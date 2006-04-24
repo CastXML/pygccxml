@@ -1,0 +1,27 @@
+Metadata-Version: 1.1
+Name: pygccxml
+Version: 0.7.1
+Author: Roman Yakovenko
+Author-email: roman yakovenko at gmail com
+Maintainer: Roman Yakovenko
+Maintainer-email: roman yakovenko at gmail com
+Home-page: http://www.language-binding.net/
+Download-url: http://sourceforge.net/project/showfiles.php?group_id=118209
+Summary: Python package for easy C++ declarations navigation
+License: Boost Software License
+Description: "...The purpose of the GCC-XML extension is to generate an XML description of a
+        C++ program from GCC's internal representation. Since XML is easy to parse,
+        other development tools will be able to work with C++ programs without the
+        burden of a complicated C++ parser..."
+        
+        -- Introduction to GCC-XML
+        
+        The purpose of pygccxml is to read a GCC-XML generated file and provide simple
+        framework to navigate C++ declarations using python classes.
+Keywords: C++ declaration parser reader
+Requires: GCCXML
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: Freeware
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development

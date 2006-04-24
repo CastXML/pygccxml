@@ -1,0 +1,55 @@
+=================
+pygccxml download
+=================
+
+.. contents:: Table of contents
+
+-------------------------
+pygccxml on SourceForge
+-------------------------
+
+`pygccxml`_ project is hosted on SourceForge. Using SourceForge services you
+can:
+
+1) get access to source code
+2) get access to latest release version of pyplusplus
+
+--------
+Download
+--------
+
+https://sourceforge.net/project/showfiles.php?group_id=118209
+
+----------
+CVS access
+----------
+
+https://sourceforge.net/cvs/?group_id=118209
+
+------------
+Installation
+------------
+
+In command prompt or shell change current directory to be "pygccxml-X.Y.Z".
+"X.Y.Z" is version of `pygccxml`_. Type next command: 
+
+| ``python setup.py install``
+
+After this command complete, you should have installed `pygccxml`_ package. 
+
+------------
+Dependencies
+------------
+
+* `GCC-XML`_
+
+.. _`pygccxml` : ./../pygccxml/pygccxml.html
+.. _`SourceForge`: http://sourceforge.net/index.php
+.. _`GCC-XML`: http://www.gccxml.org
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:

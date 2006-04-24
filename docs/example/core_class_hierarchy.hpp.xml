@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<GCC_XML>
+  <Namespace id="_1" name="::" members="_3 _4 _5 _6 _7 _8 _9 _10 _11 _12 _13 _14 _15 _16 _17 _18 _19 " mangled="_Z2::"/>
+  <Namespace id="_2" name="std" context="_1" members="" mangled="_Z3std"/>
+  <Variable id="_3" name="_ZTIN4core15class_hierarchy15multi_derived_tE" type="_20c" context="_1" location="f0:30" file="f0" line="30" extern="1" artificial="1"/>
+  <Variable id="_4" name="_ZTIN4core15class_hierarchy17derived_private_tE" type="_22c" context="_1" location="f0:27" file="f0" line="27" extern="1" artificial="1"/>
+  <Variable id="_5" name="_ZTIN4core15class_hierarchy19derived_protected_tE" type="_22c" context="_1" location="f0:24" file="f0" line="24" extern="1" artificial="1"/>
+  <Variable id="_6" name="_ZTIN4core15class_hierarchy16derived_public_tE" type="_24c" context="_1" location="f0:21" file="f0" line="21" extern="1" artificial="1"/>
+  <Variable id="_7" name="_ZTIN4core15class_hierarchy6base_tE" type="_26c" context="_1" location="f0:13" file="f0" line="13" extern="1" artificial="1"/>
+  <Function id="_8" name="__builtin_expect" returns="_28" context="_1" location="f1:15" file="f1" line="15" extern="1">
+    <Argument type="_28"/>
+    <Argument type="_28"/>
+  </Function>
+  <Function id="_9" name="__builtin_prefetch" returns="_29" context="_1" location="f1:16" file="f1" line="16" extern="1">
+    <Argument type="_30"/>
+    <Ellipsis/>
+  </Function>
+  <Function id="_10" name="__builtin_return" returns="_29" context="_1" location="f1:12" file="f1" line="12" extern="1" attributes="nothrow noreturn">
+    <Argument type="_31"/>
+  </Function>
+  <Function id="_11" name="__builtin_return_address" returns="_31" context="_1" location="f1:13" file="f1" line="13" extern="1">
+    <Argument type="_32"/>
+  </Function>
+  <Function id="_12" name="__builtin_frame_address" returns="_31" context="_1" location="f1:14" file="f1" line="14" extern="1">
+    <Argument type="_32"/>
+  </Function>
+  <Function id="_13" name="__builtin_nansl" returns="_33" context="_1" mangled="nansl" location="f1:22" file="f1" line="22" extern="1" attributes="nothrow const">
+    <Argument type="_34"/>
+  </Function>
+  <Function id="_14" name="__builtin_nansf" returns="_35" context="_1" mangled="nansf" location="f1:21" file="f1" line="21" extern="1" attributes="nothrow const">
+    <Argument type="_34"/>
+  </Function>
+  <Function id="_15" name="__builtin_nans" returns="_36" context="_1" mangled="nans" location="f1:20" file="f1" line="20" extern="1" attributes="nothrow const">
+    <Argument type="_34"/>
+  </Function>
+  <Function id="_16" name="__builtin_infl" returns="_33" context="_1" location="f1:19" file="f1" line="19" extern="1" attributes="nothrow const"/>
+  <Function id="_17" name="__builtin_inff" returns="_35" context="_1" location="f1:18" file="f1" line="18" extern="1" attributes="nothrow const"/>
+  <Function id="_18" name="__builtin_inf" returns="_36" context="_1" location="f1:17" file="f1" line="17" extern="1" attributes="nothrow const"/>
+  <Namespace id="_19" name="core" context="_1" members="_37 " mangled="_Z4core"/>
+  <Struct id="_20" name="__vmi_class_type_info_pseudo3" context="_1" mangled="29__vmi_class_type_info_pseudo3" location="f0:30" file="f0" line="30" members="_38 _39 _40 _41 " bases=""/>
+  <CvQualifiedType id="_20c" type="_20" const="1"/>
+  <Struct id="_22" name="__vmi_class_type_info_pseudo1" context="_1" mangled="29__vmi_class_type_info_pseudo1" location="f0:24" file="f0" line="24" members="_42 _43 _44 _45 " bases=""/>
+  <CvQualifiedType id="_22c" type="_22" const="1"/>
+  <Struct id="_24" name="__si_class_type_info_pseudo" context="_1" mangled="27__si_class_type_info_pseudo" location="f2:0" file="f2" line="0" members="" bases=""/>
+  <CvQualifiedType id="_24c" type="_24" const="1"/>
+  <Struct id="_26" name="__class_type_info_pseudo" context="_1" mangled="24__class_type_info_pseudo" location="f2:0" file="f2" line="0" members="" bases=""/>
+  <CvQualifiedType id="_26c" type="_26" const="1"/>
+  <FundamentalType id="_28" name="long int"/>
+  <FundamentalType id="_29" name="void"/>
+  <PointerType id="_30" type="_29c"/>
+  <PointerType id="_31" type="_29"/>
+  <FundamentalType id="_32" name="unsigned int"/>
+  <FundamentalType id="_33" name="long double"/>
+  <PointerType id="_34" type="_47c"/>
+  <FundamentalType id="_35" name="float"/>
+  <FundamentalType id="_36" name="double"/>
+  <Namespace id="_37" name="class_hierarchy" context="_19" members="_49 _50 _51 _52 _53 _54 " mangled="_ZN4core15class_hierarchyE"/>
+  <Field id="_38" name="" type="_55" context="_20" location="f0:30" file="f0" line="30"/>
+  <Field id="_39" name="" type="_56" context="_20" location="f0:30" file="f0" line="30"/>
+  <Field id="_40" name="" type="_56" context="_20" location="f0:30" file="f0" line="30"/>
+  <Field id="_41" name="" type="_57" context="_20" location="f0:30" file="f0" line="30"/>
+  <Field id="_42" name="" type="_55" context="_22" location="f0:24" file="f0" line="24"/>
+  <Field id="_43" name="" type="_56" context="_22" location="f0:24" file="f0" line="24"/>
+  <Field id="_44" name="" type="_56" context="_22" location="f0:24" file="f0" line="24"/>
+  <Field id="_45" name="" type="_58" context="_22" location="f0:24" file="f0" line="24"/>
+  <Class id="_49" name="multi_derived_t" context="_37" mangled="N4core15class_hierarchy15multi_derived_tE" location="f0:30" file="f0" line="30" members="_59 _60 _61 " bases="private:_50 protected:_54 private:_53 "/>
+  <Class id="_50" name="derived_private_t" context="_37" mangled="N4core15class_hierarchy17derived_private_tE" location="f0:27" file="f0" line="27" members="_62 _63 _64 " bases="private:_54 "/>
+  <Class id="_51" name="derived_protected_t" context="_37" mangled="N4core15class_hierarchy19derived_protected_tE" location="f0:24" file="f0" line="24" members="_65 _66 _67 " bases="protected:_54 "/>
+  <Class id="_52" name="derived_public_t" context="_37" mangled="N4core15class_hierarchy16derived_public_tE" location="f0:21" file="f0" line="21" members="_68 _69 _70 " bases="_54 "/>
+  <Class id="_53" name="other_base_t" context="_37" mangled="N4core15class_hierarchy12other_base_tE" location="f0:18" file="f0" line="18" members="_71 _72 " bases=""/>
+  <Class id="_54" name="base_t" context="_37" mangled="N4core15class_hierarchy6base_tE" location="f0:13" file="f0" line="13" members="_73 _74 _75 " bases=""/>
+  <Struct id="_55" name="__type_info_pseudo" context="_1" mangled="18__type_info_pseudo" location="f2:0" file="f2" line="0" members="" bases=""/>
+  <FundamentalType id="_56" name="int"/>
+  <ArrayType id="_57" min="0" max="3" type="_76"/>
+  <ArrayType id="_58" min="0" max="1" type="_76"/>
+  <Constructor id="_59" name="multi_derived_t" artificial="1" throw="" context="_49" mangled="_ZN4core15class_hierarchy15multi_derived_tC1ERKS1_ *INTERNAL* " location="f0:30" file="f0" line="30">
+    <Argument name="_ctor_arg" type="_77"/>
+  </Constructor>
+  <Constructor id="_60" name="multi_derived_t" artificial="1" throw="" context="_49" mangled="_ZN4core15class_hierarchy15multi_derived_tC1Ev *INTERNAL* " location="f0:30" file="f0" line="30"/>
+  <Destructor id="_61" name="multi_derived_t" virtual="1" artificial="1" context="_49" mangled="_ZN4core15class_hierarchy15multi_derived_tD1Ev *INTERNAL* " location="f0:30" file="f0" line="30">
+  </Destructor>
+  <Constructor id="_62" name="derived_private_t" artificial="1" throw="" context="_50" mangled="_ZN4core15class_hierarchy17derived_private_tC1ERKS1_ *INTERNAL* " location="f0:27" file="f0" line="27">
+    <Argument name="_ctor_arg" type="_78"/>
+  </Constructor>
+  <Constructor id="_63" name="derived_private_t" artificial="1" throw="" context="_50" mangled="_ZN4core15class_hierarchy17derived_private_tC1Ev *INTERNAL* " location="f0:27" file="f0" line="27"/>
+  <Destructor id="_64" name="derived_private_t" virtual="1" artificial="1" context="_50" mangled="_ZN4core15class_hierarchy17derived_private_tD1Ev *INTERNAL* " location="f0:27" file="f0" line="27">
+  </Destructor>
+  <Constructor id="_65" name="derived_protected_t" artificial="1" throw="" context="_51" mangled="_ZN4core15class_hierarchy19derived_protected_tC1ERKS1_ *INTERNAL* " location="f0:24" file="f0" line="24">
+    <Argument name="_ctor_arg" type="_79"/>
+  </Constructor>
+  <Constructor id="_66" name="derived_protected_t" artificial="1" throw="" context="_51" mangled="_ZN4core15class_hierarchy19derived_protected_tC1Ev *INTERNAL* " location="f0:24" file="f0" line="24"/>
+  <Destructor id="_67" name="derived_protected_t" virtual="1" artificial="1" context="_51" mangled="_ZN4core15class_hierarchy19derived_protected_tD1Ev *INTERNAL* " location="f0:24" file="f0" line="24">
+  </Destructor>
+  <Constructor id="_68" name="derived_public_t" artificial="1" throw="" context="_52" mangled="_ZN4core15class_hierarchy16derived_public_tC1ERKS1_ *INTERNAL* " location="f0:21" file="f0" line="21">
+    <Argument name="_ctor_arg" type="_80"/>
+  </Constructor>
+  <Constructor id="_69" name="derived_public_t" artificial="1" throw="" context="_52" mangled="_ZN4core15class_hierarchy16derived_public_tC1Ev *INTERNAL* " location="f0:21" file="f0" line="21"/>
+  <Destructor id="_70" name="derived_public_t" virtual="1" artificial="1" context="_52" mangled="_ZN4core15class_hierarchy16derived_public_tD1Ev *INTERNAL* " location="f0:21" file="f0" line="21">
+  </Destructor>
+  <Constructor id="_71" name="other_base_t" artificial="1" throw="" context="_53" mangled="_ZN4core15class_hierarchy12other_base_tC1ERKS1_ *INTERNAL* " location="f0:18" file="f0" line="18">
+    <Argument name="_ctor_arg" type="_81"/>
+  </Constructor>
+  <Constructor id="_72" name="other_base_t" artificial="1" throw="" context="_53" mangled="_ZN4core15class_hierarchy12other_base_tC1Ev *INTERNAL* " location="f0:18" file="f0" line="18"/>
+  <Constructor id="_73" name="base_t" artificial="1" throw="" context="_54" mangled="_ZN4core15class_hierarchy6base_tC1ERKS1_ *INTERNAL* " location="f0:13" file="f0" line="13">
+    <Argument name="_ctor_arg" type="_82"/>
+  </Constructor>
+  <Constructor id="_74" name="base_t" artificial="1" throw="" context="_54" mangled="_ZN4core15class_hierarchy6base_tC1Ev *INTERNAL* " location="f0:13" file="f0" line="13"/>
+  <Destructor id="_75" name="base_t" virtual="1" context="_54" mangled="_ZN4core15class_hierarchy6base_tD1Ev *INTERNAL* " location="f0:15" file="f0" line="15" endline="15">
+  </Destructor>
+  <Struct id="_76" name="__base_class_type_info_pseudo" context="_1" mangled="29__base_class_type_info_pseudo" location="f2:0" file="f2" line="0" members="" bases=""/>
+  <ReferenceType id="_77" type="_49c"/>
+  <ReferenceType id="_78" type="_50c"/>
+  <ReferenceType id="_79" type="_51c"/>
+  <ReferenceType id="_80" type="_52c"/>
+  <ReferenceType id="_81" type="_53c"/>
+  <ReferenceType id="_82" type="_54c"/>
+  <FundamentalType id="_47" name="char"/>
+  <CvQualifiedType id="_47c" type="_47" const="1"/>
+  <CvQualifiedType id="_29c" type="_29" const="1"/>
+  <CvQualifiedType id="_54c" type="_54" const="1"/>
+  <CvQualifiedType id="_53c" type="_53" const="1"/>
+  <CvQualifiedType id="_52c" type="_52" const="1"/>
+  <CvQualifiedType id="_51c" type="_51" const="1"/>
+  <CvQualifiedType id="_50c" type="_50" const="1"/>
+  <CvQualifiedType id="_49c" type="_49" const="1"/>
+  <File id="f0" name="core_class_hierarchy.hpp"/>
+  <File id="f1" name="/usr/local/share/gccxml-0.6/GCC/3.3/gccxml_builtins.h"/>
+  <File id="f2" name="&lt;internal&gt;"/>
+</GCC_XML>
