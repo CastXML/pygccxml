@@ -15,7 +15,6 @@ data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
 try:
     import pygccxml
     print 'unittests will run on INSTALLED version'
-    package_directory = os.path.split( pygccxml.__file__ )[0]   
 except ImportError:
     sys.path.append( os.path.join( os.curdir, '..' ) )
     import pygccxml
