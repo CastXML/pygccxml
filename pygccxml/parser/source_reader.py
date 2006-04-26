@@ -28,25 +28,20 @@ def bind_typedefs( decls ):
 
     @return: None
     """   
-    typedefs = []
-    classes = []
+    visited = set()
     for decl in decls:
-        if isinstance( decl, class_t ):
-            classes.append( decl )
-        elif isinstance( decl, typedef_t ):
-            typedefs.append( decl )
-        else:
-            pass
-    
-    
-    for decl in classes:
-        del decl.typedefs[:]
-        for typedef in typedefs:
-            type_ = remove_alias( typedef.type )
-            if not isinstance( type_, declarated_t ):
-                continue
-            if type_.declaration is decl:
-                decl.typedefs.append( typedef )
+        if not isinstance( decl, typedef_t ):
+            continue
+        type_ = remove_alias( decl.type )
+        if not isinstance( type_, declarated_t ):
+            continue
+        cls_inst = type_.declaration
+        if not isinstance( cls_inst, class_t ):
+            continue
+        if id( cls_inst ) not in visited:
+            visited.add( id( cls_inst ) )
+            del cls_inst.typedefs[:]
+        cls_inst.typedefs.append( decl )
 
 class source_reader_t:
     def __init__( self, config, cache=None, decl_factory=None ):
