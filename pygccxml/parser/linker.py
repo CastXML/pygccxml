@@ -100,14 +100,16 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         #GCC-XML sometimes generates constructors with names that does not match
         #class name. I think this is because those constructors are compiler 
         #generated. I need to find out more about this and to talk with Brad 
+
+        new_name = self.__inst.name
+        if templates.is_instantiation( new_name ):
+            new_name = templates.name( new_name )
+            
         for decl in self.__inst.declarations:
             if not isinstance( decl, constructor_t ):
                 continue
-            if '.' in self.__inst.name or '$' in self.__inst.name:
-                new_name = self.__inst.parent.name
-                if templates.is_instantiation( new_name ):
-                    new_name = templates.name( new_name )
-                self.__inst.name = new_name
+            if '.' in decl.name or '$' in decl.name:
+                decl.name = new_name
 
         bases = self.__inst.bases.split()
         self.__inst.bases = []
