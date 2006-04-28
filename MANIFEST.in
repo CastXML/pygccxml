@@ -1,0 +1,11 @@
+include LICENSE_1_0.txt
+include unittests/*.py
+include unittests/data/*
+recursive-include docs/apidocs *.css
+recursive-include docs/apidocs *.html
+include docs/*.rest
+include docs/*.png
+include docs/example/*
+include docs/history/*
+include docs/logos/*
+
