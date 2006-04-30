@@ -5,13 +5,20 @@
 
 import os
 import sys
+import getpass
 
 #__pychecker__ = 'limit=1000'
 #import pychecker.checker
 
-gccxml_path = 'gccxml'
+
+gccxml_path = ''
 data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
 
+if 'roman' in getpass.getuser():
+    if sys.platform == 'win32':
+        gccxml_path = 'c:/tools/gccxml/bin/gccxml.exe'
+    else:
+        gccxml_path = '/home/roman/gccxml/bin/gccxml'
 try:
     import pygccxml
     print 'unittests will run on INSTALLED version'
