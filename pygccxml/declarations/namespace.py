@@ -63,11 +63,12 @@ class namespace_t( scopedef.scopedef_t ):
                                   , function=function
                                   , recursive=recursive )
 
-    def namespaces( self, name=None, function=None, recursive=None ):
+    def namespaces( self, name=None, function=None, recursive=None, allow_empty=None ):
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.namespace ]
                                     , name=name
                                     , function=function
-                                    , recursive=recursive )
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
 
     def free_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_function ]
@@ -80,7 +81,7 @@ class namespace_t( scopedef.scopedef_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_function ]
                                     , name=name
                                     , function=function
@@ -89,7 +90,8 @@ class namespace_t( scopedef.scopedef_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
 
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
@@ -103,7 +105,7 @@ class namespace_t( scopedef.scopedef_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
                                     , name=name
                                     , symbol=symbol
@@ -113,4 +115,7 @@ class namespace_t( scopedef.scopedef_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive )
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
+    
+    

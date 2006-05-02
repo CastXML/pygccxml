@@ -194,7 +194,13 @@ class scopedef_t( declaration.declaration_t ):
             return self.RECURSIVE_DEFAULT
         else: 
             return keywds[ 'recursive' ]
-        
+
+    def __findout_allow_empty( self, **keywds ):
+        if None is keywds[ 'allow_empty' ]:
+            return self.ALLOW_EMPTY_MDECL_WRAPPER
+        else: 
+            return keywds[ 'allow_empty' ]
+
     def __findout_decl_type( self, match_class, **keywds ):
         if keywds.has_key( 'decl_type' ):
             return keywds['decl_type']
@@ -202,7 +208,10 @@ class scopedef_t( declaration.declaration_t ):
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
+        if matcher_args.has_key('allow_empty'):
+            del matcher_args['allow_empty']
 
+        
         matcher = match_class( **matcher_args )
         if matcher.decl_type:
             return matcher.decl_type
@@ -212,6 +221,8 @@ class scopedef_t( declaration.declaration_t ):
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
+        if matcher_args.has_key('allow_empty'):
+            del matcher_args['allow_empty']
 
         matcher = match_class( **matcher_args )
         if keywds['function']:
@@ -234,11 +245,17 @@ class scopedef_t( declaration.declaration_t ):
             if matcher.is_full_name():
                 name = matcher.decl_name_only
             if recursive:
-                utils.logger.info( 'query has been optimized on type and name' )            
-                return self._type2name2decls[decl_type][name]
+                utils.logger.info( 'query has been optimized on type and name' )   
+                if self._type2name2decls[decl_type].has_key( name ):
+                    return self._type2name2decls[decl_type][name]
+                else:
+                    return []
             else:
                 utils.logger.info( 'non recursive query has been optimized on type and name' )
-                return self._type2name2decls_nr[decl_type][name]
+                if self._type2name2decls_nr[decl_type].has_key( name ):
+                    return self._type2name2decls_nr[decl_type][name]
+                else:
+                    return []
         elif decl_type:
             if recursive:
                 utils.logger.info( 'query has been optimized on type' )            
@@ -273,13 +290,14 @@ class scopedef_t( declaration.declaration_t ):
         matcher = self.__create_matcher( match_class, **norm_keywds )
         dtype = self.__findout_decl_type( match_class, **norm_keywds )
         recursive_ = self.__findout_recursive( **norm_keywds )
+        allow_empty = self.__findout_allow_empty( **norm_keywds )
         decls = self.__findout_range( norm_keywds['name'], dtype, recursive_ )
         found = matcher_module.matcher.find( matcher, decls, False )
         mfound = mdecl_wrapper.mdecl_wrapper_t( found )
         utils.logger.info( '%d declaration(s) that match query' % len(mfound) )
         utils.logger.info( 'find single query execution - done( %f seconds )' 
                      % ( time.clock() - start_time ) )
-        if not mfound and not self.ALLOW_EMPTY_MDECL_WRAPPER:
+        if not mfound and not allow_empty:
             raise RuntimeError( "Multi declaration query returned 0 declarations." )
         return mfound
         
@@ -294,14 +312,15 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file
                                   , recursive=recursive)
 
-    def decls( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
+    def decls( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.decl ]
                                     , name=name
                                     , function=function
                                     , decl_type=decl_type
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
 
     def class_( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.class_ ]
@@ -312,14 +331,15 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive)
 
-    def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+    def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.class_ ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.class_ ]
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     
     def variable( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.variable ]
@@ -330,14 +350,15 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive)
 
-    def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
+    def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.variable ]
                                     , name=name
                                     , function=function
                                     , type=type
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive )
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.calldef ]
@@ -350,7 +371,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.calldef ]
                                     , name=name
                                     , function=function
@@ -359,7 +380,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     
     def operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.operator ]
@@ -373,7 +395,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
+    def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.operator ]
                                     , name=name
                                     , symbol=symbol
@@ -383,7 +405,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive )
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
 
     def member_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.member_function ]
@@ -396,7 +419,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_function ]
                                     , name=name
                                     , function=function
@@ -405,7 +428,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     
     def constructor( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.constructor ]
@@ -418,7 +442,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.constructor ]
                                     , name=name
                                     , function=function
@@ -427,7 +451,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     
     def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.member_operator ]
@@ -441,7 +466,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_operator ]
                                     , name=name
                                     , symbol=symbol
@@ -451,7 +476,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive ) 
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty) 
     
     def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.casting_operator ]
@@ -464,7 +490,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.casting_operator ]
                                     , name=name
                                     , function=function
@@ -473,7 +499,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , arg_types=arg_types 
                                     , header_dir=header_dir
                                     , header_file=header_file
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
 
     def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
         return self._find_single( self._impl_matchers[ scopedef_t.enumeration ]
@@ -486,13 +513,14 @@ class scopedef_t( declaration.declaration_t ):
     #adding small aliase
     enum = enumeration
     
-    def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+    def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.enumeration ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.enumeration ]
                                     , header_dir=header_dir
                                     , header_file=header_file 
-                                    , recursive=recursive)
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
     #adding small aliase
     enums = enumerations        
