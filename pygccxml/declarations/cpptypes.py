@@ -51,6 +51,19 @@ class type_t(object):
 #<Unimplemented id="_9482" tree_code="188" tree_code_name="template_type_parm" node="0xcc4d5b0"/>
 #In this case I will use this as type
 
+
+class dummy_type_t( type_t ):
+    #This class is very usefull for code generation
+    def __init__( self, decl_string ):
+        type_t.__init__( self )
+        self._decl_string = decl_string
+        
+    def _create_decl_string(self):
+        return self._decl_string
+    
+    def _clone_impl( self ):
+        return dummy_type_t( self._decl_string )
+
 class unknown_t( type_t ):
     "type, that represents all C++ types, that could not be parsed  by GCC-XML"
     def __init__( self ):
