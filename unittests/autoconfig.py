@@ -19,6 +19,7 @@ if 'roman' in getpass.getuser():
         gccxml_path = 'c:/tools/gccxml/bin/gccxml.exe'
     else:
         gccxml_path = '/home/roman/gccxml/bin/gccxml'
+        
 try:
     import pygccxml
     print 'unittests will run on INSTALLED version'
