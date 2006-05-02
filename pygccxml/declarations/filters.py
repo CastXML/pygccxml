@@ -468,3 +468,46 @@ class access_type_matcher_t( matcher_base_t ):
     def __str__( self ):
         return '(access type=%s)' % self.access_type
 
+class virtuality_type_matcher_t( matcher_base_t ):
+    """
+    Instance of this class will match declaration by its virtuality type: not virtual, 
+    virtual or pure virtual. If declarations does not have virtuality type, for example
+    free function, then False will be returned.
+    """   
+
+    def __init__( self, virtuality_type ):
+        """
+        @param access_type: declaration access type
+        @type access_type: L{VIRTUALITY_TYPES} defines few consts for your convinience.
+        """
+        matcher_base_t.__init__( self )
+        self.virtuality_type = virtuality_type
+    
+    def __call__( self, decl ):
+        if not isinstance( decl.parent, class_declaration.class_t ):
+            return False
+        return self.virtuality_type == decl.virtuality
+        
+    def __str__( self ):
+        return '(virtuality type=%s)' % self.virtuality_type
+
+
+class custom_matcher_t( matcher_base_t ):
+    """
+    Instance of this class will match declaration by user custom criteria.
+    """   
+
+    def __init__( self, function ):
+        """
+        @param function: callable, that takes single argument - declaration instance
+                         should return True or False
+        """
+        matcher_base_t.__init__( self )
+        self.function = function
+    
+    def __call__( self, decl ):
+        return bool( self.function( decl ) )
+    
+    def __str__( self ):
+        return '(user criteria)'
+    
