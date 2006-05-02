@@ -13,17 +13,18 @@ def generate_doc():
     """Generate the epydoc reference manual.
     """
     print "Generating epydoc files..."
-    options = [ '--output="%s"'%os.path.join('docs', 'apidocs'),
-                '--docformat=epytext',
-                '--url=http://www.language-binding.net',
-                '--name=pygccxml',
-#                '--verbose',
-                'pygccxml']
-    cmd_line = "epydoc " + ' '.join( options )
-    print cmd_line
-    os.system(cmd_line)
     
+    from epydoc.docbuilder import build_doc_index
+    from epydoc.docwriter.html import HTMLWriter
 
+    docindex = build_doc_index(['pygccxml'])
+    html_writer = HTMLWriter( docindex
+                              , prj_name='pygccxml'
+                              , prj_url='http://www.language-binding.net'
+                              , include_sourcecode=True )
+    
+    html_writer.write( os.path.join('docs', 'apidocs') )
+    
 class doc_cmd(Command):
     """This is a new distutils command 'doc' to build the epydoc manual.
     """
