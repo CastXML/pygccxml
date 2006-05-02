@@ -22,6 +22,7 @@ from class_declaration import class_declaration_t
 from typedef import typedef_t
 
 from cpptypes import type_t
+from cpptypes import dummy_type_t
 from cpptypes import unknown_t
 from cpptypes import fundamental_t
 from cpptypes import void_t
@@ -147,7 +148,8 @@ from filters import variable_matcher_t
 from filters import regex_matcher_t
 from filters import access_type_matcher_t
 from filters import operator_matcher_t
-
+from filters import custom_matcher_t
+from filters import virtuality_type_matcher_t
 from matcher import matcher
 
 from mdecl_wrapper import mdecl_wrapper_t
