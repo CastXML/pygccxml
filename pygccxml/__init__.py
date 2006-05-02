@@ -33,8 +33,6 @@ import pygccxml.declarations as declarations
 import pygccxml.parser as parser
 import pygccxml.utils as utils
 
-__version__ = '0.7.2'
-
 #TODO: 
 #  1. Write documentation for filtering functionality.
 #  2. Add "explicit" property for constructors
