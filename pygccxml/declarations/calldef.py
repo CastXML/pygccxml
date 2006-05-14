@@ -21,6 +21,7 @@ import cpptypes
 import algorithm
 import declaration 
 import type_traits
+import call_invocation
 
 class VIRTUALITY_TYPES:
     """class that defines "virtuality" constants"""
@@ -42,7 +43,7 @@ class argument_t(object):
         self._name = name
         self._default_value = default_value
         self._type = type
-
+    
     def __str__(self):
         if self.default_value==None:
             return "%s %s"%(self.type, self.name)
@@ -108,7 +109,8 @@ class calldef_t( declaration.declaration_t ):
         self._exceptions = exceptions
         self._return_type = return_type
         self._has_extern = has_extern
-
+        self._demangled_name = None
+        
     def _get__cmp__call_items(self):
         raise NotImplementedError()
 
@@ -180,7 +182,68 @@ class calldef_t( declaration.declaration_t ):
                            doc="""Was this callable declared as "extern"?
                            @type: bool
                            """)
-
+    
+    def __remove_parent_fname( self, demangled ):
+        demangled = demangled.strip()
+        parent_fname = algorithm.full_name( self.parent )
+        if parent_fname.startswith( '::' ) and not demangled.startswith( '::' ):
+            parent_fname = parent_fname[2:]
+        demangled = demangled[ len( parent_fname ): ]
+        return demangled
+    
+    def _get_demangled_name( self ):
+        if not self.demangled:
+            self._demangled_name = ''
+            
+        if self._demangled_name:
+            return self._demangled_name
+        
+        if self._demangled_name == '':
+            return self.name
+        
+        demangled = self.demangled
+        if self.return_type:
+            return_type = type_traits.remove_alias( self.return_type ).decl_string
+            
+            if return_type.startswith( '::' ) and not self.demangled.startswith( '::' ):
+                return_type = return_type[2:]
+            demangled = self.demangled
+            if demangled.startswith( return_type ):
+                demangled = demangled[ len( return_type ): ]
+                demangled = demangled.strip()
+        #removing scope
+        demangled_name = call_invocation.name( self.__remove_parent_fname( demangled ) )
+        if demangled_name.startswith( '::' ):
+            demangled_name = demangled_name[2:]
+        #to be on the safe side
+        if demangled_name.startswith( self.name ):
+            self._demangled_name = demangled_name
+            return self._demangled_name
+        
+        #well, I am going to try an other strategy
+        fname = algorithm.full_name( self )
+        found = self.demangled.find( fname )
+        if -1 == found:
+            if fname.startswith( '::' ):
+                fname = fname[2:]
+            found = self.demangled.find( fname )
+            if -1 == found:
+                self._demangled_name = ''
+                return self.name
+        demangled_name = call_invocation.name( self.demangled[ found: ] )
+        demangled_name = self.__remove_parent_fname( demangled_name )
+        if demangled_name.startswith( '::' ):
+            demangled_name = demangled_name[2:]
+        #to be on the safe side
+        if demangled_name.startswith( self.name ):
+            self._demangled_name = demangled_name
+            return self._demangled_name
+        #if -1 == found:
+        self._demangled_name = ''
+        return self.name
+        
+    demangled_name = property( _get_demangled_name )
+                
 #Second level in hierarchy of calldef
 class member_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ class or struct"""
