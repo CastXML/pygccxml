@@ -172,8 +172,20 @@ class default_argument_patcher_t( patcher_base_t ):
             
         return call_invocation.join( f_q_name, args )
 
+class fix_casting_operator_name_patcher_t( patcher_base_t ):
+    def __init__( self, decls ):
+        patcher_base_t.__init__( self, decls )
+
+    def patch_it(self):
+        for decl in declarations.make_flatten( self.decls ):
+            if not isinstance( decl, declarations.casting_operator_t):
+                continue
+            decl.name = 'operator ' + decl.return_type.decl_string
+
 def patch_it(decls):
     patcher = default_argument_patcher_t( decls )
     patcher.patch_it()
+    patcher2 = fix_casting_operator_name_patcher_t( decls )
+    patcher2.patch_it()
     return patcher.decls
     

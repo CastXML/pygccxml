@@ -15,6 +15,51 @@ class COMPILATION_MODE:
     ALL_AT_ONCE = 'all at once'
     FILE_BY_FILE = 'file by file'
 
+
+#TODO: rework next explanation to something useful.
+"""
+file_configuration_t is rather cool feature. When you create module_builder_t
+class instance you should pass list of files. This list can contain string( == file paths ) and/or instances of file_configuration_t class.
+
+file_configuration_t is class with fat interface.
+It has 4 states:
+   1. it could contain reference to source file.
+        Use "create_source_fc" function to create an instance of file_configuration_t
+
+   2. it could contain reference to source file and xml file. In this case if xml file
+       exist, source file will not be parsed by gccxml. If xml file does not exists, source
+       file will be parsed and xml file will be saved for future use.
+       See create_cached_source_fc function
+
+   3. it could contain reference to xml file only
+       See create_gccxml_fc
+
+   4. it could contain some text. In this case, parser will create temporal file on 
+       disk and will pass it as an argument to gccxml.
+       See create_text_fc
+   
+In most cases you don't all those features. If I were you, I would create regular
+source file and put all template instantiation there. 
+
+Any way the code:
+
+tmpl_inst = '''
+=====================
+ #include "TempClass.h"
+ 
+ namespace details{
+     inline void export_templates(){
+         sizeof( TempClass<int> );
+     }
+ }
+'''
+
+import module_builder
+mb = module_builder.module_builder_t( 
+    [ module_builder.create_text_fc( tmpl_inst ) ]
+    , .... )
+
+"""
 class file_configuration_t( object ):
     class CONTENT_TYPE:
         STANDARD_SOURCE_FILE = 'standard source file'
@@ -239,7 +284,7 @@ class project_reader_t:
         for other_ns in other_ns_list:
             main_ns = pygccxml.declarations.find_declaration( answer
                                                               , type=pygccxml.declarations.namespace_t
-                                                              , name=other_ns.name
+                                                              , name=other_ns._name
                                                               , recursive=False )
             if main_ns:
                 main_ns.take_parenting( other_ns )
@@ -253,23 +298,23 @@ class project_reader_t:
         decls = []
         for decl in nsref.declarations:
             if not ddhash.has_key( decl.__class__ ):
-                ddhash[ decl.__class__ ] = { decl.name : [ decl ] }
+                ddhash[ decl.__class__ ] = { decl._name : [ decl ] }
                 decls.append( decl )
             else:
                 joined_decls = ddhash[ decl.__class__ ]
-                if not joined_decls.has_key( decl.name ):
+                if not joined_decls.has_key( decl._name ):
                     decls.append( decl )
-                    joined_decls[decl.name] = [ decl ]
+                    joined_decls[decl._name] = [ decl ]
                 else:
                     if isinstance( decl, pygccxml.declarations.calldef_t ):
-                        if decl not in joined_decls[decl.name]:
+                        if decl not in joined_decls[decl._name]:
                             #functions has overloading
                             decls.append( decl )
-                            joined_decls[decl.name].append( decl )
+                            joined_decls[decl._name].append( decl )
                     else:
-                        assert 1 == len( joined_decls[ decl.name ] )                        
+                        assert 1 == len( joined_decls[ decl._name ] )                        
                         if isinstance( decl, pygccxml.declarations.namespace_t ):
-                            joined_decls[ decl.name ][0].take_parenting( decl )
+                            joined_decls[ decl._name ][0].take_parenting( decl )
         nsref.declarations = decls
 
     def _join_class_hierarchy( self, namespaces ):
@@ -347,7 +392,7 @@ class project_reader_t:
                     decl_wrapper_type.declaration = leaved_classes[ create_key(decl_wrapper_type.declaration) ]
                 else:
                     msg = []
-                    msg.append( "Unable to find out actual class definition: '%s'." % decl_wrapper_type.declaration.name )
+                    msg.append( "Unable to find out actual class definition: '%s'." % decl_wrapper_type.declaration._name )
                     msg.append( "Class definition has been changed from one compilation to an other." )
                     msg.append( "Why did it happen to me? Here is a short list of reasons: " )
                     msg.append( "    1. There are different preprocessor definitions applied on same file during compilation" )

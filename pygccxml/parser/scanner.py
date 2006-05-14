@@ -25,6 +25,7 @@ XML_AN_BITS = "bits"
 XML_AN_CONST = "const"
 XML_AN_CONTEXT = "context"
 XML_AN_DEFAULT = "default"
+XML_AN_DEMANGLED = "demangled"
 XML_AN_EXTERN = "extern"
 XML_AN_FILE = "file"
 XML_AN_ID = "id"
@@ -145,11 +146,6 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 continue
             members_mapping[ id( decl ) ] = members
         self.__members = members_mapping
-        #for id, members in self.__members.iteritems():
-            #decl = self.__declarations.get( id, None )
-            #if not decl or not isinstance( decl, scopedef_t):
-                #continue
-            #self.__declarations[id].declarations = members
         
     def declarations(self):
         return self.__declarations
@@ -189,6 +185,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                         self.__read_bases( obj, attrs )
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled( obj, attrs)
+                self.__read_demangled( obj, attrs)
             elif isinstance( obj, type_t ):
                 self.__types[ attrs[XML_AN_ID] ] = obj
             elif isinstance( obj, types.StringTypes ):
@@ -229,6 +226,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_mangled( self, decl, attrs ):
         decl.mangled = attrs.get( XML_AN_MANGLED, None )
 
+    def __read_demangled( self, decl, attrs ):
+        decl.demangled = attrs.get( XML_AN_DEMANGLED, None )
+        
     def __read_access( self, attrs ):
         self.__access[ attrs[XML_AN_ID] ] = attrs.get( XML_AN_ACCESS, ACCESS_TYPES.PUBLIC )
 
