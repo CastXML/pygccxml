@@ -18,7 +18,7 @@ if 'roman' in getpass.getuser():
     if sys.platform == 'win32':
         gccxml_path = 'c:/tools/gccxml/bin/gccxml.exe'
     else:
-        gccxml_path = '/home/roman/gccxml/bin/gccxml'
+        gccxml_path = '/home/roman/gccxml-build/bin/gccxml'
         
 try:
     import pygccxml
@@ -27,6 +27,8 @@ except ImportError:
     sys.path.append( os.path.join( os.curdir, '..' ) )
     import pygccxml
     print 'unittests will run on DEVELOPMENT version'
+
+pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 #try:
     #import pydsc
