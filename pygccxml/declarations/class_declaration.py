@@ -85,6 +85,8 @@ class class_declaration_t( declaration.declaration_t ):
 
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
+
+    USE_DEMANGLED_AS_NAME = True
     def __init__( self, name='', parent=None, class_type=CLASS_TYPES.CLASS, is_abstract=False ):
         scopedef.scopedef_t.__init__( self, name, parent )
         if class_type:
@@ -97,6 +99,21 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._typedefs = []
+        
+    def _get_name_impl( self ):
+        if class_t.USE_DEMANGLED_AS_NAME and self.demangled:
+            fname = algorithm.full_name( self.parent )
+            if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
+                fname = fname[2:]
+            if self.demangled.startswith( fname ):
+                tmp = self.demangled[ len( fname ): ] #demangled::name
+                if tmp.startswith( '::' ):
+                    tmp = tmp[2:] 
+                return tmp
+            else:
+                return self._name
+        else:
+            return self._name
         
     def __str__(self):
         name = algorithm.full_name(self)
