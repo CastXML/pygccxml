@@ -38,7 +38,8 @@ def full_name( decl ):
 
     @return: full name of declarations. 
     """
-    assert decl
+    if None is decl:
+        raise RuntimeError( "Unable to generate full name for None object!" )
     decl_path = declaration_path( decl )
     ##Here I have lack of knowledge: 
     ##TODO: "What is the full name of declaration declared in unnamed namespace?"
