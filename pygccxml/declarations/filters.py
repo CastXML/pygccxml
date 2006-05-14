@@ -290,6 +290,11 @@ class namespace_matcher_t( declaration_matcher_t ):
         declaration_matcher_t.__init__( self, name=name, decl_type=namespace.namespace_t)
         
     def __call__( self, decl ):
+        if self.name and decl.name == '':
+            #unnamed namespace have same name as thier parent, we should prevent
+            #this happens. The price is: user should search for unnamed namespace
+            #directly.
+            return False
         return super( namespace_matcher_t, self ).__call__( decl )
     
 
