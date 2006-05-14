@@ -68,7 +68,8 @@ class location_t(object):
 class declaration_t( object ):
     """Base class for all classes that represent a C++ declaration.
     """
-    def __init__( self, name='', parent=None, location=None, is_artificial=False, mangled=None ):
+    
+    def __init__( self, name='', parent=None, location=None, is_artificial=False, mangled=None, demangled=None ):
         self._name = name
         if parent:
             assert( isinstance( parent, declaration_t ) )
@@ -76,6 +77,7 @@ class declaration_t( object ):
         self._location = location
         self._is_artificial = is_artificial
         self._mangled = mangled
+        self._demangled = demangled
 
     def __str__(self):
         """Default __str__ method.
@@ -144,8 +146,12 @@ class declaration_t( object ):
             return self.__class__.__name__ < other.__class__.__name__
         return self._get__cmp__data() < other._get__cmp__data()
    
-    def _get_name( self ):
+    def _get_name_impl( self ):
         return self._name
+    
+    def _get_name( self ):
+        return self._get_name_impl()
+    
     def _set_name( self, new_name ):
         self._name = new_name
     name = property( _get_name, _set_name
@@ -202,6 +208,15 @@ class declaration_t( object ):
         self._mangled = mangled
     mangled = property( _get_mangled, _set_mangled
                         , doc="""Compiler generated declaration name
+                        @type: str
+                        """ )
+
+    def _get_demangled( self ):
+        return self._demangled
+    def _set_demangled( self, demangled ):
+        self._demangled = demangled
+    demangled = property( _get_demangled, _set_demangled
+                        , doc="""Demangled compiler generated declaration name
                         @type: str
                         """ )
 
