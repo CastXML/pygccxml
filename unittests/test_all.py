@@ -32,6 +32,7 @@ import filters_tester
 import cache_enums_tester
 import decl_printer_tester
 import typedefs_tester 
+import demangled_tester
 
 def create_suite():
     testers = [ 
@@ -63,6 +64,7 @@ def create_suite():
         , cache_enums_tester
         , decl_printer_tester
         , typedefs_tester
+        , demangled_tester
     ]
     
     main_suite = unittest.TestSuite()    
