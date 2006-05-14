@@ -175,6 +175,7 @@ namespace yes{
 
     typedef int& int_ref_t;
     typedef const int& const_int_ref_t;
+    typedef int const& int_const_ref_t;
     typedef some_struct_t& some_struct_ref_t;
     typedef int*& int_ptr_ref_t;   
 }
@@ -215,6 +216,7 @@ namespace yes{
     typedef const void const_void_t;
     typedef const incomplete_type const_incomplete_type_t;
     typedef int* const int_const_t;
+    //TODO typedef const int& const_int_ref_t;
 }
     
 namespace no{
