@@ -252,7 +252,7 @@ class project_reader_t:
         if config.verbose:
             logger.info( "Relinking declared types ..." )
         self._relink_declarated_types( leaved_classes, types )
-        source_reader.bind_typedefs( pygccxml.declarations.make_flatten( answer ) )
+        source_reader.bind_aliases( pygccxml.declarations.make_flatten( answer ) )
         return answer
         
     def __parse_all_at_once(self, files):

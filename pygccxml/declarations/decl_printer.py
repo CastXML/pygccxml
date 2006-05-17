@@ -129,8 +129,8 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         class_type = 'class type: ' + "'%s'" % str(self.__inst.class_type)        
         self.writer( ' ' * curr_level * self.INDENT_SIZE + class_type.ljust( self.JUSTIFY ) + os.linesep )
         
-        if self.__inst.typedefs:
-            aliases = map( lambda typedef: typedef.name, self.__inst.typedefs )
+        if self.__inst.aliases:
+            aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
             msg = 'aliases: ' + `aliases`
             self.writer( ' ' * curr_level * self.INDENT_SIZE + msg.ljust( self.JUSTIFY ) + os.linesep )
         

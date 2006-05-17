@@ -19,7 +19,7 @@ class gccxml_runtime_error_t( RuntimeError ):
         RuntimeError.__init__( self, msg )
 
 
-def bind_typedefs( decls ):
+def bind_aliases( decls ):
     """
     This function binds between class and it's typedefs. 
 
@@ -40,8 +40,8 @@ def bind_typedefs( decls ):
             continue
         if id( cls_inst ) not in visited:
             visited.add( id( cls_inst ) )
-            del cls_inst.typedefs[:]
-        cls_inst.typedefs.append( decl )
+            del cls_inst.aliases[:]
+        cls_inst.aliases.append( decl )
 
 class source_reader_t:
     def __init__( self, config, cache=None, decl_factory=None ):
@@ -253,7 +253,7 @@ class source_reader_t:
         for decl in decls.itervalues():
             linker_.instance = decl
             apply_visitor( linker_, decl )
-        bind_typedefs( decls.itervalues() )
+        bind_aliases( decls.itervalues() )
         decls = filter( lambda inst: isinstance(inst, declaration_t) and not inst.parent, decls.itervalues() )
         #some times gccxml report typedefs defined in no namespace
         #it happens for example in next situation

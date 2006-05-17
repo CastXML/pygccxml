@@ -196,6 +196,7 @@ impl_matchers[ scopedef.scopedef_t.calldef ] = calldef_matcher_t
 impl_decl_types[ scopedef.scopedef_t.calldef ] = calldef_t
 
 impl_matchers[ scopedef.scopedef_t.operator ] = operator_matcher_t
+impl_decl_types[ scopedef.scopedef_t.operator ] = operator_t
 
 impl_matchers[ scopedef.scopedef_t.member_function ] = calldef_matcher_t
 impl_decl_types[ scopedef.scopedef_t.member_function ] = member_function_t
@@ -214,6 +215,10 @@ impl_decl_types[ scopedef.scopedef_t.casting_operator ] = casting_operator_t
 
 impl_matchers[ scopedef.scopedef_t.enumeration ] = declaration_matcher_t
 impl_decl_types[ scopedef.scopedef_t.enumeration ] = enumeration_t
+
+impl_matchers[ scopedef.scopedef_t.typedef ] = declaration_matcher_t
+impl_decl_types[ scopedef.scopedef_t.typedef ] = typedef_t
+
 
 impl_matchers[ namespace_t.namespace ] = namespace_matcher_t
 

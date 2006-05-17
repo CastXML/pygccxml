@@ -147,7 +147,7 @@ class default_argument_patcher_t( patcher_base_t ):
         decl = base_type.declaration
         return decl.name == name \
                or ( isinstance( decl, declarations.class_t ) \
-                    and name in map( lambda typedef: typedef.name, decl.typedefs ) )
+                    and name in map( lambda typedef: typedef.name, decl.aliases ) )
 
     def __fix_constructor_call( self, func, arg ):
         call_invocation = declarations.call_invocation
@@ -160,7 +160,7 @@ class default_argument_patcher_t( patcher_base_t ):
         if decl.name != name:
             #we have some alias to the class
             relevant_typedefs = filter( lambda typedef: typedef.name == name
-                                        , decl.typedefs )
+                                        , decl.aliases )
             if 1 == len( relevant_typedefs ):
                 f_q_name = self.__join_names( declarations.full_name( relevant_typedefs[0].parent )
                                               , name )

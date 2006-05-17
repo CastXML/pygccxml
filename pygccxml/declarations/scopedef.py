@@ -524,3 +524,23 @@ class scopedef_t( declaration.declaration_t ):
                                     , allow_empty=allow_empty)
     #adding small aliase
     enums = enumerations        
+    
+    def typedef( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
+        """Finds any declaration by criteria. Please see L{scopedef_t} for full explanation."""
+        return self._find_single( self._impl_matchers[ scopedef_t.typedef ]
+                                  , name=name
+                                  , function=function
+                                  , decl_type=self._impl_decl_types[ scopedef_t.typedef ]
+                                  , header_dir=header_dir
+                                  , header_file=header_file
+                                  , recursive=recursive)
+
+    def typedefs( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        return self._find_multiple( self._impl_matchers[ scopedef_t.typedef ]
+                                    , name=name
+                                    , function=function
+                                    , decl_type=self._impl_decl_types[ scopedef_t.typedef ]
+                                    , header_dir=header_dir
+                                    , header_file=header_file 
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)

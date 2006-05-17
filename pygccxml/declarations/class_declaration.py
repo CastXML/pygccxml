@@ -98,7 +98,7 @@ class class_t( scopedef.scopedef_t ):
         self._public_members = []
         self._private_members = []
         self._protected_members = []
-        self._typedefs = []
+        self._aliases = []
         
     def _get_name_impl( self ):
         if class_t.USE_DEMANGLED_AS_NAME and self.demangled:
@@ -221,12 +221,12 @@ class class_t( scopedef.scopedef_t ):
     protected_members = property( _get_protected_members, _set_protected_members
                                   , doc="list of all protected L{members<declaration_t>}" )
 
-    def _get_typedefs(self):
-        return self._typedefs
-    def _set_typedefs( self, new_typedefs ):
-        self._typedefs = new_typedefs
-    typedefs = property( _get_typedefs, _set_typedefs
-                         , doc="List of aliases/typedefs to this instance")
+    def _get_aliases(self):
+        return self._aliases
+    def _set_aliases( self, new_aliases ):
+        self._aliases = new_aliases
+    aliases = property( _get_aliases, _set_aliases
+                         , doc="List of L{aliases<typedef_t>} to this instance")
 
     def _get_declarations_impl(self):
         return self.get_members()
