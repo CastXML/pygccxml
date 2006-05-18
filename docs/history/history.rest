@@ -16,6 +16,33 @@ Source code and documentation have been contributed by
   * Matthias Baas
   * Allen Bierbaum
 
+-----------
+Version 0.8
+-----------
+
+1. `pygccxml`_ now has power "select" interface. Read more about this cool feature
+   in tutorials.
+
+2. Improved support for template instantiations. `pygccxml`_ now take into 
+   account demangled name of declarations. Please refer to documentation for 
+   more explanantion.
+
+3. ``dummy_type_t`` - new type in types hierarchy. This is a very useful class
+   for code generation projects.
+   
+4. New function - ``get_global_namespace``. As you can guess, it will find and
+   return reference to global namespace.
+   
+5. New functionality in ``type_traits`` - ``has_public_assign``. This function
+   will return True, if class has public assign operator.
+   
+6. ``declarations.class_t`` has new property - ``aliases``. This is a list of
+   all class aliases. 
+   
+7. Bug fixes.
+
+8. Documentation.
+
 -------------
 Version 0.7.1
 -------------
