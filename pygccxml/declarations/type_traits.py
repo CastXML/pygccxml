@@ -671,7 +671,11 @@ def is_noncopyable( class_ ):
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
             return True
         if not has_trivial_copy( base_desc.related_class ):
-            return True
+            protected_ctrs = filter( lambda x: isinstance( x, calldef.constructor_t ) \
+                                               and x.is_copy_constructor
+                                     , base_desc.related_class.protected_members )
+            if not protected_ctrs:
+                return True
         
     if not has_trivial_copy( class_ ) \
        or not has_public_constructor( class_ )\
