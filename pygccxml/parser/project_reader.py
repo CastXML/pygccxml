@@ -16,9 +16,10 @@ class COMPILATION_MODE:
     FILE_BY_FILE = 'file by file'
 
 
-#TODO: rework next explanation to something useful.
-"""
-file_configuration_t is rather cool feature. When you create module_builder_t
+class file_configuration_t( object ):
+    """ 
+    file_configuration_t class is cool feature. When you want to parse C++ code
+    from different sources at once, you should use this class.
 class instance you should pass list of files. This list can contain string( == file paths ) and/or instances of file_configuration_t class.
 
 file_configuration_t is class with fat interface.
@@ -60,7 +61,7 @@ mb = module_builder.module_builder_t(
     , .... )
 
 """
-class file_configuration_t( object ):
+
     class CONTENT_TYPE:
         STANDARD_SOURCE_FILE = 'standard source file'
         CACHED_SOURCE_FILE = 'cached source file'

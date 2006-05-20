@@ -10,7 +10,15 @@ class config_t(object):
     """Configuration object to collect parameters for invoking gccxml.
 
     This class serves as a container for the parameters that can be used
-    to customize the call to gccxml.
+    to customize the call to gccxml. This class also allows users to work with 
+    relative files paths. In this case files are searched in the following order:
+  
+    1. current directory
+      
+    2. working directory
+      
+    3. additional include paths specified by the user
+
     """
     def __init__( self
                   , gccxml_path=''
