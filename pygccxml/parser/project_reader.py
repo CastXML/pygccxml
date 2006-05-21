@@ -17,51 +17,38 @@ class COMPILATION_MODE:
 
 
 class file_configuration_t( object ):
-    """ 
-    file_configuration_t class is cool feature. When you want to parse C++ code
-    from different sources at once, you should use this class.
-class instance you should pass list of files. This list can contain string( == file paths ) and/or instances of file_configuration_t class.
+    """
+    file_configuration_t - a class, that contains some data and description how
+    to treat the data. file_configuration_t can contain reference to the next types
+    of data:
+    
+    1) path to C++ source file
+    
+    2) path to `GCC-XML`_ generated XML file
+    
+    3) path to C++ source file and path to `GCC-XML`_ generated XML file
+    
+        In this case, if XML file does not exists, it will be created. Next time
+        you will ask to parse the source file, the XML file will be used instead.
+    
+        Small tip: you can setup your makefile to delete XML files every time,
+        the relevant source file has changed.
+    
+    4) Python string, that contains valid C++ code
+    
+    
+    There are few functions, that will help you to construct file_configuration_t
+    object:
 
-file_configuration_t is class with fat interface.
-It has 4 states:
-   1. it could contain reference to source file.
-        Use "create_source_fc" function to create an instance of file_configuration_t
+    * L{create_source_fc}
+    
+    * L{create_gccxml_fc}
+    
+    * L{create_cached_source_fc}
 
-   2. it could contain reference to source file and xml file. In this case if xml file
-       exist, source file will not be parsed by gccxml. If xml file does not exists, source
-       file will be parsed and xml file will be saved for future use.
-       See create_cached_source_fc function
-
-   3. it could contain reference to xml file only
-       See create_gccxml_fc
-
-   4. it could contain some text. In this case, parser will create temporal file on 
-       disk and will pass it as an argument to gccxml.
-       See create_text_fc
-   
-In most cases you don't all those features. If I were you, I would create regular
-source file and put all template instantiation there. 
-
-Any way the code:
-
-tmpl_inst = '''
-=====================
- #include "TempClass.h"
- 
- namespace details{
-     inline void export_templates(){
-         sizeof( TempClass<int> );
-     }
- }
-'''
-
-import module_builder
-mb = module_builder.module_builder_t( 
-    [ module_builder.create_text_fc( tmpl_inst ) ]
-    , .... )
-
-"""
-
+    * L{create_text_fc}
+    
+    """
     class CONTENT_TYPE:
         STANDARD_SOURCE_FILE = 'standard source file'
         CACHED_SOURCE_FILE = 'cached source file'
@@ -101,18 +88,59 @@ mb = module_builder.module_builder_t(
     cached_source_file = property( __get_cached_source_file )
     
 def create_text_fc( text ):
+    """
+    Creates L{file_configuration_t} instance, configured to contain Python string,
+    that contains valid C++ code
+    
+    @param text: C++ code
+    @type text: str
+    
+    @return: L{file_configuration_t}
+    """
     return file_configuration_t( data=text
                                  , content_type=file_configuration_t.CONTENT_TYPE.TEXT )
 
 def create_source_fc( header ):
+    """
+    Creates L{file_configuration_t} instance, configured to contain path to
+    C++ source file
+    
+    @param header: path to C++ source file
+    @type header: str
+    
+    @return: L{file_configuration_t}
+    """    
     return file_configuration_t( data=header
                                  , content_type=file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE )
 
 def create_gccxml_fc( xml_file ):
+    """
+    Creates L{file_configuration_t} instance, configured to contain path to
+    GCC-XML generated XML file.
+    
+    @param xml_file: path to GCC-XML generated XML file
+    @type xml_file: str
+    
+    @return: L{file_configuration_t}
+    """        
     return file_configuration_t( data=xml_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE )
 
 def create_cached_source_fc( header, cached_source_file ):
+    """
+    Creates L{file_configuration_t} instance, configured to contain path to
+    GCC-XML generated XML file and C++ source file. If XML file does not exists,
+    it will be created and used for parsing. If XML file exists, it will be used
+    for parsing.
+
+    @param header: path to C++ source file
+    @type header: str
+
+    @param cached_source_file: path to GCC-XML generated XML file
+    @type cached_source_file: str
+    
+    @return: L{file_configuration_t}
+    """        
     return file_configuration_t( data=header
                                  , cached_source_file=cached_source_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE )
