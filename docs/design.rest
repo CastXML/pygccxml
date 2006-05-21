@@ -4,142 +4,120 @@ pygccxml design
 
 .. contents:: Table of contents
    
------------------------
-The view from 1000 fits
------------------------
+------------------------
+The view from 10000 fits
+------------------------
 
 `pygccxml`_ has 3 packages:
 
-1. ``declarations``
-   This package defines classes that describe C++ declarations and types.
+* ``declarations`` package defines classes that describe C++ declarations and types
 
-2. ``parser``
-   This package defines classes that parse `GCC-XML`_ generared files and classes
-   that will help you to eliminate unnecessary parsing of C++ source files.
+* ``parser`` package defines classes that parse `GCC-XML`_ generared files. Also
+  it defines few classes that will help you to eliminate unnecessary parsing of 
+  C++ source files.
 
-3. ``utils``
-   This package defines few functions, that I found useful in the previous 
-   packages.
+* ``utils`` package defines few functions, I found useful in the whole project.
 
 -------------------------
 ``declarations`` package
 -------------------------
 
-Please take a look on `UML diagram`_. It contains all the classes are defined by 
-the `pygccxml`_.declarations package. Defined classes are used to describe almost 
-any C++ declaration. 
+Please take a look on `UML diagram`_. This `UML diagram`_ describes almost all
+classes defined in the package and their relationship. ``declarations`` package
+defines two hierarchies of class:
 
-A few words about the naming convention used. Every class name ends with "_t". 
-The are several reasons for this:
+1. types hiearchy - used to represent a C++ type
 
- * I am used to the C++ "std" convention, i.e. lower-case letters with underscores.
-   
- * Most of the names are already used in Python, and have a different meaning.
+2. declarations hierarchy - used to represent a C++ declaration.
+
 
 Types hierarchy
 ---------------
 
-Types hierarchy is used to represent an arbitrary type in C++. 
-
-Example 
-~~~~~~~
-
-For a variable "ptr"
-        
-    ``const int\* ptr=0;``
-        
-`pygccxml`_ will create the type
-        
-    ``pointer_t( const_t( int_t() ) )``
-    
-The ability to represent almost any type of C++ comes from the use of the 
-"decorator" pattern. 
+Types hierarchy is used to represent an arbitrary type in C++. class ``type_t`` 
+is the base class. 
 
 ``type_traits``
 ~~~~~~~~~~~~~~~
 
-Are you aware of `boost::type_traits`_ library? The `boost::type_traits`_ 
+Are you aware of `boost::type_traits`_ library? The `boost::type_traits`_  
 library has been developed by John Maddock, Steve Cleary and others. The 
-`boost::type_traits`_ library contains a set of very specific traits classes, 
+`boost::type_traits`_  library contains a set of very specific traits classes, 
 each of which encapsulate a single trait from the C++ type system; for example, 
 is a type a pointer or a reference type? Or does a type have a trivial constructor, 
 or a const-qualifier?
 
-`pygccxml`_ implements a lot of algorithm from the library. It also reuses the 
-names proposed by this library. Also I took few ideas for testing the `pygccxml`_ 
-type traits implementation. Here are some of the type traits implemented by `pygccxml`_.
+`pygccxml`_ implements a lot of functionality from the library:
 
-    + ``base_type``
+* a lot of algorithms has been implemented
 
-    + ``decompose_type``
-    
-    + ``decompose_class``
+  + ``is_same``
 
-    + ``is_same``
-    
-    + ``is_enum``
-    
-    + ``is_void``
-    
-    + ``is_const``
- 
-    + ``is_array``
-    
-    + ``is_pointer``
-    
-    + ``is_volatile``
-    
-    + ``is_integral``
-    
-    + ``is_reference``
-    
-    + ``is_arithmetic``
-    
-    + ``is_convertible``
-    
-    + ``is_fundamental``
-    
-    + ``is_floating_point``
-    
-    + ``is_base_and_derived``
+  + ``is_enum``
 
-    + ``is_unary_operator``
-    
-    + ``is_binary_operator``
+  + ``is_void``
 
-    + ``remove_cv``
-    
-    + ``remove_const``
-    
-    + ``remove_alias``
-    
-    + ``remove_pointer``
-    
-    + ``remove_volatile``
-    
-    + ``remove_reference``
+  + ``is_const``
 
-    + ``has_trivial_copy``
-    
-    + ``has_trivial_constructor``
-    
-    + ``find_trivial_constructor``
-    
-    + ``has_any_non_copyconstructor``
-    
-    + ``...``
+  + ``is_array``
+
+  + ``is_pointer``
+
+  + ``is_volatile``
+
+  + ``is_integral``
+
+  + ``is_reference``
+
+  + ``is_arithmetic``
+
+  + ``is_convertible``
+
+  + ``is_fundamental``
+
+  + ``is_floating_point``
+
+  + ``is_base_and_derived``
+
+  + ``is_unary_operator``
+
+  + ``is_binary_operator``
+
+  + ``remove_cv``
+
+  + ``remove_const``
+
+  + ``remove_alias``
+
+  + ``remove_pointer``
+
+  + ``remove_volatile``
+
+  + ``remove_reference``
+
+  + ``has_trivial_copy``
+
+  + ``has_trivial_constructor``
+
+  + ``has_any_non_copyconstructor``
+
+  For a full list of implemented algorithms, please consult API documentation.
+
+* a lot of unit tests has been written base on unit tests from the 
+  `boost::type_traits`_ library.
+
 
 If you are going to build code generator, you will find ``type_traits`` very handy.
 
 Declarations hierarchy
----------------------
+----------------------
 
 A declaration hierarchy is used to represent an arbitrary C++ declaration. 
 Basically, most of the classes defined in this package are just "set of properties".
 
 ``declaration_t`` is the base class of the declaration hierarchy. Every declaration
 has ``parent`` property. This property keeps a reference to the scope declaration 
-instance in which this declaration is defined. 
+instance, in which this declaration is defined. 
 
 The ``scopedef_t`` class derives from ``declaration_t``. This class is used to 
 say - "I may have other declarations inside". The "composite" design pattern is 
@@ -150,23 +128,18 @@ used here. ``class_t`` and ``namespace_t`` declaration classes derive from the
 ``parser`` package
 ------------------
 
-User API
---------
+Please take a look on `parser package UML diagram`_ . Classes defined in this 
+package implement parsing and linking functionality. There are few kind of 
+classes defined by the package:
 
-Please take a look on `parser package`_ ( "`pygccxml`_.parser" ) UML diagram. 
-This is the heart of the `pygccxml`_ project. Classes in this package implement 
-parsing and binding/linking functionality. There are few types of classes defined
-by the package:
+* classes, that implements parsing algorithms of `GCC-XML`_ generated XML file
 
-1. classes, that implements file parsing
+* classes, that configure "parser"
 
-2. classes, that configure "parser"
+* cache - classes, those one will help you to eliminate unnecessary parsing
 
-3. cache - classes
-
-4. patchers - classes, that fix `GCC-XML`_ generated declarations
-
-Next few paragraphs will tell you more about those classes.
+* patchers - classes, that fix `GCC-XML`_ generated declarations. ( Yes, sometimes
+  GCC-XML generates wrong description of C++ declaration. )
 
 Parser classes
 --------------
@@ -174,21 +147,25 @@ Parser classes
 ``source_reader_t`` - the only class that have an intime knowledge about `GCC-XML`_. 
 It has only one responsibility: it calls `GCC-XML`_ with a source file specified
 by user and creates declarations tree. The implementation of this class is split
-to 2 classes: 
-1. ``scanner_t  `` - this class scans the "XML" file, generated by `GCC-XML`_ and 
+to 2 classes:
+
+1. ``scanner_t`` - this class scans the "XML" file, generated by `GCC-XML`_ and 
    creates `pygccxml`_ declarations and types classes. After the xml file has 
    been processed declarations and type class instances keeps references to 
-   each other using `GCC-XML`_ generated id's. 
+   each other using `GCC-XML`_ generated id's.
 
 2. ``linker_t`` - this class contains logic for replacing `GCC-XML`_ generated 
    ids with references to declarations or type class instances.
 
 Both those classes are implementation details and should not be used by user.
+Performance note: ``scanner_t`` class uses Python ``xml.sax`` package in order 
+to parse XML. As a result, ``scanner_t`` class is able to parse even big XML files
+pretty quick. 
   
-``project_reader_t`` - think of this class as a linker or a binder. In most cases
-you work with few source files. GCC-XML does not supports this mode. So,`pygccxml`_
-implements all functionlity to parse few source files at once. ``project_reader_t``
-implements 2 different algorithms, that solves the problem:
+``project_reader_t`` - think about this class as a linker. In most cases you work 
+with few source files. GCC-XML does not supports this mode of work. So, `pygccxml`_
+implements all functionlity needed to parse few source files at once. 
+``project_reader_t`` implements 2 different algorithms, that solves the problem:
 
 1. ``project_reader_t`` creates temporal source file, that includes all the source 
    files. 
@@ -197,92 +174,43 @@ implements 2 different algorithms, that solves the problem:
    class and then joins the resulting declarations tree into single declarations
    tree.
    
-Both approaches have different trades-off. The firs approach does not allow you
-to reuse already parsed source files.
+Both approaches have different trades-off. The first approach does not allow you
+to reuse information from already parsed source files. While the second one
+allows you to setup cache. 
 
+Parser configuration classes
+----------------------------
 
-``config_t`` - a class that accumulates all the settings of `GCC-XML`_ and 
-`pygccxml`_. Users can work with relative files paths. In this case files are 
-searched in the following order:
-
-1. current directory
+``config_t`` - a class, that accumulates all the settings needed to invoke `GCC-XML`_:
   
-2. working directory
-  
-3. additional include paths specified by the user
+
+``file_configuration_t`` - a class, that contains some data and description how
+to treat the data. ``file_configuration_t`` can contain reference to the next types
+of data:
+
+(1) path to C++ source file
+
+(2) path to `GCC-XML`_ generated XML file
+
+(3) path to C++ source file and path to `GCC-XML`_ generated XML file
+
+    In this case, if XML file does not exists, it will be created. Next time
+    user will ask to parse the source file, the XML file will be used instead.
+
+(4) Python string, that contains valid C++ code
 
 
-Interface description 
-~~~~~~~~~~~~~~~~~~~~~
-
-``project_reader_t`` and ``source_reader_t``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-+ ``__init__( self, config, declarations_cache )`` - ``source_reader_t`` allows
-  ``declarations_cache`` to be or instance of ``cache_base_t`` or None. ``project_reader_t``
-  allows ``declarations_cache`` to be also path to cache file.
-
-+ ``read_string(self, content)`` - small convenience function. The ``content`` 
-  should be valid C++ code. This function will return the list of top level 
-  namespaces.
-
-+ ``source_reader_t.read_file(self, source_file)``  - this function will return
-  the list of top level namespaces.
-
-+ ``project_reader_t.read_files(self, files)`` This function will return the top 
-  level namespaces list. ``files`` - list of files to be compiled. This list may 
-  contain a file name ( string ) or instance of class ``file_configuration_t``. 
-  If the item is an instance of class ``file_configuration_t`` then the file will 
-  be compiled and parsed using its configuration. The project configuration stays 
-  unchanged.  
-
-+ ``source_reader_t.create_xml_file(self, source_file, destination_file_path=None)`` 
-  This function will return the file name of the file, created by `GCC-XML`_. If
-  ``destination_file_path`` is not ``None`` then this file path will be used and 
-  returned.
-
-+ ``source_reader_t.read_xml_file(self, xmlfile)`` This function will return the 
-  top level namespaces list.
-   
-  Right now top level namespaces are: "::" and "std".
-
-  The main purpose of ``source_reader_t.create_xml_file`` and ``source_reader_t.read_xml_file``
-  is to ease cross-platform development. 
-  
-``pygccxml.parser``
-^^^^^^^^^^^^^^^^^^^
-
-There are 2 functions:
-
-    1. ``parse(files, config=None, declarations_cache=None)``
-    2. ``parse_string(content, config=None)``
-
-Those are ``shortcuts`` functions for ``project_reader_t`` class.
+Cache classes
+-------------
 
 
 
-
------------------
-Test environments
------------------
-
-`pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and 
-`Debian Linux`_. I am using `Python`_ [ 2.3 | 2.4 ] and `GCC-XML`_ [ 0.6.0 | CVS ].
-Right now I am running more then 100 tests. They test almost every piece of code. 
-Also I have performance tests. Most of the time I am using "white box" testing 
-strategy.
-
-.. _`WSDL`: http://www.w3.org/TR/wsdl
-.. _`pyplusplus`: ./../pyplusplus/pyplusplus.html
 .. _`pygccxml`: ./pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
-.. _`Docutils`: http://docutils.sourceforge.net
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
-.. _`Boost Software License`: http://boost.org/more/license_info.html
-.. _`Debian Linux`: http://www.debian.org
 .. _`UML diagram` : ./declarations_uml.png
-.. _`Parser package` : ./parser_uml.png
+.. _`parser package UML diagram` : ./parser_uml.png
 .. _`ReleaseForge` : http://releaseforge.sourceforge.net
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html
 ..
