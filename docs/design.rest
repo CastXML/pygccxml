@@ -248,7 +248,7 @@ As you can guess, ``directory_cache_t`` class gives much better performance, tha
 Patchers
 --------
 
-????. Well, `GCC-XML`_ has few bugs, that could not be fixed from it. For example
+Well, `GCC-XML`_ has few bugs, that could not be fixed from it. For example
 ::
 
   namespace ns1{ namespace ns2{
@@ -258,15 +258,19 @@ Patchers
   void fix_enum( ns1::ns2::fruit arg=ns1::ns2::apple );
 
 `GCC-XML`_ will report the default value of ``arg`` as ``apple``. Obviously
-this in an error. `pygccxml`_ knows how to fix different bugs.
+this in an error. `pygccxml`_ knows how to fix this bug. 
+
+This is not the only bug, that could be fixed, there are few of them. `pygccxml`_
+introduces few classes, that knows how to deal with specific bug. More over, those
+bugs are fixed, only if I am 101% sure, that this is the right thing to do.
 
 -------
 Summary
 -------
 
-Thats all. I hope I was clear, at least I tried. Any way we are talking about
-open source project. You can take a look on source code. If you need more information
-you can take a look on API documentation.
+Thats all. I hope I was clear, at least I tried. Any way, `pygccxml`_ is an open 
+source project. You always can take a look on the source code. If you need more 
+information please read API documentation.
 
 .. _`pygccxml`: ./pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
