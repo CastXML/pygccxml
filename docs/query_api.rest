@@ -23,18 +23,18 @@ a reference to an integer. More over, I want those functions names to end with
   query = query & ~declarations.access_type_matcher_t( 'public' )
   global_ns.member_functions( function=query, arg_types=[None, 'int &'] )
 
-As for me the example I gave was too complex. In many cases you will find your
+As for me, the example I gave was too complex. In many cases you will find your
 self looking for one or many declarations using one or two properties of that
 declaration(s). For example:
 ::
 
   global_ns.namespaces( 'details' )
 
-This call will return all namespaces that have 'details' namespace.
+This call will return all namespaces with name 'details'.
 
-------------------
-How does it works?
-------------------
+--------------
+User interface
+--------------
 
 As you already know, ``pygccxml.declarations`` packages defines next classes:
 
@@ -44,8 +44,32 @@ As you already know, ``pygccxml.declarations`` packages defines next classes:
 
 * ``class_t`` - derives from ``scopedef_t`` class, represents C++ class/struct.
 
-``scopedef_t`` class defines query interface. Basicaly you can ask it about any
-declaration it contains, even about some sub declarations.
+So, the query methods defined on ``scopedef_t`` class could be used on instances
+of ``class_t`` and ``namespace_t`` classes. 
+
+I will explain the usage of ``member_function`` and ``member_functions`` methods.
+The usage of other methods is very similar to them. Here is definition of those 
+methods:
+::
+
+  def member_function(  self, 
+                        name=None, 
+                        function=None, 
+                        return_type=None, 
+                        arg_types=None, 
+                        header_dir=None, 
+                        header_file=None, 
+                        recursive=None )
+  
+  def member_functions( self, 
+                        name=None, 
+                        function=None, 
+                        return_type=None, 
+                        arg_types=None, 
+                        header_dir=None, 
+                        header_file=None, 
+                        recursive=None, 
+                        allow_empty=None )
 
 
 
