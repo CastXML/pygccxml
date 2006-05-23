@@ -54,6 +54,18 @@ from cpptypes import member_function_type_t
 from cpptypes import member_variable_type_t
 from cpptypes import declarated_t
 from cpptypes import type_qualifiers_t
+#java types  
+from cpptypes import java_fundamental_t
+from cpptypes import jbyte_t
+from cpptypes import jshort_t
+from cpptypes import jint_t
+from cpptypes import jlong_t
+from cpptypes import jfloat_t
+from cpptypes import jdouble_t
+from cpptypes import jchar_t
+from cpptypes import jboolean_t
+
+
 
 from variable import variable_t
 

@@ -184,6 +184,8 @@ class core_t( parser_test_case.parser_test_case_t ):
         for fundamental_type_name, fundamental_type in FUNDAMENTAL_TYPES.iteritems():
             if 'complex' in fundamental_type_name:
                 continue #I check this in an other tester
+            if isinstance( fundamental_type, java_fundamental_t ):
+                continue #I don't check this at all
             typedef_name = 'typedef_' + fundamental_type_name.replace( ' ', '_' )
             typedef = self.global_ns.decl( decl_type=typedef_t, name=typedef_name )
             self.failUnless( typedef, "unable to find typedef to build-in type '%s'" % fundamental_type_name )

@@ -89,7 +89,11 @@ class fundamental_t( type_t ):
 
     def _clone_impl( self ):
         return self
-    
+
+class java_fundamental_t( fundamental_t ):
+    def __init__( self, name ):
+        fundamental_t.__init__( self, name )
+
 class void_t( fundamental_t ):
     CPPNAME = 'void'
     def __init__( self ):
@@ -185,6 +189,48 @@ class complex_float_t( fundamental_t ):
     def __init__( self ):
         fundamental_t.__init__( self, complex_float_t.CPPNAME )
 
+class jbyte_t( java_fundamental_t ):
+    JNAME = 'jbyte'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jbyte_t.JNAME )
+
+class jshort_t( java_fundamental_t ):
+    JNAME = 'jshort'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jshort_t.JNAME )
+
+class jint_t( java_fundamental_t ):
+    JNAME = 'jint'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jint_t.JNAME )
+
+class jlong_t( java_fundamental_t ):
+    JNAME = 'jlong'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jlong_t.JNAME )
+
+class jfloat_t( java_fundamental_t ):
+    JNAME = 'jfloat'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jfloat_t.JNAME )
+
+
+class jdouble_t( java_fundamental_t ):
+    JNAME = 'jdouble'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jdouble_t.JNAME )
+
+  
+class jchar_t( java_fundamental_t ):
+    JNAME = 'jchar'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jchar_t.JNAME )
+
+class jboolean_t( java_fundamental_t ):
+    JNAME = 'jboolean'
+    def __init__( self ):
+        java_fundamental_t.__init__( self, jboolean_t.JNAME )
+
 FUNDAMENTAL_TYPES = {
     void_t.CPPNAME : void_t()
     , char_t.CPPNAME : char_t()
@@ -208,6 +254,24 @@ FUNDAMENTAL_TYPES = {
     , complex_long_double_t.CPPNAME : complex_long_double_t()
     , complex_double_t.CPPNAME : complex_double_t()
     , complex_float_t.CPPNAME : complex_float_t()
+    ##adding java types
+    , jbyte_t.JNAME : jbyte_t()
+    , jshort_t.JNAME : jshort_t()
+    , jint_t.JNAME : jint_t()
+    , jlong_t.JNAME : jlong_t()
+    , jfloat_t.JNAME : jfloat_t()
+    , jdouble_t.JNAME : jdouble_t()
+    , jchar_t.JNAME : jchar_t()
+    , jboolean_t.JNAME : jboolean_t()
+    , '__java_byte' : jbyte_t()
+    , '__java_short' : jshort_t()
+    , '__java_int' : jint_t()
+    , '__java_long' : jlong_t()
+    , '__java_float' : jfloat_t()
+    , '__java_double' : jdouble_t()
+    , '__java_char' : jchar_t()
+    , '__java_boolean' : jboolean_t()
+    
 }
 
 ################################################################################
