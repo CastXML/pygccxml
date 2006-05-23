@@ -41,7 +41,9 @@ Version 0.8
    
 7. Bug fixes.
 
-8. Documentation.
+8. Documentation has been updated/written/improved.
+
+9. Native java types has been added to fundamental types.
 
 -------------
 Version 0.7.1
