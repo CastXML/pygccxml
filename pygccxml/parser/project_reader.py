@@ -325,6 +325,7 @@ class project_reader_t:
         assert isinstance( nsref, pygccxml.declarations.namespace_t )
         ddhash = {} # decl.__class__ :  { decl.name : [decls] } double declaration hash
         decls = []
+        
         for decl in nsref.declarations:
             if not ddhash.has_key( decl.__class__ ):
                 ddhash[ decl.__class__ ] = { decl._name : [ decl ] }
@@ -338,6 +339,11 @@ class project_reader_t:
                     if isinstance( decl, pygccxml.declarations.calldef_t ):
                         if decl not in joined_decls[decl._name]:
                             #functions has overloading
+                            decls.append( decl )
+                            joined_decls[decl._name].append( decl )
+                    elif isinstance( decl, pygccxml.declarations.enumeration_t ):
+                        #unnamed enums
+                        if not decl.name and decl not in joined_decls[decl._name]:
                             decls.append( decl )
                             joined_decls[decl._name].append( decl )
                     else:
