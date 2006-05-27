@@ -46,6 +46,9 @@ class mdecl_wrapper_t( object ):
     def __getitem__( self, index ):
         """provides access to declaration"""
         return self.decls[index]
+ 
+    def __iter__( self ):
+        return iter(self.decls)
     
     def __ensure_attribute( self, name ):
         invalid_decls = filter( lambda d: not hasattr( d, name ), self.decls )
@@ -65,3 +68,6 @@ class mdecl_wrapper_t( object ):
         """@param name: name of method
         """
         return call_redirector_t( name, self.decls )
+    
+    def __contains__( self, item ):
+        return item in self.decls
