@@ -101,6 +101,8 @@ class class_t( scopedef.scopedef_t ):
         self._aliases = []
         
     def _get_name_impl( self ):
+        if not self._name: #class with empty name
+            return self._name
         if class_t.USE_DEMANGLED_AS_NAME and self.demangled:
             fname = algorithm.full_name( self.parent )
             if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):

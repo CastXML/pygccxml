@@ -366,6 +366,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_class_impl(self, class_type, attrs):
         decl = None
         name = attrs.get(XML_AN_NAME, '')
+        if '$' in name or '.' in name:
+            name = ''
         if attrs.has_key( XML_AN_INCOMPLETE ):
             decl = self.__decl_factory.create_class_declaration(name=name)
         else:

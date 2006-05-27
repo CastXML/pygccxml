@@ -346,6 +346,11 @@ class project_reader_t:
                         if not decl.name and decl not in joined_decls[decl._name]:
                             decls.append( decl )
                             joined_decls[decl._name].append( decl )
+                    elif isinstance( decl, pygccxml.declarations.class_t ):
+                        #unnamed classes
+                        if not decl.name and decl not in joined_decls[decl._name]:
+                            decls.append( decl )
+                            joined_decls[decl._name].append( decl )
                     else:
                         assert 1 == len( joined_decls[ decl._name ] )                        
                         if isinstance( decl, pygccxml.declarations.namespace_t ):
