@@ -87,7 +87,7 @@ Query interface
 
 `pygccxml`_ provides simple and powerful API to query declarations tree. I will
 try to give small example, that will prove my point. If you want to know more 
-about provided API please read `query api`__ document or API documentation.
+about provided API please read `query interface`__ document or API documentation.
 Examples:
 ::
 
@@ -107,7 +107,7 @@ readable:
         function has two arguments
         second argument type is int
 
-.. __: ./query_api.html
+.. __: ./query_interface.html
 
 -------
 License
