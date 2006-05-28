@@ -75,7 +75,7 @@ methods:
                         recursive=None,
                         allow_empty=None )
 
-As you can see, from the methods arguments you can search for member function
+As you can see, from the method arguments you can search for member function
 by:
 
   * ``name``
@@ -105,7 +105,7 @@ by:
 
       mem_funcs = my_class.member_functions( return_type='int' )
 
-      i = declarations.int_t()``
+      i = declarations.int_t()
       ref_i = declarations.reference_t( i )
       const_ref_i = declarations.const_t( ref_i )
       mem_funcs = my_class.member_functions( return_type=const_ref_int )

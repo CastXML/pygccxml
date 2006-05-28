@@ -14,17 +14,18 @@ can:
 1) get access to source code
 2) get access to latest release version of pyplusplus
 
+
+-----------------
+Subversion access
+-----------------
+
+http://sourceforge.net/svn/?group_id=118209
+
 --------
 Download
 --------
 
 https://sourceforge.net/project/showfiles.php?group_id=118209
-
-----------
-SVN access
-----------
-
-http://sourceforge.net/svn/?group_id=118209
 
 ------------
 Installation
