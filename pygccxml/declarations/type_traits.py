@@ -18,6 +18,7 @@ within this module works on L{type_t} class hierarchy and\\or L{class_t}.
 import typedef
 import calldef
 import cpptypes
+import variable
 import algorithm
 import enumeration
 import class_declaration
@@ -259,6 +260,15 @@ def is_enum(type):
     
     return isinstance( nake_type, cpptypes.declarated_t ) \
            and isinstance( nake_type.declaration, enumeration.enumeration_t )
+
+def is_class(type):
+    """returns True if type represents C++ class"""
+    nake_type = remove_alias( type )
+    nake_type = remove_reference( nake_type )
+    nake_type = remove_cv( nake_type )   
+    
+    return isinstance( nake_type, cpptypes.declarated_t ) \
+           and isinstance( nake_type.declaration, class_declaration.class_t )
 
 def find_trivial_constructor( type ):
     """returns reference to trivial constructor or None"""
@@ -683,6 +693,25 @@ def is_noncopyable( class_ ):
        or ( has_destructor( class_ ) and not has_public_destructor( class_ ) ):
         return True
     
+    #It is not enough to check base classes, we should also to check 
+    #member variables. 
+    mvars = filter( lambda x: isinstance( x, variable.variable_t ) 
+                    , class_.declarations )
+    for mvar in mvars:
+        if mvar.type_qualifiers.has_static:
+            continue
+        type_ = remove_alias( mvar.type )    
+        type_ = remove_reference( type_ )
+        if is_const( type_ ):
+            no_const = remove_const( type_ )
+            if is_fundamental( no_const ) or is_enum( no_const):
+                return True
+            if is_class( no_const ):
+                return True
+        if is_class( type_ ):
+            cls = type_.declaration
+            if is_noncopyable( cls ):
+                return True
     return False
     
     
