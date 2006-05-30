@@ -676,6 +676,8 @@ def is_convertible( source, target ):
     return __is_convertible_t( source, target ).is_convertible()
     
 def is_noncopyable( class_ ):
+    if class_.class_type == class_declaration.CLASS_TYPES.UNION:
+        return False
     for base_desc in class_.recursive_bases:
         assert isinstance( base_desc, class_declaration.hierarchy_info_t )
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
