@@ -170,14 +170,11 @@ class source_reader_t:
             ffname = header
             if not os.path.isabs( ffname ):
                   ffname = self.__file_full_name(header)
-            #input, output = os.popen4( self.__create_command_line( ffname, gccxml_file ) )
-            #input.close()
             command_line = self.__create_command_line( ffname, gccxml_file )
             if self.__config.verbose:
                 logger.info(  " Command line for GCC-XML: %s" % command_line )
             input_, output = os.popen4( command_line )
             input_.close()
-            #output = os.popen(command_line)
             gccxml_reports = []
             while True:
                   data = output.readline()
@@ -186,11 +183,12 @@ class source_reader_t:
                        break
             exit_status = output.close()
             gccxml_msg = ''.join(gccxml_reports)
-            if gccxml_msg or exit_status or not os.path.isfile(gccxml_file):
-                raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s" % gccxml_msg )
-            
-            #if not os.path.isfile(gccxml_file):
-               #raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s status:%s" % (gccxml_msg, exit_status) )
+            if self.__config.ignore_gccxml_output:
+                if not os.path.isfile(gccxml_file):
+                    raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s status:%s" % (gccxml_msg, exit_status) )
+            else:
+                if gccxml_msg or exit_status or not os.path.isfile(gccxml_file):
+                    raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s" % gccxml_msg )
         except Exception, error:
             pygccxml.utils.remove_file_no_raise( gccxml_file )
             raise error
