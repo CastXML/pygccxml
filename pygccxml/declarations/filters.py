@@ -353,6 +353,8 @@ class calldef_matcher_t( declaration_matcher_t ):
 
     def __compare_types( self, type_or_str, type ):
         assert type_or_str
+        if type is None:
+            return False
         if isinstance( type_or_str, cpptypes.type_t ):
             if type_or_str != type:
                 return False
