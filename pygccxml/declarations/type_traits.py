@@ -675,26 +675,7 @@ def is_convertible( source, target ):
     """returns True if source could be converted to target, otherwise False"""
     return __is_convertible_t( source, target ).is_convertible()
     
-def is_noncopyable( class_ ):
-    if class_.class_type == class_declaration.CLASS_TYPES.UNION:
-        return False
-    for base_desc in class_.recursive_bases:
-        assert isinstance( base_desc, class_declaration.hierarchy_info_t )
-        if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
-            return True
-        if not has_trivial_copy( base_desc.related_class ):
-            protected_ctrs = filter( lambda x: isinstance( x, calldef.constructor_t ) \
-                                               and x.is_copy_constructor
-                                     , base_desc.related_class.protected_members )
-            if not protected_ctrs:
-                return True
-        
-    if not has_trivial_copy( class_ ) \
-       or not has_public_constructor( class_ )\
-       or class_.is_abstract \
-       or ( has_destructor( class_ ) and not has_public_destructor( class_ ) ):
-        return True
-    
+def __is_noncopyable_single( class_ ):    
     #It is not enough to check base classes, we should also to check 
     #member variables. 
     mvars = filter( lambda x: isinstance( x, variable.variable_t ) 
@@ -715,7 +696,31 @@ def is_noncopyable( class_ ):
             if is_noncopyable( cls ):
                 return True
     return False
-    
+
+def is_noncopyable( class_ ):
+    if class_.class_type == class_declaration.CLASS_TYPES.UNION:
+        return False
+    for base_desc in class_.recursive_bases:
+        assert isinstance( base_desc, class_declaration.hierarchy_info_t )
+        if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
+            return True
+        if not has_trivial_copy( base_desc.related_class ):
+            protected_ctrs = filter( lambda x: isinstance( x, calldef.constructor_t ) \
+                                               and x.is_copy_constructor
+                                     , base_desc.related_class.protected_members )
+            if not protected_ctrs:
+                return True
+
+        if __is_noncopyable_single( base_desc.related_class ):
+            return True
+
+    if not has_trivial_copy( class_ ) \
+       or not has_public_constructor( class_ )\
+       or class_.is_abstract \
+       or ( has_destructor( class_ ) and not has_public_destructor( class_ ) ):
+        return True
+
+    return __is_noncopyable_single( class_ )    
     
     
     
