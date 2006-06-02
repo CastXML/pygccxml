@@ -8,13 +8,13 @@ pyplusplus development history
 Contributors
 ------------
 
-Thanks to all the people that have contributed patches, bug reports and suggestions.
-Source code and documentation have been contributed by
+Thanks to all the people that have contributed patches, bug reports and suggestions:
 
   * My wife - Yulia
-  * John Pallister <john@synchromesh.com>
+  * John Pallister
   * Matthias Baas
   * Allen Bierbaum
+  * Georgiy Dernovoy
 
 -----------
 Version 0.8
@@ -23,22 +23,22 @@ Version 0.8
 1. `pygccxml`_ now has power "select" interface. Read more about this cool feature
    in tutorials.
 
-2. Improved support for template instantiations. `pygccxml`_ now take into 
-   account demangled name of declarations. Please refer to documentation for 
+2. Improved support for template instantiations. `pygccxml`_ now take into
+   account demangled name of declarations. Please refer to documentation for
    more explanantion.
 
 3. ``dummy_type_t`` - new type in types hierarchy. This is a very useful class
    for code generation projects.
-   
+
 4. New function - ``get_global_namespace``. As you can guess, it will find and
    return reference to global namespace.
-   
+
 5. New functionality in ``type_traits`` - ``has_public_assign``. This function
    will return True, if class has public assign operator.
-   
+
 6. ``declarations.class_t`` has new property - ``aliases``. This is a list of
-   all class aliases. 
-   
+   all class aliases.
+
 7. Bug fixes.
 
 8. Documentation has been updated/written/improved.
@@ -54,77 +54,77 @@ Version 0.7.1
 1. New fundamental types has been added
 
    * complex float
-   
+
    * complex double
 
-   * complex long double   
-   
+   * complex long double
+
 2. **Attention - non backward compatible change**
 
    ``declarations.filtering.user_defined`` and ``declarations.filtering.by_location``
-   implementation has been changed. In previous version of those functions, 
-   ``decls`` list has been changed in place. This was wrong behaviour. Now, 
+   implementation has been changed. In previous version of those functions,
+   ``decls`` list has been changed in place. This was wrong behaviour. Now,
    those functions will return new list, that contains all desired declarations.
-   
+
 3. Few new type traits has been added
 
    * *type_traits.has_destructor*
 
    * *type_traits.has_public_destructor*
-   
+
    * *type_traits.has_public_constructor*
-   
+
    * *type_traits.is_noncopyable*
-   
-4. ``decl_printer_t`` class and ``print_declarations`` function have been added. 
+
+4. ``decl_printer_t`` class and ``print_declarations`` function have been added.
    Now you can print in a nice way your declaration tree or part of it.
    Thanks to Allen Bierbaum!
-   
+
 5. New class ``declarations.decl_factory_t`` has been added. This is a default
    factory for all declarations. From now all relevant parser classes takes as
    input instance of this class or ``Null``. In case of ``Null`` instance of
-   ``declarations.decl_factory_t`` will be created. Using this class you can 
+   ``declarations.decl_factory_t`` will be created. Using this class you can
    easily extend functionality provided by built-in declarations.
-   
+
 6. Sometimes, there is a need to find a declaration that match some criteria.
-   The was such functionality in `pygccxml`_, but it was too limited. This 
+   The was such functionality in `pygccxml`_, but it was too limited. This
    release fix the situation. `pygccxml`_ adds a set of classes that will help
    you to deal with this problem.
-   
+
 7. New cache - ``parser.directory_cache_t`` has been implemented.
-   ``parser.directory_cache_t`` uses individual files stored in a dedicated 
-   cache directory to store the cached contents. 
+   ``parser.directory_cache_t`` uses individual files stored in a dedicated
+   cache directory to store the cached contents.
    Thanks to Matthias Baas!
-   
-8. ``parser.file_cache_t`` has been improved a lot. 
+
+8. ``parser.file_cache_t`` has been improved a lot.
    Thanks to Allen Bierbaum!
-   
-9. New file configuration is available: "cached source file". 
-   ``parser.project_reader_t`` class will check for existence of `GCC-XML`_ 
-   generated file. If it does not exist it will create one. If it do exist, 
-   then that file will be used by the parser. 
-   
+
+9. New file configuration is available: "cached source file".
+   ``parser.project_reader_t`` class will check for existence of `GCC-XML`_
+   generated file. If it does not exist it will create one. If it do exist,
+   then that file will be used by the parser.
+
 10. Few helper functions has been added in order to make construction of
     configuration file to be as easy as possible:
-    
+
     * ``parser.create_text_fc`` - creates file configuration, that contains text
-    * ``parser.create_source_fc`` - creates file configuration, that contains 
+    * ``parser.create_source_fc`` - creates file configuration, that contains
       reference to regular source file
     * ``parser.create_gccxml_fc`` - creates file configuration, that contains
       reference to `GCC-XML`_ generated file
-    * ``parser.create_cached_source_fc`` - creates file configuration, that 
+    * ``parser.create_cached_source_fc`` - creates file configuration, that
       contains reference to 2 files: `GCC-XML`_ generated file and regular source
       file
-      
+
 11. Small bug fixes.
 
 12. Documentation. Allen Bierbaum and Matthias Baas contributed so much in this
     area. Almost every public function/class has now documentation string.
-    
-13. Logging functionality has been added. `pygccxml`_ creates new logger 
+
+13. Logging functionality has been added. `pygccxml`_ creates new logger
     "pygccxml". Now it is possible to see what `pygccxml`_ is doing right now.
 
-14. I am sure I forgot something.      
+14. I am sure I forgot something.
 
 
 -------------
@@ -132,29 +132,29 @@ Version 0.6.9
 -------------
 
 1. New functions:
-    
+
    * *type_traits.is_void_pointer*
-   
+
    * *type_traits.array_size*
-   
+
    * *type_traits.array_item_type*
 
 2. Class *declarations.variable_t* has new property - *bit_fields*
 
-3. Now it is possible to specify "undefined" directives using 
+3. Now it is possible to specify "undefined" directives using
    *parser.config_t* class.
-   
+
 4. *patch* functionality has been introduced. `GCC-XML`_ generates wrong
-   default values for function arguments. *patch* functionality tries to fix 
+   default values for function arguments. *patch* functionality tries to fix
    this.
-   
+
 5. Small bug fixes
 
 -------------
 Version 0.6.8
 -------------
 
-1. Small bug has been fixed. 
+1. Small bug has been fixed.
 
 -------------
 Version 0.6.7
@@ -163,44 +163,44 @@ Version 0.6.7
 1. New functions:
 
    * *type_traits.remove_pointer*
-   
+
    * *type_traits.base_type*
-   
+
    * *type_traits.is_convertible*
 
 2. A lot of small bug fixes.
 
 3. Few English mistakes have been fixed.
 
-   .. attention:: 
-   
-      There are 2 none backward compatible changes: 
-   
+   .. attention::
+
+      There are 2 none backward compatible changes:
+
       * class with name **compaund_t** has been renamed to **compound_t**
-   
+
       * word **pathes** has been replaced with **paths**
 
-4. There are new properties on 
-   
+4. There are new properties on
+
    * *declarations.declaration_t.top_parent*
-   
-   * *declarations.class_t.recursive_bases* returns all base classes of the 
+
+   * *declarations.class_t.recursive_bases* returns all base classes of the
      class
-   
-   * *declarations.class_t.recursive_derived* returns all derived classes of 
+
+   * *declarations.class_t.recursive_derived* returns all derived classes of
      the class
-     
+
    * *member_calldef_t.access_type*
 
-5. New type has been introduced: *unknown_t*. There are use cases when 
+5. New type has been introduced: *unknown_t*. There are use cases when
    `GCC-XML`_ does not returns function return type.
-   
-6. New implementation of *make_flatten* algorithm using generators. 
-   By default old implementation will be used. 
-   
-7. *parser.file_configuration_t* interface has been changed. Now it is able 
+
+6. New implementation of *make_flatten* algorithm using generators.
+   By default old implementation will be used.
+
+7. *parser.file_configuration_t* interface has been changed. Now it is able
    to keep: source file, text or `GCC-XML`_ generated file. If you are doing
-   something with code that is not changing you'd better use `GCC-XML`_ 
+   something with code that is not changing you'd better use `GCC-XML`_
    generated file as content of the *parser.file_configuration_t*. Save your
    time.
 
