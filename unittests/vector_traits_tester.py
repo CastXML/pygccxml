@@ -36,6 +36,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
         container = self.global_ns.typedef( 'container', recursive=False )
         self.validate_yes( value_type, container )
         
+    def test_yes( self ):
+        yes_ns = self.global_ns.namespace( 'yes' )
+        for struct in yes_ns.classes():
+            if not struct.name.startswith( '_' ):
+                continue
+            if not struct.name.endswith( '_' ):
+                continue
+            self.validate_yes( struct.typedef( 'value_type' )
+                               , struct.typedef( 'container' ) ) 
+        
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))

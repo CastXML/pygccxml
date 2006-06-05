@@ -21,6 +21,7 @@ import cpptypes
 import variable
 import algorithm
 import namespace 
+import templates
 import enumeration
 import class_declaration
 from sets import Set as set
@@ -210,11 +211,17 @@ def remove_const(type):
         return type
     else:
         return nake_type.base
-    
+
+def remove_declarated( type ):
+    type = remove_alias( type )
+    if isinstance( type, cpptypes.declarated_t ):
+        type = type.declaration
+    return type
+
 def is_same(type1, type2):
     """returns True if type1 and type2 are same types"""
-    nake_type1 = remove_alias( type1 )
-    nake_type2 = remove_alias( type2 )
+    nake_type1 = remove_declarated( type1 )
+    nake_type2 = remove_declarated( type2 )
     return nake_type1 == nake_type2
 
 def is_volatile(type):
@@ -793,7 +800,15 @@ class vector_traits:
         if isinstance( cls, class_declaration.class_t ):
             return cls.typedef( "value_type" ).type
         else:
-            
+            value_type_str = templates.args( cls.name )[0]
+            found = cls.top_parent.classes( value_type_str, allow_empty=True )
+            if not found:
+                if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
+                    return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
+            if len( found ) == 1:
+                return found[0]
+            else:
+                raise RuntimeError( "Unable to find out vector value type. vector class is: %s" % cls.decl_string )
     
     
     
