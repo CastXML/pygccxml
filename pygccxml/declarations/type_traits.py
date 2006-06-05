@@ -731,27 +731,27 @@ def is_noncopyable( class_ ):
     return __is_noncopyable_single( class_ )    
       
 
-def is_defined_in_std( cls ):
+def is_defined_in_xxx( xxx, cls ):
     if not cls.parent:
         return False
     
     if not isinstance( cls.parent, namespace.namespace_t ):
         return False
     
-    if 'std' != cls.parent.name:
+    if xxx != cls.parent.name:
         return False
 
-    std = cls.parent
-    if not std.parent:
+    xxx_ns = cls.parent
+    if not xxx_ns.parent:
         return False
     
-    if not isinstance( std.parent, namespace.namespace_t ):
+    if not isinstance( xxx_ns.parent, namespace.namespace_t ):
         return False
     
-    if '::' != std.parent.name:
+    if '::' != xxx_ns.parent.name:
         return False
     
-    global_ns = std.parent
+    global_ns = xxx_ns.parent
     return None is global_ns.parent
 
 class vector_traits:
@@ -772,7 +772,7 @@ class vector_traits:
         if not cls.name.startswith( 'vector<' ):
             return 
         
-        if not is_defined_in_std( cls ):
+        if not is_defined_in_xxx( 'std', cls ):
             return
         return cls
 
@@ -810,6 +810,32 @@ class vector_traits:
             else:
                 raise RuntimeError( "Unable to find out vector value type. vector class is: %s" % cls.decl_string )
     
+def is_smart_pointer( type ):
+    type = remove_alias( type )
+    type = remove_cv( type )
+    if not is_defined_in_xxx( 'boost', type ):
+        return False
+    return type.decl_string.startswith( '::boost::shared_ptr<' )
+
+def is_std_string( type ):
+    decl_strings = [
+        '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
+        , '::std::basic_string<char, std::char_traits<char>, std::allocator<char> >'
+        , '::std::string' ]
+    type = remove_alias( type )
+    return remove_cv( type ).decl_string in decl_strings
+
+def is_std_wstring( type ):
+    decl_strings = [
+        '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
+        , '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        , '::std::wstring' ]
+    type = remove_alias( type )
+    return remove_cv( type ).decl_string in decl_strings
+
+
+
+
     
     
     
