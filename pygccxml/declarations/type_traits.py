@@ -20,6 +20,7 @@ import calldef
 import cpptypes
 import variable
 import algorithm
+import namespace 
 import enumeration
 import class_declaration
 from sets import Set as set
@@ -721,8 +722,78 @@ def is_noncopyable( class_ ):
         return True
 
     return __is_noncopyable_single( class_ )    
+      
+
+def is_defined_in_std( cls ):
+    if not cls.parent:
+        return False
     
+    if not isinstance( cls.parent, namespace.namespace_t ):
+        return False
     
+    if 'std' != cls.parent.name:
+        return False
+
+    std = cls.parent
+    if not std.parent:
+        return False
+    
+    if not isinstance( std.parent, namespace.namespace_t ):
+        return False
+    
+    if '::' != std.parent.name:
+        return False
+    
+    global_ns = std.parent
+    return None is global_ns.parent
+
+class vector_traits:
+
+    @staticmethod
+    def declaration_or_none( type ):
+        global is_defined_in_std
+        """returns reference to the class declaration or None"""
+        type = remove_alias( type )
+        type = remove_cv( type )
+        if not isinstance( type, cpptypes.declarated_t ):
+            return
+        
+        cls = remove_alias( type.declaration )
+        if not isinstance( cls, ( class_declaration.class_t, class_declaration.class_declaration_t ) ):
+            return
+        
+        if not cls.name.startswith( 'vector<' ):
+            return 
+        
+        if not is_defined_in_std( cls ):
+            return
+        return cls
+
+    @staticmethod
+    def is_vector( type ):
+        """
+        Returns True if type represents instantiation of std class vector,
+        otherwise False.
+        """
+        return not( None is vector_traits.declaration_or_none( type ) )
+
+    
+    @staticmethod
+    def class_declaration( type ):
+        """returns reference to the class declaration, """
+        cls = vector_traits.declaration_or_none( type )
+        if not cls:
+            raise TypeError( 'Type "%s" is not instantiation ov std::vector' % type.decl_string )
+        return cls
+    
+    @staticmethod
+    def value_type( type ):
+        """returns reference to value_type of the vector"""
+        cls = vector_traits.class_declaration( type )
+        if isinstance( cls, class_declaration.class_t ):
+            return cls.typedef( "value_type" ).type
+        else:
+            
     
     
     
