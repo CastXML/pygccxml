@@ -34,6 +34,7 @@ import decl_printer_tester
 import typedefs_tester 
 import demangled_tester
 import unnamed_enums_bug_tester
+import vector_traits_tester
 
 def create_suite():
     testers = [ 
@@ -67,6 +68,7 @@ def create_suite():
         , typedefs_tester
         , demangled_tester
         , unnamed_enums_bug_tester
+        , vector_traits_tester
     ]
     
     main_suite = unittest.TestSuite()    

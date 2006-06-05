@@ -49,13 +49,6 @@ namespace yes{
         
         container do_nothing(){};
     };
-
-    struct _6_{
-        typedef const int value_type;
-        typedef const std::vector< const int > container;
-        
-        container do_nothing(){};
-    };
     
 }
 

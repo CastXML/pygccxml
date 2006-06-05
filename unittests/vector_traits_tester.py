@@ -45,7 +45,17 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 continue
             self.validate_yes( struct.typedef( 'value_type' )
                                , struct.typedef( 'container' ) ) 
-        
+    
+    def test_no( self ):
+        traits = declarations.vector_traits
+        no_ns = self.global_ns.namespace( 'no' )
+        for struct in no_ns.classes():
+            if not struct.name.startswith( '_' ):
+                continue
+            if not struct.name.endswith( '_' ):
+                continue
+            self.failUnless( not traits.is_vector( struct.typedef( 'container' ) ) )
+    
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))
