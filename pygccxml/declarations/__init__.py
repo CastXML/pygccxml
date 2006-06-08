@@ -119,6 +119,8 @@ from type_traits import is_floating_point
 from type_traits import is_base_and_derived
 from type_traits import is_convertible
 from type_traits import is_noncopyable
+from type_traits import is_std_string
+from type_traits import is_std_wstring
 
 from type_traits import is_unary_operator
 from type_traits import is_binary_operator
@@ -143,6 +145,9 @@ from type_traits import find_trivial_constructor
 from type_traits import has_any_non_copyconstructor
 
 from type_traits import vector_traits
+from type_traits import smart_pointer_traits
+
+
 
 import templates
 import call_invocation

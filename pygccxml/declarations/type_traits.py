@@ -790,7 +790,7 @@ class vector_traits:
         """returns reference to the class declaration, """
         cls = vector_traits.declaration_or_none( type )
         if not cls:
-            raise TypeError( 'Type "%s" is not instantiation ov std::vector' % type.decl_string )
+            raise TypeError( 'Type "%s" is not instantiation of std::vector' % type.decl_string )
         return cls
     
     @staticmethod
@@ -809,14 +809,36 @@ class vector_traits:
                 return found[0]
             else:
                 raise RuntimeError( "Unable to find out vector value type. vector class is: %s" % cls.decl_string )
-    
-def is_smart_pointer( type ):
-    type = remove_alias( type )
-    type = remove_cv( type )
-    if not is_defined_in_xxx( 'boost', type ):
-        return False
-    return type.decl_string.startswith( '::boost::shared_ptr<' )
 
+class smart_pointer_traits:
+    @staticmethod
+    def is_smart_pointer( type ):
+        type = remove_alias( type )
+        type = remove_cv( type )
+        if not is_defined_in_xxx( 'boost', type ):
+            return False
+        return type.decl_string.startswith( '::boost::shared_ptr<' )
+    
+    @staticmethod
+    def value_type( type ):
+        if not smart_pointer_traits.is_smart_pointer( type ):
+            raise TypeError( 'Type "%s" is not instantiation of boost::shared_ptr' % type.decl_string )
+        type = remove_alias( type )
+        cls = remove_cv( type )
+        if isinstance( cls, class_declaration.class_t ):
+            return cls.typedef( "value_type" ).type
+        else:
+            value_type_str = templates.args( cls.name )[0]
+            found = cls.top_parent.classes( value_type_str, allow_empty=True )
+            if not found:
+                if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
+                    return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
+            if len( found ) == 1:
+                return found[0]
+            else:
+                raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
+
+            
 def is_std_string( type ):
     decl_strings = [
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
