@@ -762,11 +762,15 @@ class vector_traits:
         """returns reference to the class declaration or None"""
         type = remove_alias( type )
         type = remove_cv( type )
-        if not isinstance( type, cpptypes.declarated_t ):
-            return
         
-        cls = remove_alias( type.declaration )
-        if not isinstance( cls, ( class_declaration.class_t, class_declaration.class_declaration_t ) ):
+        cls = None 
+        if isinstance( type, cpptypes.declarated_t ):
+            cls = remove_alias( type.declaration )
+        elif isinstance( type, class_declaration.class_t ):
+            cls = type
+        elif isinstance( type, class_declaration.class_declaration_t ):
+            cls = type
+        else:
             return
         
         if not cls.name.startswith( 'vector<' ):
@@ -798,7 +802,7 @@ class vector_traits:
         """returns reference to value_type of the vector"""
         cls = vector_traits.class_declaration( type )
         if isinstance( cls, class_declaration.class_t ):
-            return cls.typedef( "value_type" ).type
+            return remove_declarated( cls.typedef( "value_type" ).type )
         else:
             value_type_str = templates.args( cls.name )[0]
             found = cls.top_parent.classes( value_type_str, allow_empty=True )
@@ -815,6 +819,7 @@ class smart_pointer_traits:
     def is_smart_pointer( type ):
         type = remove_alias( type )
         type = remove_cv( type )
+        type = remove_declarated( type )
         if not is_defined_in_xxx( 'boost', type ):
             return False
         return type.decl_string.startswith( '::boost::shared_ptr<' )
@@ -825,8 +830,9 @@ class smart_pointer_traits:
             raise TypeError( 'Type "%s" is not instantiation of boost::shared_ptr' % type.decl_string )
         type = remove_alias( type )
         cls = remove_cv( type )
+        cls = remove_declarated( type )
         if isinstance( cls, class_declaration.class_t ):
-            return cls.typedef( "value_type" ).type
+            return remove_declarated( cls.typedef( "value_type" ).type )
         else:
             value_type_str = templates.args( cls.name )[0]
             found = cls.top_parent.classes( value_type_str, allow_empty=True )
