@@ -820,6 +820,8 @@ class smart_pointer_traits:
         type = remove_alias( type )
         type = remove_cv( type )
         type = remove_declarated( type )
+        if not isinstance( type, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
+            return False
         if not is_defined_in_xxx( 'boost', type ):
             return False
         return type.decl_string.startswith( '::boost::shared_ptr<' )
@@ -833,6 +835,8 @@ class smart_pointer_traits:
         cls = remove_declarated( type )
         if isinstance( cls, class_declaration.class_t ):
             return remove_declarated( cls.typedef( "value_type" ).type )
+        elif not isinstance( cls, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
+            raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
         else:
             value_type_str = templates.args( cls.name )[0]
             found = cls.top_parent.classes( value_type_str, allow_empty=True )
