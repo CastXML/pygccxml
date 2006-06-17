@@ -805,7 +805,11 @@ class vector_traits:
             return remove_declarated( cls.typedef( "value_type" ).type )
         else:
             value_type_str = templates.args( cls.name )[0]
-            found = cls.top_parent.classes( value_type_str, allow_empty=True )
+            if not value_type_str.startswith( '::' ):
+                value_type_str = '::' + value_type_str
+            found = cls.top_parent.decls( name=value_type_str
+                                          , function=lambda decl: not isinstance( decl, calldef.calldef_t )
+                                          ,  allow_empty=True )
             if not found:
                 if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
                     return cpptypes.FUNDAMENTAL_TYPES[value_type_str]

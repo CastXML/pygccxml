@@ -202,6 +202,8 @@ class declaration_matcher_t( matcher_base_t ):
             if not isinstance( decl, self.decl_type ):
                 return False
         if not None is self.name:
+            if 'SubMeshLodGeometryLink' in decl.decl_string:
+                i = 0
             if not self.check_name( decl ):
                 return False
         if not None is self.header_dir and decl.location:

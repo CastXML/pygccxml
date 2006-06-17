@@ -466,8 +466,11 @@ class member_function_type_t( type_t, calldef_type_t ):
         has_const_str = ''
         if has_const:
             has_const_str = 'const'
+        return_type_decl_string = ''
+        if return_type:
+            return_type_decl_string = return_type.decl_string
         return member_function_type_t.NAME_TEMPLATE % { 
-              'return_type' : return_type.decl_string 
+              'return_type' : return_type_decl_string 
             , 'class' : class_decl_string
             , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) )
             , 'has_const' : has_const_str }                                          
