@@ -72,6 +72,30 @@ class type_visitor_t(object):
 
     def visit_complex_float(self):
         raise NotImplementedError()
+   
+    def visit_jbyte(self):
+        raise NotImplementedError()
+    
+    def visit_jshort(self):
+        raise NotImplementedError()
+    
+    def visit_jint(self):
+        raise NotImplementedError()
+    
+    def visit_jlong(self):
+        raise NotImplementedError()
+    
+    def visit_jfloat(self):
+        raise NotImplementedError()
+    
+    def visit_jdouble(self):
+        raise NotImplementedError()
+    
+    def visit_jchar(self):
+        raise NotImplementedError()
+    
+    def visit_jboolean(self):
+        raise NotImplementedError()
     
     def visit_volatile( self ):
         raise NotImplementedError()

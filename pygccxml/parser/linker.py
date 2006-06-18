@@ -193,6 +193,30 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_complex_float(self):
         pass
 
+    def visit_jbyte(self):
+        pass
+    
+    def visit_jshort(self):
+        pass
+    
+    def visit_jint(self):
+        pass
+    
+    def visit_jlong(self):
+        pass
+    
+    def visit_jfloat(self):
+        pass
+    
+    def visit_jdouble(self):
+        pass
+    
+    def visit_jchar(self):
+        pass
+    
+    def visit_jboolean(self):
+        pass
+
     def visit_volatile( self ):
         self.__link_compound_type()
 
