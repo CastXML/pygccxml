@@ -802,7 +802,7 @@ class vector_traits:
         """returns reference to value_type of the vector"""
         cls = vector_traits.class_declaration( type )
         if isinstance( cls, class_declaration.class_t ):
-            return remove_declarated( cls.typedef( "value_type" ).type )
+            return remove_declarated( cls.typedef( "value_type", recursive=False ).type )
         else:
             value_type_str = templates.args( cls.name )[0]
             if not value_type_str.startswith( '::' ):
@@ -838,7 +838,7 @@ class smart_pointer_traits:
         cls = remove_cv( type )
         cls = remove_declarated( type )
         if isinstance( cls, class_declaration.class_t ):
-            return remove_declarated( cls.typedef( "value_type" ).type )
+            return remove_declarated( cls.typedef( "value_type", recursive=False ).type )
         elif not isinstance( cls, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
             raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
         else:
