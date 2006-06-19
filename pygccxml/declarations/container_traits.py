@@ -12,10 +12,13 @@ import cpptypes
 import namespace 
 import class_declaration
 import type_traits
+    
+class container_traits_impl_t:
+    def __init__( self, container_name, value_type_index ):
+        self.name = container_name
+        self.value_type_index = value_type_index
 
-class impl_details:
-    @staticmethod
-    def get_container_or_none( type, container_name ):
+    def get_container_or_none( self, type ):
         """returns reference to the class declaration or None"""
         type = type_traits.remove_alias( type )
         type = type_traits.remove_cv( type )
@@ -30,40 +33,55 @@ class impl_details:
         else:
             return
         
-        if not cls.name.startswith( container_name + '<' ):
+        if not cls.name.startswith( self.name + '<' ):
             return 
         
         if not type_traits.impl_details.is_defined_in_xxx( 'std', cls ):
             return
         return cls
+
+    def is_my_case( self, type ):
+        return bool( self.get_container_or_none( type ) )
     
-class vector_traits:
-    CONTAINER_NAME = 'vector'
-    
-    @staticmethod
-    def is_vector( type ):
-        """
-        Returns True if type represents instantiation of std class vector, otherwise False."""
-        return not( None is impl_details.get_container_or_none( type, vector_traits.CONTAINER_NAME ) )
-    
-    @staticmethod
-    def class_declaration( type ):
-        """returns reference to the class declaration, """
-        cls = impl_details.get_container_or_none( type, vector_traits.CONTAINER_NAME )
+    def class_declaration( self, type ):
+        cls = self.get_container_or_none( type )
         if not cls:
-            raise TypeError( 'Type "%s" is not instantiation of std::vector' % type.decl_string )
+            raise TypeError( 'Type "%s" is not instantiation of std::%s' % ( type.decl_string, self.name ) )
         return cls
     
-    @staticmethod
-    def value_type( type ):
-        """returns reference to value_type of the vector"""
-        cls = vector_traits.class_declaration( type )
+    def value_type( self, type ):
+        cls = self.class_declaration( type )
         if isinstance( cls, class_declaration.class_t ):
-            return type_traits.remove_declarated( cls.typedef( "value_type", recursive=False ).type )
+            value_type = cls.typedef( "value_type", recursive=False ).type
+            return type_traits.remove_declarated( value_type )
         else:
-            value_type_str = templates.args( cls.name )[0]
+            value_type_str = templates.args( cls.name )[self.value_type_index]
             ref = type_traits.impl_details.find_value_type( cls.top_parent, value_type_str )
             if None is ref:
-                raise RuntimeError( "Unable to find out vector value type. vector class is: %s" % cls.decl_string )
+                raise RuntimeError( "Unable to find out %s '%s' value type." 
+                                    % ( self.name, cls.decl_string ) )
             return ref
 
+def create_traits_class( container_name, value_type_index ):
+    class xxx_traits:
+        impl = container_traits_impl_t( container_name, value_type_index )
+
+        @staticmethod
+        def is_my_case( type ):
+            return xxx_traits.impl.is_my_case( type )
+        
+        @staticmethod
+        def class_declaration( type ):
+            return xxx_traits.impl.class_declaration( type )
+        
+        @staticmethod
+        def value_type( type ):
+            return xxx_traits.impl.value_type( type )
+    
+    return xxx_traits
+
+vector_traits = create_traits_class( 'vector', 0 )
+map_traits = create_traits_class( 'map', 1 )
+multimap_traits = create_traits_class( 'multimap', 1 )
+hash_map_traits = create_traits_class( 'hash_map', 1 )
+hash_multimap_traits = create_traits_class( 'hash_multimap', 1 )
