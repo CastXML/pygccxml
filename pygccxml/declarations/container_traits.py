@@ -10,6 +10,7 @@ defines few algorithms, that deals with different properties of std containers
 import calldef
 import cpptypes
 import namespace 
+import templates
 import class_declaration
 import type_traits
     
