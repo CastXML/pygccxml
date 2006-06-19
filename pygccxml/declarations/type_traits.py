@@ -754,6 +754,46 @@ def is_defined_in_xxx( xxx, cls ):
     global_ns = xxx_ns.parent
     return None is global_ns.parent
 
+class impl_details:
+    @staticmethod
+    def is_defined_in_xxx( xxx, cls ):
+        if not cls.parent:
+            return False
+        
+        if not isinstance( cls.parent, namespace.namespace_t ):
+            return False
+        
+        if xxx != cls.parent.name:
+            return False
+
+        xxx_ns = cls.parent
+        if not xxx_ns.parent:
+            return False
+        
+        if not isinstance( xxx_ns.parent, namespace.namespace_t ):
+            return False
+        
+        if '::' != xxx_ns.parent.name:
+            return False
+        
+        global_ns = xxx_ns.parent
+        return None is global_ns.parent
+
+    @staticmethod
+    def find_value_type( global_ns, value_type_str ):
+        if not value_type_str.startswith( '::' ):
+            value_type_str = '::' + value_type_str
+        found = global_ns.decls( name=value_type_str
+                                 , function=lambda decl: not isinstance( decl, calldef.calldef_t )
+                                 ,  allow_empty=True )
+        if not found:
+            if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
+                return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
+        if len( found ) == 1:
+            return found[0]
+        else:
+            return None
+
 class smart_pointer_traits:
     @staticmethod
     def is_smart_pointer( type ):
@@ -762,7 +802,7 @@ class smart_pointer_traits:
         type = remove_declarated( type )
         if not isinstance( type, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
             return False
-        if not is_defined_in_xxx( 'boost', type ):
+        if not impl_details.is_defined_in_xxx( 'boost', type ):
             return False
         return type.decl_string.startswith( '::boost::shared_ptr<' )
     
@@ -779,16 +819,11 @@ class smart_pointer_traits:
             raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
         else:
             value_type_str = templates.args( cls.name )[0]
-            found = cls.top_parent.classes( value_type_str, allow_empty=True )
-            if not found:
-                if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
-                    return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
-            if len( found ) == 1:
-                return found[0]
-            else:
+            ref = impl_details.find_value_type( cls.top_parent, value_type_str )
+            if None is ref:
                 raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
+            return ref
 
-            
 def is_std_string( type ):
     decl_strings = [
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'

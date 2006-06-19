@@ -27,7 +27,6 @@ class tester_t( parser_test_case.parser_test_case_t ):
     
     def validate_yes( self, value_type, container ):
         traits = declarations.vector_traits
-        self.failUnless( traits.declaration_or_none( container ) )
         self.failUnless( traits.is_vector( container ) )
         self.failUnless( declarations.is_same( value_type, traits.value_type( container ) ) )
         
