@@ -144,8 +144,10 @@ from type_traits import has_trivial_constructor
 from type_traits import find_trivial_constructor
 from type_traits import has_any_non_copyconstructor
 
-from type_traits import vector_traits
 from type_traits import smart_pointer_traits
+
+from container_traits import vector_traits
+
 
 
 
