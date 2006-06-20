@@ -263,11 +263,17 @@ def is_fundamental(type):
 def is_enum(type):
     """returns True if type represents C++ enum type"""
     nake_type = remove_alias( type )
-    nake_type = remove_reference( nake_type )
     nake_type = remove_cv( nake_type )   
     
     return isinstance( nake_type, cpptypes.declarated_t ) \
            and isinstance( nake_type.declaration, enumeration.enumeration_t )
+
+def enum_declaration(type):
+    if not is_enum( type ):
+        raise TypeError( 'Type "%s" is not enumeration' % type.decl_string  )
+    nake_type = remove_alias( type )
+    nake_type = remove_cv( nake_type )   
+    return remove_declarated( nake_type )    
 
 def is_class(type):
     """returns True if type represents C++ class"""

@@ -102,8 +102,11 @@ from type_visitor import type_visitor_t
 from type_traits import decompose_type
 from type_traits import decompose_class
 
-from type_traits import is_same
+
 from type_traits import is_enum
+from type_traits import enum_declaration
+
+from type_traits import is_same
 from type_traits import is_void
 from type_traits import is_void_pointer
 from type_traits import is_const
@@ -143,6 +146,7 @@ from type_traits import has_public_constructor
 from type_traits import has_trivial_constructor
 from type_traits import find_trivial_constructor
 from type_traits import has_any_non_copyconstructor
+
 
 from type_traits import smart_pointer_traits
 
