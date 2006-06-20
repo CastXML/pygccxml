@@ -151,6 +151,7 @@ from type_traits import has_any_non_copyconstructor
 from type_traits import smart_pointer_traits
 
 from container_traits import vector_traits
+from container_traits import list_traits
 from container_traits import map_traits 
 from container_traits import multimap_traits 
 from container_traits import hash_map_traits 

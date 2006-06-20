@@ -82,6 +82,7 @@ def create_traits_class( container_name, value_type_index ):
     return xxx_traits
 
 vector_traits = create_traits_class( 'vector', 0 )
+list_traits = create_traits_class( 'list', 0 )
 map_traits = create_traits_class( 'map', 1 )
 multimap_traits = create_traits_class( 'multimap', 1 )
 hash_map_traits = create_traits_class( 'hash_map', 1 )
