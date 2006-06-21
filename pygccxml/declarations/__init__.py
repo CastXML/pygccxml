@@ -109,6 +109,7 @@ from type_traits import enum_declaration
 from type_traits import is_same
 from type_traits import is_void
 from type_traits import is_void_pointer
+from type_traits import is_class
 from type_traits import is_const
 from type_traits import base_type
 from type_traits import is_array
@@ -140,6 +141,7 @@ from type_traits import remove_reference
 
 from type_traits import has_destructor
 from type_traits import has_trivial_copy
+from type_traits import has_public_equal
 from type_traits import has_public_assign
 from type_traits import has_public_destructor
 from type_traits import has_public_constructor
