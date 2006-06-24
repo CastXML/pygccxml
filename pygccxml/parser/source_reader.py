@@ -90,7 +90,7 @@ class source_reader_t:
             if sys.platform == 'win32':
                 gccxml_name = 'gccxml' + '.exe'
                 environment_var_delimiter = ';'
-            elif sys.platform == 'linux2':
+            elif sys.platform == 'linux2' or sys.platform == 'darwin':
                 gccxml_name = 'gccxml'
                 environment_var_delimiter = ':'
             else:
@@ -123,7 +123,7 @@ class source_reader_t:
         #returns
         cmd = []
         #first is gccxml executable
-        if 'win' in sys.platform:
+        if 'win32' in sys.platform:
             cmd.append( '"%s"' % os.path.normpath( self.__config.gccxml_path ) )
         else:
             cmd.append(  '%s' % os.path.normpath( self.__config.gccxml_path ) )
@@ -140,7 +140,7 @@ class source_reader_t:
             cmd.append( '-fxml-start="%s"' % ','.join( self.__config.start_with_declarations ) )
         
         cmd_line = ' '.join(cmd)
-        if 'win' in sys.platform :
+        if 'win32' in sys.platform :
             cmd_line = '"%s"' % cmd_line
         logger.debug( 'gccxml cmd: %s' % cmd_line )
         return cmd_line
