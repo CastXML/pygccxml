@@ -137,7 +137,7 @@ class file_cache_t( cache_base_t ):
         cache_base_t.__init__( self )
         self.__name = name
         self.__cache = self.__load( self.__name )
-        self.__needs_flushed = bool( self.__cache ) # If empty then we need to flush        
+        self.__needs_flushed = not bool( self.__cache ) # If empty then we need to flush        
         for entry in self.__cache.itervalues(): # Clear hit flags
             entry.was_hit = False
         
