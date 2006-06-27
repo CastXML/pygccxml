@@ -110,6 +110,7 @@ from type_traits import is_same
 from type_traits import is_void
 from type_traits import is_void_pointer
 from type_traits import is_class
+from type_traits import is_class_declaration
 from type_traits import is_const
 from type_traits import base_type
 from type_traits import is_array
@@ -138,6 +139,7 @@ from type_traits import remove_alias
 from type_traits import remove_pointer
 from type_traits import remove_volatile
 from type_traits import remove_reference
+from type_traits import remove_declarated
 
 from type_traits import has_destructor
 from type_traits import has_trivial_copy
@@ -166,6 +168,23 @@ from container_traits import set_traits
 from container_traits import hash_set_traits
 from container_traits import multiset_traits
 from container_traits import hash_multiset_traits
+
+all_container_traits = [
+    list_traits 
+    , deque_traits
+    , queue_traits
+    , priority_queue
+    , vector_traits
+    , stack_traits
+    , map_traits
+    , multimap_traits
+    , hash_map_traits
+    , hash_multimap_traits
+    , set_traits
+    , hash_set_traits
+    , multiset_traits
+    , hash_multiset_traits 
+]
 
 import templates
 import call_invocation
@@ -255,7 +274,6 @@ impl_decl_types[ scopedef.scopedef_t.enumeration ] = enumeration_t
 
 impl_matchers[ scopedef.scopedef_t.typedef ] = declaration_matcher_t
 impl_decl_types[ scopedef.scopedef_t.typedef ] = typedef_t
-
 
 impl_matchers[ namespace_t.namespace ] = namespace_matcher_t
 

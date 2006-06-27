@@ -278,10 +278,16 @@ def enum_declaration(type):
 def is_class(type):
     """returns True if type represents C++ class"""
     nake_type = remove_alias( type )
-    nake_type = remove_reference( nake_type )
     nake_type = remove_cv( nake_type )   
     nake_type = remove_declarated( nake_type )
     return isinstance( nake_type, class_declaration.class_t) 
+
+def is_class_declaration(type):
+    """returns True if type represents C++ class"""
+    nake_type = remove_alias( type )
+    nake_type = remove_cv( nake_type )   
+    nake_type = remove_declarated( nake_type )
+    return isinstance( nake_type, class_declaration.class_declaration_t) 
 
 def find_trivial_constructor( type ):
     """returns reference to trivial constructor or None"""
