@@ -152,14 +152,20 @@ from type_traits import has_any_non_copyconstructor
 
 from type_traits import smart_pointer_traits
 
+from container_traits import list_traits 
+from container_traits import deque_traits
+from container_traits import queue_traits
+from container_traits import priority_queue
 from container_traits import vector_traits
-from container_traits import list_traits
-from container_traits import map_traits 
-from container_traits import multimap_traits 
-from container_traits import hash_map_traits 
+from container_traits import stack_traits
+from container_traits import map_traits
+from container_traits import multimap_traits
+from container_traits import hash_map_traits
 from container_traits import hash_multimap_traits
-
-
+from container_traits import set_traits
+from container_traits import hash_set_traits
+from container_traits import multiset_traits
+from container_traits import hash_multiset_traits
 
 import templates
 import call_invocation

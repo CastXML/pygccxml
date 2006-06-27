@@ -81,9 +81,29 @@ def create_traits_class( container_name, value_type_index ):
     
     return xxx_traits
 
-vector_traits = create_traits_class( 'vector', 0 )
 list_traits = create_traits_class( 'list', 0 )
+
+deque_traits = create_traits_class( 'deque', 0 )
+
+queue_traits = create_traits_class( 'queue', 0 )
+priority_queue = create_traits_class( 'priority_queue', 0 )
+
+vector_traits = create_traits_class( 'vector', 0 )
+
+stack_traits = create_traits_class( 'stack', 0 )
+
 map_traits = create_traits_class( 'map', 1 )
 multimap_traits = create_traits_class( 'multimap', 1 )
+
 hash_map_traits = create_traits_class( 'hash_map', 1 )
 hash_multimap_traits = create_traits_class( 'hash_multimap', 1 )
+
+set_traits = create_traits_class( 'set', 0 )
+hash_set_traits = create_traits_class( 'hash_set', 0 )
+
+multiset_traits = create_traits_class( 'multiset', 0 )
+hash_multiset_traits = create_traits_class( 'hash_multiset', 0 )
+
+
+
+
