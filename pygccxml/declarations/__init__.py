@@ -105,12 +105,17 @@ from type_traits import decompose_class
 
 from type_traits import is_enum
 from type_traits import enum_declaration
+from type_traits import enum_traits
+
+from type_traits import is_class
+from type_traits import class_traits
+from type_traits import is_class_declaration
+from type_traits import class_declaration_traits
+
 
 from type_traits import is_same
 from type_traits import is_void
 from type_traits import is_void_pointer
-from type_traits import is_class
-from type_traits import is_class_declaration
 from type_traits import is_const
 from type_traits import base_type
 from type_traits import is_array

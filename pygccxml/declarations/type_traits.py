@@ -260,34 +260,36 @@ def is_fundamental(type):
                                   , cpptypes.fundamental_t
                                   , (cpptypes.const_t, cpptypes.volatile_t) )
 
-def is_enum(type):
-    """returns True if type represents C++ enum type"""
-    nake_type = remove_alias( type )
-    nake_type = remove_cv( nake_type )   
+class declaration_xxx_traits:
+    sequence = [ remove_alias, remove_cv, remove_declarated ]
+    def __init__( self, declaration_class ):
+        self.declaration_class = declaration_class
+        
+    def apply_sequence( self, type ):
+        for f in self.sequence:
+            type = f( type )
+        return type
     
-    return isinstance( nake_type, cpptypes.declarated_t ) \
-           and isinstance( nake_type.declaration, enumeration.enumeration_t )
+    def is_my_case( self, type ):
+        return isinstance( self.apply_sequence( type ), self.declaration_class )
+    
+    def get_declaration( self, type ):
+        assert self.is_my_case( type )
+        return self.apply_sequence( type )
 
-def enum_declaration(type):
-    if not is_enum( type ):
-        raise TypeError( 'Type "%s" is not enumeration' % type.decl_string  )
-    nake_type = remove_alias( type )
-    nake_type = remove_cv( nake_type )   
-    return remove_declarated( nake_type )    
+enum_traits = declaration_xxx_traits( enumeration.enumeration_t )
 
-def is_class(type):
-    """returns True if type represents C++ class"""
-    nake_type = remove_alias( type )
-    nake_type = remove_cv( nake_type )   
-    nake_type = remove_declarated( nake_type )
-    return isinstance( nake_type, class_declaration.class_t) 
+is_enum = enum_traits.is_my_case
+#backward computability
+enum_declaration = enum_traits.get_declaration
 
-def is_class_declaration(type):
-    """returns True if type represents C++ class"""
-    nake_type = remove_alias( type )
-    nake_type = remove_cv( nake_type )   
-    nake_type = remove_declarated( nake_type )
-    return isinstance( nake_type, class_declaration.class_declaration_t) 
+class_traits = declaration_xxx_traits( class_declaration.class_t )
+#backward computability
+is_class = class_traits.is_my_case
+
+class_declaration_traits = declaration_xxx_traits( class_declaration.class_declaration_t )
+#backward computability
+is_class_declaration = class_declaration_traits.is_my_case
 
 def find_trivial_constructor( type ):
     """returns reference to trivial constructor or None"""
