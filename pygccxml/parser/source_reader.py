@@ -127,6 +127,9 @@ class source_reader_t:
             cmd.append( '"%s"' % os.path.normpath( self.__config.gccxml_path ) )
         else:
             cmd.append(  '%s' % os.path.normpath( self.__config.gccxml_path ) )
+        # Add all cflags passed
+        if self.__config.cflags != "":
+            cmd.append(" %s "%self.__config.cflags)
         #second all additional includes directories
         cmd.append( ''.join( [' -I"%s"' % search_dir for search_dir in self.__search_directories] ) )
         #third all additional defined symbols

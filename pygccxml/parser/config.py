@@ -28,7 +28,8 @@ class config_t(object):
                   , undefine_symbols=None
                   , start_with_declarations=None
                   , verbose=False
-                  , ignore_gccxml_output=False):
+                  , ignore_gccxml_output=False
+                  , cflags=""):
         """Constructor. 
         """
         object.__init__( self )
@@ -53,6 +54,7 @@ class config_t(object):
 
         self.__verbose = verbose
         self.__ignore_gccxml_output = ignore_gccxml_output
+        self.__cflags = cflags
         
     def clone(self):
         return config_t( gccxml_path=self.__gccxml_path
@@ -62,7 +64,8 @@ class config_t(object):
                          , undefine_symbols=self.__undefine_symbols[:]
                          , start_with_declarations=self.__start_with_declarations[:]
                          , verbose=self.verbose
-                         , ignore_gccxml_output=self.ignore_gccxml_output)
+                         , ignore_gccxml_output=self.ignore_gccxml_output
+                         , cflags=self.cflags)
 
     def __get_gccxml_path(self):
         return self.__gccxml_path
@@ -103,3 +106,9 @@ class config_t(object):
     def __set_ignore_gccxml_output(self, val=True):
         self.__ignore_gccxml_output = val
     ignore_gccxml_output = property( __get_ignore_gccxml_output, __set_ignore_gccxml_output )
+    
+    def __get_cflags(self):
+        return self.__cflags
+    def __set_cflags(self, val):
+        self.__cflags = val
+    cflags = property( __get_cflags, __set_cflags )

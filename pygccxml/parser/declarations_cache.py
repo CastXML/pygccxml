@@ -25,33 +25,59 @@ def file_signature( filename ):
     f.close()    
     return sig.hexdigest()
 
+def configuration_signature( config ):
+    """ Return a signature for a configuration (config_t)
+        object.  This can then be used as a key in the cache.
+        This method must take into account anything about
+        a configuration that could cause the declarations generated
+        to be different between runs.
+    """
+    sig = md5.new()
+    sig.update(str(config.gccxml_path))
+    sig.update(str(config.working_directory))
+    sig.update(str(config.cflags))
+    for p in config.include_paths:
+        sig.update(str(p))
+    for s in config.define_symbols:
+        sig.update(str(s))
+    for u in config.undefine_symbols:
+        sig.update(str(u))    
+    return sig.hexdigest()
+
 class cache_base_t( object ):
     def __init__( self ):
         object.__init__(self)
         
     def flush(self):
+        """ Flush (write out) the cache to disk if needed. """
         raise NotImplementedError()
         
     def update(self, source_file, configuration, declarations, included_files):
+        """ Update cache entry.
+        @param source_file: path to the C++ source file being parsed
+        @param configuration: configuration used in parsing (config_t)
+        @param declarations: declaration tree found when parsing
+        @param included_files: files included by parsing.
+        """
         raise NotImplementedError()    
         
     def cached_value(self, source_file, configuration):
-        #returns declarations, types
+        """ Return declarations we have cached for the source_file and configuration
+            given.
+        @param source_file: path to the C++ source file being parsed.
+        @param configuration: configuration to use for parsing (config_t)
+        """        
         raise NotImplementedError()
 
 class record_t( object ):
     def __init__( self
                   , source_signature
-                  , working_directory
-                  , include_paths
-                  , define_symbols
+                  , config_signature
                   , included_files
                   , included_files_signature
                   , declarations ):
         self.__source_signature = source_signature
-        self.__working_directory = working_directory
-        self.__include_paths = include_paths
-        self.__define_symbols = define_symbols
+        self.__config_signature = config_signature
         self.__included_files = included_files
         self.__included_files_signature = included_files_signature
         self.__declarations = declarations
@@ -64,16 +90,11 @@ class record_t( object ):
     was_hit = property( _get_was_hit, _set_was_hit )
     
     def key(self):
-        return ( self.__source_signature
-                 , self.__working_directory
-                 , tuple(self.__include_paths)
-                 , tuple(self.__define_symbols ) )
+        return ( self.__source_signature, self.__config_signature)
     
     def create_key( source_file, configuration ):
         return ( file_signature(source_file)
-                 , configuration.working_directory
-                 , tuple( configuration.include_paths )
-                 , tuple( configuration.define_symbols ) )
+                 , configuration_signature(configuration))                 
     create_key = staticmethod( create_key )
     
     #def value(self):
@@ -97,22 +118,10 @@ class record_t( object ):
         return self.__source_signature
     source_signature = property( __source_signature )
     
-    def __source_file(self):
-        return self.__source_file
-    source_file = property( __source_file )
-    
-    def __working_directory(self):
-        return self.__working_directory
-    working_directory = property( __working_directory )        
-    
-    def __include_paths(self):
-        return self.__include_paths
-    include_paths = property( __include_paths )
-    
-    def __define_symbols(self):
-        return self.__define_symbols
-    define_symbols = property( __define_symbols )
-    
+    def __config_signature(self):
+        return self.__config_signature
+    config_signature = property( __config_signature )
+        
     def __included_files(self):
         return self.__included_files
     included_files = property( __included_files )
@@ -134,14 +143,18 @@ class file_cache_t( cache_base_t ):
     """
 
     def __init__( self, name ):
+        """
+        @param name: name of the cache file.
+        """
         cache_base_t.__init__( self )
-        self.__name = name
-        self.__cache = self.__load( self.__name )
+        self.__name = name                              # Name of cache file
+        self.__cache = self.__load( self.__name )       # Map record_key to record_t
         self.__needs_flushed = not bool( self.__cache ) # If empty then we need to flush        
         for entry in self.__cache.itervalues(): # Clear hit flags
             entry.was_hit = False
         
-    def __load( file_name ):        
+    def __load( file_name ):
+        " Load pickled cache from file and return the object. "
         cache = None
         if os.path.exists( file_name ) and not os.path.isfile( file_name ):
             raise RuntimeError( 'Cache should be initialized with valid full file name' )
@@ -165,10 +178,12 @@ class file_cache_t( cache_base_t ):
     __load = staticmethod( __load )
         
     def flush(self):
-        # Remove entries that did not get a cache hit
+        # If not marked as needing flushed, then return immediately
         if not self.__needs_flushed:
+            logger.info("Cache did not change, ignoring flush.")
             return
         
+        # Remove entries that did not get a cache hit
         num_removed = 0
         for key in self.__cache.keys():
             if not self.__cache[key].was_hit:
@@ -184,9 +199,7 @@ class file_cache_t( cache_base_t ):
     def update(self, source_file, configuration, declarations, included_files):
         """ Update a cached record with the current key and value contents. """
         record = record_t( source_signature=file_signature(source_file)
-                           , working_directory=configuration.working_directory
-                           , include_paths=configuration.include_paths
-                           , define_symbols=configuration.define_symbols
+                           , config_signature=configuration_signature(configuration)
                            , included_files=included_files
                            , included_files_signature=map( file_signature, included_files)
                            , declarations=declarations 

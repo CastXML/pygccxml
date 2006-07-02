@@ -345,6 +345,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         map(lambda p: m.update(p), config.include_paths)
         map(lambda p: m.update(p), config.define_symbols)
         map(lambda p: m.update(p), config.undefine_symbols)
+        map(lambda p: m.update(p), config.cflags)
         return m.digest()
 
 
