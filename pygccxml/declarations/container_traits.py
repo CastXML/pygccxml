@@ -15,9 +15,10 @@ import class_declaration
 import type_traits
     
 class container_traits_impl_t:
-    def __init__( self, container_name, value_type_index ):
+    def __init__( self, container_name, element_type_index, element_type_typedef ):
         self.name = container_name
-        self.value_type_index = value_type_index
+        self.element_type_index = element_type_index
+        self.element_type_typedef = element_type_typedef 
 
     def get_container_or_none( self, type ):
         """returns reference to the class declaration or None"""
@@ -50,22 +51,22 @@ class container_traits_impl_t:
             raise TypeError( 'Type "%s" is not instantiation of std::%s' % ( type.decl_string, self.name ) )
         return cls
     
-    def value_type( self, type ):
+    def element_type( self, type ):
         cls = self.class_declaration( type )
         if isinstance( cls, class_declaration.class_t ):
-            value_type = cls.typedef( "value_type", recursive=False ).type
+            value_type = cls.typedef( self.element_type_typedef, recursive=False ).type
             return type_traits.remove_declarated( value_type )
         else:
-            value_type_str = templates.args( cls.name )[self.value_type_index]
+            value_type_str = templates.args( cls.name )[self.element_type_index]
             ref = type_traits.impl_details.find_value_type( cls.top_parent, value_type_str )
             if None is ref:
                 raise RuntimeError( "Unable to find out %s '%s' value type." 
                                     % ( self.name, cls.decl_string ) )
             return ref
 
-def create_traits_class( container_name, value_type_index ):
+def create_traits_class( container_name, element_type_index, element_type_typedef ):
     class xxx_traits:
-        impl = container_traits_impl_t( container_name, value_type_index )
+        impl = container_traits_impl_t( container_name, element_type_index, element_type_typedef )
 
         @staticmethod
         def is_my_case( type ):
@@ -76,33 +77,34 @@ def create_traits_class( container_name, value_type_index ):
             return xxx_traits.impl.class_declaration( type )
         
         @staticmethod
-        def value_type( type ):
-            return xxx_traits.impl.value_type( type )
+        def element_type( type ):
+            return xxx_traits.impl.element_type( type )
     
     return xxx_traits
 
-list_traits = create_traits_class( 'list', 0 )
+list_traits = create_traits_class( 'list', 0, 'value_type' )
 
-deque_traits = create_traits_class( 'deque', 0 )
+deque_traits = create_traits_class( 'deque', 0, 'value_type' )
 
-queue_traits = create_traits_class( 'queue', 0 )
-priority_queue = create_traits_class( 'priority_queue', 0 )
+queue_traits = create_traits_class( 'queue', 0, 'value_type' )
 
-vector_traits = create_traits_class( 'vector', 0 )
+priority_queue = create_traits_class( 'priority_queue', 0, 'value_type' )
 
-stack_traits = create_traits_class( 'stack', 0 )
+vector_traits = create_traits_class( 'vector', 0, 'value_type' )
 
-map_traits = create_traits_class( 'map', 1 )
-multimap_traits = create_traits_class( 'multimap', 1 )
+stack_traits = create_traits_class( 'stack', 0, 'value_type' )
 
-hash_map_traits = create_traits_class( 'hash_map', 1 )
-hash_multimap_traits = create_traits_class( 'hash_multimap', 1 )
+map_traits = create_traits_class( 'map', 1, 'mapped_type' )
+multimap_traits = create_traits_class( 'multimap', 1, 'mapped_type' )
 
-set_traits = create_traits_class( 'set', 0 )
-hash_set_traits = create_traits_class( 'hash_set', 0 )
+hash_map_traits = create_traits_class( 'hash_map', 1, 'mapped_type' )
+hash_multimap_traits = create_traits_class( 'hash_multimap', 1, 'mapped_type' )
 
-multiset_traits = create_traits_class( 'multiset', 0 )
-hash_multiset_traits = create_traits_class( 'hash_multiset', 0 )
+set_traits = create_traits_class( 'set', 0, 'value_type' )
+hash_set_traits = create_traits_class( 'hash_set', 0, 'value_type' )
+
+multiset_traits = create_traits_class( 'multiset', 0, 'value_type' )
+hash_multiset_traits = create_traits_class( 'hash_multiset', 0, 'value_type' )
 
 
 
