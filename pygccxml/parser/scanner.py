@@ -255,7 +255,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         return self.__decl_factory.create_enumeration( name=enum_name )
 
     def __read_enumeration_value( self, attrs ):
-        self.__inst.values[attrs.get( XML_AN_NAME, '' )] = attrs[XML_AN_INIT]
+        name = attrs.get( XML_AN_NAME, '' )
+        num = int(attrs[XML_AN_INIT])
+        self.__inst.append_value(name, num)
 
     def __read_array_type( self, attrs ):
         type_ = attrs[ XML_AN_TYPE ]

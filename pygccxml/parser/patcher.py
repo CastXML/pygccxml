@@ -56,7 +56,7 @@ class default_argument_patcher_t( patcher_base_t ):
         type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )        
         if not declarations.is_enum( type_ ):
             return False
-        return type_.declaration.values.has_key( arg.default_value )
+        return type_.declaration.has_value_name( arg.default_value )
 
     def __fix_unqualified_enum( self, func, arg):
         type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )
@@ -106,9 +106,11 @@ class default_argument_patcher_t( patcher_base_t ):
         enums = filter( lambda decl: isinstance( decl, declarations.enumeration_t )
                         , scope.declarations )
         for enum_decl in enums:
-            if default_value in enum_decl.values.keys():
+            valnames = map(lambda x: x[0], enum_decl.values)
+            valnums = map(lambda x: x[1], enum_decl.values)
+            if default_value in valnames:
                 return enum_decl
-            if default_value in enum_decl.values.values():
+            if default_value in valnums:
                 return enum_decl
         else:
             return None
