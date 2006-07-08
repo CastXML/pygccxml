@@ -168,7 +168,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.writer( ' ' * curr_level * self.INDENT_SIZE + 'values:'.ljust( self.JUSTIFY ) )
         value_level = ' ' * ( curr_level + 1 )* self.INDENT_SIZE
         self.writer( os.linesep )
-        for name, value in self.__inst.values.items():
+        for name, value in self.__inst.values:
             self.writer( value_level + "%s : %s"% (name, value) + os.linesep )
 
     def visit_namespace(self ):

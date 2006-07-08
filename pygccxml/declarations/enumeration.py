@@ -105,5 +105,9 @@ class enumeration_t( declaration.declaration_t ):
             if val==name:
                 return True
         return False
-    
-        
+
+    def get_name2value_dict( self ):
+        x = {}
+        for val, num in self._values:
+            x[val] = num
+        return x
