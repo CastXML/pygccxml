@@ -210,7 +210,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         expected_type = declarations.find_declaration( defs
                                                        , name='expected'
                                                        , type=declarations.enumeration_t )
-        expected_value = bool( int( expected_type.values['value'] ) )
+        expected_value = bool( expected_type.get_name2value_dict()['value'] )
         if expected_value != declarations.is_convertible( source_type, target_type ):
             print decl.name
         

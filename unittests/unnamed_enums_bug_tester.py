@@ -27,7 +27,7 @@ class source_reader_tester_t( parser_test_case.parser_test_case_t ):
     def test( self ):                
         names = []
         enums = self.global_ns.enums()        
-        map( lambda enum: names.extend( enum.values.keys() ), enums )
+        map( lambda enum: names.extend( enum.get_name2value_dict().keys() ), enums )
         self.failUnless( len( names ) == 4 )
         self.failUnless( 'x1' in names )
         self.failUnless( 'x2' in names )
@@ -49,7 +49,7 @@ class project_reader_1_tester_t( parser_test_case.parser_test_case_t ):
     def test( self ):                
         names = []
         enums = self.global_ns.enums()        
-        map( lambda enum: names.extend( enum.values.keys() ), enums )
+        map( lambda enum: names.extend( enum.get_name2value_dict().keys() ), enums )
         self.failUnless( len( names ) == 4 )
         self.failUnless( 'x1' in names )
         self.failUnless( 'x2' in names )
@@ -71,7 +71,7 @@ class project_reader_3_tester_t( parser_test_case.parser_test_case_t ):
     def test( self ):                
         names = []
         enums = self.global_ns.enums()        
-        map( lambda enum: names.extend( enum.values.keys() ), enums )
+        map( lambda enum: names.extend( enum.get_name2value_dict().keys() ), enums )
         self.failUnless( len( names ) == 6 )
         self.failUnless( 'x1' in names )
         self.failUnless( 'x2' in names )

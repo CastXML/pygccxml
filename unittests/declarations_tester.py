@@ -32,8 +32,8 @@ class declarations_t( parser_test_case.parser_test_case_t ):
 
     def test_enumeration_t(self):
         enum = self.global_ns.enum( 'ENumbers' )
-        expected_values = dict( zip( [ 'e%d' % index for index in range(10) ]
-                                     , [ '%d' % index for index in range(10) ] ) )
+        expected_values = zip( [ 'e%d' % index for index in range(10) ]
+                                     , [ index for index in range(10) ] )
         self.failUnless( expected_values == enum.values
                          , "expected enum values ( '%s' ) and existings ( '%s' ) are different" % \
                             ( pprint.pformat( expected_values ), pprint.pformat( enum.values ) ) )
