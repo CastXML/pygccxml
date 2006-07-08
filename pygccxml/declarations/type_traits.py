@@ -365,32 +365,40 @@ def has_any_non_copyconstructor( type):
                            , type.public_members )
     return bool( constructors )
 
-def has_public_equal( type ):
-    """returns True if class has public operator==, otherwise False"""
+def has_public_binary_operator( type, operator_symbol ):
+    symbol = operator_symbol
     not_artificial = lambda decl: decl.is_artificial == False
     type = remove_alias( type )
     type = remove_cv( type )
     type = remove_declarated( type )
     assert isinstance( type, class_declaration.class_t )
-    equals = type.member_operators( function=not_artificial, symbol='==', allow_empty=True, recursive=False )
+    equals = type.member_operators( function=not_artificial, symbol=symbol, allow_empty=True, recursive=False )
     if equals:
         return True
 
     t = cpptypes.declarated_t( type )
     t = cpptypes.const_t( t )
     t = cpptypes.reference_t( t )
-    equals = type.parent.operators( function=not_artificial, symbol='==', arg_types=[t, None], allow_empty=True, recursive=False  )
+    equals = type.parent.operators( function=not_artificial, symbol=symbol, arg_types=[t, None], allow_empty=True, recursive=False  )
     if equals:
         return True
     for bi in type.recursive_bases:
         assert isinstance( bi, class_declaration.hierarchy_info_t )
         if bi.access_type != class_declaration.ACCESS_TYPES.PUBLIC:
             continue
-        equals = bi.related_class.member_operators( function=not_artificial, symbol='==', allow_empty=True, recursive=False )
+        equals = bi.related_class.member_operators( function=not_artificial, symbol=symbol, allow_empty=True, recursive=False )
         if equals:
             return True
     return False
-    
+
+def has_public_equal( type ):
+    """returns True if class has public operator==, otherwise False"""
+    return has_public_binary_operator( type, '==' )
+
+def has_public_less( type ):
+    """returns True if class has public operator<, otherwise False"""
+    return has_public_binary_operator( type, '<' )
+
 def is_unary_operator( oper ):
     """returns True if operator is unary operator, otherwise False"""
     #~ definition:
