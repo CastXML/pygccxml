@@ -10,10 +10,6 @@ namespace binary_operator{
 namespace yes{
     typedef std::string yes1;
 
-    inline bool instantiate_templ(){
-        return std::string( "1" ) == std::string( "2" );
-    }
-
     struct trivial{
         bool operator==(const trivial& other);
     };

@@ -15,6 +15,7 @@ Those functions are very valuable for code generation. Almost all functions
 within this module works on L{type_t} class hierarchy and\\or L{class_t}. 
 """
 
+import filters
 import typedef
 import calldef
 import cpptypes
@@ -366,28 +367,44 @@ def has_any_non_copyconstructor( type):
     return bool( constructors )
 
 def has_public_binary_operator( type, operator_symbol ):
-    symbol = operator_symbol
     not_artificial = lambda decl: decl.is_artificial == False
     type = remove_alias( type )
     type = remove_cv( type )
     type = remove_declarated( type )
     assert isinstance( type, class_declaration.class_t )
-    equals = type.member_operators( function=not_artificial, symbol=symbol, allow_empty=True, recursive=False )
-    if equals:
+    
+    if is_std_string( type ) or is_std_wstring( type ):
+        #In some case compare operators of std::basic_string are not instantiated
+        return True
+    
+    operators = type.member_operators( function=filters.custom_matcher_t( not_artificial ) \
+                                                & filters.access_type_matcher_t( 'public' )
+                                       , symbol=operator_symbol
+                                       , allow_empty=True
+                                       , recursive=False )
+    if operators:
         return True
 
     t = cpptypes.declarated_t( type )
     t = cpptypes.const_t( t )
     t = cpptypes.reference_t( t )
-    equals = type.parent.operators( function=not_artificial, symbol=symbol, arg_types=[t, None], allow_empty=True, recursive=False  )
-    if equals:
+    operators = type.top_parent.operators( function=not_artificial
+                                           , arg_types=[t, None]
+                                           , symbol=operator_symbol
+                                           , allow_empty=True
+                                           , recursive=True )
+    if operators:
         return True
     for bi in type.recursive_bases:
         assert isinstance( bi, class_declaration.hierarchy_info_t )
         if bi.access_type != class_declaration.ACCESS_TYPES.PUBLIC:
             continue
-        equals = bi.related_class.member_operators( function=not_artificial, symbol=symbol, allow_empty=True, recursive=False )
-        if equals:
+        operators = bi.related_class.member_operators( function=filters.custom_matcher_t( not_artificial ) \
+                                                             & filters.access_type_matcher_t( 'public' )
+                                                       , symbol=operator_symbol
+                                                       , allow_empty=True
+                                                       , recursive=False )
+        if operators:
             return True
     return False
 

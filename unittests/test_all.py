@@ -37,6 +37,7 @@ import unnamed_enums_bug_tester
 import vector_traits_tester
 import string_traits_tester
 import declarations_cache_tester
+import has_binary_operator_traits_tester
 
 def create_suite():
     testers = [ 
@@ -73,6 +74,7 @@ def create_suite():
         , vector_traits_tester
         , string_traits_tester
         , declarations_cache_tester
+        , has_binary_operator_traits_tester
     ]
     
     main_suite = unittest.TestSuite()    
