@@ -10,7 +10,7 @@ import xml.sax
 import warnings
 import xml.sax.handler
 from pygccxml.declarations import *
-from pygccxml.utils import logger
+from pygccxml import utils
 
 ##convention
 #XML_NN - XML Node Name
@@ -76,6 +76,7 @@ XML_NN_VARIABLE = "Variable"
 class scanner_t( xml.sax.handler.ContentHandler ):
     def __init__(self, gccxml_file, decl_factory, *args ):
         xml.sax.handler.ContentHandler.__init__(self, *args )
+        self.logger = utils.loggers.gccxml
         self.gccxml_file = gccxml_file
         #defining parsing tables
         self.__readers = {
@@ -191,12 +192,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             elif isinstance( obj, types.StringTypes ):
                 self.__files[ attrs[XML_AN_ID] ] = obj
             else:
-                logger.warning( 'Unknown object type has been found.'
-                              + ' Please report this bug to pygccxml development team.' )
+                self.logger.warning( 'Unknown object type has been found.'
+                                     + ' Please report this bug to pygccxml development team.' )
         except Exception, error:
             msg = 'error occured, while parsing element with name "%s" and attrs "%s".'
             msg = msg + os.linesep + 'Error: %s.' % str( error )
-            logger.error( msg % ( name, pprint.pformat( attrs.keys() ) ) )
+            self.logger.error( msg % ( name, pprint.pformat( attrs.keys() ) ) )
             raise
         
     def endElement(self, name):

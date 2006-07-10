@@ -8,7 +8,7 @@ import os
 import md5
 import time
 import cPickle 
-from pygccxml.utils import logger
+from pygccxml import utils
 
 
 def file_signature( filename ):
@@ -45,6 +45,8 @@ def configuration_signature( config ):
     return sig.hexdigest()
 
 class cache_base_t( object ):
+    logger = utils.loggers.declarations_cache
+    
     def __init__( self ):
         object.__init__(self)
         
@@ -146,7 +148,7 @@ class file_cache_t( cache_base_t ):
         """
         @param name: name of the cache file.
         """
-        cache_base_t.__init__( self )
+        cache_base_t.__init__( self )       
         self.__name = name                              # Name of cache file
         self.__cache = self.__load( self.__name )       # Map record_key to record_t
         self.__needs_flushed = not bool( self.__cache ) # If empty then we need to flush        
@@ -163,15 +165,16 @@ class file_cache_t( cache_base_t ):
             return {}
         cache_file_obj = file( file_name, 'rb' )
         try:
-            logger.info( "Loading cache file ..." )
+            file_cache_t.logger.info( 'Loading cache file "%s".' % file_name )
             start_time = time.clock()
             cache = cPickle.load( cache_file_obj )            
-            logger.info( "Cache file has been loaded in %.1f secs"%( time.clock() - start_time ) )
-            logger.info( "Found cache in file: [%s]  entries: %s"
-                          % ( file_name, len( cache.keys() ) ) )
-        except Exception:
+            file_cache_t.logger.debug( "Cache file has been loaded in %.1f secs"%( time.clock() - start_time ) )
+            file_cache_t.logger.debug( "Found cache in file: [%s]  entries: %s"
+                               % ( file_name, len( cache.keys() ) ) )
+        except Exception, error:
+            file_cache_t.logger.exception( "Error occured while reading cache file: %s", error )
             cache_file_obj.close()
-            logger.info( "Invalid cache file: [%s]  Regenerating." % file_name )
+            file_cache_t.logger.info( "Invalid cache file: [%s]  Regenerating." % file_name )
             file(file_name, 'w+b').close()   # Create empty file
             cache = {}                       # Empty cache            
         return cache
@@ -180,7 +183,7 @@ class file_cache_t( cache_base_t ):
     def flush(self):
         # If not marked as needing flushed, then return immediately
         if not self.__needs_flushed:
-            logger.info("Cache did not change, ignoring flush.")
+            self.logger.debug("Cache did not change, ignoring flush.")
             return
         
         # Remove entries that did not get a cache hit
@@ -190,7 +193,7 @@ class file_cache_t( cache_base_t ):
                 num_removed += 1
                 del self.__cache[key]
         if num_removed > 0:
-            logger.info(  "There are %s removed entries from cache." % num_removed )
+            self.logger.debug(  "There are %s removed entries from cache." % num_removed )
         # Save out the cache to disk
         cache_file = file( self.__name, 'w+b' )
         cPickle.dump( self.__cache, cache_file, cPickle.HIGHEST_PROTOCOL )

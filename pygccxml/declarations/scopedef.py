@@ -76,6 +76,10 @@ class scopedef_t( declaration.declaration_t ):
         self._type2name2decls_nr = {}
         self._all_decls = None
 
+    def _get_logger( self ):
+        return utils.loggers.queries_engine
+    _logger = property( _get_logger )
+        
     def _get__cmp__scope_items(self):
         raise NotImplementedError()
 
@@ -148,7 +152,7 @@ class scopedef_t( declaration.declaration_t ):
         Those hashtables allows to search declaration very quick. 
         """
         if self.name == '::':
-            utils.logger.debug( "preparing data structures for query optimizer - started" )
+            self._logger.debug( "preparing data structures for query optimizer - started" )
         start_time = time.clock()
         
         self.clear_optimizer()
@@ -178,7 +182,7 @@ class scopedef_t( declaration.declaration_t ):
         map( lambda decl: decl.init_optimizer()
              , filter( lambda decl: isinstance( decl, scopedef_t ),  self.declarations ) )
         if self.name == '::':
-            utils.logger.debug( "preparing data structures for query optimizer - done( %f seconds ). " 
+            self._logger.debug( "preparing data structures for query optimizer - done( %f seconds ). " 
                                 % ( time.clock() - start_time ) )
         self._optimized = True
         
@@ -226,15 +230,15 @@ class scopedef_t( declaration.declaration_t ):
 
         matcher = match_class( **matcher_args )
         if keywds['function']:
-            utils.logger.debug( 'running query: %s and <user defined function>' % str( matcher ) )
+            self._logger.debug( 'running query: %s and <user defined function>' % str( matcher ) )
             return lambda decl: matcher( decl ) and keywds['function'](decl)
         else:
-            utils.logger.debug( 'running query: %s' % str( matcher ) )                
+            self._logger.debug( 'running query: %s' % str( matcher ) )                
             return matcher
     
     def __findout_range( self, name, decl_type, recursive ):
         if not self._optimized:
-            utils.logger.debug( 'running non optimized query - optimization has not been done' )
+            self._logger.debug( 'running non optimized query - optimization has not been done' )
             decls = self.declarations
             if recursive:
                 decls = algorithm.make_flatten( self.declarations )
@@ -245,34 +249,34 @@ class scopedef_t( declaration.declaration_t ):
             if matcher.is_full_name():
                 name = matcher.decl_name_only
             if recursive:
-                utils.logger.debug( 'query has been optimized on type and name' )   
+                self._logger.debug( 'query has been optimized on type and name' )   
                 if self._type2name2decls[decl_type].has_key( name ):
                     return self._type2name2decls[decl_type][name]
                 else:
                     return []
             else:
-                utils.logger.debug( 'non recursive query has been optimized on type and name' )
+                self._logger.debug( 'non recursive query has been optimized on type and name' )
                 if self._type2name2decls_nr[decl_type].has_key( name ):
                     return self._type2name2decls_nr[decl_type][name]
                 else:
                     return []
         elif decl_type:
             if recursive:
-                utils.logger.debug( 'query has been optimized on type' )            
+                self._logger.debug( 'query has been optimized on type' )            
                 return self._type2decls[ decl_type ]
             else:
-                utils.logger.debug( 'non recursive query has been optimized on type' )            
+                self._logger.debug( 'non recursive query has been optimized on type' )            
                 return self._type2decls_nr[ decl_type ]
         else:
             if recursive:
-                utils.logger.debug( 'query has not been optimized ( hint: query does not contain type and/or name )' )
+                self._logger.debug( 'query has not been optimized ( hint: query does not contain type and/or name )' )
                 return self._all_decls
             else:
-                utils.logger.debug( 'non recursive query has not been optimized ( hint: query does not contain type and/or name )' )
+                self._logger.debug( 'non recursive query has not been optimized ( hint: query does not contain type and/or name )' )
                 return self.declarations
 
     def _find_single( self, match_class, **keywds ):
-        utils.logger.debug( 'find single query execution - started' )
+        self._logger.debug( 'find single query execution - started' )
         start_time = time.clock()      
         norm_keywds = self.__normalize_args( **keywds )
         matcher = self.__create_matcher( match_class, **norm_keywds )
@@ -280,11 +284,11 @@ class scopedef_t( declaration.declaration_t ):
         recursive_ = self.__findout_recursive( **norm_keywds )
         decls = self.__findout_range( norm_keywds['name'], dtype, recursive_ )
         found = matcher_module.matcher.get_single( matcher, decls, False )
-        utils.logger.debug( 'find single query execution - done( %f seconds )' % ( time.clock() - start_time ) )
+        self._logger.debug( 'find single query execution - done( %f seconds )' % ( time.clock() - start_time ) )
         return found
 
     def _find_multiple( self, match_class, **keywds ):
-        utils.logger.debug( 'find all query execution - started' )
+        self._logger.debug( 'find all query execution - started' )
         start_time = time.clock() 
         norm_keywds = self.__normalize_args( **keywds )
         matcher = self.__create_matcher( match_class, **norm_keywds )
@@ -294,8 +298,8 @@ class scopedef_t( declaration.declaration_t ):
         decls = self.__findout_range( norm_keywds['name'], dtype, recursive_ )
         found = matcher_module.matcher.find( matcher, decls, False )
         mfound = mdecl_wrapper.mdecl_wrapper_t( found )
-        utils.logger.debug( '%d declaration(s) that match query' % len(mfound) )
-        utils.logger.debug( 'find single query execution - done( %f seconds )' 
+        self._logger.debug( '%d declaration(s) that match query' % len(mfound) )
+        self._logger.debug( 'find single query execution - done( %f seconds )' 
                      % ( time.clock() - start_time ) )
         if not mfound and not allow_empty:
             raise RuntimeError( "Multi declaration query returned 0 declarations." )

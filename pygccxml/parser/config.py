@@ -27,7 +27,6 @@ class config_t(object):
                   , define_symbols=None
                   , undefine_symbols=None
                   , start_with_declarations=None
-                  , verbose=False
                   , ignore_gccxml_output=False
                   , cflags=""):
         """Constructor. 
@@ -52,7 +51,6 @@ class config_t(object):
             start_with_declarations = []
         self.__start_with_declarations = start_with_declarations
 
-        self.__verbose = verbose
         self.__ignore_gccxml_output = ignore_gccxml_output
         self.__cflags = cflags
         
@@ -63,7 +61,6 @@ class config_t(object):
                          , define_symbols=self.__define_symbols[:]
                          , undefine_symbols=self.__undefine_symbols[:]
                          , start_with_declarations=self.__start_with_declarations[:]
-                         , verbose=self.verbose
                          , ignore_gccxml_output=self.ignore_gccxml_output
                          , cflags=self.cflags)
 
@@ -95,12 +92,6 @@ class config_t(object):
         return self.__start_with_declarations
     start_with_declarations = property( __get_start_with_declarations )
     
-    def __get_verbose(self):
-        return self.__verbose
-    def __set_verbose(self, val=True):
-        self.__verbose = val
-    verbose = property( __get_verbose, __set_verbose )
-        
     def __get_ignore_gccxml_output(self):
         return self.__ignore_gccxml_output
     def __set_ignore_gccxml_output(self, val=True):

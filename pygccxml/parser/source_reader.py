@@ -12,7 +12,7 @@ import scanner
 import declarations_cache
 import patcher
 from pygccxml.declarations import *
-from pygccxml.utils import logger
+from pygccxml import utils 
 
 class gccxml_runtime_error_t( RuntimeError ):
     def __init__( self, msg ):
@@ -73,6 +73,7 @@ class source_reader_t:
         @param decl_factory: declarations factory, if not given default 
                              declarations factory L{decl_factory_t} will be used
         """
+        self.logger = utils.loggers.gccxml
         self.__search_directories = []
         self.__config = config
         self.__search_directories.append( config.working_directory )
@@ -145,7 +146,7 @@ class source_reader_t:
         cmd_line = ' '.join(cmd)
         if 'win32' in sys.platform :
             cmd_line = '"%s"' % cmd_line
-        logger.debug( 'gccxml cmd: %s' % cmd_line )
+        self.logger.info( 'gccxml cmd: %s' % cmd_line )
         return cmd_line
 
     def create_xml_file( self, header, destination=None ):
@@ -174,8 +175,6 @@ class source_reader_t:
             if not os.path.isabs( ffname ):
                   ffname = self.__file_full_name(header)
             command_line = self.__create_command_line( ffname, gccxml_file )
-            if self.__config.verbose:
-                logger.info(  " Command line for GCC-XML: %s" % command_line )
             input_, output = os.popen4( command_line )
             input_.close()
             gccxml_reports = []
@@ -231,19 +230,15 @@ class source_reader_t:
         gccxml_file = ''
         try:
             ffname = self.__file_full_name(source_file)
-            if self.__config.verbose:
-                logger.info( "Reading source file: [%s]." % ffname )
+            self.logger.debug( "Reading source file: [%s]." % ffname )
             declarations = self.__dcache.cached_value( ffname, self.__config )
             if not declarations:
-                if self.__config.verbose:
-                    logger.info( "File has not been found in cache, parsing..." )
+                self.logger.debug( "File has not been found in cache, parsing..." )
                 gccxml_file = self.create_xml_file( ffname )
                 declarations, files = self.__parse_gccxml_created_file( gccxml_file )
                 self.__dcache.update( ffname, self.__config, declarations, files )
             else:
-                if self.__config.verbose:
-                    logger.info( "File has not been changed, reading declarations from cache." )
-
+                self.logger.debug( "File has not been changed, reading declarations from cache." )
         except Exception, error:
             if gccxml_file:
                 pygccxml.utils.remove_file_no_raise( gccxml_file )
@@ -261,8 +256,7 @@ class source_reader_t:
         
         @return: declarations tree
         """
-        if self.__config.verbose:
-            logger.info( "Reading xml file: [%s]" % gccxml_created_file )
+        self.logger.debug( "Reading xml file: [%s]" % gccxml_created_file )
 
         declarations, files = self.__parse_gccxml_created_file( gccxml_created_file )
         return declarations

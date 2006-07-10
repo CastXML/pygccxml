@@ -8,12 +8,20 @@ import sys
 import logging
 import tempfile
 
-    
-logger = logging.getLogger('pygccxml')
-__handler = logging.StreamHandler(sys.stdout)
-__handler.setFormatter( logging.Formatter('%(message)s') )
-logger.addHandler(__handler) 
-logger.setLevel(logging.DEBUG)
+def _create_logger_( name ):    
+    logger = logging.getLogger('name')
+    __handler = logging.StreamHandler(sys.stdout)
+    __handler.setFormatter( logging.Formatter( '%(levelname)s %(message)s' ) )
+    logger.addHandler(__handler) 
+    logger.setLevel(logging.INFO)
+    return logger
+
+class loggers:
+    root = _create_logger_( 'pygccxml' )
+    gccxml = _create_logger_( 'pygccxml.gccxml' )
+    queries_engine = _create_logger_( 'pygccxml.queries_engine' )
+    declarations_cache = _create_logger_( 'pygccxml.declarations_cache' )
+    all = [ root, gccxml, queries_engine, declarations_cache ]
 
 def remove_file_no_raise(file_name ):
     try:

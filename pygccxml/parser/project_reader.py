@@ -9,7 +9,7 @@ import types
 import source_reader 
 import declarations_cache
 import pygccxml.declarations
-from pygccxml.utils import logger
+from pygccxml import utils 
 
 class COMPILATION_MODE:
     ALL_AT_ONCE = 'all at once'
@@ -179,7 +179,9 @@ class project_reader_t:
         self.__decl_factory = decl_factory
         if not decl_factory:
             self.__decl_factory = pygccxml.declarations.decl_factory_t()
-            
+        
+        self.logger = utils.loggers.gccxml
+        
     def get_os_file_names( files ):
         """Returns a list of OS file names
 
@@ -219,14 +221,13 @@ class project_reader_t:
                     "Unable to parse files using ALL_AT_ONCE mode. " 
                     , "There is some file configuration that is not file. "
                     , "pygccxml.parser.project_reader_t switches to FILE_BY_FILE mode." ])
-                logger.info( msg )
+                self.logger.warning( msg )
             return self.__parse_file_by_file(files)
 
     def __parse_file_by_file(self, files):        
         namespaces = []
         config = self.__config.clone()
-        if config.verbose:
-            logger.info( "Reading project files: file by file" )
+        self.logger.debug( "Reading project files: file by file" )
         for prj_file in files:
             reader = None
             header = None
@@ -259,35 +260,28 @@ class project_reader_t:
             else:
                 decls = reader.read_string( header )
             namespaces.append( decls )
-        if config.verbose:
-            logger.info( "Flushing cache... " )
+        self.logger.debug( "Flushing cache... " )
         start_time = time.clock()    
         self.__dcache.flush()
-        if config.verbose:
-            logger.info( "Cache has been flushed in %.1f secs" 
-                          % ( time.clock() - start_time ) )
+        self.logger.debug( "Cache has been flushed in %.1f secs" % ( time.clock() - start_time ) )
         answer = []
-        if config.verbose:
-            logger.info( "Joining namespaces ..." )                
+        self.logger.debug( "Joining namespaces ..." )                
         for file_nss in namespaces:
             answer = self._join_top_namespaces( answer, file_nss )
-        if config.verbose:
-            logger.info( "Joining declarations ..." )
+        self.logger.debug( "Joining declarations ..." )
         for ns in answer:
             if isinstance( ns, pygccxml.declarations.namespace_t ):
                 self._join_declarations( ns )            
         leaved_classes = self._join_class_hierarchy( answer )
         types = self.__declarated_types(answer)
-        if config.verbose:
-            logger.info( "Relinking declared types ..." )
+        self.logger.debug( "Relinking declared types ..." )
         self._relink_declarated_types( leaved_classes, types )
         source_reader.bind_aliases( pygccxml.declarations.make_flatten( answer ) )
         return answer
         
     def __parse_all_at_once(self, files):
         config = self.__config.clone()
-        if config.verbose:
-            logger.info( "Reading project files: all at once" )
+        self.logger.debug( "Reading project files: all at once" )
         header_content = []
         for header in files:
             if isinstance( header, file_configuration_t ):                
@@ -431,17 +425,15 @@ class project_reader_t:
                 if leaved_classes.has_key( key ):
                     decl_wrapper_type.declaration = leaved_classes[ create_key(decl_wrapper_type.declaration) ]
                 else:
+                    if decl_wrapper_type.declaration._name.startswith( '__vmi_class_type_info_pseudo' ):
+                        continue
                     msg = []
                     msg.append( "Unable to find out actual class definition: '%s'." % decl_wrapper_type.declaration._name )
                     msg.append( "Class definition has been changed from one compilation to an other." )
                     msg.append( "Why did it happen to me? Here is a short list of reasons: " )
                     msg.append( "    1. There are different preprocessor definitions applied on same file during compilation" )
-                    msg.append( "    2. GCC implementation details. Diamand class hierarchy will reproduce this behavior." )
-                    msg.append( "       If name starts with '__vmi_class_type_info_pseudo' you can ignore this message." )
-                    msg.append( "    3. Bug in pygccxml." )                    
-                    logger.error( os.linesep.join(msg) )
-                    #'__vmi_class_type_info_pseudo1' 
-                
+                    msg.append( "    2. Bug in pygccxml." )                    
+                    self.logger.error( os.linesep.join(msg) )
 
     def _join_declarations( self, declref ):
         self._join_namespaces( declref )

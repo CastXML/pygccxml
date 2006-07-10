@@ -41,11 +41,7 @@ class decl_cache_tester(unittest.TestCase):
         #start_decls_changed = def_cfg.clone()
         #start_decls_changed.start_with_declarations = "test object"
         #self.assert_(configuration_signature(start_decls_changed) == def_sig)
-        
-        verbose_changed = def_cfg.clone()
-        verbose_changed.verbose = True
-        self.assert_(configuration_signature(verbose_changed) == def_sig)
-        
+               
         ignore_changed = def_cfg.clone()
         ignore_changed.ignore_gccxml_output = True
         self.assert_(configuration_signature(ignore_changed) == def_sig)
@@ -101,7 +97,7 @@ class decl_cache_tester(unittest.TestCase):
         """ Return a list of configurations that all differ. """
         cfg_list = []
         def_cfg = config_t("gccxml_path",'.',['tmp'],['sym'],['unsym'],
-                               None,False,False,"")
+                               None,False,"")
         cfg_list.append(def_cfg)
                 
         # Test changes that should cause sig changes
@@ -117,21 +113,21 @@ class decl_cache_tester(unittest.TestCase):
         #inc_changed.include_paths = ["/var/tmp"]
         #self.assert_(configuration_signature(inc_changed) != def_sig)
         inc_changed = config_t("gccxml_path",'.',['/var/tmp'],['sym'],['unsym'],
-                               None,False,False,"")
+                               None,False,"")
         cfg_list.append(inc_changed)
 
         #def_changed = def_cfg.clone()
         #def_changed.define_symbols = ["symbol"]
         #self.assert_(configuration_signature(def_changed) != def_sig)
         def_changed = config_t("gccxml_path",'.',['/var/tmp'],['new-sym'],['unsym'],
-                               None,False,False,"")
+                               None,False,"")
         cfg_list.append(def_changed)
 
         #undef_changed = def_cfg.clone()
         #undef_changed.undefine_symbols = ["symbol"]
         #self.assert_(configuration_signature(undef_changed) != def_sig)
         undef_changed = config_t("gccxml_path",'.',['/var/tmp'],['sym'],['new-unsym'],
-                               None,False,False,"")
+                               None,False,"")
         cfg_list.append(undef_changed)
         
         cflags_changed = def_cfg.clone()
