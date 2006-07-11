@@ -9,7 +9,7 @@ import logging
 import tempfile
 
 def _create_logger_( name ):    
-    logger = logging.getLogger('name')
+    logger = logging.getLogger(name)
     __handler = logging.StreamHandler(sys.stdout)
     __handler.setFormatter( logging.Formatter( '%(levelname)s %(message)s' ) )
     logger.addHandler(__handler) 
@@ -17,10 +17,11 @@ def _create_logger_( name ):
     return logger
 
 class loggers:
-    root = _create_logger_( 'pygccxml' )
     gccxml = _create_logger_( 'pygccxml.gccxml' )
     queries_engine = _create_logger_( 'pygccxml.queries_engine' )
     declarations_cache = _create_logger_( 'pygccxml.declarations_cache' )
+    #root logger exists for configuration purpose only
+    root = logging.getLogger( 'pygccxml' )
     all = [ root, gccxml, queries_engine, declarations_cache ]
 
 def remove_file_no_raise(file_name ):

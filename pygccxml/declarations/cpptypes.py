@@ -406,7 +406,8 @@ class free_function_type_t( type_t, calldef_type_t ):
                                      , [ arg.clone() for arg in self.arguments_types ] )
 
     #TODO: create real typedef
-    def create_typedef( self, typedef_name):
+    def create_typedef( self, typedef_name, unused=None):
+        #unused argument simplifies user code
         return free_function_type_t.TYPEDEF_NAME_TEMPLATE % { 
             'typedef_name' : typedef_name
             , 'return_type' : self.return_type.decl_string 
@@ -438,7 +439,7 @@ class member_function_type_t( type_t, calldef_type_t ):
                            ,doc="reference to parent L{class<declaration_t>}" )
 
     #TODO: create real typedef
-    def create_typedef( self, typedef_name):
+    def create_typedef( self, typedef_name, class_alias=None):
         """
         creates typedef to the function type
         
@@ -448,10 +449,12 @@ class member_function_type_t( type_t, calldef_type_t ):
         has_const_str = ''
         if self.has_const:
             has_const_str = 'const'
+        if None is class_alias:
+            class_alias = self.class_inst.decl_string
         return member_function_type_t.TYPEDEF_NAME_TEMPLATE % { 
             'typedef_name' : typedef_name
             , 'return_type' : self.return_type.decl_string 
-            , 'class' : self.class_inst.decl_string
+            , 'class' : class_alias
             , 'arguments' : ','.join( map( lambda x: x.decl_string, self.arguments_types ) )
             , 'has_const' : has_const_str }                                          
 
