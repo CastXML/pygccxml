@@ -15,6 +15,7 @@ Those functions are very valuable for code generation. Almost all functions
 within this module works on L{type_t} class hierarchy and\\or L{class_t}. 
 """
 
+import types
 import filters
 import typedef
 import calldef
@@ -853,6 +854,14 @@ class impl_details:
         if not found:
             if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
                 return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
+            elif is_std_string( value_type_str ):
+                string_ = global_ns.typedef( '::std::string' )
+                return remove_declarated( string_ )
+            elif is_std_wstring( value_type_str ):
+                string_ = global_ns.typedef( '::std::wstring' )
+                return remove_declarated( string_ )
+            else:
+                return None
         if len( found ) == 1:
             return found[0]
         else:
@@ -893,16 +902,22 @@ def is_std_string( type ):
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
         , '::std::basic_string<char, std::char_traits<char>, std::allocator<char> >'
         , '::std::string' ]
-    type = remove_alias( type )
-    return remove_cv( type ).decl_string in decl_strings
+    if isinstance( type, types.StringTypes ):
+        return type in decl_strings
+    else:
+        type = remove_alias( type )
+        return remove_cv( type ).decl_string in decl_strings
 
 def is_std_wstring( type ):
     decl_strings = [
         '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
         , '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
         , '::std::wstring' ]
-    type = remove_alias( type )
-    return remove_cv( type ).decl_string in decl_strings
+    if isinstance( type, types.StringTypes ):
+        return type in decl_strings
+    else:
+        type = remove_alias( type )
+        return remove_cv( type ).decl_string in decl_strings
 
 
 
