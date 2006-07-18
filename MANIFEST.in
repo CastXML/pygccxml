@@ -1,4 +1,5 @@
 include LICENSE_1_0.txt
+include MANIFEST.in
 include unittests/*.py
 include unittests/data/*.hpp
 include unittests/data/*.xml
