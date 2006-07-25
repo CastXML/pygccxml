@@ -10,9 +10,9 @@ import tempfile
 
 def _create_logger_( name ):    
     logger = logging.getLogger(name)
-    __handler = logging.StreamHandler(sys.stdout)
-    __handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
-    logger.addHandler(__handler) 
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
+    logger.addHandler(handler) 
     logger.setLevel(logging.INFO)
     return logger
 
