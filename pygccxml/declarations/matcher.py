@@ -14,7 +14,7 @@ class matcher:
             self.matcher = matcher
             
         def __str__( self ):
-            return "Unable to find declaration."
+            return "Unable to find declaration.  matcher: [%s]"%str(self.matcher)
 
     class multiple_declarations_found_t( RuntimeError ):
         def __init__( self, matcher ):
@@ -22,7 +22,7 @@ class matcher:
             self.matcher = matcher
             
         def __str__( self ):
-            return "Multiple declarations has been found."
+            return "Multiple declarations has been found. matcher: [%s]"%str(self.matcher)
 
     def find( decl_matcher, decls, recursive=True ):
         where = []
