@@ -199,19 +199,19 @@ from filtering import filtering
 
 from decl_factory import decl_factory_t
 
-from filters import matcher_base_t
-from filters import or_matcher_t
-from filters import and_matcher_t
-from filters import not_matcher_t
-from filters import declaration_matcher_t
-from filters import calldef_matcher_t
-from filters import namespace_matcher_t
-from filters import variable_matcher_t
-from filters import regex_matcher_t
-from filters import access_type_matcher_t
-from filters import operator_matcher_t
-from filters import custom_matcher_t
-from filters import virtuality_type_matcher_t
+from matchers import matcher_base_t
+from matchers import or_matcher_t
+from matchers import and_matcher_t
+from matchers import not_matcher_t
+from matchers import declaration_matcher_t
+from matchers import calldef_matcher_t
+from matchers import namespace_matcher_t
+from matchers import variable_matcher_t
+from matchers import regex_matcher_t
+from matchers import access_type_matcher_t
+from matchers import operator_matcher_t
+from matchers import custom_matcher_t
+from matchers import virtuality_type_matcher_t
 from matcher import matcher
 
 from mdecl_wrapper import mdecl_wrapper_t

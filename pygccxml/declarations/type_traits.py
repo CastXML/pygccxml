@@ -16,7 +16,7 @@ within this module works on L{type_t} class hierarchy and\\or L{class_t}.
 """
 
 import types
-import filters
+import matchers
 import typedef
 import calldef
 import cpptypes
@@ -378,8 +378,8 @@ def has_public_binary_operator( type, operator_symbol ):
         #In some case compare operators of std::basic_string are not instantiated
         return True
     
-    operators = type.member_operators( function=filters.custom_matcher_t( not_artificial ) \
-                                                & filters.access_type_matcher_t( 'public' )
+    operators = type.member_operators( function=matchers.custom_matcher_t( not_artificial ) \
+                                                & matchers.access_type_matcher_t( 'public' )
                                        , symbol=operator_symbol
                                        , allow_empty=True
                                        , recursive=False )
@@ -400,8 +400,8 @@ def has_public_binary_operator( type, operator_symbol ):
         assert isinstance( bi, class_declaration.hierarchy_info_t )
         if bi.access_type != class_declaration.ACCESS_TYPES.PUBLIC:
             continue
-        operators = bi.related_class.member_operators( function=filters.custom_matcher_t( not_artificial ) \
-                                                             & filters.access_type_matcher_t( 'public' )
+        operators = bi.related_class.member_operators( function=matchers.custom_matcher_t( not_artificial ) \
+                                                             & matchers.access_type_matcher_t( 'public' )
                                                        , symbol=operator_symbol
                                                        , allow_empty=True
                                                        , recursive=False )
