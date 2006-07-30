@@ -187,14 +187,19 @@ class scopedef_t( declaration.declaration_t ):
         self._optimized = True
         
     def _build_operator_name( self, name, function, symbol ):
+        def add_operator( sym ):
+            if 'new' in sym or 'delete' in sym:
+                return 'operator ' + sym
+            else:
+                return 'operator'+ sym
         if callable( name ) and None is function:
             name = None
         if name:
             if not 'operator' in name:
-               name = 'operator' + name
+               name = add_operator( name )
             return name
         elif symbol:
-            return 'operator' + symbol
+            return add_operator( symbol )
         return name #both name and symbol are None
 
 
