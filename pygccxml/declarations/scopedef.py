@@ -186,6 +186,17 @@ class scopedef_t( declaration.declaration_t ):
                                 % ( time.clock() - start_time ) )
         self._optimized = True
         
+    def _build_operator_name( self, name, function, symbol ):
+        if callable( name ) and None is function:
+            name = None
+        if name:
+            if not 'operator' in name:
+               name = 'operator' + name
+            return name
+        elif symbol:
+            return 'operator' + symbol
+        return name #both name and symbol are None
+
 
     def __normalize_args( self, **keywds ):
         if callable( keywds['name'] ) and None is keywds['function']:
@@ -305,7 +316,6 @@ class scopedef_t( declaration.declaration_t ):
             raise RuntimeError( "Multi declaration query returned 0 declarations." )
         return mfound
         
-
     def decl( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):     
         """Finds any declaration by criteria. Please see L{scopedef_t} for full explanation."""
         return self._find_single( self._impl_matchers[ scopedef_t.decl ]
@@ -389,7 +399,7 @@ class scopedef_t( declaration.declaration_t ):
     
     def operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.operator ]
-                                  , name=name
+                                  , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.operator ]
@@ -401,7 +411,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.operator ]
-                                    , name=name
+                                    , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.operator ]
@@ -460,7 +470,7 @@ class scopedef_t( declaration.declaration_t ):
     
     def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.member_operator ]
-                                  , name=name
+                                  , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]
@@ -472,7 +482,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_operator ]
-                                    , name=name
+                                    , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]

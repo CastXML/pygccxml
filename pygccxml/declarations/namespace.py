@@ -95,7 +95,7 @@ class namespace_t( scopedef.scopedef_t ):
 
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
-                                  , name=name
+                                  , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
                                   , function=function
                                   , decl_type=self._impl_decl_types[ namespace_t.free_operator ]
@@ -107,7 +107,7 @@ class namespace_t( scopedef.scopedef_t ):
 
     def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
-                                    , name=name
+                                    , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
                                     , function=function
                                     , decl_type=self._impl_decl_types[ namespace_t.free_operator ]
