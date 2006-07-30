@@ -419,12 +419,18 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_free_operator(self, attrs ):
         operator = self.__decl_factory.create_free_operator()
         self.__read_member_function( operator, attrs )
-        operator.name = 'operator' + operator.name
+        if 'new' in operator.name or 'delete' in operator.name:
+            operator.name = 'operator ' + operator.name
+        else:
+            operator.name = 'operator' + operator.name
         return operator
  
     def __read_member_operator(self, attrs):
         operator = self.__decl_factory.create_member_operator()
         self.__read_member_function( operator, attrs )
-        operator.name = 'operator' + operator.name
+        if 'new' in operator.name or 'delete' in operator.name:
+            operator.name = 'operator ' + operator.name
+        else:
+            operator.name = 'operator' + operator.name
         return operator
 
