@@ -226,23 +226,30 @@ object:
 Cache classes
 -------------
 
-There are few cache classes, that implements different cache strategies. My
-advise - don't use them. Your best choice is ``file_configuration_t``,
-configured to C++ source file + `GCC-XML`_ generated file.
+There are few cache classes, that implements different cache strategies. 
 
-* ``file_cache_t`` class, will save all declarations from all files within single
-  binary file.
+1. ``file_configuration_t`` class, that keeps pass to C++ source file and path to
+   `GCC-XML`_ generated XML file. This class is not a cache class, but it also 
+   allows you to save your time.
 
-* ``directory_cache_t`` class will store one index file called "index.dat" which
-  is always read by the cache when the cache object is created. Each header file
-  will have its corresponding \*.cache file that stores the declarations found
-  in the header file. The index file is used to determine whether a \*.cache file
-  is still valid or not (by checking if one of the dependent files
-  (i.e. the header file itself and all included files) have been modified since
-  the last run).
+2. ``file_cache_t`` class, will save all declarations from all files within single
+   binary file.
 
-As you can guess, ``directory_cache_t`` class gives much better performance, than
+3. ``directory_cache_t`` class will store one index file called "index.dat" which
+   is always read by the cache when the cache object is created. Each header file
+   will have its corresponding \*.cache file that stores the declarations found
+   in the header file. The index file is used to determine whether a \*.cache file
+   is still valid or not (by checking if one of the dependent files
+   (i.e. the header file itself and all included files) have been modified since
+   the last run). 
+
+In some cases, ``directory_cache_t`` class gives much better performance, than
 ``file_cache_t``. Many thanks to Matthias Baas for its implemention.
+
+**Warning**: when `pygccxml`_ writes information to files, using cache classes,
+it does not write any version information. It means, that when you upgrade 
+`pygccxml`_ you have to delete all your cache files. Otherwise you will get very 
+strange errors. For example: missing attribute.
 
 
 Patchers
