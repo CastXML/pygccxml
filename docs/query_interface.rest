@@ -176,7 +176,7 @@ match query ``RuntimeError`` exception will be raised.
 Return value of ``member_functions`` is not Python list or set, but instance
 of ``mdecl_wrapper_t`` class. This class allows you to work on all selected
 objects at once. I will give an example from another project - `pyplusplus`_.
-In order to help `boost.python`_ to manage objects life time, all functions
+In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
 ::
 
@@ -266,7 +266,7 @@ I think, I gave you all important information. If you need definition of some
 query method, you can take a look on API documentation or into source code.
 
 
-.. _`boost.python`: http://boost.org/libs/python/doc/tutorial/doc/html/index.html
+.. _`Boost.Python`: http://boost.org/libs/python/doc/tutorial/doc/html/index.html
 .. _`call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 .. _`Call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 .. _`pygccxml`: ./pygccxml.html
