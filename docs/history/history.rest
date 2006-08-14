@@ -1,6 +1,6 @@
-==============================
-pyplusplus development history
-==============================
+============================
+pygccxml development history
+============================
 
 .. contents:: Table of contents
 

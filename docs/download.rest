@@ -12,7 +12,7 @@ pygccxml on SourceForge
 can:
 
 1) get access to source code
-2) get access to latest release version of pyplusplus
+2) get access to latest release version of `pygccxml`_
 
 
 -----------------

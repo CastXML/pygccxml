@@ -24,7 +24,7 @@ Using `pygccxml`_ you can:
 * parse C++ source code
 * build a code generator
 
-    + `pyplusplus`_ is heavily based on `pygccxml`_
+    + `Py++`_ is heavily based on `pygccxml`_
     + generate `WSDL`_ file from sources 
     + ...    
 
@@ -126,7 +126,7 @@ Also I have performance tests. Most of the time I am using "white box" testing
 strategy.
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
-.. _`pyplusplus`: ./../pyplusplus/pyplusplus.html
+.. _`Py++`: ./../pyplusplus/pyplusplus.html
 .. _`pygccxml`: ./pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Docutils`: http://docutils.sourceforge.net
