@@ -12,7 +12,6 @@ import tempfile
 import autoconfig
 import parser_test_case
 from pprint import pformat
-from sets import Set as set
 
 import pygccxml
 from pygccxml.utils import *

@@ -10,7 +10,6 @@ import getpass
 #__pychecker__ = 'limit=1000'
 #import pychecker.checker
 
-
 gccxml_path = ''
 data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
 build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )

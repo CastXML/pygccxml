@@ -7,7 +7,6 @@ import os
 import unittest
 import autoconfig
 import parser_test_case
-from sets import Set as set
 
 from pygccxml import utils
 from pygccxml import parser

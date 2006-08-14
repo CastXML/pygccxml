@@ -85,10 +85,7 @@ class parser_t( object ):
             elif text[ found ] == self.__end:
                 return ( first_occurance, found )
             else:
-                pass
-            previous_found = found + 1 #skip found sep
-        #TODO: find out what is args and correct the code
-        return [ arg.strip() for arg in args ]
+                previous_found = found + 1 #skip found sep
 
     def split( self, decl_string ):
         assert self.has_pattern( decl_string )

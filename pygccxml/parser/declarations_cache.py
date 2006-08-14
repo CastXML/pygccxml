@@ -94,28 +94,11 @@ class record_t( object ):
     def key(self):
         return ( self.__source_signature, self.__config_signature)
     
+    @staticmethod
     def create_key( source_file, configuration ):
         return ( file_signature(source_file)
                  , configuration_signature(configuration))                 
-    create_key = staticmethod( create_key )
     
-    #def value(self):
-        #return ( self.__source_file_signature
-                 #, self.__included_files
-                 #, self.__included_files_signature
-                 #, self.__declarations )
-    
-    #def create( key, value ):
-        #return record_t( source_file=key[0]
-                         #, working_directory=key[1]
-                         #, include_paths=list(key[2])
-                         #, define_symbols=list(key[3])
-                         #, source_file_signature=value[0]
-                         #, included_files=value[1]
-                         #, included_files_signature=value[2]
-                         #, declarations=value[3] )
-    #create = staticmethod(create)
-
     def __source_signature(self):
         return self.__source_signature
     source_signature = property( __source_signature )
@@ -155,6 +138,7 @@ class file_cache_t( cache_base_t ):
         for entry in self.__cache.itervalues(): # Clear hit flags
             entry.was_hit = False
         
+    @staticmethod
     def __load( file_name ):
         " Load pickled cache from file and return the object. "
         cache = None
@@ -178,7 +162,6 @@ class file_cache_t( cache_base_t ):
             file(file_name, 'w+b').close()   # Create empty file
             cache = {}                       # Empty cache            
         return cache
-    __load = staticmethod( __load )
         
     def flush(self):
         # If not marked as needing flushed, then return immediately

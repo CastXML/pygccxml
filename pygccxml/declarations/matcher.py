@@ -23,7 +23,8 @@ class matcher:
             
         def __str__( self ):
             return "Multiple declarations has been found. matcher: [%s]"%str(self.matcher)
-
+    
+    @staticmethod
     def find( decl_matcher, decls, recursive=True ):
         where = []
         if isinstance( decls, types.ListType ):
@@ -33,14 +34,14 @@ class matcher:
         if recursive:
             where = algorithm.make_flatten( where )
         return filter( decl_matcher, where )
-    find = staticmethod( find )
-    
+
+    @staticmethod    
     def find_single( decl_matcher, decls, recursive=True ):
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:
             return answer[0]
-    find_single = staticmethod( find_single )
-    
+
+    @staticmethod    
     def get_single( decl_matcher, decls, recursive=True ):
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:
@@ -49,4 +50,3 @@ class matcher:
             raise matcher.declaration_not_found_t( decl_matcher )
         else:
             raise matcher.multiple_declarations_found_t( decl_matcher )
-    get_single = staticmethod( get_single )

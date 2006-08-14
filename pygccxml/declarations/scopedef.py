@@ -402,7 +402,7 @@ class scopedef_t( declaration.declaration_t ):
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
     
-    def operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
+    def operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         return self._find_single( self._impl_matchers[ scopedef_t.operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
@@ -414,7 +414,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file 
                                   , recursive=recursive )
 
-    def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+    def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol

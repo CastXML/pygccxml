@@ -379,6 +379,7 @@ class free_function_type_t( type_t, calldef_type_t ):
         type_t.__init__(self)
         calldef_type_t.__init__( self, return_type, arguments_types )
 
+    @staticmethod    
     def create_decl_string( return_type, arguments_types ):
         """
         returns free function type
@@ -393,8 +394,7 @@ class free_function_type_t( type_t, calldef_type_t ):
         return free_function_type_t.NAME_TEMPLATE % { 
                   'return_type' : return_type.decl_string
                 , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) ) }
-    create_decl_string = staticmethod( create_decl_string )
-
+    
     def _create_decl_string(self):
         return self.create_decl_string( self.return_type, self.arguments_types )
 
@@ -465,6 +465,7 @@ class member_function_type_t( type_t, calldef_type_t ):
                                         , self.has_const )
 
 
+    @staticmethod    
     def create_decl_string(return_type, class_decl_string, arguments_types, has_const):
         has_const_str = ''
         if has_const:
@@ -477,7 +478,6 @@ class member_function_type_t( type_t, calldef_type_t ):
             , 'class' : class_decl_string
             , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) )
             , 'has_const' : has_const_str }                                          
-    create_decl_string = staticmethod( create_decl_string )
     
     def _create_decl_string(self):
         return self.create_decl_string( self.return_type

@@ -181,7 +181,8 @@ class project_reader_t:
             self.__decl_factory = pygccxml.declarations.decl_factory_t()
         
         self.logger = utils.loggers.gccxml
-        
+    
+    @staticmethod
     def get_os_file_names( files ):
         """Returns a list of OS file names
 
@@ -200,7 +201,6 @@ class project_reader_t:
             else:
                 pass
         return fnames
-    get_os_file_names = staticmethod( get_os_file_names )
 
     def read_files( self, files, compilation_mode=COMPILATION_MODE.FILE_BY_FILE):
         """Parse header files.

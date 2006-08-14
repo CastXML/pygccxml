@@ -6,7 +6,6 @@
 """defines few unrelated algorithms, that works on declarations"""
 
 import types
-from sets import Set as set
 
 def declaration_path( decl ):
     """

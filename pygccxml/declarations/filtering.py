@@ -15,16 +15,17 @@ class filtering:
     defines few algorithms for filtering declarations
     """
     
+    @staticmethod    
     def normalize_path( some_path ):
         """return os.path.normcase( os.path.normpath( some_path ) )"""
         return os.path.normcase( os.path.normpath( some_path ) )
-    normalize_path = staticmethod( normalize_path )
-     
+    
+    @staticmethod     
     def contains_parent_dir( fpath, dirs ):
         #precondition: dirs and fpath should be normalize_path'ed before calling this function
         return bool( filter( lambda dir: fpath.startswith( dir ), dirs ) )
-    contains_parent_dir = staticmethod( contains_parent_dir )
     
+    @staticmethod        
     def by_location( decls, locations ): 
         """
         returns list of declarations that belongs to specified locations.
@@ -55,8 +56,8 @@ class filtering:
             if filtering.contains_parent_dir( fpath, dirs ) or fpath in files:
                 result.append( decl )
         return result
-    by_location = staticmethod( by_location )
-    
+
+    @staticmethod    
     def user_defined( decls, matcher ):
         """
         returns list of declarations that match user specified criteria.
@@ -73,5 +74,4 @@ class filtering:
         """    
         #precondition: decls is a list of op level namespaces
         return filter( matcher, algorithm.make_flatten( decls ) )
-    user_defined = staticmethod( user_defined )
         

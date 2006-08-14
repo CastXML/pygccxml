@@ -99,10 +99,10 @@ class declaration_t( object ):
             cls = cls[:-2]        
         return "%s [%s]"%(name, cls)
 
+    @staticmethod    
     def _sorted_list( some_list ):
         some_list.sort()
         return some_list
-    _sorted_list = staticmethod( _sorted_list )
 
     def _get__cmp__items( self ):
         """

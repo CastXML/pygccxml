@@ -26,7 +26,6 @@ import namespace
 import templates
 import enumeration
 import class_declaration
-from sets import Set as set
 import types as build_in_types
 
 def __remove_alias(tp, tp_is_clone):
