@@ -66,7 +66,7 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
              #, 'dat'#file extension of directory cache
              #, 'config'#parameter description
              #, 'gccxml'#parameter description
-             #, 'pyplusplus'
+             #, 'Py++'
              #, 'pygccxml'
              #, 'calldef'
              #, 'XXX'

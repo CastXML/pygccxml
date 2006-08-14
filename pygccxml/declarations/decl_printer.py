@@ -14,7 +14,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     This class provides more information than the __str__() methods do.
     The class is not just meant to provide a unique "id" for a declaration
     but to inspect an entire declaration tree. This is particularly useful
-    for new users who want to find out how pyplusplus works and how it
+    for new users who want to find out how Py++ works and how it
     stores its data.
     """
     JUSTIFY = 20
