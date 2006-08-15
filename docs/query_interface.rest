@@ -11,7 +11,7 @@ You parsed the source files. Now you have to do some real work with the extracte
 information, right? `pygccxml`_ provides very powerful and simple interface to
 query about extracted declarations.
 
-Just an example. I want to select all member functions, that have 2 arguments.
+Just an example. I want to select all member functions, which have 2 arguments.
 I don't care about first argument type, but I do want second argument type to be
 a reference to an integer. More over, I want those functions names to end with
 "impl" string and they should be protected or private.
@@ -149,7 +149,7 @@ by:
     within current scope.
 
     What happen if ``recursive`` is ``None``? Well. ``scopedef_t`` class defines
-    ``RECURSIVE_DEFAULT`` variable. It's initial value is ``True``. So, if you
+    ``RECURSIVE_DEFAULT`` variable. Its initial value is ``True``. So, if you
     don't pass ``recursive`` argument, the value of ``RECURSIVE_DEFAULT`` variable
     will be used. This "yet another level of indirection" allows you to configure
     `pygccxml`_ "select" functions in one place for all project.
@@ -163,8 +163,8 @@ by:
     will be raised
 
     ``allow_empty`` uses same technique as ``recursive``, to allow you to customize
-    the behaviour project-wise. The relevant class variable name is
-    ``ALLOW_EMPTY_MDECL_WRAPPER``. It's initial value is ``False``.
+    the behavior project-wise. The relevant class variable name is
+    ``ALLOW_EMPTY_MDECL_WRAPPER``. Its initial value is ``False``.
 
 Now, when you understand, how to call those functions, I will explain what they
 return.
@@ -223,7 +223,7 @@ Implementation details
 Performance
 -----------
 
-For big projects, performace is critical. When you finished to build/change
+For big projects, performance is critical. When you finished to build/change
 declarations tree, then you can call ``scopedef_t.init_optimizer`` method.
 This method will initialize few data structures, that will help to minimize the
 number of compared declarations. The price you are going to pay is memory usage.
@@ -262,7 +262,7 @@ If you include ``name`` into your query, you will get the best performance.
 More information
 ----------------
 
-I think, I gave you all important information. If you need definition of some
+I think, I gave you the important information. If you need definition of some
 query method, you can take a look on API documentation or into source code.
 
 

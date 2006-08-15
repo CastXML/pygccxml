@@ -21,72 +21,72 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 0.8.1
 -----
 
-1. `pygccxml`_ has been ported to MacOS X. Many thanks to Darren Garnier!
-
-2. New type traits have been added: 
-   
-   * ``enum_traits``
-   * ``class_traits``
-   * ``class_declaration_traits``
-   * ``is_std_string``
-   * ``is_std_wstring``
-   * ``remove_declarated``
-   * ``has_public_less``
-   * ``has_public_equal``
-   * ``has_public_binary_operator``
-   * ``smart_pointer_traits``
-   * ``list_traits`` 
-   * ``deque_traits``
-   * ``queue_traits``
-   * ``priority_queue``
-   * ``vector_traits``
-   * ``stack_traits``
-   * ``map_traits``
-   * ``multimap_traits``
-   * ``hash_map_traits``
-   * ``hash_multimap_traits``
-   * ``set_traits``
-   * ``hash_set_traits``
-   * ``multiset_traits``
-   * ``hash_multiset_traits``
-   
-3. ``enumeration_t`` class interface was changed. Enumeration values are kept
-   in a list, instead of a dictionary. ``get_name2value_dict`` will build for
-   you dictionary, where key is an enumeration name, and value is an enumeration
-   value. 
-   
-   This has been done in order to provide stable order of enumeration values.
-   
-4. Now you can pass operator symbol, as a name to query functions:
-
-   ::
-
-     cls = global_namespace.class_( 'my_class' )
-     op = cls.operator( '<' )
-     #instead of
-     op = cls.operator( symbol='<' )
-
-5. `pygccxml`_ improved a lot functionality related to providing feedback to user:
-   
-   * every package has its own logger
-   
-   * only important user messages are written to ``stdout``
-   
-   * user messages are clear
-
-6. Support to Java native types has been added.
-
-7. It is possible to pass an arbitrary string as a parameter to `GCC-XML`_.
-
-8. Native java types has been added to fundamental types.
-
-9. Cache classes implementation was improved.
-
-10. Few bug were fixed.
-
-11. Documentation was improved.
-
-
+1. `pygccxml`_ has been ported to MacOS X. Many thanks to Darren Garnier!
+
+2. New type traits have been added: 
+   
+   * ``enum_traits``
+   * ``class_traits``
+   * ``class_declaration_traits``
+   * ``is_std_string``
+   * ``is_std_wstring``
+   * ``remove_declarated``
+   * ``has_public_less``
+   * ``has_public_equal``
+   * ``has_public_binary_operator``
+   * ``smart_pointer_traits``
+   * ``list_traits`` 
+   * ``deque_traits``
+   * ``queue_traits``
+   * ``priority_queue``
+   * ``vector_traits``
+   * ``stack_traits``
+   * ``map_traits``
+   * ``multimap_traits``
+   * ``hash_map_traits``
+   * ``hash_multimap_traits``
+   * ``set_traits``
+   * ``hash_set_traits``
+   * ``multiset_traits``
+   * ``hash_multiset_traits``
+   
+3. ``enumeration_t`` class interface was changed. Enumeration values are kept
+   in a list, instead of a dictionary. ``get_name2value_dict`` will build for
+   you dictionary, where key is an enumeration name, and value is an enumeration
+   value. 
+   
+   This has been done in order to provide stable order of enumeration values.
+   
+4. Now you can pass operator symbol, as a name to query functions:
+
+   ::
+
+     cls = global_namespace.class_( 'my_class' )
+     op = cls.operator( '<' )
+     #instead of
+     op = cls.operator( symbol='<' )
+
+5. `pygccxml`_ improved a lot functionality related to providing feedback to user:
+   
+   * every package has its own logger
+   
+   * only important user messages are written to ``stdout``
+   
+   * user messages are clear
+
+6. Support to Java native types has been added.
+
+7. It is possible to pass an arbitrary string as a parameter to `GCC-XML`_.
+
+8. Native java types has been added to fundamental types.
+
+9. Cache classes implementation was improved.
+
+10. Few bug were fixed.
+
+11. Documentation was improved.
+
+
 -----------
 Version 0.8
 -----------
@@ -132,8 +132,8 @@ Version 0.7.1
 
    ``declarations.filtering.user_defined`` and ``declarations.filtering.by_location``
    implementation has been changed. In previous version of those functions,
-   ``decls`` list has been changed in place. This was wrong behaviour. Now,
-   those functions will return new list, that contains all desired declarations.
+   ``decls`` list has been changed in place. This was wrong behavior. Now,
+   those functions will return new list, which contains all desired declarations.
 
 3. Few new type traits has been added
 
@@ -171,7 +171,7 @@ Version 0.7.1
 9. New file configuration is available: "cached source file".
    ``parser.project_reader_t`` class will check for existence of `GCC-XML`_
    generated file. If it does not exist it will create one. If it do exist,
-   then that file will be used by the parser.
+   then the parser will use that file.
 
 10. Few helper functions has been added in order to make construction of
     configuration file to be as easy as possible:
