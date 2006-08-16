@@ -433,4 +433,3 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         else:
             operator.name = 'operator' + operator.name
         return operator
-

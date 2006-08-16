@@ -584,4 +584,3 @@ class type_qualifiers_t( object ):
         #~ else:
             #~ result.append( type )
         #~ return ' '.join( result )
-

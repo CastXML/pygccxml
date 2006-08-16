@@ -66,4 +66,3 @@ class decl_factory_t(object):
         
     def create_variable( self, *arguments, **keywords ):
         return variable_t(*arguments, **keywords)
-

@@ -526,4 +526,3 @@ class filename_repository_t:
             entry = self.__entries[id_]
             print "%04d %-60s %d"%(id_, entry.filename, entry.refcount)
 
-

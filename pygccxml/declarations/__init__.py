@@ -296,4 +296,3 @@ impl_decl_types[ namespace_t.free_operator ] = free_operator_t
 
 
 
-
