@@ -6,10 +6,10 @@
 import os
 import time
 import types
-import source_reader 
+import source_reader
 import declarations_cache
 import pygccxml.declarations
-from pygccxml import utils 
+from pygccxml import utils
 
 class COMPILATION_MODE:
     ALL_AT_ONCE = 'all at once'
@@ -21,40 +21,40 @@ class file_configuration_t( object ):
     file_configuration_t - a class, that contains some data and description how
     to treat the data. file_configuration_t can contain reference to the next types
     of data:
-    
+
     1) path to C++ source file
-    
+
     2) path to `GCC-XML`_ generated XML file
-    
+
     3) path to C++ source file and path to `GCC-XML`_ generated XML file
-    
+
         In this case, if XML file does not exists, it will be created. Next time
         you will ask to parse the source file, the XML file will be used instead.
-    
+
         Small tip: you can setup your makefile to delete XML files every time,
         the relevant source file has changed.
-    
+
     4) Python string, that contains valid C++ code
-    
-    
+
+
     There are few functions, that will help you to construct file_configuration_t
     object:
 
     * L{create_source_fc}
-    
+
     * L{create_gccxml_fc}
-    
+
     * L{create_cached_source_fc}
 
     * L{create_text_fc}
-    
+
     """
     class CONTENT_TYPE:
         STANDARD_SOURCE_FILE = 'standard source file'
         CACHED_SOURCE_FILE = 'cached source file'
         GCCXML_GENERATED_FILE = 'gccxml generated file'
         TEXT = 'text'
-        
+
     def __init__( self
                   , data
                   , start_with_declarations=None
@@ -78,7 +78,7 @@ class file_configuration_t( object ):
     def __get_start_with_declarations(self):
         return self.__start_with_declarations
     start_with_declarations = property( __get_start_with_declarations )
-    
+
     def __get_content_type(self):
         return self.__content_type
     content_type = property( __get_content_type )
@@ -86,15 +86,15 @@ class file_configuration_t( object ):
     def __get_cached_source_file(self):
         return self.__cached_source_file
     cached_source_file = property( __get_cached_source_file )
-    
+
 def create_text_fc( text ):
     """
     Creates L{file_configuration_t} instance, configured to contain Python string,
     that contains valid C++ code
-    
+
     @param text: C++ code
     @type text: str
-    
+
     @return: L{file_configuration_t}
     """
     return file_configuration_t( data=text
@@ -104,12 +104,12 @@ def create_source_fc( header ):
     """
     Creates L{file_configuration_t} instance, configured to contain path to
     C++ source file
-    
+
     @param header: path to C++ source file
     @type header: str
-    
+
     @return: L{file_configuration_t}
-    """    
+    """
     return file_configuration_t( data=header
                                  , content_type=file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE )
 
@@ -117,12 +117,12 @@ def create_gccxml_fc( xml_file ):
     """
     Creates L{file_configuration_t} instance, configured to contain path to
     GCC-XML generated XML file.
-    
+
     @param xml_file: path to GCC-XML generated XML file
     @type xml_file: str
-    
+
     @return: L{file_configuration_t}
-    """        
+    """
     return file_configuration_t( data=xml_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE )
 
@@ -138,9 +138,9 @@ def create_cached_source_fc( header, cached_source_file ):
 
     @param cached_source_file: path to GCC-XML generated XML file
     @type cached_source_file: str
-    
+
     @return: L{file_configuration_t}
-    """        
+    """
     return file_configuration_t( data=header
                                  , cached_source_file=cached_source_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE )
@@ -179,14 +179,14 @@ class project_reader_t:
         self.__decl_factory = decl_factory
         if not decl_factory:
             self.__decl_factory = pygccxml.declarations.decl_factory_t()
-        
+
         self.logger = utils.loggers.gccxml
-    
+
     @staticmethod
     def get_os_file_names( files ):
         """Returns a list of OS file names
 
-        @param files: list of strings or L{file_configuration_t} instances. 
+        @param files: list of strings or L{file_configuration_t} instances.
                       files could contain a mix of them
         @type files: list
         """
@@ -205,7 +205,7 @@ class project_reader_t:
     def read_files( self, files, compilation_mode=COMPILATION_MODE.FILE_BY_FILE):
         """Parse header files.
 
-        @param files: list of strings or L{file_configuration_t} instances. 
+        @param files: list of strings or L{file_configuration_t} instances.
                       files could contain a mix of them
         @type files: list
         @param compilation_mode: Determines whether the files are parsed individually or as one single chunk
@@ -218,13 +218,13 @@ class project_reader_t:
         else:
             if compilation_mode == COMPILATION_MODE.ALL_AT_ONCE:
                 msg = ''.join([
-                    "Unable to parse files using ALL_AT_ONCE mode. " 
+                    "Unable to parse files using ALL_AT_ONCE mode. "
                     , "There is some file configuration that is not file. "
                     , "pygccxml.parser.project_reader_t switches to FILE_BY_FILE mode." ])
                 self.logger.warning( msg )
             return self.__parse_file_by_file(files)
 
-    def __parse_file_by_file(self, files):        
+    def __parse_file_by_file(self, files):
         namespaces = []
         config = self.__config.clone()
         self.logger.debug( "Reading project files: file by file" )
@@ -232,7 +232,7 @@ class project_reader_t:
             reader = None
             header = None
             content_type = None
-            if isinstance( prj_file, file_configuration_t ):                
+            if isinstance( prj_file, file_configuration_t ):
                 del config.start_with_declarations[:]
                 config.start_with_declarations.extend( prj_file.start_with_declarations )
                 header = prj_file.data
@@ -246,8 +246,10 @@ class project_reader_t:
                                                     , self.__decl_factory )
             decls = None
             if content_type == file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE:
+                self.logger.info( 'Parsing source file "%s" ... ' % header )
                 decls = reader.read_file( header )
             elif content_type == file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE:
+                self.logger.info( 'Parsing xml file "%s" ... ' % header )
                 decls = reader.read_xml_file( header )
             elif content_type == file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE:
                 #TODO: raise error when header file does not exist
@@ -255,36 +257,39 @@ class project_reader_t:
                     dir_ = os.path.split( prj_file.cached_source_file )[0]
                     if dir_ and not os.path.exists( dir_ ):
                         os.makedirs( dir_ )
+                    self.logger.info( 'Creating xml file "%s" from source file "%s" ... '
+                                      % ( prj_file.cached_source_file, header ) )
                     reader.create_xml_file( header, prj_file.cached_source_file )
+                self.logger.info( 'Parsing xml file "%s" ... ' % prj_file.cached_source_file )
                 decls = reader.read_xml_file( prj_file.cached_source_file )
             else:
                 decls = reader.read_string( header )
             namespaces.append( decls )
         self.logger.debug( "Flushing cache... " )
-        start_time = time.clock()    
+        start_time = time.clock()
         self.__dcache.flush()
         self.logger.debug( "Cache has been flushed in %.1f secs" % ( time.clock() - start_time ) )
         answer = []
-        self.logger.debug( "Joining namespaces ..." )                
+        self.logger.debug( "Joining namespaces ..." )
         for file_nss in namespaces:
             answer = self._join_top_namespaces( answer, file_nss )
         self.logger.debug( "Joining declarations ..." )
         for ns in answer:
             if isinstance( ns, pygccxml.declarations.namespace_t ):
-                self._join_declarations( ns )            
+                self._join_declarations( ns )
         leaved_classes = self._join_class_hierarchy( answer )
         types = self.__declarated_types(answer)
         self.logger.debug( "Relinking declared types ..." )
         self._relink_declarated_types( leaved_classes, types )
         source_reader.bind_aliases( pygccxml.declarations.make_flatten( answer ) )
         return answer
-        
+
     def __parse_all_at_once(self, files):
         config = self.__config.clone()
         self.logger.debug( "Reading project files: all at once" )
         header_content = []
         for header in files:
-            if isinstance( header, file_configuration_t ):                
+            if isinstance( header, file_configuration_t ):
                 del config.start_with_declarations[:]
                 config.start_with_declarations.extend( header.start_with_declarations )
                 header_content.append( '#include "%s" %s' % ( header.data, os.linesep ) )
@@ -319,7 +324,7 @@ class project_reader_t:
         assert isinstance( nsref, pygccxml.declarations.namespace_t )
         ddhash = {} # decl.__class__ :  { decl.name : [decls] } double declaration hash
         decls = []
-        
+
         for decl in nsref.declarations:
             if not ddhash.has_key( decl.__class__ ):
                 ddhash[ decl.__class__ ] = { decl._name : [ decl ] }
@@ -346,7 +351,7 @@ class project_reader_t:
                             decls.append( decl )
                             joined_decls[decl._name].append( decl )
                     else:
-                        assert 1 == len( joined_decls[ decl._name ] )                        
+                        assert 1 == len( joined_decls[ decl._name ] )
                         if isinstance( decl, pygccxml.declarations.namespace_t ):
                             joined_decls[ decl._name ][0].take_parenting( decl )
         nsref.declarations = decls
@@ -369,7 +374,7 @@ class project_reader_t:
             for base_info in class_.bases:
                 leaved_base = leaved_classes[ create_key( base_info.related_class ) ]
                 #treating base class hierarchy of leaved_class
-                leaved_base_info = pygccxml.declarations.hierarchy_info_t( 
+                leaved_base_info = pygccxml.declarations.hierarchy_info_t(
                     related_class=leaved_base
                     , access=base_info.access )
                 if leaved_base_info not in leaved_class.bases:
@@ -378,7 +383,7 @@ class project_reader_t:
                     index = leaved_class.bases.index( leaved_base_info )
                     leaved_class.bases[index].related_class = leaved_base_info.related_class
                 #treating derived class hierarchy of leaved_base
-                leaved_derived_for_base_info = pygccxml.declarations.hierarchy_info_t( 
+                leaved_derived_for_base_info = pygccxml.declarations.hierarchy_info_t(
                     related_class=leaved_class
                     , access=base_info.access )
                 if leaved_derived_for_base_info not in leaved_base.derived:
@@ -389,13 +394,13 @@ class project_reader_t:
             for derived_info in class_.derived:
                 leaved_derived = leaved_classes[ create_key( derived_info.related_class ) ]
                 #treating derived class hierarchy of leaved_class
-                leaved_derived_info = pygccxml.declarations.hierarchy_info_t( 
+                leaved_derived_info = pygccxml.declarations.hierarchy_info_t(
                     related_class=leaved_derived
                     , access=derived_info.access )
                 if leaved_derived_info not in leaved_class.derived:
                     leaved_class.derived.append( leaved_derived_info )
                 #treating base class hierarchy of leaved_derived
-                leaved_base_for_derived_info = pygccxml.declarations.hierarchy_info_t( 
+                leaved_base_for_derived_info = pygccxml.declarations.hierarchy_info_t(
                     related_class=leaved_class
                     , access=derived_info.access )
                 if leaved_base_for_derived_info not in leaved_derived.bases:
@@ -432,7 +437,7 @@ class project_reader_t:
                     msg.append( "Class definition has been changed from one compilation to an other." )
                     msg.append( "Why did it happen to me? Here is a short list of reasons: " )
                     msg.append( "    1. There are different preprocessor definitions applied on same file during compilation" )
-                    msg.append( "    2. Bug in pygccxml." )                    
+                    msg.append( "    2. Bug in pygccxml." )
                     self.logger.error( os.linesep.join(msg) )
 
     def _join_declarations( self, declref ):
@@ -440,7 +445,7 @@ class project_reader_t:
         for ns in declref.declarations:
             if isinstance( ns, pygccxml.declarations.namespace_t ):
                 self._join_declarations( ns )
-        
+
     def __declarated_types(self, namespaces):
         def get_from_type(cpptype):
             if not cpptype:
@@ -456,7 +461,7 @@ class project_reader_t:
                 for arg in cpptype.arguments_types:
                     types.extend( get_from_type( arg ) )
                 return types
-            else: 
+            else:
                 assert isinstance( cpptype, pygccxml.declarations.unknown_t )
                 return []
         types = []
