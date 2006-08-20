@@ -54,7 +54,7 @@ from cpptypes import member_function_type_t
 from cpptypes import member_variable_type_t
 from cpptypes import declarated_t
 from cpptypes import type_qualifiers_t
-#java types  
+#java types
 from cpptypes import java_fundamental_t
 from cpptypes import jbyte_t
 from cpptypes import jshort_t
@@ -160,7 +160,7 @@ from type_traits import has_any_non_copyconstructor
 
 from type_traits import smart_pointer_traits
 
-from container_traits import list_traits 
+from container_traits import list_traits
 from container_traits import deque_traits
 from container_traits import queue_traits
 from container_traits import priority_queue
@@ -175,8 +175,9 @@ from container_traits import hash_set_traits
 from container_traits import multiset_traits
 from container_traits import hash_multiset_traits
 
-all_container_traits = [
-    list_traits 
+all_container_traits = \
+[
+    list_traits
     , deque_traits
     , queue_traits
     , priority_queue
@@ -189,8 +190,9 @@ all_container_traits = [
     , set_traits
     , hash_set_traits
     , multiset_traits
-    , hash_multiset_traits 
+    , hash_multiset_traits
 ]
+"""list, that contains all STD container traits classes"""
 
 import templates
 import call_invocation
@@ -220,10 +222,10 @@ from decl_printer import decl_printer_t
 from decl_printer import print_declarations
 
 
-#implementation details: I need this trick in order to prevent recursive imports
 import scopedef
 
-scopedef.scopedef_t._impl_all_decl_types = [
+scopedef.scopedef_t._impl_all_decl_types = \
+[
     scopedef.scopedef_t
     , enumeration_t
     , namespace_t
@@ -241,53 +243,53 @@ scopedef.scopedef_t._impl_all_decl_types = [
     , member_operator_t
     , casting_operator_t
     , free_function_t
-    , free_operator_t 
+    , free_operator_t
 ]
 
-impl_matchers = scopedef.scopedef_t._impl_matchers
-impl_decl_types = scopedef.scopedef_t._impl_decl_types
+__impl_matchers = scopedef.scopedef_t._impl_matchers
+__impl_decl_types = scopedef.scopedef_t._impl_decl_types
 
-impl_matchers[ scopedef.scopedef_t.decl ] = declaration_matcher_t
+__impl_matchers[ scopedef.scopedef_t.decl ] = declaration_matcher_t
 
-impl_matchers[ scopedef.scopedef_t.class_ ] = declaration_matcher_t
-impl_decl_types[ scopedef.scopedef_t.class_ ] = class_t
+__impl_matchers[ scopedef.scopedef_t.class_ ] = declaration_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.class_ ] = class_t
 
-impl_matchers[ scopedef.scopedef_t.variable ] = variable_matcher_t
+__impl_matchers[ scopedef.scopedef_t.variable ] = variable_matcher_t
 
-impl_matchers[ scopedef.scopedef_t.calldef ] = calldef_matcher_t
-impl_decl_types[ scopedef.scopedef_t.calldef ] = calldef_t
+__impl_matchers[ scopedef.scopedef_t.calldef ] = calldef_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.calldef ] = calldef_t
 
-impl_matchers[ scopedef.scopedef_t.operator ] = operator_matcher_t
-impl_decl_types[ scopedef.scopedef_t.operator ] = operator_t
+__impl_matchers[ scopedef.scopedef_t.operator ] = operator_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.operator ] = operator_t
 
-impl_matchers[ scopedef.scopedef_t.member_function ] = calldef_matcher_t
-impl_decl_types[ scopedef.scopedef_t.member_function ] = member_function_t
+__impl_matchers[ scopedef.scopedef_t.member_function ] = calldef_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.member_function ] = member_function_t
 
-impl_matchers[ scopedef.scopedef_t.constructor ] = calldef_matcher_t
-impl_decl_types[ scopedef.scopedef_t.constructor ] = constructor_t
+__impl_matchers[ scopedef.scopedef_t.constructor ] = calldef_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.constructor ] = constructor_t
 
-impl_matchers[ scopedef.scopedef_t.member_operator ] = operator_matcher_t
-impl_decl_types[ scopedef.scopedef_t.member_operator ] = member_operator_t
+__impl_matchers[ scopedef.scopedef_t.member_operator ] = operator_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.member_operator ] = member_operator_t
 
-impl_matchers[ scopedef.scopedef_t.member_operator ] = operator_matcher_t
-impl_decl_types[ scopedef.scopedef_t.member_operator ] = member_operator_t
+__impl_matchers[ scopedef.scopedef_t.member_operator ] = operator_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.member_operator ] = member_operator_t
 
-impl_matchers[ scopedef.scopedef_t.casting_operator ] = calldef_matcher_t
-impl_decl_types[ scopedef.scopedef_t.casting_operator ] = casting_operator_t
+__impl_matchers[ scopedef.scopedef_t.casting_operator ] = calldef_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.casting_operator ] = casting_operator_t
 
-impl_matchers[ scopedef.scopedef_t.enumeration ] = declaration_matcher_t
-impl_decl_types[ scopedef.scopedef_t.enumeration ] = enumeration_t
+__impl_matchers[ scopedef.scopedef_t.enumeration ] = declaration_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.enumeration ] = enumeration_t
 
-impl_matchers[ scopedef.scopedef_t.typedef ] = declaration_matcher_t
-impl_decl_types[ scopedef.scopedef_t.typedef ] = typedef_t
+__impl_matchers[ scopedef.scopedef_t.typedef ] = declaration_matcher_t
+__impl_decl_types[ scopedef.scopedef_t.typedef ] = typedef_t
 
-impl_matchers[ namespace_t.namespace ] = namespace_matcher_t
+__impl_matchers[ namespace_t.namespace ] = namespace_matcher_t
 
-impl_matchers[ namespace_t.free_function ] = calldef_matcher_t
-impl_decl_types[ namespace_t.free_function ] = free_function_t
+__impl_matchers[ namespace_t.free_function ] = calldef_matcher_t
+__impl_decl_types[ namespace_t.free_function ] = free_function_t
 
-impl_matchers[ namespace_t.free_operator ] = operator_matcher_t
-impl_decl_types[ namespace_t.free_operator ] = free_operator_t
+__impl_matchers[ namespace_t.free_operator ] = operator_matcher_t
+__impl_decl_types[ namespace_t.free_operator ] = free_operator_t
 
 
 

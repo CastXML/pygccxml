@@ -3,13 +3,18 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""
+defines all "built-in" classes that implement declarations compare functionality
+according to some criteria
+"""
+
 import os
 import re
 import types
 import algorithm
 import variable
-import namespace 
-import calldef 
+import namespace
+import calldef
 import cpptypes
 import templates
 import class_declaration
@@ -21,7 +26,7 @@ class matcher_base_t(object):
     """
     def __init__( self ):
         object.__init__( self )
-    
+
     def __call__(self, decl):
         raise NotImplementedError( "matcher must always implement the __call__() method." )
 
@@ -36,13 +41,13 @@ class matcher_base_t(object):
     def __or__(self, other):
         """or-operator (|)"""
         return or_matcher_t([self, other])
-        
+
     def __str__( self ):
         return "base class for all matchers"
 
 class and_matcher_t(matcher_base_t):
-    """Combine several other matchers with "&". 
-    
+    """Combine several other matchers with "&".
+
     For example: find all private functions with name XXX
 
     C{ matcher = access_type_matcher_t( 'private' ) & calldef_matcher_t( name='XXX' ) }
@@ -63,7 +68,7 @@ class and_matcher_t(matcher_base_t):
 
 class or_matcher_t(matcher_base_t):
     """Combine several other matchers with "|".
-    
+
     For example: find all functions and variables with name 'XXX'
 
     C{ matcher = variable_matcher_t( name='XXX' ) | calldef_matcher_t( name='XXX' ) }
@@ -84,8 +89,8 @@ class or_matcher_t(matcher_base_t):
 
 
 class not_matcher_t(matcher_base_t):
-    """Return the inverse result of matcher, using "~" 
-    
+    """Return the inverse result of matcher, using "~"
+
     For example: find all private and protected declarations
 
     C{ matcher = ~access_type_matcher_t( 'private' ) }
@@ -104,7 +109,7 @@ class not_matcher_t(matcher_base_t):
 class declaration_matcher_t( matcher_base_t ):
     """
     Instance of this class will match declarations by next criteria:
-          - declaration name, also could be fully qualified name 
+          - declaration name, also could be fully qualified name
             Example: wstring or ::std::wstring
           - declaration type
             Example: L{class_t}, L{namespace_t}, L{enumeration_t}
@@ -114,7 +119,7 @@ class declaration_matcher_t( matcher_base_t ):
         """
         @param decl_type: declaration type to match by. For example L{enumeration_t}.
         @type decl_type: any class that derives from L{declarations.declaration_t} class
-        
+
         @param name: declaration name, could be full name.
         @type name: str
 
@@ -125,10 +130,10 @@ class declaration_matcher_t( matcher_base_t ):
         @type header_file: str
 
         """
-        #An other option is that pygccxml will create absolute path using 
-        #os.path.abspath function. But I think this is just wrong, because abspath 
-        #builds path using current working directory. This behavior is fragile 
-        #and very difficult to find a bug.        
+        #An other option is that pygccxml will create absolute path using
+        #os.path.abspath function. But I think this is just wrong, because abspath
+        #builds path using current working directory. This behavior is fragile
+        #and very difficult to find a bug.
         matcher_base_t.__init__( self )
         self.decl_type = decl_type
         self.__name = None
@@ -136,17 +141,17 @@ class declaration_matcher_t( matcher_base_t ):
         self.__opt_tmpl_name = None
         self.__opt_is_full_name = None
         self.__decl_name_only = None
-       
+
         self._set_name( name )
-        
+
         self.header_dir = header_dir
         self.header_file = header_file
-        
+
         if self.header_dir:
             self.header_dir = utils.normalize_path( self.header_dir )
             if not os.path.isabs( self.header_dir ):
                 raise RuntimeError( "Path to header directory should be absolute!" )
-        
+
         if self.header_file:
             self.header_file = utils.normalize_path( self.header_file )
             if not os.path.isabs( self.header_file ):
@@ -180,7 +185,7 @@ class declaration_matcher_t( matcher_base_t ):
                     self.__opt_is_full_name = False
                     self.__decl_name_only = self.__name
 
-    
+
     name = property( _get_name, _set_name )
 
     def __str__( self ):
@@ -196,7 +201,7 @@ class declaration_matcher_t( matcher_base_t ):
         if not msg:
             msg.append( 'any' )
         return ' and '.join( msg )
-        
+
     def __call__( self, decl ):
         if not None is self.decl_type:
             if not isinstance( decl, self.decl_type ):
@@ -218,7 +223,7 @@ class declaration_matcher_t( matcher_base_t ):
 
     def check_name( self, decl ):
         assert not None is self.name
-            
+
         if self.__opt_is_tmpl_inst:
             if not self.__opt_is_full_name:
                 if self.name != decl.name:
@@ -234,20 +239,20 @@ class declaration_matcher_t( matcher_base_t ):
                 if self.name != algorithm.full_name( decl ):
                     return False
         return True
-    
+
     def is_full_name(self):
         return self.__opt_is_full_name
-                
+
     def _get_decl_name_only(self):
         return self.__decl_name_only
     decl_name_only = property( _get_decl_name_only )
-        
+
 class variable_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match variables by next criteria:
         - L{declaration_matcher_t} criteria
         - variable type. Example: L{int_t} or 'int'
-    """        
+    """
     def __init__( self, name=None, type=None, header_dir=None, header_file=None ):
         """
         @param type: variable type
@@ -259,7 +264,7 @@ class variable_matcher_t( declaration_matcher_t ):
                                         , header_dir=header_dir
                                         , header_file=header_file )
         self.type = type
-        
+
     def __call__( self, decl ):
         if not super( variable_matcher_t, self ).__call__( decl ):
             return False
@@ -288,7 +293,7 @@ class namespace_matcher_t( declaration_matcher_t ):
 
     def __init__( self, name=None ):
         declaration_matcher_t.__init__( self, name=name, decl_type=namespace.namespace_t)
-        
+
     def __call__( self, decl ):
         if self.name and decl.name == '':
             #unnamed namespace have same name as thier parent, we should prevent
@@ -296,7 +301,7 @@ class namespace_matcher_t( declaration_matcher_t ):
             #directly.
             return False
         return super( namespace_matcher_t, self ).__call__( decl )
-    
+
 
 class calldef_matcher_t( declaration_matcher_t ):
     """
@@ -304,7 +309,7 @@ class calldef_matcher_t( declaration_matcher_t ):
         - L{declaration_matcher_t} criteria
         - return type. Example: L{int_t} or 'int'
         - argument types
-    """        
+    """
 
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
@@ -312,9 +317,9 @@ class calldef_matcher_t( declaration_matcher_t ):
         @type return_type: string or instance of L{type_t} derived class
 
         @param arg_types: list of function argument types. arg_types can contain.
-        Any item within the list could be string or instance of L{type_t} derived 
-        class. If you don't want some argument to participate in match you can 
-        put None. For example: 
+        Any item within the list could be string or instance of L{type_t} derived
+        class. If you don't want some argument to participate in match you can
+        put None. For example:
 
         C{ calldef_matcher_t( arg_types=[ 'int &', None ] ) }
 
@@ -332,7 +337,7 @@ class calldef_matcher_t( declaration_matcher_t ):
 
         self.return_type = return_type
         self.arg_types = arg_types
-        
+
     def __call__( self, decl ):
         if not super( calldef_matcher_t, self ).__call__( decl ):
             return False
@@ -385,7 +390,7 @@ class operator_matcher_t( calldef_matcher_t ):
     Instance of this class will match operators by next criteria:
         - L{calldef_matcher_t} criteria
         - operator symbol: =, !=, (), [] and etc
-    """   
+    """
     def __init__( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
         @param symbol: operator symbol
@@ -401,15 +406,15 @@ class operator_matcher_t( calldef_matcher_t ):
                                     , header_dir=header_dir
                                     , header_file=header_file)
         self.symbol = symbol
-        
+
     def __call__( self, decl ):
         if not super( operator_matcher_t, self ).__call__( decl ):
             return False
-        if not None is self.symbol: 
+        if not None is self.symbol:
             if self.symbol != decl.symbol:
                 return False
         return True
-        
+
     def __str__( self ):
         msg = [ super( operator_matcher_t, self ).__str__() ]
         if msg == [ 'any' ]:
@@ -418,45 +423,45 @@ class operator_matcher_t( calldef_matcher_t ):
             msg.append( '(symbol==%s)' % str(self.symbol) )
         if not msg:
             msg.append( 'any' )
-        return ' and '.join( msg )        
-    
+        return ' and '.join( msg )
+
 class regex_matcher_t( matcher_base_t ):
     """
     Instance of this class will match declaration using regular expression.
-    User should supply a function that will extract from declaration desired 
-    information as string. Later, this matcher will match that string using 
+    User should supply a function that will extract from declaration desired
+    information as string. Later, this matcher will match that string using
     user regular expression.
-    """   
+    """
     def __init__( self, regex, function=None ):
         """
         @param regex: regular expression
         @type regex: string, an instance of this class will compile it for you
-        
+
         @param function: function that will be called to get an information from
         declaration as string. As input this function takes 1 argument: reference
         to declaration. Return value should be string. If function is None, then
         the matcher will use declaration name.
-        
+
         """
         matcher_base_t.__init__(self)
         self.regex = re.compile( regex )
         self.function = function
         if None is self.function:
             self.function = lambda decl: decl.name
-        
+
     def __call__( self, decl ):
         text = self.function( decl )
         return bool( self.regex.match( text ) )
-        
+
     def __str__( self ):
         return '(regex=%s)' % self.regex
-    
+
 class access_type_matcher_t( matcher_base_t ):
     """
-    Instance of this class will match declaration by its access type: public, 
+    Instance of this class will match declaration by its access type: public,
     private or protected. If declarations does not have access type, for example
     free function, then False will be returned.
-    """   
+    """
 
     def __init__( self, access_type ):
         """
@@ -466,21 +471,21 @@ class access_type_matcher_t( matcher_base_t ):
         """
         matcher_base_t.__init__( self )
         self.access_type = access_type
-    
+
     def __call__( self, decl ):
         if not isinstance( decl.parent, class_declaration.class_t ):
             return False
         return self.access_type == decl.parent.find_out_member_access_type( decl )
-        
+
     def __str__( self ):
         return '(access type=%s)' % self.access_type
 
 class virtuality_type_matcher_t( matcher_base_t ):
     """
-    Instance of this class will match declaration by its virtuality type: not virtual, 
+    Instance of this class will match declaration by its virtuality type: not virtual,
     virtual or pure virtual. If declarations does not have virtuality type, for example
     free function, then False will be returned.
-    """   
+    """
 
     def __init__( self, virtuality_type ):
         """
@@ -489,12 +494,12 @@ class virtuality_type_matcher_t( matcher_base_t ):
         """
         matcher_base_t.__init__( self )
         self.virtuality_type = virtuality_type
-    
+
     def __call__( self, decl ):
         if not isinstance( decl.parent, class_declaration.class_t ):
             return False
         return self.virtuality_type == decl.virtuality
-        
+
     def __str__( self ):
         return '(virtuality type=%s)' % self.virtuality_type
 
@@ -502,7 +507,7 @@ class virtuality_type_matcher_t( matcher_base_t ):
 class custom_matcher_t( matcher_base_t ):
     """
     Instance of this class will match declaration by user custom criteria.
-    """   
+    """
 
     def __init__( self, function ):
         """
@@ -511,10 +516,9 @@ class custom_matcher_t( matcher_base_t ):
         """
         matcher_base_t.__init__( self )
         self.function = function
-    
+
     def __call__( self, decl ):
         return bool( self.function( decl ) )
-    
+
     def __str__( self ):
         return '(user criteria)'
-    

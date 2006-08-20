@@ -13,7 +13,7 @@ def generate_doc():
     """Generate the epydoc reference manual.
     """
     print "Generating epydoc files..."
-    
+
     from epydoc.docbuilder import build_doc_index
     from epydoc.docwriter.html import HTMLWriter
 
@@ -21,12 +21,12 @@ def generate_doc():
     html_writer = HTMLWriter( docindex
                               , prj_name='pygccxml'
                               , prj_url='http://www.language-binding.net'
-                              , include_sourcecode=False #This will decrease the size of generated documentation
+                              , include_source_code=False #This will decrease the size of generated documentation
                               , show_private=False
                               , show_frames=False)
-    
+
     html_writer.write( os.path.join('docs', 'apidocs') )
-    
+
 class doc_cmd(Command):
     """This is a new distutils command 'doc' to build the epydoc manual.
     """
@@ -37,10 +37,10 @@ class doc_cmd(Command):
 
     def initialize_options (self):
         self.no_doc = 0
-        
+
     def finalize_options (self):
         pass
-    
+
     def run(self):
         if self.no_doc:
             return
