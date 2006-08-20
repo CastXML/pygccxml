@@ -30,47 +30,44 @@ except ImportError:
 
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
-#try:
-    #import pydsc
-    ##test only pygccxml
-    #pydsc.doc_checker.filter.append( package_directory )
-    #pydsc.doc_checker.filter_type = pydsc.FILTER_TYPE.INCLUDE
-    ##
-    #map( pydsc.doc_checker.speller.ignore_always
-         #, [ 'Yakovenko'
-             #, 'Bierbaum'
-             #, 'org'
-             #, 'http'
-             #, 'bool'
-             #, 'str'
-             #, 'www'
-             #, 'param' 
-             #, 'txt'
-             #, 'decl'
-             #, 'decls' 
-             #, 'namespace'
-             #, 'namespaces'
-             #, 'enum'
-             #, 'const'
-             #, 'GCC'
-             #, 'xcc'
-             #, 'TODO'
-             #, 'typedef'
-             #, 'os'
-             #, 'normcase'
-             #, 'normpath'
-             #, 'scopedef'
-             #, 'ira'#part of Matthias mail address
-             #, 'uka'#part of Matthias mail address
-             #, 'de'#part of Matthias mail address
-             #, 'dat'#file extension of directory cache
-             #, 'config'#parameter description
-             #, 'gccxml'#parameter description
-             #, 'Py++'
-             #, 'pygccxml'
-             #, 'calldef'
-             #, 'XXX'
-             #, 'wstring'
-             #] )
-#except ImportError:
-    #pass
+#~ try:
+    #~ import pydsc
+    #~ pydsc.include( r'D:\pygccxml_sources\sources\pygccxml_dev' )
+    #~ pydsc.ignore( [ 'Yakovenko'
+             #~ , 'Bierbaum'
+             #~ , 'org'
+             #~ , 'http'
+             #~ , 'bool'
+             #~ , 'str'
+             #~ , 'www'
+             #~ , 'param'
+             #~ , 'txt'
+             #~ , 'decl'
+             #~ , 'decls'
+             #~ , 'namespace'
+             #~ , 'namespaces'
+             #~ , 'enum'
+             #~ , 'const'
+             #~ , 'GCC'
+             #~ , 'xcc'
+             #~ , 'TODO'
+             #~ , 'typedef'
+             #~ , 'os'
+             #~ , 'normcase'
+             #~ , 'normpath'
+             #~ , 'scopedef'
+             #~ , 'ira'#part of Matthias mail address
+             #~ , 'uka'#part of Matthias mail address
+             #~ , 'de'#part of Matthias mail address
+             #~ , 'dat'#file extension of directory cache
+             #~ , 'config'#parameter description
+             #~ , 'gccxml'#parameter description
+             #~ , 'Py++'
+             #~ , 'pygccxml'
+             #~ , 'calldef'
+             #~ , 'XXX'
+             #~ , 'wstring'
+             #~ , 'py'
+             #~ ] )
+#~ except ImportError:
+    #~ pass
