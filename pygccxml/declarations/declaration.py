@@ -99,18 +99,20 @@ class declaration_t( object ):
 
     @staticmethod    
     def _sorted_list( some_list ):
+        """@undocumented _sorted_list:"""
         some_list.sort()
         return some_list
 
     def _get__cmp__items( self ):
-        """
-        Every derived class should implement this method. This method should 
-        return a list of items, that should be compared.
-        """
+        """@undocumented _get__cmp__items:"""
+        #Every derived class should implement this method. This method should 
+        #return a list of items, that should be compared.
+
         print '_get__cmp__items not implemented for class ', self.__class__.__name__
         raise NotImplemented()
 
     def _get__cmp__data(self):
+        """@undocumented _get__cmp__data:"""
         data = [ algorithm.declaration_path( self.parent ), self.name, self.location ]
         data.extend( self._get__cmp__items() )
         return data

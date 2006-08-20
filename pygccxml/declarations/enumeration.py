@@ -43,6 +43,7 @@ class enumeration_t( declaration.declaration_t ):
         return self.values == other.values
 
     def _get__cmp__items( self ):
+        """@undocumented _get__cmp__items:"""
         return [self.values]
 
     def _get_values(self):

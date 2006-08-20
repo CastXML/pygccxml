@@ -81,6 +81,7 @@ class class_declaration_t( declaration.declaration_t ):
         declaration.declaration_t.__init__( self, name )
     
     def _get__cmp__items(self):
+        """@undocumented _get__cmp__items:"""
         return []       
 
 class class_t( scopedef.scopedef_t ):
@@ -124,6 +125,7 @@ class class_t( scopedef.scopedef_t ):
         return "%s [%s]"%(name, self.class_type)
 
     def _get__cmp__scope_items(self):
+        """@undocumented _get__cmp__scope_items:"""
         return [ self.class_type     
                  , self._sorted_list( [ algorithm.declaration_path( base.related_class ) for base in self.bases ] )
                  , self._sorted_list( [ algorithm.declaration_path( derive.related_class ) for derive in self.derived ] )

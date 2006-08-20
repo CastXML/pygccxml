@@ -13,7 +13,7 @@ class variable_t( declaration.declaration_t ):
     """describes C++ global and member variable declaration"""
 
     def __init__( self, name='', type=None, type_qualifiers=None, value=None, bits=None):
-        """@undocumented __init__:"""
+        """creates class that describes C++ global or member variable"""
         declaration.declaration_t.__init__( self, name )
         self._type = type
         self._type_qualifiers = type_qualifiers

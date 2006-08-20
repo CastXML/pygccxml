@@ -93,12 +93,7 @@ class argument_t(object):
 
 class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
-    def __init__( self
-                  , name=''
-                  , arguments=None
-                  , exceptions=None
-                  , return_type=None
-                  , has_extern=False ):
+    def __init__( self, name='', arguments=None, exceptions=None, return_type=None, has_extern=False ):
         declaration.declaration_t.__init__( self, name )
         if not arguments:
             arguments = []
@@ -111,9 +106,11 @@ class calldef_t( declaration.declaration_t ):
         self._demangled_name = None
         
     def _get__cmp__call_items(self):
+        """@undocumented _get__cmp__call_items:"""
         raise NotImplementedError()
 
     def _get__cmp__items( self ):
+        """@undocumented _get__cmp__items:"""
         items = [ self._sorted_list( self.arguments )
                   , self.return_type
                   , self.has_extern
@@ -183,6 +180,7 @@ class calldef_t( declaration.declaration_t ):
                            """)
     
     def __remove_parent_fname( self, demangled ):
+        """@undocumented __remove_parent_fname:"""
         demangled = demangled.strip()
         parent_fname = algorithm.full_name( self.parent )
         if parent_fname.startswith( '::' ) and not demangled.startswith( '::' ):
@@ -276,6 +274,7 @@ class member_calldef_t( calldef_t ):
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
+        """@undocumented _get__cmp__call_items:"""
         return [ self.virtuality, self.has_static, self.has_const ]
         
     def __eq__(self, other):
@@ -355,6 +354,7 @@ class free_calldef_t( calldef_t ):
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
+        """@undocumented _get__cmp__call_items:"""
         return []
 
     def function_type(self):

@@ -28,6 +28,7 @@ class namespace_t( scopedef.scopedef_t ):
         return "%s [namespace]"%name
 
     def _get__cmp__scope_items(self):
+        """@undocumented _get__cmp__scope_items:"""
         return [ self._sorted_list( self.declarations ) ]
         
     def _get_declarations_impl(self):

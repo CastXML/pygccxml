@@ -3,12 +3,18 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""
+defines logger classes and few convinience methods, not related to the declarations
+tree
+"""
+
 import os
 import sys
 import logging
 import tempfile
 
 def _create_logger_( name ):    
+    """@undocumented _create_logger:"""
     logger = logging.getLogger(name)
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
@@ -17,22 +23,51 @@ def _create_logger_( name ):
     return logger
 
 class loggers:
-    gccxml = _create_logger_( 'pygccxml.gccxml' )
+    """class-namespace, defines few loggers classes, used in the project"""
+
+    gccxml = _create_logger_( 'pygccxml.gccxml' ) 
+    """logger for gccxml functionality
+    
+    If you set this logger level to DEBUG, you will be able to see the exact
+    command line, used to invoke GCC-XML  and errors that occures during XML parsing
+    """
+    
     queries_engine = _create_logger_( 'pygccxml.queries_engine' )
+    """logger for query engine functionality.
+    
+    If you set this logger level to DEBUG, you will be able to see what queries
+    you do against declarations tree, measure performance and may be even to improve it.
+    Query engine reports queries and whether they are optimized or not.
+    """
+    
     declarations_cache = _create_logger_( 'pygccxml.declarations_cache' )
-    #root logger exists for configuration purpose only
+    """logger for declarations tree cache functionality
+    
+    If you set this logger level to DEBUG, you will be able to see what is exactly
+    happens, when you read the declarations from cache file. You will be able to 
+    decide, whether it worse for you to use this or that cache strategy.
+    """
+    
     root = logging.getLogger( 'pygccxml' )
+    """root logger exists for your convinience only"""
+    
     all = [ root, gccxml, queries_engine, declarations_cache ]
+    """contains all logger classes, defined by the class"""
 
 def remove_file_no_raise(file_name ):
+    """removes file from disk, if exception is raised, it silently ignores it"""
     try:
         if os.path.exists(file_name):
             os.remove( file_name )
     except Exception, error:
-        logger.error( "Error ocured while removing temprorary created file('%s'): %s" 
-                      % ( file_name, str( error ) ) )
+        loggers.root.error( "Error ocured while removing temprorary created file('%s'): %s" 
+                            % ( file_name, str( error ) ) )
 
 def create_temp_file_name(suffix, prefix=None, dir=None):    
+    """small convinience function that creates temporal file.
+    
+    This function is a wrapper aroung Python built-in function - tempfile.mkstemp
+    """
     if not prefix:
         prefix = tempfile.template
     fd, name = tempfile.mkstemp( suffix=suffix, prefix=prefix, dir=dir )
@@ -41,4 +76,5 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
     return name
 
 def normalize_path( some_path ):
+    """return os.path.normpath( os.path.normcase( some_path ) )"""
     return os.path.normpath( os.path.normcase( some_path ) )

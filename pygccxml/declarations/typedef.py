@@ -17,6 +17,7 @@ class typedef_t( declaration.declaration_t ):
         self._type = type
 
     def _get__cmp__items( self ):
+        """@undocumented _get__cmp__items:"""
         return [self.type]
 
     def __eq__(self, other):

@@ -81,9 +81,11 @@ class scopedef_t( declaration.declaration_t ):
     _logger = property( _get_logger )
         
     def _get__cmp__scope_items(self):
+        """@undocumented _get__cmp__scope_items:"""
         raise NotImplementedError()
 
     def _get__cmp__items(self):
+        """@undocumented _get__cmp__items:"""
         items = [ self._sorted_list( self.declarations ) ]
         items.extend( self._get__cmp__scope_items() )
         return items
@@ -109,6 +111,7 @@ class scopedef_t( declaration.declaration_t ):
 
 
     def __decl_types( self, decl ):
+        """@undocumented _get__cmp__items:"""
         types = []
         bases = list( decl.__class__.__bases__ )
         visited = set()
@@ -187,6 +190,7 @@ class scopedef_t( declaration.declaration_t ):
         self._optimized = True
         
     def _build_operator_name( self, name, function, symbol ):
+        """@undocumented _build_operator_name:"""
         def add_operator( sym ):
             if 'new' in sym or 'delete' in sym:
                 return 'operator ' + sym
@@ -204,24 +208,28 @@ class scopedef_t( declaration.declaration_t ):
 
 
     def __normalize_args( self, **keywds ):
+        """@undocumented __normalize_args:"""
         if callable( keywds['name'] ) and None is keywds['function']:
             keywds['function'] = keywds['name']
             keywds['name'] = None
         return keywds
     
     def __findout_recursive( self, **keywds ):
+        """@undocumented __findout_recursive:"""
         if None is keywds[ 'recursive' ]:
             return self.RECURSIVE_DEFAULT
         else: 
             return keywds[ 'recursive' ]
 
     def __findout_allow_empty( self, **keywds ):
+        """@undocumented __findout_allow_empty:"""
         if None is keywds[ 'allow_empty' ]:
             return self.ALLOW_EMPTY_MDECL_WRAPPER
         else: 
             return keywds[ 'allow_empty' ]
 
     def __findout_decl_type( self, match_class, **keywds ):
+        """@undocumented __findout_decl_type:"""
         if keywds.has_key( 'decl_type' ):
             return keywds['decl_type']
         
@@ -238,6 +246,7 @@ class scopedef_t( declaration.declaration_t ):
         return None
             
     def __create_matcher( self, match_class, **keywds ):
+        """@undocumented __create_matcher:"""
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
@@ -253,6 +262,7 @@ class scopedef_t( declaration.declaration_t ):
             return matcher
     
     def __findout_range( self, name, decl_type, recursive ):
+        """@undocumented __findout_range:"""
         if not self._optimized:
             self._logger.debug( 'running non optimized query - optimization has not been done' )
             decls = self.declarations
@@ -292,6 +302,7 @@ class scopedef_t( declaration.declaration_t ):
                 return self.declarations
 
     def _find_single( self, match_class, **keywds ):
+        """@undocumented _find_single:"""
         self._logger.debug( 'find single query execution - started' )
         start_time = time.clock()      
         norm_keywds = self.__normalize_args( **keywds )
@@ -304,6 +315,7 @@ class scopedef_t( declaration.declaration_t ):
         return found
 
     def _find_multiple( self, match_class, **keywds ):
+        """@undocumented _find_multiple:"""
         self._logger.debug( 'find all query execution - started' )
         start_time = time.clock() 
         norm_keywds = self.__normalize_args( **keywds )
