@@ -77,8 +77,8 @@ class hierarchy_info_t( object ):
 
 class class_declaration_t( declaration.declaration_t ):
     """describes class declaration"""
-    def __init__( self, name='', parent='' ):
-        declaration.declaration_t.__init__( self, name, parent )
+    def __init__( self, name='' ):
+        declaration.declaration_t.__init__( self, name )
     
     def _get__cmp__items(self):
         return []       
@@ -87,8 +87,8 @@ class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
     USE_DEMANGLED_AS_NAME = True
-    def __init__( self, name='', parent=None, class_type=CLASS_TYPES.CLASS, is_abstract=False ):
-        scopedef.scopedef_t.__init__( self, name, parent )
+    def __init__( self, name='', class_type=CLASS_TYPES.CLASS, is_abstract=False ):
+        scopedef.scopedef_t.__init__( self, name )
         if class_type:
             assert( class_type in CLASS_TYPES.ALL )
         self._class_type = class_type

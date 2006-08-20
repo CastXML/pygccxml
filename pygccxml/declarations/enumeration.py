@@ -15,7 +15,7 @@ class enumeration_t( declaration.declaration_t ):
     """
     describes C++ enum
     """
-    def __init__( self, name='', parent=None, values=None ):
+    def __init__( self, name='', values=None ):
         """Constructor.
 
         The items of the list 'values' may either be strings containing
@@ -28,7 +28,7 @@ class enumeration_t( declaration.declaration_t ):
         @param values: Enumeration values
         @type values: list
         """
-        declaration.declaration_t.__init__( self, name, parent )
+        declaration.declaration_t.__init__( self, name )
 
         # A list of tuples (valname(str), valnum(int)). The order of the list should
         # be the same as the order in the C/C++ source file.

@@ -69,15 +69,13 @@ class declaration_t( object ):
     """Base class for all classes that represent a C++ declaration.
     """
     
-    def __init__( self, name='', parent=None, location=None, is_artificial=False, mangled=None, demangled=None ):
+    def __init__( self, name='', location=None, is_artificial=False, mangled=None, demangled=None ):
         self._name = name
-        if parent:
-            assert( isinstance( parent, declaration_t ) )
-        self._parent = parent
         self._location = location
         self._is_artificial = is_artificial
         self._mangled = mangled
         self._demangled = demangled
+        self._parent = None
 
     def __str__(self):
         """Default __str__ method.

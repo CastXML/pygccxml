@@ -95,12 +95,11 @@ class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
     def __init__( self
                   , name=''
-                  , parent=None
                   , arguments=None
                   , exceptions=None
                   , return_type=None
                   , has_extern=False ):
-        declaration.declaration_t.__init__( self, name, parent )
+        declaration.declaration_t.__init__( self, name )
         if not arguments:
             arguments = []
         self._arguments = arguments

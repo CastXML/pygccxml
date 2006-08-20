@@ -12,8 +12,8 @@ import declaration
 class typedef_t( declaration.declaration_t ):
     """describes C++ typedef declaration"""
 
-    def __init__( self, name='', parent=None, type=None ):
-        declaration.declaration_t.__init__( self, name, parent )
+    def __init__( self, name='', type=None ):
+        declaration.declaration_t.__init__( self, name )
         self._type = type
 
     def _get__cmp__items( self ):

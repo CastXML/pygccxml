@@ -66,8 +66,8 @@ class scopedef_t( declaration.declaration_t ):
     _impl_decl_types = {} #this class variable is used to prevent recursive imports
     _impl_all_decl_types = [] #this class variable is used to prevent recursive imports
     
-    def __init__( self, name='', parent=''):
-        declaration.declaration_t.__init__( self, name, parent )
+    def __init__( self, name=''):
+        declaration.declaration_t.__init__( self, name )
 
         self._optimized = False
         self._type2decls = {}

@@ -12,9 +12,9 @@ import declaration
 class variable_t( declaration.declaration_t ):
     """describes C++ global and member variable declaration"""
 
-    def __init__( self, name='', parent=None, type=None, type_qualifiers=None, value=None, bits=None):
-        """@undocumented:"""
-        declaration.declaration_t.__init__( self, name, parent )
+    def __init__( self, name='', type=None, type_qualifiers=None, value=None, bits=None):
+        """@undocumented __init__:"""
+        declaration.declaration_t.__init__( self, name )
         self._type = type
         self._type_qualifiers = type_qualifiers
         self._value = value
@@ -59,4 +59,4 @@ class variable_t( declaration.declaration_t ):
     def _set_bits(self, bits):
         self._bits = bits
     bits = property( _get_bits, _set_bits
-                     , doc="int, that contains information how many bit takes bit field")
+                     , doc="integer, that contains information about how many bit takes bit field")

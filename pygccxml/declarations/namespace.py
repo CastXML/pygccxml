@@ -15,8 +15,8 @@ class namespace_t( scopedef.scopedef_t ):
     describes C++ namespace
     """
     
-    def __init__( self, name='', parent=None, declarations=None ):
-        scopedef.scopedef_t.__init__( self, name, parent )
+    def __init__( self, name='', declarations=None ):
+        scopedef.scopedef_t.__init__( self, name )
         if not declarations:
             declarations = []
         self._declarations = declarations # list of all declarations belongs to this namespace
