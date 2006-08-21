@@ -302,7 +302,7 @@ FUNDAMENTAL_TYPES = {
     , '__java_boolean' : jboolean_t()
 }
 """
-defines a mapping between funcdamental type name and its synonym to the instance
+defines a mapping between fundamental type name and its synonym to the instance
 of class that describes the type
 """
 
