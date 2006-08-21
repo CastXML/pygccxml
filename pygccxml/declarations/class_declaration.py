@@ -20,7 +20,7 @@ class ACCESS_TYPES:
     """class that defines "access" constants"""
     PUBLIC = "public"
     PRIVATE = "private"
-    PROTECTED = "protected"    
+    PROTECTED = "protected"
     ALL = [ PUBLIC, PRIVATE, PROTECTED ]
 
 class CLASS_TYPES:
@@ -31,10 +31,9 @@ class CLASS_TYPES:
     ALL = [ CLASS, STRUCT, UNION ]
 
 class hierarchy_info_t( object ):
-    """
-    describes class relationship
-    """
+    """describes class relationship"""
     def __init__(self, related_class=None, access=None ):
+        """creates class that contains partial information about class relationship"""
         if related_class:
             assert( isinstance( related_class, class_t ) )
         self._related_class = related_class
@@ -78,17 +77,19 @@ class hierarchy_info_t( object ):
 class class_declaration_t( declaration.declaration_t ):
     """describes class declaration"""
     def __init__( self, name='' ):
+        """creates class that describes C++ class declaration( and not definition )"""
         declaration.declaration_t.__init__( self, name )
-    
+
     def _get__cmp__items(self):
-        """@undocumented _get__cmp__items:"""
-        return []       
+        """implementation details"""
+        return []
 
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
     USE_DEMANGLED_AS_NAME = True
     def __init__( self, name='', class_type=CLASS_TYPES.CLASS, is_abstract=False ):
+        """creates class that describes C++ class definition"""
         scopedef.scopedef_t.__init__( self, name )
         if class_type:
             assert( class_type in CLASS_TYPES.ALL )
@@ -100,7 +101,7 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
-        
+
     def _get_name_impl( self ):
         if not self._name: #class with empty name
             return self._name
@@ -111,13 +112,13 @@ class class_t( scopedef.scopedef_t ):
             if self.demangled.startswith( fname ):
                 tmp = self.demangled[ len( fname ): ] #demangled::name
                 if tmp.startswith( '::' ):
-                    tmp = tmp[2:] 
+                    tmp = tmp[2:]
                 return tmp
             else:
                 return self._name
         else:
             return self._name
-        
+
     def __str__(self):
         name = algorithm.full_name(self)
         if name[:2]=="::":
@@ -125,15 +126,15 @@ class class_t( scopedef.scopedef_t ):
         return "%s [%s]"%(name, self.class_type)
 
     def _get__cmp__scope_items(self):
-        """@undocumented _get__cmp__scope_items:"""
-        return [ self.class_type     
+        """implementation details"""
+        return [ self.class_type
                  , self._sorted_list( [ algorithm.declaration_path( base.related_class ) for base in self.bases ] )
                  , self._sorted_list( [ algorithm.declaration_path( derive.related_class ) for derive in self.derived ] )
-                 , self.is_abstract                 
+                 , self.is_abstract
                  , self._sorted_list( self.public_members )
                  , self._sorted_list( self.private_members )
                  , self._sorted_list( self.protected_members ) ]
-                 
+
     def __eq__(self, other):
         if not scopedef.scopedef_t.__eq__( self, other ):
             return False
@@ -177,7 +178,7 @@ class class_t( scopedef.scopedef_t ):
         return all_bases
     recursive_bases = property( _get_recursive_bases
                                 , doc="returns a list of all L{base classes<hierarchy_info_t>}")
-    
+
     def _get_derived(self):
         return self._derived
     def _set_derived( self, new_derived ):
@@ -238,12 +239,12 @@ class class_t( scopedef.scopedef_t ):
     def get_members( self, access=None):
         """
         returns list of members according to access type
-        
+
         If access equals to None, then returned list will contain all members.
-        
+
         @param access: describes desired members
         @type access: L{ACCESS_TYPES}
-        
+
         @return: [ members ]
         """
         if access == ACCESS_TYPES.PUBLIC:
@@ -262,10 +263,10 @@ class class_t( scopedef.scopedef_t ):
     def set_members( self, access, new_members ):
         """
         set list of members according to access type
-        
+
         @param access: describes desired members
         @type access: L{ACCESS_TYPES}
-        
+
         @param new_members: list of new members
         @type new_members: [ L{member<declaration_t>} ]
         """
@@ -278,11 +279,11 @@ class class_t( scopedef.scopedef_t ):
             self.private_members = new_members
         for member in new_members:
             member.parent = self
-   
+
     def remove_declaration( self, decl ):
         """
         removes decl from  members list
-        
+
         @param decl: declaration to be removed
         @type decl: L{declaration_t}
         """
@@ -299,14 +300,14 @@ class class_t( scopedef.scopedef_t ):
         #add more comment about this.
         #if not keep_parent:
         #    decl.parent=None
-        
+
     def find_out_member_access_type( self, member ):
         """
         returns member access type
-        
+
         @param member: member of the class
         @type member: L{declaration_t}
-        
+
         @return: L{ACCESS_TYPES}
         """
         assert member.parent is self

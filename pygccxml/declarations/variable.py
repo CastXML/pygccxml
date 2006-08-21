@@ -21,11 +21,11 @@ class variable_t( declaration.declaration_t ):
         self._bits = bits
 
     def _get__cmp__items( self ):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         return [ self.type, self.type_qualifiers, self.value ]
 
     def __eq__(self, other):
-        """@undocumented __eq__:"""
+        """implementation details"""
         if not declaration.declaration_t.__eq__( self, other ):
             return False
         return self.type == other.type \

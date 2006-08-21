@@ -15,8 +15,7 @@ import templates
 
 
 class location_t(object):
-    
-    """Provides information about the location of the declaration within the source file.
+    """provides information about the location of the declaration within the source file.
 
     The header file name and the line number of the declaration can be
     accessed via the attributes C{file_name} and C{line}.
@@ -57,7 +56,7 @@ class location_t(object):
                      , doc="""The line number where the declaration was found
                      @type: int
                      """)
-    
+
     def as_tuple( self ):
         """Return the header file name and the line number.
 
@@ -68,7 +67,7 @@ class location_t(object):
 class declaration_t( object ):
     """Base class for all classes that represent a C++ declaration.
     """
-    
+
     def __init__( self, name='', location=None, is_artificial=False, mangled=None, demangled=None ):
         self._name = name
         self._location = location
@@ -94,25 +93,25 @@ class declaration_t( object ):
         # Append the declaration class
         cls = self.__class__.__name__
         if cls[-2:]=="_t":
-            cls = cls[:-2]        
+            cls = cls[:-2]
         return "%s [%s]"%(name, cls)
 
-    @staticmethod    
+    @staticmethod
     def _sorted_list( some_list ):
-        """@undocumented _sorted_list:"""
+        """implementation details"""
         some_list.sort()
         return some_list
 
     def _get__cmp__items( self ):
-        """@undocumented _get__cmp__items:"""
-        #Every derived class should implement this method. This method should 
+        """implementation details"""
+        #Every derived class should implement this method. This method should
         #return a list of items, that should be compared.
 
         print '_get__cmp__items not implemented for class ', self.__class__.__name__
         raise NotImplemented()
 
     def _get__cmp__data(self):
-        """@undocumented _get__cmp__data:"""
+        """implementation details"""
         data = [ algorithm.declaration_path( self.parent ), self.name, self.location ]
         data.extend( self._get__cmp__items() )
         return data
@@ -120,8 +119,8 @@ class declaration_t( object ):
     def __eq__(self, other):
         """
         function will return true, if both declarations refers to the same object.
-        This function could be implemented in terms of _get__cmp__data, but in 
-        this case it will downgrade performance. self.mangled property is not 
+        This function could be implemented in terms of _get__cmp__data, but in
+        this case it will downgrade performance. self.mangled property is not
         compared, because it could be chaned from one compilation time to an
         other.
         """
@@ -145,13 +144,13 @@ class declaration_t( object ):
         if not isinstance( other, self.__class__ ):
             return self.__class__.__name__ < other.__class__.__name__
         return self._get__cmp__data() < other._get__cmp__data()
-   
+
     def _get_name_impl( self ):
         return self._name
-    
+
     def _get_name( self ):
         return self._get_name_impl()
-    
+
     def _set_name( self, new_name ):
         self._name = new_name
     name = property( _get_name, _set_name
@@ -222,9 +221,9 @@ class declaration_t( object ):
 
     def _create_decl_string(self):
         return algorithm.full_name( self )
-    
+
     def _decl_string(self):
-        return self._create_decl_string()        
+        return self._create_decl_string()
     decl_string = property( _decl_string,
                             doc="""Full name of the declaration
                             @type: str

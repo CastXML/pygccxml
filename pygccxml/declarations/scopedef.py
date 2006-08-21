@@ -21,51 +21,51 @@ class scopedef_t( declaration.declaration_t ):
     This is the base class for all declaration classes that may have
     children nodes. The children can be accessed via the C{declarations}
     property.
-    
+
     Also this class provides "get/select/find" interface. Using this class you
-    can get instance or instances of internal declaration(s). 
-    
+    can get instance or instances of internal declaration(s).
+
     You can find declaration(s) using next criteria:
         1. name - declaration name, could be full qualified name
         2. header_dir - directory, to which belongs file, that the declaration was declarated in.
-           header_dir should be absolute path. 
+           header_dir should be absolute path.
         3. header_file - file that the declaration was declarated in.
         4. function - user ( your ) custom criteria. The interesting thing is that
            this function will be joined with other arguments ( criteria ).
         5. recursive - the search declaration range, if True will be search in
           internal declarations too.
-    
+
     Every "select" API you can invoke and pass as first argument at declaration
     name or function. This class will find out correctly what argument represents.
-    
+
     Example::
         ns - referrers to global namespace
         ns.member_function( "do_something ) - will return reference to member
         function named "do_something". If there is no such function exception
         will be raised. If there is more then one function exception will be
         raised too.
-        
+
     Example 2::
         ns - referers to global namespace
-        do_smths = ns.member_functions( "do_something ) - will return instance 
+        do_smths = ns.member_functions( "do_something ) - will return instance
         of L{mdecl_wrapper_t} object. This object allows you few things:
-        
+
         1. To iterate on selected declarations
         2. To set some property to desired value using one line of code only:
            do_smths.call_policies = x
         3. To call some function on every instance using one line of code:
            do_smths.exclude()
-           
-        Pay attention: you can not use "get" functions or properties.     
+
+        Pay attention: you can not use "get" functions or properties.
     """
 
-    RECURSIVE_DEFAULT = True   
+    RECURSIVE_DEFAULT = True
     ALLOW_EMPTY_MDECL_WRAPPER = False
-   
+
     _impl_matchers = {} #this class variable is used to prevent recursive imports
     _impl_decl_types = {} #this class variable is used to prevent recursive imports
     _impl_all_decl_types = [] #this class variable is used to prevent recursive imports
-    
+
     def __init__( self, name=''):
         declaration.declaration_t.__init__( self, name )
 
@@ -78,18 +78,18 @@ class scopedef_t( declaration.declaration_t ):
 
     def _get_logger( self ):
         return utils.loggers.queries_engine
-    _logger = property( _get_logger )
-        
+    _logger = property( _get_logger, doc="reference to C{queries_engine} logger" )
+
     def _get__cmp__scope_items(self):
-        """@undocumented _get__cmp__scope_items:"""
+        """implementation details"""
         raise NotImplementedError()
 
     def _get__cmp__items(self):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         items = [ self._sorted_list( self.declarations ) ]
         items.extend( self._get__cmp__scope_items() )
         return items
-        
+
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__( self, other ):
             return False
@@ -98,20 +98,19 @@ class scopedef_t( declaration.declaration_t ):
 
     def _get_declarations_impl(self):
         raise NotImplementedError()
-    
+
     def _get_declarations(self):
         return self._get_declarations_impl()
     declarations = property( _get_declarations,
                              doc="""A list of children declarations.
                              @type: list of L{declaration_t}
                              """)
-    
+
     def remove_declaration( self, decl ):
         raise NotImplementedError()
 
-
     def __decl_types( self, decl ):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         types = []
         bases = list( decl.__class__.__bases__ )
         visited = set()
@@ -149,23 +148,23 @@ class scopedef_t( declaration.declaration_t ):
             2. from type to declarations for non-recursive queries
             3. from type to name to declarations
             4. from type to name to declarations for non-recursive queries
-            
+
         Almost every query includes declaration type information. Also very
         common query is to search some declaration(s) by name or full name.
-        Those hashtables allows to search declaration very quick. 
+        Those hashtables allows to search declaration very quick.
         """
         if self.name == '::':
             self._logger.debug( "preparing data structures for query optimizer - started" )
         start_time = time.clock()
-        
+
         self.clear_optimizer()
-        
+
         for dtype in scopedef_t._impl_all_decl_types:
             self._type2decls[ dtype ] = []
             self._type2decls_nr[ dtype ] = []
             self._type2name2decls[ dtype ] = {}
             self._type2name2decls_nr[ dtype ] = {}
-        
+
         self._all_decls = algorithm.make_flatten( self.declarations )
         for decl in self._all_decls:
             types = self.__decl_types( decl )
@@ -185,12 +184,12 @@ class scopedef_t( declaration.declaration_t ):
         map( lambda decl: decl.init_optimizer()
              , filter( lambda decl: isinstance( decl, scopedef_t ),  self.declarations ) )
         if self.name == '::':
-            self._logger.debug( "preparing data structures for query optimizer - done( %f seconds ). " 
+            self._logger.debug( "preparing data structures for query optimizer - done( %f seconds ). "
                                 % ( time.clock() - start_time ) )
         self._optimized = True
-        
+
     def _build_operator_name( self, name, function, symbol ):
-        """@undocumented _build_operator_name:"""
+        """implementation details"""
         def add_operator( sym ):
             if 'new' in sym or 'delete' in sym:
                 return 'operator ' + sym
@@ -208,45 +207,45 @@ class scopedef_t( declaration.declaration_t ):
 
 
     def __normalize_args( self, **keywds ):
-        """@undocumented __normalize_args:"""
+        """implementation details"""
         if callable( keywds['name'] ) and None is keywds['function']:
             keywds['function'] = keywds['name']
             keywds['name'] = None
         return keywds
-    
+
     def __findout_recursive( self, **keywds ):
-        """@undocumented __findout_recursive:"""
+        """implementation details"""
         if None is keywds[ 'recursive' ]:
             return self.RECURSIVE_DEFAULT
-        else: 
+        else:
             return keywds[ 'recursive' ]
 
     def __findout_allow_empty( self, **keywds ):
-        """@undocumented __findout_allow_empty:"""
+        """implementation details"""
         if None is keywds[ 'allow_empty' ]:
             return self.ALLOW_EMPTY_MDECL_WRAPPER
-        else: 
+        else:
             return keywds[ 'allow_empty' ]
 
     def __findout_decl_type( self, match_class, **keywds ):
-        """@undocumented __findout_decl_type:"""
+        """implementation details"""
         if keywds.has_key( 'decl_type' ):
             return keywds['decl_type']
-        
+
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
         if matcher_args.has_key('allow_empty'):
             del matcher_args['allow_empty']
 
-        
+
         matcher = match_class( **matcher_args )
         if matcher.decl_type:
             return matcher.decl_type
         return None
-            
+
     def __create_matcher( self, match_class, **keywds ):
-        """@undocumented __create_matcher:"""
+        """implementation details"""
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
@@ -258,11 +257,11 @@ class scopedef_t( declaration.declaration_t ):
             self._logger.debug( 'running query: %s and <user defined function>' % str( matcher ) )
             return lambda decl: matcher( decl ) and keywds['function'](decl)
         else:
-            self._logger.debug( 'running query: %s' % str( matcher ) )                
+            self._logger.debug( 'running query: %s' % str( matcher ) )
             return matcher
-    
+
     def __findout_range( self, name, decl_type, recursive ):
-        """@undocumented __findout_range:"""
+        """implementation details"""
         if not self._optimized:
             self._logger.debug( 'running non optimized query - optimization has not been done' )
             decls = self.declarations
@@ -275,7 +274,7 @@ class scopedef_t( declaration.declaration_t ):
             if matcher.is_full_name():
                 name = matcher.decl_name_only
             if recursive:
-                self._logger.debug( 'query has been optimized on type and name' )   
+                self._logger.debug( 'query has been optimized on type and name' )
                 if self._type2name2decls[decl_type].has_key( name ):
                     return self._type2name2decls[decl_type][name]
                 else:
@@ -288,10 +287,10 @@ class scopedef_t( declaration.declaration_t ):
                     return []
         elif decl_type:
             if recursive:
-                self._logger.debug( 'query has been optimized on type' )            
+                self._logger.debug( 'query has been optimized on type' )
                 return self._type2decls[ decl_type ]
             else:
-                self._logger.debug( 'non recursive query has been optimized on type' )            
+                self._logger.debug( 'non recursive query has been optimized on type' )
                 return self._type2decls_nr[ decl_type ]
         else:
             if recursive:
@@ -302,9 +301,9 @@ class scopedef_t( declaration.declaration_t ):
                 return self.declarations
 
     def _find_single( self, match_class, **keywds ):
-        """@undocumented _find_single:"""
+        """implementation details"""
         self._logger.debug( 'find single query execution - started' )
-        start_time = time.clock()      
+        start_time = time.clock()
         norm_keywds = self.__normalize_args( **keywds )
         matcher = self.__create_matcher( match_class, **norm_keywds )
         dtype = self.__findout_decl_type( match_class, **norm_keywds )
@@ -315,9 +314,9 @@ class scopedef_t( declaration.declaration_t ):
         return found
 
     def _find_multiple( self, match_class, **keywds ):
-        """@undocumented _find_multiple:"""
+        """implementation details"""
         self._logger.debug( 'find all query execution - started' )
-        start_time = time.clock() 
+        start_time = time.clock()
         norm_keywds = self.__normalize_args( **keywds )
         matcher = self.__create_matcher( match_class, **norm_keywds )
         dtype = self.__findout_decl_type( match_class, **norm_keywds )
@@ -327,14 +326,14 @@ class scopedef_t( declaration.declaration_t ):
         found = matcher_module.matcher.find( matcher, decls, False )
         mfound = mdecl_wrapper.mdecl_wrapper_t( found )
         self._logger.debug( '%d declaration(s) that match query' % len(mfound) )
-        self._logger.debug( 'find single query execution - done( %f seconds )' 
+        self._logger.debug( 'find single query execution - done( %f seconds )'
                      % ( time.clock() - start_time ) )
         if not mfound and not allow_empty:
             raise RuntimeError( "Multi declaration query returned 0 declarations." )
         return mfound
-        
-    def decl( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):     
-        """Finds any declaration by criteria. Please see L{scopedef_t} for full explanation."""
+
+    def decl( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.decl ]
                                   , name=name
                                   , function=function
@@ -344,44 +343,49 @@ class scopedef_t( declaration.declaration_t ):
                                   , recursive=recursive)
 
     def decls( self, name=None, function=None, decl_type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.decl ]
                                     , name=name
                                     , function=function
                                     , decl_type=decl_type
                                     , header_dir=header_dir
-                                    , header_file=header_file 
+                                    , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
 
     def class_( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to class declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.class_ ]
                                   , name=name
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.class_ ]
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive)
 
     def classes( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of class declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.class_ ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.class_ ]
                                     , header_dir=header_dir
-                                    , header_file=header_file 
+                                    , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-    
+
     def variable( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to variable declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.variable ]
                                   , name=name
                                   , function=function
                                   , type=type
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive)
 
     def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of variable declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.variable ]
                                     , name=name
                                     , function=function
@@ -390,150 +394,163 @@ class scopedef_t( declaration.declaration_t ):
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-    
+
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to "calldef" declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.calldef ]
                                   , name=name
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.calldef ]
                                   , return_type=return_type
-                                  , arg_types=arg_types 
+                                  , arg_types=arg_types
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive )
 
     def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of calldef declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.calldef ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.calldef ]
                                     , return_type=return_type
-                                    , arg_types=arg_types 
+                                    , arg_types=arg_types
                                     , header_dir=header_dir
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-    
+
     def operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to operator declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.operator ]
                                   , return_type=return_type
-                                  , arg_types=arg_types 
+                                  , arg_types=arg_types
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive )
 
     def operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of operator declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.operator ]
                                     , return_type=return_type
-                                    , arg_types=arg_types 
+                                    , arg_types=arg_types
                                     , header_dir=header_dir
-                                    , header_file=header_file 
+                                    , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
 
     def member_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to member declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.member_function ]
                                   , name=name
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.member_function ]
                                   , return_type=return_type
-                                  , arg_types=arg_types 
+                                  , arg_types=arg_types
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive )
 
     def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of member function declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_function ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.member_function ]
                                     , return_type=return_type
-                                    , arg_types=arg_types 
+                                    , arg_types=arg_types
                                     , header_dir=header_dir
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-    
+
     def constructor( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to constructor declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.constructor ]
                                   , name=name
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.constructor ]
                                   , return_type=return_type
-                                  , arg_types=arg_types 
+                                  , arg_types=arg_types
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive )
 
     def constructors( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of constructor declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.constructor ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.constructor ]
                                     , return_type=return_type
-                                    , arg_types=arg_types 
+                                    , arg_types=arg_types
                                     , header_dir=header_dir
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-    
+
     def member_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to member operator declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.member_operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
                                   , function=function
                                   , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]
                                   , return_type=return_type
-                                  , arg_types=arg_types 
+                                  , arg_types=arg_types
                                   , header_dir=header_dir
-                                  , header_file=header_file 
+                                  , header_file=header_file
                                   , recursive=recursive )
 
     def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of member operator declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]
                                     , return_type=return_type
-                                    , arg_types=arg_types 
-                                    , header_dir=header_dir
-                                    , header_file=header_file 
-                                    , recursive=recursive
-                                    , allow_empty=allow_empty) 
-    
-    def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
-        return self._find_single( self._impl_matchers[ scopedef_t.casting_operator ]
-                                  , name=name
-                                  , function=function
-                                  , decl_type=self._impl_decl_types[ scopedef_t.casting_operator ]
-                                  , return_type=return_type
-                                  , arg_types=arg_types 
-                                  , header_dir=header_dir
-                                  , header_file=header_file 
-                                  , recursive=recursive )
-
-    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
-        return self._find_multiple( self._impl_matchers[ scopedef_t.casting_operator ]
-                                    , name=name
-                                    , function=function
-                                    , decl_type=self._impl_decl_types[ scopedef_t.casting_operator ]
-                                    , return_type=return_type
-                                    , arg_types=arg_types 
+                                    , arg_types=arg_types
                                     , header_dir=header_dir
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
 
-    def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
+    def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to casting operator declaration, that is matched defined criterias"""
+        return self._find_single( self._impl_matchers[ scopedef_t.casting_operator ]
+                                  , name=name
+                                  , function=function
+                                  , decl_type=self._impl_decl_types[ scopedef_t.casting_operator ]
+                                  , return_type=return_type
+                                  , arg_types=arg_types
+                                  , header_dir=header_dir
+                                  , header_file=header_file
+                                  , recursive=recursive )
+
+    def casting_operators( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of casting operator declarations, that are matched defined criterias"""
+        return self._find_multiple( self._impl_matchers[ scopedef_t.casting_operator ]
+                                    , name=name
+                                    , function=function
+                                    , decl_type=self._impl_decl_types[ scopedef_t.casting_operator ]
+                                    , return_type=return_type
+                                    , arg_types=arg_types
+                                    , header_dir=header_dir
+                                    , header_file=header_file
+                                    , recursive=recursive
+                                    , allow_empty=allow_empty)
+
+    def enumeration( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to enumeration declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.enumeration ]
                                   , name=name
                                   , function=function
@@ -541,23 +558,25 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_dir=header_dir
                                   , header_file=header_file
                                   , recursive=recursive)
-    #adding small aliase
+
     enum = enumeration
-    
+    """adding small aliase to enumeration method"""
+
     def enumerations( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of enumeration declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.enumeration ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.enumeration ]
                                     , header_dir=header_dir
-                                    , header_file=header_file 
+                                    , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
     #adding small aliase
-    enums = enumerations        
-    
-    def typedef( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):     
-        """Finds any declaration by criteria. Please see L{scopedef_t} for full explanation."""
+    enums = enumerations
+
+    def typedef( self, name=None, function=None, header_dir=None, header_file=None, recursive=None ):
+        """returns reference to typedef declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.typedef ]
                                   , name=name
                                   , function=function
@@ -567,17 +586,18 @@ class scopedef_t( declaration.declaration_t ):
                                   , recursive=recursive)
 
     def typedefs( self, name=None, function=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
+        """returns a set of typedef declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.typedef ]
                                     , name=name
                                     , function=function
                                     , decl_type=self._impl_decl_types[ scopedef_t.typedef ]
                                     , header_dir=header_dir
-                                    , header_file=header_file 
+                                    , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
 
     def __getitem__(self, name_or_function):
-        """ Allow simple name based find of decls.  Internally just calls decls() method. 
+        """ Allow simple name based find of decls.  Internally just calls decls() method.
             @param name_or_function  Name of decl to lookup or finder function.
         """
         return self.decls(name_or_function)

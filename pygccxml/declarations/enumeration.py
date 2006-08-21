@@ -16,11 +16,11 @@ class enumeration_t( declaration.declaration_t ):
     describes C++ enum
     """
     def __init__( self, name='', values=None ):
-        """Constructor.
+        """creates class that describes C++ enum declaration
 
         The items of the list 'values' may either be strings containing
         the enumeration value name or tuples (name, numvalue).
-        
+
         @param name: Enum name
         @type name: str
         @param parent: Parent declaration
@@ -43,7 +43,7 @@ class enumeration_t( declaration.declaration_t ):
         return self.values == other.values
 
     def _get__cmp__items( self ):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         return [self.values]
 
     def _get_values(self):
@@ -108,6 +108,7 @@ class enumeration_t( declaration.declaration_t ):
         return False
 
     def get_name2value_dict( self ):
+        """returns a dictionary, that maps between enum name( key ) and enum value( value )"""
         x = {}
         for val, num in self._values:
             x[val] = num

@@ -3,13 +3,12 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""
-implementation details
-"""
+"""implementation details"""
 
 import types
 
 class parser_t( object ):
+    """implementation details"""
     def __init__( self
                   , pattern_char_begin
                   , pattern_char_end
@@ -21,12 +20,14 @@ class parser_t( object ):
         self.__text_qualifier = '"'
         self.__char_qualifier = "'"
         self.__escape = '\\'
-    
-    def has_pattern( self, decl_string ):       
+
+    def has_pattern( self, decl_string ):
+        """implementation details"""
         last_part = decl_string.split( '::' )[-1]
         return -1 != last_part.find( self.__end )
 
     def name( self, decl_string ):
+        """implementation details"""
         assert isinstance( decl_string, types.StringTypes )
         if not self.has_pattern( decl_string ):
             return decl_string
@@ -34,6 +35,7 @@ class parser_t( object ):
         return decl_string[0: args_begin].strip()
 
     def __find_args_separator( self, decl_string, start_pos ):
+        """implementation details"""
         bracket_depth = 0
         for index, ch in enumerate( decl_string[start_pos:] ):
             if ch not in ( self.__begin, self.__end, self.__separator ):
@@ -50,12 +52,13 @@ class parser_t( object ):
         return -1
 
     def args( self, decl_string ):
+        """implementation details"""
         args_begin = decl_string.find( self.__begin )
         args_end = decl_string.rfind( self.__end )
         if -1 in ( args_begin, args_end ) or args_begin == args_end:
             raise RuntimeError( "%s doesn't valid template instantiation string" % decl_string )
-        
-        args_only = decl_string[args_begin + 1: args_end ]    
+
+        args_only = decl_string[args_begin + 1: args_end ]
         args = []
         previous_found, found = 0, 0
         while True:
@@ -71,10 +74,13 @@ class parser_t( object ):
         return [ arg.strip() for arg in args ]
 
     NOT_FOUND = ( -1, -1 )
+    """implementation details"""
+
     def find_args(self, text, start=None ):
+        """implementation details"""
         if start==None:
             start = 0
-        first_occurance = text.find( self.__begin, start ) 
+        first_occurance = text.find( self.__begin, start )
         if first_occurance == -1:
             return self.NOT_FOUND
         previous_found, found = first_occurance + 1, 0
@@ -88,11 +94,13 @@ class parser_t( object ):
                 previous_found = found + 1 #skip found sep
 
     def split( self, decl_string ):
+        """implementation details"""
         assert self.has_pattern( decl_string )
         return self.name( decl_string ), self.args( decl_string )
-    
+
     def split_recursive( self, decl_string ):
-        assert self.has_pattern( decl_string )    
+        """implementation details"""
+        assert self.has_pattern( decl_string )
         answer = []
         to_go = [ decl_string ]
         while to_go:
@@ -102,8 +110,9 @@ class parser_t( object ):
                 if self.has_pattern( arg ):
                     to_go.append( arg )
         return answer
-    
+
     def join( self, name, args ):
+        """implementation details"""
         args = filter( None, args)
         args_str = ''
         if not args:
@@ -112,5 +121,6 @@ class parser_t( object ):
             args_str = ' ' + args[0] + ' '
         else:
             args_str = ' ' + ', '.join( args ) + ' '
-            
-        return ''.join( [ name, self.__begin, args_str, self.__end ] )        
+
+        return ''.join( [ name, self.__begin, args_str, self.__end ] )
+

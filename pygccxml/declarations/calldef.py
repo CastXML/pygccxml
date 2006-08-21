@@ -8,18 +8,18 @@ defines classes, that describes "callable" declarations
 
 This modules contains definition for next C++ declarations:
     - operator
-        - member 
+        - member
         - free
-    - function 
+    - function
         - member
         - free
     - constructor
     - destructor
 """
 
-import cpptypes 
+import cpptypes
 import algorithm
-import declaration 
+import declaration
 import type_traits
 import call_invocation
 
@@ -29,7 +29,7 @@ class VIRTUALITY_TYPES:
     VIRTUAL = 'virtual'
     PURE_VIRTUAL = 'pure virtual'
     ALL = [NOT_VIRTUAL, VIRTUAL, PURE_VIRTUAL]
-#preserving backward compatebility    
+#preserving backward compatebility
 FUNCTION_VIRTUALITY_TYPES = VIRTUALITY_TYPES
 
 #First level in hierarchy of calldef
@@ -37,13 +37,13 @@ class argument_t(object):
     """
     class, that describes argument of "callable" declaration
     """
-    
+
     def __init__( self, name='', type=None, default_value=None ):
         object.__init__(self)
         self._name = name
         self._default_value = default_value
         self._type = type
-    
+
     def __str__(self):
         if self.default_value==None:
             return "%s %s"%(self.type, self.name)
@@ -104,20 +104,20 @@ class calldef_t( declaration.declaration_t ):
         self._return_type = return_type
         self._has_extern = has_extern
         self._demangled_name = None
-        
+
     def _get__cmp__call_items(self):
-        """@undocumented _get__cmp__call_items:"""
+        """implementation details"""
         raise NotImplementedError()
 
     def _get__cmp__items( self ):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         items = [ self._sorted_list( self.arguments )
                   , self.return_type
                   , self.has_extern
                   , self._sorted_list( self.exceptions ) ]
         items.extend( self._get__cmp__call_items() )
         return items
-        
+
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__( self, other ):
             return False
@@ -125,7 +125,7 @@ class calldef_t( declaration.declaration_t ):
                and self.arguments == other.arguments \
                and self.has_extern == other.has_extern \
                and self._sorted_list( self.exceptions ) \
-                   == other._sorted_list( other.exceptions ) 
+                   == other._sorted_list( other.exceptions )
 
     def _get_arguments(self):
         return self._arguments
@@ -160,7 +160,7 @@ class calldef_t( declaration.declaration_t ):
             = algorithm.find_all_declarations( self.parent.declarations
                                      , type=calldef_t
                                      , name=self.name
-                                     , recursive=False )        
+                                     , recursive=False )
         if not overloaded_funcs:
             return overloaded_funcs
         overloaded_funcs_ids = map( id, overloaded_funcs )
@@ -178,30 +178,30 @@ class calldef_t( declaration.declaration_t ):
                            doc="""Was this callable declared as "extern"?
                            @type: bool
                            """)
-    
+
     def __remove_parent_fname( self, demangled ):
-        """@undocumented __remove_parent_fname:"""
+        """implementation details"""
         demangled = demangled.strip()
         parent_fname = algorithm.full_name( self.parent )
         if parent_fname.startswith( '::' ) and not demangled.startswith( '::' ):
             parent_fname = parent_fname[2:]
         demangled = demangled[ len( parent_fname ): ]
         return demangled
-    
+
     def _get_demangled_name( self ):
         if not self.demangled:
             self._demangled_name = ''
-            
+
         if self._demangled_name:
             return self._demangled_name
-        
+
         if self._demangled_name == '':
             return self.name
-        
+
         demangled = self.demangled
         if self.return_type:
             return_type = type_traits.remove_alias( self.return_type ).decl_string
-            
+
             if return_type.startswith( '::' ) and not self.demangled.startswith( '::' ):
                 return_type = return_type[2:]
             demangled = self.demangled
@@ -216,7 +216,7 @@ class calldef_t( declaration.declaration_t ):
         if demangled_name.startswith( self.name ):
             self._demangled_name = demangled_name
             return self._demangled_name
-        
+
         #well, I am going to try an other strategy
         fname = algorithm.full_name( self )
         found = self.demangled.find( fname )
@@ -238,9 +238,10 @@ class calldef_t( declaration.declaration_t ):
         #if -1 == found:
         self._demangled_name = ''
         return self.name
-        
-    demangled_name = property( _get_demangled_name )
-                
+
+    demangled_name = property( _get_demangled_name
+                              , doc="returns function demangled name. It can help you to deal with function template instantiations")
+
 #Second level in hierarchy of calldef
 class member_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ class or struct"""
@@ -274,9 +275,9 @@ class member_calldef_t( calldef_t ):
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
-        """@undocumented _get__cmp__call_items:"""
+        """implementation details"""
         return [ self.virtuality, self.has_static, self.has_const ]
-        
+
     def __eq__(self, other):
         if not calldef_t.__eq__( self, other ):
             return False
@@ -289,7 +290,7 @@ class member_calldef_t( calldef_t ):
     def _set_virtuality(self, virtuality):
         assert virtuality in VIRTUALITY_TYPES.ALL
         self._virtuality = virtuality
-    virtuality = property( _get_virtuality, _set_virtuality 
+    virtuality = property( _get_virtuality, _set_virtuality
                            , doc="""Describes the "virtuality" of the member (as defined by the string constants in the class L{VIRTUALITY_TYPES}).
                            @type: str""")
 
@@ -326,7 +327,7 @@ class member_calldef_t( calldef_t ):
 
     def _create_decl_string(self):
         return self.function_type().decl_string
-    
+
 
 class free_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ namespace"""
@@ -354,7 +355,7 @@ class free_calldef_t( calldef_t ):
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
-        """@undocumented _get__cmp__call_items:"""
+        """implementation details"""
         return []
 
     def function_type(self):
@@ -370,12 +371,12 @@ class operator_t(object):
     OPERATOR_WORD_LEN = len( 'operator' )
     def __init__(self):
         object.__init__(self)
-    
+
     def _get_symbol(self):
         return self.name[operator_t.OPERATOR_WORD_LEN:].strip()
     symbol = property( _get_symbol,
                        doc="returns symbol of operator. For example: operator+, symbol is equal to '+'")
-    
+
 #Third level in hierarchy of calldef
 class member_function_t( member_calldef_t ):
     """describes member function declaration"""
@@ -387,8 +388,8 @@ class constructor_t( member_calldef_t ):
     """describes constructor declaration"""
     def __init__( self, *args, **keywords ):
         member_calldef_t.__init__( self, *args, **keywords )
-    
-    def _get_is_copy_constructor(self):        
+
+    def _get_is_copy_constructor(self):
         args = self.arguments
         if 1 != len( args ):
             return False

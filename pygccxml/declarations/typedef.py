@@ -13,11 +13,12 @@ class typedef_t( declaration.declaration_t ):
     """describes C++ typedef declaration"""
 
     def __init__( self, name='', type=None ):
+        """creates class that describes C++ typedef"""
         declaration.declaration_t.__init__( self, name )
         self._type = type
 
     def _get__cmp__items( self ):
-        """@undocumented _get__cmp__items:"""
+        """implementation details"""
         return [self.type]
 
     def __eq__(self, other):

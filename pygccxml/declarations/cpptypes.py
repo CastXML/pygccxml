@@ -40,27 +40,30 @@ class type_t(object):
 
     def _clone_impl( self ):
         raise NotImplementedError()
-    
+
     def clone( self ):
         "returns new instance of the type"
         answer = self._clone_impl()
         assert answer
         return answer
-    
+
 #There are cases when GCC-XML reports something like this
 #<Unimplemented id="_9482" tree_code="188" tree_code_name="template_type_parm" node="0xcc4d5b0"/>
 #In this case I will use this as type
 
 
 class dummy_type_t( type_t ):
-    #This class is very usefull for code generation
+    """provides L{type_t} interface for a string, that defines C++ type.
+
+    This class could be very useful in the code generator.
+    """
     def __init__( self, decl_string ):
         type_t.__init__( self )
         self._decl_string = decl_string
-        
+
     def _create_decl_string(self):
         return self._decl_string
-    
+
     def _clone_impl( self ):
         return dummy_type_t( self._decl_string )
 
@@ -71,10 +74,10 @@ class unknown_t( type_t ):
 
     def _create_decl_string(self):
         return '?unknown?'
-    
+
     def _clone_impl( self ):
-        return self 
-    
+        return self
+
 ################################################################################
 ## Fundamental types:
 
@@ -91,142 +94,168 @@ class fundamental_t( type_t ):
         return self
 
 class java_fundamental_t( fundamental_t ):
+    """base class for all JNI defined fundamental types"""
     def __init__( self, name ):
         fundamental_t.__init__( self, name )
 
 class void_t( fundamental_t ):
+    """represents void type"""
     CPPNAME = 'void'
     def __init__( self ):
         fundamental_t.__init__( self,void_t.CPPNAME )
 
 class char_t( fundamental_t ):
+    """represents char type"""
     CPPNAME = 'char'
     def __init__( self ):
         fundamental_t.__init__( self, char_t.CPPNAME )
 
 class unsigned_char_t( fundamental_t ):
+    """represents unsigned char type"""
     CPPNAME = 'unsigned char'
     def __init__( self ):
         fundamental_t.__init__( self, unsigned_char_t.CPPNAME )
 
 class wchar_t( fundamental_t ):
+    """represents wchar_t type"""
     CPPNAME = 'wchar_t'
     def __init__( self ):
         fundamental_t.__init__( self, wchar_t.CPPNAME )
 
 class short_int_t( fundamental_t ):
+    """represents short int type"""
     CPPNAME = 'short int'
     def __init__( self ):
         fundamental_t.__init__( self, short_int_t.CPPNAME )
 
 class short_unsigned_int_t( fundamental_t ):
+    """represents short unsigned int type"""
     CPPNAME = 'short unsigned int'
     def __init__( self ):
         fundamental_t.__init__( self, short_unsigned_int_t.CPPNAME )
 
 class bool_t( fundamental_t ):
+    """represents bool type"""
     CPPNAME = 'bool'
     def __init__( self ):
         fundamental_t.__init__( self, bool_t.CPPNAME )
 
 class int_t( fundamental_t ):
+    """represents int type"""
     CPPNAME = 'int'
     def __init__( self ):
         fundamental_t.__init__( self, int_t.CPPNAME )
 
 class unsigned_int_t( fundamental_t ):
+    """represents unsigned int type"""
     CPPNAME = 'unsigned int'
     def __init__( self ):
         fundamental_t.__init__( self, unsigned_int_t.CPPNAME )
 
 class long_int_t( fundamental_t ):
+    """represents long int type"""
     CPPNAME = 'long int'
     def __init__( self ):
         fundamental_t.__init__( self, long_int_t.CPPNAME )
 
 class long_unsigned_int_t( fundamental_t ):
+    """represents long unsigned int type"""
     CPPNAME = 'long unsigned int'
     def __init__( self ):
         fundamental_t.__init__( self, long_unsigned_int_t.CPPNAME )
 
 class long_long_int_t( fundamental_t ):
+    """represents long long int type"""
     CPPNAME = 'long long int'
     def __init__( self ):
         fundamental_t.__init__( self, long_long_int_t.CPPNAME )
 
 class long_long_unsigned_int_t( fundamental_t ):
+    """represents long long unsigned int type"""
     CPPNAME = 'long long unsigned int'
     def __init__( self ):
         fundamental_t.__init__( self, long_long_unsigned_int_t.CPPNAME )
 
 class float_t( fundamental_t ):
+    """represents float type"""
     CPPNAME = 'float'
     def __init__( self ):
         fundamental_t.__init__( self, float_t.CPPNAME )
 
 class double_t( fundamental_t ):
+    """represents double type"""
     CPPNAME = 'double'
     def __init__( self ):
         fundamental_t.__init__( self, double_t.CPPNAME )
 
 class long_double_t( fundamental_t ):
+    """represents long double type"""
     CPPNAME = 'long double'
     def __init__( self ):
         fundamental_t.__init__( self, long_double_t.CPPNAME )
 
 class complex_double_t( fundamental_t ):
+    """represents complex double type"""
     CPPNAME = 'complex double'
     def __init__( self ):
         fundamental_t.__init__( self, complex_double_t.CPPNAME )
 
 class complex_long_double_t( fundamental_t ):
+    """represents complex long double type"""
     CPPNAME = 'complex long double'
     def __init__( self ):
         fundamental_t.__init__( self, complex_long_double_t.CPPNAME )
 
 class complex_float_t( fundamental_t ):
+    """represents complex float type"""
     CPPNAME = 'complex float'
     def __init__( self ):
         fundamental_t.__init__( self, complex_float_t.CPPNAME )
 
 class jbyte_t( java_fundamental_t ):
+    """represents jbyte type"""
     JNAME = 'jbyte'
     def __init__( self ):
         java_fundamental_t.__init__( self, jbyte_t.JNAME )
 
 class jshort_t( java_fundamental_t ):
+    """represents jshort type"""
     JNAME = 'jshort'
     def __init__( self ):
         java_fundamental_t.__init__( self, jshort_t.JNAME )
 
 class jint_t( java_fundamental_t ):
+    """represents jint type"""
     JNAME = 'jint'
     def __init__( self ):
         java_fundamental_t.__init__( self, jint_t.JNAME )
 
 class jlong_t( java_fundamental_t ):
+    """represents jlong type"""
     JNAME = 'jlong'
     def __init__( self ):
         java_fundamental_t.__init__( self, jlong_t.JNAME )
 
 class jfloat_t( java_fundamental_t ):
+    """represents jfloat type"""
     JNAME = 'jfloat'
     def __init__( self ):
         java_fundamental_t.__init__( self, jfloat_t.JNAME )
 
-
 class jdouble_t( java_fundamental_t ):
+    """represents jdouble type"""
     JNAME = 'jdouble'
     def __init__( self ):
         java_fundamental_t.__init__( self, jdouble_t.JNAME )
 
-  
 class jchar_t( java_fundamental_t ):
+    """represents jchar type"""
     JNAME = 'jchar'
     def __init__( self ):
         java_fundamental_t.__init__( self, jchar_t.JNAME )
 
 class jboolean_t( java_fundamental_t ):
+    """represents jboolean type"""
     JNAME = 'jboolean'
     def __init__( self ):
         java_fundamental_t.__init__( self, jboolean_t.JNAME )
@@ -271,8 +300,11 @@ FUNDAMENTAL_TYPES = {
     , '__java_double' : jdouble_t()
     , '__java_char' : jchar_t()
     , '__java_boolean' : jboolean_t()
-    
 }
+"""
+defines a mapping between funcdamental type name and its synonym to the instance
+of class that describes the type
+"""
 
 ################################################################################
 ## Compaund types:
@@ -292,6 +324,7 @@ class compound_t( type_t ):
                      , doc="reference to internal/base class")
 
 class volatile_t( compound_t ):
+    """represents C{volatile whatever} type"""
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
@@ -300,8 +333,9 @@ class volatile_t( compound_t ):
 
     def _clone_impl( self ):
         return volatile_t( self.base.clone() )
-            
+
 class const_t( compound_t ):
+    """represents C{whatever const} type"""
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
@@ -312,6 +346,7 @@ class const_t( compound_t ):
         return const_t( self.base.clone() )
 
 class pointer_t( compound_t ):
+    """represents C{whatever*} type"""
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
@@ -322,6 +357,7 @@ class pointer_t( compound_t ):
         return pointer_t( self.base.clone() )
 
 class reference_t( compound_t ):
+    """represents C{whatever&} type"""
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
@@ -332,6 +368,7 @@ class reference_t( compound_t ):
         return reference_t( self.base.clone() )
 
 class array_t( compound_t ):
+    """represents C++ array type"""
     SIZE_UNKNOWN = -1
     def __init__( self, base, size ):
         compound_t.__init__( self, base )
@@ -339,7 +376,7 @@ class array_t( compound_t ):
 
     def _get_size(self):
         return self._size
-    size = property( _get_size, 
+    size = property( _get_size,
                      doc="returns array size" )
 
     def _create_decl_string(self):
@@ -355,7 +392,7 @@ class calldef_type_t( object ):
         self._return_type = return_type
         if arguments_types is None:
             arguments_types = []
-        self._arguments_types = arguments_types 
+        self._arguments_types = arguments_types
 
     def _get_return_type(self):
         return self._return_type
@@ -379,45 +416,49 @@ class free_function_type_t( type_t, calldef_type_t ):
         type_t.__init__(self)
         calldef_type_t.__init__( self, return_type, arguments_types )
 
-    @staticmethod    
+    @staticmethod
     def create_decl_string( return_type, arguments_types ):
         """
         returns free function type
-        
+
         @param return_type: function return type
         @type return_type: L{type_t}
-        
+
         @param arguments_types: list of argument L{type<type_t>}
-        
+
         @return: L{free_function_type_t}
         """
-        return free_function_type_t.NAME_TEMPLATE % { 
+        return free_function_type_t.NAME_TEMPLATE % {
                   'return_type' : return_type.decl_string
                 , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) ) }
-    
+
     def _create_decl_string(self):
         return self.create_decl_string( self.return_type, self.arguments_types )
 
     def _clone_impl( self ):
         rt_clone = None
         if self.return_type:
-            rt_clone = self.return_type.clone()        
+            rt_clone = self.return_type.clone()
         return free_function_type_t( rt_clone
                                      , [ arg.clone() for arg in self.arguments_types ] )
 
     #TODO: create real typedef
     def create_typedef( self, typedef_name, unused=None):
+        """returns string, that contains valid C++ code, that defines typedef to function type
+
+        @param name: the desired name of typedef
+        """
         #unused argument simplifies user code
-        return free_function_type_t.TYPEDEF_NAME_TEMPLATE % { 
+        return free_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name' : typedef_name
-            , 'return_type' : self.return_type.decl_string 
+            , 'return_type' : self.return_type.decl_string
             , 'arguments' : ','.join( map( lambda x: x.decl_string, self.arguments_types ) ) }
-    
+
 class member_function_type_t( type_t, calldef_type_t ):
     """describes member function type"""
     NAME_TEMPLATE = '%(return_type)s ( %(class)s::* )( %(arguments)s ) %(has_const)s'
     TYPEDEF_NAME_TEMPLATE = '%(return_type)s ( %(class)s::*%(typedef_name)s )( %(arguments)s ) %(has_const)s'
-    
+
     def __init__( self, class_inst=None, return_type=None, arguments_types=None, has_const=False):
         type_t.__init__(self)
         calldef_type_t.__init__( self, return_type, arguments_types )
@@ -429,7 +470,7 @@ class member_function_type_t( type_t, calldef_type_t ):
     def _set_has_const(self, has_const ):
         self._has_const = has_const
     has_const = property( _get_has_const, _set_has_const
-                          , doc="describes, whether function has const modifier")    
+                          , doc="describes, whether function has const modifier")
 
     def _get_class_inst(self):
         return self._class_inst
@@ -440,9 +481,8 @@ class member_function_type_t( type_t, calldef_type_t ):
 
     #TODO: create real typedef
     def create_typedef( self, typedef_name, class_alias=None):
-        """
-        creates typedef to the function type
-        
+        """creates typedef to the function type
+
         @param typedef_name: desired type name
         @return: string
         """
@@ -451,12 +491,12 @@ class member_function_type_t( type_t, calldef_type_t ):
             has_const_str = 'const'
         if None is class_alias:
             class_alias = self.class_inst.decl_string
-        return member_function_type_t.TYPEDEF_NAME_TEMPLATE % { 
+        return member_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name' : typedef_name
-            , 'return_type' : self.return_type.decl_string 
+            , 'return_type' : self.return_type.decl_string
             , 'class' : class_alias
             , 'arguments' : ','.join( map( lambda x: x.decl_string, self.arguments_types ) )
-            , 'has_const' : has_const_str }                                          
+            , 'has_const' : has_const_str }
 
     def create(self):
         return self.create_decl_string( self.return_type
@@ -465,7 +505,7 @@ class member_function_type_t( type_t, calldef_type_t ):
                                         , self.has_const )
 
 
-    @staticmethod    
+    @staticmethod
     def create_decl_string(return_type, class_decl_string, arguments_types, has_const):
         has_const_str = ''
         if has_const:
@@ -473,12 +513,12 @@ class member_function_type_t( type_t, calldef_type_t ):
         return_type_decl_string = ''
         if return_type:
             return_type_decl_string = return_type.decl_string
-        return member_function_type_t.NAME_TEMPLATE % { 
-              'return_type' : return_type_decl_string 
+        return member_function_type_t.NAME_TEMPLATE % {
+              'return_type' : return_type_decl_string
             , 'class' : class_decl_string
             , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) )
-            , 'has_const' : has_const_str }                                          
-    
+            , 'has_const' : has_const_str }
+
     def _create_decl_string(self):
         return self.create_decl_string( self.return_type
                                         , self.class_inst.decl_string
@@ -489,19 +529,19 @@ class member_function_type_t( type_t, calldef_type_t ):
         rt_clone = None
         if self.return_type:
             rt_clone = self.return_type.clone()
-        
+
         return member_function_type_t( self.class_inst
                                        , rt_clone
                                        , [ arg.clone() for arg in self.arguments_types ]
                                        , self.has_const )
-    
+
 
 class member_variable_type_t( compound_t ):
     """describes member variable type"""
     NAME_TEMPLATE = '%(type)s ( %(class)s::* )'
     def __init__( self, class_inst=None, variable_type=None ):
         compound_t.__init__(self, class_inst)
-        self._mv_type = variable_type 
+        self._mv_type = variable_type
 
     def _get_variable_type(self):
         return self._mv_type
@@ -516,13 +556,13 @@ class member_variable_type_t( compound_t ):
     def _clone_impl( self ):
         return member_variable_type_t( class_inst=self.base
                                        , variable_type=self.variable_type.clone() )
-    
+
 
 ################################################################################
 ## declarated types:
 
 class declarated_t( type_t ):
-    """describes type declared by user"""
+    """class that binds between to hierarchies: L{type_t} and L{declaration_t}"""
     def __init__( self, declaration ):
         type_t.__init__( self )
         self._declaration = declaration
@@ -541,6 +581,7 @@ class declarated_t( type_t ):
         return declarated_t( self.declaration )
 
 class type_qualifiers_t( object ):
+    """contains additional information about type: mutable, static, extern"""
     def __init__(self, has_static=False, has_mutable=False ):
         self._has_static = has_static
         self._has_mutable = has_mutable
@@ -572,15 +613,3 @@ class type_qualifiers_t( object ):
     def _set_has_mutable(self, has_mutable ):
         self._has_mutable = has_mutable
     has_mutable = property( _get_has_mutable, _set_has_mutable )
-
-    #~ def apply_qualifiers( qualifiers, type ):
-        #~ result = []
-        #~ if qualifiers.has_static:
-            #~ result.append( 'static' )
-        #~ if qualifiers.has_mutable:
-            #~ result.append( 'mutable' )
-        #~ if isinstance( type, type_t ):
-            #~ result.append( type.decl_string )
-        #~ else:
-            #~ result.append( type )
-        #~ return ' '.join( result )
