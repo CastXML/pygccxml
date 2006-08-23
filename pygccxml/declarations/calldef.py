@@ -285,12 +285,12 @@ class member_calldef_t( calldef_t ):
                and self.has_static == other.has_static \
                and self.has_const == other.has_const
 
-    def _get_virtuality(self):
+    def get_virtuality(self):
         return self._virtuality
-    def _set_virtuality(self, virtuality):
+    def set_virtuality(self, virtuality):
         assert virtuality in VIRTUALITY_TYPES.ALL
         self._virtuality = virtuality
-    virtuality = property( _get_virtuality, _set_virtuality
+    virtuality = property( get_virtuality, set_virtuality
                            , doc="""Describes the "virtuality" of the member (as defined by the string constants in the class L{VIRTUALITY_TYPES}).
                            @type: str""")
 
