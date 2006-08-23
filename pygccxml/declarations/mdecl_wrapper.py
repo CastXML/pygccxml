@@ -65,7 +65,7 @@ class mdecl_wrapper_t( object ):
 
     def __ensure_attribute( self, name ):
         invalid_decls = filter( lambda d: not hasattr( d, name ), self.decls )
-        if invalid_decls:
+        if False in invalid_decls:
             raise RuntimeError( "Not all declarations have '%s' attribute." % name )
 
     def __setattr__( self, name, value ):
