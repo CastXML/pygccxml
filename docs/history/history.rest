@@ -108,6 +108,18 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 
 11. Documentation was improved.
 
+12. ``mdecl_wrapper_t.decls`` property was renamed to  ``declarations``.
+    The reason is that the current name ( ``decls`` ) conflicts with the method
+    of the same name in the decl interface from ``declarations.scopedef_t`` class.
+
+    So for example:
+    ::
+
+      classes = ns.decls("class")
+      classes.decls("method")
+
+    This will fail because it finds the attribute decls which is not a callable.
+
 -----------
 Version 0.8
 -----------
