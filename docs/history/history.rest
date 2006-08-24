@@ -17,9 +17,9 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Georgiy Dernovoy
   * Darren Garnier
 
------
-0.8.1
------
+-------------
+Version 0.8.1
+-------------
 
 1. `pygccxml`_ has been ported to MacOS X. Many thanks to Darren Garnier!
 
