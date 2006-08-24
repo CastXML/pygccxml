@@ -47,25 +47,25 @@ class mdecl_wrapper_t( object ):
         @type decls: list of L{declaration wrappers<decl_wrapper_t>}
         """
         object.__init__( self )
-        self.__dict__['decls'] = decls
+        self.__dict__['declarations'] = decls
 
     def __nonzero__( self ):
-        return bool( self.decls )
+        return bool( self.declarations )
 
     def __len__( self ):
         """returns the number of declarations"""
-        return len( self.decls )
+        return len( self.declarations )
 
     def __getitem__( self, index ):
         """provides access to declaration"""
-        return self.decls[index]
+        return self.declarations[index]
 
     def __iter__( self ):
-        return iter(self.decls)
+        return iter(self.declarations)
 
     def __ensure_attribute( self, name ):
-        invalid_decls = filter( lambda d: not hasattr( d, name ), self.decls )
-        if False in invalid_decls:
+        invalid_decls = filter( lambda d: not hasattr( d, name ), self.declarations )
+        if invalid_decls:
             raise RuntimeError( "Not all declarations have '%s' attribute." % name )
 
     def __setattr__( self, name, value ):
@@ -74,13 +74,13 @@ class mdecl_wrapper_t( object ):
         @param value: new value of attribute
         """
         self.__ensure_attribute( name )
-        for d in self.decls:
+        for d in self.declarations:
             setattr( d, name, value )
 
     def __getattr__( self, name ):
         """@param name: name of method
         """
-        return call_redirector_t( name, self.decls )
+        return call_redirector_t( name, self.declarations )
 
     def __contains__( self, item ):
-        return item in self.decls
+        return item in self.declarations
