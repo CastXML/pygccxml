@@ -315,12 +315,20 @@ class class_t( scopedef.scopedef_t ):
 
         @return: L{ACCESS_TYPES}
         """
-        assert member.parent is self
-        if member in self.public_members:
-            return ACCESS_TYPES.PUBLIC
-        elif member in self.protected_members:
-            return ACCESS_TYPES.PROTECTED
-        elif member in self.private_members:
-            return ACCESS_TYPES.PRIVATE
+        assert member.parent is self        
+        cached_access_type = getattr(member, "_cached_access_type", None)
+        if cached_access_type:
+            return cached_access_type
         else:
-            raise RuntimeError( "Unable to find member within internal members list." )
+            access_type = None
+            if member in self.public_members:
+                access_type = ACCESS_TYPES.PUBLIC
+            elif member in self.protected_members:
+                access_type = ACCESS_TYPES.PROTECTED
+            elif member in self.private_members:
+                access_type = ACCESS_TYPES.PRIVATE
+            else:
+                raise RuntimeError( "Unable to find member within internal members list." )
+            setattr(member, "_cached_access_type", access_type)
+            return access_type
+            
