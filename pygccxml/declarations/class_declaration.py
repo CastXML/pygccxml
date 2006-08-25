@@ -101,21 +101,26 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
+        self.__cached_demangled_name = None     # Cached value of name from get_name_impl
 
     def _get_name_impl( self ):
         if not self._name: #class with empty name
             return self._name
-        if class_t.USE_DEMANGLED_AS_NAME and self.demangled:
-            fname = algorithm.full_name( self.parent )
-            if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
-                fname = fname[2:]
-            if self.demangled.startswith( fname ):
-                tmp = self.demangled[ len( fname ): ] #demangled::name
-                if tmp.startswith( '::' ):
-                    tmp = tmp[2:]
-                return tmp
+        elif class_t.USE_DEMANGLED_AS_NAME and self.demangled:
+            if self.__cached_demangled_name:
+                return self.__cached_demangled_name
             else:
-                return self._name
+                fname = algorithm.full_name( self.parent )
+                if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
+                    fname = fname[2:]
+                if self.demangled.startswith( fname ):
+                    tmp = self.demangled[ len( fname ): ] #demangled::name
+                    if tmp.startswith( '::' ):
+                        tmp = tmp[2:]
+                    self.__cached_demangled_name = tmp
+                else:
+                    self.__cached_demangled_name = self._name
+                return self.__cached_demangled_name
         else:
             return self._name
 

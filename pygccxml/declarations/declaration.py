@@ -75,6 +75,8 @@ class declaration_t( object ):
         self._mangled = mangled
         self._demangled = demangled
         self._parent = None
+        
+        #self._cached_name = None
 
     def __str__(self):
         """Default __str__ method.
@@ -149,6 +151,12 @@ class declaration_t( object ):
         return self._name
 
     def _get_name( self ):
+        #if self._cached_name:
+        #    assert self._get_name_impl() == self._cached_name
+        #    return self._cached_name
+        #else:
+        #    self._cached_name = self._get_name_impl()
+        #    return self._cached_name
         return self._get_name_impl()
 
     def _set_name( self, new_name ):
