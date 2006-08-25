@@ -19,13 +19,18 @@ def declaration_path( decl ):
     """
     if not decl:
         return []
-    result = [ decl.name ]
-    parent = decl.parent
-    while parent:
-        result.append( parent.name )
-        parent = parent.parent
-    result.reverse()
-    return result
+    cached_decl_path = getattr(decl, "cached_decl_path", None)
+    if cached_decl_path:
+        return cached_decl_path
+    else:
+        result = [ decl.name ]
+        parent = decl.parent
+        while parent:
+            result.append( parent.name )
+            parent = parent.parent
+        result.reverse()
+        setattr(decl, "cached_decl_path", result)
+        return result
 
 def full_name( decl ):
     """
@@ -74,7 +79,7 @@ def make_flatten( decl_or_decls ):
         decls.append( decl_or_decls )
     answer = []
     for decl in decls:
-        answer.extend( proceed_single( decl ) )
+        answer.extend( proceed_single( decl ) )        
     return answer
 
 def __make_flatten_generator( decl_or_decls ):
