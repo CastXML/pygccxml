@@ -78,3 +78,11 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
 def normalize_path( some_path ):
     """return os.path.normpath( os.path.normcase( some_path ) )"""
     return os.path.normpath( os.path.normcase( some_path ) )
+
+def get_architecture():    
+    if sys.maxint == 2147483647:
+        return 32
+    elif sys.maxint == 9223372036854775807:
+        return 64
+    else:
+        raise RuntimeError( "Unknown architecture" )
