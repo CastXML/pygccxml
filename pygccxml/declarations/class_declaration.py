@@ -107,9 +107,7 @@ class class_t( scopedef.scopedef_t ):
         if not self._name: #class with empty name
             return self._name
         elif class_t.USE_DEMANGLED_AS_NAME and self.demangled:
-            if self.__cached_demangled_name:
-                return self.__cached_demangled_name
-            else:
+            if not self.__cached_demangled_name:
                 fname = algorithm.full_name( self.parent )
                 if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
                     fname = fname[2:]
@@ -120,7 +118,7 @@ class class_t( scopedef.scopedef_t ):
                     self.__cached_demangled_name = tmp
                 else:
                     self.__cached_demangled_name = self._name
-                return self.__cached_demangled_name
+            return self.__cached_demangled_name
         else:
             return self._name
 
@@ -246,6 +244,8 @@ class class_t( scopedef.scopedef_t ):
         returns list of members according to access type
 
         If access equals to None, then returned list will contain all members.
+        You should not modify the list content, otherwise different optimization
+        data will stop work and may to give you wrong results.
 
         @param access: describes desired members
         @type access: L{ACCESS_TYPES}
@@ -265,25 +265,24 @@ class class_t( scopedef.scopedef_t ):
             all_members.extend( self.private_members )
             return all_members
 
-    def set_members( self, access, new_members ):
-        """
-        set list of members according to access type
+    def adopt_declaration( self, decl, access ):
+        """adds new declaration to the class
 
-        @param access: describes desired members
+        @param decl: reference to a L{declaration<declaration_t>}
+
+        @param access: member access type
         @type access: L{ACCESS_TYPES}
-
-        @param new_members: list of new members
-        @type new_members: [ L{member<declaration_t>} ]
         """
-        assert( access in ACCESS_TYPES.ALL )
         if access == ACCESS_TYPES.PUBLIC:
-            self.public_members = new_members
+            self.public_members.append( decl )
         elif access == ACCESS_TYPES.PROTECTED:
-            self.protected_members = new_members
+            self.protected_members.append( decl )
+        elif access == ACCESS_TYPES.PRIVATE:
+            self.private_members.append( decl )
         else:
-            self.private_members = new_members
-        for member in new_members:
-            member.parent = self
+            raise RuntimeError( "Invalid access type: %s." % access )
+        decl.parent = self
+        decl.cache.access_type = access
 
     def remove_declaration( self, decl ):
         """
@@ -293,19 +292,16 @@ class class_t( scopedef.scopedef_t ):
         @type decl: L{declaration_t}
         """
         container = None
-        if decl in self.public_members:
+        access_type = self.find_out_member_access_type( decl )
+        if access_type == ACCESS_TYPES.PUBLIC:
             container = self.public_members
-        elif decl in self.protected_members:
+        elif access_type == ACCESS_TYPES.PROTECTED:
             container = self.protected_members
-        elif decl in self.private_members:
+        else: #decl.cache.access_type == ACCESS_TYPES.PRVATE
             container = self.private_members
-        else:
-            raise ValueError()
         del container[ container.index( decl ) ]
-        #add more comment about this.
-        #if not keep_parent:
-        #    decl.parent=None
-
+        decl.cache.reset_access_type()
+        
     def find_out_member_access_type( self, member ):
         """
         returns member access type
@@ -316,19 +312,15 @@ class class_t( scopedef.scopedef_t ):
         @return: L{ACCESS_TYPES}
         """
         assert member.parent is self        
-        cached_access_type = getattr(member, "_cached_access_type", None)
-        if cached_access_type:
-            return cached_access_type
-        else:
+        if not member.cache.access_type:
             access_type = None
             if member in self.public_members:
-                access_type = ACCESS_TYPES.PUBLIC
+                member.cache.access_type = ACCESS_TYPES.PUBLIC
             elif member in self.protected_members:
-                access_type = ACCESS_TYPES.PROTECTED
+                member.cache.access_type = ACCESS_TYPES.PROTECTED
             elif member in self.private_members:
-                access_type = ACCESS_TYPES.PRIVATE
+                member.cache.access_type = ACCESS_TYPES.PRIVATE
             else:
                 raise RuntimeError( "Unable to find member within internal members list." )
-            setattr(member, "_cached_access_type", access_type)
-            return access_type
+        return member.cache.access_type
             

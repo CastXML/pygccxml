@@ -205,6 +205,15 @@ class scopedef_t( declaration.declaration_t ):
             return add_operator( symbol )
         return name #both name and symbol are None
 
+    def _on_rename( self ):
+        for decl in self.decls(allow_empty=True):
+            decl.cache.reset_name_based()
+        #I am not sure whether to introduce this or not?
+        #It could be very time consuming operation + it changes optimize query
+        #data structures.
+        #if self.parent:
+        #    if self.parent._optimized:
+        #        self.parent.init_optimizer()
 
     def __normalize_args( self, **keywds ):
         """implementation details"""

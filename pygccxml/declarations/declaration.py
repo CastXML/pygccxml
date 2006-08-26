@@ -12,7 +12,7 @@ and class that defines C++ declaration location.
 
 import algorithm
 import templates
-
+import algorithms_cache
 
 class location_t(object):
     """provides information about the location of the declaration within the source file.
@@ -75,8 +75,7 @@ class declaration_t( object ):
         self._mangled = mangled
         self._demangled = demangled
         self._parent = None
-        
-        #self._cached_name = None
+        self._cache = algorithms_cache.algorithms_cache_t()
 
     def __str__(self):
         """Default __str__ method.
@@ -159,8 +158,15 @@ class declaration_t( object ):
         #    return self._cached_name
         return self._get_name_impl()
 
+    def _on_rename( self ):
+        pass
+
     def _set_name( self, new_name ):
+        previous_name = self._name
         self._name = new_name
+        if previous_name: #the was a rename and not initial "set"
+            self._on_rename()
+            
     name = property( _get_name, _set_name
                      , doc="""Declaration name
                      @type: str
@@ -236,3 +242,10 @@ class declaration_t( object ):
                             doc="""Full name of the declaration
                             @type: str
                             """ )
+    @property
+    def cache( self ):
+        """implementation details
+
+        reference to instance of L{algorithms_cache.algorithms_cache_t} class.
+        """
+        return self._cache

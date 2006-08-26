@@ -48,6 +48,10 @@ class namespace_t( scopedef.scopedef_t ):
             self.declarations.append( decl )
         inst.declarations = []
 
+    def adopt_declaration( self, decl ):
+        self.declarations.append( decl )
+        decl.parent = self 
+        
     def remove_declaration( self, decl ):
         """
         removes decl from  members list

@@ -54,10 +54,9 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
                 continue
             decl = self.__decls[member]
             if isinstance( self.__inst, class_t ):
-                self.__inst.get_members( access ).append( decl )
+                self.__inst.adopt_declaration( decl, access )
             else:
-                self.__inst.declarations.append( decl )
-            decl.parent = self.__inst
+                self.__inst.adopt_declaration( decl )
 
     def __link_calldef(self):
         self.__inst.return_type = self.__link_type( self.__inst.return_type )
