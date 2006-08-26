@@ -28,25 +28,25 @@ import enumeration
 import class_declaration
 import types as build_in_types
 
-def __remove_alias(tp, tp_is_clone):
+def __remove_alias(type_):
     """implementation details"""
-    #implementation of this function is important
-    if isinstance( tp, cpptypes.compound_t ):
-        if not tp_is_clone:
-            tp = tp.clone()
-            tp_is_clone = True #copy on first modification
-        tp.base = __remove_alias( tp.base, tp_is_clone )
-        return tp
-    elif isinstance( tp, typedef.typedef_t ):
-        return __remove_alias( tp.type, tp_is_clone )
-    elif isinstance( tp, cpptypes.declarated_t ) and isinstance( tp.declaration, typedef.typedef_t ):
-        return __remove_alias( tp.declaration.type, tp_is_clone )
-    else:
-        return tp
+    if isinstance( type_, typedef.typedef_t ):
+        return __remove_alias( type_.type )
+    if isinstance( type_, cpptypes.declarated_t ) and isinstance( type_.declaration, typedef.typedef_t ):
+        return __remove_alias( type_.declaration.type )
+    if isinstance( type_, cpptypes.compound_t ):
+        type_.base = __remove_alias( type_.base )
+        return type_
+    return type_
 
-def remove_alias(tp):
+def remove_alias(type_):
     """returns type without typedefs"""
-    return __remove_alias( tp, False )
+    if isinstance( type_, cpptypes.type_t ):
+        return __remove_alias( type_.clone() )
+    elif isinstance( type_, typedef.typedef_t ):
+        return __remove_alias( type_.type.clone() )
+    else:
+        return type_
 
 def create_cv_types( base ):
     """implementation details"""

@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+from pygccxml import utils
 from pygccxml import declarations
 
 class patcher_base_t(object):
@@ -73,9 +74,14 @@ class default_argument_patcher_t( patcher_base_t ):
             return arg.default_value
         except:
             pass
-        
+                
         try:
             int( arg.default_value, 16 )
+            if 64 == utils.get_architecture():
+                #on 64 bit architecture, gccxml reports 0fffff, which is valid number
+                #the problem is that in this case it is so buggy so pygccxml can not fix it
+                #users will have to fix the default value manually
+                return arg.default_value
             default_value = arg.default_value.lower()
             found_hex = filter( lambda ch: ch in 'abcdef', default_value )
             if found_hex and not default_value.startswith( '0x' ):

@@ -80,6 +80,10 @@ def normalize_path( some_path ):
     return os.path.normpath( os.path.normcase( some_path ) )
 
 def get_architecture():    
+    """returns computer architecture: 32 or 64.
+    
+    The guess is based on maxint.
+    """
     if sys.maxint == 2147483647:
         return 32
     elif sys.maxint == 9223372036854775807:

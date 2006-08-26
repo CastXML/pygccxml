@@ -50,4 +50,3 @@ void typedef__func( const typedef_::alias& position = typedef_::alias() );
 /*default_arg_t create_default_argument();*/
 /*void double_call( default_arg_t x=create_default_argument() );*/
 #endif//__patcher_hpp__
-

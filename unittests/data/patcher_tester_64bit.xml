@@ -1,0 +1,452 @@
+<?xml version="1.0"?>
+<GCC_XML cvs_revision="1.113">
+  <Namespace id="_1" name="::" members="_3 _4 _6 _7 _8 _9 _10 _11 _12 _13 _14 _15 _16 _17 _18 _19 _20 _21 _22 _23 _24 _25 _26 _27 _28 _29 _30 _31 _32 _33 _34 _35 _36 _37 _38 _39 _40 _41 _42 _43 _44 _45 _46 _47 _48 _49 _50 _51 _52 _53 _54 _55 _56 _57 _58 _59 _60 _61 _62 _63 _64 _65 _66 _67 _68 _69 _70 _71 _72 _73 _74 _75 _76 _77 _78 _79 _80 _81 _82 _83 _84 _85 _86 _87 _88 _89 _90 _91 _92 _93 _94 _95 _96 _97 _98 _99 _100 _101 _102 _103 _104 _105 _106 _107 _108 _109 _110 _111 _112 _113 _114 _115 _116 _117 _118 _119 _120 _121 _122 _123 _124 _125 _126 _127 _128 _129 _130 _131 " mangled="_Z2::" demangled="::"/>
+  <Namespace id="_2" name="std" context="_1" members="" mangled="_Z3std" demangled="std"/>
+  <Function id="_3" name="typedef__func" returns="_132" context="_1" mangled="_Z13typedef__funcRKN8typedef_13original_nameE" demangled="typedef__func(typedef_::original_name const&amp;)" location="f0:46" file="f0" line="46" extern="1">
+    <Argument name="position" type="_133" location="f0:46" file="f0" line="46" default="alias()"/>
+  </Function>
+  <Function id="_4" name="fix_numeric" returns="_132" context="_1" mangled="_Z11fix_numericy" demangled="fix_numeric(unsigned long long)" location="f0:18" file="f0" line="18" extern="1">
+    <Argument name="arg" type="_6" location="f0:18" file="f0" line="18" default="0ffffffff"/>
+  </Function>
+  <FundamentalType id="_5" name="long long unsigned int" size="64" align="64"/>
+  <Typedef id="_6" name="ull" type="_5" context="_1" location="f0:17" file="f0" line="17"/>
+  <Function id="_7" name="fix_enum" returns="_132" context="_1" mangled="_Z8fix_enumN3ns13ns25fruitE" demangled="fix_enum(ns1::ns2::fruit)" location="f0:15" file="f0" line="15" extern="1">
+    <Argument name="arg" type="_134" location="f0:15" file="f0" line="15" default="apple"/>
+  </Function>
+  <Function id="_8" name="__builtin_cpowl" returns="_135" context="_1" location="f1:131" file="f1" line="131" extern="1">
+    <Argument type="_135" location="f1:131" file="f1" line="131"/>
+    <Argument type="_135" location="f1:131" file="f1" line="131"/>
+  </Function>
+  <Function id="_9" name="__builtin_cpow" returns="_136" context="_1" location="f1:130" file="f1" line="130" extern="1">
+    <Argument type="_136" location="f1:130" file="f1" line="130"/>
+    <Argument type="_136" location="f1:130" file="f1" line="130"/>
+  </Function>
+  <Function id="_10" name="__builtin_cpowf" returns="_137" context="_1" location="f1:129" file="f1" line="129" extern="1">
+    <Argument type="_137" location="f1:129" file="f1" line="129"/>
+    <Argument type="_137" location="f1:129" file="f1" line="129"/>
+  </Function>
+  <Function id="_11" name="__builtin_ctanhl" returns="_135" context="_1" location="f1:128" file="f1" line="128" extern="1">
+    <Argument type="_135" location="f1:128" file="f1" line="128"/>
+  </Function>
+  <Function id="_12" name="__builtin_ctanh" returns="_136" context="_1" location="f1:127" file="f1" line="127" extern="1">
+    <Argument type="_136" location="f1:127" file="f1" line="127"/>
+  </Function>
+  <Function id="_13" name="__builtin_ctanhf" returns="_137" context="_1" location="f1:126" file="f1" line="126" extern="1">
+    <Argument type="_137" location="f1:126" file="f1" line="126"/>
+  </Function>
+  <Function id="_14" name="__builtin_ctanl" returns="_135" context="_1" location="f1:125" file="f1" line="125" extern="1">
+    <Argument type="_135" location="f1:125" file="f1" line="125"/>
+  </Function>
+  <Function id="_15" name="__builtin_ctan" returns="_136" context="_1" location="f1:124" file="f1" line="124" extern="1">
+    <Argument type="_136" location="f1:124" file="f1" line="124"/>
+  </Function>
+  <Function id="_16" name="__builtin_ctanf" returns="_137" context="_1" location="f1:123" file="f1" line="123" extern="1">
+    <Argument type="_137" location="f1:123" file="f1" line="123"/>
+  </Function>
+  <Function id="_17" name="__builtin_csqrtl" returns="_135" context="_1" location="f1:122" file="f1" line="122" extern="1">
+    <Argument type="_135" location="f1:122" file="f1" line="122"/>
+  </Function>
+  <Function id="_18" name="__builtin_csqrt" returns="_136" context="_1" location="f1:121" file="f1" line="121" extern="1">
+    <Argument type="_136" location="f1:121" file="f1" line="121"/>
+  </Function>
+  <Function id="_19" name="__builtin_csqrtf" returns="_137" context="_1" location="f1:120" file="f1" line="120" extern="1">
+    <Argument type="_137" location="f1:120" file="f1" line="120"/>
+  </Function>
+  <Function id="_20" name="__builtin_csinhl" returns="_135" context="_1" location="f1:119" file="f1" line="119" extern="1">
+    <Argument type="_135" location="f1:119" file="f1" line="119"/>
+  </Function>
+  <Function id="_21" name="__builtin_csinh" returns="_136" context="_1" location="f1:118" file="f1" line="118" extern="1">
+    <Argument type="_136" location="f1:118" file="f1" line="118"/>
+  </Function>
+  <Function id="_22" name="__builtin_csinhf" returns="_137" context="_1" location="f1:117" file="f1" line="117" extern="1">
+    <Argument type="_137" location="f1:117" file="f1" line="117"/>
+  </Function>
+  <Function id="_23" name="__builtin_csinl" returns="_135" context="_1" location="f1:116" file="f1" line="116" extern="1">
+    <Argument type="_135" location="f1:116" file="f1" line="116"/>
+  </Function>
+  <Function id="_24" name="__builtin_csin" returns="_136" context="_1" location="f1:115" file="f1" line="115" extern="1">
+    <Argument type="_136" location="f1:115" file="f1" line="115"/>
+  </Function>
+  <Function id="_25" name="__builtin_csinf" returns="_137" context="_1" location="f1:114" file="f1" line="114" extern="1">
+    <Argument type="_137" location="f1:114" file="f1" line="114"/>
+  </Function>
+  <Function id="_26" name="__builtin_clogl" returns="_135" context="_1" location="f1:113" file="f1" line="113" extern="1">
+    <Argument type="_135" location="f1:113" file="f1" line="113"/>
+  </Function>
+  <Function id="_27" name="__builtin_clog" returns="_136" context="_1" location="f1:112" file="f1" line="112" extern="1">
+    <Argument type="_136" location="f1:112" file="f1" line="112"/>
+  </Function>
+  <Function id="_28" name="__builtin_clogf" returns="_137" context="_1" location="f1:111" file="f1" line="111" extern="1">
+    <Argument type="_137" location="f1:111" file="f1" line="111"/>
+  </Function>
+  <Function id="_29" name="__builtin_cexpl" returns="_135" context="_1" location="f1:110" file="f1" line="110" extern="1">
+    <Argument type="_135" location="f1:110" file="f1" line="110"/>
+  </Function>
+  <Function id="_30" name="__builtin_cexp" returns="_136" context="_1" location="f1:109" file="f1" line="109" extern="1">
+    <Argument type="_136" location="f1:109" file="f1" line="109"/>
+  </Function>
+  <Function id="_31" name="__builtin_cexpf" returns="_137" context="_1" location="f1:108" file="f1" line="108" extern="1">
+    <Argument type="_137" location="f1:108" file="f1" line="108"/>
+  </Function>
+  <Function id="_32" name="__builtin_ccoshl" returns="_135" context="_1" location="f1:107" file="f1" line="107" extern="1">
+    <Argument type="_135" location="f1:107" file="f1" line="107"/>
+  </Function>
+  <Function id="_33" name="__builtin_ccosh" returns="_136" context="_1" location="f1:106" file="f1" line="106" extern="1">
+    <Argument type="_136" location="f1:106" file="f1" line="106"/>
+  </Function>
+  <Function id="_34" name="__builtin_ccoshf" returns="_137" context="_1" location="f1:105" file="f1" line="105" extern="1">
+    <Argument type="_137" location="f1:105" file="f1" line="105"/>
+  </Function>
+  <Function id="_35" name="__builtin_ccosl" returns="_135" context="_1" location="f1:104" file="f1" line="104" extern="1">
+    <Argument type="_135" location="f1:104" file="f1" line="104"/>
+  </Function>
+  <Function id="_36" name="__builtin_ccos" returns="_136" context="_1" location="f1:103" file="f1" line="103" extern="1">
+    <Argument type="_136" location="f1:103" file="f1" line="103"/>
+  </Function>
+  <Function id="_37" name="__builtin_ccosf" returns="_137" context="_1" location="f1:102" file="f1" line="102" extern="1">
+    <Argument type="_137" location="f1:102" file="f1" line="102"/>
+  </Function>
+  <Function id="_38" name="__builtin_popcountll" returns="_138" context="_1" location="f1:101" file="f1" line="101" extern="1">
+    <Argument type="_139" location="f1:101" file="f1" line="101"/>
+  </Function>
+  <Function id="_39" name="__builtin_popcountl" returns="_138" context="_1" location="f1:100" file="f1" line="100" extern="1">
+    <Argument type="_140" location="f1:100" file="f1" line="100"/>
+  </Function>
+  <Function id="_40" name="__builtin_popcount" returns="_138" context="_1" location="f1:99" file="f1" line="99" extern="1">
+    <Argument type="_138" location="f1:99" file="f1" line="99"/>
+  </Function>
+  <Function id="_41" name="__builtin_ctzll" returns="_138" context="_1" location="f1:98" file="f1" line="98" extern="1">
+    <Argument type="_139" location="f1:98" file="f1" line="98"/>
+  </Function>
+  <Function id="_42" name="__builtin_ctzl" returns="_138" context="_1" location="f1:97" file="f1" line="97" extern="1">
+    <Argument type="_140" location="f1:97" file="f1" line="97"/>
+  </Function>
+  <Function id="_43" name="__builtin_ctz" returns="_138" context="_1" location="f1:96" file="f1" line="96" extern="1">
+    <Argument type="_138" location="f1:96" file="f1" line="96"/>
+  </Function>
+  <Function id="_44" name="__builtin_cargl" returns="_141" context="_1" location="f1:95" file="f1" line="95" extern="1">
+    <Argument type="_135" location="f1:95" file="f1" line="95"/>
+  </Function>
+  <Function id="_45" name="__builtin_carg" returns="_142" context="_1" location="f1:94" file="f1" line="94" extern="1">
+    <Argument type="_136" location="f1:94" file="f1" line="94"/>
+  </Function>
+  <Function id="_46" name="__builtin_cargf" returns="_143" context="_1" location="f1:93" file="f1" line="93" extern="1">
+    <Argument type="_137" location="f1:93" file="f1" line="93"/>
+  </Function>
+  <Function id="_47" name="__builtin_cabsl" returns="_141" context="_1" location="f1:92" file="f1" line="92" extern="1">
+    <Argument type="_135" location="f1:92" file="f1" line="92"/>
+  </Function>
+  <Function id="_48" name="__builtin_cabs" returns="_142" context="_1" location="f1:91" file="f1" line="91" extern="1">
+    <Argument type="_136" location="f1:91" file="f1" line="91"/>
+  </Function>
+  <Function id="_49" name="__builtin_cabsf" returns="_143" context="_1" location="f1:90" file="f1" line="90" extern="1">
+    <Argument type="_137" location="f1:90" file="f1" line="90"/>
+  </Function>
+  <Function id="_50" name="__builtin_tanl" returns="_141" context="_1" location="f1:89" file="f1" line="89" extern="1">
+    <Argument type="_141" location="f1:89" file="f1" line="89"/>
+  </Function>
+  <Function id="_51" name="__builtin_tanhl" returns="_141" context="_1" location="f1:88" file="f1" line="88" extern="1">
+    <Argument type="_141" location="f1:88" file="f1" line="88"/>
+  </Function>
+  <Function id="_52" name="__builtin_tanhf" returns="_143" context="_1" location="f1:87" file="f1" line="87" extern="1">
+    <Argument type="_143" location="f1:87" file="f1" line="87"/>
+  </Function>
+  <Function id="_53" name="__builtin_tanh" returns="_142" context="_1" location="f1:86" file="f1" line="86" extern="1">
+    <Argument type="_142" location="f1:86" file="f1" line="86"/>
+  </Function>
+  <Function id="_54" name="__builtin_tanf" returns="_143" context="_1" location="f1:85" file="f1" line="85" extern="1">
+    <Argument type="_143" location="f1:85" file="f1" line="85"/>
+  </Function>
+  <Function id="_55" name="__builtin_tan" returns="_142" context="_1" location="f1:84" file="f1" line="84" extern="1">
+    <Argument type="_142" location="f1:84" file="f1" line="84"/>
+  </Function>
+  <Function id="_56" name="__builtin_sinhl" returns="_141" context="_1" location="f1:79" file="f1" line="79" extern="1">
+    <Argument type="_141" location="f1:79" file="f1" line="79"/>
+  </Function>
+  <Function id="_57" name="__builtin_sinhf" returns="_143" context="_1" location="f1:78" file="f1" line="78" extern="1">
+    <Argument type="_143" location="f1:78" file="f1" line="78"/>
+  </Function>
+  <Function id="_58" name="__builtin_sinh" returns="_142" context="_1" location="f1:77" file="f1" line="77" extern="1">
+    <Argument type="_142" location="f1:77" file="f1" line="77"/>
+  </Function>
+  <Function id="_59" name="__builtin_powil" returns="_141" context="_1" location="f1:74" file="f1" line="74" extern="1">
+    <Argument type="_141" location="f1:74" file="f1" line="74"/>
+    <Argument type="_138" location="f1:74" file="f1" line="74"/>
+  </Function>
+  <Function id="_60" name="__builtin_powif" returns="_143" context="_1" location="f1:73" file="f1" line="73" extern="1">
+    <Argument type="_143" location="f1:73" file="f1" line="73"/>
+    <Argument type="_138" location="f1:73" file="f1" line="73"/>
+  </Function>
+  <Function id="_61" name="__builtin_powi" returns="_142" context="_1" location="f1:72" file="f1" line="72" extern="1">
+    <Argument type="_142" location="f1:72" file="f1" line="72"/>
+    <Argument type="_138" location="f1:72" file="f1" line="72"/>
+  </Function>
+  <Function id="_62" name="__builtin_powl" returns="_141" context="_1" location="f1:71" file="f1" line="71" extern="1">
+    <Argument type="_141" location="f1:71" file="f1" line="71"/>
+    <Argument type="_141" location="f1:71" file="f1" line="71"/>
+  </Function>
+  <Function id="_63" name="__builtin_powf" returns="_143" context="_1" location="f1:70" file="f1" line="70" extern="1">
+    <Argument type="_143" location="f1:70" file="f1" line="70"/>
+    <Argument type="_143" location="f1:70" file="f1" line="70"/>
+  </Function>
+  <Function id="_64" name="__builtin_modfl" returns="_141" context="_1" location="f1:69" file="f1" line="69" extern="1">
+    <Argument type="_141" location="f1:69" file="f1" line="69"/>
+    <Argument type="_144" location="f1:69" file="f1" line="69"/>
+  </Function>
+  <Function id="_65" name="__builtin_modff" returns="_143" context="_1" location="f1:68" file="f1" line="68" extern="1">
+    <Argument type="_143" location="f1:68" file="f1" line="68"/>
+    <Argument type="_145" location="f1:68" file="f1" line="68"/>
+  </Function>
+  <Function id="_66" name="__builtin_log10l" returns="_141" context="_1" location="f1:65" file="f1" line="65" extern="1">
+    <Argument type="_141" location="f1:65" file="f1" line="65"/>
+  </Function>
+  <Function id="_67" name="__builtin_log10f" returns="_143" context="_1" location="f1:64" file="f1" line="64" extern="1">
+    <Argument type="_143" location="f1:64" file="f1" line="64"/>
+  </Function>
+  <Function id="_68" name="__builtin_log10" returns="_142" context="_1" location="f1:63" file="f1" line="63" extern="1">
+    <Argument type="_142" location="f1:63" file="f1" line="63"/>
+  </Function>
+  <Function id="_69" name="__builtin_ldexpl" returns="_141" context="_1" location="f1:61" file="f1" line="61" extern="1">
+    <Argument type="_141" location="f1:61" file="f1" line="61"/>
+    <Argument type="_138" location="f1:61" file="f1" line="61"/>
+  </Function>
+  <Function id="_70" name="__builtin_ldexpf" returns="_143" context="_1" location="f1:60" file="f1" line="60" extern="1">
+    <Argument type="_143" location="f1:60" file="f1" line="60"/>
+    <Argument type="_138" location="f1:60" file="f1" line="60"/>
+  </Function>
+  <Function id="_71" name="__builtin_ldexp" returns="_142" context="_1" location="f1:59" file="f1" line="59" extern="1">
+    <Argument type="_142" location="f1:59" file="f1" line="59"/>
+    <Argument type="_138" location="f1:59" file="f1" line="59"/>
+  </Function>
+  <Function id="_72" name="__builtin_frexpl" returns="_141" context="_1" location="f1:58" file="f1" line="58" extern="1">
+    <Argument type="_141" location="f1:58" file="f1" line="58"/>
+    <Argument type="_146" location="f1:58" file="f1" line="58"/>
+  </Function>
+  <Function id="_73" name="__builtin_frexpf" returns="_143" context="_1" location="f1:57" file="f1" line="57" extern="1">
+    <Argument type="_143" location="f1:57" file="f1" line="57"/>
+    <Argument type="_146" location="f1:57" file="f1" line="57"/>
+  </Function>
+  <Function id="_74" name="__builtin_frexp" returns="_142" context="_1" location="f1:56" file="f1" line="56" extern="1">
+    <Argument type="_142" location="f1:56" file="f1" line="56"/>
+    <Argument type="_146" location="f1:56" file="f1" line="56"/>
+  </Function>
+  <Function id="_75" name="__builtin_fmodl" returns="_141" context="_1" location="f1:55" file="f1" line="55" extern="1">
+    <Argument type="_141" location="f1:55" file="f1" line="55"/>
+    <Argument type="_141" location="f1:55" file="f1" line="55"/>
+  </Function>
+  <Function id="_76" name="__builtin_fmodf" returns="_143" context="_1" location="f1:54" file="f1" line="54" extern="1">
+    <Argument type="_143" location="f1:54" file="f1" line="54"/>
+    <Argument type="_143" location="f1:54" file="f1" line="54"/>
+  </Function>
+  <Function id="_77" name="__builtin_floorl" returns="_141" context="_1" location="f1:53" file="f1" line="53" extern="1">
+    <Argument type="_141" location="f1:53" file="f1" line="53"/>
+  </Function>
+  <Function id="_78" name="__builtin_floorf" returns="_143" context="_1" location="f1:52" file="f1" line="52" extern="1">
+    <Argument type="_143" location="f1:52" file="f1" line="52"/>
+  </Function>
+  <Function id="_79" name="__builtin_floor" returns="_142" context="_1" location="f1:51" file="f1" line="51" extern="1">
+    <Argument type="_142" location="f1:51" file="f1" line="51"/>
+  </Function>
+  <Function id="_80" name="__builtin_coshl" returns="_141" context="_1" location="f1:43" file="f1" line="43" extern="1">
+    <Argument type="_141" location="f1:43" file="f1" line="43"/>
+  </Function>
+  <Function id="_81" name="__builtin_coshf" returns="_143" context="_1" location="f1:42" file="f1" line="42" extern="1">
+    <Argument type="_143" location="f1:42" file="f1" line="42"/>
+  </Function>
+  <Function id="_82" name="__builtin_cosh" returns="_142" context="_1" location="f1:41" file="f1" line="41" extern="1">
+    <Argument type="_142" location="f1:41" file="f1" line="41"/>
+  </Function>
+  <Function id="_83" name="__builtin_ceill" returns="_141" context="_1" location="f1:38" file="f1" line="38" extern="1">
+    <Argument type="_141" location="f1:38" file="f1" line="38"/>
+  </Function>
+  <Function id="_84" name="__builtin_ceilf" returns="_143" context="_1" location="f1:37" file="f1" line="37" extern="1">
+    <Argument type="_143" location="f1:37" file="f1" line="37"/>
+  </Function>
+  <Function id="_85" name="__builtin_ceil" returns="_142" context="_1" location="f1:36" file="f1" line="36" extern="1">
+    <Argument type="_142" location="f1:36" file="f1" line="36"/>
+  </Function>
+  <Function id="_86" name="__builtin_atanl" returns="_141" context="_1" location="f1:35" file="f1" line="35" extern="1">
+    <Argument type="_141" location="f1:35" file="f1" line="35"/>
+  </Function>
+  <Function id="_87" name="__builtin_atanf" returns="_143" context="_1" location="f1:34" file="f1" line="34" extern="1">
+    <Argument type="_143" location="f1:34" file="f1" line="34"/>
+  </Function>
+  <Function id="_88" name="__builtin_atan2l" returns="_141" context="_1" location="f1:33" file="f1" line="33" extern="1">
+    <Argument type="_141" location="f1:33" file="f1" line="33"/>
+    <Argument type="_141" location="f1:33" file="f1" line="33"/>
+  </Function>
+  <Function id="_89" name="__builtin_atan2f" returns="_143" context="_1" location="f1:32" file="f1" line="32" extern="1">
+    <Argument type="_143" location="f1:32" file="f1" line="32"/>
+    <Argument type="_143" location="f1:32" file="f1" line="32"/>
+  </Function>
+  <Function id="_90" name="__builtin_atan2" returns="_142" context="_1" location="f1:31" file="f1" line="31" extern="1">
+    <Argument type="_142" location="f1:31" file="f1" line="31"/>
+    <Argument type="_142" location="f1:31" file="f1" line="31"/>
+  </Function>
+  <Function id="_91" name="__builtin_atan" returns="_142" context="_1" location="f1:30" file="f1" line="30" extern="1">
+    <Argument type="_142" location="f1:30" file="f1" line="30"/>
+  </Function>
+  <Function id="_92" name="__builtin_asinl" returns="_141" context="_1" location="f1:29" file="f1" line="29" extern="1">
+    <Argument type="_141" location="f1:29" file="f1" line="29"/>
+  </Function>
+  <Function id="_93" name="__builtin_asinf" returns="_143" context="_1" location="f1:28" file="f1" line="28" extern="1">
+    <Argument type="_143" location="f1:28" file="f1" line="28"/>
+  </Function>
+  <Function id="_94" name="__builtin_asin" returns="_142" context="_1" location="f1:27" file="f1" line="27" extern="1">
+    <Argument type="_142" location="f1:27" file="f1" line="27"/>
+  </Function>
+  <Function id="_95" name="__builtin_acosl" returns="_141" context="_1" location="f1:26" file="f1" line="26" extern="1">
+    <Argument type="_141" location="f1:26" file="f1" line="26"/>
+  </Function>
+  <Function id="_96" name="__builtin_acosf" returns="_143" context="_1" location="f1:25" file="f1" line="25" extern="1">
+    <Argument type="_143" location="f1:25" file="f1" line="25"/>
+  </Function>
+  <Function id="_97" name="__builtin_acos" returns="_142" context="_1" location="f1:24" file="f1" line="24" extern="1">
+    <Argument type="_142" location="f1:24" file="f1" line="24"/>
+  </Function>
+  <Function id="_98" name="__builtin_expect" returns="_140" context="_1" location="f1:16" file="f1" line="16" extern="1">
+    <Argument name="EXP" type="_140" location="f1:16" file="f1" line="16"/>
+    <Argument name="C" type="_140" location="f1:16" file="f1" line="16"/>
+  </Function>
+  <Function id="_99" name="__builtin_prefetch" returns="_132" context="_1" location="f1:17" file="f1" line="17" extern="1">
+    <Argument name="ADDR" type="_147" location="f1:17" file="f1" line="17"/>
+    <Ellipsis/>
+  </Function>
+  <Function id="_100" name="__builtin_return" returns="_132" context="_1" location="f1:13" file="f1" line="13" extern="1" attributes="nothrow noreturn">
+    <Argument name="RESULT" type="_148" location="f1:13" file="f1" line="13"/>
+  </Function>
+  <Function id="_101" name="__builtin_return_address" returns="_148" context="_1" location="f1:14" file="f1" line="14" extern="1">
+    <Argument name="LEVEL" type="_149" location="f1:14" file="f1" line="14"/>
+  </Function>
+  <Function id="_102" name="__builtin_frame_address" returns="_148" context="_1" location="f1:15" file="f1" line="15" extern="1">
+    <Argument name="LEVEL" type="_149" location="f1:15" file="f1" line="15"/>
+  </Function>
+  <Function id="_103" name="__builtin_nansl" returns="_141" context="_1" mangled="nansl" demangled="__int128" location="f1:23" file="f1" line="23" extern="1" attributes="nothrow const">
+    <Argument name="str" type="_150" location="f1:23" file="f1" line="23"/>
+  </Function>
+  <Function id="_104" name="__builtin_nansf" returns="_143" context="_1" mangled="nansf" demangled="__int128" location="f1:22" file="f1" line="22" extern="1" attributes="nothrow const">
+    <Argument name="str" type="_150" location="f1:22" file="f1" line="22"/>
+  </Function>
+  <Function id="_105" name="__builtin_nans" returns="_142" context="_1" mangled="nans" demangled="__int128" location="f1:21" file="f1" line="21" extern="1" attributes="nothrow const">
+    <Argument name="str" type="_150" location="f1:21" file="f1" line="21"/>
+  </Function>
+  <Function id="_106" name="__builtin_infl" returns="_141" context="_1" location="f1:20" file="f1" line="20" extern="1" attributes="nothrow const"/>
+  <Function id="_107" name="__builtin_inff" returns="_143" context="_1" location="f1:19" file="f1" line="19" extern="1" attributes="nothrow const"/>
+  <Function id="_108" name="__builtin_inf" returns="_142" context="_1" location="f1:18" file="f1" line="18" extern="1" attributes="nothrow const"/>
+  <Function id="_109" name="__builtin_logl" returns="_141" context="_1" mangled="logl" demangled="long" location="f1:67" file="f1" line="67" extern="1" attributes="nothrow">
+    <Argument type="_141" location="f1:67" file="f1" line="67"/>
+  </Function>
+  <Function id="_110" name="__builtin_expl" returns="_141" context="_1" mangled="expl" demangled="long double" location="f1:47" file="f1" line="47" extern="1" attributes="nothrow">
+    <Argument type="_141" location="f1:47" file="f1" line="47"/>
+  </Function>
+  <Function id="_111" name="__builtin_cosl" returns="_141" context="_1" mangled="cosl" demangled="char" location="f1:44" file="f1" line="44" extern="1" attributes="nothrow pure">
+    <Argument type="_141" location="f1:44" file="f1" line="44"/>
+  </Function>
+  <Function id="_112" name="__builtin_sinl" returns="_141" context="_1" mangled="sinl" demangled="short" location="f1:80" file="f1" line="80" extern="1" attributes="nothrow pure">
+    <Argument type="_141" location="f1:80" file="f1" line="80"/>
+  </Function>
+  <Function id="_113" name="__builtin_sqrtl" returns="_141" context="_1" mangled="sqrtl" demangled="short" location="f1:83" file="f1" line="83" extern="1" attributes="nothrow">
+    <Argument type="_141" location="f1:83" file="f1" line="83"/>
+  </Function>
+  <Function id="_114" name="__builtin_logf" returns="_143" context="_1" mangled="logf" demangled="long" location="f1:66" file="f1" line="66" extern="1" attributes="nothrow">
+    <Argument type="_143" location="f1:66" file="f1" line="66"/>
+  </Function>
+  <Function id="_115" name="__builtin_expf" returns="_143" context="_1" mangled="expf" demangled="long double" location="f1:46" file="f1" line="46" extern="1" attributes="nothrow">
+    <Argument type="_143" location="f1:46" file="f1" line="46"/>
+  </Function>
+  <Function id="_116" name="__builtin_cosf" returns="_143" context="_1" mangled="cosf" demangled="char" location="f1:40" file="f1" line="40" extern="1" attributes="nothrow pure">
+    <Argument type="_143" location="f1:40" file="f1" line="40"/>
+  </Function>
+  <Function id="_117" name="__builtin_sinf" returns="_143" context="_1" mangled="sinf" demangled="short" location="f1:76" file="f1" line="76" extern="1" attributes="nothrow pure">
+    <Argument type="_143" location="f1:76" file="f1" line="76"/>
+  </Function>
+  <Function id="_118" name="__builtin_sqrtf" returns="_143" context="_1" mangled="sqrtf" demangled="short" location="f1:82" file="f1" line="82" extern="1" attributes="nothrow">
+    <Argument type="_143" location="f1:82" file="f1" line="82"/>
+  </Function>
+  <Function id="_119" name="__builtin_log" returns="_142" context="_1" mangled="log" demangled="long" location="f1:62" file="f1" line="62" extern="1" attributes="nothrow">
+    <Argument type="_142" location="f1:62" file="f1" line="62"/>
+  </Function>
+  <Function id="_120" name="__builtin_exp" returns="_142" context="_1" mangled="exp" demangled="long double" location="f1:45" file="f1" line="45" extern="1" attributes="nothrow">
+    <Argument type="_142" location="f1:45" file="f1" line="45"/>
+  </Function>
+  <Function id="_121" name="__builtin_cos" returns="_142" context="_1" mangled="cos" demangled="char" location="f1:39" file="f1" line="39" extern="1" attributes="nothrow pure">
+    <Argument type="_142" location="f1:39" file="f1" line="39"/>
+  </Function>
+  <Function id="_122" name="__builtin_sin" returns="_142" context="_1" mangled="sin" demangled="short" location="f1:75" file="f1" line="75" extern="1" attributes="nothrow pure">
+    <Argument type="_142" location="f1:75" file="f1" line="75"/>
+  </Function>
+  <Function id="_123" name="__builtin_sqrt" returns="_142" context="_1" mangled="sqrt" demangled="short" location="f1:81" file="f1" line="81" extern="1" attributes="nothrow">
+    <Argument type="_142" location="f1:81" file="f1" line="81"/>
+  </Function>
+  <Function id="_124" name="__builtin_fabsl" returns="_141" context="_1" location="f1:50" file="f1" line="50" extern="1" attributes="nothrow const">
+    <Argument type="_141" location="f1:50" file="f1" line="50"/>
+  </Function>
+  <Function id="_125" name="__builtin_fabsf" returns="_143" context="_1" location="f1:49" file="f1" line="49" extern="1" attributes="nothrow const">
+    <Argument type="_143" location="f1:49" file="f1" line="49"/>
+  </Function>
+  <Function id="_126" name="__builtin_fabs" returns="_142" context="_1" location="f1:48" file="f1" line="48" extern="1" attributes="nothrow const">
+    <Argument type="_142" location="f1:48" file="f1" line="48"/>
+  </Function>
+  <Namespace id="_127" name="typedef_" context="_1" members="_152 _151 " mangled="_Z8typedef_" demangled="typedef_"/>
+  <Namespace id="_128" name="fundamental" context="_1" members="_153 _154 " mangled="_Z11fundamental" demangled="fundamental"/>
+  <Namespace id="_129" name="function_call" context="_1" members="_155 _156 " mangled="_Z13function_call" demangled="function_call"/>
+  <Namespace id="_130" name="fx" context="_1" members="_157 _158 " mangled="_Z2fx" demangled="fx"/>
+  <Namespace id="_131" name="ns1" context="_1" members="_159 " mangled="_Z3ns1" demangled="ns1"/>
+  <FundamentalType id="_132" name="void" align="8"/>
+  <ReferenceType id="_133" type="_152c" size="64" align="64"/>
+  <Enumeration id="_134" name="fruit" context="_159" location="f0:11" file="f0" line="11" artificial="1" size="32" align="32">
+    <EnumValue name="apple" init="0"/>
+    <EnumValue name="orange" init="1"/>
+  </Enumeration>
+  <FundamentalType id="_135" name="complex long double" size="256" align="128"/>
+  <FundamentalType id="_136" name="complex double" size="128" align="64"/>
+  <FundamentalType id="_137" name="complex float" size="64" align="32"/>
+  <FundamentalType id="_138" name="int" size="32" align="32"/>
+  <FundamentalType id="_139" name="long long int" size="64" align="64"/>
+  <FundamentalType id="_140" name="long int" size="64" align="64"/>
+  <FundamentalType id="_141" name="long double" size="128" align="128"/>
+  <FundamentalType id="_142" name="double" size="64" align="64"/>
+  <FundamentalType id="_143" name="float" size="32" align="32"/>
+  <PointerType id="_144" type="_141" size="64" align="64"/>
+  <PointerType id="_145" type="_143" size="64" align="64"/>
+  <PointerType id="_146" type="_138" size="64" align="64"/>
+  <PointerType id="_147" type="_132c" size="64" align="64"/>
+  <PointerType id="_148" type="_132" size="64" align="64"/>
+  <FundamentalType id="_149" name="unsigned int" size="32" align="32"/>
+  <PointerType id="_150" type="_162c" size="64" align="64"/>
+  <Struct id="_151" name="original_name" context="_127" mangled="N8typedef_13original_nameE" demangled="typedef_::original_name" location="f0:38" file="f0" line="38" artificial="1" size="8" align="8" members="_164 _165 " bases=""/>
+  <Typedef id="_152" name="alias" type="_151" context="_127" location="f0:42" file="f0" line="42"/>
+  <Function id="_153" name="fix_fundamental" returns="_132" context="_128" mangled="_ZN11fundamental15fix_fundamentalEj" demangled="fundamental::fix_fundamental(unsigned)" location="f0:32" file="f0" line="32" extern="1">
+    <Argument name="v" type="_149" location="f0:32" file="f0" line="32" default="eggs"/>
+  </Function>
+  <Enumeration id="_154" name="spam" context="_128" location="f0:31" file="f0" line="31" artificial="1" size="32" align="32">
+    <EnumValue name="eggs" init="0"/>
+  </Enumeration>
+  <Function id="_155" name="fix_function_call" returns="_132" context="_129" mangled="_ZN13function_call17fix_function_callEi" demangled="function_call::fix_function_call(int)" location="f0:27" file="f0" line="27" extern="1">
+    <Argument name="i" type="_138" location="f0:27" file="f0" line="27" default="function_call::calc(int, int, int)(1, 2, 3)"/>
+  </Function>
+  <Function id="_156" name="calc" returns="_138" context="_129" mangled="_ZN13function_call4calcEiii" demangled="function_call::calc(int, int, int)" location="f0:26" file="f0" line="26" endline="26" inline="1">
+    <Argument type="_138" location="f0:26" file="f0" line="26"/>
+    <Argument type="_138" location="f0:26" file="f0" line="26"/>
+    <Argument type="_138" location="f0:26" file="f0" line="26"/>
+  </Function>
+  <Function id="_157" name="fix_unnamed" returns="_132" context="_130" mangled="_ZN2fx11fix_unnamedEi" demangled="fx::fix_unnamed(int)" location="f0:22" file="f0" line="22" extern="1">
+    <Argument name="x" type="_138" location="f0:22" file="f0" line="22" default="unnamed"/>
+  </Function>
+  <Enumeration id="_158" name="._0" context="_130" location="f0:21" file="f0" line="21" artificial="1" size="32" align="32">
+    <EnumValue name="unnamed" init="0"/>
+  </Enumeration>
+  <Namespace id="_159" name="ns2" context="_131" members="_134 " mangled="_ZN3ns13ns2E" demangled="ns1::ns2"/>
+  <Constructor id="_164" name="original_name" artificial="1" throw="" context="_151" access="public" mangled="_ZN8typedef_13original_nameC1ERKS0_ *INTERNAL* " demangled="typedef_::original_name::original_name(typedef_::original_name const&amp;)" location="f0:38" file="f0" line="38" inline="1">
+    <Argument name="_ctor_arg" type="_166" location="f0:38" file="f0" line="38"/>
+  </Constructor>
+  <Constructor id="_165" name="original_name" explicit="1" context="_151" access="public" mangled="_ZN8typedef_13original_nameC1Ev *INTERNAL* " demangled="typedef_::original_name::original_name()" location="f0:39" file="f0" line="39" endline="39" inline="1"/>
+  <ReferenceType id="_166" type="_151c" size="64" align="64"/>
+  <FundamentalType id="_162" name="char" size="8" align="8"/>
+  <CvQualifiedType id="_162c" type="_162" const="1"/>
+  <CvQualifiedType id="_132c" type="_132" const="1"/>
+  <CvQualifiedType id="_151c" type="_151" const="1"/>
+  <CvQualifiedType id="_152c" type="_152" const="1"/>
+  <File id="f0" name="/home/gotti/pygccxml-0.8.1/unittests/data/patcher.hpp"/>
+  <File id="f1" name="/usr/local/share/gccxml-0.7/GCC/4.1/gccxml_builtins.h"/>
+</GCC_XML>
