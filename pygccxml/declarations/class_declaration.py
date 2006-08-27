@@ -101,13 +101,12 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
-        self.__cached_demangled_name = None     # Cached value of name from get_name_impl
 
     def _get_name_impl( self ):
         if not self._name: #class with empty name
             return self._name
         elif class_t.USE_DEMANGLED_AS_NAME and self.demangled:
-            if not self.__cached_demangled_name:
+            if not self.cache.demangled_name:
                 fname = algorithm.full_name( self.parent )
                 if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
                     fname = fname[2:]
@@ -115,10 +114,13 @@ class class_t( scopedef.scopedef_t ):
                     tmp = self.demangled[ len( fname ): ] #demangled::name
                     if tmp.startswith( '::' ):
                         tmp = tmp[2:]
-                    self.__cached_demangled_name = tmp
+                    self.cache.demangled_name = tmp
+                    return tmp
                 else:
-                    self.__cached_demangled_name = self._name
-            return self.__cached_demangled_name
+                    self.cache.demangled_name = self._name
+                    return self._name
+            else:
+                return self.cache.demangled_name
         else:
             return self._name
 
@@ -301,7 +303,7 @@ class class_t( scopedef.scopedef_t ):
             container = self.private_members
         del container[ container.index( decl ) ]
         decl.cache.reset_access_type()
-        
+
     def find_out_member_access_type( self, member ):
         """
         returns member access type
@@ -311,16 +313,19 @@ class class_t( scopedef.scopedef_t ):
 
         @return: L{ACCESS_TYPES}
         """
-        assert member.parent is self        
+        assert member.parent is self
         if not member.cache.access_type:
             access_type = None
             if member in self.public_members:
-                member.cache.access_type = ACCESS_TYPES.PUBLIC
+                access_type = ACCESS_TYPES.PUBLIC
             elif member in self.protected_members:
-                member.cache.access_type = ACCESS_TYPES.PROTECTED
+                access_type = ACCESS_TYPES.PROTECTED
             elif member in self.private_members:
-                member.cache.access_type = ACCESS_TYPES.PRIVATE
+                access_type = ACCESS_TYPES.PRIVATE
             else:
                 raise RuntimeError( "Unable to find member within internal members list." )
-        return member.cache.access_type
-            
+            member.cache.access_type = access_type
+            return access_type
+        else:
+            return member.cache.access_type
+

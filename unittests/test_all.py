@@ -17,7 +17,7 @@ import templates_tester
 import type_traits_tester
 import core_tester
 import xmlfile_reader_tester
-import filtering_tester 
+import filtering_tester
 import text_reader_tester
 import hierarchy_traveling
 import patcher_tester
@@ -31,16 +31,17 @@ import calldef_matcher_tester
 import filters_tester
 import cache_enums_tester
 import decl_printer_tester
-import typedefs_tester 
+import typedefs_tester
 import demangled_tester
 import unnamed_enums_bug_tester
 import vector_traits_tester
 import string_traits_tester
 import declarations_cache_tester
 import has_binary_operator_traits_tester
+import algorithms_cache_tester
 
 def create_suite():
-    testers = [ 
+    testers = [
         decl_string_tester
         , declaration_files_tester
         , declarations_comparison_tester
@@ -75,14 +76,15 @@ def create_suite():
         , string_traits_tester
         , declarations_cache_tester
         , has_binary_operator_traits_tester
+        , algorithms_cache_tester
     ]
-    
-    main_suite = unittest.TestSuite()    
+
+    main_suite = unittest.TestSuite()
     for tester in testers:
         main_suite.addTest( tester.create_suite() )
 
     return main_suite
-    
+
 def run_suite():
     result = unittest.TextTestRunner(verbosity=2).run( create_suite() )
     error_desc = 'EXCEPTION IN SAFE SELECT 9'

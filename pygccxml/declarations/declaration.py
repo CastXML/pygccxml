@@ -75,7 +75,7 @@ class declaration_t( object ):
         self._mangled = mangled
         self._demangled = demangled
         self._parent = None
-        self._cache = algorithms_cache.algorithms_cache_t()
+        self._cache = algorithms_cache.declaration_algs_cache_t()
 
     def __str__(self):
         """Default __str__ method.
@@ -164,9 +164,10 @@ class declaration_t( object ):
     def _set_name( self, new_name ):
         previous_name = self._name
         self._name = new_name
+        self.cache.reset_name_based()
         if previous_name: #the was a rename and not initial "set"
             self._on_rename()
-            
+
     name = property( _get_name, _set_name
                      , doc="""Declaration name
                      @type: str
