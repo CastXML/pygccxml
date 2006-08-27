@@ -41,12 +41,20 @@ def __remove_alias(type_):
 
 def remove_alias(type_):
     """returns type without typedefs"""
+    type_ref = None
     if isinstance( type_, cpptypes.type_t ):
-        return __remove_alias( type_.clone() )
+        type_ref = type_
     elif isinstance( type_, typedef.typedef_t ):
-        return __remove_alias( type_.type.clone() )
+        type_ref = type_.type
     else:
+        pass #not a valid input, just return it
+    if not type_ref:
         return type_
+    if type_ref.cache.remove_alias:
+        return type_ref.cache.remove_alias
+    no_alias = __remove_alias( type_ref.clone() )
+    type_ref.cache.remove_alias = no_alias
+    return no_alias
 
 def create_cv_types( base ):
     """implementation details"""

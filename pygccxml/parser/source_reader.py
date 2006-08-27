@@ -29,9 +29,8 @@ def bind_aliases( decls ):
     @return: None
     """   
     visited = set()
-    for decl in decls:
-        if not isinstance( decl, typedef_t ):
-            continue
+    typedefs = filter( lambda decl: isinstance( decl, typedef_t ), decls )
+    for decl in typedefs:
         type_ = remove_alias( decl.type )
         if not isinstance( type_, declarated_t ):
             continue

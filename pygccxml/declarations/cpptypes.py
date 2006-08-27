@@ -7,11 +7,14 @@
 defines classes, that describe C++ types
 """
 
+import algorithms_cache
+
 class type_t(object):
     """base class for all types"""
     def __init__(self):
         object.__init__( self )
-
+        self.cache = algorithms_cache.type_algs_cache_t() 
+        
     def __str__(self):
         res = self.decl_string
         if res[:2]=="::":
@@ -44,7 +47,6 @@ class type_t(object):
     def clone( self ):
         "returns new instance of the type"
         answer = self._clone_impl()
-        assert answer
         return answer
 
 #There are cases when GCC-XML reports something like this
@@ -578,7 +580,7 @@ class declarated_t( type_t ):
         return self._declaration.decl_string
 
     def _clone_impl( self ):
-        return declarated_t( self.declaration )
+        return declarated_t( self._declaration )
 
 class type_qualifiers_t( object ):
     """contains additional information about type: mutable, static, extern"""

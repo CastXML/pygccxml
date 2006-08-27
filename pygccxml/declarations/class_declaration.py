@@ -284,6 +284,7 @@ class class_t( scopedef.scopedef_t ):
         else:
             raise RuntimeError( "Invalid access type: %s." % access )
         decl.parent = self
+        decl.cache.reset()
         decl.cache.access_type = access
 
     def remove_declaration( self, decl ):
@@ -302,7 +303,7 @@ class class_t( scopedef.scopedef_t ):
         else: #decl.cache.access_type == ACCESS_TYPES.PRVATE
             container = self.private_members
         del container[ container.index( decl ) ]
-        decl.cache.reset_access_type()
+        decl.cache.reset()
 
     def find_out_member_access_type( self, member ):
         """

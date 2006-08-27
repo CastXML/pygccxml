@@ -425,6 +425,9 @@ class project_reader_t:
         create_key = lambda decl:( decl.location.as_tuple()
                                    , tuple( pygccxml.declarations.declaration_path( decl ) ) )
         for decl_wrapper_type in declarated_types:
+            #it is possible, that cache contains reference to dropped class
+            #We need to clear it
+            decl_wrapper_type.cache.reset() 
             if isinstance( decl_wrapper_type.declaration, pygccxml.declarations.class_t ):
                 key = create_key(decl_wrapper_type.declaration)
                 if leaved_classes.has_key( key ):

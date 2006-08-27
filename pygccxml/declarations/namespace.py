@@ -51,6 +51,7 @@ class namespace_t( scopedef.scopedef_t ):
     def adopt_declaration( self, decl ):
         self.declarations.append( decl )
         decl.parent = self 
+        decl.cache.reset()
         
     def remove_declaration( self, decl ):
         """
@@ -60,6 +61,7 @@ class namespace_t( scopedef.scopedef_t ):
         @type decl: L{declaration_t}
         """
         del self.declarations[ self.declarations.index( decl ) ]
+        decl.cache.reset()
         #add more comment about this.
         #if not keep_parent:
         #    decl.parent=None

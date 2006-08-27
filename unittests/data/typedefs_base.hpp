@@ -15,4 +15,3 @@ typedef item_t Item;
 }
 
 #endif//__typedefs_hpp__
-
