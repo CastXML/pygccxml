@@ -36,9 +36,9 @@ class core_t( parser_test_case.parser_test_case_t ):
                             , 'core_overloads_1.hpp'
                             , 'core_overloads_2.hpp'
                             , 'abstract_classes.hpp'
-        ]           
+        ]
         self.global_ns = None
-        
+
     def setUp(self):
         if not core_t.global_ns:
             decls = parse( self.test_files, self.config, self.COMPILATION_MODE )
@@ -50,7 +50,7 @@ class core_t( parser_test_case.parser_test_case_t ):
     def test_top_parent(self):
         enum = self.global_ns.enum( '::ns::ns32::E33' )
         self.failUnless( self.global_ns is enum.top_parent )
-        
+
     #tests namespaces join functionality. described in gccxml.py
     def test_nss_join(self):
         #list of all namespaces
@@ -114,7 +114,7 @@ class core_t( parser_test_case.parser_test_case_t ):
         self.failUnless( nested_enum1 is nested_enum2
                          , "enum accessed through access definition('%s') and through declarations('%s') are different enums or instances."  \
                            %( nested_enum1.name, nested_enum2.name ) )
-        
+
         #check whether we meaning same class instance
         self.failUnless( class_inst is nested_enum1.parent is nested_enum2.parent
                          , 'There are 2 or more instances of ns namespace.' )
@@ -124,7 +124,7 @@ class core_t( parser_test_case.parser_test_case_t ):
         core_membership = self.global_ns.namespace( 'membership' )
         self._test_ns_membership( self.global_ns, 'EGlobal' )
         self._test_ns_membership( core_membership.namespace('enums_ns'), 'EWithin' )
-        self._test_ns_membership( core_membership.namespace( '' ), 'EWithinUnnamed' )        
+        self._test_ns_membership( core_membership.namespace( '' ), 'EWithinUnnamed' )
         class_nested_enums = core_membership.class_( 'class_for_nested_enums_t' )
         self._test_class_membership( class_nested_enums, 'ENestedPublic', ACCESS_TYPES.PUBLIC )
         self._test_class_membership( class_nested_enums, 'ENestedProtected', ACCESS_TYPES.PROTECTED )
@@ -193,28 +193,28 @@ class core_t( parser_test_case.parser_test_case_t ):
                                % (typedef.type.decl_string, fundamental_type.decl_string) )
 
     def test_compound_types(self):
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_int' )        
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_int' )
         self._test_type_composition( typedef_inst.type, const_t, int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_pointer_int' )        
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_pointer_int' )
         self._test_type_composition( typedef_inst.type, pointer_t, int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_reference_int' )        
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_reference_int' )
         self._test_type_composition( typedef_inst.type, reference_t, int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_unsigned_int_const_pointer' )        
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_unsigned_int_const_pointer' )
         self._test_type_composition( typedef_inst.type, const_t, pointer_t )
         self._test_type_composition( typedef_inst.type.base, pointer_t, const_t )
         self._test_type_composition( typedef_inst.type.base.base, const_t, unsigned_int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_volatile_int' )        
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_volatile_int' )
         self._test_type_composition( typedef_inst.type, volatile_t, int_t )
 
-        var_inst = self.global_ns.variable( 'array255' )        
+        var_inst = self.global_ns.variable( 'array255' )
         self._test_type_composition( var_inst.type, array_t, int_t )
 
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_EFavoriteDrinks' )    
+        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_EFavoriteDrinks' )
         self.failUnless( isinstance( typedef_inst.type, declarated_t )
                          , " typedef to enum should be 'declarated_t' instead of '%s'" % typedef_inst.type.__class__.__name__ )
         enum_declaration = self.global_ns.enum( 'EFavoriteDrinks' )
@@ -223,7 +223,7 @@ class core_t( parser_test_case.parser_test_case_t ):
                            % ( typedef_inst.type.declaration.name, enum_declaration.name ) )
 
     def test_free_function_type(self):
-        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='function_ptr' )    
+        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='function_ptr' )
         self._test_type_composition( function_ptr.type, pointer_t, free_function_type_t )
         function_type = function_ptr.type.base
         self.failUnless( isinstance( function_type.return_type, int_t )
@@ -240,7 +240,7 @@ class core_t( parser_test_case.parser_test_case_t ):
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
     def test_member_function_type(self):
-        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='member_function_ptr_t')    
+        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='member_function_ptr_t')
         self._test_type_composition( function_ptr.type, pointer_t, member_function_type_t )
 
         function_type = function_ptr.type.base
@@ -262,7 +262,7 @@ class core_t( parser_test_case.parser_test_case_t ):
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
     def test_member_variable_type(self):
-        mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')    
+        mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')
         self._test_type_composition( mv.type, pointer_t, member_variable_type_t )
 
         members_pointers = self.global_ns.class_( 'members_pointers_t' )
@@ -282,7 +282,7 @@ class core_t( parser_test_case.parser_test_case_t ):
                            % ( 4, len(do_nothings) ) )
         for index, do_nothing in enumerate(do_nothings):
             others = do_nothings[:index] + do_nothings[index+1:]
-            self.failUnless( do_nothing.overloads == others
+            self.failUnless( set( do_nothing.overloads ) == set( others )
                              , "there is a difference between expected function overloads and existing ones." )
 
     def test_abstract_classes(self):
@@ -320,7 +320,7 @@ class core_file_by_file_no_opt_t( core_t ):
         core_t.__init__(self, *args)
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(core_all_at_once_t))
     suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
     suite.addTest( unittest.makeSuite(core_file_by_file_t))

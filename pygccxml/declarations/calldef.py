@@ -156,16 +156,12 @@ class calldef_t( declaration.declaration_t ):
         if not self.parent:
             return []
         # finding all functions with the same name
-        overloaded_funcs \
-            = algorithm.find_all_declarations( self.parent.declarations
-                                     , type=calldef_t
-                                     , name=self.name
-                                     , recursive=False )
-        if not overloaded_funcs:
-            return overloaded_funcs
-        overloaded_funcs_ids = map( id, overloaded_funcs )
-        index = overloaded_funcs_ids.index( id( self ) )
-        return overloaded_funcs[:index] + overloaded_funcs[index+1:]
+        return self.parent.calldefs(
+            name=self.name
+            , function=lambda decl: not (decl is self )
+            , allow_empty=True
+            , recursive=False )
+
     overloads = property( _get_overloads
                           , doc="""A list of overloaded "callables" (i.e. other callables with the same name within the same scope.
                           @type: list of L{calldef_t}""" )
