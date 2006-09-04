@@ -16,6 +16,16 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Allen Bierbaum
   * Georgiy Dernovoy
   * Darren Garnier
+  * Gottfried Ganssauge
+
+-------------
+Version 0.8.*
+-------------
+
+1. Few small bug fix and unit tests have been introduced on 64 Bit platform.
+   Many thanks to Gottfried Ganssauge! He also help me to discover and fix
+   some important bug in ``type_traits.__remove_alias`` function, by introducing
+   small example that reproduced the error.
 
 -------------
 Version 0.8.1
