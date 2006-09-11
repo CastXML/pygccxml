@@ -39,25 +39,9 @@ class argument_t(object):
     """
 
     def __init__( self, name='', type=None, default_value=None ):
-        """Constructor.
-
-        The type can either be a L{type_t} object or a string containing
-        a valid C++ type. In the latter case the string will be wrapped
-        inside an appropriate type_t object, so the L{type} property
-        will always be a type_t object.
-
-        @param name: The name of the argument
-        @type name: str
-        @param type: The type of the argument
-        @type type: L{type_t} or str
-        @param default_value: The optional default value of the argument
-        @tyape default_value: str
-        """
         object.__init__(self)
         self._name = name
         self._default_value = default_value
-        if not isinstance(type, cpptypes.type_t):
-            type = cpptypes.dummy_type_t(str(type))
         self._type = type
 
     def __str__(self):
