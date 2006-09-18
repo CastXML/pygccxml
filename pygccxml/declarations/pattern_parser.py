@@ -66,8 +66,9 @@ class parser_t( object ):
             if -1 == found:
                 args.append( args_only[ previous_found : ] )
                 break
-            elif decl_string[ found ] == self.__end:
-                raise RuntimeError( "unmatched '%s' token has been found." % self.__end )
+            #elif decl_string[ found ] == self.__end:
+            #    print args
+            #    raise RuntimeError( "unmatched '%s' token has been found." % self.__end )
             else:
                 args.append( args_only[ previous_found : found ] )
             previous_found = found + 1 #skip found sep
