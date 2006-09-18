@@ -13,8 +13,8 @@ class type_t(object):
     """base class for all types"""
     def __init__(self):
         object.__init__( self )
-        self.cache = algorithms_cache.type_algs_cache_t() 
-        
+        self.cache = algorithms_cache.type_algs_cache_t()
+
     def __str__(self):
         res = self.decl_string
         if res[:2]=="::":
@@ -378,7 +378,9 @@ class array_t( compound_t ):
 
     def _get_size(self):
         return self._size
-    size = property( _get_size,
+    def _set_size(self, size):#sometimes there is a need to update the size of the array
+        self._size = size
+    size = property( _get_size, _set_size,
                      doc="returns array size" )
 
     def _create_decl_string(self):
