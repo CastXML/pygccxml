@@ -188,6 +188,12 @@ class scopedef_t( declaration.declaration_t ):
                                 % ( time.clock() - start_time ) )
         self._optimized = True
 
+    def _build_operator_function( self, name, function ):
+        if callable( name ):
+            return name
+        else:
+            return function
+        
     def _build_operator_name( self, name, function, symbol ):
         """implementation details"""
         def add_operator( sym ):
@@ -434,7 +440,7 @@ class scopedef_t( declaration.declaration_t ):
         return self._find_single( self._impl_matchers[ scopedef_t.operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
-                                  , function=function
+                                  , function=self._build_operator_function( name, function )
                                   , decl_type=self._impl_decl_types[ scopedef_t.operator ]
                                   , return_type=return_type
                                   , arg_types=arg_types
@@ -447,7 +453,7 @@ class scopedef_t( declaration.declaration_t ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
-                                    , function=function
+                                    , function=self._build_operator_function( name, function )
                                     , decl_type=self._impl_decl_types[ scopedef_t.operator ]
                                     , return_type=return_type
                                     , arg_types=arg_types
@@ -511,7 +517,7 @@ class scopedef_t( declaration.declaration_t ):
         return self._find_single( self._impl_matchers[ scopedef_t.member_operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
-                                  , function=function
+                                  , function=self._build_operator_function( name, function )
                                   , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]
                                   , return_type=return_type
                                   , arg_types=arg_types
@@ -524,7 +530,7 @@ class scopedef_t( declaration.declaration_t ):
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
-                                    , function=function
+                                    , function=self._build_operator_function( name, function )
                                     , decl_type=self._impl_decl_types[ scopedef_t.member_operator ]
                                     , return_type=return_type
                                     , arg_types=arg_types

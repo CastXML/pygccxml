@@ -111,7 +111,7 @@ class namespace_t( scopedef.scopedef_t ):
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
-                                  , function=function
+                                  , function=self._build_operator_function( name, function )
                                   , decl_type=self._impl_decl_types[ namespace_t.free_operator ]
                                   , return_type=return_type
                                   , arg_types=arg_types
@@ -124,7 +124,7 @@ class namespace_t( scopedef.scopedef_t ):
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol
-                                    , function=function
+                                    , function=self._build_operator_function( name, function )
                                     , decl_type=self._impl_decl_types[ namespace_t.free_operator ]
                                     , return_type=return_type
                                     , arg_types=arg_types
