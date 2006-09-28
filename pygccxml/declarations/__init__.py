@@ -175,6 +175,8 @@ from container_traits import hash_set_traits
 from container_traits import multiset_traits
 from container_traits import hash_multiset_traits
 
+from function_traits import is_same_function
+
 all_container_traits = \
 [
     list_traits
