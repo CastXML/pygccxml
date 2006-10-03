@@ -111,7 +111,7 @@ class calldef_t( declaration.declaration_t ):
 
     def _get__cmp__items( self ):
         """implementation details"""
-        items = [ self._sorted_list( self.arguments )
+        items = [ self.arguments
                   , self.return_type
                   , self.has_extern
                   , self._sorted_list( self.exceptions ) ]
@@ -129,9 +129,9 @@ class calldef_t( declaration.declaration_t ):
 
     def _get_arguments(self):
         return self._arguments
-    def _set_arguments(self, arguments):
-        self._arguments = arguments
-    arguments = property( _get_arguments, _set_arguments
+    #~ def _set_arguments(self, arguments):
+        #~ self._arguments = arguments
+    arguments = property( _get_arguments #, _set_arguments
                           , doc="""The argument list.
                           @type: list of L{argument_t}""")
 
