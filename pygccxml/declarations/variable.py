@@ -8,6 +8,7 @@ defines class that describes C++ global and member variable declaration
 """
 
 import declaration
+import class_declaration
 
 class variable_t( declaration.declaration_t ):
     """describes C++ global and member variable declaration"""
@@ -60,3 +61,10 @@ class variable_t( declaration.declaration_t ):
         self._bits = bits
     bits = property( _get_bits, _set_bits
                      , doc="integer, that contains information about how many bit takes bit field")
+
+    @property
+    def access_type(self):
+        if not isinstance( self.parent, class_declaration.class_t ):
+            raise RuntimeError( "access_type functionality only available on member variables and not on global variables" )
+        return self.parent.find_out_member_access_type( self )
+
