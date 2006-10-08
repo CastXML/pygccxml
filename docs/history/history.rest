@@ -27,6 +27,37 @@ Version 0.8.*
    some important bug in ``type_traits.__remove_alias`` function, by introducing
    small example that reproduced the error.
 
+2. Huge speed improvment has been achieved( x10 ). Allen Bierbaum suggested to
+   save and reuse results of different `pygccxml`_ algorithms:
+
+   * ``declarations.remove_alias``
+   * ``declarations.full_name``
+   * ``declarations.access_type``
+   * ``declarations.demangled_name``
+   * ``declarations.declaration_path``
+
+3. Interface changes:
+
+  * ``declarations.class_t``:
+
+    + ``set_members`` method was removed
+
+    + ``adopt_declaration`` method was introduced, instead of ``set_members``
+
+  * ``declarations.array_t`` class "set" accessor for size property was added.
+
+  * ``declarations.namespace_t.adopt_declaration`` method was added.
+
+  * ``declarations.variable_t.access_type`` property was added.
+
+4. New  type traits have been added:
+
+   * ``is_same_function``
+
+5. Few bug were fixed.
+
+6. Documentation was improved.
+
 -------------
 Version 0.8.1
 -------------
