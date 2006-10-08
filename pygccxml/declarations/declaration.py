@@ -150,12 +150,6 @@ class declaration_t( object ):
         return self._name
 
     def _get_name( self ):
-        #if self._cached_name:
-        #    assert self._get_name_impl() == self._cached_name
-        #    return self._cached_name
-        #else:
-        #    self._cached_name = self._get_name_impl()
-        #    return self._cached_name
         return self._get_name_impl()
 
     def _on_rename( self ):
