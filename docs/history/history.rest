@@ -122,7 +122,8 @@ Version 0.8.1
    This has been done in order to provide stable order of enumeration values.
 
 4. Now you can pass operator symbol, as a name to query functions:
-   ::
+
+  .. code-block:: Python
 
      cls = global_namespace.class_( 'my_class' )
      op = cls.operator( '<' )
@@ -154,7 +155,8 @@ Version 0.8.1
     of the same name in the decl interface from ``declarations.scopedef_t`` class.
 
     So for example:
-    ::
+
+    .. code-block:: Python
 
       classes = ns.decls("class")
       classes.decls("method")

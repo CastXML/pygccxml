@@ -15,7 +15,7 @@ Just an example. I want to select all member functions, which have 2 arguments.
 I don't care about first argument type, but I do want second argument type to be
 a reference to an integer. More over, I want those functions names to end with
 "impl" string and they should be protected or private.
-::
+.. code-block:: Python
 
   #global_ns is the reference to an instance of namespace_t object, that
   #represents global namespace
@@ -26,7 +26,7 @@ a reference to an integer. More over, I want those functions names to end with
 The example is complex, but still readable. In many cases you will find your
 self looking for one or many declarations using one or two properties of that
 declaration(s). For example:
-::
+.. code-block:: Python
 
   global_ns.namespaces( 'details' )
 
@@ -53,7 +53,7 @@ Usage examples
 I will explain the usage of ``member_function`` and ``member_functions`` methods.
 The usage of other methods is very similar to them. Here is definition of those
 methods:
-::
+.. code-block:: Python
 
   def member_function(  self,
                         name=None,
@@ -81,7 +81,8 @@ by:
   * ``name``
 
     Python string, that contains member function name or full name.
-    ::
+
+  .. code-block:: Python
 
       do_smth = my_class.member_function( 'do_smth' )
       do_smth = my_class.member_function( 'my_namespace::my_class::do_smth' )
@@ -91,7 +92,8 @@ by:
     Python callable object. You would use this functionality, if you need to
     build custom query. This object will be called with one argument - declaration,
     and it should return ``True`` or ``False``.
-    ::
+
+  .. code-block:: Python
 
       impls = my_class.member_functions( lambda decl: decl.name.endswith( 'impl' ) )
 
@@ -101,7 +103,8 @@ by:
 
     Function return type. This argument can be Python string or an object that
     describes C++ type.
-    ::
+
+  .. code-block:: Python
 
       mem_funcs = my_class.member_functions( return_type='int' )
 
@@ -117,7 +120,8 @@ by:
     type. Size of list says how many arguments function should have. If you want
     to skip some argument type from within comparison, you put ``None``, into
     relevant position within the list.
-    ::
+
+  .. code-block:: Python
 
       mem_funcs = my_class.member_functions( arg_types=[ None, 'int'] )
 
@@ -178,12 +182,15 @@ of ``mdecl_wrapper_t`` class. This class allows you to work on all selected
 objects at once. I will give an example from another project - `Py++`_.
 In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
-::
+
+.. code-block:: C++
 
   struct A{
       A* clone() const { return new A(); }
       ...
   };
+
+.. code-block:: C++
 
   struct B{
       B* clone() const { return new B(); }
@@ -193,7 +200,8 @@ should have `call policies`_. For example:
 `Call policies`_ of the member function ``clone`` is ``return_value_policy<manage_new_object>()``.
 Next code applies `call policies`_ on all ``clone`` member functions within the
 project.
-::
+
+.. code-block:: Python
 
   #global_ns - instance of namespace_t class, that contains reference to global namespace
   clone = global_ns.member_functions( 'clone' )
@@ -210,7 +218,7 @@ As you can see this class allows you to write less code. Basically using this
 class you don't have to write loops. If will do it for you. Also if you insist to
 write loops, ``mdecl_wrapper_t`` class implements ``__len__``, ``__getitem__``
 and ``__iter__`` methods. So you can write next code:
-::
+.. code-block:: Python
 
   for clone in global_ns.member_functions( 'clone' ):
       print clone.parent.name

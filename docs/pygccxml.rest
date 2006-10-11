@@ -89,7 +89,8 @@ Query interface
 try to give small example, that will prove my point. If you want to know more 
 about provided API please read `query interface`__ document or API documentation.
 Examples:
-::
+
+.. code-block:: Python
 
   #global_ns is the reference to declarations that describes C++ namespace.
   #In our case, instance of that declarations describes global ( :: ) namespace.
@@ -98,14 +99,15 @@ Examples:
 
 Small explanation. Assume that ``None`` means "any type". Now the code is pretty
 readable: 
+
 ::
 
-    select all free functions
-    where 
-        name equal to "do_smth"
-        return type is void
-        function has two arguments
-        second argument type is int
+  select all free functions from the project
+  where 
+      name equal to "do_smth"
+      return type is void
+      function has two arguments
+      second argument type is int
 
 .. __: ./query_interface.html
 
