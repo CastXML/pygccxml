@@ -1,0 +1,3 @@
+.. code-block::
+     :language: C++
+     :source-file: ./example.hpp

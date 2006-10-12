@@ -3,10 +3,9 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __core_class_hierarchy_hpp__
-#define __core_class_hierarchy_hpp__
+#ifndef example_hpp_12_10_2006
+#define example_hpp_12_10_2006
 
-//TODO("To add virtual inheritance case");
 
 namespace core{ namespace class_hierarchy{
 
@@ -32,4 +31,4 @@ class multi_derived_t : derived_private_t, protected base_t, private other_base_
 
 } }
 
-#endif//__core_class_hierarchy_hpp__
+#endif//example_hpp_12_10_2006

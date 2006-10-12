@@ -1,0 +1,3 @@
+.. code-block::
+     :language: XML
+     :source-file: ./example.hpp.xml
