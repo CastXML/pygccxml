@@ -85,7 +85,7 @@ by:
 
     Python string, that contains member function name or full name.
 
-  .. code-block:: Python
+    .. code-block:: Python
 
       do_smth = my_class.member_function( 'do_smth' )
       do_smth = my_class.member_function( 'my_namespace::my_class::do_smth' )
@@ -108,10 +108,10 @@ by:
     Function return type. This argument can be Python string or an object that
     describes C++ type.
 
-  .. code-block:: Python
+    .. code-block:: Python
 
       mem_funcs = my_class.member_functions( return_type='int' )
-
+      
       i = declarations.int_t()
       ref_i = declarations.reference_t( i )
       const_ref_i = declarations.const_t( ref_i )
@@ -216,7 +216,9 @@ Another example, from `Py++`_ project. Sometimes it is desirable to
 exclude declaration, from being exported to Python. Next code will exclude
 ``clone`` member function from being exported:
 
-    ``global_ns.member_functions( 'clone' ).exclude()``
+.. code-block:: Python
+
+  global_ns.member_functions( 'clone' ).exclude()
 
 As you can see this class allows you to write less code. Basically using this
 class you don't have to write loops. If will do it for you. Also if you insist to
