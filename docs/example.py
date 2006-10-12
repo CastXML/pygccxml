@@ -13,7 +13,7 @@ from pygccxml import declarations
 config = parser.config_t( gccxml_path='/home/roman/gccxml-build/bin/gccxml' )
 
 #parsing source file
-decls = parser.parse( ['core_class_hierarchy.hpp'], config )
+decls = parser.parse( ['example.hpp'], config )
 global_ns = declarations.get_global_namespace( decls )
 
 #printing all declarations found in file and its includes
