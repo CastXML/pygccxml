@@ -19,7 +19,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Gottfried Ganssauge
 
 -------------
-Version 0.8.*
+Version 0.8.2
 -------------
 
 1. Few small bug fix and unit tests have been introduced on 64 Bit platform.
