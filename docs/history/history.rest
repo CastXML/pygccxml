@@ -22,12 +22,12 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 Version 0.8.2
 -------------
 
-1. Few small bug fix and unit tests have been introduced on 64 Bit platform.
+1. Few small bug fix and unit tests have been introduced on 64 Bit platforms.
    Many thanks to Gottfried Ganssauge! He also help me to discover and fix
    some important bug in ``type_traits.__remove_alias`` function, by introducing
    small example that reproduced the error.
 
-2. Huge speed improvment has been achieved( x10 ). Allen Bierbaum suggested to
+2. Huge speed improvement has been achieved (x10). Allen Bierbaum suggested to
    save and reuse results of different `pygccxml`_ algorithms:
 
    * ``declarations.remove_alias``
@@ -50,7 +50,7 @@ Version 0.8.2
 
   * ``declarations.variable_t.access_type`` property was added.
 
-4. New  type traits have been added:
+4. New type traits have been added:
 
    * ``is_same_function``
 
