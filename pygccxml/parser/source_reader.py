@@ -255,9 +255,18 @@ class source_reader_t:
         
         @return: declarations tree
         """
-        self.logger.debug( "Reading xml file: [%s]" % gccxml_created_file )
+        assert(self.__config!=None)
 
-        declarations, files = self.__parse_gccxml_created_file( gccxml_created_file )
+        ffname = self.__file_full_name(gccxml_created_file)
+        self.logger.debug( "Reading xml file: [%s]" % gccxml_created_file )
+        declarations = self.__dcache.cached_value( ffname, self.__config )
+        if not declarations:
+            self.logger.debug( "File has not been found in cache, parsing..." )
+            declarations, files = self.__parse_gccxml_created_file( ffname )
+            self.__dcache.update( ffname, self.__config, declarations, [] )
+        else:
+            self.logger.debug( "File has not been changed, reading declarations from cache." )
+
         return declarations
 
     def read_string(self, content):
