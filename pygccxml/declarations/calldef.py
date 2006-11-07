@@ -135,6 +135,22 @@ class calldef_t( declaration.declaration_t ):
                           , doc="""The argument list.
                           @type: list of L{argument_t}""")
 
+    @property
+    def required_args(self):
+        """list of all required arguments"""
+        r_args = []
+        for arg in self.arguments:
+            if not arg.default_value:
+                r_args.append( arg )
+            else:
+                break
+        return r_args
+
+    @property
+    def optional_args(self):
+        """list of all optional arguments, the arguments that have default value"""
+        return self.arguments[ len( self.required_args ) : ]
+
     def _get_exceptions(self):
         return self._exceptions
     def _set_exceptions(self, exceptions):
