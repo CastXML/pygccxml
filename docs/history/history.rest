@@ -17,6 +17,15 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Georgiy Dernovoy
   * Darren Garnier
   * Gottfried Ganssauge
+  * Gaetan Lehmann 
+  
+-------------
+Version 0.8.*
+-------------
+
+1. ``signed char`` and ``char`` are two different types. This bug was fixed and
+   now `pygccxml`_ treats them right. Many thanks to Gaetan Lehmann for reporting 
+   the bug.
 
 -------------
 Version 0.8.2
