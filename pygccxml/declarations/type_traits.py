@@ -118,6 +118,7 @@ def is_integral( type ):
     """returns True, if type represents C++ integral type, False otherwise"""
     integral_def = create_cv_types( cpptypes.char_t() )                    \
                    + create_cv_types( cpptypes.unsigned_char_t() )         \
+                   + create_cv_types( cpptypes.signed_char_t() )           \
                    + create_cv_types( cpptypes.wchar_t() )                 \
                    + create_cv_types( cpptypes.short_int_t() )             \
                    + create_cv_types( cpptypes.short_unsigned_int_t() )    \

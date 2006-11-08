@@ -112,6 +112,12 @@ class char_t( fundamental_t ):
     def __init__( self ):
         fundamental_t.__init__( self, char_t.CPPNAME )
 
+class signed_char_t( fundamental_t ):
+    """represents signed char type"""
+    CPPNAME = 'signed char'
+    def __init__( self ):
+        fundamental_t.__init__( self, signed_char_t.CPPNAME )
+
 class unsigned_char_t( fundamental_t ):
     """represents unsigned char type"""
     CPPNAME = 'unsigned char'
@@ -265,7 +271,7 @@ class jboolean_t( java_fundamental_t ):
 FUNDAMENTAL_TYPES = {
     void_t.CPPNAME : void_t()
     , char_t.CPPNAME : char_t()
-    , 'signed ' +  char_t.CPPNAME : char_t()
+    , signed_char_t.CPPNAME : signed_char_t()
     , unsigned_char_t.CPPNAME : unsigned_char_t()
     , wchar_t.CPPNAME : wchar_t()
     , short_int_t.CPPNAME : short_int_t()

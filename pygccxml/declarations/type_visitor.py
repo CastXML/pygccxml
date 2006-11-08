@@ -24,7 +24,10 @@ class type_visitor_t(object):
         
     def visit_unsigned_char( self ):
         raise NotImplementedError()
-        
+
+    def visit_signed_char( self ):
+        raise NotImplementedError()
+    
     def visit_wchar( self ):
         raise NotImplementedError()
         

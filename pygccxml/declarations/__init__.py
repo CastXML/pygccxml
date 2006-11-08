@@ -27,6 +27,7 @@ from cpptypes import unknown_t
 from cpptypes import fundamental_t
 from cpptypes import void_t
 from cpptypes import char_t
+from cpptypes import signed_char_t
 from cpptypes import unsigned_char_t
 from cpptypes import wchar_t
 from cpptypes import short_int_t

@@ -141,6 +141,9 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_char( self ):
         pass
 
+    def visit_signed_char( self ):
+        pass
+
     def visit_unsigned_char( self ):
         pass
 
