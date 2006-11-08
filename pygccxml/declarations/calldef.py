@@ -136,6 +136,11 @@ class calldef_t( declaration.declaration_t ):
                           @type: list of L{argument_t}""")
 
     @property
+    def argument_types( self ):
+        """list of all argument types"""
+        return [ arg.type for arg in self.arguments ]
+
+    @property
     def required_args(self):
         """list of all required arguments"""
         r_args = []
