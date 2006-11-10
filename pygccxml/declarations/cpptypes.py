@@ -385,6 +385,7 @@ class array_t( compound_t ):
     def _get_size(self):
         return self._size
     def _set_size(self, size):#sometimes there is a need to update the size of the array
+        self.cache.reset()
         self._size = size
     size = property( _get_size, _set_size,
                      doc="returns array size" )
