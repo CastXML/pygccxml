@@ -187,14 +187,17 @@ def array_size(type):
     assert isinstance( nake_type, cpptypes.array_t )
     return nake_type.size
 
-def array_item_type(type):
+def array_item_type(type_):
     """returns array item type"""
-    assert is_array(type)
-    nake_type = remove_alias( type )
-    nake_type = remove_reference( nake_type )
-    nake_type = remove_cv( nake_type )
-    return nake_type.base
-
+    if is_array(type_):
+        type_ = remove_alias( type_ )
+        type_ = remove_cv( type_ )
+        return type_.base
+    elif is_pointer( type_ ):
+        return remove_pointer( type_ )
+    else:
+        assert 0
+    
 def remove_reference(type):
     """removes reference from the type definition
 
