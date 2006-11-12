@@ -44,6 +44,17 @@ class argument_t(object):
         self._default_value = default_value
         self._type = type
 
+    def clone( self, **keywd ):
+        """constructs new argument_t instance
+        
+        return argument_t( name=keywd.get( 'name', self.name )
+                           , type=keywd.get( 'type', self.type )
+                           , default_value=keywd.get( 'default_value', self.default_value )
+        """
+        return argument_t( name=keywd.get( 'name', self.name )
+                           , type=keywd.get( 'type', self.type )
+                           , default_value=keywd.get( 'default_value', self.default_value ) )
+        
     def __str__(self):
         if self.default_value==None:
             return "%s %s"%(self.type, self.name)
