@@ -106,6 +106,10 @@ def does_match_definition(given, main, secondary ):
     else:
         return False
 
+def is_bool( type_ ):
+    """returns True, if type represents C{bool}, False otherwise"""
+    return remove_alias( type_ ) in create_cv_types( cpptypes.bool_t() )
+    
 def is_void( type ):
     """returns True, if type represents C{void}, False otherwise"""
     return remove_alias( type ) in create_cv_types( cpptypes.void_t() )

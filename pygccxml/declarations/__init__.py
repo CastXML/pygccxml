@@ -114,6 +114,7 @@ from type_traits import is_class_declaration
 from type_traits import class_declaration_traits
 
 
+from type_traits import is_bool
 from type_traits import is_same
 from type_traits import is_void
 from type_traits import is_void_pointer
