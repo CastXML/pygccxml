@@ -21,7 +21,6 @@ def generate_doc():
     html_writer = HTMLWriter( docindex
                               , prj_name='pygccxml'
                               , prj_url='http://www.language-binding.net'
-                              , include_source_code=False #This will decrease the size of generated documentation
                               , show_private=False
                               , show_frames=False)
 
