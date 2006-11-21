@@ -398,7 +398,8 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_dir=header_dir
                                   , header_file=header_file
                                   , recursive=recursive)
-
+    var = variable #small alias
+    
     def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of variable declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.variable ]
@@ -409,7 +410,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-
+    vars = variables #small alias
+    
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to "calldef" declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.calldef ]
@@ -473,7 +475,8 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_dir=header_dir
                                   , header_file=header_file
                                   , recursive=recursive )
-
+    mem_fun = member_function
+    
     def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of member function declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_function ]
@@ -486,7 +489,8 @@ class scopedef_t( declaration.declaration_t ):
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
-
+    mem_funs = member_functions
+    
     def constructor( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to constructor declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.constructor ]

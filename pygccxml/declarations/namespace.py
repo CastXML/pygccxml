@@ -92,7 +92,8 @@ class namespace_t( scopedef.scopedef_t ):
                                   , header_dir=header_dir
                                   , header_file=header_file
                                   , recursive=recursive )
-
+    free_fun = free_function
+    
     def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of free function declarations, that are matched defined criterias"""
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_function ]
@@ -105,6 +106,7 @@ class namespace_t( scopedef.scopedef_t ):
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
+    free_funs = free_functions
 
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to free operator declaration, that is matched defined criterias"""
