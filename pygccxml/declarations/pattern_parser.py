@@ -112,8 +112,10 @@ class parser_t( object ):
                     to_go.append( arg )
         return answer
 
-    def join( self, name, args ):
+    def join( self, name, args, arg_separator=None ):
         """implementation details"""
+        if None is arg_separator:
+            arg_separator = ', '
         args = filter( None, args)
         args_str = ''
         if not args:
@@ -121,7 +123,7 @@ class parser_t( object ):
         elif 1 == len( args ):
             args_str = ' ' + args[0] + ' '
         else:
-            args_str = ' ' + ', '.join( args ) + ' '
+            args_str = ' ' + arg_separator.join( args ) + ' '
 
         return ''.join( [ name, self.__begin, args_str, self.__end ] )
 

@@ -72,7 +72,7 @@ def split_recursive( decl_string ):
     global __THE_PARSER
     return __THE_PARSER.split_recursive( decl_string )
 
-def join( name, args ):
+def join( name, args, arg_separator=None ):
     """returns name( argument_1, argument_2, ..., argument_n )"""
     global __THE_PARSER
-    return __THE_PARSER.join( name, args )
+    return __THE_PARSER.join( name, args, arg_separator )
