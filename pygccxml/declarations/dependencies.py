@@ -4,11 +4,17 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
+this module contains class that keeps dependency information of some declaration
 """
+
+import cpptypes
 
 class dependency_info_t( object ):
     def __init__( self, declaration, depend_on_it, access_type=None ):
         object.__init__( self )
+        #prevent recursive import
+        import class_declaration
+        assert isinstance( depend_on_it, ( class_declaration.class_t, cpptypes.type_t ) )
         self._declaration = declaration
         self._depend_on_it = depend_on_it
         self._access_type = access_type
@@ -32,3 +38,17 @@ class dependency_info_t( object ):
     def __str__( self ):
         return 'declaration "%s" depends( %s ) on "%s" ' \
                % ( self.declaration, self.access_type, self.depend_on_it )
+
+    def find_out_depend_on_declaration( self ):
+        """if declaration depends on other declaration and not on some type
+           this function will return reference to it. Otherwise None will be returned
+        """
+        #prevent recursive import
+        from pygccxml import declarations
+        
+        if isinstance( self.depend_on_it, declarations.declaration_t ):
+            return self.depend_on_it
+        base_type = declarations.base_type( declarations.remove_alias( self.depend_on_it ) )
+        if isinstance( base_type, cpptypes.declarated_t ):
+            return base_type.declaration
+        return None

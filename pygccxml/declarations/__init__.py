@@ -19,6 +19,8 @@ from class_declaration import ACCESS_TYPES
 from class_declaration import hierarchy_info_t
 from class_declaration import class_declaration_t
 
+class_types = ( class_t, class_declaration_t )
+
 from typedef import typedef_t
 
 from cpptypes import type_t
