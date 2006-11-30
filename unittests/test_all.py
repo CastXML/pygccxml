@@ -39,6 +39,7 @@ import string_traits_tester
 import declarations_cache_tester
 import has_binary_operator_traits_tester
 import algorithms_cache_tester
+import dependencies_tester
 
 def create_suite():
     testers = [
@@ -77,6 +78,7 @@ def create_suite():
         , declarations_cache_tester
         , has_binary_operator_traits_tester
         , algorithms_cache_tester
+        , dependencies_tester
     ]
 
     main_suite = unittest.TestSuite()

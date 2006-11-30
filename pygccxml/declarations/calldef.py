@@ -21,6 +21,7 @@ import cpptypes
 import algorithm
 import declaration
 import type_traits
+import dependencies
 import call_invocation
 
 class VIRTUALITY_TYPES:
@@ -269,6 +270,17 @@ class calldef_t( declaration.declaration_t ):
 
     demangled_name = property( _get_demangled_name
                               , doc="returns function demangled name. It can help you to deal with function template instantiations")
+
+    def i_depend_on_them( self ):
+        report_dependency = lambda x: dependencies.dependency_info_t( self, x )
+        answer = []
+        map( lambda arg: answer.append( report_dependency( arg.type ) )
+             , self.arguments )
+        if self.return_type:
+            answer.append( report_dependency( self.return_type ) )
+        map( lambda exception: answer.append( report_dependency( exception ) )
+             , self.exceptions )
+        return answer
 
 #Second level in hierarchy of calldef
 class member_calldef_t( calldef_t ):

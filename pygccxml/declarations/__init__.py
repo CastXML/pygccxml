@@ -6,7 +6,7 @@
 """
 contains classes that describe different C++ declarations
 """
-
+from dependencies import dependency_info_t
 from declaration import location_t
 from declaration import declaration_t
 from scopedef import scopedef_t

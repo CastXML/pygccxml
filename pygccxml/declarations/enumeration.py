@@ -113,3 +113,6 @@ class enumeration_t( declaration.declaration_t ):
         for val, num in self._values:
             x[val] = num
         return x
+
+    def i_depend_on_them( self ):
+        return []

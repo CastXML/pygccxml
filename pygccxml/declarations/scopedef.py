@@ -625,6 +625,3 @@ class scopedef_t( declaration.declaration_t ):
 
 
 
-
-
-

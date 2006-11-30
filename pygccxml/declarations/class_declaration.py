@@ -15,6 +15,7 @@ This modules contains definition for next C++ declarations:
 import scopedef
 import algorithm
 import declaration
+import dependencies
 
 class ACCESS_TYPES:
     """class that defines "access" constants"""
@@ -83,7 +84,10 @@ class class_declaration_t( declaration.declaration_t ):
     def _get__cmp__items(self):
         """implementation details"""
         return []
-
+    
+    def i_depend_on_them( self ):
+        return []
+        
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
@@ -330,3 +334,24 @@ class class_t( scopedef.scopedef_t ):
         else:
             return member.cache.access_type
 
+    def __find_out_member_dependencies( self, access_type ):
+        members = self.get_members( access_type )
+        answer = []
+        map( lambda mem: answer.extend( mem.i_depend_on_them() ), members )
+        member_ids = set( map( lambda m: id( m ), members ) )
+        for dependency in answer:
+            if id( dependency.declaration ) in member_ids:
+                dependency.access_type = access_type
+        return answer
+
+    def i_depend_on_them( self ):
+        report_dependency = lambda *args: dependencies.dependency_info_t( self, *args )
+        answer = []
+        
+        map( lambda base: answer.append( report_dependency( base.related_class, base.access_type ) )
+             , self.bases )
+        
+        map( lambda access_type: answer.extend( self.__find_out_member_dependencies( access_type ) )
+             , ACCESS_TYPES.ALL )
+             
+        return answer

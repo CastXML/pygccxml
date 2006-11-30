@@ -8,6 +8,7 @@ defines class that describes C++ typedef declaration
 """
 
 import declaration
+import dependencies
 
 class typedef_t( declaration.declaration_t ):
     """describes C++ typedef declaration"""
@@ -32,3 +33,6 @@ class typedef_t( declaration.declaration_t ):
         self._type = type
     type = property( _get_type, _set_type
                      , doc="reference to the original L{type<type_t>}"    )
+
+    def i_depend_on_them( self ):
+        return [ dependencies.dependency_info_t( self, self.type ) ]

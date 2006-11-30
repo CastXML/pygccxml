@@ -8,6 +8,7 @@ defines class that describes C++ global and member variable declaration
 """
 
 import declaration
+import dependencies
 import class_declaration
 
 class variable_t( declaration.declaration_t ):
@@ -68,3 +69,5 @@ class variable_t( declaration.declaration_t ):
             raise RuntimeError( "access_type functionality only available on member variables and not on global variables" )
         return self.parent.find_out_member_access_type( self )
 
+    def i_depend_on_them( self ):
+        return [ dependencies.dependency_info_t( self, self.type ) ]

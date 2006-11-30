@@ -135,3 +135,7 @@ class namespace_t( scopedef.scopedef_t ):
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
 
+    def i_depend_on_them( self ):
+        answer = []
+        map( lambda decl: answer.extend( decl.i_depend_on_them() ), self.declarations )
+        return answer

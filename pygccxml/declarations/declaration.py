@@ -244,3 +244,8 @@ class declaration_t( object ):
         reference to instance of L{algorithms_cache.algorithms_cache_t} class.
         """
         return self._cache
+        
+    def i_depend_on_them( self ):
+        #this method should return list of all types, declarations it depends on
+        print self
+        raise NotImplementedError()
