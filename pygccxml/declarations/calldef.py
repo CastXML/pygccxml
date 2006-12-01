@@ -271,7 +271,7 @@ class calldef_t( declaration.declaration_t ):
     demangled_name = property( _get_demangled_name
                               , doc="returns function demangled name. It can help you to deal with function template instantiations")
 
-    def i_depend_on_them( self ):
+    def i_depend_on_them( self, recursive=True ):
         report_dependency = lambda x: dependencies.dependency_info_t( self, x )
         answer = []
         map( lambda arg: answer.append( report_dependency( arg.type ) )

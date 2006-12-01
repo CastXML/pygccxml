@@ -114,5 +114,5 @@ class enumeration_t( declaration.declaration_t ):
             x[val] = num
         return x
 
-    def i_depend_on_them( self ):
+    def i_depend_on_them( self, recursive=True ):
         return []

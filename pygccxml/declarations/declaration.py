@@ -245,7 +245,7 @@ class declaration_t( object ):
         """
         return self._cache
         
-    def i_depend_on_them( self ):
+    def i_depend_on_them( self, recursive=True ):
         #this method should return list of all types, declarations it depends on
         print self
         raise NotImplementedError()
