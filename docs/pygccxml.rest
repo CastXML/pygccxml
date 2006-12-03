@@ -16,19 +16,19 @@ Introduction
 ------------
 .. include:: ./definition.rest
 
-----------------------
-What can I do with it?
-----------------------
+------------------------
+What can you do with it?
+------------------------
 Using `pygccxml`_ you can:
 
 * parse C++ source code
-* build a code generator
+* create a powerful code generator
 
-    + `Py++`_ is heavily based on `pygccxml`_
-    + generate `WSDL`_ file from sources 
-    + ...    
+  + `Py++`_ is heavily based on `pygccxml`_
+  + generate `WSDL`_ file from sources 
+  + ...    
 
-* create UML diagrams
+* generate UML diagrams
 * build code analyzer
 * ...
     
@@ -50,22 +50,35 @@ classes. It was simple task, right? If you are still curious how it looks
 Features
 --------
 
-Caching
--------
+Query interface
+---------------
+`pygccxml`_ provides simple and powerful API to query declarations tree. How many
+lines is needed to write next query?
+::
 
-Consider the following situation: you have to parse the same set of files every 
-day. There are 2 possible ways to complete the task:
+  select all free functions from the project
+  where 
+      name equal to "do_smth"
+      return type is void
+      function has two arguments
+      second argument type is int
 
-* create a header file that includes all files you need to parse
+Only 1 ( one ) line of code is needed:
 
-* parse each file separately and then join the results
+.. code-block:: Python
 
-The difference between these approaches is the caching algorithm used in the 
-second case. `pygccxml`_ supports both of them. 
+  #global_ns is the reference to declarations, which describes global( :: ) namespace
+  global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
+
+``None`` means "any type". In my opinion the code is prety clear and readable.
+
+If you want to know more about provided API read `query interface`__ document or 
+API documentation.
+
+.. __: ./query_interface.html
 
 Type traits
 -----------
-
 `pygccxml`_ provides a lot of functionality to analyze C++ types and relationship
 between them. For more information please refer to `design`__ document or API 
 documentation. Just a few names of algorithms:
@@ -82,34 +95,26 @@ documentation. Just a few names of algorithms:
 .. __: ./design.html
 
 
-Query interface
----------------
+Declaration dependencies
+------------------------
+You can query a declaration, about it dependencies - declarations it depends on.
+This is very powerful and useful feature. `Py++`_, for example, uses this 
+functionality to check that user creates Python bindings for all relevant 
+declarations. 
 
-`pygccxml`_ provides simple and powerful API to query declarations tree. I will
-try to give small example, that will prove my point. If you want to know more 
-about provided API please read `query interface`__ document or API documentation.
-Examples:
+Caching
+-------
+Consider the following situation: you have to parse the same set of files every 
+day. There are 2 possible ways to complete the task:
 
-.. code-block:: Python
+* create a header file that includes all files you need to parse
 
-  #global_ns is the reference to declarations that describes C++ namespace.
-  #In our case, instance of that declarations describes global ( :: ) namespace.
-  global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
-  
+* parse each file separately and then join the results
 
-Small explanation. Assume that ``None`` means "any type". Now the code is pretty
-readable: 
+The difference between these approaches is the caching algorithm used in the 
+second case. `pygccxml`_ supports both of them. Actually `pygccxml`_ supports
+more caching strategies, read the API documentation for more information.
 
-::
-
-  select all free functions from the project
-  where 
-      name equal to "do_smth"
-      return type is void
-      function has two arguments
-      second argument type is int
-
-.. __: ./query_interface.html
 
 -------
 License
@@ -122,10 +127,9 @@ Test environments
 -----------------
 
 `pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and 
-`Ubuntu`_. I am using `Python`_ 2.4 and `GCC-XML`_ CVS.
-Right now I am running more then 150 tests. They test almost every piece of code. 
-Also I have performance tests. Most of the time I am using "white box" testing 
-strategy.
+`Ubuntu`_. I am using `Python`_ 2.4\\2.5 and `GCC-XML`_ CVS. `pygccxml`_ has 
+more then 170 tests. They test almost every piece of code. It also has performance 
+tests. Most of the time I am using "white box" testing strategy.
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
 .. _`Py++`: ./../pyplusplus/pyplusplus.html
