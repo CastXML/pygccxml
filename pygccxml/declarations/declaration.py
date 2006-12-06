@@ -95,6 +95,7 @@ class declaration_t( object ):
         cls = self.__class__.__name__
         if cls[-2:]=="_t":
             cls = cls[:-2]
+        cls = cls.replace( '_', ' ' )
         return "%s [%s]"%(name, cls)
 
     @staticmethod

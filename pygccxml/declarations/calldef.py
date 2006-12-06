@@ -312,6 +312,7 @@ class member_calldef_t( calldef_t ):
         cls = self.__class__.__name__
         if cls[-2:]=="_t":
             cls = cls[:-2]
+        cls = cls.replace( '_', ' ' )
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
@@ -392,6 +393,7 @@ class free_calldef_t( calldef_t ):
         cls = self.__class__.__name__
         if cls[-2:]=="_t":
             cls = cls[:-2]
+        cls = cls.replace( '_', ' ' )
         return "%s [%s]"%(res, cls)
 
     def _get__cmp__call_items(self):
