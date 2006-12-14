@@ -431,6 +431,20 @@ class constructor_t( member_calldef_t ):
     def __init__( self, *args, **keywords ):
         member_calldef_t.__init__( self, *args, **keywords )
 
+    def __str__(self):
+        # Get the full name of the calldef...
+        name = algorithm.full_name(self)
+        if name[:2]=="::":
+            name = name[2:]
+        # Add the arguments...
+        args = map(lambda a: str(a), self.arguments)
+        res = "%s(%s)"%(name, ", ".join(args))
+        # Append the declaration class
+        cls = 'constructor'
+        if self.is_copy_constructor:
+            cls = 'copy ' + cls
+        return "%s [%s]"%(res, cls)
+
     def _get_is_copy_constructor(self):
         args = self.arguments
         if 1 != len( args ):
