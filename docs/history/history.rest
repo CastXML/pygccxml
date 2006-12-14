@@ -20,12 +20,39 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
   * Gaetan Lehmann 
   
 -------------
-Version 0.8.*
+Version 0.8.5
 -------------
 
 1. ``signed char`` and ``char`` are two different types. This bug was fixed and
    now `pygccxml`_ treats them right. Many thanks to Gaetan Lehmann for reporting 
    the bug.
+
+2. Declarations, read from GCC-XML generated file, could be saved in cache.
+
+3. New type traits have been added:
+ 
+   * ``is_bool``
+   
+4. Small improvment to algorithm, which extracts ``value_type``( ``mapped_type`` )
+   from STD containers.
+   
+5. Few aliases to long method name were introduced:
+
+   ================================= ==========================
+                name                       alias               
+   ================================= ==========================
+    ``scopedef_t.variable``           ``scopedef_t.var``       
+    ``scopedef_t.variables``          ``scopedef_t.vars``      
+    ``scopedef_t.member_function``    ``scopedef_t.mem_fun``   
+    ``scopedef_t.member_functions``   ``scopedef_t.mem_funs``  
+    ``scopedef_t.free_function``      ``scopedef_t.free_fun``  
+    ``scopedef_t.free_functions``     ``scopedef_t.free_funs`` 
+   ================================= ==========================
+
+6. Fixing bug related to array size and cache.
+
+7. Adding new functionality: "I depend on them". Every declarations could be asked
+   to report 
 
 -------------
 Version 0.8.2
