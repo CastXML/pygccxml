@@ -898,9 +898,9 @@ class impl_details:
         found = global_ns.decls( name=value_type_str
                                  , function=lambda decl: not isinstance( decl, calldef.calldef_t )
                                  ,  allow_empty=True )
-        if not found:
-            if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str ):
-                return cpptypes.FUNDAMENTAL_TYPES[value_type_str]
+        if not found:            
+            if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str[2:] ): #remove leading ::
+                return cpptypes.FUNDAMENTAL_TYPES[value_type_str[2:]]
             elif is_std_string( value_type_str ):
                 string_ = global_ns.typedef( '::std::string' )
                 return remove_declarated( string_ )
@@ -908,7 +908,24 @@ class impl_details:
                 string_ = global_ns.typedef( '::std::wstring' )
                 return remove_declarated( string_ )
             else:
-                return None
+                value_type_str = value_type_str[2:]#removing leading ::
+                has_const = value_type_str.startswith( 'const ' )
+                if has_const:
+                    value_type_str = value_type_str[ len('const '): ]
+                has_pointer = value_type_str.endswith( '*' )
+                if has_pointer:
+                    value_type_str = value_type_str[:-1]
+                found = impl_details.find_value_type( global_ns, value_type_str )
+                if not found:
+                    return None
+                else:
+                    if isinstance( found, class_declaration.class_types ):
+                        found = cpptypes.declarated_t( found )
+                    if has_const:
+                        found = cpptypes.const_t( found )
+                    if has_pointer:
+                        found = cpptypes.pointer_t( found )
+                    return found
         if len( found ) == 1:
             return found[0]
         else:

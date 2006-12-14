@@ -356,3 +356,5 @@ class class_t( scopedef.scopedef_t ):
                  , ACCESS_TYPES.ALL )
              
         return answer
+
+class_types = ( class_t, class_declaration_t )
