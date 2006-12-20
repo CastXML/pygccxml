@@ -1,0 +1,69 @@
+Hello!
+
+I'm pleased to announce the 0.8.5 release of pygccxml. 
+
+What is pygccxml?
+=================
+
+"...The purpose of the GCC-XML extension is to generate an XML description of a 
+C++ program from GCC's internal representation. "
+
+-- Introduction to GCC-XML
+
+The purpose of pygccxml is to read a generated file and provide a simple 
+framework to navigate C++ declarations, using Python classes.
+
+Where is pygccxml?
+==================
+
+Site: http://language-binding.net/pygccxml/pygccxml.html
+
+Download: http://language-binding.net/pygccxml/download.html
+
+What's new?
+===========
+
+Features 
+--------
+
+* Added new functionality: "I depend on them". Every declaration can report 
+  types and declarations it depends on. This functionality helps code generators.
+  For example, Py++, the Boost.Python code generator, uses it to verify that all 
+  relevant declarations were exposed.
+
+* Declarations, read from GCC-XML generated file, could be saved in cache.
+
+Small features
+--------------
+* New type traits have been added:
+
+   * is_bool
+
+* Small improvement to algorithm, which extracts value_type
+  ( mapped_type ) from "std" containers.
+
+* Few aliases to long method name were introduced:
+
+   ============================= ==========================
+               Name                        Alias
+   ============================= ==========================
+    scopedef_t.variable           scopedef_t.var
+    scopedef_t.variables          scopedef_t.vars
+    scopedef_t.member_function    scopedef_t.mem_fun
+    scopedef_t.member_functions   scopedef_t.mem_funs
+    scopedef_t.free_function      scopedef_t.free_fun
+    scopedef_t.free_functions     scopedef_t.free_funs
+   ============================= ==========================
+
+Bug fixes
+---------
+
+* "signed char" and "char" are two different types. This bug was fixed and
+  now pygccxml treats them right. Many thanks to Gaetan Lehmann for reporting
+  the bug.
+
+* Fixing bug related to array size and cache.
+
+
+For a more complete list, please see the news:
+http://language-binding.net/pygccxml/history/history.html

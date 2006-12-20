@@ -23,7 +23,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 Version 0.8.5
 -------------
 
-1. Adding new functionality: "I depend on them". Every declarations can report
+1. Added new functionality: "I depend on them". Every declaration can report
    types and declarations it depends on.
 
 2. ``signed char`` and ``char`` are two different types. This bug was fixed and
