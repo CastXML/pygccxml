@@ -18,7 +18,7 @@ if 'roman' in getpass.getuser():
     if sys.platform == 'win32':
         gccxml_path = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
     else:
-        gccxml_path = '/home/roman/gccxml-build/bin/gccxml'
+        gccxml_path = '/home/roman/gccxml/bin/gccxml'
 
 try:
     import pygccxml

@@ -57,11 +57,12 @@ class default_argument_patcher_t( patcher_base_t ):
         type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )        
         if not declarations.is_enum( type_ ):
             return False
-        return type_.declaration.has_value_name( arg.default_value )
+        enum_type = declarations.enum_declaration( type_ )
+        return enum_type.has_value_name( arg.default_value )
 
     def __fix_unqualified_enum( self, func, arg):
         type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )
-        enum_type = type_.declaration
+        enum_type = declarations.enum_declaration( type_ )
         return self.__join_names( enum_type.parent.decl_string, arg.default_value )
 
     def __is_invalid_integral(self, func, arg):

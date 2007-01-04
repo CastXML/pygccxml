@@ -394,7 +394,7 @@ def is_base_and_derived( based, derived ):
 
     all_derived = None
     if isinstance( derived, class_declaration.class_t ):
-        all_derived = ( derived )
+        all_derived = ( [derived] )
     else: #tuple
         all_derived = derived
     
