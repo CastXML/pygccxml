@@ -129,6 +129,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
                                                  , type=declarations.class_t
                                                  , name='derived' )
         self.failUnless( base and derived and declarations.is_base_and_derived( base, derived ) )
+        self.failUnless( base and derived and declarations.is_base_and_derived( base, ( derived, derived ) ) )
 
         unrelated1 = declarations.find_declaration( ns.declarations
                                                     , type=declarations.class_t

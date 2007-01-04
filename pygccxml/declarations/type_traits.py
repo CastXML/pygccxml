@@ -390,13 +390,20 @@ def has_public_destructor(type):
 def is_base_and_derived( based, derived ):
     """returns True, if there is "base and derived" relationship between classes, False otherwise"""
     assert isinstance( based, class_declaration.class_t )
-    assert isinstance( derived, class_declaration.class_t )
+    assert isinstance( derived, ( class_declaration.class_t, tuple ) )
 
-    for base_desc in derived.recursive_bases:
-        if base_desc.related_class == based:
-            return True
+    all_derived = None
+    if isinstance( derived, class_declaration.class_t ):
+        all_derived = ( derived )
+    else: #tuple
+        all_derived = derived
+    
+    for derived_cls in all_derived:
+        for base_desc in derived_cls.recursive_bases:
+            if base_desc.related_class == based:
+                return True
     return False
-
+    
 def has_any_non_copyconstructor( type):
     """returns True, if class has any non "copy constructor", otherwise False"""
     assert isinstance( type, class_declaration.class_t )
