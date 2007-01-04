@@ -36,19 +36,24 @@ GCC-XML
 There are few different ways to install GCC-XML on your system:
 
 1. If you use Linux, than I am almost sure your system has "gccxml" package.
-   Consider to install it using "native"(rpm, deb, portage) packaging system.
+   Consider to install it using "native"(rpm, deb, portage) packaging system. 
 
-2. Install from source code. See `instructions`_ provided by Brad King, the author
-   of `GCC-XML`_.
+.. line separator
+
+2. Another option is to install it from the source code. See `instructions`_ 
+   provided by Brad King, the author of `GCC-XML`_. Installation from sources
+   is supported for Windows, Linux and Mac platforms. 
 
 .. _`instructions` : http://gccxml.org/HTML/Install.html
 
-3. You can use `GCC-XML`_ installer created by me. Go to download page and get
-   "gccxml_xxx_installer.zip" file. "xxx" is a name of your OS: Windows or Linux.
-   You will find installation instructions within the file. The setup is basically
-   small Python script, which installs `GCC-XML`_ to the specified directory.
-   It works pretty well for me. You don't have to download CMake build system
-   or something else.
+3. You can use `GCC-XML`_ installer created by me. Go to `download page`_ and get
+   `"gccxml_installer.zip"`_ file. You will find installation instructions within 
+   the file. The setup is basically small Python script, which installs `GCC-XML`_ 
+   to the specified directory. It works pretty well for me on Linux and Windows. 
+   You don't have to download CMake build system or anything else.
+
+.. _`download page` : http://sourceforge.net/project/showfiles.php?group_id=118209&package_id=146545
+.. _`"gccxml_installer.zip"` : http://sourceforge.net/project/showfiles.php?group_id=118209&package_id=146545
 
 pygccxml
 --------
