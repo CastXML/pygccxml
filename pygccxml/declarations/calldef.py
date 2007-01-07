@@ -105,13 +105,14 @@ class argument_t(object):
 
 class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
-    def __init__( self, name='', arguments=None, exceptions=None, return_type=None, has_extern=False ):
+    def __init__( self, name='', arguments=None, exceptions=None, return_type=None, has_extern=False, does_throw=True ):
         declaration.declaration_t.__init__( self, name )
         if not arguments:
             arguments = []
         self._arguments = arguments
         if not exceptions:
             exceptions = []
+        self._does_throw = does_throw
         self._exceptions = exceptions
         self._return_type = return_type
         self._has_extern = has_extern
@@ -126,6 +127,7 @@ class calldef_t( declaration.declaration_t ):
         items = [ self.arguments
                   , self.return_type
                   , self.has_extern
+                  , self.does_throw
                   , self._sorted_list( self.exceptions ) ]
         items.extend( self._get__cmp__call_items() )
         return items
@@ -136,6 +138,7 @@ class calldef_t( declaration.declaration_t ):
         return self.return_type == other.return_type \
                and self.arguments == other.arguments \
                and self.has_extern == other.has_extern \
+               and self.does_throw == other.does_throw \
                and self._sorted_list( self.exceptions ) \
                    == other._sorted_list( other.exceptions )
 
@@ -167,6 +170,16 @@ class calldef_t( declaration.declaration_t ):
     def optional_args(self):
         """list of all optional arguments, the arguments that have default value"""
         return self.arguments[ len( self.required_args ) : ]
+
+    def _get_does_throw(self):
+        return self._does_throw
+    def _set_does_throw(self, does_throw):
+        self._does_throw = does_throw
+    does_throw = property( _get_does_throw, _set_does_throw,
+                           doc="""If False, than function does not throw any exception.
+                           In this case, function was declared with empty throw 
+                           statement.
+                           """)
 
     def _get_exceptions(self):
         return self._exceptions
