@@ -322,7 +322,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         if isinstance( calldef, declaration_t ):
             calldef.name = attrs.get(XML_AN_NAME, '')
             calldef.has_extern = attrs.get( XML_AN_EXTERN, False )
-            throw_stmt = attrs.get( XML_AN_THROW, "" )
+            throw_stmt = attrs.get( XML_AN_THROW, None )
             if None is throw_stmt:
                 calldef.does_throw = True
                 calldef.exceptions = []
