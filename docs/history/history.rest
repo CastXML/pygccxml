@@ -18,6 +18,27 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Darren Garnier
 * Gottfried Ganssauge
 * Gaetan Lehmann
+* Martin Preisler
+
+
+-------------
+Version 0.8.*
+-------------
+
+1. ``is_base_and_derived`` function was changed. The second argument could be 
+   a tuple, which contains classes. Function returns ``True`` if at least one
+   class derives from the base one.
+
+.. line separator
+
+2. Class ``calldef_t`` has new instance variable - ``does_throw``. It describes
+   whether the function throws any exception or not.
+
+.. line separator
+
+3. Bug fixes: small bug was fixed in functionality that corrects GCC-XML reported
+   function default arguments. Reference to "enum" declaration extracted properly.
+   Many thanks to Martin Preisler for reporting the bug.
 
 -------------
 Version 0.8.5
