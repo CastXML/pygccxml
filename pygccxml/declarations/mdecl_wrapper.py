@@ -10,6 +10,8 @@ as it was one declaration.
 The L{class<mdecl_wrapper_t>} allows user to not write "for" loops within the code.
 """
 
+import os
+
 class call_redirector_t( object ):
     """Internal class used to call some function of objects"""
     def __init__( self, name, decls ):
@@ -65,8 +67,10 @@ class mdecl_wrapper_t( object ):
 
     def __ensure_attribute( self, name ):
         invalid_decls = filter( lambda d: not hasattr( d, name ), self.declarations )
+        sep = os.linesep + '    '
         if invalid_decls:
-            raise RuntimeError( "Not all declarations have '%s' attribute." % name )
+            raise RuntimeError( "Next declarations don't have '%s' attribute: %s" 
+                                % ( name, sep.join( map( str, invalid_decls ) ) ) )
 
     def __setattr__( self, name, value ):
         """Updates the value of attribute on all declarations.
