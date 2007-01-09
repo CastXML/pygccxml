@@ -80,14 +80,22 @@ class class_declaration_t( declaration.declaration_t ):
     def __init__( self, name='' ):
         """creates class that describes C++ class declaration( and not definition )"""
         declaration.declaration_t.__init__( self, name )
-
+        self._aliases = []
+        
     def _get__cmp__items(self):
         """implementation details"""
         return []
     
     def i_depend_on_them( self, recursive=True ):
         return []
-        
+    
+    def _get_aliases(self):
+        return self._aliases
+    def _set_aliases( self, new_aliases ):
+        self._aliases = new_aliases
+    aliases = property( _get_aliases, _set_aliases
+                         , doc="List of L{aliases<typedef_t>} to this instance")
+
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 

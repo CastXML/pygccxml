@@ -35,7 +35,7 @@ def bind_aliases( decls ):
         if not isinstance( type_, declarated_t ):
             continue
         cls_inst = type_.declaration
-        if not isinstance( cls_inst, class_t ):
+        if not isinstance( cls_inst, class_types ):
             continue
         if id( cls_inst ) not in visited:
             visited.add( id( cls_inst ) )

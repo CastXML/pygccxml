@@ -199,6 +199,22 @@ all_container_traits = \
 ]
 """list, that contains all STD container traits classes"""
 
+sequential_container_traits = \
+[
+    list_traits
+    , deque_traits
+    , queue_traits
+    , priority_queue
+    , vector_traits
+    , stack_traits
+    , set_traits
+    , hash_set_traits
+    , multiset_traits
+    , hash_multiset_traits
+]
+"""list, that contains all STD container traits classes"""
+
+
 import templates
 import call_invocation
 
