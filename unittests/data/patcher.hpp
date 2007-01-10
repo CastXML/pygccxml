@@ -6,6 +6,8 @@
 #ifndef __patcher_hpp__
 #define __patcher_hpp__
 
+#include <vector>
+
 namespace ns1{ namespace ns2{
 
 enum fruit{ apple, orange };
@@ -45,6 +47,11 @@ typedef original_name alias;
  
 void typedef__func( const typedef_::alias& position = typedef_::alias() );
 
+namespace osg{
+    struct node{};
+    node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
+    
+}
 
 /*struct default_arg_t{};*/
 /*default_arg_t create_default_argument();*/
