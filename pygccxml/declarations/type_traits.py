@@ -555,7 +555,10 @@ class __is_convertible_t:
         if is_reference( target ) and is_const( target.base ) and is_same( source, target.base.base ):
             return True #X => const X&
         if is_same( target, cpptypes.pointer_t( cpptypes.void_t() ) ):
-            return True #X => void*
+            if is_integral( source ) or is_enum( source ):
+                return False
+            else:
+                return True #X => void*
         if is_pointer( source ) and is_pointer( target ):
             if is_const( target.base ) and is_same( source.base, target.base.base ):
                 return True#X* => const X*
@@ -763,31 +766,31 @@ class __is_convertible_t:
                and not is_void( target ):
                 return True # enum could be converted to any integral type
 
-            assert isinstance( source.declaration, class_declaration.class_t )
-            source_inst = source.declaration
-            #class instance could be convertible to something else if it has operator
-            casting_operators = algorithm.find_all_declarations( source_inst.declarations
-                                                                 , type=calldef.casting_operator_t
-                                                                 , recursive=False )
-            if casting_operators:
-                for operator in casting_operators:
-                    if is_convertible( operator.return_type, target ):
-                        return True
+            if isinstance( source.declaration, class_declaration.class_t ):
+                source_inst = source.declaration
+                #class instance could be convertible to something else if it has operator
+                casting_operators = algorithm.find_all_declarations( source_inst.declarations
+                                                                     , type=calldef.casting_operator_t
+                                                                     , recursive=False )
+                if casting_operators:
+                    for operator in casting_operators:
+                        if is_convertible( operator.return_type, target ):
+                            return True
 
         #may be target is class too, so in this case we should check whether is
         #has constructor from source
         if isinstance( target, cpptypes.declarated_t ):
-            assert isinstance( target.declaration, class_declaration.class_t )
-            constructors = algorithm.find_all_declarations( target.declaration.declarations
-                                                            , type=calldef.constructor_t
-                                                            , recursive=False )
-            if constructors:
-                for constructor in constructors:
-                    if 1 != len( constructor.arguments ):
-                        continue
-                    #TODO: add test to check explicitness
-                    if is_convertible( source, constructor.arguments[0].type ):
-                        return True
+            if isinstance( target.declaration, class_declaration.class_t ):
+                constructors = algorithm.find_all_declarations( target.declaration.declarations
+                                                                , type=calldef.constructor_t
+                                                                , recursive=False )
+                if constructors:
+                    for constructor in constructors:
+                        if 1 != len( constructor.arguments ):
+                            continue
+                        #TODO: add test to check explicitness
+                        if is_convertible( source, constructor.arguments[0].type ):
+                            return True
 
         return False
 
