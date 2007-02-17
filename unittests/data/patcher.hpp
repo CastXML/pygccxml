@@ -6,6 +6,7 @@
 #ifndef __patcher_hpp__
 #define __patcher_hpp__
 
+#include <string>
 #include <vector>
 
 namespace ns1{ namespace ns2{
