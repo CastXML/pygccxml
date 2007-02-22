@@ -6,6 +6,8 @@
 //Almost all test cases have been taken
 //from boost.type_traits (http://www.boost.org) library.
 
+#include <string>
+
 #define TYPE_PERMUTATION( BASE, NAME )                        \
     typedef BASE NAME##_t;                                     \
     typedef BASE const NAME##_const_t;                         \
@@ -32,6 +34,24 @@ namespace no{
     typedef void(*function_t)();
     typedef void (some_struct_t::*member_function_t)();
 } }
+
+namespace is_noncopyable{
+
+namespace detail{
+    struct x{
+    private:
+        x( const x& );
+        x& operator=(const x& );
+    };
+}    
+
+namespace yes{
+    typedef detail::x x;
+}
+namespace no{
+    typedef std::string string_type;
+}
+}
 
 namespace is_integral{
 namespace yes{   

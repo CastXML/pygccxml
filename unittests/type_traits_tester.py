@@ -101,7 +101,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_is_fundamental(self):
         self.__test_type_category( 'is_fundamental', declarations.is_fundamental )
-        
+
+    def test_is_noncopyable(self):
+        self.__test_type_category( 'is_noncopyable', declarations.is_noncopyable )
+
     def test_has_trivial_constructor(self):
         self.__test_type_category( 'has_trivial_constructor', declarations.has_trivial_constructor )
 

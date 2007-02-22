@@ -823,6 +823,8 @@ def __is_noncopyable_single( class_ ):
 
 def is_noncopyable( class_ ):
     """returns True, if class is noncopyable, False otherwise"""
+    class_ = class_traits.get_declaration( class_ )
+    
     if class_.class_type == class_declaration.CLASS_TYPES.UNION:
         return False
     for base_desc in class_.recursive_bases:
