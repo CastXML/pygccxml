@@ -41,6 +41,12 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
             cls = demangled.class_( "item_t<25214903917l, 11l, 2147483648l>" )
             self.failUnless( cls._name == 'item_t<25214903917,11,2147483648>' )
 
+    def test_free_function( self ):
+        f = self.global_ns.free_functions('set_a', allow_empty=True)
+        if not f:
+            return 
+        f = f[0]
+        self.failUnless( f.mangled )
 
 class tester_32_t( tester_impl_t ):
     def __init__(self, *args):

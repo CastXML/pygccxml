@@ -24,4 +24,6 @@ struct buggy{
 
 }
 
+void set_a();
+
 #endif//__demangled_hpp
