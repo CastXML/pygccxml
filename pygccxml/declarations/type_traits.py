@@ -802,8 +802,13 @@ def __is_noncopyable_single( class_ ):
     """implementation details"""
     #It is not enough to check base classes, we should also to check
     #member variables.
-    #if is_std_string( class_ ) or is_std_wstring( class_ ):
-    #    return False
+    
+    if has_trivial_copy( class_ ) \
+       and has_public_constructor( class_ ) \
+       and has_public_assign( class_ ) \
+       and has_public_destructor( class_ ):
+        return False
+    
     mvars = filter( lambda x: isinstance( x, variable.variable_t )
                     , class_.declarations )
     for mvar in mvars:
