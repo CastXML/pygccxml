@@ -134,6 +134,8 @@ from type_traits import is_convertible
 from type_traits import is_noncopyable
 from type_traits import is_std_string
 from type_traits import is_std_wstring
+from type_traits import is_std_ostream
+from type_traits import is_std_wostream
 
 from type_traits import is_unary_operator
 from type_traits import is_binary_operator

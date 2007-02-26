@@ -105,6 +105,12 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_is_noncopyable(self):
         self.__test_type_category( 'is_noncopyable', declarations.is_noncopyable )
 
+    def test_is_std_ostream(self):
+        self.__test_type_category( 'is_std_ostream', declarations.is_std_ostream )
+
+    def test_is_std_wostream(self):
+        self.__test_type_category( 'is_std_wostream', declarations.is_std_wostream )
+
     def test_has_trivial_constructor(self):
         self.__test_type_category( 'has_trivial_constructor', declarations.has_trivial_constructor )
 

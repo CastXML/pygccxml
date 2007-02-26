@@ -1008,8 +1008,30 @@ def is_std_wstring( type ):
         type = remove_alias( type )
         return remove_cv( type ).decl_string in decl_strings
 
+def is_std_ostream( type ):
+    """returns True, if type represents C++ std::string, False otherwise"""
+    decl_strings = [
+        '::std::basic_ostream<char, std::char_traits<char> >'
+        , '::std::basic_ostream<char,std::char_traits<char> >'
+        , '::std::ostream' ]
+    if isinstance( type, types.StringTypes ):
+        return type in decl_strings
+    else:
+        type = remove_alias( type )
+        return remove_cv( type ).decl_string in decl_strings
+    
 
-
+def is_std_wostream( type ):
+    """returns True, if type represents C++ std::string, False otherwise"""
+    decl_strings = [
+        '::std::basic_ostream<wchar_t, std::char_traits<wchar_t> >'
+        , '::std::basic_ostream<wchar_t,std::char_traits<wchar_t> >'
+        , '::std::wostream' ]
+    if isinstance( type, types.StringTypes ):
+        return type in decl_strings
+    else:
+        type = remove_alias( type )
+        return remove_cv( type ).decl_string in decl_strings
 
 
 

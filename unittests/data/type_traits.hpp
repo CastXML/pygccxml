@@ -7,6 +7,7 @@
 //from boost.type_traits (http://www.boost.org) library.
 
 #include <string>
+#include <iostream>
 
 #define TYPE_PERMUTATION( BASE, NAME )                        \
     typedef BASE NAME##_t;                                     \
@@ -17,6 +18,25 @@ struct some_struct_t{
     void do_smth();
     int member;
 };
+
+namespace is_std_ostream{
+namespace yes{
+    typedef std::ostream ostream_type;
+}
+namespace no{
+    typedef int int__;
+}
+}
+
+namespace is_std_wostream{
+namespace yes{
+    typedef std::wostream wostream_type;
+}
+namespace no{
+    typedef int int__;
+}
+}
+
 
 struct incomplete_type;
 
