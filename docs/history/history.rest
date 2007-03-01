@@ -31,7 +31,7 @@ Version 0.8.*
 
 .. line separator
 
-2. Class ``calldef_t`` has new instance variable - ``does_throw``. It describes
+2. Class ``calldef_t`` has property - ``does_throw``. It describes
    whether the function throws any exception or not.
 
 .. line separator
@@ -39,6 +39,47 @@ Version 0.8.*
 3. Bug fixes: small bug was fixed in functionality that corrects GCC-XML reported
    function default arguments. Reference to "enum" declaration extracted properly.
    Many thanks to Martin Preisler for reporting the bug.
+
+.. line separator
+
+4. New type traits have been added:
+
+   * ``is_std_ostream``
+   * ``is_std_wostream``
+
+.. line separator
+ 
+5. C++ does not define implicit conversion between an integral type and ``void*``.  
+   ``declarations.is_convertible`` type traitswas fixed.
+
+.. line separator
+
+6. ``declarations.is_noncopyable`` type traits implementation was slightly changed.
+   Now it checks explicitly that class has:
+   
+   * default constructor
+   * copy constructor
+   * ``operator=``
+   * destructor
+
+   If all listed functions exists, than the algorithm returns ``False``, otherwise
+   it will continue to execute previous logic.
+   
+.. line separator
+
+7. ``declarations.class_declaration_t`` has new property - ``aliases``. This is 
+   a list of all aliases to the class declaration.
+
+.. line separator
+   
+8. The message of the exception, which is raised from ``declarations.mdecl_wrapper_t`` 
+   class was improved and now clearly explains what the problem is.
+
+.. line separator  
+
+9. Small improvment was done for ``parser.default_argument_patcher_t`` class.
+   ``enum`` extraction is done using functionality provided by type traits module.
+
 
 -------------
 Version 0.8.5
