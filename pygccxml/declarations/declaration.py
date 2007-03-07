@@ -6,8 +6,10 @@
 """
 defines 2 important classes
 
-This module defines base class for all classes, that describes C++ declaration
-and class that defines C++ declaration location.
+This module defines:
+* declaration_t - base class for all pygccxml defined classes, which describe
+  a C++ declaration
+* location_t - provides information about physical location of the declaration
 """
 
 import algorithm
@@ -15,11 +17,7 @@ import templates
 import algorithms_cache
 
 class location_t(object):
-    """provides information about the location of the declaration within the source file.
-
-    The header file name and the line number of the declaration can be
-    accessed via the attributes C{file_name} and C{line}.
-    """
+    """provides information about the location of the declaration within the source file"""
 
     def __init__(self, file_name='', line=-1 ):
         self._file_name = file_name
@@ -44,29 +42,20 @@ class location_t(object):
     def _set_file_name(self, new_file_name):
         self._file_name = new_file_name
     file_name = property( _get_file_name, _set_file_name
-                          , doc="""The full file name of the header in which the declaration was found.
-                          @type: str
-                          """)
+                          , doc="""absolute source file name, type string""" )
 
     def _get_line( self ):
         return self._line
     def _set_line( self, new_line ):
         self._line = new_line
-    line = property( _get_line, _set_line
-                     , doc="""The line number where the declaration was found
-                     @type: int
-                     """)
+    line = property( _get_line, _set_line, doc="""line number, type int""")
 
     def as_tuple( self ):
-        """Return the header file name and the line number.
-
-        @returns: Returns a 2-tuple (file name, line number).
-        """
+        """return tuple(self.file_name, self.line)"""
         return (self.file_name, self.line)
 
 class declaration_t( object ):
-    """Base class for all classes that represent a C++ declaration.
-    """
+    """base class for all classes that represent a C++ declaration"""
 
     def __init__( self, name='', location=None, is_artificial=False, mangled=None, demangled=None ):
         self._name = name
@@ -245,8 +234,8 @@ class declaration_t( object ):
         reference to instance of L{algorithms_cache.algorithms_cache_t} class.
         """
         return self._cache
-        
+
     def i_depend_on_them( self, recursive=True ):
-        #this method should return list of all types, declarations it depends on
+        """return list of all types and declarations the declaration depends on"""
         print self
         raise NotImplementedError()
