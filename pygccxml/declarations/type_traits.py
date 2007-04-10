@@ -848,13 +848,16 @@ def is_noncopyable( class_ ):
         if __is_noncopyable_single( base_desc.related_class ):
             return True
 
-    if not has_trivial_copy( class_ ) \
-       or not has_public_constructor( class_ )\
-       or class_.is_abstract \
-       or ( has_destructor( class_ ) and not has_public_destructor( class_ ) ):
+    if class_.is_abstract:
         return True
-
-    return __is_noncopyable_single( class_ )
+    elif not has_trivial_copy( class_ ):
+        return True
+    elif not has_public_constructor( class_ ):
+        return True
+    elif has_destructor( class_ ) and not has_public_destructor( class_ ):
+        return True
+    else:
+        return __is_noncopyable_single( class_ )
 
 
 def is_defined_in_xxx( xxx, cls ):
