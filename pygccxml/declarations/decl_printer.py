@@ -109,7 +109,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
     def visit_constructor( self ):
         self.print_decl_header()
-
+        if self.__print_details:
+            self.writer( ' ' * ( self.level + 1 ) * self.INDENT_SIZE
+                         + 'copy constructor: ' + str(self.__inst.is_copy_constructor) 
+                         + os.linesep )
+        
     def visit_destructor( self ):
         self.print_decl_header()
 

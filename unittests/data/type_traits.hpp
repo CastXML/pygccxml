@@ -63,6 +63,17 @@ namespace detail{
         x( const x& );
         x& operator=(const x& );
     };
+    
+    struct y_type{
+        union {
+            struct {
+                float x, y, z;
+            };
+            float val[3];
+        };
+
+        static const y_type zero;
+    };
 }    
 
 namespace yes{
@@ -70,6 +81,7 @@ namespace yes{
 }
 namespace no{
     typedef std::string string_type;
+    typedef detail::y_type y_type;    
 }
 }
 
