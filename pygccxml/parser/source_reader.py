@@ -8,7 +8,12 @@ import sys
 import config
 import pygccxml.utils
 import linker
-import scanner
+
+try: #select faster xml parser
+    from etree_scanner import etree_scanner_t as scanner_t
+except:
+    from scanner import scanner_t
+
 import declarations_cache
 import patcher
 from pygccxml.declarations import *
@@ -308,7 +313,7 @@ class source_reader_t:
             return file_path
         
     def __parse_gccxml_created_file( self, gccxml_file ):
-        scanner_ = scanner.scanner_t( gccxml_file, self.__decl_factory )
+        scanner_ = scanner_t( gccxml_file, self.__decl_factory )
         scanner_.read()
         decls = scanner_.declarations()
         types = scanner_.types()

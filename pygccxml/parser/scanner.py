@@ -165,6 +165,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def members(self):
         return self.__members
 
+    def startElementNS(self, name, qname, attrs):
+        return self.startElement( name[1], attrs )
+    
+    def endElementNS(self, name, qname):
+        return self.endElement( name[1] )
+    
     def startElement(self, name, attrs):
         try:
             if name not in self.__readers:
