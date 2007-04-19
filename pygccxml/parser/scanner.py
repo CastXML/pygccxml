@@ -139,6 +139,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     
     def read( self ):
         xml.sax.parse( self.gccxml_file, self )
+    
+    def endDocument( self ):
         #updating membership
         members_mapping = {}
         for gccxml_id, members in self.__members.iteritems():
