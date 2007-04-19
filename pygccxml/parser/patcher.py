@@ -25,7 +25,7 @@ class default_argument_patcher_t( patcher_base_t ):
     def patch_it(self):
         for decl in declarations.make_flatten( self.decls ):
             if not isinstance( decl, declarations.calldef_t ):
-                continue
+                continue           
             for arg in decl.arguments:
                 if not arg.default_value:
                     continue
@@ -67,7 +67,13 @@ class default_argument_patcher_t( patcher_base_t ):
 
     def __is_invalid_integral(self, func, arg):
         type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )        
-        return declarations.is_integral( type_ )
+        if not declarations.is_integral( type_ ):
+            return False
+        try:
+            int( arg.default_value )
+            return False
+        except:
+            return True
 
     def __fix_invalid_integral(self, func, arg):
         try:
@@ -113,14 +119,9 @@ class default_argument_patcher_t( patcher_base_t ):
         enums = filter( lambda decl: isinstance( decl, declarations.enumeration_t )
                         , scope.declarations )
         for enum_decl in enums:
-            valnames = map(lambda x: x[0], enum_decl.values)
-            valnums = map(lambda x: x[1], enum_decl.values)
-            if default_value in valnames:
+            if enum_decl.has_value_name( default_value ):
                 return enum_decl
-            if default_value in valnums:
-                return enum_decl
-        else:
-            return None
+        return None
 
     def __is_double_call( self, func, arg ):
         call_invocation = declarations.call_invocation
