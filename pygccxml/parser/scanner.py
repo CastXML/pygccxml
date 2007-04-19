@@ -182,23 +182,21 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             if name in self.deep_declarations:
                 self.__inst = obj
             self.__read_access( attrs )
+            element_id = attrs.get(XML_AN_ID, None)
             if isinstance( obj, declaration_t ):
                 self.__update_membership( attrs )
-                self.__declarations[ attrs[XML_AN_ID] ] = obj
+                self.__declarations[ element_id ] = obj
                 if not isinstance( obj, namespace_t ):
                     self.__read_location( obj, attrs )
-                if isinstance( obj, scopedef_t):
-                    #deprecated 
-                    #self.__read_members( obj, attrs )
-                    if isinstance( obj, class_t ):
-                        self.__read_bases( obj, attrs )
+                if isinstance( obj, class_t):
+                    self.__read_bases( obj, attrs )
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled( obj, attrs)
                 self.__read_demangled( obj, attrs)
             elif isinstance( obj, type_t ):
-                self.__types[ attrs[XML_AN_ID] ] = obj
+                self.__types[ element_id ] = obj
             elif isinstance( obj, types.StringTypes ):
-                self.__files[ attrs[XML_AN_ID] ] = obj
+                self.__files[ element_id ] = obj
             else:
                 self.logger.warning( 'Unknown object type has been found.'
                                      + ' Please report this bug to pygccxml development team.' )

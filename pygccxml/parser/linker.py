@@ -23,9 +23,9 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         return self.__inst
     def _set_inst(self, inst):
         self.__inst = inst
-        if isinstance( self.__inst, declaration_t ):
-            if self.__inst.location is not None:
-                self.__inst.location.file_name = self.__files[self.__inst.location.file_name]
+        #use inst, to reduce attribute access time
+        if isinstance( inst, declaration_t ) and inst.location:
+            inst.location.file_name = self.__files[inst.location.file_name]
     instance = property( _get_inst, _set_inst )
 
     def __link_type(self, type_id):
