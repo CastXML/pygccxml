@@ -6,8 +6,8 @@
 import os
 import sys
 import time
-import pstats
-import cProfile
+import hotshot
+import hotshot.stats
 import autoconfig
 from pygccxml import *
 
@@ -85,7 +85,8 @@ def profile_project2():
 
 def parse_big_file():
     reader = parser.project_reader_t( parser.config_t(gccxml_path=autoconfig.gccxml_path) )
-    
+    reader.read_files([parser.create_gccxml_fc( os.path.join( autoconfig.data_directory, 'big.xml' ) )])
+    reader.read_files([parser.create_gccxml_fc( os.path.join( autoconfig.data_directory, 'big.xml' ) )])
     reader.read_files([parser.create_gccxml_fc( os.path.join( autoconfig.data_directory, 'big.xml' ) )])
     
 
@@ -95,15 +96,19 @@ if __name__ == "__main__":
     #~ test_source_on_include_std_dot_hpp()
     #~ test_project_on_include_std_dot_hpp()
     print 'running'
-    cProfile.run('parse_big_file()', 'pygccxml.profile')    
+    prof = hotshot.Profile( 'parser.prof' )
+    prof.runcall(parse_big_file )
+    stats = hotshot.stats.load("parser.prof")
+    stats.sort_stats('time', 'calls')
+    stats.print_stats(30)
     print 'running - done'
-    print 'loading file'
-    pdata = pstats.Stats('pygccxml.profile')
-    print 'loading file - done'
-    print 'striping dirs'
-    pdata.strip_dirs()
-    print 'striping dirs - done'
-    print 'sorting stats'
-    pdata.sort_stats('cumulative', 'time').print_stats(476)
-    print 'sorting stats - done'
+    #~ print 'loading file'
+    #~ pdata = pstats.Stats('pygccxml.profile')
+    #~ print 'loading file - done'
+    #~ print 'striping dirs'
+    #~ pdata.strip_dirs()
+    #~ print 'striping dirs - done'
+    #~ print 'sorting stats'
+    #~ pdata.sort_stats('time').print_stats(476)
+    #~ print 'sorting stats - done'
     #pdata.print_callers('find_all_declarations')

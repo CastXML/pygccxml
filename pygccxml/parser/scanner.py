@@ -126,6 +126,10 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         
         #mapping from id -> decl
         self.__declarations = {}
+        #list of all read declarations
+        self.__all_declarations = []
+        #list of enums I need later
+        self.__enums = []
         #mapping from id -> type
         self.__types = {}
         #mapping from id -> file        
@@ -152,6 +156,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         
     def declarations(self):
         return self.__declarations
+        
+    def all_declarations( self ):
+        return self.__all_declarations
+
+    def enums(self):
+        return self.__enums
         
     def types(self):
         return self.__types
@@ -184,6 +194,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             self.__read_access( attrs )
             element_id = attrs.get(XML_AN_ID, None)
             if isinstance( obj, declaration_t ):
+                self.__all_declarations.append( obj )
                 self.__update_membership( attrs )
                 self.__declarations[ element_id ] = obj
                 if not isinstance( obj, namespace_t ):
@@ -211,7 +222,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             self.__inst = None
 
     def __read_location(self, decl, attrs):
-        decl.location = location_t( file_name=attrs[XML_AN_FILE], line=int( attrs[XML_AN_LINE]))
+        decl.location = location_t( file_name=attrs[XML_AN_FILE], line=int(attrs[XML_AN_LINE]))
 
     def __update_membership(self, attrs):
         parent = attrs.get( XML_AN_CONTEXT, None )
@@ -259,7 +270,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         if '$_' in enum_name or '._' in enum_name:
             #it means that this is unnamed enum. in c++ enum{ x };
             enum_name = ''
-        return self.__decl_factory.create_enumeration( name=enum_name )
+        decl = self.__decl_factory.create_enumeration( name=enum_name )
+        self.__enums.append( decl )
+        return decl
 
     def __read_enumeration_value( self, attrs ):
         name = attrs.get( XML_AN_NAME, '' )

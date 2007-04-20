@@ -337,9 +337,9 @@ class source_reader_t:
         #it happens for example in next situation
         #template< typename X>
         #void ddd(){ typedef typename X::Y YY;}        
-        decls = filter( lambda inst: isinstance(inst, declaration_t) and not inst.parent
-                        , decls.itervalues() )
-        patcher.fix_decls( make_flatten( decls ) )
-        decls = filter( lambda inst: isinstance( inst, namespace_t ), decls )
+        #if I will fail on this bug next time, the right way to fix it may be different
+        patcher.fix_decls( scanner_.all_declarations(), scanner_.enums() )
+        decls = filter( lambda inst: isinstance( inst, namespace_t ) and not inst.parent
+                        , decls.itervalues()  )
         return ( decls, files.values() )
 

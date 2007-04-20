@@ -60,8 +60,11 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         self.failUnless( typedef__func.arguments[0].default_value == u"::typedef_::alias( )" )
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun( 'clone_tree' )
-            default_value = 'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >()'
-            self.failUnless( default_value == clone_tree.arguments[0].default_value )
+            default_values =  [
+                'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >()'
+                , 'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >((&allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >()))'
+            ]
+            self.failUnless( clone_tree.arguments[0].default_value in default_values)
         
 class tester_32_t( tester_impl_t ):
     def __init__(self, *args):
