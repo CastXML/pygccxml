@@ -177,12 +177,11 @@ class casting_operator_patcher_t( object ):
 
 _casting_oper_patcher_ = casting_operator_patcher_t()
 
-def fix_decls(decls, enums):
+def fix_calldef_decls(decls, enums):
     default_arg_patcher = default_argument_patcher_t(enums)
     #decls should be flat list of all declarations, you want to apply patch on
     for decl in decls:
-        if isinstance( decl, declarations.calldef_t ):
-            default_arg_patcher( decl )
+        default_arg_patcher( decl )
         if isinstance( decl, declarations.casting_operator_t):
             _casting_oper_patcher_( decl )
     

@@ -338,7 +338,7 @@ class source_reader_t:
         #template< typename X>
         #void ddd(){ typedef typename X::Y YY;}        
         #if I will fail on this bug next time, the right way to fix it may be different
-        patcher.fix_decls( scanner_.all_declarations(), scanner_.enums() )
+        patcher.fix_calldef_decls( scanner_.calldefs(), scanner_.enums() )
         decls = filter( lambda inst: isinstance( inst, namespace_t ) and not inst.parent
                         , decls.itervalues()  )
         return ( decls, files.values() )

@@ -127,7 +127,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         #mapping from id -> decl
         self.__declarations = {}
         #list of all read declarations
-        self.__all_declarations = []
+        self.__calldefs = []
         #list of enums I need later
         self.__enums = []
         #mapping from id -> type
@@ -157,8 +157,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def declarations(self):
         return self.__declarations
         
-    def all_declarations( self ):
-        return self.__all_declarations
+    def calldefs( self ):
+        return self.__calldefs
 
     def enums(self):
         return self.__enums
@@ -194,7 +194,6 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             self.__read_access( attrs )
             element_id = attrs.get(XML_AN_ID, None)
             if isinstance( obj, declaration_t ):
-                self.__all_declarations.append( obj )
                 self.__update_membership( attrs )
                 self.__declarations[ element_id ] = obj
                 if not isinstance( obj, namespace_t ):
@@ -335,10 +334,11 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 argument.default_value = None
             self.__inst.arguments.append( argument )
      
-    def __read_calldef( self, calldef, attrs ):
+    def __read_calldef( self, calldef, attrs, is_declaration ):
         #destructor for example doesn't have return type
         calldef.return_type =  attrs.get( XML_AN_RETURNS, None )
-        if isinstance( calldef, declaration_t ):
+        if is_declaration:
+            self.__calldefs.append( calldef )
             calldef.name = attrs.get(XML_AN_NAME, '')
             calldef.has_extern = attrs.get( XML_AN_EXTERN, False )
             throw_stmt = attrs.get( XML_AN_THROW, None )
@@ -352,10 +352,10 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 calldef.does_throw = True
                 calldef.exceptions = throw_stmt.split()
  
-    def __read_member_function( self, calldef, attrs ):       
-        self.__read_calldef( calldef, attrs )
+    def __read_member_function( self, calldef, attrs, is_declaration ):       
+        self.__read_calldef( calldef, attrs, is_declaration )
         calldef.has_const = attrs.get( XML_AN_CONST, False )        
-        if isinstance( calldef, declaration_t ):
+        if is_declaration:
             calldef.has_static = attrs.get( XML_AN_STATIC, False )
             if attrs.has_key( XML_AN_PURE_VIRTUAL ):
                 calldef.virtuality = VIRTUALITY_TYPES.PURE_VIRTUAL
@@ -368,12 +368,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     
     def __read_function_type(self, attrs):
         answer = free_function_type_t()
-        self.__read_calldef( answer, attrs )
+        self.__read_calldef( answer, attrs, False )
         return answer
     
     def __read_method_type(self, attrs):
         answer = member_function_type_t()
-        self.__read_member_function( answer, attrs )
+        self.__read_member_function( answer, attrs, False )
         return answer
 
     def __read_typedef(self, attrs ):
@@ -420,33 +420,33 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_casting_operator(self, attrs ):
         operator = self.__decl_factory.create_casting_operator()
-        self.__read_member_function( operator, attrs )
+        self.__read_member_function( operator, attrs, True )
         return operator
  
     def __read_constructor( self, attrs ):
         constructor = self.__decl_factory.create_constructor()
-        self.__read_member_function( constructor, attrs )
+        self.__read_member_function( constructor, attrs, True )
         return constructor
 
     def __read_function(self, attrs):
         gfunction = self.__decl_factory.create_free_function()
-        self.__read_calldef( gfunction, attrs )
+        self.__read_calldef( gfunction, attrs, True )
         return gfunction
  
     def __read_method(self, attrs):
         mfunction = self.__decl_factory.create_member_function()
-        self.__read_member_function( mfunction, attrs )
+        self.__read_member_function( mfunction, attrs, True )
         return mfunction
  
     def __read_destructor(self, attrs):
         destructor = self.__decl_factory.create_destructor()
-        self.__read_member_function( destructor, attrs )
+        self.__read_member_function( destructor, attrs, True )
         destructor.name = '~' + destructor.name
         return destructor
  
     def __read_free_operator(self, attrs ):
         operator = self.__decl_factory.create_free_operator()
-        self.__read_member_function( operator, attrs )
+        self.__read_member_function( operator, attrs, True )
         if 'new' in operator.name or 'delete' in operator.name:
             operator.name = 'operator ' + operator.name
         else:
@@ -455,7 +455,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
  
     def __read_member_operator(self, attrs):
         operator = self.__decl_factory.create_member_operator()
-        self.__read_member_function( operator, attrs )
+        self.__read_member_function( operator, attrs, True )
         if 'new' in operator.name or 'delete' in operator.name:
             operator.name = 'operator ' + operator.name
         else:
