@@ -22,64 +22,68 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 
 
 -------------
-Version 0.8.*
+Version 0.9.0
 -------------
 
-1. ``is_base_and_derived`` function was changed. The second argument could be 
+1. Performance was improved. `pygccxml`_ is now 30-50% faster. The improvement
+   was achieved by using `cElementTree`_ package, ``iterparse`` functionality,
+   instead of standard XML SAX API. If `cElementTree`_ package is not available,
+   the built-in XML SAX package is used.
+
+.. _`cElementTree` : http://effbot.org/zone/celementtree.htm
+
+2. ``is_base_and_derived`` function was changed. The second argument could be
    a tuple, which contains classes. Function returns ``True`` if at least one
    class derives from the base one.
 
 .. line separator
 
-2. Class ``calldef_t`` has property - ``does_throw``. It describes
+3. Class ``calldef_t`` has property - ``does_throw``. It describes
    whether the function throws any exception or not.
 
 .. line separator
 
-3. Bug fixes: small bug was fixed in functionality that corrects GCC-XML reported
+4. Bug fixes: small bug was fixed in functionality that corrects GCC-XML reported
    function default arguments. Reference to "enum" declaration extracted properly.
    Many thanks to Martin Preisler for reporting the bug.
 
 .. line separator
 
-4. New type traits have been added:
+5. New type traits have been added:
+
 
    * ``is_std_ostream``
    * ``is_std_wostream``
 
 .. line separator
- 
-5. C++ does not define implicit conversion between an integral type and ``void*``.  
-   ``declarations.is_convertible`` type traitswas fixed.
+
+6. C++ does not define implicit conversion between an integral type and ``void*``.
+   ``declarations.is_convertible`` type traits was fixed.
 
 .. line separator
 
-6. ``declarations.is_noncopyable`` type traits implementation was slightly changed.
+7. ``declarations.is_noncopyable`` type traits implementation was slightly changed.
    Now it checks explicitly that class has:
-   
+
    * default constructor
    * copy constructor
    * ``operator=``
    * destructor
 
-   If all listed functions exists, than the algorithm returns ``False``, otherwise
+   If all listed functions exist, than the algorithm returns ``False``, otherwise
    it will continue to execute previous logic.
-   
+
 .. line separator
 
-7. ``declarations.class_declaration_t`` has new property - ``aliases``. This is 
+8. ``declarations.class_declaration_t`` has new property - ``aliases``. This is
    a list of all aliases to the class declaration.
 
 .. line separator
-   
-8. The message of the exception, which is raised from ``declarations.mdecl_wrapper_t`` 
+
+9. The message of the exception, which is raised from ``declarations.mdecl_wrapper_t``
    class was improved and now clearly explains what the problem is.
 
-.. line separator  
-
-9. Small improvment was done for ``parser.default_argument_patcher_t`` class.
-   ``enum`` extraction is done using functionality provided by type traits module.
-
+.. line separator
 
 -------------
 Version 0.8.5
