@@ -24,8 +24,8 @@ a reference to an integer. More over, I want those functions names to end with
   query = query & ~declarations.access_type_matcher_t( 'public' )
   global_ns.member_functions( function=query, arg_types=[None, 'int &'] )
 
-The example is complex, but still readable. In many cases you will find your
-self looking for one or many declarations using one or two properties of that
+The example is complex, but still readable. In many cases you will find 
+yourself looking for one or many declarations using one or two properties of that
 declaration(s). For example:
 
 .. code-block:: Python
@@ -105,8 +105,8 @@ by:
 
   * ``return_type``
 
-    Function return type. This argument can be Python string or an object that
-    describes C++ type.
+    the function return type. This argument can be string or an object that describes 
+    C++ type.
 
     .. code-block:: Python
 
@@ -129,7 +129,7 @@ by:
 
       mem_funcs = my_class.member_functions( arg_types=[ None, 'int'] ) 
 
-    ``mem_funcs`` will contain all member functions, that have two arguments
+    ``mem_funcs`` will contain all member functions, which have two arguments
     and type of second argument is ``int``.
 
   * ``header_dir``
