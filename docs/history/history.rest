@@ -33,7 +33,7 @@ Version 0.9.0
 .. _`cElementTree` : http://effbot.org/zone/celementtree.htm
 
 2. ``is_base_and_derived`` function was changed. The second argument could be
-   a tuple, which contains classes. Function returns ``True`` if at least one
+   a tuple, which contains classes. The function returns ``True`` if at least one
    class derives from the base one.
 
 .. line separator
