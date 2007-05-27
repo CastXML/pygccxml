@@ -25,13 +25,15 @@ def _create_logger_( name ):
 class loggers:
     """class-namespace, defines few loggers classes, used in the project"""
 
-    gccxml = _create_logger_( 'pygccxml.gccxml' )
-    """logger for gccxml functionality
+    cxx_parser = _create_logger_( 'pygccxml.cxx_parser' )
+    """logger for C++ parser functionality
 
     If you set this logger level to DEBUG, you will be able to see the exact
     command line, used to invoke GCC-XML  and errors that occures during XML parsing
     """
 
+    gccxml = cxx_parser #backward compatability
+    
     queries_engine = _create_logger_( 'pygccxml.queries_engine' )
     """logger for query engine functionality.
 
@@ -51,7 +53,7 @@ class loggers:
     root = logging.getLogger( 'pygccxml' )
     """root logger exists for your convinience only"""
 
-    all = [ root, gccxml, queries_engine, declarations_cache ]
+    all = [ root, cxx_parser, queries_engine, declarations_cache ]
     """contains all logger classes, defined by the class"""
 
 def remove_file_no_raise(file_name ):
