@@ -5,9 +5,10 @@
 
 import os
 import sys
-import config
-import pygccxml.utils
 import linker
+import config
+import patcher
+import pygccxml.utils
 
 try: #select faster xml parser
     from etree_scanner import etree_scanner_t as scanner_t
@@ -15,9 +16,8 @@ except:
     from scanner import scanner_t
 
 import declarations_cache
-import patcher
-from pygccxml.declarations import *
 from pygccxml import utils 
+from pygccxml.declarations import *
 
 class gccxml_runtime_error_t( RuntimeError ):
     def __init__( self, msg ):
@@ -77,7 +77,7 @@ class source_reader_t:
         @param decl_factory: declarations factory, if not given default 
                              declarations factory L{decl_factory_t} will be used
         """
-        self.logger = utils.loggers.gccxml
+        self.logger = utils.loggers.cxx_parser
         self.__search_directories = []
         self.__config = config
         self.__search_directories.append( config.working_directory )
@@ -85,43 +85,10 @@ class source_reader_t:
         if not cache:
             cache = declarations_cache.dummy_cache_t()
         self.__dcache = cache
-        self.__raise_on_wrong_settings()
+        self.__config.raise_on_wrong_settings()
         self.__decl_factory = decl_factory
         if not decl_factory:
             self.__decl_factory = decl_factory_t()
-
-    def __raise_on_wrong_settings(self):
-        if not os.path.isfile( self.__config.gccxml_path ):
-            if sys.platform == 'win32':
-                gccxml_name = 'gccxml' + '.exe'
-                environment_var_delimiter = ';'
-            elif sys.platform == 'linux2' or sys.platform == 'darwin':
-                gccxml_name = 'gccxml'
-                environment_var_delimiter = ':'
-            else:
-                raise RuntimeError( 'unable to find out location of gccxml' )
-            may_be_gccxml = os.path.join( self.__config.gccxml_path, gccxml_name )
-            if os.path.isfile( may_be_gccxml ):
-                self.__config.gccxml_path = may_be_gccxml
-            else:
-                for path in os.environ['PATH'].split( environment_var_delimiter ):
-                    gccxml_path = os.path.join( path, gccxml_name )
-                    if os.path.isfile( gccxml_path ):
-                        self.__config.gccxml_path = gccxml_path
-                        break
-                else:
-                    msg = 'gccxml_path("%s") should exists or to be a valid file name.' \
-                          % self.__config.gccxml_path
-                    raise RuntimeError( msg )
-        if not os.path.isdir( self.__config.working_directory ):
-            msg = 'working_directory("%s") should exists or to be a valid directory name.' \
-                  % self.__config.working_directory
-            raise RuntimeError( msg )
-        for include_path in self.__config.include_paths:
-            if not os.path.isdir( include_path ):
-                msg = 'include path "%s" should exists or to be a valid directory name.' \
-                      % include_path
-                raise RuntimeError( msg )
 
     def __create_command_line(self, file, xmlfile):
         assert isinstance( self.__config, config.config_t )
@@ -222,8 +189,14 @@ class source_reader_t:
         finally:
             pygccxml.utils.remove_file_no_raise( header_file )
         return gccxml_file
-        
-    def read_file(self, source_file):
+
+    def read_file( self, source_file ):
+        if isinstance( self.__config, config.gccxml_configuration_t ):
+            return self.read_gccxml_file( source_file )
+        else:
+            return self.read_synopsis_file( source_file )
+    
+    def read_gccxml_file(self, source_file):
         """
         Reads C++ source file and returns declarations tree
         
@@ -342,4 +315,28 @@ class source_reader_t:
         decls = filter( lambda inst: isinstance( inst, namespace_t ) and not inst.parent
                         , decls.itervalues()  )
         return ( decls, files.values() )
+    
+    def read_synopsis_file( self, source_file ):
+        import synopsis_scanner
+        from Synopsis import AST
+        from Synopsis.Parsers import Cxx
 
+        ffname = self.__file_full_name(source_file)
+        
+        cppflags = []
+        map( lambda dpath: cppflags.append( '-I %s' % dpath )
+             , self.__config.include_paths )
+        map( lambda define: cppflags.append( '-D %s' % define )
+             , self.__config.define_symbols )
+        map( lambda define: cppflags.append( '-U %s' % define )
+             , self.__config.undefine_symbols )
+        
+        cxx = Cxx.Parser( preprocess=True, cppflags=cppflags )
+        ast = AST.AST()
+        cxx.process( ast, input=[source_file] )
+        scanner = synopsis_scanner.scanner_t( ast, self.__decl_factory )
+        scanner.visitAST( ast )
+        declarations = [scanner.global_ns]
+        self.__dcache.update( ffname, self.__config, declarations, [] )
+        return declarations
+    
