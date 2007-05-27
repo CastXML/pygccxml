@@ -6,11 +6,15 @@
 """This module contains the implementation of the L{config_t} class.
 """
 
-class config_t(object):
-    """Configuration object to collect parameters for invoking gccxml.
+import os
+import sys
+import copy
 
-    This class serves as a container for the parameters that can be used
-    to customize the call to gccxml. This class also allows users to work with 
+class parser_configuration_t(object):
+    """Configuration object to collect parameters for invoking C++ parser
+
+    This class serves as a base class for the parameters that can be used
+    to customize the call to C++ parser. This class also allows users to work with 
     relative files paths. In this case files are searched in the following order:
   
     1. current directory
@@ -21,18 +25,14 @@ class config_t(object):
 
     """
     def __init__( self
-                  , gccxml_path=''
                   , working_directory='.'
                   , include_paths=None
                   , define_symbols=None
                   , undefine_symbols=None
-                  , start_with_declarations=None
-                  , ignore_gccxml_output=False
                   , cflags=""):
         """Constructor. 
         """
         object.__init__( self )
-        self.__gccxml_path = gccxml_path
         self.__working_directory = working_directory
 
         if not include_paths:
@@ -47,29 +47,11 @@ class config_t(object):
             undefine_symbols = []
         self.__undefine_symbols = undefine_symbols
 
-        if not start_with_declarations:
-            start_with_declarations = []
-        self.__start_with_declarations = start_with_declarations
-
-        self.__ignore_gccxml_output = ignore_gccxml_output
         self.__cflags = cflags
         
     def clone(self):
-        return config_t( gccxml_path=self.__gccxml_path
-                         , working_directory=self.__working_directory
-                         , include_paths=self.__include_paths[:]
-                         , define_symbols=self.__define_symbols[:]
-                         , undefine_symbols=self.__undefine_symbols[:]
-                         , start_with_declarations=self.__start_with_declarations[:]
-                         , ignore_gccxml_output=self.ignore_gccxml_output
-                         , cflags=self.cflags)
-
-    def __get_gccxml_path(self):
-        return self.__gccxml_path
-    def __set_gccxml_path(self, new_path ):
-        self.__gccxml_path = new_path
-    gccxml_path = property( __get_gccxml_path, __set_gccxml_path )
-    
+        raise NotImplementedError( self.__class__.__name__ )
+        
     def __get_working_directory(self):
         return self.__working_directory
     def __set_working_directory(self, working_dir):
@@ -87,6 +69,68 @@ class config_t(object):
     def __get_undefine_symbols(self):
         return self.__undefine_symbols
     undefine_symbols = property( __get_undefine_symbols )
+    
+    def __get_cflags(self):
+        return self.__cflags
+    def __set_cflags(self, val):
+        self.__cflags = val
+    cflags = property( __get_cflags, __set_cflags )
+
+    def __ensure_dir_exists( self, dir_path, meaning ):
+        if os.path.isdir( dir_path ):
+            return 
+        msg = None
+        if os.path.exists( self.working_directory ):
+            raise RuntimeError( '%s("%s") does not exist!' % ( meaning, dir_path ) )
+        else:
+            raise RuntimeError( '%s("%s") should be "directory", not a file.' % ( meaning, dir_path ) )
+
+
+    def raise_on_wrong_settings( self ):     
+        self.__ensure_dir_exists( self.working_directory, 'working directory' )
+        map( lambda idir: self.__ensure_dir_exists( idir, 'include directory' )
+             , self.include_paths )
+
+        
+class gccxml_configuration_t(parser_configuration_t):
+    """Configuration object to collect parameters for invoking gccxml.
+
+    This class serves as a container for the parameters that can be used
+    to customize the call to gccxml. 
+    """
+    def __init__( self
+                  , gccxml_path=''
+                  , working_directory='.'
+                  , include_paths=None
+                  , define_symbols=None
+                  , undefine_symbols=None
+                  , start_with_declarations=None
+                  , ignore_gccxml_output=False
+                  , cflags=""):
+        """Constructor. 
+        """
+        parser_configuration_t.__init__( self
+                                         , working_directory=working_directory
+                                         , include_paths=include_paths
+                                         , define_symbols=define_symbols
+                                         , undefine_symbols=undefine_symbols
+                                         , cflags=cflags)
+        self.__gccxml_path = gccxml_path
+
+        if not start_with_declarations:
+            start_with_declarations = []
+        self.__start_with_declarations = start_with_declarations
+
+        self.__ignore_gccxml_output = ignore_gccxml_output
+        
+    def clone(self):
+        return copy.deepcopy( self )
+    
+    def __get_gccxml_path(self):
+        return self.__gccxml_path
+    def __set_gccxml_path(self, new_path ):
+        self.__gccxml_path = new_path
+    gccxml_path = property( __get_gccxml_path, __set_gccxml_path )
 
     def __get_start_with_declarations(self):
         return self.__start_with_declarations
@@ -97,9 +141,56 @@ class config_t(object):
     def __set_ignore_gccxml_output(self, val=True):
         self.__ignore_gccxml_output = val
     ignore_gccxml_output = property( __get_ignore_gccxml_output, __set_ignore_gccxml_output )
+
     
-    def __get_cflags(self):
-        return self.__cflags
-    def __set_cflags(self, val):
-        self.__cflags = val
-    cflags = property( __get_cflags, __set_cflags )
+    def raise_on_wrong_settings( self ):     
+        super( gccxml_configuration_t, self ).raise_on_wrong_settings()
+        if os.path.isfile( self.gccxml_path ):
+            return 
+        if sys.platform == 'win32':
+            gccxml_name = 'gccxml' + '.exe'
+            environment_var_delimiter = ';'
+        elif sys.platform == 'linux2' or sys.platform == 'darwin':
+            gccxml_name = 'gccxml'
+            environment_var_delimiter = ':'
+        else:
+            raise RuntimeError( 'unable to find out location of gccxml' )
+        may_be_gccxml = os.path.join( self.gccxml_path, gccxml_name )
+        if os.path.isfile( may_be_gccxml ):
+            self.gccxml_path = may_be_gccxml
+        else:
+            for path in os.environ['PATH'].split( environment_var_delimiter ):
+                gccxml_path = os.path.join( path, gccxml_name )
+                if os.path.isfile( gccxml_path ):
+                    self.gccxml_path = gccxml_path
+                    break
+            else:
+                msg = 'gccxml_path("%s") should exists or to be a valid file name.' \
+                      % self.gccxml_path
+                raise RuntimeError( msg )
+    
+config_t = gccxml_configuration_t #backward computability
+
+class synopsis_configuration_t(parser_configuration_t):
+    """Configuration object to collect parameters for invoking gccxml.
+
+    This class serves as a container for the parameters that can be used
+    to customize the call to synopsis. 
+    """
+    def __init__( self
+                  , working_directory='.'
+                  , include_paths=None
+                  , define_symbols=None
+                  , undefine_symbols=None
+                  , cflags=""):
+        """Constructor. 
+        """
+        parser_configuration_t.__init__( self
+                                         , working_directory=working_directory
+                                         , include_paths=include_paths
+                                         , define_symbols=define_symbols
+                                         , undefine_symbols=undefine_symbols
+                                         , cflags=cflags)
+
+    def clone(self):
+        return copy.deepcopy( self )
