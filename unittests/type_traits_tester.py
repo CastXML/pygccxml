@@ -111,6 +111,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_is_std_wostream(self):
         self.__test_type_category( 'is_std_wostream', declarations.is_std_wostream )
 
+    def test_is_calldef_pointer(self):
+        self.__test_type_category( 'is_calldef_pointer', declarations.is_calldef_pointer )
+
     def test_has_trivial_constructor(self):
         self.__test_type_category( 'has_trivial_constructor', declarations.has_trivial_constructor )
 

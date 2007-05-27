@@ -154,6 +154,16 @@ def is_pointer(type):
                                   , cpptypes.pointer_t
                                   , (cpptypes.const_t, cpptypes.volatile_t) )
 
+def is_calldef_pointer(type):
+    """returns True, if type represents pointer to free/member function, False otherwise"""
+    if not is_pointer(type):
+        return False
+    nake_type = remove_alias( type )
+    nake_type = remove_const( nake_type )
+    nake_type = remove_volatile( nake_type )
+    return isinstance( nake_type, cpptypes.compound_t ) \
+           and isinstance( nake_type.base, cpptypes.calldef_type_t )
+
 def remove_pointer(type):
     """removes pointer from the type definition
 

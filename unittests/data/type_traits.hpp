@@ -10,9 +10,10 @@
 #include <iostream>
 
 #define TYPE_PERMUTATION( BASE, NAME )                        \
-    typedef BASE NAME##_t;                                     \
-    typedef BASE const NAME##_const_t;                         \
-    typedef BASE volatile NAME##_volatile_t;                   
+    typedef BASE NAME##_t;                                    \
+    typedef BASE const NAME##_const_t;                        \
+    typedef BASE volatile NAME##_volatile_t;                  \
+    typedef BASE const volatile NAME##_const_volatile_t;      
 
 struct some_struct_t{
     void do_smth();
@@ -83,6 +84,31 @@ namespace no{
     typedef std::string string_type;
     typedef detail::y_type y_type;    
 }
+}
+
+
+
+namespace is_calldef_pointer{
+
+namespace details{
+struct X{
+    void do_smth( int ) const;
+};
+
+}    
+    
+namespace yes{
+    typedef void (*ff1)( int, int );
+    typedef void ( details::X::*mf1)( int ) const;
+    
+    TYPE_PERMUTATION( ff1, ff1_type );
+    TYPE_PERMUTATION( mf1, mf1_type );
+}
+
+namespace no{
+    typedef int int_;
+}
+
 }
 
 namespace is_integral{
