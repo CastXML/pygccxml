@@ -3,9 +3,10 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import pprint
 import unittest
 import autoconfig
-import pprint
+
 
 import pygccxml
 from pygccxml.utils import *
@@ -13,10 +14,15 @@ from pygccxml.parser import *
 from pygccxml.declarations import *
 
 class parser_test_case_t( unittest.TestCase ):
+    
+    CXX_PARSER_CFG = None
+    
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
-        self.config = config.config_t( gccxml_path=autoconfig.gccxml_path
-                                       , working_directory=autoconfig.data_directory )
+        if self.CXX_PARSER_CFG:
+            self.config = self.CXX_PARSER_CFG.clone()
+        else:
+            self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
 
     def _test_type_composition( self, type, expected_compound, expected_base ):
         self.failUnless( isinstance( type, expected_compound)

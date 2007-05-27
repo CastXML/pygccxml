@@ -30,6 +30,13 @@ except ImportError:
 
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
+class cxx_parsers_cfg:
+    gccxml = pygccxml.parser.gccxml_configuration_t( gccxml_path=gccxml_path
+                                                     , working_directory=data_directory )
+
+    synopsis = pygccxml.parser.synopsis_configuration_t( working_directory=data_directory )
+
+
 #~ try:
     #~ import pydsc
     #~ pydsc.include( r'D:\pygccxml_sources\sources\pygccxml_dev' )
