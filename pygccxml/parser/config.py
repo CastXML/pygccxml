@@ -29,7 +29,8 @@ class parser_configuration_t(object):
                   , include_paths=None
                   , define_symbols=None
                   , undefine_symbols=None
-                  , cflags=""):
+                  , cflags=""
+                  , compiler=None):
         """Constructor. 
         """
         object.__init__( self )
@@ -49,6 +50,8 @@ class parser_configuration_t(object):
 
         self.__cflags = cflags
         
+        self.__compiler = compiler
+        
     def clone(self):
         raise NotImplementedError( self.__class__.__name__ )
         
@@ -58,23 +61,32 @@ class parser_configuration_t(object):
         self.__working_directory=working_dir
     working_directory = property( __get_working_directory, __set_working_directory )
     
-    def __get_include_paths(self):
+    @property
+    def include_paths(self):
+        """list of include paths to look for header files"""
         return self.__include_paths
-    include_paths = property( __get_include_paths )
     
-    def __get_define_symbols(self):
+    @property
+    def define_symbols(self):
+        """list of "define" directives """
         return self.__define_symbols
-    define_symbols = property( __get_define_symbols )
 
-    def __get_undefine_symbols(self):
+    @property
+    def undefine_symbols(self):
+        """list of "undefine" directives """
         return self.__undefine_symbols
-    undefine_symbols = property( __get_undefine_symbols )
-    
+
+    @property
+    def compiler(self):        
+        """compiler name to simulate"""
+        return self.__compiler
+
     def __get_cflags(self):
         return self.__cflags
     def __set_cflags(self, val):
         self.__cflags = val
-    cflags = property( __get_cflags, __set_cflags )
+    cflags = property( __get_cflags, __set_cflags
+                      , doc="additional flags to pass to compiler" )
 
     def __ensure_dir_exists( self, dir_path, meaning ):
         if os.path.isdir( dir_path ):
@@ -87,6 +99,7 @@ class parser_configuration_t(object):
 
 
     def raise_on_wrong_settings( self ):     
+        """validates the configuration settings and raises RuntimeError on error"""
         self.__ensure_dir_exists( self.working_directory, 'working directory' )
         map( lambda idir: self.__ensure_dir_exists( idir, 'include directory' )
              , self.include_paths )
@@ -106,7 +119,8 @@ class gccxml_configuration_t(parser_configuration_t):
                   , undefine_symbols=None
                   , start_with_declarations=None
                   , ignore_gccxml_output=False
-                  , cflags=""):
+                  , cflags=""
+                  , compiler=None):
         """Constructor. 
         """
         parser_configuration_t.__init__( self
@@ -114,7 +128,9 @@ class gccxml_configuration_t(parser_configuration_t):
                                          , include_paths=include_paths
                                          , define_symbols=define_symbols
                                          , undefine_symbols=undefine_symbols
-                                         , cflags=cflags)
+                                         , cflags=cflags
+                                         , compiler=compiler)
+                                         
         self.__gccxml_path = gccxml_path
 
         if not start_with_declarations:
@@ -130,17 +146,20 @@ class gccxml_configuration_t(parser_configuration_t):
         return self.__gccxml_path
     def __set_gccxml_path(self, new_path ):
         self.__gccxml_path = new_path
-    gccxml_path = property( __get_gccxml_path, __set_gccxml_path )
+    gccxml_path = property( __get_gccxml_path, __set_gccxml_path
+                            , doc="gccxml binary location" )
 
-    def __get_start_with_declarations(self):
+    @property
+    def start_with_declarations(self):
+        """list of declarations gccxml should start with, when it dumps declaration tree"""    
         return self.__start_with_declarations
-    start_with_declarations = property( __get_start_with_declarations )
     
     def __get_ignore_gccxml_output(self):
         return self.__ignore_gccxml_output
     def __set_ignore_gccxml_output(self, val=True):
         self.__ignore_gccxml_output = val
-    ignore_gccxml_output = property( __get_ignore_gccxml_output, __set_ignore_gccxml_output )
+    ignore_gccxml_output = property( __get_ignore_gccxml_output, __set_ignore_gccxml_output
+                                    , doc="set this property to True, if you want pygccxml to ignore any error\\warning that comes from gccxml" )
 
     
     def raise_on_wrong_settings( self ):     
@@ -182,7 +201,8 @@ class synopsis_configuration_t(parser_configuration_t):
                   , include_paths=None
                   , define_symbols=None
                   , undefine_symbols=None
-                  , cflags=""):
+                  , cflags=""
+                  , compiler=None):
         """Constructor. 
         """
         parser_configuration_t.__init__( self
@@ -190,7 +210,8 @@ class synopsis_configuration_t(parser_configuration_t):
                                          , include_paths=include_paths
                                          , define_symbols=define_symbols
                                          , undefine_symbols=undefine_symbols
-                                         , cflags=cflags)
+                                         , cflags=cflags
+                                         , compiler=compiler)
 
     def clone(self):
         return copy.deepcopy( self )

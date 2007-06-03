@@ -99,6 +99,7 @@ class source_reader_t:
             cmd.append( '"%s"' % os.path.normpath( self.__config.gccxml_path ) )
         else:
             cmd.append(  '%s' % os.path.normpath( self.__config.gccxml_path ) )
+            
         # Add all cflags passed
         if self.__config.cflags != "":
             cmd.append(" %s "%self.__config.cflags)
@@ -113,7 +114,9 @@ class source_reader_t:
         cmd.append( '-fxml="%s"' % xmlfile )
         if self.__config.start_with_declarations:
             cmd.append( '-fxml-start="%s"' % ','.join( self.__config.start_with_declarations ) )
-        
+        # Specify compiler if asked to
+        if self.__config.compiler:
+            cmd.append( " --gccxml-compiler %s" % self.__config.compiler )       
         cmd_line = ' '.join(cmd)
         if 'win32' in sys.platform :
             cmd_line = '"%s"' % cmd_line
