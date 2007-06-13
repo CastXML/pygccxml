@@ -39,4 +39,4 @@ import pygccxml.utils as utils
 
 __version__ = '0.9.0'
 
-__revision__ = '1053'
+__revision__ = 1053
