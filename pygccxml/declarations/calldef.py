@@ -427,17 +427,16 @@ class operator_t(object):
     def __init__(self):
         object.__init__(self)
 
-    def _get_symbol(self):
+    @property
+    def symbol(self):
+        "operator's symbol. For example: operator+, symbol is equal to '+'"
         return self.name[operator_t.OPERATOR_WORD_LEN:].strip()
-    symbol = property( _get_symbol,
-                       doc="returns symbol of operator. For example: operator+, symbol is equal to '+'")
 
 #Third level in hierarchy of calldef
 class member_function_t( member_calldef_t ):
     """describes member function declaration"""
     def __init__( self, *args, **keywords ):
         member_calldef_t.__init__( self, *args, **keywords )
-
 
 class constructor_t( member_calldef_t ):
     """describes constructor declaration"""
@@ -485,6 +484,7 @@ class member_operator_t( member_calldef_t, operator_t ):
     def __init__( self, *args, **keywords ):
         member_calldef_t.__init__( self, *args, **keywords )
         operator_t.__init__( self, *args, **keywords )
+        self.__class_types = None
 
 class casting_operator_t( member_calldef_t, operator_t ):
     """describes casting operator declaration"""
@@ -502,3 +502,22 @@ class free_operator_t( free_calldef_t, operator_t ):
     def __init__( self, *args, **keywords ):
         free_calldef_t.__init__( self, *args, **keywords )
         operator_t.__init__( self, *args, **keywords )
+        self.__class_types = None
+        
+    @property
+    def class_types( self ):
+        """list of class/class declaration types, extracted from the operator arguments"""
+        if None is self.__class_types:
+            self.__class_types = []
+            for type_ in self.argument_types:
+                decl = None
+                type_ = type_traits.remove_reference( type_ )
+                if type_traits.is_class( type_ ):
+                    decl = type_traits.class_traits.get_declaration( type_ )
+                elif type_traits.is_class_declaration( type_ ):
+                    decl = type_traits.class_declaration_traits.get_declaration( type_ )
+                else:
+                    pass
+                if decl:
+                    self.__class_types.append( decl )
+        return self.__class_types
