@@ -11,6 +11,7 @@
 #include <deque>
 #include <queue>
 #include <list>
+#include <set>
 
 namespace rtd{
 
@@ -33,6 +34,24 @@ namespace deques{
 namespace queues{
     typedef std::queue< int > q_int;
     typedef std::queue< std::string > q_string;
+
+}
+
+namespace priority_queues{
+    typedef std::priority_queue< int > pq_int;
+    typedef std::priority_queue< std::string > pq_string;
+
+}
+
+namespace sets{
+    typedef std::set< std::vector< int > > s_v_int;
+    typedef std::set< std::string > s_string;
+
+}
+
+namespace multiset_sets{
+    typedef std::multiset< std::vector< int > > ms_v_int;
+    typedef std::multiset< std::string > ms_string;
 
 }
 

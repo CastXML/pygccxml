@@ -15,6 +15,9 @@ import templates
 import type_traits
 import class_declaration
 
+def __normalize_type( type_str ):
+    return type_str.replace( ' ', '' )
+
 def __remove_basic_string( cls_name ):
     strings = { 
           'std::string' : ( 'std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
@@ -38,7 +41,7 @@ def __remove_defaults_recursive( cls_name ):
         return cls_name
     return 'std::' + c_traits.remove_defaults( no_std_cls_name )
 
-def __remove_allocator( cls_name ):
+def __remove_allocator( cls_name, default_allocator='std::allocator' ):
     cls_name = __remove_basic_string( cls_name )
     # "vector<int,std::allocator<int> >" 
     c_name, c_args = templates.split( cls_name )
@@ -46,27 +49,60 @@ def __remove_allocator( cls_name ):
     if 2 != len( c_args ):
         return 
     a_name, a_args = templates.split( c_args[1] )
-    if 'allocator' not in a_name:
+    if __normalize_type(default_allocator) != __normalize_type( a_name ):
         return 
     if 1 != len( a_args ):
         return 
-    if c_args[0].strip() != a_args[0]:
+    if __normalize_type( c_args[0] ) != __normalize_type( a_args[0] ):
         return 
     value_type = __remove_defaults_recursive( c_args[0] )
     return templates.join( c_name, [value_type] )
 
-def __remove_container( cls_name, default_container_name='deque' ):
+def __remove_container( cls_name, default_container_name='std::deque' ):
     cls_name = __remove_basic_string( cls_name )
-    # "vector<int,std::allocator<int> >" 
     c_name, c_args = templates.split( cls_name )
-    #"vector", [ "int", "std::allocator<int>" ]
     if 2 != len( c_args ):
         return 
     dc_no_defaults = __remove_defaults_recursive( c_args[1] )   
-    if dc_no_defaults != templates.join( 'std::' + default_container_name, [c_args[0]] ):
+    if __normalize_type( dc_no_defaults ) \
+       != __normalize_type( templates.join( default_container_name, [c_args[0]] ) ):
         return    
     value_type = __remove_defaults_recursive( c_args[0] )
     return templates.join( c_name, [value_type] )    
+
+
+def __remove_container_compare( cls_name, default_container_name='std::vector', default_compare='std::less' ):
+    cls_name = __remove_basic_string( cls_name )
+    c_name, c_args = templates.split( cls_name )
+    if 3 != len( c_args ):
+        return 
+    dc_no_defaults = __remove_defaults_recursive( c_args[1] )   
+    if __normalize_type( dc_no_defaults ) \
+       != __normalize_type( templates.join( default_container_name, [c_args[0]] ) ):
+        return            
+    dcomp_no_defaults = __remove_defaults_recursive( c_args[2] )   
+    if __normalize_type( dcomp_no_defaults ) \
+       != __normalize_type( templates.join( default_compare, [c_args[0]] ) ):
+        return    
+    value_type = __remove_defaults_recursive( c_args[0] )
+    return templates.join( c_name, [value_type] )    
+
+def __remove_compare_allocator( cls_name, default_compare='std::less', default_allocator='std::allocator' ):
+    cls_name = __remove_basic_string( cls_name )
+    c_name, c_args = templates.split( cls_name )
+    if 3 != len( c_args ):
+        return 
+    dc_no_defaults = __remove_defaults_recursive( c_args[1] )   
+    if __normalize_type( dc_no_defaults ) \
+       != __normalize_type( templates.join( default_compare, [c_args[0]] ) ):
+        return            
+    da_no_defaults = __remove_defaults_recursive( c_args[2] )   
+    if __normalize_type( da_no_defaults ) \
+       != __normalize_type( templates.join( default_allocator, [c_args[0]] ) ):
+        return    
+    value_type = __remove_defaults_recursive( c_args[0] )
+    return templates.join( c_name, [value_type] )    
+
 
 class container_traits_impl_t:
     """this class implements the functionality needed for convinient work with
@@ -192,7 +228,7 @@ deque_traits = create_traits_class( 'deque', 0, 'value_type', __remove_allocator
 
 queue_traits = create_traits_class( 'queue', 0, 'value_type', __remove_container )
 
-priority_queue = create_traits_class( 'priority_queue', 0, 'value_type' )
+priority_queue_traits = create_traits_class( 'priority_queue', 0, 'value_type', __remove_container_compare )
 
 vector_traits = create_traits_class( 'vector', 0, 'value_type', __remove_allocator )
 
@@ -204,17 +240,17 @@ multimap_traits = create_traits_class( 'multimap', 1, 'mapped_type' )
 hash_map_traits = create_traits_class( 'hash_map', 1, 'mapped_type' )
 hash_multimap_traits = create_traits_class( 'hash_multimap', 1, 'mapped_type' )
 
-set_traits = create_traits_class( 'set', 0, 'value_type' )
+set_traits = create_traits_class( 'set', 0, 'value_type', __remove_compare_allocator )
 hash_set_traits = create_traits_class( 'hash_set', 0, 'value_type' )
 
-multiset_traits = create_traits_class( 'multiset', 0, 'value_type' )
+multiset_traits = create_traits_class( 'multiset', 0, 'value_type', __remove_compare_allocator )
 hash_multiset_traits = create_traits_class( 'hash_multiset', 0, 'value_type' )
 
 container_traits = (
       list_traits
     , deque_traits
     , queue_traits
-    , priority_queue
+    , priority_queue_traits
     , vector_traits
     , stack_traits
     , map_traits
@@ -225,6 +261,7 @@ container_traits = (
     , hash_set_traits 
     , multiset_traits
     , hash_multiset_traits )
+"""tuple of all STD container traits classes"""    
     
 def find_container_traits( cls_or_string ):
     if isinstance( cls_or_string, types.StringTypes ):

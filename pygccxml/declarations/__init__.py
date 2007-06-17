@@ -169,7 +169,7 @@ from type_traits import smart_pointer_traits
 from container_traits import list_traits
 from container_traits import deque_traits
 from container_traits import queue_traits
-from container_traits import priority_queue
+from container_traits import priority_queue_traits
 from container_traits import vector_traits
 from container_traits import stack_traits
 from container_traits import map_traits
@@ -183,31 +183,15 @@ from container_traits import hash_multiset_traits
 
 from function_traits import is_same_function
 
-all_container_traits = \
-[
-    list_traits
-    , deque_traits
-    , queue_traits
-    , priority_queue
-    , vector_traits
-    , stack_traits
-    , map_traits
-    , multimap_traits
-    , hash_map_traits
-    , hash_multimap_traits
-    , set_traits
-    , hash_set_traits
-    , multiset_traits
-    , hash_multiset_traits
-]
-"""list, that contains all STD container traits classes"""
+all_container_traits = container_traits.container_traits
+"""tuple of all STD container traits classes"""    
 
 sequential_container_traits = \
 [
     list_traits
     , deque_traits
     , queue_traits
-    , priority_queue
+    , priority_queue_traits
     , vector_traits
     , stack_traits
     , set_traits

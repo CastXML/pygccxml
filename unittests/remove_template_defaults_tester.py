@@ -58,6 +58,29 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( 'queue< std::string >'
                          == declarations.queue_traits.remove_defaults( q_string ) )
 
+    def test_priority_queue( self ):                
+        pq_int = self.global_ns.typedef( 'pq_int' )
+        self.failUnless( 'priority_queue< int >' 
+                         == declarations.priority_queue_traits.remove_defaults( pq_int ) )
+        pq_string = self.global_ns.typedef( 'pq_string' )
+        self.failUnless( 'priority_queue< std::string >'
+                         == declarations.priority_queue_traits.remove_defaults( pq_string ) )
+
+    def test_set( self ):                
+        s_v_int = self.global_ns.typedef( 's_v_int' )
+        self.failUnless( 'set< std::vector< int > >' 
+                         == declarations.set_traits.remove_defaults( s_v_int ) )
+        s_string = self.global_ns.typedef( 's_string' )
+        self.failUnless( 'set< std::string >'
+                         == declarations.set_traits.remove_defaults( s_string ) )
+
+    def test_multiset( self ):                
+        ms_v_int = self.global_ns.typedef( 'ms_v_int' )
+        self.failUnless( 'multiset< std::vector< int > >' 
+                         == declarations.multiset_traits.remove_defaults( ms_v_int ) )
+        ms_string = self.global_ns.typedef( 'ms_string' )
+        self.failUnless( 'multiset< std::string >'
+                         == declarations.multiset_traits.remove_defaults( ms_string ) )
 
 def create_suite():
     suite = unittest.TestSuite()        
