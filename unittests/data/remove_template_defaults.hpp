@@ -6,6 +6,8 @@
 #ifndef __remove_template_defaults_hpp__
 #define __remove_template_defaults_hpp__
 
+#include <hash_set>
+#include <hash_map>
 #include <string>
 #include <vector>
 #include <deque>
@@ -68,6 +70,27 @@ namespace multimaps{
     typedef std::multimap< std::vector< int > const, mm_wstr2d const > mm_v_i2mm_wstr2d;
 }
 
+namespace hash_sets{
+    typedef std::hash_set< std::vector< int > > hs_v_int;
+    typedef std::hash_set< std::string > hs_string;
+
+}
+
+namespace hash_multisets{                 
+    typedef std::hash_multiset< std::vector< int > > mhs_v_int;
+    typedef std::hash_multiset< std::string > mhs_string;
+}
+
+namespace hash_maps{
+    typedef std::hash_map< int, double > hm_i2d;
+    typedef std::hash_map< std::wstring, double > hm_wstr2d;
+}
+
+namespace hash_multimaps{
+    typedef std::hash_multimap< int, double > hmm_i2d;
+    typedef std::hash_multimap< std::wstring const, double > hmm_wstr2d;
+    typedef std::hash_multimap< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
+}
 
 }
 

@@ -37,13 +37,23 @@ class defaults_eraser:
 
     class recursive_impl:
         @staticmethod
-        def decorated_call( cls_name, text, doit ):
+        def decorated_call_prefix( cls_name, text, doit ):
             has_text = cls_name.startswith( text )
             if has_text:
                 cls_name = cls_name[ len( text ): ]
             answer = doit( cls_name )
             if has_text:
                 answer = text + answer
+            return answer
+
+        @staticmethod
+        def decorated_call_suffix( cls_name, text, doit ):
+            has_text = cls_name.endswith( text )
+            if has_text:
+                cls_name = cls_name[: len( text )]
+            answer = doit( cls_name )
+            if has_text:
+                answer = answer + text
             return answer
 
         @staticmethod
@@ -57,9 +67,11 @@ class defaults_eraser:
         @staticmethod
         def erase_recursive( cls_name ):
             ri = defaults_eraser.recursive_impl
-            no_std = lambda cls_name: ri.decorated_call( cls_name, 'std::', ri.erase_call )
-            no_const = lambda cls_name: ri.decorated_call( cls_name, 'const ', no_std )
-            return no_const( cls_name )
+            no_std = lambda cls_name: ri.decorated_call_prefix( cls_name, 'std::', ri.erase_call )
+            no_stdext = lambda cls_name: ri.decorated_call_prefix( cls_name, 'stdext::', no_std )
+            no_const = lambda cls_name: ri.decorated_call_prefix( cls_name, 'const ', no_stdext )
+            no_end_const = lambda cls_name: ri.decorated_call_suffix( cls_name, ' const', no_const )
+            return no_end_const( cls_name )
 
     @staticmethod
     def erase_recursive( cls_name ):
@@ -144,6 +156,53 @@ class defaults_eraser:
             return templates.join( c_name
                                    , [ defaults_eraser.erase_recursive( key_type )
                                        , defaults_eraser.erase_recursive( mapped_type )] )
+
+
+    @staticmethod
+    def erase_hash_allocator( cls_name
+                              , default_hash='stdext::hash_compare'
+                              , default_compare='std::less'
+                              , default_allocator='std::allocator' ):
+        cls_name = defaults_eraser.replace_basic_string( cls_name )
+        c_name, c_args = templates.split( cls_name )
+        if 3 != len( c_args ):
+            return    
+        value_type = c_args[0]
+        tmpl = string.Template( "$container< $value_type, $hash<$value_type, $less<$value_type> >, $allocator<$value_type> >" )
+        tmpl = tmpl.substitute( container=c_name
+                                , value_type=value_type
+                                , hash=default_hash
+                                , less=default_compare
+                                , allocator=default_allocator )
+        if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
+            return templates.join( c_name, [defaults_eraser.erase_recursive( value_type )] )
+
+
+    @staticmethod
+    def erase_hashmap_compare_allocator( cls_name
+                                         , default_hash='stdext::hash_compare'
+                                         , default_compare='std::less'
+                                         , default_allocator='std::allocator' ):
+        cls_name = defaults_eraser.replace_basic_string( cls_name )
+        c_name, c_args = templates.split( cls_name )
+        if 4 != len( c_args ):
+            return    
+        key_type = c_args[0]        
+        mapped_type = c_args[1]
+        tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< const $key_type, $mapped_type> > >" )
+        if key_type.startswith( 'const ' ) or key_type.endswith( ' const' ):
+            tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< $key_type, $mapped_type> > >" )
+        tmpl = tmpl.substitute( container=c_name
+                                , key_type=key_type
+                                , mapped_type=mapped_type
+                                , hash=default_hash
+                                , less=default_compare
+                                , allocator=default_allocator )
+        if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
+            return templates.join( c_name
+                                   , [ defaults_eraser.erase_recursive( key_type )
+                                       , defaults_eraser.erase_recursive( mapped_type )] )
+
 
 class container_traits_impl_t:
     """this class implements the functionality needed for convinient work with
@@ -278,14 +337,14 @@ stack_traits = create_traits_class( 'stack', 0, 'value_type', defaults_eraser.er
 map_traits = create_traits_class( 'map', 1, 'mapped_type', defaults_eraser.erase_map_compare_allocator )
 multimap_traits = create_traits_class( 'multimap', 1, 'mapped_type', defaults_eraser.erase_map_compare_allocator )
 
-hash_map_traits = create_traits_class( 'hash_map', 1, 'mapped_type' )
-hash_multimap_traits = create_traits_class( 'hash_multimap', 1, 'mapped_type' )
+hash_map_traits = create_traits_class( 'hash_map', 1, 'mapped_type', defaults_eraser.erase_hashmap_compare_allocator )
+hash_multimap_traits = create_traits_class( 'hash_multimap', 1, 'mapped_type', defaults_eraser.erase_hashmap_compare_allocator )
 
 set_traits = create_traits_class( 'set', 0, 'value_type', defaults_eraser.erase_compare_allocator)
 multiset_traits = create_traits_class( 'multiset', 0, 'value_type', defaults_eraser.erase_compare_allocator )
 
-hash_set_traits = create_traits_class( 'hash_set', 0, 'value_type' )
-hash_multiset_traits = create_traits_class( 'hash_multiset', 0, 'value_type' )
+hash_set_traits = create_traits_class( 'hash_set', 0, 'value_type', defaults_eraser.erase_hash_allocator )
+hash_multiset_traits = create_traits_class( 'hash_multiset', 0, 'value_type', defaults_eraser.erase_hash_allocator )
 
 container_traits = (
       list_traits

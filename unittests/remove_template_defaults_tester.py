@@ -104,6 +104,42 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( 'multimap< const std::vector< int >, const std::multimap< const std::wstring, double > >' 
                          == declarations.multimap_traits.remove_defaults( mm_v_i2mm_wstr2d ) )
 
+    def test_hash_set( self ):                
+        hs_v_int = self.global_ns.typedef( 'hs_v_int' )
+        self.failUnless( 'hash_set< std::vector< int > >' 
+                         == declarations.hash_set_traits.remove_defaults( hs_v_int ) )
+        hs_string = self.global_ns.typedef( 'hs_string' )
+        self.failUnless( 'hash_set< std::string >'
+                         == declarations.hash_set_traits.remove_defaults( hs_string ) )
+
+    def test_hash_multiset( self ):                
+        mhs_v_int = self.global_ns.typedef( 'mhs_v_int' )
+        self.failUnless( 'hash_multiset< std::vector< int > >' 
+                         == declarations.hash_multiset_traits.remove_defaults( mhs_v_int ) )
+        mhs_string = self.global_ns.typedef( 'mhs_string' )
+        self.failUnless( 'hash_multiset< std::string >'
+                         == declarations.hash_multiset_traits.remove_defaults( mhs_string ) )
+
+    def test_hash_map( self ):                
+        hm_i2d = self.global_ns.typedef( 'hm_i2d' )
+        self.failUnless( 'hash_map< int, double >' 
+                         == declarations.hash_map_traits.remove_defaults( hm_i2d ) )
+        hm_wstr2d = self.global_ns.typedef( 'hm_wstr2d' )
+        self.failUnless( 'hash_map< std::wstring, double >' 
+                         == declarations.hash_map_traits.remove_defaults( hm_wstr2d ) )
+
+    def test_hash_multimap( self ):                
+        hmm_i2d = self.global_ns.typedef( 'hmm_i2d' )
+        self.failUnless( 'hash_multimap< int, double >' 
+                         == declarations.hash_multimap_traits.remove_defaults( hmm_i2d ) )
+        hmm_wstr2d = self.global_ns.typedef( 'hmm_wstr2d' )
+        self.failUnless( 'hash_multimap< const std::wstring, double >' 
+                         == declarations.hash_multimap_traits.remove_defaults( hmm_wstr2d ) )
+        hmm_v_i2mm_wstr2d = self.global_ns.typedef( 'hmm_v_i2mm_wstr2d' )     
+        self.failUnless( 'hash_multimap< const std::vector< int >, const std::hash_multimap< const std::wstring, double > >' 
+                         == declarations.hash_multimap_traits.remove_defaults( hmm_v_i2mm_wstr2d ) )
+
+
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))
