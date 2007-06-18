@@ -30,7 +30,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         v_string = self.global_ns.typedef( 'v_string' )
         self.failUnless( 'vector< std::string >'
                          == declarations.vector_traits.remove_defaults( v_string ) )
-        v_v_int = self.global_ns.typedef( 'v_v_int' )                                 
+        v_v_int = self.global_ns.typedef( 'v_v_int' )          
         self.failUnless( 'vector< std::vector< int > >'
                          == declarations.vector_traits.remove_defaults( v_v_int ) )
         
@@ -81,6 +81,28 @@ class tester_t( parser_test_case.parser_test_case_t ):
         ms_string = self.global_ns.typedef( 'ms_string' )
         self.failUnless( 'multiset< std::string >'
                          == declarations.multiset_traits.remove_defaults( ms_string ) )
+
+    def test_map( self ):                
+        m_i2d = self.global_ns.typedef( 'm_i2d' )
+        self.failUnless( 'map< int, double >' 
+                         == declarations.map_traits.remove_defaults( m_i2d ) )
+        m_wstr2d = self.global_ns.typedef( 'm_wstr2d' )
+        self.failUnless( 'map< std::wstring, double >' 
+                         == declarations.map_traits.remove_defaults( m_wstr2d ) )
+        m_v_i2m_wstr2d = self.global_ns.typedef( 'm_v_i2m_wstr2d' )     
+        self.failUnless( 'map< const std::vector< int >, std::map< std::wstring, double > >' 
+                         == declarations.map_traits.remove_defaults( m_v_i2m_wstr2d ) )
+
+    def test_multimap( self ):                
+        mm_i2d = self.global_ns.typedef( 'mm_i2d' )
+        self.failUnless( 'multimap< int, double >' 
+                         == declarations.multimap_traits.remove_defaults( mm_i2d ) )
+        mm_wstr2d = self.global_ns.typedef( 'mm_wstr2d' )
+        self.failUnless( 'multimap< const std::wstring, double >' 
+                         == declarations.multimap_traits.remove_defaults( mm_wstr2d ) )
+        mm_v_i2mm_wstr2d = self.global_ns.typedef( 'mm_v_i2mm_wstr2d' )     
+        self.failUnless( 'multimap< const std::vector< int >, const std::multimap< const std::wstring, double > >' 
+                         == declarations.multimap_traits.remove_defaults( mm_v_i2mm_wstr2d ) )
 
 def create_suite():
     suite = unittest.TestSuite()        

@@ -12,6 +12,7 @@
 #include <queue>
 #include <list>
 #include <set>
+#include <map>
 
 namespace rtd{
 
@@ -54,6 +55,19 @@ namespace multiset_sets{
     typedef std::multiset< std::string > ms_string;
 
 }
+
+namespace maps{
+    typedef std::map< int, double > m_i2d;
+    typedef std::map< std::wstring, double > m_wstr2d;
+    typedef std::map< const std::vector< int >, m_wstr2d > m_v_i2m_wstr2d;
+}
+
+namespace multimaps{
+    typedef std::multimap< int, double > mm_i2d;
+    typedef std::multimap< std::wstring const, double > mm_wstr2d;
+    typedef std::multimap< std::vector< int > const, mm_wstr2d const > mm_v_i2mm_wstr2d;
+}
+
 
 }
 

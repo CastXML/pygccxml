@@ -72,6 +72,7 @@ from cpptypes import jboolean_t
 from variable import variable_t
 
 from algorithm import full_name
+from algorithm import full_name_from_declaration_path
 from algorithm import make_flatten
 from algorithm import apply_visitor
 from algorithm import declaration_path

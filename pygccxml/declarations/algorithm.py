@@ -34,6 +34,13 @@ def declaration_path( decl ):
     else:
         return decl.cache.declaration_path
 
+def full_name_from_declaration_path( dpath ):
+    ##Here I have lack of knowledge:
+    ##TODO: "What is the full name of declaration declared in unnamed namespace?"  
+    result = filter( None, dpath )
+    result = result[0] + '::'.join( result[1:] )
+    return result
+
 def full_name( decl ):
     """
     returns full name of the declaration
@@ -47,16 +54,8 @@ def full_name( decl ):
     if None is decl:
         raise RuntimeError( "Unable to generate full name for None object!" )
     if not decl.cache.full_name:
-        decl_path = declaration_path( decl )
-        ##Here I have lack of knowledge:
-        ##TODO: "What is the full name of declaration declared in unnamed namespace?"
-        result = filter( None, decl_path )
-        result = result[0] + '::'.join( result[1:] )
-        decl.cache.full_name = result
-        return result
-    else:
-        return decl.cache.full_name
-
+        decl.cache.full_name = full_name_from_declaration_path( declaration_path( decl ) )
+    return decl.cache.full_name
 
 def make_flatten( decl_or_decls ):
     """
