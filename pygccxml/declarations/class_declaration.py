@@ -81,6 +81,8 @@ class class_declaration_t( declaration.declaration_t ):
         """creates class that describes C++ class declaration( and not definition )"""
         declaration.declaration_t.__init__( self, name )
         self._aliases = []
+        self._container_traits = None
+        self._container_traits_set = False
         
     def _get__cmp__items(self):
         """implementation details"""
@@ -96,6 +98,15 @@ class class_declaration_t( declaration.declaration_t ):
     aliases = property( _get_aliases, _set_aliases
                          , doc="List of L{aliases<typedef_t>} to this instance")
 
+    @property
+    def container_traits( self ):
+        """reference to L{container traits<container_traits.py>} or None"""
+        if self._container_traits_set == False:
+            import container_traits #prevent cyclic dependencies
+            self._container_traits_set = True
+            self._container_traits = container_traits.find_container_traits( self )            
+        return self._container_traits
+    
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
@@ -113,6 +124,8 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
+        self._container_traits = None
+        self._container_traits_set = False
 
     def _get_name_impl( self ):
         if not self._name: #class with empty name
@@ -364,5 +377,14 @@ class class_t( scopedef.scopedef_t ):
                  , ACCESS_TYPES.ALL )
              
         return answer
+
+    @property
+    def container_traits( self ):
+        """reference to L{container traits<container_traits.py>} or None"""
+        if self._container_traits_set == False:
+            import container_traits #prevent cyclic dependencies
+            self._container_traits_set = True
+            self._container_traits = container_traits.find_container_traits( self )            
+        return self._container_traits
 
 class_types = ( class_t, class_declaration_t )

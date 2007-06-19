@@ -373,7 +373,7 @@ def find_container_traits( cls_or_string ):
                 return cls_traits       
     else:
         for cls_traits in container_traits:        
-            if cls_traits.is_my_case( cls ):
+            if cls_traits.is_my_case( cls_or_string ):
                 return cls_traits
 
 

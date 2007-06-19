@@ -22,7 +22,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
-            
+
     def test_vector( self ):                
         v_int = self.global_ns.typedef( 'v_int' )        
         self.failUnless( 'vector< int >' 
