@@ -19,6 +19,7 @@ from pygccxml import utils
 XML_AN_ABSTRACT = "abstract"
 XML_AN_ACCESS = "access"
 XML_AN_ARTIFICIAL = "artificial"
+XML_AN_ATTRIBUTES = "attributes"
 XML_AN_BASE_TYPE = "basetype"
 XML_AN_BASES = "bases"
 XML_AN_BITS = "bits"
@@ -203,6 +204,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled( obj, attrs)
                 self.__read_demangled( obj, attrs)
+                self.__read_attributes(obj, attrs)                
             elif isinstance( obj, type_t ):
                 self.__types[ element_id ] = obj
             elif isinstance( obj, types.StringTypes ):
@@ -246,6 +248,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_demangled( self, decl, attrs ):
         decl.demangled = attrs.get( XML_AN_DEMANGLED, None )
         
+    def __read_attributes( self, decl, attrs ):
+    	decl.attributes = attrs.get( XML_AN_ATTRIBUTES, None )
+
     def __read_access( self, attrs ):
         self.__access[ attrs[XML_AN_ID] ] = attrs.get( XML_AN_ACCESS, ACCESS_TYPES.PUBLIC )
 
@@ -330,6 +335,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             argument.name = attrs.get( XML_AN_NAME, 'arg%d' % len(self.__inst.arguments) )
             argument.type = attrs[XML_AN_TYPE]           
             argument.default_value = attrs.get( XML_AN_DEFAULT, None )
+            self.__read_attributes( argument, attrs )
             if argument.default_value == '<gccxml-cast-expr>':
                 argument.default_value = None
             self.__inst.arguments.append( argument )

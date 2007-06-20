@@ -57,12 +57,13 @@ class location_t(object):
 class declaration_t( object ):
     """base class for all classes that represent a C++ declaration"""
 
-    def __init__( self, name='', location=None, is_artificial=False, mangled=None, demangled=None ):
+    def __init__( self, name='', location=None, is_artificial=False, mangled=None, demangled=None, attributes=None ):
         self._name = name
         self._location = location
         self._is_artificial = is_artificial
         self._mangled = mangled
         self._demangled = demangled
+        self._attributes = attributes        
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
 
@@ -217,6 +218,17 @@ class declaration_t( object ):
                         , doc="""Demangled compiler generated declaration name
                         @type: str
                         """ )
+
+    def _get_attributes( self ):
+        return self._attributes
+    def _set_attributes( self, attributes ):
+        self._attributes = attributes
+    attributes = property( _get_attributes, _set_attributes
+                        , doc="""GCCXML attributes, set using __attribute__((gccxml("...")))
+                        @type: str
+                        """ )
+
+
 
     def _create_decl_string(self):
         return algorithm.full_name( self )

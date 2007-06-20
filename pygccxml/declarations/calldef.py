@@ -39,11 +39,12 @@ class argument_t(object):
     class, that describes argument of "callable" declaration
     """
 
-    def __init__( self, name='', type=None, default_value=None ):
+    def __init__( self, name='', type=None, default_value=None, attributes=None  ):
         object.__init__(self)
         self._name = name
         self._default_value = default_value
         self._type = type
+        self._attributes = attributes        
 
     def clone( self, **keywd ):
         """constructs new argument_t instance
@@ -54,7 +55,8 @@ class argument_t(object):
         """
         return argument_t( name=keywd.get( 'name', self.name )
                            , type=keywd.get( 'type', self.type )
-                           , default_value=keywd.get( 'default_value', self.default_value ) )
+                           , default_value=keywd.get( 'default_value', self.default_value )
+                           , attributes=keywd.get( 'attributes', self.attributes ) )
         
     def __str__(self):
         if self.default_value==None:
@@ -102,6 +104,16 @@ class argument_t(object):
     type = property( _get_type, _set_type
                      , doc="""The type of the argument.
                      @type: L{type_t}""")
+                     
+    def _get_attributes( self ):
+        return self._attributes
+    def _set_attributes( self, attributes ):
+        self._attributes = attributes
+    attributes = property( _get_attributes, _set_attributes
+                        , doc="""GCCXML attributes, set using __attribute__((gccxml("...")))
+                        @type: str
+                        """ )
+
 
 class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
