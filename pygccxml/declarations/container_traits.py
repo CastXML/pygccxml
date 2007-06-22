@@ -16,6 +16,8 @@ import templates
 import type_traits
 import class_declaration
 
+std_namespaces = ( 'std', 'stdext', '__gnu_cxx' )
+
 class defaults_eraser:       
     @staticmethod
     def normalize( type_str ):
@@ -69,7 +71,8 @@ class defaults_eraser:
             ri = defaults_eraser.recursive_impl
             no_std = lambda cls_name: ri.decorated_call_prefix( cls_name, 'std::', ri.erase_call )
             no_stdext = lambda cls_name: ri.decorated_call_prefix( cls_name, 'stdext::', no_std )
-            no_const = lambda cls_name: ri.decorated_call_prefix( cls_name, 'const ', no_stdext )
+            no_gnustd = lambda cls_name: ri.decorated_call_prefix( cls_name, '__gnu_cxx::', no_stdext )
+            no_const = lambda cls_name: ri.decorated_call_prefix( cls_name, 'const ', no_gnustd )
             no_end_const = lambda cls_name: ri.decorated_call_suffix( cls_name, ' const', no_const )
             return no_end_const( cls_name )
 
@@ -150,8 +153,6 @@ class defaults_eraser:
                                 , mapped_type=mapped_type
                                 , compare=default_compare
                                 , allocator=default_allocator )
-        #~ print '\noriginal: ', defaults_eraser.normalize(cls_name)
-        #~ print '\ntmpl    : ', defaults_eraser.normalize(tmpl)
         if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
             return templates.join( c_name
                                    , [ defaults_eraser.erase_recursive( key_type )
@@ -159,49 +160,84 @@ class defaults_eraser:
 
 
     @staticmethod
-    def erase_hash_allocator( cls_name
-                              , default_hash='stdext::hash_compare'
-                              , default_compare='std::less'
-                              , default_allocator='std::allocator' ):
+    def erase_hash_allocator( cls_name ):
         cls_name = defaults_eraser.replace_basic_string( cls_name )
         c_name, c_args = templates.split( cls_name )
-        if 3 != len( c_args ):
-            return    
+        if len( c_args ) < 3:
+            return 
+
+        default_hash=None
+        default_less='std::less'
+        default_equal_to='std::equal_to'
+        default_allocator='std::allocator'
+
+        tmpl = None
+        if 3 == len( c_args ):
+            default_hash='hash_compare'
+            tmpl = "$container< $value_type, $hash<$value_type, $less<$value_type> >, $allocator<$value_type> >"
+        elif 4 == len( c_args ):
+            default_hash='hash'
+            tmpl = "$container< $value_type, $hash<$value_type >, $equal_to<$value_type >, $allocator<$value_type> >"
+        else:
+            return 
+        
         value_type = c_args[0]
-        tmpl = string.Template( "$container< $value_type, $hash<$value_type, $less<$value_type> >, $allocator<$value_type> >" )
-        tmpl = tmpl.substitute( container=c_name
-                                , value_type=value_type
-                                , hash=default_hash
-                                , less=default_compare
-                                , allocator=default_allocator )
-        if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
-            return templates.join( c_name, [defaults_eraser.erase_recursive( value_type )] )
+        tmpl = string.Template( tmpl )
+        for ns in std_namespaces:
+            inst = tmpl.substitute( container=c_name
+                                    , value_type=value_type
+                                    , hash= ns + '::' + default_hash
+                                    , less=default_less
+                                    , equal_to=default_equal_to
+                                    , allocator=default_allocator )
+            if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( inst ):
+                return templates.join( c_name, [defaults_eraser.erase_recursive( value_type )] )
 
 
     @staticmethod
-    def erase_hashmap_compare_allocator( cls_name
-                                         , default_hash='stdext::hash_compare'
-                                         , default_compare='std::less'
-                                         , default_allocator='std::allocator' ):
+    def erase_hashmap_compare_allocator( cls_name ):
         cls_name = defaults_eraser.replace_basic_string( cls_name )
         c_name, c_args = templates.split( cls_name )
-        if 4 != len( c_args ):
-            return    
-        key_type = c_args[0]        
-        mapped_type = c_args[1]
-        tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< const $key_type, $mapped_type> > >" )
-        if key_type.startswith( 'const ' ) or key_type.endswith( ' const' ):
-            tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< $key_type, $mapped_type> > >" )
-        tmpl = tmpl.substitute( container=c_name
-                                , key_type=key_type
-                                , mapped_type=mapped_type
-                                , hash=default_hash
-                                , less=default_compare
-                                , allocator=default_allocator )
-        if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
-            return templates.join( c_name
-                                   , [ defaults_eraser.erase_recursive( key_type )
-                                       , defaults_eraser.erase_recursive( mapped_type )] )
+
+        default_hash=None
+        default_less='std::less'
+        default_allocator='std::allocator'
+        default_equal_to = 'std::equal_to'
+        
+        tmpl = None      
+        key_type = None
+        mapped_type = None
+        if 2 < len( c_args ):
+            key_type = c_args[0]        
+            mapped_type = c_args[1]
+        else:
+            return
+        
+        if 4 == len( c_args ):
+            default_hash = 'hash_compare'
+            tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< const $key_type, $mapped_type> > >" )
+            if key_type.startswith( 'const ' ) or key_type.endswith( ' const' ):
+                tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type, $less<$key_type> >, $allocator< std::pair< $key_type, $mapped_type> > >" )
+        elif 5 == len( c_args ):
+            default_hash = 'hash'
+            tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type >, $equal_to<$key_type>, $allocator< $mapped_type> >" )
+            if key_type.startswith( 'const ' ) or key_type.endswith( ' const' ):
+                tmpl = string.Template( "$container< $key_type, $mapped_type, $hash<$key_type >, $equal_to<$key_type>, $allocator< $mapped_type > >" )
+        else:
+            return
+
+        for ns in std_namespaces:
+            inst = tmpl.substitute( container=c_name
+                                    , key_type=key_type
+                                    , mapped_type=mapped_type
+                                    , hash=ns + '::' + default_hash
+                                    , less=default_less
+                                    , equal_to = default_equal_to
+                                    , allocator=default_allocator )
+            if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( inst ):
+                return templates.join( c_name
+                                       , [ defaults_eraser.erase_recursive( key_type )
+                                           , defaults_eraser.erase_recursive( mapped_type )] )
 
 
 class container_traits_impl_t:
@@ -245,9 +281,9 @@ class container_traits_impl_t:
         if not cls.name.startswith( self.name + '<' ):
             return
 
-        if not type_traits.impl_details.is_defined_in_xxx( 'std', cls ):
-            return
-        return cls
+        for ns in std_namespaces:
+            if type_traits.impl_details.is_defined_in_xxx( ns, cls ):
+                return cls
 
     def is_my_case( self, type ):
         """checks, whether type is STD container or not"""
