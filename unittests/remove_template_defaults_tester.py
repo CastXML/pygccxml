@@ -107,7 +107,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_hash_set( self ):                
         hs_v_int = self.global_ns.typedef( 'hs_v_int' )
         self.failUnless( 'hash_set< std::vector< int > >' 
-                         == declarations.hash_set_traits.remove_defaults( hs_v_int ) )
+                         == declarations.hash_set_traits.remove_defaults( hs_v_int )
+                         , declarations.hash_set_traits.remove_defaults( hs_v_int ) )
         hs_string = self.global_ns.typedef( 'hs_string' )
         self.failUnless( 'hash_set< std::string >'
                          == declarations.hash_set_traits.remove_defaults( hs_string ) )
@@ -136,8 +137,13 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( 'hash_multimap< const std::wstring, double >' 
                          == declarations.hash_multimap_traits.remove_defaults( hmm_wstr2d ) )
         hmm_v_i2mm_wstr2d = self.global_ns.typedef( 'hmm_v_i2mm_wstr2d' )     
-        self.failUnless( 'hash_multimap< const std::vector< int >, const std::hash_multimap< const std::wstring, double > >' 
-                         == declarations.hash_multimap_traits.remove_defaults( hmm_v_i2mm_wstr2d ) )
+        
+        possible_values = ( 
+            'hash_multimap< const std::vector< int >, const __gnu_cxx::hash_multimap< const std::wstring, double > >'
+            , 'hash_multimap< const std::vector< int >, const std::hash_multimap< const std::wstring, double > >' )
+        
+        self.failUnless( declarations.hash_multimap_traits.remove_defaults( hmm_v_i2mm_wstr2d ) 
+                         in possible_values )
 
 
 def create_suite():
