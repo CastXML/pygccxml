@@ -44,6 +44,7 @@ import free_operators_tester
 import remove_template_defaults_tester
 import find_container_traits_tester
 import attributes_tester
+import type_as_exception_bug_tester
 
 def create_suite():
     testers = [
@@ -87,6 +88,7 @@ def create_suite():
         , remove_template_defaults_tester
         , find_container_traits_tester
         , attributes_tester
+        , type_as_exception_bug_tester
     ]
 
     main_suite = unittest.TestSuite()

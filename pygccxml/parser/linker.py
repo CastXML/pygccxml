@@ -67,7 +67,10 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
             for arg in self.__inst.arguments:
                 arg.type = self.__link_type(arg.type)
             for index in range( len( self.__inst.exceptions ) ):
-                self.__inst.exceptions[index] = self.__decls[ self.__inst.exceptions[index] ]
+                try:
+                    self.__inst.exceptions[index] = self.__decls[ self.__inst.exceptions[index] ]
+                except KeyError:
+                    self.__inst.exceptions[index] = self.__link_type( self.__inst.exceptions[index] )
 
     def visit_member_function( self ):
         self.__link_calldef()
