@@ -20,6 +20,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Gaetan Lehmann
 * Martin Preisler
 * Miguel Lobo
+* Jeremy Sanders
 
 -----------
 SVN Version 
@@ -32,6 +33,9 @@ SVN Version
    the implementation.
 
 .. _`GCC-XML attributes`: http://www.gccxml.org/HTML/Running.html
+
+3. A bug in parsing a function exception specification was fixed. Many thanks to 
+   Jeremy Sanders.
 
 -------------
 Version 0.9.0
