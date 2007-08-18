@@ -126,6 +126,8 @@ class class_t( scopedef.scopedef_t ):
         self._aliases = []
         self._container_traits = None
         self._container_traits_set = False
+        self._recursive_bases = None
+        self._recursive_derived = None
 
     def _get_name_impl( self ):
         if not self._name: #class with empty name
@@ -197,17 +199,19 @@ class class_t( scopedef.scopedef_t ):
     bases = property( _get_bases, _set_bases
                       , doc="list of L{base classes<hierarchy_info_t>}")
 
-    def _get_recursive_bases(self):
-        to_go = self.bases[:]
-        all_bases = []
-        while to_go:
-            base = to_go.pop()
-            if base not in all_bases:
-                all_bases.append( base )
-                to_go.extend( base.related_class.bases )
-        return all_bases
-    recursive_bases = property( _get_recursive_bases
-                                , doc="returns a list of all L{base classes<hierarchy_info_t>}")
+    @property
+    def recursive_bases(self):
+        """list of all L{base classes<hierarchy_info_t>}"""
+        if self._recursive_bases is None:
+            to_go = self.bases[:]
+            all_bases = []
+            while to_go:
+                base = to_go.pop()
+                if base not in all_bases:
+                    all_bases.append( base )
+                    to_go.extend( base.related_class.bases )
+            self._recursive_bases = all_bases
+        return self._recursive_bases
 
     def _get_derived(self):
         return self._derived
@@ -216,17 +220,19 @@ class class_t( scopedef.scopedef_t ):
     derived = property( _get_derived, _set_derived
                         , doc="list of L{derived classes<hierarchy_info_t>}")
 
-    def _get_recursive_derived(self):
-        to_go = self.derived[:]
-        all_derived = []
-        while to_go:
-            derive = to_go.pop()
-            if derive not in all_derived:
-                all_derived.append( derive )
-                to_go.extend( derive.related_class.derived )
-        return all_derived
-    recursive_derived = property( _get_recursive_derived
-                                  , doc="returns a list of all L{derive classes<hierarchy_info_t>}")
+    @property
+    def recursive_derived(self):
+        """list of all L{derive classes<hierarchy_info_t>}"""
+        if self._recursive_derived is None:
+            to_go = self.derived[:]
+            all_derived = []
+            while to_go:
+                derive = to_go.pop()
+                if derive not in all_derived:
+                    all_derived.append( derive )
+                    to_go.extend( derive.related_class.derived )
+            self._recursive_derived = all_derived
+        return self._recursive_derived
 
     def _get_is_abstract(self):
         return self._is_abstract
