@@ -83,6 +83,14 @@ def profile_project2():
     reader = parser.project_reader_t( parser.config_t(gccxml_path=autoconfig.gccxml_path) )
     reader.read_files([include_std_header])
 
+def test_on_big_file( file_name, count ):
+    file_name = os.path.join( autoconfig.data_directory, file_name ) 
+    for i in range( count ):
+        reader = parser.project_reader_t( parser.config_t(gccxml_path=autoconfig.gccxml_path) )
+        decls = reader.read_files([parser.create_gccxml_fc( file_name )])
+        global_ns = declarations.get_global_namespace( decls )
+        global_ns.init_optimizer()
+
 def parse_big_file():
     reader = parser.project_reader_t( parser.config_t(gccxml_path=autoconfig.gccxml_path) )
     reader.read_files([parser.create_gccxml_fc( os.path.join( autoconfig.data_directory, 'big.xml' ) )])
@@ -97,7 +105,7 @@ if __name__ == "__main__":
     #~ test_project_on_include_std_dot_hpp()
     print 'running'
     prof = hotshot.Profile( 'parser.prof' )
-    prof.runcall(parse_big_file )
+    prof.runcall( lambda:  test_on_big_file( 'big2.xml', 1 ) )
     stats = hotshot.stats.load("parser.prof")
     stats.sort_stats('time', 'calls')
     stats.print_stats(30)
