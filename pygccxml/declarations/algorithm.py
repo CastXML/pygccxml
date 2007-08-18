@@ -26,8 +26,13 @@ def declaration_path( decl ):
         result = [ decl.name ]
         parent = decl.parent
         while parent:
-            result.append( parent.name )
-            parent = parent.parent
+            if parent.cache.declaration_path:
+                result.reverse()
+                decl.cache.declaration_path = parent.cache.declaration_path + result
+                return decl.cache.declaration_path
+            else:
+                result.append( parent.name )
+                parent = parent.parent
         result.reverse()
         decl.cache.declaration_path = result
         return result
