@@ -931,8 +931,9 @@ class impl_details:
                                  , function=lambda decl: not isinstance( decl, calldef.calldef_t )
                                  ,  allow_empty=True )
         if not found:            
-            if cpptypes.FUNDAMENTAL_TYPES.has_key( value_type_str[2:] ): #remove leading ::
-                return cpptypes.FUNDAMENTAL_TYPES[value_type_str[2:]]
+            no_global_ns_value_type_str = value_type_str[2:]
+            if cpptypes.FUNDAMENTAL_TYPES.has_key( no_global_ns_value_type_str ): 
+                return cpptypes.FUNDAMENTAL_TYPES[ no_global_ns_value_type_str ]
             elif is_std_string( value_type_str ):
                 string_ = global_ns.typedef( '::std::string' )
                 return remove_declarated( string_ )
@@ -940,14 +941,16 @@ class impl_details:
                 string_ = global_ns.typedef( '::std::wstring' )
                 return remove_declarated( string_ )
             else:
-                value_type_str = value_type_str[2:]#removing leading ::
+                value_type_str = no_global_ns_value_type_str
                 has_const = value_type_str.startswith( 'const ' )
                 if has_const:
                     value_type_str = value_type_str[ len('const '): ]
                 has_pointer = value_type_str.endswith( '*' )
                 if has_pointer:
                     value_type_str = value_type_str[:-1]
-                found = impl_details.find_value_type( global_ns, value_type_str )
+                found = None
+                if has_const or has_pointer:
+                    found = impl_details.find_value_type( global_ns, value_type_str )
                 if not found:
                     return None
                 else:
