@@ -1,0 +1,24 @@
+GCC-XML 0.9
+
+  <Typedef id="_97" name="mfun_ptr_t" type="_96" context="_1" location="f1:11" file="f1" line="11"/>
+  <PointerType id="_96" type="_147" size="32" align="32"/>
+  <MethodType id="_147" basetype="_92" returns="_131">
+    <Argument type="_127"/>
+  </MethodType>
+
+
+  <Typedef id="_52" name="mvar_ptr_t" type="_139" context="_1" location="f1:13" file="f1" line="13"/>
+  <OffsetType id="_139" basetype="_92" type="_131" size="32" align="32"/>
+  
+GCC-XML 0.7
+
+  <Typedef id="_6" name="mfun_ptr_t" type="_5" context="_1" location="f0:11" file="f0" line="11"/>
+  <PointerType id="_5" type="_128" size="32" align="32"/>
+  <MethodType id="_128" basetype="_7" returns="_136">
+    <Argument type="_140"/>
+  </MethodType>
+
+
+  <Typedef id="_4" name="mvar_ptr_t" type="_3" context="_1" location="f0:13" file="f0" line="13"/>
+  <PointerType id="_3" type="_127" size="32" align="32"/>
+  <OffsetType id="_127" basetype="_7" type="_136" size="32" align="32"/>

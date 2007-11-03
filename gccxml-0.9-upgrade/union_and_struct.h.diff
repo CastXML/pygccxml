@@ -1,0 +1,10 @@
+GCC-XML 0.9
+<Struct id="_102" name="position" members="_141 _142 _143 " />
+
+GCC-XML 0.7
+<Struct id="_3" name="position" members="_123 _124 _125 _126 _127 "/>
+    <Constructor id="_126" name="position" artificial="1" throw="" context="_3" access="public" mangled="_ZN8positionC1ERKS_ *INTERNAL* " demangled="position::position(position const&amp;)" location="f0:6" file="f0" line="6" inline="1">
+        <Argument name="_ctor_arg" type="_149" location="f0:6" file="f0" line="6"/>
+    </Constructor>
+    <Constructor id="_127" name="position" explicit="1" artificial="1" throw="" context="_3" access="public" mangled="_ZN8positionC1Ev *INTERNAL* " demangled="position::position()" location="f0:6" file="f0" line="6" inline="1"/>
+
