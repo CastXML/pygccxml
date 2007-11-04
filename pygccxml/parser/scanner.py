@@ -74,6 +74,8 @@ XML_NN_TYPEDEF = "Typedef"
 XML_NN_UNION = "Union"
 XML_NN_VARIABLE = "Variable"
    
+NUMERIC_SUFFIX_LETTERS = 'UuLlFf'
+   
 class scanner_t( xml.sax.handler.ContentHandler ):
     def __init__(self, gccxml_file, decl_factory, *args ):
         xml.sax.handler.ContentHandler.__init__(self, *args )
