@@ -13,23 +13,11 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_impl_t( parser_test_case.parser_test_case_t ):
-
     def __init__(self, architecture, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.architecture = architecture
         self.global_ns = None
-        
-    def setUp( self ):
-        reader = parser.source_reader_t( self.config )
-        if 32 == self.architecture:
-            self.global_ns = reader.read_file( 'patcher.hpp' )[0].top_parent
-        else:
-            original_get_architecture = utils.get_architecture
-            utils.get_architecture = lambda: 64
-            self.global_ns = reader.read_xml_file( 
-                    os.path.join( autoconfig.data_directory, 'patcher_tester_64bit.xml' ) )[0].top_parent
-            utils.get_architecture = original_get_architecture
-    
+            
     def test_enum_patcher(self):
         fix_enum = self.global_ns.free_fun( 'fix_enum' )
         self.failUnless( fix_enum.arguments[0].default_value == '::ns1::ns2::apple' )
@@ -67,12 +55,36 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
             self.failUnless( clone_tree.arguments[0].default_value in default_values)
         
 class tester_32_t( tester_impl_t ):
+    global_ns = None    
     def __init__(self, *args):
         tester_impl_t.__init__(self, 32, *args)
 
+
+    def setUp( self ):
+        if not tester_32_t.global_ns:
+            reader = parser.source_reader_t( self.config )
+            tester_32_t.global_ns = reader.read_file( 'patcher.hpp' )[0].top_parent
+        self.global_ns = tester_32_t.global_ns 
+
+
 class tester_64_t( tester_impl_t ):
+    global_ns = None
     def __init__(self, *args):
         tester_impl_t.__init__(self, 64, *args)
+        self.original_get_architecture = utils.get_architecture
+
+    def setUp( self ):
+        self.original_get_architecture = utils.get_architecture
+        utils.get_architecture = lambda: 64
+
+        if not tester_64_t.global_ns:
+            reader = parser.source_reader_t( self.config )
+            tester_64_t.global_ns = reader.read_xml_file( 
+                        os.path.join( autoconfig.data_directory, 'patcher_tester_64bit.xml' ) )[0].top_parent
+        self.global_ns = tester_64_t.global_ns
+                
+    def tearDown( self ):
+        utils.get_architecture = self.original_get_architecture
 
 def create_suite():
     suite = unittest.TestSuite()        
