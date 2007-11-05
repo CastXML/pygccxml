@@ -75,9 +75,7 @@ XML_NN_STRUCT = "Struct"
 XML_NN_TYPEDEF = "Typedef"
 XML_NN_UNION = "Union"
 XML_NN_VARIABLE = "Variable"
-   
-NUMERIC_SUFFIX_LETTERS = 'UuLlFf'
-   
+
 class scanner_t( xml.sax.handler.ContentHandler ):
     def __init__(self, gccxml_file, decl_factory, *args ):
         xml.sax.handler.ContentHandler.__init__(self, *args )
@@ -257,7 +255,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         decl.demangled = attrs.get( XML_AN_DEMANGLED, None )
         
     def __read_attributes( self, decl, attrs ):
-    	decl.attributes = attrs.get( XML_AN_ATTRIBUTES, None )
+        decl.attributes = attrs.get( XML_AN_ATTRIBUTES, None )
 
     def __read_access( self, attrs ):
         self.__access[ attrs[XML_AN_ID] ] = attrs.get( XML_AN_ACCESS, ACCESS_TYPES.PUBLIC )
@@ -291,18 +289,26 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         num = int(attrs[XML_AN_INIT])
         self.__inst.append_value(name, num)
 
+    def __guess_int_value( self, value_as_str ):
+        #returns instance of int or None
+        #if gcc compiled the code, than it is correct!
+        numeric_suffix_letters = 'UuLlFf'
+        for s in numeric_suffix_letters:
+            value_as_str = value_as_str.replace( s, '' )
+        try:
+            return int( value_as_str )
+        except ValueError:
+            try:
+                return int( value_as_str, 16 )
+            except ValueError:
+                return None
+
     def __read_array_type( self, attrs ):
         type_ = attrs[ XML_AN_TYPE ]
-        size = array_t.SIZE_UNKNOWN
-        if attrs.has_key(XML_AN_MAX):
-            if attrs[XML_AN_MAX]:
-                try:
-                    size = int( attrs[XML_AN_MAX] )
-                except ValueError:
-                    try:
-                        size = int( attrs[ XML_AN_MAX ], 16 )
-                    except ValueError:
-                        warnings.warn( 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ] )
+        size = self.__guess_int_value( attrs.get(XML_AN_MAX, '' ) )
+        if size is None:
+            size = array_t.SIZE_UNKNOWN
+            warnings.warn( 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ] )
         return array_t( type_, size + 1 )
  
     def __read_cv_qualified_type( self, attrs ):
@@ -480,7 +486,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         version = float( attrs.get(XML_AN_CVS_REVISION, None) )
         if version is None:
             version = "0.6"
-        elif version <= 1.114:
+        elif version < 1.117:
             version = "0.7"
         else:
             version = "0.9"
