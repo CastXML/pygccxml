@@ -294,6 +294,9 @@ class core_t( parser_test_case.parser_test_case_t ):
         implementation = ns.class_( 'implementation' )
         self.failUnless( not implementation.is_abstract, "class 'implementation' should not be abstract" )
 
+    def test_versioning(self):
+        for d in self.global_ns.decls():
+            self.failUnless( d.compiler )
 
 class core_all_at_once_t( core_t ):
     COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE

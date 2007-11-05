@@ -66,7 +66,8 @@ class declaration_t( object ):
         self._attributes = attributes        
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
-
+        self._compiler = None
+        
     def __str__(self):
         """Default __str__ method.
 
@@ -229,7 +230,6 @@ class declaration_t( object ):
                         """ )
 
 
-
     def _create_decl_string(self):
         return algorithm.full_name( self )
 
@@ -251,3 +251,11 @@ class declaration_t( object ):
         """return list of all types and declarations the declaration depends on"""
         print self
         raise NotImplementedError()
+
+    def _get_compiler( self ):
+        return self._compiler
+    def _set_compiler( self, compiler ):
+        self._compiler = compiler
+    compiler = property( _get_compiler, _set_compiler
+                        , doc="""compiler name + version
+                        @type: str""" )

@@ -18,7 +18,7 @@ build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )
 if 'roman' in getpass.getuser():
     if sys.platform == 'win32':
         compiler = 'msvc71'
-        gccxml_path = r'd:/dev/gccxml_cvs/gccxml-bin/bin/release/gccxml.exe'
+        gccxml_path = r'D:/dev/gccxml/gccxml.exe'
     else:
         gccxml_path = '/home/roman/gccxml/bin/gccxml'
 

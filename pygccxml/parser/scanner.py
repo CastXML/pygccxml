@@ -25,6 +25,7 @@ XML_AN_BASES = "bases"
 XML_AN_BITS = "bits"
 XML_AN_CONST = "const"
 XML_AN_CONTEXT = "context"
+XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_DEFAULT = "default"
 XML_AN_DEMANGLED = "demangled"
 XML_AN_EXTERN = "extern"
@@ -61,6 +62,7 @@ XML_NN_FUNCTION = "Function"
 XML_NN_FUNCTION_TYPE = "FunctionType"
 XML_NN_FUNDAMENTAL_TYPE = "FundamentalType"
 XML_NN_FREE_OPERATOR = "OperatorFunction"
+XML_NN_GCC_XML = "GCC_XML"
 XML_NN_MEMBER_OPERATOR = "OperatorMethod"
 XML_NN_METHOD = "Method"
 XML_NN_METHOD_TYPE = "MethodType"
@@ -109,6 +111,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                , XML_NN_FREE_OPERATOR : self.__read_free_operator
                , XML_NN_MEMBER_OPERATOR : self.__read_member_operator
                , XML_NN_METHOD : self.__read_method
+               , XML_NN_GCC_XML : self.__read_version
         }
         self.deep_declarations = [
             XML_NN_CASTING_OPERATOR
@@ -143,6 +146,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         self.__inst = None
         #mapping from id to members
         self.__members = {}
+        
+        self.__compiler = None
     
     def read( self ):
         xml.sax.parse( self.gccxml_file, self )
@@ -197,6 +202,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             self.__read_access( attrs )
             element_id = attrs.get(XML_AN_ID, None)
             if isinstance( obj, declaration_t ):
+                obj.compiler = self.__compiler
                 self.__update_membership( attrs )
                 self.__declarations[ element_id ] = obj
                 if not isinstance( obj, namespace_t ):
@@ -469,3 +475,13 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         else:
             operator.name = 'operator' + operator.name
         return operator
+
+    def __read_version(self, attrs):
+        version = float( attrs.get(XML_AN_CVS_REVISION, None) )
+        if version is None:
+            version = "0.6"
+        elif version <= 1.114:
+            version = "0.7"
+        else:
+            version = "0.9"
+        self.__compiler = "GCC-XML " + version
