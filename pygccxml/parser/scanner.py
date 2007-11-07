@@ -308,7 +308,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         size = self.__guess_int_value( attrs.get(XML_AN_MAX, '' ) )
         if size is None:
             size = array_t.SIZE_UNKNOWN
-            warnings.warn( 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ] )
+            msg = 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ]
+            warnings.warn( msg )
         return array_t( type_, size + 1 )
  
     def __read_cv_qualified_type( self, attrs ):
@@ -339,7 +340,10 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_offset_type( self,attrs ):
         base = attrs[ XML_AN_BASE_TYPE ]
         type_ = attrs[ XML_AN_TYPE ]
-        return member_variable_type_t( class_inst=base, variable_type=type_ )
+        if '0.9' in self.__compiler:
+            return pointer_t( member_variable_type_t( class_inst=base, variable_type=type_ ) )
+        else:
+            return member_variable_type_t( class_inst=base, variable_type=type_ )
 
     def __read_argument( self, attrs ):
         if isinstance( self.__inst, calldef_type_t ):
