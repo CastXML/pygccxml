@@ -1,0 +1,33 @@
+GCC-XML 0.9
+    
+    void fix_numeric( ull arg=(ull)-1 );
+    <Argument name="arg" type="_103" location="f24:18" file="f24" line="18" default="0xffffffffffffffffu"/>
+    
+    void fix_function_call( int i=calc( 1,2,3) );
+    <Argument name="i" type="_34" location="f24:27" file="f24" line="27" default="function_call::calc(1, 2, 3)"/>
+
+    void typedef__func( const typedef_::alias& position = typedef_::alias() );
+    <Argument name="position" type="_1703" location="f24:46" file="f24" line="46" default="typedef_::original_name()"/>
+
+    void typedef__func2( const typedef_::alias& position = alias() );
+    <Argument name="position" type="_1703" location="f24:49" file="f24" line="49" default="typedef_::original_name()"/>
+
+    node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
+    <Argument name="types" type="_3096" location="f4:53" file="f4" line="53" default="std::vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;(((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;&amp;)((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;*)(&amp; std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))))"/>
+
+GCC-XML 0.7
+
+    void fix_numeric( ull arg=(ull)-1 );
+    <Argument name="arg" type="_7" location="f0:18" file="f0" line="18" default="0xffffffffffffffff"/>
+
+    void fix_function_call( int i=calc( 1,2,3) );
+    <Argument name="i" type="_9" location="f0:27" file="f0" line="27" default="function_call::calc(int, int, int)(1, 2, 3)"/>
+
+    void typedef__func( const typedef_::alias& position = typedef_::alias() );
+    <Argument name="position" type="_1458" location="f0:46" file="f0" line="46" default="alias()"/>
+  
+    void typedef__func2( const typedef_::alias& position = alias() );
+    <Argument name="position" type="_1458" location="f0:49" file="f0" line="49" default="alias()"/>
+
+    node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
+    <Argument name="types" type="_3336" location="f0:53" file="f0" line="53" default="vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;((&amp;allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))"/>
