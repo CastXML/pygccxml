@@ -47,9 +47,16 @@ class declarations_t( parser_test_case.parser_test_case_t ):
     def test_variables(self):
         variables = self.global_ns.namespace( 'variables' )
         initialized = self.global_ns.variable( name='initialized' )
-        self.failUnless( initialized.value == '10122004'
+        
+        expected_value = None
+        if '0.9' in initialized.compiler:
+            expected_value = '10122004ul'
+        else:
+            expected_value = '10122004'
+        
+        self.failUnless( initialized.value == expected_value
                          , "there is a difference between expected value( %s ) and real value(%s) of 'initialized' variable" \
-                           % ( '10122004', initialized.value ) )
+                           % ( expected_value, initialized.value ) )
         self._test_type_composition( initialized.type, const_t, long_unsigned_int_t )
 
         static_var = initialized = self.global_ns.variable( name='static_var' )

@@ -1,3 +1,4 @@
+
 // Copyright 2004 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -79,10 +80,16 @@ namespace detail{
 
 namespace yes{
     typedef detail::x x;
+#ifdef __GCCXML_09__    
+    typedef detail::y_type y_type;    
+#endif//__GCCXML_09__    
+    
 }
 namespace no{
     typedef std::string string_type;
+#ifdef __GCCXML_07__    
     typedef detail::y_type y_type;    
+#endif//__GCCXML_07__    
 }
 }
 

@@ -27,7 +27,10 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
     def test_numeric_patcher(self):
         fix_numeric = self.global_ns.free_fun( 'fix_numeric' )
         if 32 == self.architecture:
-            self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffff" )
+            if '0.9' in fix_numeric.compiler:
+                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffffu" )
+            else:
+                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffff" )
         else: 
             self.failUnless( fix_numeric.arguments[0].default_value == u"0ffffffff" )
             
@@ -37,7 +40,10 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun( 'fix_function_call' )
-        self.failUnless( fix_function_call.arguments[0].default_value == u"function_call::calc( 1, 2, 3 )" )
+        if '0.9' in fix_function_call.compiler:
+            self.failUnless( fix_function_call.arguments[0].default_value == u"function_call::calc(1, 2, 3)" )
+        else:
+            self.failUnless( fix_function_call.arguments[0].default_value == u"function_call::calc( 1, 2, 3 )" )
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun( 'fix_fundamental' )
@@ -45,20 +51,27 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
 
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_fun( 'typedef__func' )
-        self.failUnless( typedef__func.arguments[0].default_value == u"::typedef_::alias( )" )
+        if '0.9' in typedef__func.compiler:
+            self.failUnless( typedef__func.arguments[0].default_value == u"typedef_::original_name()" )
+        else:
+            self.failUnless( typedef__func.arguments[0].default_value == u"::typedef_::alias( )" )
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun( 'clone_tree' )
-            default_values =  [
-                'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >()'
-                , 'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >((&allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >()))'
-            ]
+            default_values = []
+            if '0.9' in clone_tree.compiler:
+                default_values = [
+                ]
+            else:
+                default_values = [
+                    'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >()'
+                    , 'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >((&allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >()))'
+                ]   
             self.failUnless( clone_tree.arguments[0].default_value in default_values)
         
 class tester_32_t( tester_impl_t ):
     global_ns = None    
     def __init__(self, *args):
         tester_impl_t.__init__(self, 32, *args)
-
 
     def setUp( self ):
         if not tester_32_t.global_ns:

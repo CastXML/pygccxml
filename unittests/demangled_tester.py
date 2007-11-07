@@ -35,8 +35,12 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
     def test( self ):                
         demangled = self.global_ns.namespace( 'demangled' )
         if 32 == self.architecture:
-            cls = demangled.class_( 'item_t<3740067437l, 11l, 2147483648l>' )
-            self.failUnless( cls._name == 'item_t<0x0deece66d,11,0x080000000>' )
+            if '0.9' in demangled.compiler:
+                cls = demangled.class_( 'item_t<3740067437ul, 11ul, 2147483648ul>' )
+                self.failUnless( cls._name == 'item_t<-554899859ul,11ul,-2147483648ul>' )
+            else:
+                cls = demangled.class_( 'item_t<3740067437l, 11l, 2147483648l>' )
+                self.failUnless( cls._name == 'item_t<0x0deece66d,11,0x080000000>' )
         else:
             cls = demangled.class_( "item_t<25214903917l, 11l, 2147483648l>" )
             self.failUnless( cls._name == 'item_t<25214903917,11,2147483648>' )

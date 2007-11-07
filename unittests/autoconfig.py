@@ -11,16 +11,17 @@ import getpass
 #import pychecker.checker
 
 compiler = None
-gccxml_path = ''
 data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
 build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )
 
-if 'roman' in getpass.getuser():
-    if sys.platform == 'win32':
-        compiler = 'msvc71'
-        gccxml_path = r'D:/dev/gccxml/gccxml.exe'
-    else:
-        gccxml_path = '/home/roman/gccxml/bin/gccxml'
+gccxml_07_path = os.path.abspath( os.path.join( '..', '..', 'gccxml_bin', 'v07', sys.platform, 'bin' ) )
+gccxml_09_path = os.path.abspath( os.path.join( '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' ) )
+
+gccxml_path = gccxml_09_path
+gccxml_version = '__GCCXML_09__'
+
+if sys.platform == 'win32':
+    compiler = 'msvc71'
 
 try:
     import pygccxml
@@ -35,6 +36,7 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 class cxx_parsers_cfg:
     gccxml = pygccxml.parser.gccxml_configuration_t( gccxml_path=gccxml_path
                                                      , working_directory=data_directory
+                                                     , define_symbols=[ gccxml_version ]
                                                      , compiler=compiler )
 
     synopsis = pygccxml.parser.synopsis_configuration_t( working_directory=data_directory )

@@ -38,8 +38,9 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         color2 = declarations.matcher.get_single( enum_matcher, decls2 )
         self.failUnless( color1.values == color2.values )
 
-class synopsis_tester_t( tester_impl_t ):
-    CXX_PARSER_CFG = autoconfig.cxx_parsers_cfg.synopsis
+#there is no progress with this parser
+#class synopsis_tester_t( tester_impl_t ):
+#    CXX_PARSER_CFG = autoconfig.cxx_parsers_cfg.synopsis
 
 class gccxml_tester_t( tester_impl_t ):
     CXX_PARSER_CFG = autoconfig.cxx_parsers_cfg.gccxml
@@ -47,7 +48,7 @@ class gccxml_tester_t( tester_impl_t ):
 
 def create_suite():
     suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(synopsis_tester_t))
+    #suite.addTest( unittest.makeSuite(synopsis_tester_t))
     suite.addTest( unittest.makeSuite(gccxml_tester_t))
     return suite
 
