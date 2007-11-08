@@ -12,8 +12,8 @@ from pygccxml.parser.declarations_cache import *
 class decl_cache_tester(unittest.TestCase):
     def __init__(self, *args ):
         unittest.TestCase.__init__(self, *args)
-        if not os.path.exists( autoconfig.build_dir ):
-            os.makedirs( autoconfig.build_dir )
+        if not os.path.exists( autoconfig.build_directory ):
+            os.makedirs( autoconfig.build_directory )
 
     def test_file_signature(self):
         file1 = os.path.join(autoconfig.data_directory, 'decl_cache_file1.txt')
@@ -47,7 +47,7 @@ class decl_cache_tester(unittest.TestCase):
         self.assert_(configuration_signature(ignore_changed) == def_sig)
         
     def test_cache_interface(self):
-        cache_file = os.path.join(autoconfig.build_dir, 'decl_cache_test.test_cache_read.cache')
+        cache_file = os.path.join(autoconfig.build_directory, 'decl_cache_test.test_cache_read.cache')
         file1 = os.path.join(autoconfig.data_directory, 'decl_cache_file1.txt')
         file1_dup = os.path.join(autoconfig.data_directory, 'decl_cache_file1_duplicate.txt')
         file2 = os.path.join(autoconfig.data_directory, 'decl_cache_file2.txt')

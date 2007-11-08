@@ -3,7 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import sys
 import unittest
+
 import decl_string_tester
 import declaration_files_tester
 import declarations_comparison_tester
@@ -46,55 +48,54 @@ import find_container_traits_tester
 import attributes_tester
 import type_as_exception_bug_tester
 
-def create_suite():
-    testers = [
-        decl_string_tester
-        , declaration_files_tester
-        , declarations_comparison_tester
-        , declarations_tester
-        , file_cache_tester
-        , gccxml_runner_tester
-        , project_reader_correctness_tester
-        , source_reader_tester
-        , start_with_declarations_tester
-        , templates_tester
-        , type_traits_tester
-        , core_tester
-        , xmlfile_reader_tester
-        , filtering_tester
-        , text_reader_tester
-        , hierarchy_traveling
-        , patcher_tester
-        , call_invocation_tester
-        , bit_fields_tester
-        , complex_types_tester
-        , cached_source_file_tester
-        , variable_matcher_tester
-        , namespace_matcher_tester
-        , calldef_matcher_tester
-        , filters_tester
-        , cache_enums_tester
-        , decl_printer_tester
-        , typedefs_tester
-        , demangled_tester
-        , unnamed_enums_bug_tester
-        , vector_traits_tester
-        , string_traits_tester
-        , declarations_cache_tester
-        , has_binary_operator_traits_tester
-        , algorithms_cache_tester
-        , dependencies_tester
-        , free_operators_tester
-        , remove_template_defaults_tester
-        , find_container_traits_tester
-        , attributes_tester
-        , type_as_exception_bug_tester
-    ]
+testers = [
+    decl_string_tester
+    , declaration_files_tester
+    , declarations_comparison_tester
+    , declarations_tester
+    , file_cache_tester
+    , gccxml_runner_tester
+    , project_reader_correctness_tester
+    , source_reader_tester
+    , start_with_declarations_tester
+    , templates_tester
+    , type_traits_tester
+    , core_tester
+    , xmlfile_reader_tester
+    , filtering_tester
+    , text_reader_tester
+    , hierarchy_traveling
+    , patcher_tester
+    , call_invocation_tester
+    , bit_fields_tester
+    , complex_types_tester
+    , cached_source_file_tester
+    , variable_matcher_tester
+    , namespace_matcher_tester
+    , calldef_matcher_tester
+    , filters_tester
+    , cache_enums_tester
+    , decl_printer_tester
+    , typedefs_tester
+    , demangled_tester
+    , unnamed_enums_bug_tester
+    , vector_traits_tester
+    , string_traits_tester
+    , declarations_cache_tester
+    , has_binary_operator_traits_tester
+    , algorithms_cache_tester
+    , dependencies_tester
+    , free_operators_tester
+    , remove_template_defaults_tester
+    , find_container_traits_tester
+    , attributes_tester
+    , type_as_exception_bug_tester
+]
 
+def create_suite():
     main_suite = unittest.TestSuite()
     for tester in testers:
         main_suite.addTest( tester.create_suite() )
-
     return main_suite
 
 def run_suite():

@@ -42,7 +42,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
         cls = ns_vars.class_( 'struct_variables_t' )
         dependencies = cls.i_depend_on_them()
-        self.failUnless( len(dependencies) == 2 ) #compiler generated copy constructor
+        if '0.9' in cls.compiler:
+            self.failUnless( len(dependencies) == 1 )
+        else:
+            self.failUnless( len(dependencies) == 2 ) #compiler generated copy constructor
         
         m_mutable = ns_vars.variable( 'm_mutable' )
         dependencies = filter( lambda dependency: dependency.declaration is m_mutable

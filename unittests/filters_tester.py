@@ -32,14 +32,23 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_access_type( self ):       
         criteria = declarations.access_type_matcher_t( declarations.ACCESS_TYPES.PUBLIC )
         public_members = declarations.matcher.find( criteria, self.declarations )
-        self.failUnless( 19 == len( public_members ) )
+        if '0.9' in public_members[0].compiler:
+            #2 empty classes, this compiler doesn't generate constructor and copy constructor
+            self.failUnless( 15 == len( public_members ) ) 
+        else:
+            self.failUnless( 19 == len( public_members ) )
         
     def test_or_matcher( self ):
         criteria1 = declarations.regex_matcher_t( 'oper.*'
                                                    , lambda decl: decl.name )
         criteria2 = declarations.access_type_matcher_t( declarations.ACCESS_TYPES.PUBLIC )
         found = declarations.matcher.find( criteria1 | criteria2, self.declarations )
-        self.failUnless( 19 <= len( found ) <= 25 )
+
+        if '0.9' in found[0].compiler:
+            #2 empty classes, this compiler doesn't generate constructor and copy constructor
+            self.failUnless( 15 <= len( found ) <= 21) 
+        else:
+            self.failUnless( 19 <= len( found ) <= 25)
 
     def test_and_matcher( self ):
         criteria1 = declarations.regex_matcher_t( 'oper.*'

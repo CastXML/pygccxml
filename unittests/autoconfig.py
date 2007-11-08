@@ -10,12 +10,14 @@ import getpass
 #__pychecker__ = 'limit=1000'
 #import pychecker.checker
 
-compiler = None
-data_directory = os.path.abspath( os.path.join( os.curdir, 'data' ) )
-build_dir = os.path.abspath( os.path.join( os.curdir, 'temp' ) )
+this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
-gccxml_07_path = os.path.abspath( os.path.join( '..', '..', 'gccxml_bin', 'v07', sys.platform, 'bin' ) )
-gccxml_09_path = os.path.abspath( os.path.join( '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' ) )
+compiler = None
+data_directory = os.path.join( this_module_dir_path, 'data' )
+build_directory = os.path.join( this_module_dir_path, 'temp' )
+
+gccxml_07_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v07', sys.platform, 'bin' )
+gccxml_09_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 
 gccxml_path = gccxml_09_path
 gccxml_version = '__GCCXML_09__'
