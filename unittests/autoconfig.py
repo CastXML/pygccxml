@@ -20,7 +20,12 @@ gccxml_07_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', '
 gccxml_09_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 
 gccxml_path = gccxml_09_path
-gccxml_version = '__GCCXML_09__'
+
+gccxml_version = '__GCCXML_07__'
+if '09' in gccxml_path:
+    gccxml_version = '__GCCXML_09__'
+
+print 'compiler: ', gccxml_version
 
 if sys.platform == 'win32':
     compiler = 'msvc71'

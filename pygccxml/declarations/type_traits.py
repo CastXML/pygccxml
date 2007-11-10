@@ -344,22 +344,79 @@ is_class_declaration = class_declaration_traits.is_my_case
 def find_trivial_constructor( type ):
     """returns reference to trivial constructor or None"""
     assert isinstance( type, class_declaration.class_t )
-    constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
-                                     and 0 == len( x.arguments ) \
-                           , type.public_members )
-    if constructors:
-        return constructors[0]
+    trivial = type.constructors( lambda x: x.is_trivial_constructor and x.access_type == 'public'
+                                 , recursive=False
+                                 , allow_empty=True )
+    if trivial:
+        return trivial[0]
     else:
         return None
 
 def has_trivial_constructor( type ):
-    """returns True, if class has trivial constructor, False otherwise"""
-    return None != find_trivial_constructor( type )
+    """returns True, if class has public trivial constructor, False otherwise"""
+    if '0.9' in type.compiler:
+        trivial = type.constructors( lambda x: x.is_trivial_constructor
+                                     , recursive=False
+                                     , allow_empty=True )
+        if trivial:
+            if trivial[0].access_type == 'public':
+                return True
+            else:
+                return False
+        else: 
+            #there is no trivial constructor, so I should find out whether other constructors exist
+            if type.constructors( recursive=False, allow_empty=True ):
+                return False
+            else:
+                return True
+    else:
+        if None != find_trivial_constructor( type ):
+            return True
+        return False
+
+"""
+Question: Do I have to define a copy constructor and assignment operator?
+
+Answer: 
+  C++ implicitly declares a copy constructor and an assignment operator 
+  for every class, struct and union unless the user declared them explicitly. 
+  A copy constructor isnot implicitly declared if the class has any user-declared 
+  constructor(s). Implicitly defined copy constructor and assignment operator 
+  are said to be trivial if:
+
+    * their class has no virtual functions and no virtual base class(es)
+    * all direct base classes and nonstatic data members of their class have trivial constructors
+
+  Otherwise, the copy constructor and the assignment operator are non-trivial. 
+  Implicitly-declared non-trivial copy constructor and assignment operator are 
+  implicitly-defined.
+
+The assignment operator is called "copy assignment operator" in the standard. 
+This verbosity doesnot convey any new or hidden meanings. Perhaps it's meant to 
+differentiate between the assignment operator of fundamental types and the 
+assignment operator member function of class types. In this series I will stick 
+to the term assignment operator.
+"""
 
 def has_trivial_copy( type):
-    """returns True, if class has copy constructor, False otherwise"""
+    """returns True, if class has public copy constructor, False otherwise"""
     assert isinstance( type, class_declaration.class_t )
-    constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
+    if '0.9' in type.compiler:
+        copy_ = type.constructors( lambda x: x.is_copy_constructor
+                                     , recursive=False
+                                     , allow_empty=True )
+        if copy_:
+            if copy_[0].access_type == 'public':
+                return True
+            else:
+                return False
+        else:
+            if type.constructors( recursive=False, allow_empty=True ):
+                return False
+            else:
+                return True
+    else:
+        constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
                                      and x.is_copy_constructor
                            , type.public_members )
     return bool( constructors )
@@ -378,7 +435,7 @@ def has_public_constructor(type):
                                              , type=calldef.constructor_t
                                              , recursive=False )
     constructors = filter( lambda decl: not decl.is_copy_constructor, decls )
-    return bool( constructors )
+    return bool( constructors ) or has_trivial_constructor( type )
 
 def has_public_assign(type):
     """returns True, if class has public assign operator, False otherwise"""
@@ -395,7 +452,6 @@ def has_public_destructor(type):
     return bool( algorithm.find_declaration( type.public_members
                                              , type=calldef.destructor_t
                                              , recursive=False ) )
-
 
 def is_base_and_derived( based, derived ):
     """returns True, if there is "base and derived" relationship between classes, False otherwise"""
@@ -420,7 +476,7 @@ def has_any_non_copyconstructor( type):
     constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
                                      and not x.is_copy_constructor
                            , type.public_members )
-    return bool( constructors )
+    return bool( constructors ) or has_trivial_constructor( type )
 
 def has_public_binary_operator( type, operator_symbol ):
     """returns True, if type has public binary operator, otherwise False"""
@@ -860,6 +916,20 @@ def is_noncopyable( class_ ):
 
     if class_.is_abstract:
         return True
+    #~ if '0.9' in class_.compiler:
+        #~ #class will be mark as noncopyable if it has private operator assign and 
+        #~ #copy constructor
+        #~ #select all non-public members that are copy constructor and operator assign
+        #~ is_noncopyable_query = \
+            #~ matchers.not_matcher_t( matchers.access_type_matcher_t( 'public' ) )\
+            #~ & \
+            #~ ( matchers.custom_matcher_t( lambda decl: isinstance( decl, calldef.constructor_t ) \
+                                                      #~ and decl.is_copy_constructor )
+              #~ | matchers.operator_matcher_t( symbol='=' ) )
+        #~ result = class_.decls( is_noncopyable_query, recursive=False, allow_empty=True )
+        #~ if result:
+            #~ return True
+    #~ else:
     elif not has_trivial_copy( class_ ):
         return True
     elif not has_public_constructor( class_ ):

@@ -79,17 +79,11 @@ namespace detail{
 }    
 
 namespace yes{
-    typedef detail::x x;
-#ifdef __GCCXML_09__    
-    typedef detail::y_type y_type;    
-#endif//__GCCXML_09__    
-    
+    typedef detail::x x;    
 }
 namespace no{
     typedef std::string string_type;
-#ifdef __GCCXML_07__    
     typedef detail::y_type y_type;    
-#endif//__GCCXML_07__    
 }
 }
 

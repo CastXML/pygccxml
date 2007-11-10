@@ -469,7 +469,9 @@ class constructor_t( member_calldef_t ):
             cls = 'copy ' + cls
         return "%s [%s]"%(res, cls)
 
-    def _get_is_copy_constructor(self):
+    @property
+    def is_copy_constructor(self):
+        """returns True if described declaration is copy constructor, otherwise False"""
         args = self.arguments
         if 1 != len( args ):
             return False
@@ -483,8 +485,11 @@ class constructor_t( member_calldef_t ):
         if not isinstance( unaliased.base, cpptypes.declarated_t ):
             return False
         return id(unaliased.base.declaration) == id(self.parent)
-    is_copy_constructor = property(_get_is_copy_constructor
-                                   , doc="returns True if described declaration is copy constructor, otherwise False")
+    
+    @property
+    def is_trivial_constructor(self):
+        return not bool( self.arguments )
+    
 
 class destructor_t( member_calldef_t ):
     """describes deconstructor declaration"""
