@@ -1,0 +1,17 @@
+GCC-XML 0.9
+
+  <Method id="_1527" name="identity" returns="_1289" context="_177" access="public" mangled="_ZN13mem_var_str_t8identityESs" demangled="mem_var_str_t::identity(std::string)" location="f28:10" file="f28" line="10" endline="10" inline="1">
+    <Argument name="x" type="_2736r" location="f28:10" file="f28" line="10"/>
+  </Method>
+  
+  <CvQualifiedType id="_2736r" type="_2736" restrict="1"/>
+  <ReferenceType id="_2736" type="_1289" size="32" align="32"/>
+  <Typedef id="_1289" name="string" type="_1285" context="_2" location="f47:60" file="f47" line="60"/>
+  
+  
+GCC-XML 0.7
+
+  <Method id="_1418" name="identity" returns="_1406" context="_3" access="public" mangled="_ZN13mem_var_str_t8identityESs" demangled="mem_var_str_t::identity(std::string)" location="f0:10" file="f0" line="10" endline="10" inline="1">
+    <Argument name="x" type="_1406" location="f0:10" file="f0" line="10"/>
+  </Method>
+  <Typedef id="_1406" name="string" type="_1405" context="_2" location="f58:60" file="f58" line="60"/>
