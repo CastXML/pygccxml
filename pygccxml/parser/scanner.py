@@ -318,9 +318,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         elif attrs.has_key( XML_AN_VOLATILE ):
             return volatile_t( attrs[XML_AN_TYPE] )
         elif attrs.has_key( XML_AN_RESTRICT ):
-            #TODO: find out what is restrict type
-            #and I really don't know what I should return
-            return volatile_t( attrs[XML_AN_TYPE] )
+            return restrict_t( attrs[XML_AN_TYPE] )
         else: 
             assert 0 
 

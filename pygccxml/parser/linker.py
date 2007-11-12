@@ -264,3 +264,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_declarated( self ):
         if isinstance( self.__inst.declaration, types.StringTypes ):
             self.__inst.declaration = self.__decls[self.__inst.declaration]
+
+    def visit_restrict( self ):
+        self.__link_compound_type()
+
