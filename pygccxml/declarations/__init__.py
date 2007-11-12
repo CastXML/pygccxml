@@ -49,6 +49,7 @@ from cpptypes import volatile_t
 from cpptypes import const_t
 from cpptypes import pointer_t
 from cpptypes import reference_t
+from cpptypes import restrict_t
 from cpptypes import array_t
 from cpptypes import calldef_type_t
 from cpptypes import free_function_type_t

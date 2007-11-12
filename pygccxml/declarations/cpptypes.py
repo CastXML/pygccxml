@@ -342,6 +342,27 @@ class volatile_t( compound_t ):
     def _clone_impl( self ):
         return volatile_t( self.base.clone() )
 
+class restrict_t( compound_t ):
+    """represents C{restrict whatever} type"""
+    
+    #The restrict keyword can be considered an extension to the strict aliasing 
+    #rule. It allows the programmer to declare that pointers which share the same 
+    #type (or were otherwise validly created) do not alias eachother. By using 
+    #restrict the programmer can declare that any loads and stores through the 
+    #qualified pointer (or through another pointer copied either directly or 
+    #indirectly from the restricted pointer) are the only loads and stores to 
+    #the same address during the lifetime of the pointer. In other words, the 
+    #pointer is not aliased by any pointers other than its own copies.
+
+    def __init__( self, base ):
+        compound_t.__init__( self, base)
+
+    def _create_decl_string(self):
+        return '__restrict__ ' + self.base.decl_string
+
+    def _clone_impl( self ):
+        return restrict_t( self.base.clone() )
+
 class const_t( compound_t ):
     """represents C{whatever const} type"""
     def __init__( self, base ):
