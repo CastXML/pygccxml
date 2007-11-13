@@ -9,6 +9,8 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+#include "noncopyable.hpp"
 
 #define TYPE_PERMUTATION( BASE, NAME )                        \
     typedef BASE NAME##_t;                                    \
@@ -76,14 +78,93 @@ namespace detail{
 
         static const y_type zero;
     };
+    
+    struct instantiate_vector{
+        instantiate_vector()
+        : v()
+        {}
+        
+        std::vector< int > v;
+    };
+    
+    
+    class a_t{
+    public:
+
+        static char get_a(){ return 'a'; }
+
+    private:
+        a_t(){};
+        ~a_t(){};
+    };
+
+    class b_t{
+        ~b_t(){}
+    public:
+       
+        static char get_b(){ return 'b'; }
+
+    };
+
+    class c_t : public boost::noncopyable{
+    public:  
+        static char get_c(){ return 'c'; }
+
+    };
+
+    class d_t{  
+    private:
+        d_t( const d_t& );    
+    public:  
+        d_t(){}
+        ~d_t(){}
+        static char get_d(){ return 'd'; }
+
+    };
+
+    class dd_t : public d_t{
+    public:
+        dd_t(){}
+        ~dd_t(){}
+        static char get_dd(){ return 'D'; }        
+    };
+
+    struct e_t{
+        virtual void do_smth() = 0;
+    private:
+        c_t c;    
+    };
+
+    struct f_t{
+        f_t() : i(0){}
+        virtual void do_smth() = 0;
+    private:
+        const int i;    
+    };
+
+    struct g_t{    
+        enum E{e};
+        g_t() : e_(e){}
+        virtual void do_smth() = 0;
+    private:
+        const E e_;    
+    };    
 }    
 
 namespace yes{
     typedef detail::x x;    
+    typedef detail::a_t a_t;
+    typedef detail::b_t b_t;
+    typedef detail::c_t c_t;
+    typedef detail::d_t d_t;
+    typedef detail::dd_t dd_t;
+    typedef detail::f_t f_t;
+    typedef detail::g_t g_t;    
 }
 namespace no{
     typedef std::string string_type;
     typedef detail::y_type y_type;    
+    typedef std::vector< int > vector_of_int_type;
 }
 }
 

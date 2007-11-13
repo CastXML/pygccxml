@@ -402,11 +402,9 @@ def has_trivial_copy( type):
     """returns True, if class has public copy constructor, False otherwise"""
     assert isinstance( type, class_declaration.class_t )
     if '0.9' in type.compiler:
-        copy_ = type.constructors( lambda x: x.is_copy_constructor
-                                     , recursive=False
-                                     , allow_empty=True )
+        copy_ = type.find_copy_constructor()
         if copy_:
-            if copy_[0].access_type == 'public':
+            if copy_.access_type == 'public':
                 return True
             else:
                 return False
@@ -900,8 +898,18 @@ def is_noncopyable( class_ ):
     
     if class_.class_type == class_declaration.CLASS_TYPES.UNION:
         return False
+
+    if class_.is_abstract:
+        return True
+
+    #if class has public, user defined copy constructor, than this class is 
+    #copyable
+    copy_ = class_.find_copy_constructor()
+    if copy_ and copy_.access_type == 'public' and not copy_.is_artificial:
+        return False
+    
     for base_desc in class_.recursive_bases:
-        assert isinstance( base_desc, class_declaration.hierarchy_info_t )
+        assert isinstance( base_desc, class_declaration.hierarchy_info_t )    
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
             return True
         if not has_trivial_copy( base_desc.related_class ):
@@ -910,27 +918,10 @@ def is_noncopyable( class_ ):
                                      , base_desc.related_class.protected_members )
             if not protected_ctrs:
                 return True
-
         if __is_noncopyable_single( base_desc.related_class ):
             return True
-
-    if class_.is_abstract:
-        return True
-    #~ if '0.9' in class_.compiler:
-        #~ #class will be mark as noncopyable if it has private operator assign and 
-        #~ #copy constructor
-        #~ #select all non-public members that are copy constructor and operator assign
-        #~ is_noncopyable_query = \
-            #~ matchers.not_matcher_t( matchers.access_type_matcher_t( 'public' ) )\
-            #~ & \
-            #~ ( matchers.custom_matcher_t( lambda decl: isinstance( decl, calldef.constructor_t ) \
-                                                      #~ and decl.is_copy_constructor )
-              #~ | matchers.operator_matcher_t( symbol='=' ) )
-        #~ result = class_.decls( is_noncopyable_query, recursive=False, allow_empty=True )
-        #~ if result:
-            #~ return True
-    #~ else:
-    elif not has_trivial_copy( class_ ):
+        
+    if not has_trivial_copy( class_ ):
         return True
     elif not has_public_constructor( class_ ):
         return True
@@ -938,7 +929,6 @@ def is_noncopyable( class_ ):
         return True
     else:
         return __is_noncopyable_single( class_ )
-
 
 def is_defined_in_xxx( xxx, cls ):
     """small helper function, that checks whether class ( C{cls} ) is defined

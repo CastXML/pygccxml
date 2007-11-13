@@ -393,4 +393,18 @@ class class_t( scopedef.scopedef_t ):
             self._container_traits = container_traits.find_container_traits( self )            
         return self._container_traits
 
+    def find_copy_constructor( self ):
+        copy_ = self.constructors( lambda x: x.is_copy_constructor, recursive=False, allow_empty=True )
+        if copy_:
+            return copy_[0]
+        else:
+            return None
+        
+    def find_trivial_constructor( self ):
+        trivial = self.constructors( lambda x: x.is_trivial_constructor, recursive=False, allow_empty=True )
+        if trivial:
+            return trivial[0]
+        else:
+            return None
+        
 class_types = ( class_t, class_declaration_t )
