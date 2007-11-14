@@ -278,6 +278,8 @@ class source_reader_t:
         raise RuntimeError( "pygccxml error: file '%s' does not exist" % file )
 
     def __produce_full_file( self, file_path ):
+        if 'win' in sys.platform or 'linux' in sys.platform:
+            file_path = file_path.replace( r'\/', os.path.sep )
         if os.path.isabs( file_path ):
             return file_path
         try:

@@ -16,9 +16,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'core_ns_join_1.hpp'
-        self.config = config.config_t( gccxml_path=autoconfig.gccxml_path
-                                       , working_directory=autoconfig.data_directory
-                                       , start_with_declarations=[ 'E11', 'ns::ns12::E13' ] )
+        self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
+        self.config.start_with_declarations.extend([ 'E11', 'ns::ns12::E13' ] )
         
     def __check_result(self, decls):
         E11 = find_declaration( decls, fullname='::E11' )        
