@@ -152,7 +152,10 @@ namespace detail{
         const E e_;    
     };    
     
-    
+    struct const_item{ const int values[10]; };
+
+    struct const_container{ const const_item items[10]; };
+
 }    
 
 namespace yes{
@@ -163,7 +166,9 @@ namespace yes{
     typedef detail::d_t d_t;
     typedef detail::dd_t dd_t;
     typedef detail::f_t f_t;
-    typedef detail::g_t g_t;    
+    typedef detail::g_t g_t;
+    typedef detail::const_item const_item_t;
+    typedef detail::const_container const_container_t;
 }
 namespace no{
     typedef std::string string_type;
@@ -499,6 +504,7 @@ namespace no{
 } }
 
 namespace has_trivial_constructor{
+
 namespace yes{
     struct x{
         x(){}
@@ -510,6 +516,10 @@ namespace no{
         private: 
         y(){}
     };
+    
+    struct const_item{ const int values[10]; };
+    struct const_container{ const const_item items[10]; };
+
 } }
 
 namespace has_public_constructor{
