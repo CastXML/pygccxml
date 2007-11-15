@@ -883,12 +883,15 @@ def __is_noncopyable_single( class_ ):
         if is_const( type_ ):
             no_const = remove_const( type_ )
             if is_fundamental( no_const ) or is_enum( no_const):
+                #~ print "__is_noncopyable_single - %s - containes const member variable - fundamental or enum" % class_.decl_string
                 return True
             if is_class( no_const ):
+                #~ print "__is_noncopyable_single - %s - containes const member variable - class" % class_.decl_string
                 return True
         if is_class( type_ ):
             cls = type_.declaration
             if is_noncopyable( cls ):
+                #~ print "__is_noncopyable_single - %s - containes member variable - class that is not copyable" % class_.decl_string
                 return True
     return False
 
@@ -900,6 +903,7 @@ def is_noncopyable( class_ ):
         return False
 
     if class_.is_abstract:
+        #~ print "is_noncopyable - %s - abstract client" % class_.decl_string
         return True
 
     #if class has public, user defined copy constructor, than this class is 
@@ -911,21 +915,30 @@ def is_noncopyable( class_ ):
     for base_desc in class_.recursive_bases:
         assert isinstance( base_desc, class_declaration.hierarchy_info_t )    
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
-            return True
+            #~ print "is_noncopyable - %s - derives from boost::noncopyable" % class_.decl_string
+            return True        
         if not has_trivial_copy( base_desc.related_class ):
-            protected_ctrs = filter( lambda x: isinstance( x, calldef.constructor_t ) \
-                                               and x.is_copy_constructor
-                                     , base_desc.related_class.protected_members )
-            if not protected_ctrs:
-                return True
+            base_copy_ = base_desc.related_class.find_copy_constructor()
+            if base_copy_:
+                if base_copy_.access_type == 'private':
+                    #~ print "is_noncopyable - %s - there is private copy constructor" % class_.decl_string
+                    return True
+            else:
+                if __is_noncopyable_single( base_desc.related_class ):
+                    #~ print "is_noncopyable - %s - __is_noncopyable_single returned True" % class_.decl_string
+                    return True
         if __is_noncopyable_single( base_desc.related_class ):
+            #~ print "is_noncopyable - %s - __is_noncopyable_single returned True" % class_.decl_string
             return True
         
     if not has_trivial_copy( class_ ):
+        #~ print "is_noncopyable - %s - does not have trival copy constructor" % class_.decl_string
         return True
     elif not has_public_constructor( class_ ):
+        #~ print "is_noncopyable - %s - does not have a public constructor" % class_.decl_string
         return True
     elif has_destructor( class_ ) and not has_public_destructor( class_ ):
+        #~ print "is_noncopyable - %s - has private destructor" % class_.decl_string
         return True
     else:
         return __is_noncopyable_single( class_ )
