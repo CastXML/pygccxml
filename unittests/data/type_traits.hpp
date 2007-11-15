@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <set>
 #include "noncopyable.hpp"
 
 #define TYPE_PERMUTATION( BASE, NAME )                        \
@@ -79,12 +80,13 @@ namespace detail{
         static const y_type zero;
     };
     
-    struct instantiate_vector{
-        instantiate_vector()
-        : v()
+    struct instantiate_tmpls{
+        instantiate_tmpls()
+        : v(), s()
         {}
         
         std::vector< int > v;
+        std::set< std::string > s;
     };
     
     
@@ -149,6 +151,8 @@ namespace detail{
     private:
         const E e_;    
     };    
+    
+    
 }    
 
 namespace yes{
@@ -165,6 +169,7 @@ namespace no{
     typedef std::string string_type;
     typedef detail::y_type y_type;    
     typedef std::vector< int > vector_of_int_type;
+    typedef std::set< std::string > string_set_type;
 }
 }
 
