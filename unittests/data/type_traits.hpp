@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <map>
 #include "noncopyable.hpp"
 
 #define TYPE_PERMUTATION( BASE, NAME )                        \
@@ -82,11 +83,12 @@ namespace detail{
     
     struct instantiate_tmpls{
         instantiate_tmpls()
-        : v(), s()
+        : v(), s(), ms()
         {}
         
         std::vector< int > v;
         std::set< std::string > s;
+        std::multimap< std::string, std::string > ms;
     };
     
     
@@ -175,6 +177,7 @@ namespace no{
     typedef detail::y_type y_type;    
     typedef std::vector< int > vector_of_int_type;
     typedef std::set< std::string > string_set_type;
+    typedef std::multimap< std::string, std::string > s2s_multimap_type;
 }
 }
 
