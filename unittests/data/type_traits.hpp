@@ -158,6 +158,20 @@ namespace detail{
 
     struct const_container{ const const_item items[10]; };
 
+    enum semantic{ position, normal, binormal };
+    enum element_type{ float_, color, short_ };
+    
+    struct vertex{
+        protected:
+            unsigned short source;
+            size_t offset;
+            semantic sem;
+            element_type el_type;
+        public:
+            vertex( int x, int y, int z );
+        
+            bool operator==( const vertex& ) const;
+    };
 }    
 
 namespace yes{
@@ -178,6 +192,7 @@ namespace no{
     typedef std::vector< int > vector_of_int_type;
     typedef std::set< std::string > string_set_type;
     typedef std::multimap< std::string, std::string > s2s_multimap_type;
+    typedef detail::vertex vertex_type;
 }
 }
 
@@ -553,11 +568,12 @@ namespace no{
     };
 } }
 
-namespace has_trivial_copy{
+namespace has_copy_constructor{
 namespace yes{
     struct x{
         x(const x&){}
     };
+    typedef is_noncopyable::detail::vertex vertex_type;
 }
     
 namespace no{

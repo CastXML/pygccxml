@@ -406,25 +406,25 @@ assignment operator member function of class types. In this series I will stick
 to the term assignment operator.
 """
 
-def has_trivial_copy( type):
+def has_copy_constructor( class_ ):
     """returns True, if class has public copy constructor, False otherwise"""
-    assert isinstance( type, class_declaration.class_t )
-    if '0.9' in type.compiler:
-        copy_ = type.find_copy_constructor()
+    class_ = class_traits.get_declaration( class_ )
+    if '0.9' in class_.compiler:
+        copy_ = class_.find_copy_constructor()
         if copy_:
             if copy_.access_type == 'public':
                 return True
             else:
                 return False
         else:
-            if type.constructors( recursive=False, allow_empty=True ):
+            if __contains_noncopyable_mem_var( class_ ):
                 return False
             else:
                 return True
     else:
         constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
                                      and x.is_copy_constructor
-                           , type.public_members )
+                           , class_.public_members )
     return bool( constructors )
 
 def has_destructor(type):
@@ -691,7 +691,7 @@ class __is_convertible_t:
             return True
         if isinstance( target, cpptypes.declarated_t ):
             assert isinstance( target.declaration, class_declaration.class_t )
-            if has_trivial_copy( target.declaration ):
+            if has_copy_constructor( target.declaration ):
                 return True #we have copy constructor
         return False
 
@@ -704,7 +704,7 @@ class __is_convertible_t:
             return True
         if isinstance( target, cpptypes.declarated_t ):
             assert isinstance( target.declaration, class_declaration.class_t )
-            if has_trivial_copy( target.declaration ):
+            if has_copy_constructor( target.declaration ):
                 return True #we have copy constructor
         return False
 
@@ -717,7 +717,7 @@ class __is_convertible_t:
             return True
         if isinstance( target, cpptypes.declarated_t ):
             assert isinstance( target.declaration, class_declaration.class_t )
-            if has_trivial_copy( target.declaration ):
+            if has_copy_constructor( target.declaration ):
                 return True #we have copy constructor
         return False
 
@@ -730,7 +730,7 @@ class __is_convertible_t:
             return True
         if isinstance( target, cpptypes.declarated_t ):
             assert isinstance( target.declaration, class_declaration.class_t )
-            if has_trivial_copy( target.declaration ):
+            if has_copy_constructor( target.declaration ):
                 return True #we have copy constructor
         return False
 
@@ -895,13 +895,13 @@ def __contains_noncopyable_mem_var( class_ ):
                 return True
     logger.debug( "__contains_noncopyable_mem_var - %s - false - doesn't contains noncopyable members" % class_.decl_string )
 
-def __is_noncopyable_single( class_ ):
+def __is_noncopyable_single( class_):
     """implementation details"""
     #It is not enough to check base classes, we should also to check
     #member variables.
     logger = utils.loggers.cxx_parser
 
-    if has_trivial_copy( class_ ) \
+    if has_copy_constructor( class_ ) \
        and has_public_constructor( class_ ) \
        and has_public_assign( class_ ) \
        and has_public_destructor( class_ ):
@@ -947,7 +947,7 @@ def is_noncopyable( class_ ):
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
             logger.debug( true_header + "derives from boost::noncopyable" )
             return True        
-        if not has_trivial_copy( base_desc.related_class ):
+        if not has_copy_constructor( base_desc.related_class ):
             base_copy_ = base_desc.related_class.find_copy_constructor()
             if base_copy_:
                 if base_copy_.access_type == 'private':
@@ -961,7 +961,7 @@ def is_noncopyable( class_ ):
             logger.debug( true_header + "__is_noncopyable_single returned True" )
             return True
         
-    if not has_trivial_copy( class_ ):
+    if not has_copy_constructor( class_ ):
         logger.debug( true_header + "does not have trival copy constructor" )
         return True
     elif not has_public_constructor( class_ ):

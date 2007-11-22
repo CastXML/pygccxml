@@ -126,8 +126,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_has_any_non_copyconstructor(self):
         self.__test_type_category( 'has_any_non_copyconstructor', declarations.has_any_non_copyconstructor)
 
-    def test_has_trivial_copy(self):
-        self.__test_type_category( 'has_trivial_copy', declarations.has_trivial_copy )
+    def test_has_copy_constructor(self):
+        self.__test_type_category( 'has_copy_constructor', declarations.has_copy_constructor )
 
     def test_is_base_and_derived(self):
         ns = declarations.find_declaration( self.declarations

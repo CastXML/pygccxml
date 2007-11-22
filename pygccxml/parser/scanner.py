@@ -485,11 +485,19 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         return operator
 
     def __read_version(self, attrs):
+        logger = utils.loggers.cxx_parser
+        
         version = float( attrs.get(XML_AN_CVS_REVISION, 0.6) )
         if version is None:
+            logger.info ( 'GCCXML version - 0.6' )
             version = "0.6"
-        elif version < 1.117:
+        elif version <= 1.114:
+            logger.info ( 'GCCXML version - 0.7' )
             version = "0.7"
+        elif version in ( 1.115, 1.116, 1.117 ):
+            logger.info ( 'GCCXML version - 0.9 BUGGY' )
+            version = "0.9"
         else:
+            logger.info ( 'GCCXML version - 0.9' )
             version = "0.9"
         self.__compiler = "GCC-XML " + version

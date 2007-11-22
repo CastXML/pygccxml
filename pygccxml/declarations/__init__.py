@@ -156,7 +156,8 @@ from type_traits import remove_declarated
 
 from type_traits import has_destructor
 from type_traits import has_public_less
-from type_traits import has_trivial_copy
+from type_traits import has_copy_constructor
+has_trivial_copy = has_copy_constructor #backward comp mode will be removed
 from type_traits import has_public_equal
 from type_traits import has_public_assign
 from type_traits import has_public_destructor
