@@ -545,6 +545,8 @@ namespace yes{
     struct x{
         x(){}
     };
+    
+    struct z{int i;};
 }
     
 namespace no{
