@@ -67,6 +67,7 @@ class declaration_t( object ):
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
         self._compiler = None
+        self._partial_name = None
         
     def __str__(self):
         """Default __str__ method.
@@ -150,6 +151,7 @@ class declaration_t( object ):
     def _set_name( self, new_name ):
         previous_name = self._name
         self._name = new_name
+        self._partial_name = None
         self.cache.reset_name_based()
         if previous_name: #the was a rename and not initial "set"
             self._on_rename()
@@ -158,6 +160,17 @@ class declaration_t( object ):
                      , doc="""Declaration name
                      @type: str
                      """)
+
+    def _get_partial_name_impl( self ):
+        return self.name
+    
+    @property
+    def partial_name( self ):
+        """declaration name, without template default arguments        
+        Right now std containers is the only classes that support this functionality"""
+        if None is self._partial_name:
+            self._partial_name = self._get_partial_name_impl()
+        return self._partial_name
 
     def _get_parent(self):
         return self._parent
@@ -229,16 +242,19 @@ class declaration_t( object ):
                         @type: str
                         """ )
 
+    def create_decl_string(self, with_defaults=True):
+        return algorithm.full_name( self, with_defaults )
 
-    def _create_decl_string(self):
-        return algorithm.full_name( self )
+    @property
+    def decl_string(self):
+        """declaration full name"""
+        return self.create_decl_string()
 
-    def _decl_string(self):
-        return self._create_decl_string()
-    decl_string = property( _decl_string,
-                            doc="""Full name of the declaration
-                            @type: str
-                            """ )
+    @property
+    def partial_decl_string(self):
+        """declaration full name"""
+        return self.create_decl_string(with_defaults=False)
+
     @property
     def cache( self ):
         """implementation details

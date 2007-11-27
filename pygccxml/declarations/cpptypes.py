@@ -34,12 +34,16 @@ class type_t(object):
             return self.__class__.__name__ < other.__class__.__name__
         return self.decl_string < other.decl_string
 
-    def _create_decl_string(self):
+    def build_decl_string(self, with_defaults=True):
         raise NotImplementedError()
 
-    def _get_decl_string( self ):
-        return self._create_decl_string()
-    decl_string = property( _get_decl_string )
+    @property
+    def decl_string( self ):
+        return self.build_decl_string()
+    
+    @property
+    def partial_decl_string( self ):
+        return self.build_decl_string( False )
 
     def _clone_impl( self ):
         raise NotImplementedError()
@@ -63,7 +67,7 @@ class dummy_type_t( type_t ):
         type_t.__init__( self )
         self._decl_string = decl_string
 
-    def _create_decl_string(self):
+    def build_decl_string(self, with_defaults=True):
         return self._decl_string
 
     def _clone_impl( self ):
@@ -74,7 +78,7 @@ class unknown_t( type_t ):
     def __init__( self ):
         type_t.__init__( self )
 
-    def _create_decl_string(self):
+    def build_decl_string(self, with_defaults=True):
         return '?unknown?'
 
     def _clone_impl( self ):
@@ -89,7 +93,7 @@ class fundamental_t( type_t ):
         type_t.__init__( self )
         self._name = name
 
-    def _create_decl_string(self):
+    def build_decl_string(self, with_defaults=True):
         return self._name
 
     def _clone_impl( self ):
@@ -336,8 +340,8 @@ class volatile_t( compound_t ):
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
-    def _create_decl_string(self):
-        return 'volatile ' + self.base.decl_string
+    def build_decl_string(self, with_defaults=True):
+        return 'volatile ' + self.base.build_decl_string(with_defaults)
 
     def _clone_impl( self ):
         return volatile_t( self.base.clone() )
@@ -357,8 +361,8 @@ class restrict_t( compound_t ):
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
-    def _create_decl_string(self):
-        return '__restrict__ ' + self.base.decl_string
+    def build_decl_string(self, with_defaults=True):
+        return '__restrict__ ' + self.base.build_decl_string( with_defaults ) 
 
     def _clone_impl( self ):
         return restrict_t( self.base.clone() )
@@ -368,8 +372,8 @@ class const_t( compound_t ):
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
-    def _create_decl_string(self):
-        return self.base.decl_string + ' const'
+    def build_decl_string(self, with_defaults=True):
+        return self.base.build_decl_string(with_defaults) + ' const'
 
     def _clone_impl( self ):
         return const_t( self.base.clone() )
@@ -379,8 +383,8 @@ class pointer_t( compound_t ):
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
-    def _create_decl_string(self):
-        return self.base.decl_string + ' *'
+    def build_decl_string(self, with_defaults=True):
+        return self.base.build_decl_string( with_defaults ) + ' *'
 
     def _clone_impl( self ):
         return pointer_t( self.base.clone() )
@@ -390,8 +394,8 @@ class reference_t( compound_t ):
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
-    def _create_decl_string(self):
-        return self.base.decl_string + ' &'
+    def build_decl_string(self, with_defaults=True):
+        return self.base.build_decl_string(with_defaults) + ' &'
 
     def _clone_impl( self ):
         return reference_t( self.base.clone() )
@@ -411,8 +415,8 @@ class array_t( compound_t ):
     size = property( _get_size, _set_size,
                      doc="returns array size" )
 
-    def _create_decl_string(self):
-        return self.base.decl_string + '[%d]' %  self.size
+    def build_decl_string(self, with_defaults=True):
+        return self.base.build_decl_string(with_defaults) + '[%d]' %  self.size
 
     def _clone_impl( self ):
         return array_t( self.base.clone(), self.size )
@@ -449,7 +453,7 @@ class free_function_type_t( type_t, calldef_type_t ):
         calldef_type_t.__init__( self, return_type, arguments_types )
 
     @staticmethod
-    def create_decl_string( return_type, arguments_types ):
+    def create_decl_string( return_type, arguments_types, with_defaults=True ):
         """
         returns free function type
 
@@ -461,11 +465,12 @@ class free_function_type_t( type_t, calldef_type_t ):
         @return: L{free_function_type_t}
         """
         return free_function_type_t.NAME_TEMPLATE % {
-                  'return_type' : return_type.decl_string
-                , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) ) }
+                  'return_type' : return_type.build_decl_string( with_defaults )
+                , 'arguments' : ','.join( map( lambda x: x.build_decl_string( with_defaults )
+                                               , arguments_types ) ) }
 
-    def _create_decl_string(self):
-        return self.create_decl_string( self.return_type, self.arguments_types )
+    def build_decl_string(self, with_defaults=True):
+        return self.create_decl_string( self.return_type, self.arguments_types, with_defaults )
 
     def _clone_impl( self ):
         rt_clone = None
@@ -475,7 +480,7 @@ class free_function_type_t( type_t, calldef_type_t ):
                                      , [ arg.clone() for arg in self.arguments_types ] )
 
     #TODO: create real typedef
-    def create_typedef( self, typedef_name, unused=None):
+    def create_typedef( self, typedef_name, unused=None, with_defaults=True):
         """returns string, that contains valid C++ code, that defines typedef to function type
 
         @param name: the desired name of typedef
@@ -483,8 +488,9 @@ class free_function_type_t( type_t, calldef_type_t ):
         #unused argument simplifies user code
         return free_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name' : typedef_name
-            , 'return_type' : self.return_type.decl_string
-            , 'arguments' : ','.join( map( lambda x: x.decl_string, self.arguments_types ) ) }
+            , 'return_type' : self.return_type.build_decl_string( with_defaults )
+            , 'arguments' : ','.join( map( lambda x: x.build_decl_string( with_defaults )
+                                           , self.arguments_types ) ) }
 
 class member_function_type_t( type_t, calldef_type_t ):
     """describes member function type"""
@@ -512,7 +518,7 @@ class member_function_type_t( type_t, calldef_type_t ):
                            ,doc="reference to parent L{class<declaration_t>}" )
 
     #TODO: create real typedef
-    def create_typedef( self, typedef_name, class_alias=None):
+    def create_typedef( self, typedef_name, class_alias=None, with_defaults=True):
         """creates typedef to the function type
 
         @param typedef_name: desired type name
@@ -522,40 +528,46 @@ class member_function_type_t( type_t, calldef_type_t ):
         if self.has_const:
             has_const_str = 'const'
         if None is class_alias:
-            class_alias = self.class_inst.decl_string
+            if with_defaults:
+                class_alias = self.class_inst.decl_string
+            else:
+                class_alias = self.class_inst.partial_decl_string
         return member_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name' : typedef_name
-            , 'return_type' : self.return_type.decl_string
+            , 'return_type' : self.return_type.build_decl_string( with_defaults )
             , 'class' : class_alias
-            , 'arguments' : ','.join( map( lambda x: x.decl_string, self.arguments_types ) )
+            , 'arguments' : ','.join( map( lambda x: x.build_decl_string(with_defaults)
+                                           , self.arguments_types ) )
             , 'has_const' : has_const_str }
 
     def create(self):
-        return self.create_decl_string( self.return_type
+        return self.build_decl_string( self.return_type
                                         , self.class_inst.decl_string
                                         , self.arguments_types
                                         , self.has_const )
 
 
     @staticmethod
-    def create_decl_string(return_type, class_decl_string, arguments_types, has_const):
+    def create_decl_string(return_type, class_decl_string, arguments_types, has_const, with_defaults=True):
         has_const_str = ''
         if has_const:
             has_const_str = 'const'
         return_type_decl_string = ''
         if return_type:
-            return_type_decl_string = return_type.decl_string
+            return_type_decl_string = return_type.build_decl_string( with_defaults )
         return member_function_type_t.NAME_TEMPLATE % {
               'return_type' : return_type_decl_string
             , 'class' : class_decl_string
-            , 'arguments' : ','.join( map( lambda x: x.decl_string, arguments_types ) )
+            , 'arguments' : ','.join( map( lambda x: x.build_decl_string(with_defaults)
+                                           , arguments_types ) )
             , 'has_const' : has_const_str }
 
-    def _create_decl_string(self):
+    def build_decl_string(self, with_defaults=True):
         return self.create_decl_string( self.return_type
                                         , self.class_inst.decl_string
                                         , self.arguments_types
-                                        , self.has_const )
+                                        , self.has_const 
+                                        , with_defaults)
 
     def _clone_impl( self ):
         rt_clone = None
@@ -582,8 +594,9 @@ class member_variable_type_t( compound_t ):
     variable_type = property( _get_variable_type, _set_variable_type
                               , doc="describes member variable L{type<type_t>}")
 
-    def _create_decl_string(self):
-        return self.NAME_TEMPLATE % { 'type' : self.variable_type.decl_string, 'class' : self.base.decl_string }
+    def build_decl_string(self, with_defaults=True):
+        return self.NAME_TEMPLATE % { 'type' : self.variable_type.build_decl_string(with_defaults)
+                                      , 'class' : self.base.build_decl_string(with_defaults) }
 
     def _clone_impl( self ):
         return member_variable_type_t( class_inst=self.base
@@ -606,8 +619,11 @@ class declarated_t( type_t ):
     declaration = property( _get_declaration, _set_declaration
                             , doc="reference to L{declaration<declaration_t>}")
 
-    def _create_decl_string(self):
-        return self._declaration.decl_string
+    def build_decl_string(self, with_defaults=True):
+        if with_defaults:
+            return self._declaration.decl_string
+        else:
+            return self._declaration.partial_decl_string
 
     def _clone_impl( self ):
         return declarated_t( self._declaration )

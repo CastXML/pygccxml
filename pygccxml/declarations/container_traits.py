@@ -145,18 +145,20 @@ class defaults_eraser:
             return    
         key_type = c_args[0]        
         mapped_type = c_args[1]
-        tmpl = string.Template( "$container< $key_type, $mapped_type, $compare<$key_type>, $allocator< std::pair< const $key_type, $mapped_type> > >" )
-        if key_type.startswith( 'const ' ) or key_type.endswith( ' const' ):
-            tmpl = string.Template( "$container< $key_type, $mapped_type, $compare<$key_type>, $allocator< std::pair< $key_type, $mapped_type> > >" )
-        tmpl = tmpl.substitute( container=c_name
-                                , key_type=key_type
-                                , mapped_type=mapped_type
-                                , compare=default_compare
-                                , allocator=default_allocator )
-        if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
-            return templates.join( c_name
-                                   , [ defaults_eraser.erase_recursive( key_type )
-                                       , defaults_eraser.erase_recursive( mapped_type )] )
+        tmpls = [ 
+            string.Template( "$container< $key_type, $mapped_type, $compare<$key_type>, $allocator< std::pair< const $key_type, $mapped_type> > >" )
+            , string.Template( "$container< $key_type, $mapped_type, $compare<$key_type>, $allocator< std::pair< $key_type const, $mapped_type> > >" )
+            , string.Template( "$container< $key_type, $mapped_type, $compare<$key_type>, $allocator< std::pair< $key_type, $mapped_type> > >" )]
+        for tmpl in tmpls:
+            tmpl = tmpl.substitute( container=c_name
+                                    , key_type=key_type
+                                    , mapped_type=mapped_type
+                                    , compare=default_compare
+                                    , allocator=default_allocator )
+            if defaults_eraser.normalize( cls_name ) == defaults_eraser.normalize( tmpl ):
+                return templates.join( c_name
+                                       , [ defaults_eraser.erase_recursive( key_type )
+                                           , defaults_eraser.erase_recursive( mapped_type )] )
 
 
     @staticmethod

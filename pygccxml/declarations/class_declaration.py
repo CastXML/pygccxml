@@ -107,6 +107,11 @@ class class_declaration_t( declaration.declaration_t ):
             self._container_traits = container_traits.find_container_traits( self )            
         return self._container_traits
     
+    def _get_partial_name_impl( self ):
+        if not self.container_traits:
+            return self.name
+        return self.container_traits.remove_defaults( self )
+    
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
@@ -406,5 +411,10 @@ class class_t( scopedef.scopedef_t ):
             return trivial[0]
         else:
             return None
-        
+
+    def _get_partial_name_impl( self ):
+        if not self.container_traits:
+            return self.name
+        return self.container_traits.remove_defaults( self )
+
 class_types = ( class_t, class_declaration_t )

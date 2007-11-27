@@ -391,9 +391,12 @@ class member_calldef_t( calldef_t ):
                                            , arguments_types=[ arg.type for arg in self.arguments ]
                                            , has_const=self.has_const )
 
-    def _create_decl_string(self):
-        return self.function_type().decl_string
-
+    def create_decl_string(self, with_defaults=True):
+        f_type = self.function_type()
+        if with_defaults:
+            return f_type.decl_string
+        else:
+            return f_type.partial_decl_string
 
 class free_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ namespace"""
@@ -430,8 +433,13 @@ class free_calldef_t( calldef_t ):
         return cpptypes.free_function_type_t( return_type=self.return_type
                                      , arguments_types=[ arg.type for arg in self.arguments ] )
 
-    def _create_decl_string(self):
-        return self.function_type().decl_string
+    def create_decl_string(self, with_defaults=True):
+        f_type = self.function_type()
+        if with_defaults:
+            return f_type.decl_string
+        else:
+            return f_type.partial_decl_string
+
 
 class operator_t(object):
     """base class for "operator" declarations"""
