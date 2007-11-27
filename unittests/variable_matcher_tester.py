@@ -12,8 +12,9 @@ from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
-class tester_t( parser_test_case.parser_test_case_t ):
+class tester_1_t( parser_test_case.parser_test_case_t ):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    declarations  = None
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'bit_fields.hpp'
@@ -40,9 +41,29 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
         self.failUnless( 'public' == x.access_type )
 
+class tester_2_t( parser_test_case.parser_test_case_t ):
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    global_ns = None
+    def __init__(self, *args ):
+        parser_test_case.parser_test_case_t.__init__( self, *args )
+        self.header = 'vector_traits.hpp'
+        self.global_ns = None
+
+    def setUp(self):
+        if not self.global_ns:
+            self.global_ns = declarations.get_global_namespace( parser.parse( [self.header], self.config ) )
+
+    def test_no_defaults( self ):
+        vectors = self.global_ns.decls( lambda decl: 'vector<' in decl.name )
+        self.global_ns.decl( 'vector< _0_ >' )
+        self.global_ns.class_( 'vector< std::vector< int > >' )
+        self.global_ns.class_( 'vector< std::string >' )
+        self.global_ns.decl( 'vector< const int >' )
+    
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest( unittest.makeSuite(tester_t))
+    suite.addTest( unittest.makeSuite(tester_1_t))
+    suite.addTest( unittest.makeSuite(tester_2_t))
     return suite
 
 def run_suite():

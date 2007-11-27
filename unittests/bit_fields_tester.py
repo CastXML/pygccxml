@@ -12,16 +12,18 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
+    
+    global_ns = None
+    
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'bit_fields.hpp'
-        self.global_ns = None
         
     def setUp(self):
-        if not self.global_ns:
+        if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
-            self.global_ns = declarations.get_global_namespace( decls )
-            self.global_ns.init_optimizer()
+            tester_t.global_ns = declarations.get_global_namespace( decls )
+            tester_t.global_ns.init_optimizer()
             
     def test( self ):                
         bf_x = self.global_ns.variable( 'x' )        
@@ -32,6 +34,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
         mv_z = self.global_ns.variable( 'z' )        
         self.failUnless( mv_z.bits == None )
+        
+    def test2( self ):
+        pass
 
 def create_suite():
     suite = unittest.TestSuite()        
