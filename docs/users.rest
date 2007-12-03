@@ -1,0 +1,18 @@
+======================
+Who is using pygccxml?
+======================
+
+.. contents:: Table of contents
+
+* `PyBindGen`_ - is a Python module that is geared to generating C/C++ code
+  that binds a C/C++ library for Python.
+
+.. _`PyBindGen` : https://launchpad.net/pybindgen
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:
