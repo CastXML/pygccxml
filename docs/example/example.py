@@ -4,13 +4,13 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import sys
-sys.path.append('../..') #adding pygccxml to the path
+#~ sys.path.append('../..') #adding pygccxml to the path
 
 from pygccxml import parser
 from pygccxml import declarations
 
 #configure GCC-XML parser
-config = parser.config_t( gccxml_path='/home/roman/gccxml-build/bin/gccxml' )
+config = parser.config_t( gccxml_path='/home/roman/language-binding/sources/gccxml_bin/v09/linux2/bin' )
 
 #parsing source file
 decls = parser.parse( ['example.hpp'], config )

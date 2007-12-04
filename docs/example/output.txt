@@ -1,0 +1,773 @@
+>python -u "example.py"
+
+INFO Parsing source file "example.hpp" ... 
+
+INFO gccxml cmd: /home/roman/language-binding/sources/gccxml_bin/v09/linux2/bin/gccxml  -I"."   "example.hpp" -fxml="/tmp/tmpgpIVCq.xml"
+
+INFO GCCXML version - 0.9
+namespace_t: '::'   
+    artificial: 'False' 
+    namespace_t: 'std'  
+        artificial: 'False' 
+    free_function_t: '__builtin_nans'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:21
+        artificial: 'False' 
+        attributes: nothrow const nonnull
+    free_function_t: '__builtin_acosf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:25
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_acosl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:26
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_log10'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:63
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_popcountll'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:101
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_clogf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:111
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_clogl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:113
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cexpf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:108
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cexpl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:110
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    variable_t: '_ZTIN4core15class_hierarchy17derived_private_tE'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:26
+        artificial: '1'     
+        type: ::__vmi_class_type_info_pseudo1 const  value: None
+        size: 0             
+        align: 0            
+        offset: 0
+    free_function_t: '__builtin_asinf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:28
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_asinl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:29
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_popcount'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:99
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_nansf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:22
+        artificial: 'False' 
+        attributes: nothrow const nonnull
+    free_function_t: '__builtin_nansl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:23
+        artificial: 'False' 
+        attributes: nothrow const nonnull
+    free_function_t: '__builtin_floorf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:52
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_floorl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:53
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_ctanf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:123
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctanh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:127
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctanl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:125
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_carg'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:94
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_clog'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:112
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_logf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:66
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_logl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:67
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_fabs'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:48
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_expf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:46
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_expl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:47
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_csqrt'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:121
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_sin'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:75
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ldexpf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:60
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ldexpl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:61
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_tanf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:85
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_tanh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:86
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_tanl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:89
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ceil'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:36
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_fmodf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:54
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_fmodl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:55
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_return'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:13
+        artificial: 'False' 
+        attributes: nothrow noreturn
+    free_function_t: '__builtin_sqrt'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:81
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_cpow'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:130
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_coshf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:42
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_coshl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:43
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_cexp'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:109
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_atan2'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:31
+        artificial: 'False' 
+        attributes: nothrow
+    variable_t: '_ZTIN4core15class_hierarchy19derived_protected_tE'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+        artificial: '1'     
+        type: ::__vmi_class_type_info_pseudo1 const  value: None
+        size: 0             
+        align: 0            
+        offset: 0
+    free_function_t: '__builtin_atanf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:34
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_atanl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:35
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctan'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:124
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_log'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:62
+        artificial: 'False' 
+        attributes: nothrow
+    variable_t: '_ZTIN4core15class_hierarchy6base_tE'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:12
+        artificial: '1'     
+        type: ::__class_type_info_pseudo const  value: None
+        size: 0             
+        align: 0            
+        offset: 0
+    free_function_t: '__builtin_asin'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:27
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_frexp'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:56
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_log10f'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:64
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_log10l'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:65
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ctzl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:97
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_powif'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:73
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_powil'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:74
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_modff'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:68
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_exp'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:45
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_modfl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:69
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_prefetch'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:17
+        artificial: 'False' 
+        attributes: no vops
+    free_function_t: '__builtin_tan'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:84
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_fabsf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:49
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_fabsl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:50
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_inf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:18
+        artificial: 'False' 
+        attributes: nothrow const
+    namespace_t: '__cxxabiv1'
+        artificial: 'False' 
+    free_function_t: '__builtin_frame_address'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:15
+        artificial: 'False' 
+    free_function_t: '__builtin_cabs'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:91
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    namespace_t: 'core' 
+        artificial: 'False' 
+        namespace_t: 'class_hierarchy'
+            artificial: 'False' 
+            class_t: 'base_t'   
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:12
+                artificial: '1'     
+                class type: 'class' 
+                size: 4             
+                align: 4            
+                derived classes:    
+                    class: '::core::class_hierarchy::derived_public_t'
+                        access: 'public'    
+                    class: '::core::class_hierarchy::derived_private_t'
+                        access: 'private'   
+                    class: '::core::class_hierarchy::derived_protected_t'
+                        access: 'protected' 
+                    class: '::core::class_hierarchy::multi_derived_t'
+                        access: 'protected' 
+                public:             
+                destructor_t: '~base_t'
+                    location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:14
+                    artificial: 'False' 
+                protected:          
+                private:            
+            class_t: 'derived_public_t'
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:20
+                artificial: '1'     
+                class type: 'class' 
+                size: 4             
+                align: 4            
+                base classes:       
+                    class: '::core::class_hierarchy::base_t'
+                        access: 'public'    
+                public:             
+                destructor_t: '~derived_public_t'
+                    location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:20
+                    artificial: '1'     
+                protected:          
+                private:            
+            class_t: 'derived_protected_t'
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+                artificial: '1'     
+                class type: 'class' 
+                size: 4             
+                align: 4            
+                base classes:       
+                    class: '::core::class_hierarchy::base_t'
+                        access: 'protected' 
+                public:             
+                destructor_t: '~derived_protected_t'
+                    location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+                    artificial: '1'     
+                protected:          
+                private:            
+            class_t: 'multi_derived_t'
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+                artificial: '1'     
+                class type: 'class' 
+                size: 8             
+                align: 4            
+                base classes:       
+                    class: '::core::class_hierarchy::derived_private_t'
+                        access: 'private'   
+                    class: '::core::class_hierarchy::base_t'
+                        access: 'protected' 
+                    class: '::core::class_hierarchy::other_base_t'
+                        access: 'private'   
+                public:             
+                destructor_t: '~multi_derived_t'
+                    location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+                    artificial: '1'     
+                protected:          
+                private:            
+            class_t: 'derived_private_t'
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:26
+                artificial: '1'     
+                class type: 'class' 
+                size: 4             
+                align: 4            
+                base classes:       
+                    class: '::core::class_hierarchy::base_t'
+                        access: 'private'   
+                derived classes:    
+                    class: '::core::class_hierarchy::multi_derived_t'
+                        access: 'private'   
+                public:             
+                destructor_t: '~derived_private_t'
+                    location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:26
+                    artificial: '1'     
+                protected:          
+                private:            
+            class_t: 'other_base_t'
+                location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:17
+                artificial: '1'     
+                class type: 'class' 
+                size: 1             
+                align: 1            
+                derived classes:    
+                    class: '::core::class_hierarchy::multi_derived_t'
+                        access: 'private'   
+                public:             
+                protected:          
+                private:            
+    free_function_t: '__builtin_atan2f'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:32
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_atan2l'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:33
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ccoshf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:105
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ccoshl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:107
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_atan'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:30
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_sinhf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:78
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_sinhl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:79
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_sqrtf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:82
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_sqrtl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:83
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_frexpf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:57
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_frexpl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:58
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_cpowf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:129
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cpowl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:131
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_tanhf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:87
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_tanhl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:88
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cabsf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:90
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cabsl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:92
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_powf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:70
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_powi'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:72
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_powl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:71
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ccos'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:103
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_expect'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:16
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_popcountl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:100
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_inff'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:19
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_infl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:20
+        artificial: 'False' 
+        attributes: nothrow const
+    variable_t: '_ZTIN4core15class_hierarchy16derived_public_tE'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:20
+        artificial: '1'     
+        type: ::__si_class_type_info_pseudo const  value: None
+        size: 0             
+        align: 0            
+        offset: 0
+    free_function_t: '__builtin_cos'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:39
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctz'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:96
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_return_address'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:14
+        artificial: 'False' 
+    free_function_t: '__builtin_csinhf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:117
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csinhl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:119
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csqrtf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:120
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csqrtl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:122
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    variable_t: '_ZTIN4core15class_hierarchy15multi_derived_tE'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+        artificial: '1'     
+        type: ::__vmi_class_type_info_pseudo3 const  value: None
+        size: 0             
+        align: 0            
+        offset: 0
+    free_function_t: '__builtin_floor'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:51
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_ldexp'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:59
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ccosf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:102
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ccosh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:106
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ccosl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:104
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctanhf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:126
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ctanhl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:128
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_ceilf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:37
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_ceill'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:38
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_csinf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:114
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csinh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:118
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csinl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:116
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_acos'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:24
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_ctzll'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:98
+        artificial: 'False' 
+        attributes: nothrow const
+    free_function_t: '__builtin_cargf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:93
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cargl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:95
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cosf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:40
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_cosh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:41
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_cosl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:44
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_sinf'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:76
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_sinh'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:77
+        artificial: 'False' 
+        attributes: nothrow
+    free_function_t: '__builtin_sinl'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:80
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    free_function_t: '__builtin_csin'
+        location: [/home/roman/language-binding/sources/gccxml_bin/v09/linux2/share/gccxml-0.9/GCC/4.1/gccxml_builtins.h]:115
+        artificial: 'False' 
+        attributes: nothrow pure no vops
+    class_t: '__vmi_class_type_info_pseudo1'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+        artificial: 'False' 
+        class type: 'struct'
+        size: 24            
+        align: 4            
+        public:             
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+            artificial: 'False' 
+            type: ::__type_info_pseudo  value: None
+            size: 8             
+            align: 4            
+            offset: 0
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+            artificial: 'False' 
+            type: int  value: None
+            size: 4             
+            align: 4            
+            offset: 8
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+            artificial: 'False' 
+            type: int  value: None
+            size: 4             
+            align: 4            
+            offset: 12
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:23
+            artificial: 'False' 
+            type: ::__base_class_type_info_pseudo[1]  value: None
+            size: 8             
+            align: 4            
+            offset: 16
+        protected:          
+        private:            
+    class_t: '__class_type_info_pseudo'
+        location: [<built-in>]:0
+        artificial: 'False' 
+        class type: 'struct'
+        size: 8             
+        align: 4            
+        public:             
+        protected:          
+        private:            
+    class_t: '__si_class_type_info_pseudo'
+        location: [<built-in>]:0
+        artificial: 'False' 
+        class type: 'struct'
+        size: 12            
+        align: 4            
+        public:             
+        protected:          
+        private:            
+    class_t: '__vmi_class_type_info_pseudo3'
+        location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+        artificial: 'False' 
+        class type: 'struct'
+        size: 40            
+        align: 4            
+        public:             
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+            artificial: 'False' 
+            type: ::__type_info_pseudo  value: None
+            size: 8             
+            align: 4            
+            offset: 0
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+            artificial: 'False' 
+            type: int  value: None
+            size: 4             
+            align: 4            
+            offset: 8
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+            artificial: 'False' 
+            type: int  value: None
+            size: 4             
+            align: 4            
+            offset: 12
+        variable_t: ''      
+            location: [/home/roman/language-binding/sources/pygccxml_dev/docs/example/example.hpp]:29
+            artificial: 'False' 
+            type: ::__base_class_type_info_pseudo[3]  value: None
+            size: 24            
+            align: 4            
+            offset: 16
+        protected:          
+        private:            
+    class_t: '__type_info_pseudo'
+        location: [<built-in>]:0
+        artificial: 'False' 
+        class type: 'struct'
+        size: 8             
+        align: 4            
+        public:             
+        protected:          
+        private:            
+    class_t: '__base_class_type_info_pseudo'
+        location: [<built-in>]:0
+        artificial: 'False' 
+        class type: 'struct'
+        size: 8             
+        align: 4            
+        public:             
+        protected:          
+        private:            
+base_t
+	bases:  []
+	derived:  ['derived_public_t', 'derived_private_t', 'derived_protected_t', 'multi_derived_t']
+derived_public_t
+	bases:  ['base_t']
+	derived:  []
+derived_protected_t
+	bases:  ['base_t']
+	derived:  []
+multi_derived_t
+	bases:  ['derived_private_t', 'base_t', 'other_base_t']
+	derived:  []
+derived_private_t
+	bases:  ['base_t']
+	derived:  ['multi_derived_t']
+other_base_t
+	bases:  []
+	derived:  ['multi_derived_t']
+__vmi_class_type_info_pseudo1
+	bases:  []
+	derived:  []
+__class_type_info_pseudo
+	bases:  []
+	derived:  []
+__si_class_type_info_pseudo
+	bases:  []
+	derived:  []
+__vmi_class_type_info_pseudo3
+	bases:  []
+	derived:  []
+__type_info_pseudo
+	bases:  []
+	derived:  []
+__base_class_type_info_pseudo
+	bases:  []
+	derived:  []
+>Exit code: 1
