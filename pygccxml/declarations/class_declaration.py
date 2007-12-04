@@ -129,6 +129,8 @@ class class_t( scopedef.scopedef_t ):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
+        self._byte_size = 0
+        self._byte_align = 0        
         self._container_traits = None
         self._container_traits_set = False
         self._recursive_bases = None
@@ -273,6 +275,20 @@ class class_t( scopedef.scopedef_t ):
         self._aliases = new_aliases
     aliases = property( _get_aliases, _set_aliases
                          , doc="List of L{aliases<typedef_t>} to this instance")
+
+    def _get_byte_size(self):
+        return self._byte_size
+    def _set_byte_size( self, new_byte_size ):
+        self._byte_size = new_byte_size
+    byte_size = property( _get_byte_size, _set_byte_size
+                          , doc="Size of this class in bytes @type: int")
+
+    def _get_byte_align(self):
+        return self._byte_align
+    def _set_byte_align( self, new_byte_align ):
+        self._byte_align = new_byte_align
+    byte_align = property( _get_byte_align, _set_byte_align
+                          , doc="Alignment of this class in bytes @type: int")
 
     def _get_declarations_impl(self):
         return self.get_members()

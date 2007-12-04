@@ -14,6 +14,8 @@ class type_t(object):
     def __init__(self):
         object.__init__( self )
         self.cache = algorithms_cache.type_algs_cache_t()
+        self._byte_size = 0
+        self._byte_align = 0
 
     def __str__(self):
         res = self.decl_string
@@ -52,6 +54,21 @@ class type_t(object):
         "returns new instance of the type"
         answer = self._clone_impl()
         return answer
+
+    def _get_byte_size(self):
+        return self._byte_size
+    def _set_byte_size( self, new_byte_size ):
+        self._byte_size = new_byte_size
+    byte_size = property( _get_byte_size, _set_byte_size
+                          , doc="Size of this type in bytes @type: int")
+
+    def _get_byte_align(self):
+        return self._byte_align
+    def _set_byte_align( self, new_byte_align ):
+        self._byte_align = new_byte_align
+    byte_align = property( _get_byte_align, _set_byte_align
+                          , doc="Alignment of this type in bytes @type: int")
+
 
 #There are cases when GCC-XML reports something like this
 #<Unimplemented id="_9482" tree_code="188" tree_code_name="template_type_parm" node="0xcc4d5b0"/>
@@ -627,6 +644,16 @@ class declarated_t( type_t ):
 
     def _clone_impl( self ):
         return declarated_t( self._declaration )
+
+    @property
+    def byte_size (self):
+        "Size of this type in bytes @type: int"
+        return self._declaration.byte_size
+
+    @property
+    def byte_align (self):
+        "alignment of this type in bytes @type: int"
+        return self._declaration.byte_align
 
 class type_qualifiers_t( object ):
     """contains additional information about type: mutable, static, extern"""

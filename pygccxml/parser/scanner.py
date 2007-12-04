@@ -18,6 +18,7 @@ from pygccxml import utils
 #also those constants are sorted for easy searching.
 XML_AN_ABSTRACT = "abstract"
 XML_AN_ACCESS = "access"
+XML_AN_ALIGN = "align"
 XML_AN_ARTIFICIAL = "artificial"
 XML_AN_ATTRIBUTES = "attributes"
 XML_AN_BASE_TYPE = "basetype"
@@ -39,9 +40,11 @@ XML_AN_MAX = "max"
 XML_AN_MEMBERS = "members"
 XML_AN_MUTABLE = "mutable"
 XML_AN_NAME = "name"
+XML_AN_OFFSET = "offset"
 XML_AN_PURE_VIRTUAL = "pure_virtual"
 XML_AN_RESTRICT = "restrict"
 XML_AN_RETURNS = "returns"
+XML_AN_SIZE = "size"
 XML_AN_STATIC = "static"
 XML_AN_THROW = "throw"
 XML_AN_TYPE = "type"
@@ -210,9 +213,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled( obj, attrs)
                 self.__read_demangled( obj, attrs)
-                self.__read_attributes(obj, attrs)                
+                self.__read_attributes(obj, attrs)
+                
             elif isinstance( obj, type_t ):
                 self.__types[ element_id ] = obj
+                self.__read_byte_size(obj, attrs)
+                self.__read_byte_align(obj, attrs)
             elif isinstance( obj, types.StringTypes ):
                 self.__files[ element_id ] = obj
             else:
@@ -259,6 +265,21 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_access( self, attrs ):
         self.__access[ attrs[XML_AN_ID] ] = attrs.get( XML_AN_ACCESS, ACCESS_TYPES.PUBLIC )
+
+    def __read_byte_size (self, decl, attrs):
+        "Using duck typing to set the size instead of in constructor"
+        size = attrs.get(XML_AN_SIZE, 0)
+        decl.byte_size = int(size)/8 # Make sure the size is in bytes instead of bits
+
+    def __read_byte_offset (self, decl, attrs):
+        "Using duck typing to set the offset instead of in constructor"
+        offset = attrs.get(XML_AN_OFFSET, 0)
+        decl.byte_offset = int(offset)/8 # Make sure the size is in bytes instead of bits
+
+    def __read_byte_align (self, decl, attrs):
+        "Using duck typing to set the alignment"
+        align = attrs.get(XML_AN_ALIGN, 0)
+        decl.byte_align = int(align)/8 # Make sure the size is in bytes instead of bits
 
     def __read_root(self, attrs):
         pass
@@ -408,12 +429,14 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         bits = attrs.get( XML_AN_BITS, None )
         if bits:
             bits = int( bits )
-        return self.__decl_factory.create_variable( name=attrs.get( XML_AN_NAME, '' )
-                           , type=attrs[XML_AN_TYPE]
-                           , type_qualifiers=type_qualifiers
-                           , value=attrs.get( XML_AN_INIT, None )
-                           , bits=bits)
-                           
+        decl = self.__decl_factory.create_variable( name=attrs.get( XML_AN_NAME, '' )
+                                                    , type=attrs[XML_AN_TYPE]
+                                                    , type_qualifiers=type_qualifiers
+                                                    , value=attrs.get( XML_AN_INIT, None )
+                                                    , bits=bits)
+        self.__read_byte_offset(decl, attrs)
+        return decl
+
     __read_field = __read_variable #just a synonim
 
     def __read_class_impl(self, class_type, attrs):
@@ -429,6 +452,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 decl.is_abstract = True
             else:
                 decl.is_abstract = False
+        self.__read_byte_size(decl, attrs)
+        self.__read_byte_align(decl, attrs)
         return decl
     
     def __read_class( self, attrs ):

@@ -297,6 +297,19 @@ class core_t( parser_test_case.parser_test_case_t ):
     def test_versioning(self):
         for d in self.global_ns.decls():
             self.failUnless( d.compiler )
+            
+    def test_byte_size( self ):
+        mptrs = self.global_ns.class_( 'members_pointers_t' )
+        self.failUnless( mptrs.byte_size != 0 )
+        
+    def test_byte_align( self ):
+        mptrs = self.global_ns.class_( 'members_pointers_t' )
+        self.failUnless( mptrs.byte_align != 0 )
+
+    def test_byte_offset( self ):
+        mptrs = self.global_ns.class_( 'members_pointers_t' )
+        self.failUnless( mptrs.var( 'xxx' ).byte_offset != 0 )
+
 
 class core_all_at_once_t( core_t ):
     COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE

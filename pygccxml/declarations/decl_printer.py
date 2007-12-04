@@ -141,6 +141,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         curr_level = self.level + 1
         class_type = 'class type: ' + "'%s'" % str(self.__inst.class_type)
         self.writer( ' ' * curr_level * self.INDENT_SIZE + class_type.ljust( self.JUSTIFY ) + os.linesep )
+        if self.__print_details:
+            byte_size = 'size: %d'%(self.__inst.byte_size)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep )
+            byte_align = 'align: %d'%(self.__inst.byte_align)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
 
         if self.__inst.aliases:
             aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
@@ -201,6 +206,13 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.print_decl_header()
         curr_level = self.level + 1
         self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value)  + os.linesep)
+        if self.__print_details:
+            byte_size = 'size: %d'%(self.__inst.type.byte_size)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep )
+            byte_align = 'align: %d'%(self.__inst.type.byte_align)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
+            byte_offset = 'offset: %d'%(self.__inst.byte_offset)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep)
 
 def print_declarations( decls, detailed=True, recursive=True, writer=sys.stdout.write ):
     """ Print decl tree rooted at each of the included nodes.

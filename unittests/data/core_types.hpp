@@ -46,6 +46,7 @@ struct exception{};
 struct members_pointers_t{
     int some_function( double ) const throw( exception );
     int m_some_const_member;
+    int xxx;
 };
 
 typedef int (members_pointers_t::*member_function_ptr_t)( double )const;
