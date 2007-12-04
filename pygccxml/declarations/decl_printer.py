@@ -91,6 +91,10 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + location + os.linesep )
             artificial = 'artificial: ' + "'%s'" % str(self.__inst.is_artificial)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + artificial.ljust( self.JUSTIFY ) + os.linesep )
+            if self.__inst.attributes:
+                attributes = 'attributes: %s'%(self.__inst.attributes)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + attributes + os.linesep )
+
 
     def __get_method_signature(self, decl=None):
        """ Returns function signature: [retval, [arg1, ..., argN]]. """
