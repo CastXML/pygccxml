@@ -1,0 +1,16 @@
+=======
+Example
+=======
+
+This directory contains C++ source file, GCC-XML generated file and Python script
+that uses `pygccxml`_ to extract information from the source file.
+
+.. _`pygccxml`: ./../pygccxml.html
+
+..
+   Local Variables:
+   mode: indented-text
+   indent-tabs-mode: nil
+   sentence-end-double-space: t
+   fill-column: 70
+   End:

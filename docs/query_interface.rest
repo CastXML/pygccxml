@@ -67,6 +67,7 @@ methods:
                         header_file=None,
                         recursive=None )
   
+  mem_fun = member_function #just an alias
   
   def member_functions( self,
                         name=None,
@@ -77,6 +78,8 @@ methods:
                         header_file=None,
                         recursive=None,
                         allow_empty=None )
+  mem_funs = member_functions 
+
 
 As you can see, from the method arguments you can search for member function
 by:
@@ -201,9 +204,9 @@ should have `call policies`_. For example:
       ...
   };
 
-`Call policies`_ of the member function ``clone`` is ``return_value_policy<manage_new_object>()``.
-Next code applies `call policies`_ on all ``clone`` member functions within the
-project.
+``clone`` member function `call policies`_ is ``return_value_policy<manage_new_object>()``.
+Next code applies the `call policies`_ on all ``clone`` member functions within the
+project:
 
 .. code-block:: Python
 
