@@ -406,6 +406,8 @@ def find_container_traits( cls_or_string ):
         if not templates.is_instantiation( cls_or_string ):
             return None        
         name = templates.name( cls_or_string )
+        if name.startswith( 'std::' ):
+            name = name[ len( 'std::' ): ]
         for cls_traits in container_traits:        
             if cls_traits.name() == name:
                 return cls_traits       

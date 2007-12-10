@@ -57,10 +57,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
             print m.partial_name
 
     def test_recursive_partial_name( self ):
-        f = self.global_ns.free_fun( 'do_nothing1' )
-        t1 = declarations.class_traits.get_declaration( f.arguments[0].type )
-        print t1.name
-        print t1.partial_name
+        f1 = self.global_ns.free_fun( 'f1' )
+        t1 = declarations.class_traits.get_declaration( f1.arguments[0].type )
+        self.failUnless( 'type< std::set< std::vector< int > > >' == t1.partial_name )
 
 def create_suite():
     suite = unittest.TestSuite()        

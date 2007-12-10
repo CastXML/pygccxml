@@ -282,8 +282,16 @@ class core_t( parser_test_case.parser_test_case_t ):
                            % ( 4, len(do_nothings) ) )
         for index, do_nothing in enumerate(do_nothings):
             others = do_nothings[:index] + do_nothings[index+1:]
+            if set( do_nothing.overloads ) != set( others ):
+                print '\nexisting: '
+                for x in do_nothing.overloads:
+                    print str(x)
+                print '\nexpected: '
+                for x in others:
+                    print str(x)
+                
             self.failUnless( set( do_nothing.overloads ) == set( others )
-                             , "there is a difference between expected function overloads and existing ones." )
+                             , "there is a difference between expected function overloads and existing ones." )            
 
     def test_abstract_classes(self):
         ns = self.global_ns.namespace( 'abstract_classes' )

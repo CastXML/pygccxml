@@ -102,7 +102,7 @@ namespace hash_multimaps{
     typedef HASH_XXX_NS::hash_multimap< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
 }
 
-inline void do_nothing1( type< sets::s_v_int > ){
+inline void f1( type< sets::s_v_int > ){
 }
 
 }

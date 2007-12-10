@@ -302,6 +302,8 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             #it means that this is unnamed enum. in c++ enum{ x };
             enum_name = ''
         decl = self.__decl_factory.create_enumeration( name=enum_name )
+        self.__read_byte_size(decl, attrs)
+        self.__read_byte_align(decl, attrs)
         self.__enums.append( decl )
         return decl
 

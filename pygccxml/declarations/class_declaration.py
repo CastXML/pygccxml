@@ -40,8 +40,6 @@ def get_partial_name( name ):
     elif templates.is_instantiation( name ):
         tmpl_name, args = templates.split( name )
         for i, arg_name in enumerate( args ):
-            print i, ' : ', get_partial_name( arg_name.strip() )
-            print
             args[i] = get_partial_name( arg_name.strip() )
         return templates.join( tmpl_name, args )
     else:
@@ -125,10 +123,7 @@ class class_declaration_t( declaration.declaration_t ):
         return self._container_traits
     
     def _get_partial_name_impl( self ):
-        #~ return get_partial_name( self.name )
-        if not self.container_traits:
-            return self.name
-        return self.container_traits.remove_defaults( self )
+        return get_partial_name( self.name )
     
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
@@ -447,9 +442,6 @@ class class_t( scopedef.scopedef_t ):
             return None
 
     def _get_partial_name_impl( self ):
-        #~ return get_partial_name( self.name )
-        if not self.container_traits:
-            return self.name
-        return self.container_traits.remove_defaults( self )
+        return get_partial_name( self.name )
 
 class_types = ( class_t, class_declaration_t )

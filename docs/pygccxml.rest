@@ -128,7 +128,7 @@ Test environments
 
 `pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and 
 `Ubuntu`_. I am using `Python`_ 2.4\\2.5 and `GCC-XML`_ CVS. `pygccxml`_ has 
-more then 170 tests. They test almost every piece of code. It also has performance 
+more then 215 tests. They test almost every piece of code. It also has performance 
 tests. Most of the time I am using "white box" testing strategy.
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
