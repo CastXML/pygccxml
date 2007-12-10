@@ -31,6 +31,23 @@ class CLASS_TYPES:
     UNION = "union"
     ALL = [ CLASS, STRUCT, UNION ]
 
+def get_partial_name( name ):
+    import templates
+    import container_traits #prevent cyclic dependencies
+    ct = container_traits.find_container_traits( name )            
+    if ct:
+        return ct.remove_defaults( name )
+    elif templates.is_instantiation( name ):
+        tmpl_name, args = templates.split( name )
+        for i, arg_name in enumerate( args ):
+            print i, ' : ', get_partial_name( arg_name.strip() )
+            print
+            args[i] = get_partial_name( arg_name.strip() )
+        return templates.join( tmpl_name, args )
+    else:
+        return name
+    
+
 class hierarchy_info_t( object ):
     """describes class relationship"""
     def __init__(self, related_class=None, access=None ):
@@ -108,6 +125,7 @@ class class_declaration_t( declaration.declaration_t ):
         return self._container_traits
     
     def _get_partial_name_impl( self ):
+        #~ return get_partial_name( self.name )
         if not self.container_traits:
             return self.name
         return self.container_traits.remove_defaults( self )
@@ -429,6 +447,7 @@ class class_t( scopedef.scopedef_t ):
             return None
 
     def _get_partial_name_impl( self ):
+        #~ return get_partial_name( self.name )
         if not self.container_traits:
             return self.name
         return self.container_traits.remove_defaults( self )

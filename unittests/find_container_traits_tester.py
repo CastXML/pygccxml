@@ -56,6 +56,12 @@ class tester_t( parser_test_case.parser_test_case_t ):
             traits = declarations.find_container_traits( m )
             print m.partial_name
 
+    def test_recursive_partial_name( self ):
+        f = self.global_ns.free_fun( 'do_nothing1' )
+        t1 = declarations.class_traits.get_declaration( f.arguments[0].type )
+        print t1.name
+        print t1.partial_name
+
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))

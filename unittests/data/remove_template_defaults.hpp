@@ -25,6 +25,9 @@
 
 namespace rtd{
 
+template <class T>
+struct type {};
+    
 namespace vectors{    
     typedef std::vector< int > v_int;
     typedef std::vector< std::string > v_string;
@@ -97,6 +100,9 @@ namespace hash_multimaps{
     typedef HASH_XXX_NS::hash_multimap< int, double > hmm_i2d;
     typedef HASH_XXX_NS::hash_multimap< std::wstring const, double > hmm_wstr2d;
     typedef HASH_XXX_NS::hash_multimap< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
+}
+
+inline void do_nothing1( type< sets::s_v_int > ){
 }
 
 }
