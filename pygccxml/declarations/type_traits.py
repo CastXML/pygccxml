@@ -378,9 +378,8 @@ def has_trivial_constructor( type ):
                     logger.debug( true_header + "class doesn't have any user defined constructor and it is copyable" )
                     return True
     else:
-        if None != find_trivial_constructor( type ):
-            return True
-        return False
+        cons = find_trivial_constructor( type )
+        return cons and cons.access_type == 'public'
 
 """
 Question: Do I have to define a copy constructor and assignment operator?

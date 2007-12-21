@@ -538,6 +538,17 @@ namespace no{
     struct const_item{ const int values[10]; };
     struct const_container{ const const_item items[10]; };
 
+    class singleton_t
+    {
+    private:
+        static singleton_t *m_instance;
+    
+        singleton_t () {}
+        ~singleton_t () {}
+    
+    public:
+        static singleton_t* instance();
+    };
 } }
 
 namespace has_public_constructor{

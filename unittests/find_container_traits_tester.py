@@ -61,6 +61,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
         t1 = declarations.class_traits.get_declaration( f1.arguments[0].type )
         self.failUnless( 'type< std::set< std::vector< int > > >' == t1.partial_name )
 
+    def test_from_ogre( self ):
+        x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
+        ct = declarations.find_container_traits( x )
+        y = ct.remove_defaults( x )
+        
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))
