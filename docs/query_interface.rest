@@ -296,10 +296,3 @@ query method, you can take a look on API documentation or into source code.
 .. _`parser package UML diagram` : ./parser_uml.png
 .. _`ReleaseForge` : http://releaseforge.sourceforge.net
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

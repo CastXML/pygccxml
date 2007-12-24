@@ -141,10 +141,3 @@ tests. Most of the time I am using "white box" testing strategy.
 .. _`Boost Software License`: http://boost.org/more/license_info.html
 .. _`Ubuntu`: http://www.ubuntu.com/
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

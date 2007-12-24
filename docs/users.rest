@@ -8,11 +8,3 @@ Who is using pygccxml?
   that binds a C/C++ library for Python.
 
 .. _`PyBindGen` : https://launchpad.net/pybindgen
-
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

@@ -20,10 +20,3 @@ Links
 .. _`XTI An Extended Type Information Library` : http://lcgapp.cern.ch/project/architecture/XTI_accu.pdf
 
 .. _`pygccxml`: ./pygccxml.html
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:

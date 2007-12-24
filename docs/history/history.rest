@@ -478,10 +478,3 @@ Version 0.6.7
 .. _`pygccxml`: ./../pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`GCC-XML`: http://www.gccxml.org
-..
-   Local Variables:
-   mode: indented-text
-   indent-tabs-mode: nil
-   sentence-end-double-space: t
-   fill-column: 70
-   End:
