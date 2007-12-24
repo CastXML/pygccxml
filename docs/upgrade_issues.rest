@@ -8,9 +8,9 @@ GCC-XML 0.7 -> 0.9 upgrade issues
 Introduction
 ------------
 
-Recently, GCC-XML internal parser was updated to GCC 4.2. The internal representation 
-of source code, provided by GCC's parser, has changed a lot and few backward 
-compatibility issues were introduced. In this document, I will try to cover all 
+Recently, GCC-XML internal parser was updated to GCC 4.2. The internal representation
+of source code, provided by GCC's parser, has changed a lot and few backward
+compatibility issues were introduced. In this document, I will try to cover all
 problems you may encounter.
 
 
@@ -18,10 +18,10 @@ problems you may encounter.
 Default constructor
 -------------------
 
-GCC-XML 0.9 doesn't report compiler generated default and copy constructors as 
+GCC-XML 0.9 doesn't report compiler generated default and copy constructors as
 an implicit ones.
 
-If you rely havily on their existence in the generated XML, I suggest you to swith
+If you rely heavily on their existence in the generated XML, I suggest you to switch
 to `type_traits.has_trivial_constructor`_/`type_traits.has_trivial_copy`_ functions.
 
 .. _`type_traits.has_trivial_constructor` : ./apidocs/pygccxml.declarations.type_traits-pysrc.html#has_trivial_constructor
@@ -47,7 +47,7 @@ C++ code:
   typedef int (xyz_t::*mfun_ptr_t)( double );
 
   typedef int (xyz_t::*mvar_ptr_t);
-  
+
 GCC-XML 0.7:
 
 .. code-block:: XML
@@ -57,7 +57,7 @@ GCC-XML 0.7:
   <MethodType id="_128" basetype="_7" returns="_136">
     <Argument type="_140"/>
   </MethodType>
-  
+
   <Typedef id="_4" name="mvar_ptr_t" type="_3" />
   <PointerType id="_3" type="_127" size="32" align="32"/>
   <OffsetType id="_127" basetype="_7" type="_136" size="32" align="32"/>
@@ -71,11 +71,11 @@ GCC-XML 0.9:
   <MethodType id="_147" basetype="_92" returns="_131">
     <Argument type="_127"/>
   </MethodType>
-  
+
   <Typedef id="_52" name="mvar_ptr_t" type="_139" />
   <OffsetType id="_139" basetype="_92" type="_131" size="32" align="32"/>
 
-`pygccxml`_ handles this problem automatically, you don't have to change your code.
+`pygccxml`_ handles this issue automatically, you don't have to change your code.
 
 -----------------------
 Constant variable value
@@ -87,8 +87,8 @@ For example:
 
 .. code-block:: C++
 
-  const long unsigned int initialized = 10122004; 
-  
+  const long unsigned int initialized = 10122004;
+
 GCC-XML 0.9 will report the ``initialized`` value as ``10122004ul``, while GCC-XML
 0.7 as ``10122004``.
 
@@ -101,11 +101,11 @@ Free and member function default arguments
 Both versions of GCC-XML have a few issues, related to default arguments. GCC-XML 0.9
 fixes some issues, but introduces another ones. Take a look on next examples:
 
-* 
+*
   .. code-block:: C++
 
     void fix_numeric( ull arg=(ull)-1 );
-  
+
   GCC-XML 0.7
 
   .. code-block:: XML
@@ -119,11 +119,11 @@ fixes some issues, but introduces another ones. Take a look on next examples:
 
     <Argument name="arg" type="_103" default="0xffffffffffffffffu"/>
 
-* 
+*
   .. code-block:: C++
 
     void fix_function_call( int i=calc( 1,2,3) );
-  
+
   GCC-XML 0.7
 
   .. code-block:: XML
@@ -137,11 +137,11 @@ fixes some issues, but introduces another ones. Take a look on next examples:
 
     <Argument name="i" type="_34" default="function_call::calc(1, 2, 3)"/>
 
-* 
+*
   .. code-block:: C++
 
     void typedef__func( const typedef_::alias& position = typedef_::alias() );
-  
+
   GCC-XML 0.7
 
   .. code-block:: XML
@@ -155,11 +155,11 @@ fixes some issues, but introduces another ones. Take a look on next examples:
 
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
-* 
+*
   .. code-block:: C++
 
     void typedef__func2( const typedef_::alias& position = alias() );
-  
+
   GCC-XML 0.7
 
   .. code-block:: XML
@@ -173,12 +173,12 @@ fixes some issues, but introduces another ones. Take a look on next examples:
 
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
-    
-* 
+
+*
   .. code-block:: C++
 
     node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
-  
+
   GCC-XML 0.7
 
   .. code-block:: XML
@@ -192,31 +192,57 @@ fixes some issues, but introduces another ones. Take a look on next examples:
 
     <Argument name="types" type="_3096" default="std::vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;(((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;&amp;)((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;*)(&amp; std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))))"/>
 
+Basically `pygccxml`_ can't help you here. The good news is that you always can
+change the default value expression from the script:
+
+.. code-block:: Python
+
+  #f is "calldef_t" instance
+  for arg in f.arguments:
+      arg.default_value = <new default value or None>
+
 
 -------------
 Name mangling
 -------------
 
-GCC-XML 0.9 manlges names different than the previous one.
+GCC-XML 0.9 mangles names different than the previous one. This change is the most
+dramatic one, because it may require from you to change the code.
 
+Consider next C++ code:
 
+.. code-block:: C++
 
+  template< unsigned long i1>
+  struct item_t{
+    static const unsigned long v1 = i1;
+  };
 
+  struct buggy{
+    typedef unsigned long ulong;
+    typedef item_t< ulong( 0xDEECE66DUL ) | (ulong(0x5) << 32) > my_item_t;
+    my_item_t my_item_var;
+  };
 
+====================  ======================  =======================
+    generated data         GCC-XML 0.7             GCC-XML 0.9
+====================  ======================  =======================
+class name            item_t<0x0deece66d>     item_t<-554899859ul>
+class mangled name    6item_tILm3740067437EE  6item_tILm3740067437EE
+class demangled name  item_t<3740067437l>     item_t<3740067437ul>
+====================  ======================  =======================
 
+`pygccxml`_ uses class demangled name as a "name" of the class. This was done to
+overcome few bugs GCC-XML has, when it works on libraries with extreme usage of
+templates.
 
+As you can see the name of the class is different. `pygccxml`_ is unable to help
+you in such situations. I suggest you to use query API strict mode. This is the
+default one. If the class/declaration with the given name could not be found, it
+will raise an error with clear description of the problem.
 
-
-
-
-
-
-
-
-
-
-
-
+You can also to print the declarations tree to ``stdout`` and find out the name
+of the class/declaration from it.
 
 
 .. _`pygccxml`: ./pygccxml.html
