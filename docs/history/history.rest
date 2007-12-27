@@ -40,6 +40,26 @@ SVN Version
    
 4. Support for a type/class "align", "offset" and "size" was added. Many thanks to 
    Ben Schleimer for the implementation.
+   
+5. Support for GCC-XML 0.9 was added.
+
+6. Support for ``__restrict__`` was added.
+
+7. ``declarations.has_trivial_copy`` was renamed to ``declarations.has_copy_constructor``. 
+   The old name is still available, but will be removed soon.
+   
+8. ``declarations.priority_queue`` was renamed to ``declarations.priority_queue_traits``.
+
+9. ``declarations.find_container_traits`` function was added.
+
+10. Support for "partial name" was added. "Partial name" is the class name, without
+    template default arguments. The functionality was added to std containers 
+    classes.
+    
+11. ``declarations.class_t`` and ``declarations.class_declaration_t`` has new property - 
+    ``container_traits``. This property describes std container element class.
+    
+12. All logging is now done to ``stderr`` instead of ``stdout``.
 
 -------------
 Version 0.9.0
