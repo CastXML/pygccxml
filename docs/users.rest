@@ -4,7 +4,35 @@ Who is using pygccxml?
 
 .. contents:: Table of contents
 
+Users
+-----
+
 * `PyBindGen`_ - is a Python module that is geared to generating C/C++ code
   that binds a C/C++ library for Python.
 
 .. _`PyBindGen` : https://launchpad.net/pybindgen
+
+* your project name ... :-)
+
+pygccxml in blogs
+-----------------
+
+- http://blog.susheelspace.com/?p=88
+
+  " ... I’ve used pygccxml for parsing c++ code, it was a lot of fun to use  "
+
+- http://cysquatch.net/blog/2007/09/01/c-code-metrics-with-pygccxml
+
+  `pygccxml`_ is used to calculate the Weighted Methods per Class (WMC) metric.
+
+- http://www.garagegames.com/blogs/4280/13907
+
+  `pygccxml`_ is used to generate input files for `SIP`_ code generator.
+
+.. _`SIP` : http://www.riverbankcomputing.co.uk/sip/index.php
+
+- http://blogs.sun.com/thorsten/entry/more_on_source_code_grokking
+
+  Short listing of C++ parsers and their description.
+
+ .. _`pygccxml` : ./../pygccxml.html
