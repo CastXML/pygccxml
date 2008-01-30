@@ -2,6 +2,11 @@
 Example
 =======
 
+**Example**
+
+This example prints all declarations found in `example.hpp`_ file. For every class, 
+it prints it's base and derived classes. 
+
 The example consists from few files:
 
 * `example.hpp`_ - C++ source code, this file was passed to GCC-XML

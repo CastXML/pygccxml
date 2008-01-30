@@ -19,7 +19,7 @@ pygccxml in blogs
 
 - http://blog.susheelspace.com/?p=88
 
-  " ... I’ve used pygccxml for parsing c++ code, it was a lot of fun to use  "
+  " ... I have used pygccxml for parsing c++ code, it was a lot of fun to use  "
 
 - http://cysquatch.net/blog/2007/09/01/c-code-metrics-with-pygccxml
 
@@ -35,4 +35,4 @@ pygccxml in blogs
 
   Short listing of C++ parsers and their description.
 
- .. _`pygccxml` : ./../pygccxml.html
+ .. _`pygccxml` : ./pygccxml.html

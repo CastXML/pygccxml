@@ -52,7 +52,7 @@ if sys.argv[-1]=="sdist":
 
 
 setup( name = "pygccxml",
-       version = "0.9.0",
+       version = "0.9.5",
        description = "GCC-XML generated file reader",
        author = "Roman Yakovenko",
        author_email = "roman.yakovenko@gmail.com",

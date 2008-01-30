@@ -23,9 +23,9 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Jeremy Sanders
 * Ben Schleimer
 
------------
-SVN Version 
------------
+-------------
+Version 0.9.5
+-------------
 
 1. Class ``free_operator_t`` is now able to provide references to the class declarations
    instances it works on.
