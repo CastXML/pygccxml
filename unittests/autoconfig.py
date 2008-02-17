@@ -46,9 +46,6 @@ class cxx_parsers_cfg:
                                                      , define_symbols=[ gccxml_version ]
                                                      , compiler=compiler )
 
-    synopsis = pygccxml.parser.synopsis_configuration_t( working_directory=data_directory )
-
-
 #~ try:
     #~ import pydsc
     #~ pydsc.include( r'D:\pygccxml_sources\sources\pygccxml_dev' )

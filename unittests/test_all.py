@@ -48,6 +48,7 @@ import find_container_traits_tester
 import attributes_tester
 import type_as_exception_bug_tester
 import copy_constructor_tester
+import plain_c_tester
 
 testers = [
     decl_string_tester
@@ -92,6 +93,7 @@ testers = [
     , attributes_tester
     , type_as_exception_bug_tester
     , copy_constructor_tester
+    , plain_c_tester
 ]
 
 def create_suite():
