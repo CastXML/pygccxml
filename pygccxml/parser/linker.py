@@ -24,7 +24,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
             for d in self.__decls.itervalues():
                 self.__compiler = d.compiler
                 break
-            
+    
     def _get_inst(self):
         return self.__inst
     def _set_inst(self, inst):
@@ -43,6 +43,8 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
             base = declarated_t( declaration=self.__decls[ type_id ] )
             self.__types[type_id] = base
             return base
+        elif '...' == type_id:
+            return ellipsis_t()
         else:
             return unknown_t()
 

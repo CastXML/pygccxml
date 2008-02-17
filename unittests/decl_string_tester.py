@@ -40,6 +40,15 @@ class tester_t( parser_test_case.parser_test_case_t ):
         return_default_args = self.global_ns.free_fun( 'return_default_args' )
         decls = parser.parse_string( self.template % return_default_args.decl_string, self.config )
         self.failUnless( decls, "Created decl_string for global function containes mistake" )
+    
+    def test_all_mem_and_free_funs( self ):
+        ns = self.global_ns.ns( '::declarations::calldef' )
+        for f in ns.mem_funs():
+            decls = parser.parse_string( self.template % f.decl_string, self.config )
+            self.failUnless( decls, "Created decl_string for member function containes mistake" )
+        for f in ns.free_funs():
+            decls = parser.parse_string( self.template % f.decl_string, self.config )
+            self.failUnless( decls, "Created decl_string for member function containes mistake" )
 
 def create_suite():
     suite = unittest.TestSuite()        

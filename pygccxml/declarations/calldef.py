@@ -39,7 +39,7 @@ class argument_t(object):
     class, that describes argument of "callable" declaration
     """
 
-    def __init__( self, name='', type=None, default_value=None, attributes=None  ):
+    def __init__( self, name='', type=None, default_value=None, attributes=None):
         object.__init__(self)
         self._name = name
         self._default_value = default_value
@@ -52,6 +52,8 @@ class argument_t(object):
         return argument_t( name=keywd.get( 'name', self.name )
                            , type=keywd.get( 'type', self.type )
                            , default_value=keywd.get( 'default_value', self.default_value )
+                           , attributes=keywd.get( 'attributes', self.attributes ) )
+
         """
         return argument_t( name=keywd.get( 'name', self.name )
                            , type=keywd.get( 'type', self.type )
@@ -59,10 +61,13 @@ class argument_t(object):
                            , attributes=keywd.get( 'attributes', self.attributes ) )
         
     def __str__(self):
-        if self.default_value==None:
-            return "%s %s"%(self.type, self.name)
+        if self.ellipsis:
+            return "..."
         else:
-            return "%s %s=%s"%(self.type, self.name, self.default_value)
+            if self.default_value==None:
+                return "%s %s"%(self.type, self.name)
+            else:
+                return "%s %s=%s"%(self.type, self.name, self.default_value)
 
     def __eq__(self, other):
         if not isinstance( other, self.__class__ ):
@@ -88,6 +93,11 @@ class argument_t(object):
     name = property( _get_name, _set_name
                      , doc="""Argument name.
                      @type: str""" )
+
+    @property
+    def ellipsis(self):
+        """bool, if True argument represents ellipsis ( "..." ) in function definition"""
+        return isinstance( self.type, cpptypes.ellipsis_t )
 
     def _get_default_value(self):
         return self._default_value
@@ -163,6 +173,10 @@ class calldef_t( declaration.declaration_t ):
                           @type: list of L{argument_t}""")
 
     @property
+    def has_ellipsis( self ):
+        return self.arguments and self.arguments[-1].ellipsis
+
+    @property
     def argument_types( self ):
         """list of all argument types"""
         return [ arg.type for arg in self.arguments ]
@@ -209,20 +223,19 @@ class calldef_t( declaration.declaration_t ):
                             , doc='''The type of the return value of the "callable" or None (constructors).
                             @type: L{type_t}
                             ''')
-
-    def _get_overloads(self):
+    @property
+    def overloads(self):
+        """A list of overloaded "callables" (i.e. other callables with the same name within the same scope.
+        
+        @type: list of L{calldef_t}
+        """ 
         if not self.parent:
             return []
         # finding all functions with the same name
-        return self.parent.calldefs(
-            name=self.name
-            , function=lambda decl: not (decl is self )
-            , allow_empty=True
-            , recursive=False )
-
-    overloads = property( _get_overloads
-                          , doc="""A list of overloaded "callables" (i.e. other callables with the same name within the same scope.
-                          @type: list of L{calldef_t}""" )
+        return self.parent.calldefs( name=self.name
+                                     , function=lambda decl: not (decl is self )
+                                     , allow_empty=True
+                                     , recursive=False )
 
     def _get_has_extern(self):
         return self._has_extern

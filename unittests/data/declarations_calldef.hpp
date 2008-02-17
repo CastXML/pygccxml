@@ -60,6 +60,16 @@ namespace std{
 std::iostream& operator<<( std::iostream&, const calldefs_t& );
 std::iostream& operator>>( std::iostream&, calldefs_t& );
 
+namespace ellipsis_tester{
+
+struct ellipsis{
+    void do_smth( int, ... );
+};
+
+void do_smth_else( int, ... );
+
+}//ellipsis_tester
+
 } }
 
 #endif//__declarations_calldef_hpp__

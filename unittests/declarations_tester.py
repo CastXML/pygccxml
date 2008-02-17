@@ -160,6 +160,16 @@ class declarations_t( parser_test_case.parser_test_case_t ):
             else:
                 self.failUnless( decl.return_type.decl_string in calldefs_cast_operators, "unable to find operator symbol for operator '%s'" % decl.decl_string )
 
+    def test_ellipsis( self ):
+        ns = self.global_ns.ns( 'ellipsis_tester' )
+        do_smth = ns.mem_fun( 'do_smth' )
+        for a in do_smth.arguments:
+            print str(a)
+        self.failUnless( do_smth.has_ellipsis )
+        do_smth_else = ns.free_fun( 'do_smth_else' )
+        self.failUnless( do_smth_else.has_ellipsis )
+        
+
 class all_at_once_tester_t( declarations_t ):
     COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args):

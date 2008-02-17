@@ -101,6 +101,17 @@ class unknown_t( type_t ):
     def _clone_impl( self ):
         return self
 
+class ellipsis_t( type_t ):
+    """type, that represents "..." in function definition"""
+    def __init__( self ):
+        type_t.__init__( self )
+
+    def build_decl_string(self, with_defaults=True):
+        return '...'
+
+    def _clone_impl( self ):
+        return self
+
 ################################################################################
 ## Fundamental types:
 
@@ -460,6 +471,11 @@ class calldef_type_t( object ):
         self._arguments_types = new_arguments_types
     arguments_types = property( _get_arguments_types, _set_arguments_types
                                 , doc="list of argument L{types<type_t>}")
+                                
+    @property
+    def has_ellipsis( self ):
+        return self.arguments_types and isinstance( self.arguments_types[-1], ellipsis_t )
+                                
 
 class free_function_type_t( type_t, calldef_type_t ):
     """describes free function type"""

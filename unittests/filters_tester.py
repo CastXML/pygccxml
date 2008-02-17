@@ -34,9 +34,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
         public_members = declarations.matcher.find( criteria, self.declarations )
         if '0.9' in public_members[0].compiler:
             #2 empty classes, this compiler doesn't generate constructor and copy constructor
-            self.failUnless( 15 == len( public_members ) ) 
+            self.failUnless( 16 == len( public_members ) ) 
         else:
-            self.failUnless( 19 == len( public_members ) )
+            self.failUnless( 20 == len( public_members ) )
         
     def test_or_matcher( self ):
         criteria1 = declarations.regex_matcher_t( 'oper.*'

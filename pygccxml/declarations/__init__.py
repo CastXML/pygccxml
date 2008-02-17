@@ -25,6 +25,7 @@ from typedef import typedef_t
 from cpptypes import type_t
 from cpptypes import dummy_type_t
 from cpptypes import unknown_t
+from cpptypes import ellipsis_t
 from cpptypes import fundamental_t
 from cpptypes import void_t
 from cpptypes import char_t

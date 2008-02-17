@@ -57,6 +57,7 @@ XML_NN_CLASS = "Class"
 XML_NN_CONSTRUCTOR = "Constructor"
 XML_NN_CV_QUALIFIED_TYPE = "CvQualifiedType"
 XML_NN_DESTRUCTOR = "Destructor"
+XML_NN_ELLIPSIS = "Ellipsis"
 XML_NN_ENUMERATION = "Enumeration"
 XML_NN_ENUMERATION_VALUE = "EnumValue"
 XML_NN_FIELD = "Field"
@@ -113,6 +114,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                , XML_NN_MEMBER_OPERATOR : self.__read_member_operator
                , XML_NN_METHOD : self.__read_method
                , XML_NN_GCC_XML : self.__read_version
+               , XML_NN_ELLIPSIS : self.__read_ellipsis
         }
         self.deep_declarations = [
             XML_NN_CASTING_OPERATOR
@@ -379,6 +381,13 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 argument.default_value = None
             self.__inst.arguments.append( argument )
      
+    def __read_ellipsis( self, attrs ):
+        if isinstance( self.__inst, calldef_type_t ):
+            self.__inst.arguments_types.append( '...' )
+        else:
+            argument = argument_t( type='...' )
+            self.__inst.arguments.append( argument )
+
     def __read_calldef( self, calldef, attrs, is_declaration ):
         #destructor for example doesn't have return type
         calldef.return_type =  attrs.get( XML_AN_RETURNS, None )
