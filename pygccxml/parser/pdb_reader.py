@@ -5,7 +5,8 @@ import comtypes
 import comtypes.client
 from msdia_details import msdia
 
-sys.path.append( r'C:\dev\language-binding\pygccxml_dev' )
+sys.path.append( r'../..' )
+#sys.path.append( r'C:\dev\language-binding\pygccxml_dev' )
 
 from pygccxml import utils
 from pygccxml import declarations
@@ -36,14 +37,6 @@ def print_enums( smb ):
                 continue
             print '  value %s(%d): ' % ( v.name, v.value )
 
-def print_nss( smb, offset ):
-    symbols = smb.findChildren( msdia.SymTagUDT, None, 0 )
-    for internal_smb in iter( symbols ):
-        internal_smb = ctypes.cast( internal_smb, ctypes.POINTER( msdia.IDiaSymbol ) )
-        if internal_smb.classParentId == smb.symIndexId:
-            print ' ' * offset, internal_smb.name
-            print_nss( internal_smb, offset + 1 )
-
 def print_files( session ):
     files = iter( session.findFile( None, '', 0 ) )
     for f in files:
@@ -67,6 +60,11 @@ class pdb_reader_t(object):
     def read(self):
         self.__populate_scopes()
 
+        files = iter( self.__dia_session.findFile( None, '', 0 ) )
+        for f in files:
+            f = ctypes.cast( f, ctypes.POINTER(msdia.IDiaSourceFile) )
+            print 'File: ', f.fileName
+            
     @property
     def dia_global_scope(self):
         return self.__dia_session.globalScope
@@ -141,5 +139,6 @@ class pdb_reader_t(object):
 
 if __name__ == '__main__':
     control_pdb = r'C:\dev\produce_pdb\Debug\produce_pdb.pdb'
+    control_pdb = r'xxx.pdb'
     reader = pdb_reader_t( control_pdb )
     reader.read()

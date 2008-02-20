@@ -1,12 +1,72 @@
-import getpass
+import os
 import comtypes
 import comtypes.client
+import _winreg as win_registry
+from distutils import msvccompiler
 
-msdia_path = None
-if 'root' == getpass.getuser():
-    msdia_path = r'C:\Program Files\Microsoft Visual Studio 9.0\Common7\Packages\Debugger\msdia90.dll'
+class msdia_searcher_t:
+    def __init__( self ):
+        self.root_reg_key = win_registry.HKEY_LOCAL_MACHINE
+        
+    def find_path( self ):
+        vss_installed = self.__get_installed_vs_dirs()
+        msdia_dlls = self.__get_msdia_dll_paths( vss_installed )
+        #D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\
+        #D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Packages\Debugger\msdia71.dll
+        #C:\Program Files\Microsoft Visual Studio 9.0\Common7\Packages\Debugger\msdia90.dll
+        if 1 == len(msdia_dlls):
+            return msdia_dlls[0]
+        else:
+            #TODO find the highest version and use it.
+            pass
+    
+    def __get_msdia_dll_paths( self, vss_installed ):
+        msdia_dlls = []        
+        for vs in vss_installed:
+            vs = os.path.split( vs )[0]
+            debug_dir = os.path.join( vs, 'Packages', 'Debugger' )
+            files = filter( lambda f: f.startswith( 'msdia' ) and f.endswith( '.dll' )
+                            , os.listdir( debug_dir ) )
+            if not files:
+                continue
+            msdia_dlls.extend([ os.path.join( debug_dir, f ) for f in files ])
+        if not msdia_dlls:
+            raise RuntimeError( 'pygccxml unable to find out msdiaXX.dll location' )
+        return msdia_dlls
+    
+    def __get_installed_vs_dirs( self ):
+        vs_reg_path = 'Software\Microsoft\VisualStudio'
+        vss = self.read_keys( self.root_reg_key, vs_reg_path )
+        vs_installed_and_exist = []
+        
+        for vs_installed in vss:
+            values = self.read_values( self.root_reg_key, vs_reg_path + '\\' + vs_installed )
+            try:
+                vs_installed_and_exist.append( os.path.realpath( values['installdir'] ) )
+            except KeyError:
+                pass
+        
+        if not vs_installed_and_exist:
+            raise RuntimeError( 'pygccxml unable to find out a Visual Studio installation directory' )
+        return vs_installed_and_exist
 
-msdia = comtypes.client.GetModule( msdia_path )
+    
+    def read_keys(self, base, key):
+        return msvccompiler.read_keys(base, key)
+
+    def read_values(self, base, key):
+        return msvccompiler.read_values(base, key)
+
+msdia_path = msdia_searcher_t().find_path()  
+
+comtypes_client_gen_dir = comtypes.client.gen_dir
+try:
+    comtypes.client.gen_dir = None
+    msdia = comtypes.client.GetModule( msdia_path )
+finally:
+    comtypes.client.gen_dir = comtypes_client_gen_dir
+
+#Adding code, that was not generated for some reason.
 
 class UdtKind:
    UdtStruct, UdtClass, UdtUnion = ( 0, 1, 2 )
@@ -29,21 +89,3 @@ class NameSearchOptions:
    nsCaseInRegularExpression = nsfRegularExpression | nsfCaseInsensitive
 
 msdia.NameSearchOptions = NameSearchOptions
-
-
-#
-#from distutils import ccompiler
-#from distutils import msvccompiler
-#
-#if 'msvc' == ccompiler.get_default_compiler():
-#    cc = msvccompiler.MSVCCompiler()
-#    cc.initialize()
-#    generator = 'NMake Makefiles'
-#    native_build = '"%s" /A all' % cc.find_exe( 'nmake.exe' )
-#    configure_environment_script = cc.find_exe( 'vsvars32.bat' )
-#    if not configure_environment_script:
-#        configure_environment_script = cc.find_exe( 'vcvars32.bat' )
-#    cl_mapping = { 6.0 : "msvc6", 7.0 : "msvc7", 7.1 : "msvc71", 8.0 : "msvc8" }
-#    compiler = cl_mapping[ msvccompiler.get_build_version() ]
-#else:
-#    raise RuntimeError( "Unable to find out MSDIA dll location")
