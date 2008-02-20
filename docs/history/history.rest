@@ -23,6 +23,27 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Jeremy Sanders
 * Ben Schleimer
 
+
+-----------
+Version SVN
+-----------
+
+1. Support for ellipsis was added.
+   Warning: this feature introduce backward compatibility problem! 
+   
+   Description: 
+   .. code-block:: C++
+
+      void do_smth( int, ... )
+      
+   Before this change, pygccxml would report that the function ``do_smth`` has 
+   only one argument.
+   
+   After this change, pygccxml will report that the function has two arguments. 
+   The second argument type will be ``declarations.ellipsis_t``. All classes, 
+   which describe callables, have new property ``has_ellipsis``. It the value of 
+   the property is ``True``, than the function has ellipsis in its definition.
+
 -------------
 Version 0.9.5
 -------------
