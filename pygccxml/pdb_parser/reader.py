@@ -11,6 +11,7 @@ sys.path.append( r'../..' )
 from pygccxml import utils
 from pygccxml import declarations
 
+import details
 
 
 SymTagEnum = 12
@@ -43,15 +44,6 @@ def print_files( session ):
         f = ctypes.cast( f, ctypes.POINTER(msdia.IDiaSourceFile) )
         print 'File: ', f.fileName
 
-#~ print_files( session )
-#print_enums( root_symbol )
-def guess_class_type( udt_kind ):
-    if msdia.UdtKind.UdtStruct == udt_kind:
-        return declarations.CLASS_TYPES.STRUCT
-    elif msdia.UdtKind.UdtClass == udt_kind:
-        return declarations.CLASS_TYPES.CLASS
-    else:
-        return declarations.CLASS_TYPES.UNION
 
 class pdb_reader_t(object):
     def __init__(self, pdb_file_path ):
@@ -81,24 +73,6 @@ class pdb_reader_t(object):
     def global_ns(self):
         return self.__global_ns
 
-    def __split_scope_identifiers( self, name ):
-        result = []
-        tmp = name.split( '::' )
-        tmp.reverse()
-        while tmp:
-            token = tmp.pop()
-            less_count = token.count( '<' )
-            greater_count = token.count( '>' )
-            if less_count != greater_count:
-                while less_count != greater_count:
-                    next_token = tmp.pop()
-                    token = token + '::' + next_token
-                    less_count += next_token.count( '<' )
-                    greater_count += next_token.count( '>' )    
-            result.append( token )        
-        return result
-    
-    def __scope_identifie
     
     def __found_udt( self, name ):
         self.logger.debug( 'testing whether name( "%s" ) is UDT symbol' % name )
@@ -114,7 +88,7 @@ class pdb_reader_t(object):
             #~ for s in iter(found):
                 #~ s = 
                 #~ print s.name
-                #~ print guess_class_type(s.udtKind)
+                #~ print details.guess_class_type(s.udtKind)
         else:    
             self.logger.debug( 'name( "%s" ) is **NOT** UDT symbol' % name )            
             return False
@@ -128,30 +102,33 @@ class pdb_reader_t(object):
                 classes[ dia_class.name ] = [ dia_class ]
             else:
                 classes[ dia_class.name ].append( dia_class )
-        for name, class_list in classes.iteritems():
-            if len( class_list ) != 1:
-                print len( class_list ), name
-    
-            #~ klass = declarations.class_t(dia_class.name)
-            #~ klass.class_type = guess_class_type( dia_class.udtKind )
-            #~ scope_identifiers = self.__split_scope_identifiers( dia_class.name )
-            #~ if 1 == len(scope_identifiers):
-                #~ classes.append( klass )
-            #~ else:
-                #~ ns_ref = self.global_ns
-                #~ for i in range( len(scope_identifiers) - 1):
-                    #~ full_identifier = '::'.join( scope_identifiers[0:i+1] )
-                    #~ if not self.__is_udt( full_identifier ):
-                        #~ #we have namespace
-                        #~ try:
-                            #~ ns_ref = ns_ref.namespace( scope_identifiers[i], recursive=False) 
-                        #~ except ns_ref.declaration_not_found_t:
-                            #~ new_ns = declarations.namespace_t( scope_identifiers[i] )
-                            #~ ns_ref.adopt_declaration( new_ns )
-                            #~ ns_ref = new_ns
-                    #~ else:
-                        #~ classes.append( klass )
-                        #~ break
+
+        for name, class_list in classes.iteritems():    
+            fname_splitter = details.full_name_splitter_t( name )
+            klass = declarations.class_t(fname_splitter.name)
+            klass.class_type = details.guess_class_type( dia_class.udtKind )
+            klass.dia_symbols = class_list
+            
+            for index, scope in enumerate( fname_splitter.scope_names ):
+                
+            
+            if not fname_splitter.scope_name:
+                classes.append( klass )
+            else:
+                ns_ref = self.global_ns
+                for i in range( len(scope_identifiers) - 1):
+                    full_identifier = '::'.join( scope_identifiers[0:i+1] )
+                    if not self.__is_udt( full_identifier ):
+                        #we have namespace
+                        try:
+                            ns_ref = ns_ref.namespace( scope_identifiers[i], recursive=False) 
+                        except ns_ref.declaration_not_found_t:
+                            new_ns = declarations.namespace_t( scope_identifiers[i] )
+                            ns_ref.adopt_declaration( new_ns )
+                            ns_ref = new_ns
+                    else:
+                        classes.append( klass )
+                        break
         #~ classes.sort( lambda klass1, klass2: cmp( klass1.name, klass2.name ) )
         #~ for i in classes:
             #~ print str(i)
