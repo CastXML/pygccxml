@@ -45,6 +45,13 @@ def print_files( session ):
 
 #~ print_files( session )
 #print_enums( root_symbol )
+def guess_class_type( udt_kind ):
+    if msdia.UdtKind.UdtStruct == udt_kind:
+        return declarations.CLASS_TYPES.STRUCT
+    elif msdia.UdtKind.UdtClass == udt_kind:
+        return declarations.CLASS_TYPES.CLASS
+    else:
+        return declarations.CLASS_TYPES.UNION
 
 class pdb_reader_t(object):
     def __init__(self, pdb_file_path ):
@@ -56,7 +63,8 @@ class pdb_reader_t(object):
         self.logger.debug( 'opening session' )
         self.__dia_session = self.__dia_source.openSession()
         self.__global_ns = declarations.namespace_t( '::' )
-
+        self.__id2decl = {} #hash table unique symbol id : pygccxml declaration
+        
     def read(self):
         self.__populate_scopes()
 
@@ -87,55 +95,67 @@ class pdb_reader_t(object):
                     token = token + '::' + next_token
                     less_count += next_token.count( '<' )
                     greater_count += next_token.count( '>' )    
-            result.append( token )
+            result.append( token )        
         return result
     
-    def __is_udt( self, name ):
+    def __scope_identifie
+    
+    def __found_udt( self, name ):
         self.logger.debug( 'testing whether name( "%s" ) is UDT symbol' % name )
         flags = msdia.NameSearchOptions.nsfCaseSensitive
         found = self.dia_global_scope.findChildren( msdia.SymTagUDT, name, flags )
-        if found.Count:
+        if found.Count == 1:                      
             self.logger.debug( 'name( "%s" ) is UDT symbol' % name )
+            return AsDiaSymbol( fount.Item[0] )
+        elif 1 < found.Count:
+            raise RuntimeError( "duplicated UDTs with name '%s', were found" % name )
+            #~ self.logger.debug( 'name( "%s" ) is UDT symbol' % name )
+            #~ return [AsDiaSymbol( s ) for s in  iter(found)]
+            #~ for s in iter(found):
+                #~ s = 
+                #~ print s.name
+                #~ print guess_class_type(s.udtKind)
         else:    
-            self.logger.debug( 'name( "%s" ) is **NOT** UDT symbol' % name )
-        return found.Count
-       
-    def __populate_scopes(self):
-        classes = []
+            self.logger.debug( 'name( "%s" ) is **NOT** UDT symbol' % name )            
+            return False
+        
+    def __populate_scopes(self):                
+        classes = {} #full name to list of symbols
         dia_classes = self.dia_global_scope.findChildren( msdia.SymTagUDT, None, 0 )
         for dia_class in iter( dia_classes ):
-            dia_class = AsDiaSymbol( dia_class )            
-            if '$' in dia_class.name:
-                continue
-            klass = declarations.class_t(dia_class.name)
-            if msdia.UdtKind.UdtStruct == dia_class.udtKind:
-                klass.class_type = declarations.CLASS_TYPES.STRUCT
-            elif msdia.UdtKind.UdtClass == dia_class.udtKind:
-                klass.class_type = declarations.CLASS_TYPES.CLASS
+            dia_class = AsDiaSymbol( dia_class )        
+            if not classes.has_key( dia_class.name ):
+                classes[ dia_class.name ] = [ dia_class ]
             else:
-                klass.class_type = declarations.CLASS_TYPES.UNION
-            scope_identifiers = self.__split_scope_identifiers( dia_class.name )
-            if 1 == len(scope_identifiers):
-                classes.append( klass )
-                #self.global_ns.adopt_declaration( klass )                
-            else:
-                ns_ref = self.global_ns
-                for i in range( len(scope_identifiers) - 1):
-                    full_identifier = '::'.join( scope_identifiers[0:i+1] )
-                    if not self.__is_udt( full_identifier ):
-                        #we have namespace
-                        try:
-                            ns_ref = ns_ref.namespace( scope_identifiers[i], recursive=False) 
-                        except ns_ref.declaration_not_found_t:
-                            new_ns = declarations.namespace_t( scope_identifiers[i] )
-                            ns_ref.adopt_declaration( new_ns )
-                            ns_ref = new_ns
-                    else:
-                        classes.append( klass )
-        classes.sort( lambda klass1, klass2: cmp( klass1.name, klass2.name ) )
-        for i in classes:
-            print str(i)
-        declarations.print_declarations( self.global_ns )
+                classes[ dia_class.name ].append( dia_class )
+        for name, class_list in classes.iteritems():
+            if len( class_list ) != 1:
+                print len( class_list ), name
+    
+            #~ klass = declarations.class_t(dia_class.name)
+            #~ klass.class_type = guess_class_type( dia_class.udtKind )
+            #~ scope_identifiers = self.__split_scope_identifiers( dia_class.name )
+            #~ if 1 == len(scope_identifiers):
+                #~ classes.append( klass )
+            #~ else:
+                #~ ns_ref = self.global_ns
+                #~ for i in range( len(scope_identifiers) - 1):
+                    #~ full_identifier = '::'.join( scope_identifiers[0:i+1] )
+                    #~ if not self.__is_udt( full_identifier ):
+                        #~ #we have namespace
+                        #~ try:
+                            #~ ns_ref = ns_ref.namespace( scope_identifiers[i], recursive=False) 
+                        #~ except ns_ref.declaration_not_found_t:
+                            #~ new_ns = declarations.namespace_t( scope_identifiers[i] )
+                            #~ ns_ref.adopt_declaration( new_ns )
+                            #~ ns_ref = new_ns
+                    #~ else:
+                        #~ classes.append( klass )
+                        #~ break
+        #~ classes.sort( lambda klass1, klass2: cmp( klass1.name, klass2.name ) )
+        #~ for i in classes:
+            #~ print str(i)
+        #~ declarations.print_declarations( self.global_ns )
 
 if __name__ == '__main__':
     control_pdb = r'C:\dev\produce_pdb\Debug\produce_pdb.pdb'
