@@ -19,7 +19,7 @@ def _create_logger_( name ):
     handler = logging.StreamHandler()
     handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
     logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     return logger
 
 class loggers:
