@@ -1,6 +1,7 @@
 import os
 import sys
 import ctypes
+import pprint
 import logging
 import comtypes
 import comtypes.client
@@ -56,7 +57,11 @@ class pdb_reader_t(object):
         self.__dia_source.loadDataFromPdb(pdb_file_path)
         self.logger.debug( 'opening session' )
         self.__dia_session = self.__dia_source.openSession()
-        self.__global_ns = declarations.namespace_t( '::' )
+        self.logger.debug( 'opening session - done' )
+        self.__global_ns = declarations.namespace_t( '::' )        
+        self.__classes = {}
+        self.__namespaces = {'': self.__global_ns}
+
         
     def read(self):
         self.__populate_scopes()
@@ -89,48 +94,64 @@ class pdb_reader_t(object):
             return False
     
     def __list_main_classes( self ):
-        #in this context main classes, are classes that was defined within a namespace
-        #as opposite to classes defined in other classes
+        #in this context main classes, are classes that were defined within a namespace
+        #as opposite to the classes defined in other classes
         classes = []
         dia_classes = self.dia_global_scope.findChildren( msdia.SymTagUDT, None, 0 )
         for dia_class in iter( dia_classes ):
             dia_class = AsDiaSymbol( dia_class )        
             name_splitter = details.get_name_splitter( dia_class.name )            
-            for scope in name_splitter.scope_names:
-                udt = self.__find_udt( scope )
-                if udt:
-                    classes.append( udt )
-                    break
+            for index, scope in enumerate( name_splitter.scope_names ):                
+                if scope in self.__namespaces:
+                    continue
+                else:
+                    udt = self.__find_udt( scope )
+                    if udt:
+                        classes.append( udt )
+                        if index:
+                            self.__namespaces[ name_splitter.scope_names[index-1] ] = None
+                        break
+                    else:
+                        self.__namespaces[ scope ] = None
             else:
                 classes.append( dia_class )
+                if name_splitter.scope_names:
+                    self.__namespaces[ name_splitter.scope_names[-1] ] = None
         return classes
     
-    def __add_inner_classes( self ):
-        for klass in self.global_ns.classes(recursive=True):
-            for dia_symbol in klass.dia_symbols:
-                flags = msdia.NameSearchOptions.nsCaseInRegularExpression
-                inner_name = dia_symbol.name + '::.*'
-                found = dia_symbol.findChildren( msdia.SymTagUDT, None, flags )
-                for inner_dia_class in iter(found):
-                    inner_dia_class = AsDiaSymbol( inner_dia_class )
-                    inner_name_splitter = details.get_name_splitter( inner_dia_class.name )
-                    try:
-                        inner_klass = klass.class_( inner_name_splitter.name, recursive=False )
-                        inner_klass.dia_symbols.append( inner_dia_class )
-                    except klass.declaration_not_found_t:
-                        klass.adopt_declaration( self.__create_class( inner_dia_class )
-                                                 , details.guess_access_type( inner_dia_class.access ) )
+    def __add_inner_classes( self, parent_class ):
+        self.logger.debug( 'adding inner classes to "%s"' % parent_class.dia_symbols[0].name )
+        for dia_symbol in parent_class.dia_symbols:
+            self.logger.debug( '\tdia symbol id: %d' % dia_symbol.symIndexId )
+            found = dia_symbol.findChildren( msdia.SymTagUDT, None, 0 )
+            for inner_dia_class in iter(found):
+                inner_dia_class = AsDiaSymbol( inner_dia_class )
+                self.logger.debug( '\t\tinner UDT found - %s' % inner_dia_class.name )
+                inner_name_splitter = details.get_name_splitter( inner_dia_class.name )
+                try:
+                    inner_klass = parent_class.class_( inner_name_splitter.name, recursive=False )
+                    inner_klass.dia_symbols.append( inner_dia_class )
+                except parent_class.declaration_not_found_t:
+                    inner_klass = self.__create_class( inner_dia_class )
+                    parent_class.adopt_declaration( inner_klass
+                                                    , details.guess_access_type( inner_dia_class.access ) )
+                    self.__classes[ inner_dia_class.name ] = inner_klass
+        self.logger.debug( 'adding inner classes to "%s" - done' % parent_class.dia_symbols[0].name )                                             
 
-    def __create_parent_ns( self, ns_full_name ):        
-        name_splitter = details.get_name_splitter( ns_full_name )
-        ns_ref = self.global_ns
-        for ns_name in name_splitter.identifiers:
-            try:
-                ns_ref = ns_ref.ns( ns_name, recursive=False )
-            except ns_ref.declaration_not_found_t:
-                ns = declarations.namespace_t( ns_name )
-                ns_ref.adopt_declaration( ns )
-                ns_ref = ns
+    
+    def __create_nss( self ):        
+        nss = self.__namespaces.keys()
+        nss.sort()
+        
+        for ns_name in nss:
+            name_splitter = details.get_name_splitter( ns_name )
+            if not name_splitter.scope_names:
+                parent_ns = self.global_ns
+            else:
+                parent_ns = self.__namespaces[ name_splitter.scope_names[-1] ]
+            ns_decl = declarations.namespace_t( name_splitter.name )
+            parent_ns.adopt_declaration( ns_decl )
+            self.__namespaces[ ns_name ] = ns_decl
     
     def __create_class( self, dia_class ):
         name_splitter = details.get_name_splitter( dia_class.name )
@@ -141,23 +162,25 @@ class pdb_reader_t(object):
         
     def __populate_scopes(self):                
         main_classes = self.__list_main_classes()
-        for dia_class in main_classes:
-            name_splitter = details.get_name_splitter( dia_class.name )
-            map( self.__create_parent_ns, name_splitter.scope_names )
+        self.__create_nss()
+        
         for dia_class in main_classes:
             name_splitter = details.get_name_splitter( dia_class.name )            
-            ns_ref = self.global_ns
-            if 1 < len(name_splitter.identifiers):
-                ns_ref = self.global_ns.ns( '::' + name_splitter.scope_names[-1] )
+            parent_ns = self.global_ns
+            if name_splitter.scope_names:
+                parent_ns = self.__namespaces[ name_splitter.scope_names[-1] ]
             try:
-                klass = ns_ref.class_( name_splitter.name, recursive=False )
+                klass = parent_ns.class_( name_splitter.name, recursive=False )
                 klass.dia_symbols.append( dia_class )
-            except ns_ref.declaration_not_found_t:
-                ns_ref.adopt_declaration( self.__create_class( dia_class ) )
+            except parent_ns.declaration_not_found_t:
+                klass = self.__create_class( dia_class )
+                parent_ns.adopt_declaration( klass )
+                self.__classes[ dia_class.name ] = klass      
         
-        self.__add_inner_classes()
+        map( self.__add_inner_classes, self.__classes.values() )
         
-        declarations.print_declarations( self.global_ns )
+        declarations.print_declarations( self.global_ns.namespace( 'ns1' ) )
+        declarations.print_declarations( self.global_ns.namespace( 'std' ) )
         
 if __name__ == '__main__':
     control_pdb = r'C:\dev\produce_pdb\Debug\produce_pdb.pdb'
