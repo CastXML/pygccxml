@@ -19,7 +19,7 @@ def _create_logger_( name ):
     handler = logging.StreamHandler()
     handler.setFormatter( logging.Formatter( os.linesep + '%(levelname)s %(message)s' ) )
     logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     return logger
 
 class loggers:
@@ -33,7 +33,12 @@ class loggers:
     """
 
     gccxml = cxx_parser #backward compatability
-    
+
+    pdb_reader = _create_logger_( 'pygccxml.pdb_reader' )
+    """logger for MS .pdb file reader functionality
+    """
+
+
     queries_engine = _create_logger_( 'pygccxml.queries_engine' )
     """logger for query engine functionality.
 
@@ -53,7 +58,7 @@ class loggers:
     root = logging.getLogger( 'pygccxml' )
     """root logger exists for your convinience only"""
 
-    all = [ root, cxx_parser, queries_engine, declarations_cache ]
+    all = [ root, cxx_parser, queries_engine, declarations_cache, pdb_reader ]
     """contains all logger classes, defined by the class"""
 
 def remove_file_no_raise(file_name ):

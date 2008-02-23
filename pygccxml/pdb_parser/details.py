@@ -1,3 +1,6 @@
+from msdia_details import msdia
+from pygccxml import declarations
+
 def guess_class_type( udt_kind ):
     if msdia.UdtKind.UdtStruct == udt_kind:
         return declarations.CLASS_TYPES.STRUCT
@@ -6,7 +9,14 @@ def guess_class_type( udt_kind ):
     else:
         return declarations.CLASS_TYPES.UNION
 
-
+def guess_access_type( access_type ):
+    if msdia.CV_access_e.CV_private == access_type:
+        return declarations.ACCESS_TYPES.PRIVATE
+    elif msdia.CV_access_e.CV_protected == access_type:
+        return declarations.ACCESS_TYPES.PROTECTED
+    else:
+        return declarations.ACCESS_TYPES.PUBLIC
+        
 class full_name_splitter_t( object ):
     def __init__( self, full_name ):
         self.__full_name = full_name
@@ -20,7 +30,7 @@ class full_name_splitter_t( object ):
     @property
     def scope_names( self ):
         if None is self.__scope_identifiers:
-            self.__scope_identifiers = ['::']
+            self.__scope_identifiers = []# ['::']
             for i in range( len(self.__identifiers) - 1):
                 self.__scope_identifiers.append( '::'.join( self.__identifiers[0:i+1] ) )
         return self.__scope_identifiers
@@ -45,6 +55,15 @@ class full_name_splitter_t( object ):
                     greater_count += next_token.count( '>' )    
             result.append( token )        
         return result
+
+__name_splitters = {}
+def get_name_splitter( full_name ):
+    try:
+        return __name_splitters[full_name]
+    except KeyError:
+        splitter = full_name_splitter_t( full_name )
+        __name_splitters[full_name] = splitter
+        return splitter
 
 
 if '__main__' == __name__:

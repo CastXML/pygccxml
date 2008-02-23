@@ -23,8 +23,7 @@ class msdia_searcher_t:
     def __get_msdia_dll_paths( self, vss_installed ):
         msdia_dlls = []        
         for vs in vss_installed:
-            vs = os.path.split( vs )[0]
-            debug_dir = os.path.join( vs, 'Packages', 'Debugger' )
+            debug_dir = os.path.join( vs, 'Common7', 'Packages', 'Debugger' )
             files = filter( lambda f: f.startswith( 'msdia' ) and f.endswith( '.dll' )
                             , os.listdir( debug_dir ) )
             if not files:
@@ -35,16 +34,18 @@ class msdia_searcher_t:
         return msdia_dlls
     
     def __get_installed_vs_dirs( self ):
-        vs_reg_path = 'Software\Microsoft\VisualStudio'
-        vss = self.read_keys( self.root_reg_key, vs_reg_path )
-        vs_installed_and_exist = []
+        vs_reg_path = 'Software\Microsoft\VisualStudio\SxS\VS7'
+        values = self.read_values( self.root_reg_key, vs_reg_path )
+        return [ values.values()[0] ]
+        #~ vss = self.read_keys( self.root_reg_key, vs_reg_path )
+        #~ vs_installed_and_exist = []
         
-        for vs_installed in vss:
-            values = self.read_values( self.root_reg_key, vs_reg_path + '\\' + vs_installed )
-            try:
-                vs_installed_and_exist.append( os.path.realpath( values['installdir'] ) )
-            except KeyError:
-                pass
+        #~ for vs_installed in vss:
+            #~ values = self.read_values( self.root_reg_key, vs_reg_path + '\\' + vs_installed )
+            #~ try:
+                #~ vs_installed_and_exist.append( os.path.realpath( values['installdir'] ) )
+            #~ except KeyError:
+                #~ pass
         
         if not vs_installed_and_exist:
             raise RuntimeError( 'pygccxml unable to find out a Visual Studio installation directory' )
@@ -69,9 +70,13 @@ finally:
 #Adding code, that was not generated for some reason.
 
 class UdtKind:
-   UdtStruct, UdtClass, UdtUnion = ( 0, 1, 2 )
+   UdtStruct, UdtClass, UdtUnion = (0, 1, 2)
+
+class CV_access_e:
+   CV_private, CV_protected, CV_public = (1, 2, 3)
 
 msdia.UdtKind = UdtKind
+msdia.CV_access_e = CV_access_e
 
 class NameSearchOptions:
    nsNone               = 0
