@@ -44,6 +44,7 @@ class scanner_t(object):
         
         self.__enums = {}
         self.__classes = {}
+        self.__typedefs = {}
         self.__namespaces = {'': self.__global_ns}
 
         
@@ -138,6 +139,7 @@ class scanner_t(object):
         name_splitter = details.get_name_splitter( enum_smbl.name )
         enum_decl = declarations.enumeration_t( name_splitter.name )
         enum_decl.dia_symbols = [ enum_smbl.symIndexId ]
+        enum_decl.byte_size = enum_smbl.length
         values = enum_smbl.findChildren( msdia.SymTagData, None, 0 )
         for v in iter(values):
             v = AsDiaSymbol(v)
@@ -169,7 +171,29 @@ class scanner_t(object):
                     self.__enums[ enum_smbl.name ] = [ enum_decl ]
                 self.logger.debug( '\tfound %s %s' % ( enum_smbl.name, str(enum_decl) ) )
         self.logger.debug( 'loading enums to "%s" - done' % parent_symbol.name )
-
+    
+    def __create_typedef( self, typedef_smbl ):
+        name_splitter = details.get_name_splitter( typedef_smbl.name )
+        typedef_decl = declarations.typedef_t( name_splitter.name )
+        typedef_decl.dia_symbols = [ typedef_smbl.symIndexId ]
+        return typedef_decl
+    
+    def __load_typedefs( self, parent_symbol_id ):
+        parent_symbol = self.__dia_session.symbolById( parent_symbol_id )
+        self.logger.debug( 'loading typedefs to "%s" ' % parent_symbol.name )
+        for typedef_smbl in iter( parent_symbol.findChildren( SymTagEnum, None, 0 ) ):
+            typedef_smbl = AsDiaSymbol( typedef_smbl )
+            typedef_decl = self.__create_typedef( typedef_smbl )            
+            try:
+                for typedef_discovered in self.__typedefs[ typedef_smbl.name ]:
+                    if self.__are_symbols_equivalent( typedef_smbl.symIndexId, typedef_discovered.dia_symbols[0] ):
+                        continue
+                else:
+                    self.__typedefs[ typedef_smbl.name ].append( typedef_decl )
+            except KeyError:
+                self.__typedefs[ typedef_smbl.name ] = [ typedef_decl ]
+            self.logger.debug( '\tfound %s %s' % ( typedef_smbl.name, str(typedef_decl) ) )
+        self.logger.debug( 'loading typedefs to "%s" - done' % parent_symbol.name )
     
     def __load_classes( self, parent_symbol_id ):
         parent_symbol = self.__dia_session.symbolById( parent_symbol_id )
@@ -207,16 +231,18 @@ class scanner_t(object):
             parent_ns.adopt_declaration( ns_decl )
             self.__namespaces[ ns_name ] = ns_decl
     
-    def __create_class( self, dia_class ):
-        name_splitter = details.get_name_splitter( dia_class.name )
-        klass = declarations.class_t( name_splitter.name )
-        klass.class_type = details.guess_class_type(dia_class.udtKind)        
-        klass.dia_symbols = set([dia_class.symIndexId])
-        return klass
+    def __create_class( self, class_smbl ):
+        name_splitter = details.get_name_splitter( class_smbl.name )
+        class_decl = declarations.class_t( name_splitter.name )
+        class_decl.class_type = details.guess_class_type(class_smbl.udtKind)        
+        class_decl.dia_symbols = set([class_smbl.symIndexId])
+        class_decl.byte_size = class_smbl.length
+        return class_decl
         
     def __populate_scopes(self):                
         self.__load_enums( self.dia_global_scope.symIndexId )
         self.__load_classes( self.dia_global_scope.symIndexId )
+        self.__load_typedefs( self.dia_global_scope.symIndexId )
         #~ main_classes = self.__list_main_classes()
         #~ self.__create_nss()
         
