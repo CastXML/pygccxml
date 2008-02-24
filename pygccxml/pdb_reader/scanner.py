@@ -29,7 +29,7 @@ def print_files( session ):
         print 'File: ', f.fileName
 
 
-class pdb_reader_t(object):
+class scanner_t(object):
     def __init__(self, pdb_file_path ):
         self.logger = utils.loggers.pdb_reader
         self.logger.setLevel(logging.DEBUG)
@@ -40,7 +40,9 @@ class pdb_reader_t(object):
         self.logger.debug( 'opening session' )
         self.__dia_session = self.__dia_source.openSession()
         self.logger.debug( 'opening session - done' )
-        self.__global_ns = declarations.namespace_t( '::' )        
+        self.__global_ns = declarations.namespace_t( '::' )     
+        
+        self.__enums = {}
         self.__classes = {}
         self.__namespaces = {'': self.__global_ns}
 
@@ -55,6 +57,17 @@ class pdb_reader_t(object):
     @property
     def global_ns(self):
         return self.__global_ns
+    
+    def __are_symbols_equivalent( self, smbl1_id, smbl2_id ):
+        smbl1 = self.__dia_session.symbolById(smbl1_id)
+        smbl2 = self.__dia_session.symbolById(smbl2_id)
+        result = self.__dia_session.symsAreEquiv( smbl1, smbl2 )
+        if result:
+            msg = 'Symbols "%s(%d)" and  "%s(%d)" are equivalent.' 
+        else:
+            msg = 'Symbols "%s(%d)" and  "%s(%d)" are NOT equivalent.' 
+        self.logger.debug( msg, smbl1.name, smbl1_id, smbl2.name, smbl2_id )
+        return result
     
     def __find_udt( self, name ):
         self.logger.debug( 'testing whether name( "%s" ) is UDT symbol' % name )
@@ -124,6 +137,7 @@ class pdb_reader_t(object):
     def __create_enum( self, enum_smbl ):
         name_splitter = details.get_name_splitter( enum_smbl.name )
         enum_decl = declarations.enumeration_t( name_splitter.name )
+        enum_decl.dia_symbols = [ enum_smbl.symIndexId ]
         values = enum_smbl.findChildren( msdia.SymTagData, None, 0 )
         for v in iter(values):
             v = AsDiaSymbol(v)
@@ -138,36 +152,51 @@ class pdb_reader_t(object):
             #between those cases
             return None
 
-    def __add_enums( self, parent_symbol_id ):
+    def __load_enums( self, parent_symbol_id ):
         parent_symbol = self.__dia_session.symbolById( parent_symbol_id )
-        self.logger.debug( 'adding enums to "%s" ' % parent_symbol.name )
+        self.logger.debug( 'loading enums to "%s" ' % parent_symbol.name )
         for enum_smbl in iter( parent_symbol.findChildren( SymTagEnum, None, 0 ) ):
             enum_smbl = AsDiaSymbol( enum_smbl )
             enum_decl = self.__create_enum( enum_smbl )            
-            if not enum_decl:
-                continue
-            self.logger.debug( '\tfound %s' % str(enum_decl) )
-            name_splitter = details.get_name_splitter( enum_smbl.name )
-            if not name_splitter.scope_names:
-                self.global_ns.adopt_declaration( enum_decl )
-                self.logger.debug( '\tenum "%s" was added to global namespace' % enum_decl.name )
-            else:
+            if enum_decl:
                 try:
-                    self.logger.debug( '\tadding enum "%s" to a namespace' % enum_decl.name )
-                    ns = self.__namespaces[ name_splitter.scope_names[-1] ]
-                    ns.adopt_declaration( enum_decl )
-                    self.logger.debug( '\tadding enum "%s" to a namespace - done' % enum_decl.name )
+                    for enum_discovered in self.__enums[ enum_smbl.name ]:
+                        if self.__are_symbols_equivalent( enum_smbl.symIndexId, enum_discovered.dia_symbols[0] ):
+                            continue
+                    else:
+                        self.__enums[ enum_smbl.name ].append( enum_decl )
                 except KeyError:
-                    self.logger.debug( '\tadding enum "%s" to a class' % enum_decl.name )
-                    klass = self.__classes[ name_splitter.scope_names[-1] ]
-                    klass.adopt_declaration( enum_decl, details.guess_access_type( enum_smbl.access ) )    
-                    self.logger.debug( '\tadding enum "%s" to a class - done' % enum_decl.name )                    
-        self.logger.debug( 'adding enums to "%s" - done' % parent_symbol.name )
-        
+                    self.__enums[ enum_smbl.name ] = [ enum_decl ]
+                self.logger.debug( '\tfound %s %s' % ( enum_smbl.name, str(enum_decl) ) )
+        self.logger.debug( 'loading enums to "%s" - done' % parent_symbol.name )
+
+    
+    def __load_classes( self, parent_symbol_id ):
+        parent_symbol = self.__dia_session.symbolById( parent_symbol_id )
+        self.logger.debug( 'loading classes to "%s" ' % parent_symbol.name )
+        for class_smbl in iter( parent_symbol.findChildren( msdia.SymTagUDT, None, 0 ) ):
+            class_smbl = AsDiaSymbol( class_smbl )
+            class_decl = self.__create_class( class_smbl )            
+            try:
+                equivalent_found = False
+                for class_discovered in self.__classes[ class_smbl.name ]:
+                    for smbl_discovered in class_discovered.dia_symbols:
+                        equivalent_found = self.__are_symbols_equivalent( smbl_discovered, class_smbl.symIndexId )
+                        if equivalent_found:
+                            class_discovered.dia_symbols.add( class_smbl.symIndexId )
+                            break
+                    if equivalent_found:
+                        break
+                if not equivalent_found:
+                    self.__classes[ class_smbl.name ].append( class_decl )
+            except KeyError:
+                self.__classes[ class_smbl.name ] = [ class_decl ]
+            self.logger.debug( '\tfound %s' % str(class_decl) )
+        self.logger.debug( 'loading classes to "%s" - done' % parent_symbol.name )
+    
     def __create_nss( self ):        
         nss = self.__namespaces.keys()
         nss.sort()
-        
         for ns_name in nss:
             name_splitter = details.get_name_splitter( ns_name )
             if not name_splitter.scope_names:
@@ -186,37 +215,39 @@ class pdb_reader_t(object):
         return klass
         
     def __populate_scopes(self):                
-        main_classes = self.__list_main_classes()
-        self.__create_nss()
+        self.__load_enums( self.dia_global_scope.symIndexId )
+        self.__load_classes( self.dia_global_scope.symIndexId )
+        #~ main_classes = self.__list_main_classes()
+        #~ self.__create_nss()
         
-        for dia_class in main_classes:
-            name_splitter = details.get_name_splitter( dia_class.name )            
-            if not name_splitter.scope_names:
-                parent_ns = self.global_ns
-            else:
-                parent_ns = self.__namespaces[ name_splitter.scope_names[-1] ]
+        #~ for dia_class in main_classes:
+            #~ name_splitter = details.get_name_splitter( dia_class.name )            
+            #~ if not name_splitter.scope_names:
+                #~ parent_ns = self.global_ns
+            #~ else:
+                #~ parent_ns = self.__namespaces[ name_splitter.scope_names[-1] ]
                 
-            try:                
-                klass = parent_ns.class_( name_splitter.name, recursive=False )
-                klass.dia_symbols.add( dia_class.symIndexId )                
-            except parent_ns.declaration_not_found_t:
-                klass = self.__create_class( dia_class )
-                parent_ns.adopt_declaration( klass )
-                self.__classes[ dia_class.name ] = klass      
+            #~ try:                
+                #~ klass = parent_ns.class_( name_splitter.name, recursive=False )
+                #~ klass.dia_symbols.add( dia_class.symIndexId )                
+            #~ except parent_ns.declaration_not_found_t:
+                #~ klass = self.__create_class( dia_class )
+                #~ parent_ns.adopt_declaration( klass )
+                #~ self.__classes[ dia_class.name ] = klass      
         
-        map( self.__add_inner_classes, self.__classes.values() )
+        #~ map( self.__add_inner_classes, self.__classes.values() )
 
-        self.__add_enums( self.dia_global_scope.symIndexId )
-        for klass in self.__classes.itervalues():
-            map( self.__add_enums, klass.dia_symbols )
+        #~ self.__add_enums( self.dia_global_scope.symIndexId )
+        #~ for klass in self.__classes.itervalues():
+            #~ map( self.__add_enums, klass.dia_symbols )
 
         #declarations.print_declarations( self.global_ns )#.namespace( 'ns1' ) )
         #declarations.print_declarations( self.global_ns.namespace( 'std' ) )
         
 if __name__ == '__main__':
     control_pdb = r'C:\dev\produce_pdb\Debug\produce_pdb.pdb'
-    #control_pdb = r'xxx.pdb'
-    reader = pdb_reader_t( control_pdb )
+    control_pdb = r'xxx.pdb'
+    reader = scanner_t( control_pdb )
     reader.read()
     f = file( 'decls.cpp', 'w+' )
     declarations.print_declarations( reader.global_ns, writer=f.write )

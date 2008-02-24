@@ -11,9 +11,6 @@ class msdia_searcher_t:
     def find_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
         msdia_dlls = self.__get_msdia_dll_paths( vss_installed )
-        #D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\
-        #D:\Program Files\Microsoft Visual Studio .NET 2003\Common7\Packages\Debugger\msdia71.dll
-        #C:\Program Files\Microsoft Visual Studio 9.0\Common7\Packages\Debugger\msdia90.dll
         if 1 == len(msdia_dlls):
             return msdia_dlls[0]
         else:
@@ -37,20 +34,6 @@ class msdia_searcher_t:
         vs_reg_path = 'Software\Microsoft\VisualStudio\SxS\VS7'
         values = self.read_values( self.root_reg_key, vs_reg_path )
         return [ values.values()[0] ]
-        #~ vss = self.read_keys( self.root_reg_key, vs_reg_path )
-        #~ vs_installed_and_exist = []
-        
-        #~ for vs_installed in vss:
-            #~ values = self.read_values( self.root_reg_key, vs_reg_path + '\\' + vs_installed )
-            #~ try:
-                #~ vs_installed_and_exist.append( os.path.realpath( values['installdir'] ) )
-            #~ except KeyError:
-                #~ pass
-        
-        if not vs_installed_and_exist:
-            raise RuntimeError( 'pygccxml unable to find out a Visual Studio installation directory' )
-        return vs_installed_and_exist
-
     
     def read_keys(self, base, key):
         return msvccompiler.read_keys(base, key)
@@ -59,6 +42,7 @@ class msdia_searcher_t:
         return msvccompiler.read_values(base, key)
 
 msdia_path = msdia_searcher_t().find_path()  
+print msdia_path
 
 comtypes_client_gen_dir = comtypes.client.gen_dir
 try:
