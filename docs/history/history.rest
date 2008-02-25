@@ -29,9 +29,11 @@ Version SVN
 -----------
 
 1. Support for ellipsis was added.
+
    Warning: this feature introduce backward compatibility problem! 
-   
+
    Description: 
+
    .. code-block:: C++
 
       void do_smth( int, ... )
