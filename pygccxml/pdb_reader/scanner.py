@@ -5,7 +5,7 @@ import pprint
 import logging
 import comtypes
 import comtypes.client
-from msdia_details import msdia
+from msvc_details import msdia
 
 sys.path.append( r'../..' )
 #sys.path.append( r'C:\dev\language-binding\pygccxml_dev' )

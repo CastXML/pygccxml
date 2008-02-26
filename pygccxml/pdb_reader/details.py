@@ -1,4 +1,4 @@
-from msdia_details import msdia
+from msvc_details import msdia
 from pygccxml import declarations
 
 def guess_class_type( udt_kind ):

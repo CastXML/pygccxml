@@ -1,14 +1,19 @@
 import os
+import sys
 import comtypes
 import comtypes.client
 import _winreg as win_registry
 from distutils import msvccompiler
 
-class msdia_searcher_t:
-    def __init__( self ):
-        self.root_reg_key = win_registry.HKEY_LOCAL_MACHINE
-        
-    def find_path( self ):
+
+class binaries_searcher_t:    
+    
+    def get_msbsc_path( self ):
+        relative_path = os.path.dirname( sys.modules[__name__].__file__)
+        absolute_path = os.path.abspath (relative_path)
+        return os.path.join( absolute_path, 'msbsc70.dll' )
+    
+    def get_msdia_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
         msdia_dlls = self.__get_msdia_dll_paths( vss_installed )
         if 1 == len(msdia_dlls):
@@ -32,7 +37,7 @@ class msdia_searcher_t:
     
     def __get_installed_vs_dirs( self ):
         vs_reg_path = 'Software\Microsoft\VisualStudio\SxS\VS7'
-        values = self.read_values( self.root_reg_key, vs_reg_path )
+        values = self.read_values( win_registry.HKEY_LOCAL_MACHINE, vs_reg_path )
         return [ values.values()[0] ]
     
     def read_keys(self, base, key):
@@ -41,8 +46,13 @@ class msdia_searcher_t:
     def read_values(self, base, key):
         return msvccompiler.read_values(base, key)
 
-msdia_path = msdia_searcher_t().find_path()  
-print msdia_path
+bs = binaries_searcher_t()
+
+msdia_path = bs.get_msdia_path()  
+print 'msdia path: ', msdia_path
+
+msbsc_path = bs.get_msbsc_path()  
+print 'msbsc path: ', msbsc_path
 
 comtypes_client_gen_dir = comtypes.client.gen_dir
 try:
