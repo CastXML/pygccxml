@@ -255,7 +255,7 @@ class MBF:
 class bsc_reader_t( object ):
     def __init__( self, bsc_file ):
         self.logger = utils.loggers.pdb_reader
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
 
         self.__bsc_file = bsc_file   
         self.__bsc = pointer( Bsc() )
@@ -266,7 +266,10 @@ class bsc_reader_t( object ):
         self.logger.debug( 'openning bsc file "%s" - done', self.__bsc_file )
         
         self.__instances = []
-
+        
+        self.__files = self.__load_files()
+        self.__file_instances = self.__load_files_instances( self.__files )
+        
     def query_all_instances( self ):
         instances_len = ULONG(0)        
         instances = pointer( IINST() )
@@ -278,8 +281,35 @@ class bsc_reader_t( object ):
         self.logger.debug( 'call BSCGetAllGlobalsArray function - success' )            
         self.logger.debug( 'instances_len: %d', instances_len.value )
         for i in range( instances_len.value ):
-            print i
-            self.__instances.append( i )        
+            self.__instances.append( instances[i] )  
+        BSCDisposeArray( self.__bsc, instances )            
+    
+    @property
+    def files( self ):
+        return self.__files.keys()
+    
+    def __load_files(self):
+        module_ids = pointer( IMOD() ) 
+        module_ids_len = ULONG()
+        bs = BSC_STAT()
+        self.logger.debug( 'call BSCGetAllModulesArray function' )        
+        
+        if not BSCGetAllModulesArray( self.__bsc, module_ids, byref(module_ids_len) ):
+            self.logger.debug( 'call BSCGetAllModulesArray function - failure' )    
+            raise RuntimeError( "Unable to load all modules" )            
+        self.logger.debug( 'call BSCGetAllModulesArray function - success' )        
+        modules = [ module_ids[i] for i in range( module_ids_len.value ) ]
+
+        files = {}
+
+        for m in modules:
+            name = STRING()
+            BSCImodInfo(self.__bsc, m, byref(name))
+            files[ name.value ] = m
+            
+        BSCDisposeArray( self.__bsc, module_ids )
+        
+        return files
         
     def print_stat( self ):
         stat = BSC_STAT()
@@ -287,17 +317,45 @@ class bsc_reader_t( object ):
         for f, t in stat._fields_:
             print '%s: %s' % ( f, str( getattr( stat, f) ) )
     
+    def __load_files_instances( self, files ):
+        file_instances = {}
+        for fname, file_id in files.iteritems():
+            self.logger.debug( 'load instances for file "%s"', fname )
+            
+            instances_len = ULONG(0)        
+            instances = pointer( IINST() )
+            
+            self.logger.debug( 'call BSCGetModuleContents function' )
+            if not BSCGetModuleContents( self.__bsc, file_id, MBF.mbfClass, byref( instances ), byref( instances_len ) ):
+                self.logger.debug( 'call BSCGetModuleContents function - failure' )
+                raise RuntimeError( "Unable to call BSCGetModuleContents" )
+            file_instances[ fname ] = [ instances[i] for i in range( instances_len.value ) ]
+             
+            self.logger.debug( 'load instances for file "%s" - done', fname )
+        return file_instances
+    
     def __del__( self ):
         BSCClose( self.__bsc )
-
-
-
+        
+    def print_classes( self ):
+        for fname, instances in self.__file_instances.iteritems():
+            print 'file: ', fname
+            for inst in instances:
+                name = STRING()
+                typ = TYP()
+                attribute = ATR()
+                BSCIinstInfo( self.__bsc, inst, byref( name ), byref( typ ), byref( attribute ) )
+                name = BSCFormatDname( self.__bsc, name )
+                print '\tname: ', name
+                print '\ttype: ', typ
+                print '\tattribute: ', attribute
+                
 
 if __name__ == '__main__':
-    #for i in range( 1000 ):
     control_bsc = r'xxx.bsc'
     reader = bsc_reader_t( control_bsc )
     reader.print_stat()
-    reader.query_all_instances()
-        
+    #~ reader.query_all_instances()
+    #reader.files        
+    reader.print_classes()
         
