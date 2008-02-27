@@ -12,6 +12,11 @@ class binaries_searcher_t:
         relative_path = os.path.dirname( sys.modules[__name__].__file__)
         absolute_path = os.path.abspath (relative_path)
         return os.path.join( absolute_path, 'msbsc70.dll' )
+        
+    def get_msvcr_path( self ):
+        relative_path = os.path.dirname( sys.modules[__name__].__file__)
+        absolute_path = os.path.abspath (relative_path)
+        return os.path.join( absolute_path, 'msvcr70.dll' )
     
     def get_msdia_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
@@ -53,6 +58,9 @@ print 'msdia path: ', msdia_path
 
 msbsc_path = bs.get_msbsc_path()  
 print 'msbsc path: ', msbsc_path
+
+msvcr_path = bs.get_msvcr_path()
+print 'msvcr path: ', msvcr_path
 
 comtypes_client_gen_dir = comtypes.client.gen_dir
 try:
