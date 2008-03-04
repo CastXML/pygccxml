@@ -236,21 +236,117 @@ LszNameFrBob.restype = SZ
 LszNameFrBob.argtypes = [BOB]
 CLS = USHORT
 
-class MBF:
-    mbfNil       = 0x000
-    mbfVars      = 0x001
-    mbfFuncs     = 0x002
-    mbfMacros    = 0x004
-    mbfTypes     = 0x008
-    mbfClass     = 0x010
-    mbfIncl      = 0x020
-    mbfMsgMap    = 0x040
-    mbfDialogID  = 0x080
-    mbfLibrary   = 0x100
-    mbfImport    = 0x200
-    mbfTemplate  = 0x400
-    mbfNamespace = 0x800
-    mbfAll       = 0xFFF
+class enums:
+    class MBF:
+        Nil       = (0x000, 'Nil')
+        Vars      = (0x001, 'Vars')
+        Funcs     = (0x002, 'Funcs')
+        Macros    = (0x004, 'Macros')
+        Types     = (0x008, 'Types')
+        Class     = (0x010, 'Class')
+        Incl      = (0x020, 'Incl')
+        MsgMap    = (0x040, 'MsgMap')
+        DialogID  = (0x080, 'DialogID')
+        Library   = (0x100, 'Library')
+        Import    = (0x200, 'Import')
+        Template  = (0x400, 'Template')
+        Namespace = (0x800, 'Namespace')
+        All       = (0xFFF, 'All')
+    
+    class TYP:
+        FUNCTION  = (0x01, 'Function') 
+        LABEL     = (0x02, 'Label') 
+        PARAMETER = (0x03, 'Parameter')
+        VARIABLE  = (0x04, 'Variable')
+        CONSTANT  = (0x05, 'Const') 
+        MACRO     = (0x06, 'Macro') 
+        TYPEDEF   = (0x07, 'Typedef') 
+        STRUCNAM  = (0x08, 'Struct') 
+        ENUMNAM   = (0x09, 'Enum')   
+        ENUMMEM   = (0x0A, 'Enum value') 
+        UNIONNAM  = (0x0B, 'Union') 
+        SEGMENT   = (0x0C, 'Segment') 
+        GROUP     = (0x0D, 'Group') 
+        PROGRAM   = (0x0E, 'Program') 
+        CLASSNAM  = (0x0F, 'Class') 
+        MEMFUNC   = (0x10, 'Mem Function')
+        MEMVAR    = (0x11, 'Mem Variable')
+
+class instance_t(object):
+    #represents some symbol
+    def __init__( self, inst_id, bsc, logger ):
+        self.__bsc = bsc
+        self.__inst_id = inst_id
+        self.logger = logger
+
+    @property
+    def inst_id(self):
+        return self.__inst_id
+    
+    @utils.cached
+    def name_type_attribute( self ):
+        name = STRING()
+        typ = TYP()
+        attribute = ATR()
+        self.logger.debug( 'call BSCIinstInfo( %s ) function', str(self.__inst_id) )
+        if not BSCIinstInfo( self.__bsc, self.inst_id, byref( name ), byref( typ ), byref( attribute ) ):
+            self.logger.debug( 'call BSCIinstInfo( %s ) function - failure', str(self.__inst_id) )
+            raise RuntimeError( "Unable to load information about instance(%s)" % str( self.__inst_id ) )
+        self.logger.debug( 'call BSCIinstInfo( %s ) function - success', str(self.__inst_id) )
+        name = BSCFormatDname( self.__bsc, name )
+        return name, typ, attribute
+        
+    @utils.cached    
+    def name(self):
+        return self.name_type_attribute[0]
+
+    @utils.cached    
+    def type(self):
+        return self.name_type_attribute[1].value
+
+    @utils.cached    
+    def attribute(self):
+        return self.name_type_attribute[2].value
+        
+    def __str__( self ):
+        return 'type( "%s" ), attribute( "%s" ), name( "%s" )' \
+                % ( TYP_ENUM.names[ self.type], str( self.attribute ), self.name )
+
+class module_t(object):
+    #represents file 
+    def __init__( self, mod_id, bsc, logger ):
+        self.__bsc = bsc
+        self.__mod_id = mod_id
+        self.logger = logger
+    
+    @property
+    def mod_id( self ):
+        return self.__mod_id 
+    
+    @utils.cached
+    def path( self ):
+        name = STRING()
+        BSCImodInfo(self.__bsc, self.__mod_id, byref(name))
+        return name
+        
+    @utils.cached
+    def instances( self ):              
+        self.logger.debug( 'load instances for file "%s"', self.path )
+
+        instances_len = ULONG(0)        
+        instances_ids = pointer( IINST() )
+        
+        self.logger.debug( 'call BSCGetModuleContents function' )
+        if not BSCGetModuleContents( self.__bsc, self.mod_id, enums.MBF.All[0], byref( instances_ids ), byref( instances_len ) ):
+            self.logger.debug( 'call BSCGetModuleContents function - failure' )
+            raise RuntimeError( "Unable to call BSCGetModuleContents" )
+        self.logger.debug( 'load instances for file "%s" - done', self.path )
+        
+        instances = map( lambda i: instance_t( instances_ids[i], self.__bsc, self.logger )
+                         , range( instances_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, instances_ids )        
+        return instances
 
 class bsc_reader_t( object ):
     def __init__( self, bsc_file ):
@@ -263,19 +359,14 @@ class bsc_reader_t( object ):
         if not BSCOpen( self.__bsc_file, byref( self.__bsc ) ):
             self.logger.debug( 'unable to open bsc file "%s"', self.__bsc_file )
             raise RuntimeError( "Unable to open bsc file '%s'" % self.__bsc_file )
-        self.logger.debug( 'openning bsc file "%s" - done', self.__bsc_file )
-        
-        self.__instances = []
-        
-        self.__files = self.__load_files()
-        self.__file_instances = self.__load_files_instances( self.__files )
+        self.logger.debug( 'openning bsc file "%s" - done', self.__bsc_file )        
         
     def query_all_instances( self ):
         instances_len = ULONG(0)        
         instances = pointer( IINST() )
 
         self.logger.debug( 'call BSCGetAllGlobalsArray function' )        
-        if not BSCGetAllGlobalsArray( self.__bsc, MBF.mbfAll, byref( instances ), byref( instances_len ) ):
+        if not BSCGetAllGlobalsArray( self.__bsc, enums.MBF.All[0], byref( instances ), byref( instances_len ) ):
             self.logger.debug( 'call BSCGetAllGlobalsArray function - failure' )
             raise RuntimeError( "Unable to load all globals symbols" )
         self.logger.debug( 'call BSCGetAllGlobalsArray function - success' )            
@@ -284,32 +375,24 @@ class bsc_reader_t( object ):
             self.__instances.append( instances[i] )  
         BSCDisposeArray( self.__bsc, instances )            
     
-    @property
-    def files( self ):
-        return self.__files.keys()
-    
-    def __load_files(self):
+    @utils.cached
+    def files(self):
         module_ids = pointer( IMOD() ) 
-        module_ids_len = ULONG()
+        module_len = ULONG()
         bs = BSC_STAT()
-        self.logger.debug( 'call BSCGetAllModulesArray function' )        
         
-        if not BSCGetAllModulesArray( self.__bsc, module_ids, byref(module_ids_len) ):
+        self.logger.debug( 'call BSCGetAllModulesArray function' )        
+        if not BSCGetAllModulesArray( self.__bsc, module_ids, byref(module_len) ):
             self.logger.debug( 'call BSCGetAllModulesArray function - failure' )    
             raise RuntimeError( "Unable to load all modules" )            
         self.logger.debug( 'call BSCGetAllModulesArray function - success' )        
-        modules = [ module_ids[i] for i in range( module_ids_len.value ) ]
+        
+        modules = map( lambda i: module_t( module_ids[i], self.__bsc, self.logger )
+                       , range( module_len.value ) )
 
-        files = {}
-
-        for m in modules:
-            name = STRING()
-            BSCImodInfo(self.__bsc, m, byref(name))
-            files[ name.value ] = m
-            
         BSCDisposeArray( self.__bsc, module_ids )
         
-        return files
+        return modules
         
     def print_stat( self ):
         stat = BSC_STAT()
@@ -317,39 +400,14 @@ class bsc_reader_t( object ):
         for f, t in stat._fields_:
             print '%s: %s' % ( f, str( getattr( stat, f) ) )
     
-    def __load_files_instances( self, files ):
-        file_instances = {}
-        for fname, file_id in files.iteritems():
-            self.logger.debug( 'load instances for file "%s"', fname )
-            
-            instances_len = ULONG(0)        
-            instances = pointer( IINST() )
-            
-            self.logger.debug( 'call BSCGetModuleContents function' )
-            if not BSCGetModuleContents( self.__bsc, file_id, MBF.mbfClass, byref( instances ), byref( instances_len ) ):
-                self.logger.debug( 'call BSCGetModuleContents function - failure' )
-                raise RuntimeError( "Unable to call BSCGetModuleContents" )
-            file_instances[ fname ] = [ instances[i] for i in range( instances_len.value ) ]
-             
-            self.logger.debug( 'load instances for file "%s" - done', fname )
-        return file_instances
+    def print_classes(self):
+        for m in self.files:
+            print m.path
+            for inst in m.instances:
+                print '\t', str(inst)
     
     def __del__( self ):
         BSCClose( self.__bsc )
-        
-    def print_classes( self ):
-        for fname, instances in self.__file_instances.iteritems():
-            print 'file: ', fname
-            for inst in instances:
-                name = STRING()
-                typ = TYP()
-                attribute = ATR()
-                BSCIinstInfo( self.__bsc, inst, byref( name ), byref( typ ), byref( attribute ) )
-                name = BSCFormatDname( self.__bsc, name )
-                print '\tname: ', name
-                print '\ttype: ', typ
-                print '\tattribute: ', attribute
-                
 
 if __name__ == '__main__':
     control_bsc = r'xxx.bsc'

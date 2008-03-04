@@ -99,3 +99,29 @@ def get_architecture():
     else:
         raise RuntimeError( "Unknown architecture" )
 
+
+#The following code is cut-and-paste from this post:
+#http://groups.google.com/group/comp.lang.python/browse_thread/thread/5b71896c06bd0f76/
+#Thanks to Michele Simionato, for it
+class cached(property):
+    'Convert a method into a cached attribute'
+    def __init__(self, method):
+        private = '_' + method.__name__
+        def fget(s):
+            try:
+                return getattr(s, private)
+            except AttributeError:
+                value = method(s)
+                setattr(s, private, value)
+                return value
+        def fdel(s):
+            del s.__dict__[private]
+        super(cached, self).__init__(fget, fdel=fdel)
+        
+    @staticmethod
+    def reset(self):
+        cls = self.__class__
+        for name in dir(cls):
+            attr = getattr(cls, name)
+            if isinstance(attr, cached):
+                delattr(self, name) 
