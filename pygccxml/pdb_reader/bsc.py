@@ -236,41 +236,89 @@ LszNameFrBob.restype = SZ
 LszNameFrBob.argtypes = [BOB]
 CLS = USHORT
 
-class enums:
-    class MBF:
-        Nil       = (0x000, 'Nil')
-        Vars      = (0x001, 'Vars')
-        Funcs     = (0x002, 'Funcs')
-        Macros    = (0x004, 'Macros')
-        Types     = (0x008, 'Types')
-        Class     = (0x010, 'Class')
-        Incl      = (0x020, 'Incl')
-        MsgMap    = (0x040, 'MsgMap')
-        DialogID  = (0x080, 'DialogID')
-        Library   = (0x100, 'Library')
-        Import    = (0x200, 'Import')
-        Template  = (0x400, 'Template')
-        Namespace = (0x800, 'Namespace')
-        All       = (0xFFF, 'All')
+class enums:  
+    class MBF(utils.enum):
+        NIL       = 0x000
+        VARS      = 0x001
+        FUNCS     = 0x002
+        MACROS    = 0x004
+        TYPES     = 0x008
+        CLASS     = 0x010
+        INCL      = 0x020
+        MSGMAP    = 0x040
+        DIALOGID  = 0x080
+        LIBRARY   = 0x100
+        IMPORT    = 0x200
+        TEMPLATE  = 0x400
+        NAMESPACE = 0x800
+        ALL       = 0xFFF
+        
+    class TYPES(utils.enum):
+        FUNCTION  = 0x01
+        LABEL     = 0x02
+        PARAMETER = 0x03
+        VARIABLE  = 0x04
+        CONSTANT  = 0x05
+        MACRO     = 0x06
+        TYPEDEF   = 0x07
+        STRUCNAM  = 0x08
+        ENUMNAM   = 0x09
+        ENUMMEM   = 0x0A
+        UNIONNAM  = 0x0B
+        SEGMENT   = 0x0C
+        GROUP     = 0x0D
+        PROGRAM   = 0x0E
+        CLASSNAM  = 0x0F
+        MEMFUNC   = 0x10
+        MEMVAR    = 0x11
+
+    class ATTRIBUTES(utils.enum):
+        LOCAL     = 0x001
+        STATIC    = 0x002 
+        SHARED    = 0x004
+        NEAR      = 0x008
+        COMMON    = 0x010 
+        DECL_ONLY = 0x020
+        PUBLIC    = 0x040 
+        NAMED     = 0x080 
+        MODULE    = 0x100 
+        VIRTUAL   = 0x200         
+        PRIVATE   = 0x400
+        PROTECT   = 0x800 
+
+class definition_t(object):
+    #represents some other symbol
+    def __init__( self, def_id, bsc, logger ):
+        self.__bsc = bsc
+        self.__def_id = def_id
+        self.logger = logger
+
+    @property
+    def def_id(self):
+        return self.__def_id
     
-    class TYP:
-        FUNCTION  = (0x01, 'Function') 
-        LABEL     = (0x02, 'Label') 
-        PARAMETER = (0x03, 'Parameter')
-        VARIABLE  = (0x04, 'Variable')
-        CONSTANT  = (0x05, 'Const') 
-        MACRO     = (0x06, 'Macro') 
-        TYPEDEF   = (0x07, 'Typedef') 
-        STRUCNAM  = (0x08, 'Struct') 
-        ENUMNAM   = (0x09, 'Enum')   
-        ENUMMEM   = (0x0A, 'Enum value') 
-        UNIONNAM  = (0x0B, 'Union') 
-        SEGMENT   = (0x0C, 'Segment') 
-        GROUP     = (0x0D, 'Group') 
-        PROGRAM   = (0x0E, 'Program') 
-        CLASSNAM  = (0x0F, 'Class') 
-        MEMFUNC   = (0x10, 'Mem Function')
-        MEMVAR    = (0x11, 'Mem Variable')
+    @utils.cached
+    def location( self ):
+        module = STRING()
+        line = LINE()
+        self.logger.debug( 'call BSCIdefInfo( %s ) function', str(self.__def_id) )
+        if not BSCIdefInfo( self.__bsc, self.def_id, byref( module ), byref( line ) ):
+            self.logger.debug( 'call BSCIdefInfo( %s ) function - failure', str(self.__def_id) )
+            raise RuntimeError( "Unable to load information about instance(%s)" % str( self.__def_id ) )
+        self.logger.debug( 'call BSCIdefInfo( %s ) function - success', str(self.__def_id) )
+        return (module, line)
+        
+    @utils.cached    
+    def file_name(self):
+        return self.location[0].value
+
+    @utils.cached    
+    def line(self):
+        return self.location[1].value
+        
+    def __str__( self ):               
+        return self.file_name + ': %d' % self.line
+
 
 class instance_t(object):
     #represents some symbol
@@ -308,9 +356,33 @@ class instance_t(object):
     def attribute(self):
         return self.name_type_attribute[2].value
         
-    def __str__( self ):
-        return 'type( "%s" ), attribute( "%s" ), name( "%s" )' \
-                % ( TYP_ENUM.names[ self.type], str( self.attribute ), self.name )
+    def __str__( self ):               
+        tmp = []
+        if enums.TYPES.has_value( self.type ):
+            tmp.append( 'type( "%s" )' % enums.TYPES.name_of( self.type ) )
+        if enums.ATTRIBUTES.has_value( self.attribute ):
+            tmp.append( 'attribute( "%s" )' % enums.ATTRIBUTES.name_of( self.attribute ) ) 
+        tmp.append( 'name( "%s" )' % self.name )
+        return ', '.join( tmp )
+        
+    @utils.cached
+    def definitions( self ):
+        self.logger.debug( 'load definitions for instance "%s"', self.name )
+
+        definitions_len = ULONG(0)        
+        definitions_ids = pointer( IDEF() )
+        
+        self.logger.debug( 'call BSCGetDefArray function' )
+        if not BSCGetDefArray( self.__bsc, self.inst_id, byref( definitions_ids ), byref( definitions_len ) ):
+            self.logger.debug( 'call BSCGetDefArray function - failure' )
+            raise RuntimeError( "Unable to call BSCGetDefArray" )
+        self.logger.debug( 'load definitions for instance "%s" - done', self.name )
+        
+        definitions = map( lambda i: definition_t( definitions_ids[i], self.__bsc, self.logger )
+                           , range( definitions_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, definitions_ids )        
+        return definitions
 
 class module_t(object):
     #represents file 
@@ -327,7 +399,7 @@ class module_t(object):
     def path( self ):
         name = STRING()
         BSCImodInfo(self.__bsc, self.__mod_id, byref(name))
-        return name
+        return name.value
         
     @utils.cached
     def instances( self ):              
@@ -337,7 +409,7 @@ class module_t(object):
         instances_ids = pointer( IINST() )
         
         self.logger.debug( 'call BSCGetModuleContents function' )
-        if not BSCGetModuleContents( self.__bsc, self.mod_id, enums.MBF.All[0], byref( instances_ids ), byref( instances_len ) ):
+        if not BSCGetModuleContents( self.__bsc, self.mod_id, enums.MBF.ALL, byref( instances_ids ), byref( instances_len ) ):
             self.logger.debug( 'call BSCGetModuleContents function - failure' )
             raise RuntimeError( "Unable to call BSCGetModuleContents" )
         self.logger.debug( 'load instances for file "%s" - done', self.path )
@@ -366,7 +438,7 @@ class bsc_reader_t( object ):
         instances = pointer( IINST() )
 
         self.logger.debug( 'call BSCGetAllGlobalsArray function' )        
-        if not BSCGetAllGlobalsArray( self.__bsc, enums.MBF.All[0], byref( instances ), byref( instances_len ) ):
+        if not BSCGetAllGlobalsArray( self.__bsc, enums.MBF.ALL, byref( instances ), byref( instances_len ) ):
             self.logger.debug( 'call BSCGetAllGlobalsArray function - failure' )
             raise RuntimeError( "Unable to load all globals symbols" )
         self.logger.debug( 'call BSCGetAllGlobalsArray function - success' )            
@@ -374,6 +446,10 @@ class bsc_reader_t( object ):
         for i in range( instances_len.value ):
             self.__instances.append( instances[i] )  
         BSCDisposeArray( self.__bsc, instances )            
+    
+    @utils.cached
+    def is_case_sensitive( self ):
+        return bool( BSCFCaseSensitive( self.__bsc ) )
     
     @utils.cached
     def files(self):
@@ -405,14 +481,18 @@ class bsc_reader_t( object ):
             print m.path
             for inst in m.instances:
                 print '\t', str(inst)
+                for definition in inst.definitions:
+                    print '\t\t', str( definition )
     
     def __del__( self ):
-        BSCClose( self.__bsc )
+        if self.__bsc:
+            BSCClose( self.__bsc )
 
 if __name__ == '__main__':
     control_bsc = r'xxx.bsc'
     reader = bsc_reader_t( control_bsc )
     reader.print_stat()
+    print 'is_case_sensitive', reader.is_case_sensitive
     #~ reader.query_all_instances()
     #reader.files        
     reader.print_classes()
