@@ -317,8 +317,11 @@ class definition_t(object):
         return self.location[1].value
         
     def __str__( self ):               
-        return self.file_name + ': %d' % self.line
-
+        return self.file_name + ': %d' % self.line + ' name: %s' % self.as_instance.name
+        
+    @utils.cached
+    def as_instance(self):
+        return instance_t( BSCIinstFrIdef( self.__bsc, self.def_id), self.__bsc, self.logger )
 
 class instance_t(object):
     #represents some symbol
@@ -383,6 +386,26 @@ class instance_t(object):
         
         BSCDisposeArray( self.__bsc, definitions_ids )        
         return definitions
+        
+    @utils.cached
+    def members( self ):
+        self.logger.debug( 'load members for instance "%s"', self.name )
+
+        instances_len = ULONG(0)        
+        instances_ids = pointer( IINST() )
+        
+        self.logger.debug( 'call BSCGetMembersArray function' )
+        if not BSCGetMembersArray( self.__bsc, self.inst_id, enums.MBF.ALL, byref( instances_ids ), byref( instances_len ) ):
+            self.logger.debug( 'call BSCGetMembersArray function - failure' )
+            raise RuntimeError( "Unable to call BSCGetMembersArray" )
+        self.logger.debug( 'load members for instance "%s" - done', self.name )
+        
+        instances = map( lambda i: instance_t( instances_ids[i], self.__bsc, self.logger )
+                         , range( instances_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, instances_ids )        
+        return instances
+
 
 class module_t(object):
     #represents file 
@@ -476,13 +499,20 @@ class bsc_reader_t( object ):
         for f, t in stat._fields_:
             print '%s: %s' % ( f, str( getattr( stat, f) ) )
     
-    def print_classes(self):
+    def print_classes(self, file_name=None):
         for m in self.files:
-            print m.path
+            if file_name and m.path != file_name:
+                continue
+            print 'File: ', m.path
+            print '\tInstances:'
             for inst in m.instances:
-                print '\t', str(inst)
+                print '\t\t', str(inst)
+                print '\t\t\tDefinitions:'
                 for definition in inst.definitions:
-                    print '\t\t', str( definition )
+                    print '\t\t\t\t', str( definition )
+                print '\t\t\tMembers:'
+                for member in inst.members:
+                    print '\t\t\t\t', str( member )
     
     def __del__( self ):
         if self.__bsc:
@@ -495,5 +525,4 @@ if __name__ == '__main__':
     print 'is_case_sensitive', reader.is_case_sensitive
     #~ reader.query_all_instances()
     #reader.files        
-    reader.print_classes()
-        
+    reader.print_classes( r'c:\dev\produce_pdb\produce_pdb.cpp')
