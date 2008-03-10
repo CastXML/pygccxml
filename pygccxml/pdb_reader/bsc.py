@@ -288,10 +288,9 @@ class enums:
 
 class definition_t(object):
     #represents some other symbol
-    def __init__( self, def_id, bsc, logger ):
+    def __init__( self, def_id, bsc ):
         self.__bsc = bsc
         self.__def_id = def_id
-        self.logger = logger
 
     @property
     def def_id(self):
@@ -301,11 +300,8 @@ class definition_t(object):
     def location( self ):
         module = STRING()
         line = LINE()
-        self.logger.debug( 'call BSCIdefInfo( %s ) function', str(self.__def_id) )
         if not BSCIdefInfo( self.__bsc, self.def_id, byref( module ), byref( line ) ):
-            self.logger.debug( 'call BSCIdefInfo( %s ) function - failure', str(self.__def_id) )
             raise RuntimeError( "Unable to load information about instance(%s)" % str( self.__def_id ) )
-        self.logger.debug( 'call BSCIdefInfo( %s ) function - success', str(self.__def_id) )
         return (module, line)
         
     @utils.cached    
@@ -321,14 +317,13 @@ class definition_t(object):
         
     @utils.cached
     def as_instance(self):
-        return instance_t( BSCIinstFrIdef( self.__bsc, self.def_id), self.__bsc, self.logger )
+        return self.__bsc.create_instance( BSCIinstFrIdef( self.__bsc, self.def_id) )
 
 class instance_t(object):
     #represents some symbol
-    def __init__( self, inst_id, bsc, logger ):
+    def __init__( self, inst_id, bsc ):
         self.__bsc = bsc
         self.__inst_id = inst_id
-        self.logger = logger
 
     @property
     def inst_id(self):
@@ -339,11 +334,8 @@ class instance_t(object):
         name = STRING()
         typ = TYP()
         attribute = ATR()
-        self.logger.debug( 'call BSCIinstInfo( %s ) function', str(self.__inst_id) )
         if not BSCIinstInfo( self.__bsc, self.inst_id, byref( name ), byref( typ ), byref( attribute ) ):
-            self.logger.debug( 'call BSCIinstInfo( %s ) function - failure', str(self.__inst_id) )
             raise RuntimeError( "Unable to load information about instance(%s)" % str( self.__inst_id ) )
-        self.logger.debug( 'call BSCIinstInfo( %s ) function - success', str(self.__inst_id) )
         name = BSCFormatDname( self.__bsc, name )
         return name, typ, attribute
         
@@ -365,23 +357,19 @@ class instance_t(object):
             tmp.append( 'type( "%s" )' % enums.TYPES.name_of( self.type ) )
         if enums.ATTRIBUTES.has_value( self.attribute ):
             tmp.append( 'attribute( "%s" )' % enums.ATTRIBUTES.name_of( self.attribute ) ) 
-        tmp.append( 'name( "%s" )' % self.name )
+        tmp.append( 'name( "%s" )' % self.name )        
         return ', '.join( tmp )
+        
         
     @utils.cached
     def definitions( self ):
-        self.logger.debug( 'load definitions for instance "%s"', self.name )
-
         definitions_len = ULONG(0)        
         definitions_ids = pointer( IDEF() )
         
-        self.logger.debug( 'call BSCGetDefArray function' )
         if not BSCGetDefArray( self.__bsc, self.inst_id, byref( definitions_ids ), byref( definitions_len ) ):
-            self.logger.debug( 'call BSCGetDefArray function - failure' )
             raise RuntimeError( "Unable to call BSCGetDefArray" )
-        self.logger.debug( 'load definitions for instance "%s" - done', self.name )
         
-        definitions = map( lambda i: definition_t( definitions_ids[i], self.__bsc, self.logger )
+        definitions = map( lambda i: definition_t( definitions_ids[i], self.__bsc )
                            , range( definitions_len.value ) )
         
         BSCDisposeArray( self.__bsc, definitions_ids )        
@@ -389,30 +377,65 @@ class instance_t(object):
         
     @utils.cached
     def members( self ):
-        self.logger.debug( 'load members for instance "%s"', self.name )
-
         instances_len = ULONG(0)        
         instances_ids = pointer( IINST() )
         
-        self.logger.debug( 'call BSCGetMembersArray function' )
         if not BSCGetMembersArray( self.__bsc, self.inst_id, enums.MBF.ALL, byref( instances_ids ), byref( instances_len ) ):
-            self.logger.debug( 'call BSCGetMembersArray function - failure' )
             raise RuntimeError( "Unable to call BSCGetMembersArray" )
-        self.logger.debug( 'load members for instance "%s" - done', self.name )
         
-        instances = map( lambda i: instance_t( instances_ids[i], self.__bsc, self.logger )
+        instances = map( lambda i: self.__bsc.create_instance( instances_ids[i] )
                          , range( instances_len.value ) )
         
         BSCDisposeArray( self.__bsc, instances_ids )        
         return instances
 
+    @utils.cached
+    def used_symbols(self):
+        instances_len = ULONG(0)        
+        instances_ids = pointer( IINST() )
+
+        if not BSCGetUsesArray( self.__bsc, self.inst_id, enums.MBF.ALL, byref( instances_ids ), byref( instances_len ) ):
+            raise RuntimeError( "Unable to call BSCGetUsesArray" )
+        
+        instances = map( lambda i: self.__bsc.create_instance( instances_ids[i] )
+                         , range( instances_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, instances_ids )        
+        return instances
+
+    @utils.cached
+    def base_classes(self):
+        instances_len = ULONG(0)        
+        instances_ids = pointer( IINST() )
+
+        if not BSCGetBaseArray( self.__bsc, self.inst_id, byref( instances_ids ), byref( instances_len ) ):
+            raise RuntimeError( "Unable to call BSCGetBaseArray" )
+        
+        instances = map( lambda i: self.__bsc.create_instance( instances_ids[i] )
+                         , range( instances_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, instances_ids )        
+        return instances
+
+    @utils.cached
+    def derived_classes(self):
+        instances_len = ULONG(0)        
+        instances_ids = pointer( IINST() )
+
+        if not BSCGetDervArray( self.__bsc, self.inst_id, byref( instances_ids ), byref( instances_len ) ):
+            raise RuntimeError( "Unable to call BSCGetDervArray" )
+        
+        instances = map( lambda i: self.__bsc.create_instance( instances_ids[i] )
+                         , range( instances_len.value ) )
+        
+        BSCDisposeArray( self.__bsc, instances_ids )        
+        return instances
 
 class module_t(object):
     #represents file 
-    def __init__( self, mod_id, bsc, logger ):
+    def __init__( self, mod_id, bsc ):
         self.__bsc = bsc
         self.__mod_id = mod_id
-        self.logger = logger
     
     @property
     def mod_id( self ):
@@ -426,18 +449,13 @@ class module_t(object):
         
     @utils.cached
     def instances( self ):              
-        self.logger.debug( 'load instances for file "%s"', self.path )
-
         instances_len = ULONG(0)        
         instances_ids = pointer( IINST() )
         
-        self.logger.debug( 'call BSCGetModuleContents function' )
         if not BSCGetModuleContents( self.__bsc, self.mod_id, enums.MBF.ALL, byref( instances_ids ), byref( instances_len ) ):
-            self.logger.debug( 'call BSCGetModuleContents function - failure' )
             raise RuntimeError( "Unable to call BSCGetModuleContents" )
-        self.logger.debug( 'load instances for file "%s" - done', self.path )
         
-        instances = map( lambda i: instance_t( instances_ids[i], self.__bsc, self.logger )
+        instances = map( lambda i: self.__bsc.create_instance( instances_ids[i] )
                          , range( instances_len.value ) )
         
         BSCDisposeArray( self.__bsc, instances_ids )        
@@ -450,22 +468,26 @@ class bsc_reader_t( object ):
 
         self.__bsc_file = bsc_file   
         self.__bsc = pointer( Bsc() )
-        self.logger.debug( 'openning bsc file "%s"', self.__bsc_file )
         if not BSCOpen( self.__bsc_file, byref( self.__bsc ) ):
-            self.logger.debug( 'unable to open bsc file "%s"', self.__bsc_file )
             raise RuntimeError( "Unable to open bsc file '%s'" % self.__bsc_file )
-        self.logger.debug( 'openning bsc file "%s" - done', self.__bsc_file )        
         
+        self.__instances_cache = {} #inst id : instance_t
+        self.__bsc.create_instance = lambda inst_id: self.__create_instance( inst_id )
+    
+    def __create_instance( self, inst_id ):
+        try:
+            return self.__instances_cache[ inst_id ]
+        except KeyError:
+            inst = instance_t( inst_id, self.__bsc )
+            self.__instances_cache[ inst_id ] = inst
+            return inst
+            
     def query_all_instances( self ):
         instances_len = ULONG(0)        
         instances = pointer( IINST() )
 
-        self.logger.debug( 'call BSCGetAllGlobalsArray function' )        
         if not BSCGetAllGlobalsArray( self.__bsc, enums.MBF.ALL, byref( instances ), byref( instances_len ) ):
-            self.logger.debug( 'call BSCGetAllGlobalsArray function - failure' )
             raise RuntimeError( "Unable to load all globals symbols" )
-        self.logger.debug( 'call BSCGetAllGlobalsArray function - success' )            
-        self.logger.debug( 'instances_len: %d', instances_len.value )
         for i in range( instances_len.value ):
             self.__instances.append( instances[i] )  
         BSCDisposeArray( self.__bsc, instances )            
@@ -480,13 +502,10 @@ class bsc_reader_t( object ):
         module_len = ULONG()
         bs = BSC_STAT()
         
-        self.logger.debug( 'call BSCGetAllModulesArray function' )        
         if not BSCGetAllModulesArray( self.__bsc, module_ids, byref(module_len) ):
-            self.logger.debug( 'call BSCGetAllModulesArray function - failure' )    
             raise RuntimeError( "Unable to load all modules" )            
-        self.logger.debug( 'call BSCGetAllModulesArray function - success' )        
         
-        modules = map( lambda i: module_t( module_ids[i], self.__bsc, self.logger )
+        modules = map( lambda i: module_t( module_ids[i], self.__bsc )
                        , range( module_len.value ) )
 
         BSCDisposeArray( self.__bsc, module_ids )
@@ -504,15 +523,30 @@ class bsc_reader_t( object ):
             if file_name and m.path != file_name:
                 continue
             print 'File: ', m.path
-            print '\tInstances:'
-            for inst in m.instances:
-                print '\t\t', str(inst)
-                print '\t\t\tDefinitions:'
-                for definition in inst.definitions:
-                    print '\t\t\t\t', str( definition )
-                print '\t\t\tMembers:'
-                for member in inst.members:
-                    print '\t\t\t\t', str( member )
+            if m.instances:
+                print '\tInstances:'
+                for inst in m.instances:
+                    print '\t\t', str(inst)
+                    if inst.definitions:
+                        print '\t\t\tDefinitions:'
+                        for definition in inst.definitions:
+                            print '\t\t\t\t', str( definition )
+                    if inst.members:
+                        print '\t\t\tMembers:'
+                        for member in inst.members:
+                            print '\t\t\t\t', str( member )
+                    if inst.used_symbols:
+                        print '\t\t\tUsed symbols:'
+                        for used_symbol in inst.used_symbols:
+                            print '\t\t\t\t', str( used_symbol )
+                    if inst.base_classes:
+                        print '\t\t\tBase classes:'
+                        for base_class in inst.base_classes:
+                            print '\t\t\t\t', str( base_class )
+                    if inst.derived_classes:
+                        print '\t\t\tDerived classes:'
+                        for derived_class in inst.derived_classes:
+                            print '\t\t\t\t', str( derived_class )
     
     def __del__( self ):
         if self.__bsc:
@@ -525,4 +559,4 @@ if __name__ == '__main__':
     print 'is_case_sensitive', reader.is_case_sensitive
     #~ reader.query_all_instances()
     #reader.files        
-    reader.print_classes( r'c:\dev\produce_pdb\produce_pdb.cpp')
+    reader.print_classes( )#r'c:\dev\produce_pdb\produce_pdb.cpp')
