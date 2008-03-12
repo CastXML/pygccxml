@@ -330,26 +330,31 @@ class instance_t(object):
         return self.__inst_id
     
     @utils.cached
-    def name_type_attribute( self ):
+    def name_type_attribute_mangled_name( self ):
         name = STRING()
         typ = TYP()
         attribute = ATR()
         if not BSCIinstInfo( self.__bsc, self.inst_id, byref( name ), byref( typ ), byref( attribute ) ):
             raise RuntimeError( "Unable to load information about instance(%s)" % str( self.__inst_id ) )
-        name = BSCFormatDname( self.__bsc, name )
-        return name, typ, attribute
+        undecorated_name = BSCFormatDname( self.__bsc, name )
+        return undecorated_name, typ, attribute, name.value
+    
+    
+    @utils.cached    
+    def mangled_name(self):
+        return self.name_type_attribute_mangled_name[3]
         
     @utils.cached    
     def name(self):
-        return self.name_type_attribute[0]
+        return self.name_type_attribute_mangled_name[0]
 
     @utils.cached    
     def type(self):
-        return self.name_type_attribute[1].value
+        return self.name_type_attribute_mangled_name[1].value
 
     @utils.cached    
     def attribute(self):
-        return self.name_type_attribute[2].value
+        return self.name_type_attribute_mangled_name[2].value
         
     def __str__( self ):               
         tmp = []
@@ -358,6 +363,7 @@ class instance_t(object):
         if enums.ATTRIBUTES.has_value( self.attribute ):
             tmp.append( 'attribute( "%s" )' % enums.ATTRIBUTES.name_of( self.attribute ) ) 
         tmp.append( 'name( "%s" )' % self.name )        
+        tmp.append( 'mangled name( "%s" )' % self.mangled_name )   
         return ', '.join( tmp )
         
         
