@@ -5,15 +5,20 @@ import pprint
 import logging
 import comtypes
 import comtypes.client
-from msvc_details import msdia
 
-sys.path.append( r'../..' )
-#sys.path.append( r'C:\dev\language-binding\pygccxml_dev' )
+from . import impl_details
 
-from pygccxml import utils
-from pygccxml import declarations
+from ... import utils
+from ... import declarations
+from .. import config as msvc_cfg
 
-import details
+comtypes_client_gen_dir = comtypes.client.gen_dir
+try:
+    comtypes.client.gen_dir = None
+    msdia = comtypes.client.GetModule( msvc_cfg.msdia_path )
+finally:
+    comtypes.client.gen_dir = comtypes_client_gen_dir
+
 
 
 SymTagEnum = 12
@@ -29,7 +34,7 @@ def print_files( session ):
         print 'File: ', f.fileName
 
 
-class scanner_t(object):
+class reader_t(object):
     def __init__(self, pdb_file_path ):
         self.logger = utils.loggers.pdb_reader
         self.logger.setLevel(logging.DEBUG)
@@ -46,7 +51,6 @@ class scanner_t(object):
         self.__classes = {}
         self.__typedefs = {}
         self.__namespaces = {'': self.__global_ns}
-
         
     def read(self):
         self.__populate_scopes()
@@ -84,7 +88,7 @@ class scanner_t(object):
             #~ for s in iter(found):
                 #~ s = 
                 #~ print s.name
-                #~ print details.guess_class_type(s.udtKind)
+                #~ print impl_details.guess_class_type(s.udtKind)
         else:    
             self.logger.debug( 'name( "%s" ) is **NOT** UDT symbol' % name )            
             return None
@@ -96,7 +100,7 @@ class scanner_t(object):
         dia_classes = self.dia_global_scope.findChildren( msdia.SymTagUDT, None, 0 )
         for dia_class in iter( dia_classes ):
             dia_class = AsDiaSymbol( dia_class )        
-            name_splitter = details.get_name_splitter( dia_class.name )            
+            name_splitter = impl_details.get_name_splitter( dia_class.name )            
             for index, scope in enumerate( name_splitter.scope_names ):                
                 if scope in self.__namespaces:
                     continue
@@ -124,19 +128,19 @@ class scanner_t(object):
             for inner_dia_class in iter(found):
                 inner_dia_class = AsDiaSymbol( inner_dia_class )
                 self.logger.debug( '\t\tinner UDT found - %s' % inner_dia_class.name )
-                inner_name_splitter = details.get_name_splitter( inner_dia_class.name )
+                inner_name_splitter = impl_details.get_name_splitter( inner_dia_class.name )
                 try:
                     inner_klass = parent_class.class_( inner_name_splitter.name, recursive=False )
                     inner_klass.dia_symbols.add( inner_dia_class.symIndexId )
                 except parent_class.declaration_not_found_t:
                     inner_klass = self.__create_class( inner_dia_class )
                     parent_class.adopt_declaration( inner_klass
-                                                    , details.guess_access_type( inner_dia_class.access ) )
+                                                    , impl_details.guess_access_type( inner_dia_class.access ) )
                     self.__classes[ inner_dia_class.name ] = inner_klass
         self.logger.debug( 'adding inner classes to "%s" - done' % parent_class.decl_string )                                             
 
     def __create_enum( self, enum_smbl ):
-        name_splitter = details.get_name_splitter( enum_smbl.name )
+        name_splitter = impl_details.get_name_splitter( enum_smbl.name )
         enum_decl = declarations.enumeration_t( name_splitter.name )
         enum_decl.dia_symbols = [ enum_smbl.symIndexId ]
         enum_decl.byte_size = enum_smbl.length
@@ -173,7 +177,7 @@ class scanner_t(object):
         self.logger.debug( 'loading enums to "%s" - done' % parent_symbol.name )
     
     def __create_typedef( self, typedef_smbl ):
-        name_splitter = details.get_name_splitter( typedef_smbl.name )
+        name_splitter = impl_details.get_name_splitter( typedef_smbl.name )
         typedef_decl = declarations.typedef_t( name_splitter.name )
         typedef_decl.dia_symbols = [ typedef_smbl.symIndexId ]
         return typedef_decl
@@ -222,7 +226,7 @@ class scanner_t(object):
         nss = self.__namespaces.keys()
         nss.sort()
         for ns_name in nss:
-            name_splitter = details.get_name_splitter( ns_name )
+            name_splitter = impl_details.get_name_splitter( ns_name )
             if not name_splitter.scope_names:
                 parent_ns = self.global_ns
             else:
@@ -232,9 +236,9 @@ class scanner_t(object):
             self.__namespaces[ ns_name ] = ns_decl
     
     def __create_class( self, class_smbl ):
-        name_splitter = details.get_name_splitter( class_smbl.name )
+        name_splitter = impl_details.get_name_splitter( class_smbl.name )
         class_decl = declarations.class_t( name_splitter.name )
-        class_decl.class_type = details.guess_class_type(class_smbl.udtKind)        
+        class_decl.class_type = impl_details.guess_class_type(class_smbl.udtKind)        
         class_decl.dia_symbols = set([class_smbl.symIndexId])
         class_decl.byte_size = class_smbl.length
         return class_decl
@@ -247,7 +251,7 @@ class scanner_t(object):
         #~ self.__create_nss()
         
         #~ for dia_class in main_classes:
-            #~ name_splitter = details.get_name_splitter( dia_class.name )            
+            #~ name_splitter = impl_details.get_name_splitter( dia_class.name )            
             #~ if not name_splitter.scope_names:
                 #~ parent_ns = self.global_ns
             #~ else:

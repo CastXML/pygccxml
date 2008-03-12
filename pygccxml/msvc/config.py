@@ -5,7 +5,6 @@ import comtypes.client
 import _winreg as win_registry
 from distutils import msvccompiler
 
-
 class binaries_searcher_t:    
     
     def get_msbsc_path( self ):
@@ -61,38 +60,3 @@ print 'msbsc path: ', msbsc_path
 
 msvcr_path = bs.get_msvcr_path()
 print 'msvcr path: ', msvcr_path
-
-comtypes_client_gen_dir = comtypes.client.gen_dir
-try:
-    comtypes.client.gen_dir = None
-    msdia = comtypes.client.GetModule( msdia_path )
-finally:
-    comtypes.client.gen_dir = comtypes_client_gen_dir
-
-#Adding code, that was not generated for some reason.
-
-class UdtKind:
-   UdtStruct, UdtClass, UdtUnion = (0, 1, 2)
-
-class CV_access_e:
-   CV_private, CV_protected, CV_public = (1, 2, 3)
-
-msdia.UdtKind = UdtKind
-msdia.CV_access_e = CV_access_e
-
-class NameSearchOptions:
-   nsNone               = 0
-   nsfCaseSensitive     = 0x1
-   nsfCaseInsensitive   = 0x2
-   nsfFNameExt          = 0x4
-   nsfRegularExpression = 0x8
-   nsfUndecoratedName   = 0x10
-
-   # For backward compabibility:
-   nsCaseSensitive           = nsfCaseSensitive
-   nsCaseInsensitive         = nsfCaseInsensitive
-   nsFNameExt = nsfFNameExt
-   nsRegularExpression       = nsfRegularExpression | nsfCaseSensitive
-   nsCaseInRegularExpression = nsfRegularExpression | nsfCaseInsensitive
-
-msdia.NameSearchOptions = NameSearchOptions

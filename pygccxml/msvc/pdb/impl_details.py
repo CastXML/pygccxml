@@ -1,18 +1,19 @@
-from msvc_details import msdia
+
+from . import enums
 from pygccxml import declarations
 
 def guess_class_type( udt_kind ):
-    if msdia.UdtKind.UdtStruct == udt_kind:
+    if enums.UdtKind.UdtStruct == udt_kind:
         return declarations.CLASS_TYPES.STRUCT
-    elif msdia.UdtKind.UdtClass == udt_kind:
+    elif enums.UdtKind.UdtClass == udt_kind:
         return declarations.CLASS_TYPES.CLASS
     else:
         return declarations.CLASS_TYPES.UNION
 
 def guess_access_type( access_type ):
-    if msdia.CV_access_e.CV_private == access_type:
+    if enums.CV_access_e.CV_private == access_type:
         return declarations.ACCESS_TYPES.PRIVATE
-    elif msdia.CV_access_e.CV_protected == access_type:
+    elif enums.CV_access_e.CV_protected == access_type:
         return declarations.ACCESS_TYPES.PROTECTED
     else:
         return declarations.ACCESS_TYPES.PUBLIC
