@@ -79,7 +79,8 @@ class decl_loader_t(object):
         def ns_filter( smbl ):
             tags = ( msdia.SymTagFunction
                      , msdia.SymTagBlock
-                     , msdia.SymTagData
+                     #I should skipp data, because it requier different treatment
+                     #, msdia.SymTagData
                      , msdia.SymTagAnnotation
                      , msdia.SymTagPublicSymbol
                      , msdia.SymTagUDT
@@ -100,8 +101,12 @@ class decl_loader_t(object):
             elif smbl.classParent:
                 if smbl.classParent.name:
                     return False
-                elif smbl.classParent.symTag == msdia.SymTagUDT:
-                    return False
+                parent_smbl = smbl.classParent
+                while parent_smbl:
+                    if parent_smbl.symTag == msdia.SymTagUDT:
+                        return False
+                    else:
+                        parent_smbl = parent_smbl.classParent
             elif smbl.name.endswith( '__unnamed' ):
                 return False
             return True
@@ -113,6 +118,8 @@ class decl_loader_t(object):
         for index, smbl in enumerate( itertools.ifilter( ns_filter, self.symbols.itervalues() ) ):
             if index and ( index % 10000 == 0 ):
                 self.logger.debug( '%d symbols scanned', index )
+            if '_Facetptr<std::ctype<char> >' in smbl.name:
+                i = 0
             name_splitter = impl_details.get_name_splitter( smbl.name )            
             names.update( name_splitter.scope_names )
         names = list( names )
