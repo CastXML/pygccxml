@@ -41,22 +41,27 @@ class full_name_splitter_t( object ):
         return self.__identifiers
 
     def __split_scope_identifiers( self ):
-        result = []
-        tmp = self.__full_name.split( '::' )
-        tmp.reverse()
-        while tmp:
-            token = tmp.pop()
-            less_count = token.count( '<' )
-            greater_count = token.count( '>' )
-            if less_count != greater_count:
-                while less_count != greater_count:
-                    next_token = tmp.pop()
-                    token = token + '::' + next_token
-                    less_count += next_token.count( '<' )
-                    greater_count += next_token.count( '>' )    
-            result.append( token )        
-        return result
-
+        try:
+            result = []
+            tmp = self.__full_name.split( '::' )
+            tmp.reverse()
+            while tmp:
+                token = tmp.pop()
+                less_count = token.count( '<' )
+                greater_count = token.count( '>' )
+                if less_count != greater_count:
+                    while less_count != greater_count and tmp:
+                        next_token = tmp.pop()
+                        token = token + '::' + next_token
+                        less_count += next_token.count( '<' )
+                        greater_count += next_token.count( '>' )    
+                result.append( token )        
+            return result
+        except Exception, err:
+            msg = 'Unable to split scope for identifiers. The full scope name is: "%s". Error: %s'
+            msg = msg % ( self.__full_name, str(err) )
+            raise RuntimeError( msg )
+            
 __name_splitters = {}
 def get_name_splitter( full_name ):
     try:
