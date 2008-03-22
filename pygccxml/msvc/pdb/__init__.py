@@ -20,3 +20,4 @@ finally:
     comtypes.client.gen_dir = comtypes_client_gen_dir
 
 from loader import decl_loader_t
+

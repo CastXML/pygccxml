@@ -8,11 +8,15 @@ from pygccxml import declarations
 class tester_t( unittest.TestCase ):
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
+        self.pdb_file = os.path.join( autoconfig.data_directory
+                                      , 'msvc_build'
+                                      , 'Debug'
+                                      , 'msvc_build.pdb' )
 
     def __test_splitter_impl( self, name, expected_result ):
         splitter = pdb.impl_details.full_name_splitter_t( name )
-        self.failUnless( len(splitter.scope_names) == len(expected_result) )        
-        self.failUnless( splitter.scope_names == expected_result )        
+        self.failUnless( len(splitter.scope_names) == len(expected_result) )
+        self.failUnless( splitter.scope_names == expected_result )
 
     def __test_name_splitter(self):
         name = "std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >::const_iterator::operator->"
@@ -21,17 +25,16 @@ class tester_t( unittest.TestCase ):
             , 'std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >', 'std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >::const_iterator'
         ]
         self.__test_splitter_impl( name, expected_result )
-        
+
         name = 'boost::reference_wrapper<engine_objects::ops::pathable_t const >::operator engine_objects::ops::pathable_t const &'
         expected_result = [
             'boost'
             , 'boost::reference_wrapper<engine_objects::ops::pathable_t const >'
         ]
         self.__test_splitter_impl( name, expected_result )
-        
+
     def test_create_nss(self):
-        control_pdb = os.path.join( autoconfig.data_directory, r'xxx.pdb' )
-        reader = pdb.decl_loader_t( control_pdb )
+        reader = pdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
         f = file( 'decls.cpp', 'w+' )
