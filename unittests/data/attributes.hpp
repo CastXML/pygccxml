@@ -6,6 +6,8 @@
 #ifndef __atributes_hpp__
 #define __atributes_hpp__
 
+#ifdef __GCCXML__
+
 #define _out_ __attribute( (gccxml( "out" ) ) )
 #define _sealed_ __attribute( (gccxml( "sealed" ) ) )
 #define _no_throw_ __attribute( (gccxml( "no throw" ) ) )
@@ -19,6 +21,8 @@ _sealed_ struct numeric_t{
 };
     
 }
+
+#endif//__GCCXML__
 
 #endif//__atributes_hpp__
 

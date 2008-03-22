@@ -13,7 +13,11 @@
 #else
     #include <hash_set>
     #include <hash_map>
-    #define HASH_XXX_NS std
+	#ifdef __GCCXML__
+		#define HASH_XXX_NS std
+	#else
+		#define HASH_XXX_NS stdext
+	#endif//GCCXML
 #endif
 #include <string>
 #include <vector>
