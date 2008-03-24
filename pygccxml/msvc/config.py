@@ -5,18 +5,24 @@ import comtypes.client
 import _winreg as win_registry
 from distutils import msvccompiler
 
-class binaries_searcher_t:    
-    
+class binaries_searcher_t:
+
     def get_msbsc_path( self ):
         relative_path = os.path.dirname( sys.modules[__name__].__file__)
         absolute_path = os.path.abspath (relative_path)
         return os.path.join( absolute_path, 'msbsc70.dll' )
-        
-    def get_msvcr_path( self ):
+
+    def get_msvcr70_path( self ):
         relative_path = os.path.dirname( sys.modules[__name__].__file__)
         absolute_path = os.path.abspath (relative_path)
         return os.path.join( absolute_path, 'msvcr70.dll' )
-    
+
+
+    def get_msvcr_path( self ):
+        vss_installed = self.__get_installed_vs_dirs()
+        #TODO: better algorithm to find the path
+        return os.path.join( vss_installed[0], 'vc', 'redist', 'x86', 'microsoft.vc90.crt', 'MSVCR90.DLL' )
+
     def get_msdia_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
         msdia_dlls = self.__get_msdia_dll_paths( vss_installed )
@@ -25,9 +31,9 @@ class binaries_searcher_t:
         else:
             #TODO find the highest version and use it.
             pass
-    
+
     def __get_msdia_dll_paths( self, vss_installed ):
-        msdia_dlls = []        
+        msdia_dlls = []
         for vs in vss_installed:
             debug_dir = os.path.join( vs, 'Common7', 'Packages', 'Debugger' )
             files = filter( lambda f: f.startswith( 'msdia' ) and f.endswith( '.dll' )
@@ -38,12 +44,12 @@ class binaries_searcher_t:
         if not msdia_dlls:
             raise RuntimeError( 'pygccxml unable to find out msdiaXX.dll location' )
         return msdia_dlls
-    
+
     def __get_installed_vs_dirs( self ):
         vs_reg_path = 'Software\Microsoft\VisualStudio\SxS\VS7'
         values = self.read_values( win_registry.HKEY_LOCAL_MACHINE, vs_reg_path )
         return [ values.values()[0] ]
-    
+
     def read_keys(self, base, key):
         return msvccompiler.read_keys(base, key)
 
@@ -52,10 +58,10 @@ class binaries_searcher_t:
 
 bs = binaries_searcher_t()
 
-msdia_path = bs.get_msdia_path()  
+msdia_path = bs.get_msdia_path()
 print 'msdia path: ', msdia_path
 
-msbsc_path = bs.get_msbsc_path()  
+msbsc_path = bs.get_msbsc_path()
 print 'msbsc path: ', msbsc_path
 
 msvcr_path = bs.get_msvcr_path()
