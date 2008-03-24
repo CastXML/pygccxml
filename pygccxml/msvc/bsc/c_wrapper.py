@@ -11,7 +11,7 @@ from ctypes.wintypes import BYTE
 from ctypes.wintypes import WORD
 from ctypes.wintypes import UINT
 
-from .. import config as msvc_cfg#
+from .. import config as msvc_cfg
 from ... import utils #import utils from pygccxml package
 
 STRING = c_char_p
@@ -233,7 +233,7 @@ LszNameFrBob.restype = SZ
 LszNameFrBob.argtypes = [BOB]
 CLS = USHORT
 
-class enums:  
+class enums:
     class MBF(utils.enum):
         NIL       = 0x000
         VARS      = 0x001
@@ -249,7 +249,7 @@ class enums:
         TEMPLATE  = 0x400
         NAMESPACE = 0x800
         ALL       = 0xFFF
-        
+
     class TYPES(utils.enum):
         FUNCTION  = 0x01
         LABEL     = 0x02
@@ -271,14 +271,14 @@ class enums:
 
     class ATTRIBUTES(utils.enum):
         LOCAL     = 0x001
-        STATIC    = 0x002 
+        STATIC    = 0x002
         SHARED    = 0x004
         NEAR      = 0x008
-        COMMON    = 0x010 
+        COMMON    = 0x010
         DECL_ONLY = 0x020
-        PUBLIC    = 0x040 
-        NAMED     = 0x080 
-        MODULE    = 0x100 
-        VIRTUAL   = 0x200         
+        PUBLIC    = 0x040
+        NAMED     = 0x080
+        MODULE    = 0x100
+        VIRTUAL   = 0x200
         PRIVATE   = 0x400
-        PROTECT   = 0x800 
+        PROTECT   = 0x800
