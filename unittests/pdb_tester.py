@@ -33,13 +33,30 @@ class tester_t( unittest.TestCase ):
         ]
         self.__test_splitter_impl( name, expected_result )
 
-    def test_create_nss(self):
+    def __test_create_nss(self):
         reader = pdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
         f = file( 'decls.cpp', 'w+' )
         declarations.print_declarations( reader.global_ns )#, writer=f.write )
         f.close()
+
+    def test_undecorate_name(self):
+        #basic test, that verify that function wrapper works as expected
+        data = [
+              # mangled, unmangled
+              ( '?$rebind@D', 'rebind<char>' )
+            , ( '?$rebind@PAU_Node@?$_Tree_nod@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@$0A@@std@@@std@@'
+                , 'rebind<std::_Tree_nod<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::_Node *>' )
+            , ( '?$rebind@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@'
+                , 'rebind<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >' )
+            , ( '?$rebind@U_Node@?$_Tree_nod@V?$_Tmap_traits@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@U?$less@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@V?$allocator@U?$pair@$$CBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@$00@std@@@std@@'
+                , 'rebind<std::_Tree_nod<std::_Tmap_traits<std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::less<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char> > const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,1> >::_Node>' )
+        ]
+        for decorated, undecorated in data:
+            #~ print '\n', pdb.impl_details.undecorate_name( decorated )
+            #~ print undecorated
+            self.failUnless( pdb.impl_details.undecorate_name( decorated ) == undecorated )
 
 def create_suite():
     suite = unittest.TestSuite()
