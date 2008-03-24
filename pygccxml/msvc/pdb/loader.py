@@ -40,7 +40,7 @@ def print_files( session ):
 class decl_loader_t(object):
     def __init__(self, pdb_file_path ):
         self.logger = utils.loggers.pdb_reader
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         self.logger.debug( 'creating DiaSource object' )
         self.__dia_source = comtypes.client.CreateObject( msdia.DiaSource )
         self.logger.debug( 'loading pdb file: %s' % pdb_file_path )
@@ -70,8 +70,18 @@ class decl_loader_t(object):
 
     @utils.cached
     def symbols(self):
+        def get_name( smbl ):
+            if not smbl.name:
+                return
+            for ch in '@?$':
+                if ch in smbl.name and smbl.undecoratedName:
+                    return smbl.undecoratedName
+            else:
+                return smbl.name
+
         smbls = {}
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
+            smbl.uname = get_name( smbl )
             smbls[ smbl.symIndexId ] = smbl
         return smbls
 
@@ -166,10 +176,11 @@ class decl_loader_t(object):
                     if not parent:
                         self.logger.debug( 'unable to find parent for class %s', udt_smbl.name )
                         continue
-                    if isinstance( parent[0], declarations.namespace_t ):
+                    parent = parent[0]
+                    if isinstance( parent, declarations.namespace_t ):
                         parent.adopt_declaration( ns_class )
                     else:
-                        parent[0].adopt_declaration( ns_class, declarations.ACCESS_TYPES.PUBLIC )
+                        parent.adopt_declaration( ns_class, declarations.ACCESS_TYPES.PUBLIC )
                 del classes[ ns_class.dia_symbols[0].symIndexId ]
         self.logger.info( 'integrating udt objects with namespaces - done' )
 
@@ -234,7 +245,6 @@ class decl_loader_t(object):
             #between those cases
             return None
 
-
     def __create_typedef( self, typedef_smbl ):
         name_splitter = impl_details.get_name_splitter( typedef_smbl.name )
         typedef_decl = declarations.typedef_t( name_splitter.name )
@@ -242,7 +252,7 @@ class decl_loader_t(object):
         return typedef_decl
 
     def __create_class( self, class_smbl ):
-        name_splitter = impl_details.get_name_splitter( class_smbl.name )
+        name_splitter = impl_details.get_name_splitter( class_smbl.uname )
         class_decl = declarations.class_t( name_splitter.name )
         class_decl.class_type = impl_details.guess_class_type(class_smbl.udtKind)
         class_decl.dia_symbols = [class_smbl]
