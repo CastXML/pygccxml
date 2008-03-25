@@ -73,11 +73,13 @@ class decl_loader_t(object):
         def get_name( smbl ):
             if not smbl.name:
                 return
-            for ch in '@?$':
-                if ch in smbl.name and smbl.undecoratedName:
-                    return smbl.undecoratedName
             else:
-                return smbl.name
+                return impl_details.undecorate_name( smbl.name )
+            #~ for ch in '@?$':
+                #~ if ch in smbl.name:
+                    #~ return impl_details.undecorate_name( smbl.name )
+            #~ else:
+                #~ return smbl.name
 
         smbls = {}
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
@@ -87,6 +89,7 @@ class decl_loader_t(object):
 
     def __load_nss(self):
         def ns_filter( smbl ):
+            self.logger.debug( '__load_ns.ns_filter, %s', smbl.uname )
             tags = ( msdia.SymTagFunction
                      , msdia.SymTagBlock
                      #I should skipp data, because it requier different treatment
@@ -105,21 +108,29 @@ class decl_loader_t(object):
                      , msdia.SymTagFunctionArgType
                      , msdia.SymTagUsingNamespace )
             if smbl.symTag not in tags:
+                self.logger.debug( 'smbl.symTag not in tags, %s', smbl.uname )
                 return False
             elif not smbl.name:
+                self.logger.debug( 'not smbl.name, %s', smbl.uname )
                 return False
+            #~ elif '-' in smbl.name:
+                #~ self.logger.debug( '"-" in smbl.name, %s', smbl.uname )
+                #~ return False
             elif smbl.classParent:
-                if smbl.classParent.name:
-                    return False
-                parent_smbl = smbl.classParent
+                parent_smbl = self.symbols[ smbl.classParentId ]
                 while parent_smbl:
                     if parent_smbl.symTag == msdia.SymTagUDT:
-                        return False
+                        if parent_smbl.uname in smbl.uname:
+                            #for some reason std::map is reported as parent of std::_Tree, in source code
+                            #std::map derives from std::_Tree. In logical sense parent name is a subset of the child name
+                            self.logger.debug( 'parent_smbl.symTag == msdia.SymTagUDT, %s', parent_smbl.uname )
+                            return False
+                        else:
+                            return True
                     else:
-                        parent_smbl = parent_smbl.classParent
-            elif smbl.name.endswith( '__unnamed' ):
-                return False
-            return True
+                        parent_smbl = self.symbols[ parent_smbl.classParentId ]
+            else:
+                return True
 
         self.logger.debug( 'scanning symbols table' )
 
@@ -128,9 +139,7 @@ class decl_loader_t(object):
         for index, smbl in enumerate( itertools.ifilter( ns_filter, self.symbols.itervalues() ) ):
             if index and ( index % 10000 == 0 ):
                 self.logger.debug( '%d symbols scanned', index )
-            if '_Facetptr<std::ctype<char> >' in smbl.name:
-                i = 0
-            name_splitter = impl_details.get_name_splitter( smbl.name )
+            name_splitter = impl_details.get_name_splitter( smbl.uname )
             names.update( name_splitter.scope_names )
         names = list( names )
         names.sort()
@@ -152,35 +161,69 @@ class decl_loader_t(object):
 
         self.logger.debug( 'scanning symbols table - done' )
 
+    def __add_class( self, parent, class_decl ):
+        class_smbl = class_decl.dia_symbols[0]
+        already_added = parent.classes( class_decl.name, recursive=False, allow_empty=True )
+        if not already_added:
+            if isinstance( parent, declarations.namespace_t ):
+                parent.adopt_declaration( class_decl )
+            else:
+                parent.adopt_declaration( class_decl, declarations.ACCESS_TYPES.PUBLIC )
+        else:
+            for decl in already_added:
+                for smbl in decl.dia_symbols:
+                    if self.__are_symbols_equivalent( smbl, class_smbl ):
+                        decl.dia_symbols.append( class_smbl )
+                        return
+            else:
+                if isinstance( parent, declarations.namespace_t ):
+                    parent.adopt_declaration( class_decl )
+                else:
+                    parent.adopt_declaration( class_decl, declarations.ACCESS_TYPES.PUBLIC )
+
     def __load_classes( self ):
-        classes = {}#unique symbold id : class decl
+        classes = {}#unique symbol id : class decl
         is_udt = lambda smbl: smbl.symTag == msdia.SymTagUDT
         self.logger.info( 'building udt objects' )
         for udt_smbl in itertools.ifilter( is_udt, self.symbols.itervalues() ):
             classes[udt_smbl.symIndexId] = self.__create_class(udt_smbl)
         self.logger.info( 'building udt objects(%d) - done', len(classes) )
 
-        does_parent_exist = lambda cls_decl: not classes.has_key( cls_decl.dia_symbols[0].classParentId )
+        def does_parent_exist_in_decls_tree( class_decl ):
+            class_smbl = class_decl.dia_symbols[0]
+            if classes.has_key( class_smbl.classParentId ):
+                return False
+            name_splitter = impl_details.get_name_splitter( class_smbl.uname )
+            if not name_splitter.scope_names:
+                return True #global namespace
+            else:
+                parent_name = '::' + name_splitter.scope_names[-1]
+                found = self.global_ns.decls( parent_name
+                                              , decl_type=declarations.scopedef_t
+                                              , allow_empty=True
+                                              , recursive=True )
+                return bool( found )
+
         self.logger.info( 'integrating udt objects with namespaces' )
         while classes:
             self.logger.info( 'there are %d classes to go', len( classes ) )
-            to_be_deleted = filter( does_parent_exist, classes.itervalues() )
+            to_be_deleted = filter( does_parent_exist_in_decls_tree, classes.itervalues() )
             for ns_class in to_be_deleted:
                 udt_smbl = ns_class.dia_symbols[0]
-                name_splitter = impl_details.get_name_splitter( udt_smbl.name )
+                name_splitter = impl_details.get_name_splitter( udt_smbl.uname )
                 if not name_splitter.scope_names:
-                    self.global_ns.adopt_declaration( ns_class )
+                    self.__add_class( self.global_ns, ns_class )
                 else:
                     parent_name = '::' + name_splitter.scope_names[-1]
-                    parent = self.global_ns.decls( parent_name, allow_empty=True )
-                    if not parent:
-                        self.logger.debug( 'unable to find parent for class %s', udt_smbl.name )
-                        continue
-                    parent = parent[0]
-                    if isinstance( parent, declarations.namespace_t ):
-                        parent.adopt_declaration( ns_class )
-                    else:
-                        parent.adopt_declaration( ns_class, declarations.ACCESS_TYPES.PUBLIC )
+                    try:
+                        parent = self.global_ns.decl( parent_name )
+                    except:
+                        declarations.print_declarations( self.global_ns )
+                        print 'identifiers:'
+                        for index, identifier in enumerate(name_splitter.identifiers):
+                            print index, ':', identifier
+                        raise
+                    self.__add_class( parent, ns_class )
                 del classes[ ns_class.dia_symbols[0].symIndexId ]
         self.logger.info( 'integrating udt objects with namespaces - done' )
 
@@ -196,15 +239,15 @@ class decl_loader_t(object):
     def global_ns(self):
         return self.__global_ns
 
-    def __are_symbols_equivalent( self, smbl1_id, smbl2_id ):
-        smbl1 = self.__dia_session.symbolById(smbl1_id)
-        smbl2 = self.__dia_session.symbolById(smbl2_id)
-        result = self.__dia_session.symsAreEquiv( smbl1, smbl2 )
+    def __are_symbols_equivalent( self, smbl1, smbl2 ):
+        result = smbl1.symTag == smbl2.symTag and smbl1.uname == smbl2.uname
+        if not result:
+            result = self.__dia_session.symsAreEquiv( smbl1, smbl2 )
         if result:
             msg = 'Symbols "%s(%d)" and  "%s(%d)" are equivalent.'
         else:
             msg = 'Symbols "%s(%d)" and  "%s(%d)" are NOT equivalent.'
-        self.logger.debug( msg, smbl1.name, smbl1_id, smbl2.name, smbl2_id )
+        self.logger.debug( msg, smbl1.uname, smbl1.symIndexId, smbl2.uname, smbl2.symIndexId )
         return result
 
     def __find_udt( self, name ):

@@ -33,13 +33,13 @@ class tester_t( unittest.TestCase ):
         ]
         self.__test_splitter_impl( name, expected_result )
 
-    def __test_create_nss(self):
+    def test_create_nss(self):
         reader = pdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
-        f = file( 'decls.cpp', 'w+' )
-        declarations.print_declarations( reader.global_ns )#, writer=f.write )
-        f.close()
+        #f = file( 'decls.cpp', 'w+' )
+        #declarations.print_declarations( reader.global_ns )#, writer=f.write )
+        #f.close()
 
     def test_undecorate_name(self):
         #basic test, that verify that function wrapper works as expected
