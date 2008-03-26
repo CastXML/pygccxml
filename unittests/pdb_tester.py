@@ -39,6 +39,12 @@ class tester_t( unittest.TestCase ):
         reader.read()
         #f = file( 'decls.cpp', 'w+' )
         #declarations.print_declarations( reader.global_ns )#, writer=f.write )
+        names = []
+        for d in reader.global_ns.classes():
+            names.append( '{%s}<=====>{%s}' %( d.demangled, d.mangled ) )
+        names.sort()
+        for name in names:
+            print name
         #f.close()
 
     def test_undecorate_name(self):

@@ -34,7 +34,7 @@ class CLASS_TYPES:
 def get_partial_name( name ):
     import templates
     import container_traits #prevent cyclic dependencies
-    ct = container_traits.find_container_traits( name )            
+    ct = container_traits.find_container_traits( name )
     if ct:
         return ct.remove_defaults( name )
     elif templates.is_instantiation( name ):
@@ -44,7 +44,7 @@ def get_partial_name( name ):
         return templates.join( tmpl_name, args )
     else:
         return name
-    
+
 
 class hierarchy_info_t( object ):
     """describes class relationship"""
@@ -98,14 +98,14 @@ class class_declaration_t( declaration.declaration_t ):
         self._aliases = []
         self._container_traits = None
         self._container_traits_set = False
-        
+
     def _get__cmp__items(self):
         """implementation details"""
         return []
-    
+
     def i_depend_on_them( self, recursive=True ):
         return []
-    
+
     def _get_aliases(self):
         return self._aliases
     def _set_aliases( self, new_aliases ):
@@ -119,12 +119,12 @@ class class_declaration_t( declaration.declaration_t ):
         if self._container_traits_set == False:
             import container_traits #prevent cyclic dependencies
             self._container_traits_set = True
-            self._container_traits = container_traits.find_container_traits( self )            
+            self._container_traits = container_traits.find_container_traits( self )
         return self._container_traits
-    
+
     def _get_partial_name_impl( self ):
         return get_partial_name( self.name )
-    
+
 class class_t( scopedef.scopedef_t ):
     """describes class definition"""
 
@@ -143,7 +143,7 @@ class class_t( scopedef.scopedef_t ):
         self._protected_members = []
         self._aliases = []
         self._byte_size = 0
-        self._byte_align = 0        
+        self._byte_align = 0
         self._container_traits = None
         self._container_traits_set = False
         self._recursive_bases = None
@@ -152,7 +152,7 @@ class class_t( scopedef.scopedef_t ):
     def _get_name_impl( self ):
         if not self._name: #class with empty name
             return self._name
-        elif class_t.USE_DEMANGLED_AS_NAME and self.demangled:
+        elif class_t.USE_DEMANGLED_AS_NAME and self.demangled and 'GCC' in self.compiler:
             if not self.cache.demangled_name:
                 fname = algorithm.full_name( self.parent )
                 if fname.startswith( '::' ) and not self.demangled.startswith( '::' ):
@@ -408,14 +408,14 @@ class class_t( scopedef.scopedef_t ):
     def i_depend_on_them( self, recursive=True ):
         report_dependency = lambda *args: dependencies.dependency_info_t( self, *args )
         answer = []
-        
+
         map( lambda base: answer.append( report_dependency( base.related_class, base.access_type ) )
              , self.bases )
-        
+
         if recursive:
             map( lambda access_type: answer.extend( self.__find_out_member_dependencies( access_type ) )
                  , ACCESS_TYPES.ALL )
-             
+
         return answer
 
     @property
@@ -424,7 +424,7 @@ class class_t( scopedef.scopedef_t ):
         if self._container_traits_set == False:
             import container_traits #prevent cyclic dependencies
             self._container_traits_set = True
-            self._container_traits = container_traits.find_container_traits( self )            
+            self._container_traits = container_traits.find_container_traits( self )
         return self._container_traits
 
     def find_copy_constructor( self ):
@@ -433,7 +433,7 @@ class class_t( scopedef.scopedef_t ):
             return copy_[0]
         else:
             return None
-        
+
     def find_trivial_constructor( self ):
         trivial = self.constructors( lambda x: x.is_trivial_constructor, recursive=False, allow_empty=True )
         if trivial:

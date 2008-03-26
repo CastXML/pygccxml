@@ -13,11 +13,18 @@ from . import impl_details
 from ... import utils
 from ... import declarations
 from .. import config as msvc_cfg
+from .. import common_utils as msvc_utils
 
 msdia = comtypes.client.GetModule( msvc_cfg.msdia_path )
 
 SymTagEnum = 12
 msdia.SymTagEnum = 12
+
+def iif( condition, true_value, false_value ):
+    if condition:
+        return true_value
+    else:
+        return false_value
 
 def as_symbol( x ):
     return ctypes.cast( x, ctypes.POINTER( msdia.IDiaSymbol ) )
@@ -38,6 +45,7 @@ def print_files( session ):
         print 'File: ', f.fileName
 
 class decl_loader_t(object):
+    COMPILER = 'MSVC PDB'
     def __init__(self, pdb_file_path ):
         self.logger = utils.loggers.pdb_reader
         self.logger.setLevel(logging.INFO)
@@ -74,7 +82,7 @@ class decl_loader_t(object):
             if not smbl.name:
                 return
             else:
-                return impl_details.undecorate_name( smbl.name )
+                return msvc_utils.undecorate_name( smbl.name )
             #~ for ch in '@?$':
                 #~ if ch in smbl.name:
                     #~ return impl_details.undecorate_name( smbl.name )
@@ -297,7 +305,10 @@ class decl_loader_t(object):
     def __create_class( self, class_smbl ):
         name_splitter = impl_details.get_name_splitter( class_smbl.uname )
         class_decl = declarations.class_t( name_splitter.name )
-        class_decl.class_type = impl_details.guess_class_type(class_smbl.udtKind)
+        class_decl.compiler = self.COMPILER
         class_decl.dia_symbols = [class_smbl]
+        class_decl.class_type = impl_details.guess_class_type(class_smbl.udtKind)
         class_decl.byte_size = class_smbl.length
+        class_decl.mangled = iif( class_smbl.name, class_smbl.name, '' )
+        class_decl.demangled = iif( class_smbl.uname, class_smbl.uname, '' )
         return class_decl

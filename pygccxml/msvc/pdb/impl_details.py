@@ -1,7 +1,4 @@
-import ctypes
 from . import enums
-import ctypes.wintypes
-from .. import config as msvc_cfg
 from pygccxml import declarations
 
 def guess_class_type( udt_kind ):
@@ -72,40 +69,6 @@ def get_name_splitter( full_name ):
         splitter = full_name_splitter_t( full_name )
         __name_splitters[full_name] = splitter
         return splitter
-
-
-#__unDName definition was taken from:
-#http://www.tech-archive.net/Archive/VC/microsoft.public.vc.language/2006-02/msg00754.html
-msvcrxx = ctypes.CDLL( msvc_cfg.msvcr_path, mode=ctypes.RTLD_GLOBAL)
-
-free_type = ctypes.CFUNCTYPE( None, ctypes.c_void_p ) #free type
-malloc_type = ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) #malloc type
-
-
-__unDName = msvcrxx.__unDName
-__unDName.argtypes = [ ctypes.c_char_p #undecorated name
-                       , ctypes.c_char_p #decorated name
-                       , ctypes.c_int #sizeof undecorated name
-                       , malloc_type
-                       , free_type
-                       , ctypes.c_ushort #flags
-                     ]
-__unDName.restype = ctypes.c_char_p
-
-
-def undecorate_name( name, options=None ):
-    if options is None:
-        options = enums.UndecorateNameOptions.UNDNAME_NO_ECSU
-    buffer_size = 1024 * 32
-    undecorated_name = ctypes.create_string_buffer('\0' * buffer_size) #should be enouph for any symbol
-    __unDName( undecorated_name
-               , name
-               , buffer_size
-               , malloc_type( msvcrxx.malloc )
-               , free_type( msvcrxx.free )
-               , options )
-    return undecorated_name.value
-
 
 if '__main__' == __name__:
     name = "boost::detail::is_base_and_derived_impl2<engine_objects::universal_base_t,engine_objects::erroneous_transactions_file_configuration_t>::Host"

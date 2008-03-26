@@ -7,20 +7,27 @@ from pygccxml.msvc import bsc
 class tester_t( unittest.TestCase ):
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
+        self.bsc_file = os.path.join( autoconfig.data_directory
+                                      , 'msvc_build'
+                                      , 'Debug'
+                                      , 'msvc_build.bsc' )
 
     def test(self):
-        control_bsc = os.path.join( autoconfig.data_directory, r'xxx.bsc' )
-        reader = bsc.reader_t( control_bsc )
+        reader = bsc.reader_t( self.bsc_file )
         reader.print_stat()
         print 'is_case_sensitive', reader.is_case_sensitive
         reader.load_instances()
-        print 'done'
-        #reader.files        
+        #reader.files
         #reader.print_classes( )#r'c:\dev\produce_pdb\produce_pdb.cpp')
-
+        names = []
+        for inst in reader.instances:
+            names.append( '{%s}<=====>{%s}' % ( inst.name, inst.mangled_name ) )
+        names.sort()
+        for name in names:
+            print name
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
