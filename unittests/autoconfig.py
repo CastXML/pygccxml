@@ -46,6 +46,22 @@ class cxx_parsers_cfg:
                                                      , define_symbols=[ gccxml_version ]
                                                      , compiler=compiler )
 
+    pdb_loader = None
+
+    @staticmethod
+    def get_pdb_loader():
+        if not cxx_parsers_cfg.pdb_loader:
+            from pygccxml.msvc import pdb
+            pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
+            cxx_parsers_cfg.pdb_loader = pdb.decl_loader_t( pdb_file )
+            cxx_parsers_cfg.pdb_loader.read()
+        return cxx_parsers_cfg.pdb_loader
+
+
+def get_pdb_global_ns():
+    return cxx_parsers_cfg.get_pdb_loader().global_ns
+
+
 #~ try:
     #~ import pydsc
     #~ pydsc.include( r'D:\pygccxml_sources\sources\pygccxml_dev' )

@@ -41,3 +41,7 @@
 #include "unnamed_ns_bug.hpp"
 #include "vector_traits.hpp"
 
+void use_decls(){	
+	declarations::enums::ENumbers enumbers;
+	declarations::enums::data::EColor ecolor;
+}

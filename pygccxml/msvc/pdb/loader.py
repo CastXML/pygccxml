@@ -78,20 +78,9 @@ class decl_loader_t(object):
 
     @utils.cached
     def symbols(self):
-        def get_name( smbl ):
-            if not smbl.name:
-                return
-            else:
-                return msvc_utils.undecorate_name( smbl.name )
-            #~ for ch in '@?$':
-                #~ if ch in smbl.name:
-                    #~ return impl_details.undecorate_name( smbl.name )
-            #~ else:
-                #~ return smbl.name
-
         smbls = {}
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
-            smbl.uname = get_name( smbl )
+            smbl.uname = msvc_utils.undecorate_name( smbl.name, msvc_utils.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
             smbls[ smbl.symIndexId ] = smbl
         return smbls
 
@@ -148,7 +137,11 @@ class decl_loader_t(object):
             if index and ( index % 10000 == 0 ):
                 self.logger.debug( '%d symbols scanned', index )
             name_splitter = impl_details.get_name_splitter( smbl.uname )
-            names.update( name_splitter.scope_names )
+            for sn in name_splitter.scope_names:
+                if '<' in sn:
+                    break
+                else:
+                    names.add( sn )
         names = list( names )
         names.sort()
         self.logger.debug( 'looking for scopes - done' )
@@ -157,37 +150,58 @@ class decl_loader_t(object):
 
         self.logger.debug( 'building namespace objects' )
         for ns_name in itertools.ifilterfalse( self.__find_udt, names ):
+            self.logger.debug( 'inserting ns "%s" into declarations tree', ns_name )
             name_splitter = impl_details.get_name_splitter( ns_name )
             if not name_splitter.scope_names:
                 parent_ns = self.global_ns
             else:
-                parent_ns = nss[ name_splitter.scope_names[-1] ]
+                parent_ns = nss.get( name_splitter.scope_names[-1], None )
+                if not parent_ns:
+                    continue #in this case the parent scope is UDT
             ns_decl = declarations.namespace_t( name_splitter.name )
             parent_ns.adopt_declaration( ns_decl )
             nss[ ns_name ] = ns_decl
+            self.logger.debug( 'inserting ns "%s" into declarations tree - done', ns_name )
         self.logger.debug( 'building namespace objects - done' )
 
         self.logger.debug( 'scanning symbols table - done' )
 
-    def __add_class( self, parent, class_decl ):
-        class_smbl = class_decl.dia_symbols[0]
-        already_added = parent.classes( class_decl.name, recursive=False, allow_empty=True )
+    def __update_decls_tree( self, decl ):
+        smbl = decl.dia_symbols[0]
+        name_splitter = impl_details.get_name_splitter( smbl.uname )
+        if not name_splitter.scope_names:
+            self.__adopt_declaration( self.global_ns, decl )
+        else:
+            parent_name = '::' + name_splitter.scope_names[-1]
+            try:
+                parent = self.global_ns.decl( parent_name )
+            except:
+                declarations.print_declarations( self.global_ns )
+                print 'identifiers:'
+                for index, identifier in enumerate(name_splitter.identifiers):
+                    print index, ':', identifier
+                raise
+            self.__adopt_declaration( parent, decl )
+
+    def __adopt_declaration( self, parent, decl ):
+        smbl = decl.dia_symbols[0]
+        already_added = parent.decls( decl.name, decl_type=decl.__class__, recursive=False, allow_empty=True )
         if not already_added:
             if isinstance( parent, declarations.namespace_t ):
-                parent.adopt_declaration( class_decl )
+                parent.adopt_declaration( decl )
             else:
-                parent.adopt_declaration( class_decl, declarations.ACCESS_TYPES.PUBLIC )
+                parent.adopt_declaration( decl, declarations.ACCESS_TYPES.PUBLIC )
         else:
-            for decl in already_added:
-                for smbl in decl.dia_symbols:
-                    if self.__are_symbols_equivalent( smbl, class_smbl ):
-                        decl.dia_symbols.append( class_smbl )
+            for other_decl in already_added:
+                for other_smbl in other_decl.dia_symbols:
+                    if self.__are_symbols_equivalent( other_smbl, smbl ):
+                        other_decl.dia_symbols.append( smbl )
                         return
             else:
                 if isinstance( parent, declarations.namespace_t ):
-                    parent.adopt_declaration( class_decl )
+                    parent.adopt_declaration( decl )
                 else:
-                    parent.adopt_declaration( class_decl, declarations.ACCESS_TYPES.PUBLIC )
+                    parent.adopt_declaration( decl, declarations.ACCESS_TYPES.PUBLIC )
 
     def __load_classes( self ):
         classes = {}#unique symbol id : class decl
@@ -211,33 +225,25 @@ class decl_loader_t(object):
                                               , allow_empty=True
                                               , recursive=True )
                 return bool( found )
-
         self.logger.info( 'integrating udt objects with namespaces' )
         while classes:
+            to_be_integrated = len( classes )
             self.logger.info( 'there are %d classes to go', len( classes ) )
             to_be_deleted = filter( does_parent_exist_in_decls_tree, classes.itervalues() )
-            for ns_class in to_be_deleted:
-                udt_smbl = ns_class.dia_symbols[0]
-                name_splitter = impl_details.get_name_splitter( udt_smbl.uname )
-                if not name_splitter.scope_names:
-                    self.__add_class( self.global_ns, ns_class )
-                else:
-                    parent_name = '::' + name_splitter.scope_names[-1]
-                    try:
-                        parent = self.global_ns.decl( parent_name )
-                    except:
-                        declarations.print_declarations( self.global_ns )
-                        print 'identifiers:'
-                        for index, identifier in enumerate(name_splitter.identifiers):
-                            print index, ':', identifier
-                        raise
-                    self.__add_class( parent, ns_class )
-                del classes[ ns_class.dia_symbols[0].symIndexId ]
+            map( self.__update_decls_tree, to_be_deleted )
+            map( lambda decl: classes.pop( decl.dia_symbols[0].symIndexId )
+                 , to_be_deleted )
+            integrated =  to_be_integrated - len( classes )
+            if not integrated:
+                for cls in classes.itervalues():
+                    self.logger.debug( 'unable to integrate class "%s"', cls.dia_symbols[0].uname )
+                break
         self.logger.info( 'integrating udt objects with namespaces - done' )
 
     def read(self):
         self.__load_nss()
         self.__load_classes()
+        self.__load_enums()
 
     @property
     def dia_global_scope(self):
@@ -277,12 +283,29 @@ class decl_loader_t(object):
             self.logger.debug( 'name( "%s" ) is **NOT** UDT symbol' % name )
             return None
 
+    def __load_enums( self ):
+        is_enum = lambda smbl: smbl.symTag == msdia.SymTagEnum
+        self.logger.info( 'building enum objects' )
+        enums_count = 0
+        for enum_smbl in itertools.ifilter( is_enum, self.symbols.itervalues() ):
+            enum_decl = self.__create_enum(enum_smbl)
+            if not enum_decl:
+                continue
+            enums_count += 1
+            self.__update_decls_tree( enum_decl )
+        self.logger.info( 'building enum objects(%d) - done', enums_count )
+
+    def __update_decl_binary_names( self, decl, smbl ):
+        decl.mangled = iif( smbl.name, smbl.name, '' )
+        decl.demangled = iif( smbl.uname, smbl.uname, '' )
 
     def __create_enum( self, enum_smbl ):
-        name_splitter = impl_details.get_name_splitter( enum_smbl.name )
+        name_splitter = impl_details.get_name_splitter( enum_smbl.uname )
+        self.logger.debug( 'working on enum %s', enum_smbl.uname )
         enum_decl = declarations.enumeration_t( name_splitter.name )
-        enum_decl.dia_symbols = [ enum_smbl.symIndexId ]
+        enum_decl.dia_symbols = [ enum_smbl ]
         enum_decl.byte_size = enum_smbl.length
+        self.__update_decl_binary_names( enum_decl, enum_smbl )
         values = enum_smbl.findChildren( msdia.SymTagData, None, 0 )
         for v in itertools.imap(as_symbol, values):
             if v.classParent.symIndexId != enum_smbl.symIndexId:
@@ -309,6 +332,5 @@ class decl_loader_t(object):
         class_decl.dia_symbols = [class_smbl]
         class_decl.class_type = impl_details.guess_class_type(class_smbl.udtKind)
         class_decl.byte_size = class_smbl.length
-        class_decl.mangled = iif( class_smbl.name, class_smbl.name, '' )
-        class_decl.demangled = iif( class_smbl.uname, class_smbl.uname, '' )
+        self.__update_decl_binary_names( class_decl, class_smbl )
         return class_decl

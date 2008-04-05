@@ -4,6 +4,7 @@ import autoconfig
 
 from pygccxml.msvc import pdb
 from pygccxml import declarations
+from pygccxml.msvc import common_utils as msvc_utils
 
 class tester_t( unittest.TestCase ):
     def __init__(self, *args):
@@ -38,13 +39,14 @@ class tester_t( unittest.TestCase ):
         print reader.symbols_table.name
         reader.read()
         #f = file( 'decls.cpp', 'w+' )
-        #declarations.print_declarations( reader.global_ns )#, writer=f.write )
-        names = []
-        for d in reader.global_ns.classes():
-            names.append( '{%s}<=====>{%s}' %( d.demangled, d.mangled ) )
-        names.sort()
-        for name in names:
-            print name
+        declarations.print_declarations( reader.global_ns )#, writer=f.write )
+
+        #~ names = []
+        #~ for d in reader.global_ns.classes():
+            #~ names.append( '{%s}<=====>{%s}' %( d.demangled, d.mangled ) )
+        #~ names.sort()
+        #~ f6or name in names:
+            #~ print name
         #f.close()
 
     def test_undecorate_name(self):
@@ -62,7 +64,7 @@ class tester_t( unittest.TestCase ):
         for decorated, undecorated in data:
             #~ print '\n', pdb.impl_details.undecorate_name( decorated )
             #~ print undecorated
-            self.failUnless( pdb.impl_details.undecorate_name( decorated ) == undecorated )
+            self.failUnless( msvc_utils.undecorate_name( decorated ) == undecorated )
 
 def create_suite():
     suite = unittest.TestSuite()

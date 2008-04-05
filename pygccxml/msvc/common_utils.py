@@ -24,6 +24,17 @@ class UNDECORATE_NAME_OPTIONS:
     UNDNAME_NO_IDENT_CHAR_CHECK = 0x10000 #Suppresses check for valid identifier characters.
     UNDNAME_NO_PTR64 = 0x20000 #Does not include ptr64 in output.
 
+    UNDNAME_SCOPES_ONLY = UNDNAME_NO_LEADING_UNDERSCORES \
+                          | UNDNAME_NO_MS_KEYWORDS \
+                          | UNDNAME_NO_FUNCTION_RETURNS \
+                          | UNDNAME_NO_ALLOCATION_MODEL \
+                          | UNDNAME_NO_ALLOCATION_LANGUAGE \
+                          | UNDNAME_NO_ACCESS_SPECIFIERS \
+                          | UNDNAME_NO_THROW_SIGNATURES \
+                          | UNDNAME_NO_MEMBER_TYPE \
+                          | UNDNAME_NO_ECSU \
+                          | UNDNAME_NO_IDENT_CHAR_CHECK
+
 #__unDName definition was taken from:
 #http://www.tech-archive.net/Archive/VC/microsoft.public.vc.language/2006-02/msg00754.html
 msvcrxx = ctypes.CDLL( msvc_cfg.msvcr_path, mode=ctypes.RTLD_GLOBAL)
@@ -44,6 +55,8 @@ __unDName.restype = ctypes.c_char_p
 
 
 def undecorate_name( name, options=None ):
+    if not name:
+        return ''
     if options is None:
         options = UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ECSU
     buffer_size = 1024 * 32
