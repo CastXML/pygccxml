@@ -161,8 +161,16 @@ class class_t( scopedef.scopedef_t ):
                     tmp = self.demangled[ len( fname ): ] #demangled::name
                     if tmp.startswith( '::' ):
                         tmp = tmp[2:]
-                    self.cache.demangled_name = tmp
-                    return tmp
+                    if '<' not in tmp and '<' in self._name:
+                        #we have template class, but for some reason demangled 
+                        #name doesn't contain any template
+                        #This happens for std::string class, but this breaks 
+                        #other cases, because this behaviour is not consistent
+                        self.cache.demangled_name = self._name
+                        return self.cache.demangled_name
+                    else:
+                        self.cache.demangled_name = tmp
+                        return tmp
                 else:
                     self.cache.demangled_name = self._name
                     return self._name
@@ -442,6 +450,12 @@ class class_t( scopedef.scopedef_t ):
             return None
 
     def _get_partial_name_impl( self ):
-        return get_partial_name( self.name )
+        import type_traits #prevent cyclic dependencies        
+        if type_traits.is_std_string( self ):
+            return 'string'
+        elif type_traits.is_std_wstring( self ):
+            return 'wstring'
+        else:
+            return get_partial_name( self.name )
 
 class_types = ( class_t, class_declaration_t )
