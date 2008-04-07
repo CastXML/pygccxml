@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import sys
 import pprint
 import unittest
 import autoconfig
@@ -192,9 +193,10 @@ class pdb_based_tester_t( declarations_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    #~ suite.addTest( unittest.makeSuite(file_by_file_tester_t))
-    #~ suite.addTest( unittest.makeSuite(all_at_once_tester_t))
-    suite.addTest( unittest.makeSuite(pdb_based_tester_t))
+    suite.addTest( unittest.makeSuite(file_by_file_tester_t))
+    suite.addTest( unittest.makeSuite(all_at_once_tester_t))
+    if sys.platform == 'win32':
+        suite.addTest( unittest.makeSuite(pdb_based_tester_t))
 
     return suite
 

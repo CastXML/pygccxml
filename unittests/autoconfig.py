@@ -50,7 +50,7 @@ class cxx_parsers_cfg:
 
     @staticmethod
     def get_pdb_loader():
-        if not cxx_parsers_cfg.pdb_loader:
+        if not cxx_parsers_cfg.pdb_loader and sys.platform == 'win32':
             from pygccxml.msvc import pdb
             pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
             cxx_parsers_cfg.pdb_loader = pdb.decl_loader_t( pdb_file )
