@@ -9,14 +9,6 @@ def guess_class_type( udt_kind ):
     else:
         return declarations.CLASS_TYPES.UNION
 
-def guess_access_type( access_type ):
-    if enums.CV_access_e.CV_private == access_type:
-        return declarations.ACCESS_TYPES.PRIVATE
-    elif enums.CV_access_e.CV_protected == access_type:
-        return declarations.ACCESS_TYPES.PROTECTED
-    else:
-        return declarations.ACCESS_TYPES.PUBLIC
-
 class full_name_splitter_t( object ):
     def __init__( self, full_name ):
         self.__full_name = full_name

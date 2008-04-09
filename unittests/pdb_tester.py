@@ -38,8 +38,12 @@ class tester_t( unittest.TestCase ):
         reader = pdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
-        #f = file( 'decls.cpp', 'w+' )
-        declarations.print_declarations( reader.global_ns )#, writer=f.write )
+        x = []
+        declarations.print_declarations( reader.global_ns, writer=x.append )
+        x = filter( None, map( lambda l: l.rstrip(), x ) )
+        f = file( 'decls.cpp', 'w+' )
+        f.write( os.linesep.join( x ) )
+        f.close()
 
         #~ names = []
         #~ for d in reader.global_ns.classes():

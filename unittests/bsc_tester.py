@@ -18,13 +18,13 @@ class tester_t( unittest.TestCase ):
         print 'is_case_sensitive', reader.is_case_sensitive
         reader.load_instances()
         #reader.files
-        #reader.print_classes( )#r'c:\dev\produce_pdb\produce_pdb.cpp')
-        names = []
-        for inst in reader.instances:
-            names.append( '{%s}<=====>{%s}' % ( inst.name, inst.mangled_name ) )
-        names.sort()
-        for name in names:
-            print name
+        reader.print_classes( )#r'c:\dev\produce_pdb\produce_pdb.cpp')
+        #~ names = []
+        #~ for inst in reader.instances:
+            #~ names.append( '{%s}<=====>{%s}' % ( inst.name, inst.mangled_name ) )
+        #~ names.sort()
+        #~ for name in names:
+            #~ print name
 
 def create_suite():
     suite = unittest.TestSuite()
