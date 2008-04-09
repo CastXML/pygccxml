@@ -13,6 +13,10 @@ enum ENumbers{ e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 };
 class data{
 public:
     enum EColor{ red, green, blue, black, white };
+private:
+    enum EPrivColor{ priv_red, priv_green, priv_blue, priv_black, priv_white };
+
+    void do_smth(EPrivColor x){}
 };
 
 } }
