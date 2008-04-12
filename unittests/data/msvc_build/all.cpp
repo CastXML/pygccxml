@@ -41,6 +41,11 @@
 #include "unnamed_ns_bug.hpp"
 #include "vector_traits.hpp"
 
+namespace declarations{ namespace variables{
+
+int static_var = 0;
+}}
+
 void use_decls(){	
 	declarations::enums::ENumbers enumbers;
 	declarations::enums::data::EColor ecolor;

@@ -10,6 +10,8 @@ namespace declarations{ namespace variables{
 
 const long unsigned int initialized = 10122004;
 int array[255];
+
+//TODO: explain why such variables is not peeked
 extern int static_var;
 
 struct struct_variables_t{

@@ -1,4 +1,5 @@
 import os
+import pdb
 import sys
 import ctypes
 import pprint
@@ -57,10 +58,7 @@ class decl_loader_t(object):
         self.__dia_session = self.__dia_source.openSession()
         self.logger.debug( 'opening session - done' )
         self.__global_ns = declarations.namespace_t( '::' )
-
-        self.__enums = {}
-        self.__classes = {}
-        self.__typedefs = {}
+        self.__global_ns.compiler = self.COMPILER
 
     def __find_table(self, name):
         valid_names = ( 'Symbols', 'SourceFiles', 'Sections'
@@ -72,55 +70,13 @@ class decl_loader_t(object):
         else:
             return None
 
-    def create_type( self, smbl ):
-        if msdia.SymTagBaseType == smbl.symTag:
-            if enums.BasicType.btNoType == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btVoid == smbl.baseType:
-                return declarations.void_t()
-            elif enums.BasicType.btChar == smbl.baseType:
-                return declarations.char_t()
-            elif enums.BasicType.btWChar == smbl.baseType:
-                return declarations.wchar_t()
-            elif enums.BasicType.btInt == smbl.baseType:
-                return declarations.int_t()
-            elif enums.BasicType.btUInt == smbl.baseType:
-                return declarations.unsigned_int_t()
-            elif enums.BasicType.btFloat == smbl.baseType:
-                return declarations.float_t()
-            elif enums.BasicType.btBCD == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btBool == smbl.baseType:
-                return declarations.bool_t()
-            elif enums.BasicType.btLong == smbl.baseType:
-                return declarations.long_int_t()
-            elif enums.BasicType.btULong == smbl.baseType:
-                return declarations.long_unsigned_int_t()
-            elif enums.BasicType.btCurrency == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btDate == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btVariant == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btComplex == smbl.baseType:
-                return declarations.complex_double_t()
-            elif enums.BasicType.btBit == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btBSTR == smbl.baseType:
-                return declarations.unknown_t()
-            elif enums.BasicType.btHresult == smbl.baseType:
-                return declarations.unknown_t()
-            else:
-                return declarations.unknown_t()
-        else:
-            return declarations.unknown_t()
-
     @utils.cached
     def symbols_table(self):
         return self.__find_table( "Symbols" )
 
     @utils.cached
     def symbols(self):
+        self.logger.info( 'loading symbols from the file' )
         smbls = {}
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
             smbl.uname = msvc_utils.undecorate_name( smbl.name, msvc_utils.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
@@ -128,6 +84,7 @@ class decl_loader_t(object):
                 return msvc_utils.undecorate_name( smbl.name, options )
             smbl.undecorate_name = smbl_undecorate_name
             smbls[ smbl.symIndexId ] = smbl
+        self.logger.info( 'loading symbols(%d) from the file - done', len( smbls ) )
         return smbls
 
     def __load_nss(self):
@@ -301,7 +258,19 @@ class decl_loader_t(object):
                 break
         self.logger.info( 'integrating udt objects with namespaces - done' )
 
+    def __clear_symbols(self):
+        self.logger.info( 'clearing symbols' )
+        to_be_deleted = []
+        for smbl_id, smbl in self.symbols.iteritems():
+            if ( smbl.symTag == msdia.SymTagData and not self.__is_my_var( smbl ) ) \
+                or smbl.symTag in ( msdia.SymTagAnnotation, msdia.SymTagPublicSymbol ):
+                to_be_deleted.append( smbl_id )
+
+        map( lambda smbl_id: self.symbols.pop( smbl_id ), to_be_deleted )
+        self.logger.info( 'clearing symbols(%d) - done', len( to_be_deleted ) )
+
     def read(self):
+        self.__clear_symbols()
         self.__load_nss()
         self.__load_classes()
         self.__load_enums()
@@ -351,6 +320,7 @@ class decl_loader_t(object):
         decl.byte_size = smbl.length
         decl.mangled = iif( smbl.name, smbl.name, '' )
         decl.demangled = iif( smbl.uname, smbl.uname, '' )
+        decl.is_artificial = bool( smbl.compilerGenerated )
 
     def __load_enums( self ):
         is_enum = lambda smbl: smbl.symTag == msdia.SymTagEnum
@@ -394,6 +364,8 @@ class decl_loader_t(object):
         #I am only interested in global and class variables
         if smbl.symTag != msdia.SymTagData:
             return False
+        if not smbl.uname:
+            return False
         if smbl.classParentId not in self.symbols:
             return True #global scope
         parent_smbl = self.symbols[ smbl.classParentId ]
@@ -410,17 +382,71 @@ class decl_loader_t(object):
             self.__update_decls_tree( var_decl )
         self.logger.info( 'building variable objects(%d) - done', vars_count )
 
-    def __create_var( self, var_smbl ):
-        self.logger.debug( 'creating variable "%s"', var_smbl.uname )
-        name_splitter = impl_details.get_name_splitter( var_smbl.uname )
-        if not name_splitter.name:
-            return None
-        var_decl = declarations.variable_t( name_splitter.name )
-        self.__update_decl( var_decl, var_smbl )
+    def __create_var( self, smbl ):
+        self.logger.debug( 'creating variable "%s"', smbl.uname )
+        name_splitter = impl_details.get_name_splitter( smbl.uname )
+        decl = declarations.variable_t( name_splitter.name )
+        self.__update_decl( decl, smbl )
+        #~ if decl.name == 'initialized':
+            #~ pdb.set_trace()
+        decl.type = self.create_type( smbl.type )
+        decl.value = str(smbl.value)
+        self.logger.debug( 'creating variable "%s" - done', smbl.uname )
+        return decl
 
-        var_decl.type = self.create_type( var_smbl.type )
-        self.logger.debug( 'creating variable "%s" - done', var_smbl.uname )
-        return var_decl
-
-
-
+    def create_type( self, smbl ):
+        my_type = None
+        if msdia.SymTagBaseType == smbl.symTag:
+            if enums.BasicType.btNoType == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btVoid == smbl.baseType:
+                my_type = declarations.void_t()
+            elif enums.BasicType.btChar == smbl.baseType:
+                my_type = declarations.char_t()
+            elif enums.BasicType.btWChar == smbl.baseType:
+                my_type = declarations.wchar_t()
+            elif enums.BasicType.btInt == smbl.baseType:
+                my_type = declarations.int_t()
+            elif enums.BasicType.btUInt == smbl.baseType:
+                my_type = declarations.unsigned_int_t()
+            elif enums.BasicType.btFloat == smbl.baseType:
+                my_type = declarations.float_t()
+            elif enums.BasicType.btBCD == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btBool == smbl.baseType:
+                my_type = declarations.bool_t()
+            elif enums.BasicType.btLong == smbl.baseType:
+                my_type = declarations.long_int_t()
+            elif enums.BasicType.btULong == smbl.baseType:
+                my_type = declarations.long_unsigned_int_t()
+            elif enums.BasicType.btCurrency == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btDate == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btVariant == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btComplex == smbl.baseType:
+                my_type = declarations.complex_double_t()
+            elif enums.BasicType.btBit == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btBSTR == smbl.baseType:
+                my_type = declarations.unknown_t()
+            elif enums.BasicType.btHresult == smbl.baseType:
+                my_type = declarations.unknown_t()
+            else:
+                my_type = declarations.unknown_t()
+        elif msdia.SymTagArrayType == smbl.symTag:
+            bytes = smbl.length
+            element_type = self.create_type( smbl.arrayIndexType )
+            size = declarations.array_t.SIZE_UNKNOWN
+            if bytes and element_type.byte_size:
+                size = bytes / element_type.byte_size
+            my_type = declarations.array_t( element_type, size )
+        else:
+            my_type = declarations.unknown_t()
+        my_type.byte_size = smbl.length
+        if smbl.constType:
+            my_type = declarations.const_t( my_type )
+        if smbl.volatileType:
+            my_type = declarations.volatile_t( my_type )
+        return my_type

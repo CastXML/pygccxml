@@ -9,16 +9,17 @@ class BasicType(utils.enum):
     btUInt     = 7
     btFloat    = 8
     btBCD      = 9
-    btBool     = 1
-    btLong     = 1
-    btULong    = 1
-    btCurrency = 2
-    btDate     = 2
-    btVariant  = 2
-    btComplex  = 2
-    btBit      = 2
-    btBSTR     = 3
+    btBool     = 10
+    btLong     = 13
+    btULong    = 14
+    btCurrency = 25
+    btDate     = 26
+    btVariant  = 27
+    btComplex  = 28
+    btBit      = 29
+    btBSTR     = 30
     btHresult  = 31
+
 
 
 
