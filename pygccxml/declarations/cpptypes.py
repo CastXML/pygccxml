@@ -7,6 +7,7 @@
 defines classes, that describe C++ types
 """
 
+import compilers
 import algorithms_cache
 
 class type_t(object):
@@ -42,7 +43,7 @@ class type_t(object):
     @property
     def decl_string( self ):
         return self.build_decl_string()
-    
+
     @property
     def partial_decl_string( self ):
         return self.build_decl_string( False )
@@ -63,6 +64,8 @@ class type_t(object):
                           , doc="Size of this type in bytes @type: int")
 
     def _get_byte_align(self):
+        if self.compiler == compilers.MSVC_PDB_9:
+            compilers.on_missing_functionality( self.compiler, "byte align" )
         return self._byte_align
     def _set_byte_align( self, new_byte_align ):
         self._byte_align = new_byte_align
@@ -376,21 +379,21 @@ class volatile_t( compound_t ):
 
 class restrict_t( compound_t ):
     """represents C{restrict whatever} type"""
-    
-    #The restrict keyword can be considered an extension to the strict aliasing 
-    #rule. It allows the programmer to declare that pointers which share the same 
-    #type (or were otherwise validly created) do not alias eachother. By using 
-    #restrict the programmer can declare that any loads and stores through the 
-    #qualified pointer (or through another pointer copied either directly or 
-    #indirectly from the restricted pointer) are the only loads and stores to 
-    #the same address during the lifetime of the pointer. In other words, the 
+
+    #The restrict keyword can be considered an extension to the strict aliasing
+    #rule. It allows the programmer to declare that pointers which share the same
+    #type (or were otherwise validly created) do not alias eachother. By using
+    #restrict the programmer can declare that any loads and stores through the
+    #qualified pointer (or through another pointer copied either directly or
+    #indirectly from the restricted pointer) are the only loads and stores to
+    #the same address during the lifetime of the pointer. In other words, the
     #pointer is not aliased by any pointers other than its own copies.
 
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return '__restrict__ ' + self.base.build_decl_string( with_defaults ) 
+        return '__restrict__ ' + self.base.build_decl_string( with_defaults )
 
     def _clone_impl( self ):
         return restrict_t( self.base.clone() )
@@ -471,11 +474,11 @@ class calldef_type_t( object ):
         self._arguments_types = new_arguments_types
     arguments_types = property( _get_arguments_types, _set_arguments_types
                                 , doc="list of argument L{types<type_t>}")
-                                
+
     @property
     def has_ellipsis( self ):
         return self.arguments_types and isinstance( self.arguments_types[-1], ellipsis_t )
-                                
+
 
 class free_function_type_t( type_t, calldef_type_t ):
     """describes free function type"""
@@ -599,7 +602,7 @@ class member_function_type_t( type_t, calldef_type_t ):
         return self.create_decl_string( self.return_type
                                         , self.class_inst.decl_string
                                         , self.arguments_types
-                                        , self.has_const 
+                                        , self.has_const
                                         , with_defaults)
 
     def _clone_impl( self ):

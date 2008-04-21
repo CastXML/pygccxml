@@ -49,13 +49,14 @@ class declarations_t( parser_test_case.parser_test_case_t ):
                            % ( expected_value, initialized.value ) )
         self._test_type_composition( initialized.type, const_t, long_unsigned_int_t )
 
-        if 'PDB' in self.global_ns.compiler:
-            return #TODO find out work around
         static_var = initialized = self.global_ns.variable( name='static_var' )
         self.failUnless( static_var.type_qualifiers.has_static
                          , "static_var must have static type qualifier" )
         self.failUnless( not static_var.type_qualifiers.has_mutable
                          , "static_var must not have mutable type qualifier" )
+
+        if 'PDB' in self.global_ns.compiler:
+            return #TODO find out work around
 
         m_mutable = initialized = self.global_ns.variable( name='m_mutable' )
         self.failUnless( not m_mutable.type_qualifiers.has_static

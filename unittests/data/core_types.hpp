@@ -6,6 +6,11 @@
 #ifndef __core_types_hpp__
 #define __core_types_hpp__
 
+#include <iostream>
+
+#define USE_SYMBOL( X ) enum{ x##__LINE__ = sizeof(X) };
+
+
 namespace core{ namespace types{
 
 typedef void typedef_void;
@@ -29,6 +34,8 @@ typedef double typedef_double;
 typedef long double typedef_long_double;
 
 typedef const int typedef_const_int;
+USE_SYMBOL( typedef_const_int );
+
 typedef int * typedef_pointer_int;
 typedef int& typedef_reference_int;
 typedef const unsigned int * const typedef_const_unsigned_int_const_pointer;

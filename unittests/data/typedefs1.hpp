@@ -12,6 +12,8 @@ namespace typedefs{
 
 typedef item_t Item1;
 
+typedef int my_int_t;
+
 }
 
 #endif//__typedefs1_hpp__

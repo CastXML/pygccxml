@@ -7,9 +7,10 @@
 defines class, that describes C++ enum
 """
 
-import declaration
 import copy
 import types
+import compilers
+import declaration
 
 class enumeration_t( declaration.declaration_t ):
     """
@@ -37,7 +38,7 @@ class enumeration_t( declaration.declaration_t ):
         # Initialize values via property access
         self.values = values
         self._byte_size = 0
-        self._byte_align = 0        
+        self._byte_align = 0
 
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__( self, other ):
@@ -127,6 +128,8 @@ class enumeration_t( declaration.declaration_t ):
                           , doc="Size of this class in bytes @type: int")
 
     def _get_byte_align(self):
+        if self.compiler == compilers.MSVC_PDB_9:
+            compilers.on_missing_functionality( self.compiler, "byte align" )
         return self._byte_align
     def _set_byte_align( self, new_byte_align ):
         self._byte_align = new_byte_align

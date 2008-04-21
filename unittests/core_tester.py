@@ -23,29 +23,7 @@ class core_t( parser_test_case.parser_test_case_t ):
     global_ns = None
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
-        self.test_files = [ 'core_ns_join_1.hpp'
-                            , 'core_ns_join_2.hpp'
-                            , 'core_ns_join_3.hpp'
-                            , 'core_membership.hpp'
-                            , 'core_class_hierarchy.hpp'
-                            , 'core_types.hpp'
-                            , 'core_diamand_hierarchy_base.hpp'
-                            , 'core_diamand_hierarchy_derived1.hpp'
-                            , 'core_diamand_hierarchy_derived2.hpp'
-                            , 'core_diamand_hierarchy_final_derived.hpp'
-                            , 'core_overloads_1.hpp'
-                            , 'core_overloads_2.hpp'
-                            , 'abstract_classes.hpp'
-        ]
         self.global_ns = None
-
-    def setUp(self):
-        if not core_t.global_ns:
-            decls = parse( self.test_files, self.config, self.COMPILATION_MODE )
-            core_t.global_ns = pygccxml.declarations.get_global_namespace( decls )
-            if self.INIT_OPTIMIZER:
-                core_t.global_ns.init_optimizer()
-        self.global_ns = core_t.global_ns
 
     def test_top_parent(self):
         enum = self.global_ns.enum( '::ns::ns32::E33' )
@@ -289,9 +267,9 @@ class core_t( parser_test_case.parser_test_case_t ):
                 print '\nexpected: '
                 for x in others:
                     print str(x)
-                
+
             self.failUnless( set( do_nothing.overloads ) == set( others )
-                             , "there is a difference between expected function overloads and existing ones." )            
+                             , "there is a difference between expected function overloads and existing ones." )
 
     def test_abstract_classes(self):
         ns = self.global_ns.namespace( 'abstract_classes' )
@@ -305,50 +283,89 @@ class core_t( parser_test_case.parser_test_case_t ):
     def test_versioning(self):
         for d in self.global_ns.decls():
             self.failUnless( d.compiler )
-            
+
     def test_byte_size( self ):
         mptrs = self.global_ns.class_( 'members_pointers_t' )
         self.failUnless( mptrs.byte_size != 0 )
-        
+
     def test_byte_align( self ):
         mptrs = self.global_ns.class_( 'members_pointers_t' )
-        self.failUnless( mptrs.byte_align != 0 )
+        if mptrs.compiler != compilers.MSVC_PDB_9:
+            self.failUnless( mptrs.byte_align != 0 )
 
     def test_byte_offset( self ):
         mptrs = self.global_ns.class_( 'members_pointers_t' )
         self.failUnless( mptrs.var( 'xxx' ).byte_offset != 0 )
 
+class pdb_based_core_tester_t( core_t ):
+    def __init__(self, *args ):
+        core_t.__init__( self, *args )
+        self.global_ns = autoconfig.get_pdb_global_ns()
 
-class core_all_at_once_t( core_t ):
+class core_gccxml_t( core_t ):
+    """Tests core algorithms of GCC-XML and GCC-XML file reader.
+    Those most white-box testing.
+    """
+    global_ns = None
+    def __init__(self, *args ):
+        core_t.__init__( self, *args )
+        self.test_files = [ 'core_ns_join_1.hpp'
+                            , 'core_ns_join_2.hpp'
+                            , 'core_ns_join_3.hpp'
+                            , 'core_membership.hpp'
+                            , 'core_class_hierarchy.hpp'
+                            , 'core_types.hpp'
+                            , 'core_diamand_hierarchy_base.hpp'
+                            , 'core_diamand_hierarchy_derived1.hpp'
+                            , 'core_diamand_hierarchy_derived2.hpp'
+                            , 'core_diamand_hierarchy_final_derived.hpp'
+                            , 'core_overloads_1.hpp'
+                            , 'core_overloads_2.hpp'
+                            , 'abstract_classes.hpp'
+        ]
+        self.global_ns = None
+
+    def setUp(self):
+        if not core_t.global_ns:
+            decls = parse( self.test_files, self.config, self.COMPILATION_MODE )
+            core_t.global_ns = pygccxml.declarations.get_global_namespace( decls )
+            if self.INIT_OPTIMIZER:
+                core_t.global_ns.init_optimizer()
+        self.global_ns = core_t.global_ns
+
+class core_all_at_once_t( core_gccxml_t ):
     COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        core_gccxml_t.__init__(self, *args)
 
-class core_all_at_once_no_opt_t( core_t ):
+class core_all_at_once_no_opt_t( core_gccxml_t ):
     COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = False
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        core_gccxml_t.__init__(self, *args)
 
-class core_file_by_file_t( core_t ):
+class core_file_by_file_t( core_gccxml_t ):
     COMPILATION_MODE = COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = True
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        core_gccxml_t.__init__(self, *args)
 
-class core_file_by_file_no_opt_t( core_t ):
+class core_file_by_file_no_opt_t( core_gccxml_t ):
     COMPILATION_MODE = COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = False
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        core_gccxml_t.__init__(self, *args)
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest( unittest.makeSuite(core_all_at_once_t))
-    suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
-    suite.addTest( unittest.makeSuite(core_file_by_file_t))
-    suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
+    #~ suite.addTest( unittest.makeSuite(core_all_at_once_t))
+    #~ suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
+    #~ suite.addTest( unittest.makeSuite(core_file_by_file_t))
+    #~ suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
+    if sys.platform == 'win32':
+        suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
+
     return suite
 
 def run_suite():

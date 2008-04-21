@@ -92,12 +92,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                , XML_NN_ENUMERATION : self.__read_enumeration
                , XML_NN_ENUMERATION_VALUE : self.__read_enumeration_value
                , XML_NN_ARRAY_TYPE : self.__read_array_type
-               , XML_NN_CV_QUALIFIED_TYPE : self.__read_cv_qualified_type                   
+               , XML_NN_CV_QUALIFIED_TYPE : self.__read_cv_qualified_type
                , XML_NN_POINTER_TYPE : self.__read_pointer_type
                , XML_NN_REFERENCE_TYPE : self.__read_reference_type
-               , XML_NN_FUNDAMENTAL_TYPE : self.__read_fundamental_type                   
+               , XML_NN_FUNDAMENTAL_TYPE : self.__read_fundamental_type
                , XML_NN_ARGUMENT : self.__read_argument
-               , XML_NN_FUNCTION_TYPE : self.__read_function_type                   
+               , XML_NN_FUNCTION_TYPE : self.__read_function_type
                , XML_NN_METHOD_TYPE : self.__read_method_type
                , XML_NN_OFFSET_TYPE : self.__read_offset_type
                , XML_NN_TYPEDEF : self.__read_typedef
@@ -132,7 +132,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
         assert isinstance( decl_factory, decl_factory_t )
         self.__decl_factory = decl_factory
-        
+
         #mapping from id -> decl
         self.__declarations = {}
         #list of all read declarations
@@ -141,7 +141,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         self.__enums = []
         #mapping from id -> type
         self.__types = {}
-        #mapping from id -> file        
+        #mapping from id -> file
         self.__files = {}
         #mapping between decl id -> access
         self.__access = {}
@@ -149,12 +149,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         self.__inst = None
         #mapping from id to members
         self.__members = {}
-        
+
         self.__compiler = None
-    
+
     def read( self ):
         xml.sax.parse( self.gccxml_file, self )
-    
+
     def endDocument( self ):
         #updating membership
         members_mapping = {}
@@ -164,34 +164,34 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 continue
             members_mapping[ id( decl ) ] = members
         self.__members = members_mapping
-        
+
     def declarations(self):
         return self.__declarations
-        
+
     def calldefs( self ):
         return self.__calldefs
 
     def enums(self):
         return self.__enums
-        
+
     def types(self):
         return self.__types
-        
+
     def files(self):
         return self.__files
 
     def access(self):
         return self.__access
-    
+
     def members(self):
         return self.__members
 
     def startElementNS(self, name, qname, attrs):
         return self.startElement( name[1], attrs )
-    
+
     def endElementNS(self, name, qname):
         return self.endElement( name[1] )
-    
+
     def startElement(self, name, attrs):
         try:
             if name not in self.__readers:
@@ -216,7 +216,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 self.__read_mangled( obj, attrs)
                 self.__read_demangled( obj, attrs)
                 self.__read_attributes(obj, attrs)
-                
+
             elif isinstance( obj, type_t ):
                 self.__types[ element_id ] = obj
                 self.__read_byte_size(obj, attrs)
@@ -231,7 +231,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             msg = msg + os.linesep + 'Error: %s.' % str( error )
             self.logger.error( msg % ( name, pprint.pformat( attrs.keys() ) ) )
             raise
-        
+
     def endElement(self, name):
         if name in self.deep_declarations:
             self.__inst = None
@@ -242,7 +242,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __update_membership(self, attrs):
         parent = attrs.get( XML_AN_CONTEXT, None )
         if not parent:
-            return 
+            return
         if not self.__members.has_key( parent ):
             self.__members[ parent ] = []
         self.__members[parent].append( attrs[XML_AN_ID] )
@@ -261,7 +261,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_demangled( self, decl, attrs ):
         decl.demangled = attrs.get( XML_AN_DEMANGLED, None )
-        
+
     def __read_attributes( self, decl, attrs ):
         decl.attributes = attrs.get( XML_AN_ATTRIBUTES, None )
 
@@ -285,7 +285,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_root(self, attrs):
         pass
-        
+
     def __read_file( self, attrs ):
         return attrs.get( XML_AN_NAME, '' )
 
@@ -336,7 +336,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             msg = 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ]
             warnings.warn( msg )
         return array_t( type_, size + 1 )
- 
+
     def __read_cv_qualified_type( self, attrs ):
         if attrs.has_key( XML_AN_CONST ):
             return const_t( attrs[XML_AN_TYPE] )
@@ -344,12 +344,12 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             return volatile_t( attrs[XML_AN_TYPE] )
         elif attrs.has_key( XML_AN_RESTRICT ):
             return restrict_t( attrs[XML_AN_TYPE] )
-        else: 
-            assert 0 
+        else:
+            assert 0
 
     def __read_pointer_type( self, attrs ):
         return pointer_t( attrs[XML_AN_TYPE] )
-    
+
     def __read_reference_type( self, attrs ):
         return reference_t( attrs[XML_AN_TYPE] )
 
@@ -374,13 +374,13 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         else:
             argument = argument_t()
             argument.name = attrs.get( XML_AN_NAME, 'arg%d' % len(self.__inst.arguments) )
-            argument.type = attrs[XML_AN_TYPE]           
+            argument.type = attrs[XML_AN_TYPE]
             argument.default_value = attrs.get( XML_AN_DEFAULT, None )
             self.__read_attributes( argument, attrs )
             if argument.default_value == '<gccxml-cast-expr>':
                 argument.default_value = None
             self.__inst.arguments.append( argument )
-     
+
     def __read_ellipsis( self, attrs ):
         if isinstance( self.__inst, calldef_type_t ):
             self.__inst.arguments_types.append( '...' )
@@ -405,10 +405,10 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             else:
                 calldef.does_throw = True
                 calldef.exceptions = throw_stmt.split()
- 
-    def __read_member_function( self, calldef, attrs, is_declaration ):       
+
+    def __read_member_function( self, calldef, attrs, is_declaration ):
         self.__read_calldef( calldef, attrs, is_declaration )
-        calldef.has_const = attrs.get( XML_AN_CONST, False )        
+        calldef.has_const = attrs.get( XML_AN_CONST, False )
         if is_declaration:
             calldef.has_static = attrs.get( XML_AN_STATIC, False )
             if attrs.has_key( XML_AN_PURE_VIRTUAL ):
@@ -418,13 +418,13 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             else:
                 calldef.virtuality = VIRTUALITY_TYPES.NOT_VIRTUAL
         else:
-            calldef.class_inst = attrs[XML_AN_BASE_TYPE]   
-    
+            calldef.class_inst = attrs[XML_AN_BASE_TYPE]
+
     def __read_function_type(self, attrs):
         answer = free_function_type_t()
         self.__read_calldef( answer, attrs, False )
         return answer
-    
+
     def __read_method_type(self, attrs):
         answer = member_function_type_t()
         self.__read_member_function( answer, attrs, False )
@@ -434,7 +434,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         return self.__decl_factory.create_typedef( name=attrs.get( XML_AN_NAME, '' ), type=attrs[XML_AN_TYPE])
 
     def __read_variable(self, attrs ):
-        type_qualifiers = type_qualifiers_t()        
+        type_qualifiers = type_qualifiers_t()
         type_qualifiers.has_mutable = attrs.get(XML_AN_MUTABLE, False)
         type_qualifiers.has_static = attrs.get(XML_AN_EXTERN, False)
         bits = attrs.get( XML_AN_BITS, None )
@@ -466,7 +466,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
         return decl
-    
+
     def __read_class( self, attrs ):
         return self.__read_class_impl( CLASS_TYPES.CLASS, attrs )
 
@@ -480,7 +480,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         operator = self.__decl_factory.create_casting_operator()
         self.__read_member_function( operator, attrs, True )
         return operator
- 
+
     def __read_constructor( self, attrs ):
         constructor = self.__decl_factory.create_constructor()
         self.__read_member_function( constructor, attrs, True )
@@ -490,18 +490,18 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         gfunction = self.__decl_factory.create_free_function()
         self.__read_calldef( gfunction, attrs, True )
         return gfunction
- 
+
     def __read_method(self, attrs):
         mfunction = self.__decl_factory.create_member_function()
         self.__read_member_function( mfunction, attrs, True )
         return mfunction
- 
+
     def __read_destructor(self, attrs):
         destructor = self.__decl_factory.create_destructor()
         self.__read_member_function( destructor, attrs, True )
         destructor.name = '~' + destructor.name
         return destructor
- 
+
     def __read_free_operator(self, attrs ):
         operator = self.__decl_factory.create_free_operator()
         self.__read_member_function( operator, attrs, True )
@@ -510,7 +510,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         else:
             operator.name = 'operator' + operator.name
         return operator
- 
+
     def __read_member_operator(self, attrs):
         operator = self.__decl_factory.create_member_operator()
         self.__read_member_function( operator, attrs, True )
@@ -522,18 +522,18 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_version(self, attrs):
         logger = utils.loggers.cxx_parser
-        
+
         version = float( attrs.get(XML_AN_CVS_REVISION, 0.6) )
         if version is None:
             logger.info ( 'GCCXML version - 0.6' )
-            version = "0.6"
+            self.__compiler = compilers.GCC_XML_06
         elif version <= 1.114:
             logger.info ( 'GCCXML version - 0.7' )
-            version = "0.7"
+            self.__compiler = compilers.GCC_XML_07
         elif version in ( 1.115, 1.116, 1.117 ):
             logger.info ( 'GCCXML version - 0.9 BUGGY' )
-            version = "0.9"
+            self.__compiler = compilers.GCC_XML_09_BUGGY
         else:
             logger.info ( 'GCCXML version - 0.9' )
-            version = "0.9"
-        self.__compiler = "GCC-XML " + version
+            self.__compiler = compilers.GCC_XML_09
+

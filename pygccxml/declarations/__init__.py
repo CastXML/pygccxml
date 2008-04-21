@@ -6,6 +6,9 @@
 """
 contains classes that describe different C++ declarations
 """
+
+import compilers
+
 from dependencies import dependency_info_t
 from declaration import location_t
 from declaration import declaration_t
@@ -189,7 +192,7 @@ from container_traits import find_container_traits
 from function_traits import is_same_function
 
 all_container_traits = container_traits.container_traits
-"""tuple of all STD container traits classes"""    
+"""tuple of all STD container traits classes"""
 
 sequential_container_traits = \
 [

@@ -14,25 +14,25 @@ class tester_t( unittest.TestCase ):
                                       , 'Debug'
                                       , 'msvc_build.pdb' )
 
-    def __test_splitter_impl( self, name, expected_result ):
+    def __splitter_tester_impl( self, name, expected_result ):
         splitter = pdb.impl_details.full_name_splitter_t( name )
         self.failUnless( len(splitter.scope_names) == len(expected_result) )
         self.failUnless( splitter.scope_names == expected_result )
 
-    def __test_name_splitter(self):
+    def test_name_splitter(self):
         name = "std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >::const_iterator::operator->"
         expected_result = [
             'std'
             , 'std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >', 'std::_Tree<std::_Tmap_traits<engine_objects::ouuid_t,engine_objects::sql_query::parameterized_query::sql_fragment_t,std::less<engine_objects::ouuid_t>,std::allocator<std::pair<engine_objects::ouuid_t const ,engine_objects::sql_query::parameterized_query::sql_fragment_t> >,0> >::const_iterator'
         ]
-        self.__test_splitter_impl( name, expected_result )
+        self.__splitter_tester_impl( name, expected_result )
 
         name = 'boost::reference_wrapper<engine_objects::ops::pathable_t const >::operator engine_objects::ops::pathable_t const &'
         expected_result = [
             'boost'
             , 'boost::reference_wrapper<engine_objects::ops::pathable_t const >'
         ]
-        self.__test_splitter_impl( name, expected_result )
+        self.__splitter_tester_impl( name, expected_result )
 
     def test_create_nss(self):
         reader = pdb.decl_loader_t( self.pdb_file )
@@ -45,6 +45,12 @@ class tester_t( unittest.TestCase ):
         f.write( os.linesep.join( x ) )
         f.close()
 
+        f = file( 'symbols.txt', 'w+')
+        for smbl in reader.symbols.itervalues():
+            f.write( smbl.uname )
+            f.write( os.linesep )
+            f.write( '\t' + str(smbl.name) )
+        f.close()
         #~ names = []
         #~ for d in reader.global_ns.classes():
             #~ names.append( '{%s}<=====>{%s}' %( d.demangled, d.mangled ) )
@@ -69,6 +75,7 @@ class tester_t( unittest.TestCase ):
             #~ print '\n', pdb.impl_details.undecorate_name( decorated )
             #~ print undecorated
             self.failUnless( msvc_utils.undecorate_name( decorated ) == undecorated )
+
 
 def create_suite():
     suite = unittest.TestSuite()

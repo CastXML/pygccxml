@@ -3,6 +3,7 @@
 #include "bit_fields.hpp"
 #include "complex_types.hpp"
 #include "core_cache.hpp"
+#include "core_types.hpp"
 #include "core_class_hierarchy.hpp"
 #include "core_diamand_hierarchy_base.hpp"
 #include "core_diamand_hierarchy_derived1.hpp"
@@ -40,6 +41,7 @@
 #include "unnamed_enums_bug2.hpp"
 #include "unnamed_ns_bug.hpp"
 #include "vector_traits.hpp"
+#include "core_types.hpp"
 
 namespace declarations{ namespace variables{
 
@@ -49,4 +51,12 @@ int static_var = 0;
 void use_decls(){	
 	declarations::enums::ENumbers enumbers;
 	declarations::enums::data::EColor ecolor;
+
+	sizeof(core::types::exception );
+}
+
+
+void use_core_types(){
+	core::types::members_pointers_t mem_ptrs;
+	core::types::typedef_const_int typedef_const_int_ = 0;
 }

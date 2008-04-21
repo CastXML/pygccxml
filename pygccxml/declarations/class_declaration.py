@@ -13,6 +13,7 @@ This modules contains definition for next C++ declarations:
 """
 
 import scopedef
+import compilers
 import algorithm
 import declaration
 import dependencies
@@ -48,7 +49,7 @@ def get_partial_name( name ):
 
 class hierarchy_info_t( object ):
     """describes class relationship"""
-    def __init__(self, related_class=None, access=None ):
+    def __init__(self, related_class=None, access=None, is_virtual=None ):
         """creates class that contains partial information about class relationship"""
         if related_class:
             assert( isinstance( related_class, class_t ) )
@@ -56,12 +57,14 @@ class hierarchy_info_t( object ):
         if access:
             assert( access in ACCESS_TYPES.ALL)
         self._access=access
+        self._is_virtual = is_virtual
 
     def __eq__(self, other):
         if not isinstance( other, hierarchy_info_t ):
             return False
         return algorithm.declaration_path( self.related_class ) == algorithm.declaration_path( other.related_class ) \
-               and self.access == other.access
+               and self.access == other.access \
+               and self.is_virtual == other.is_virtual
 
     def __ne__( self, other):
         return not self.__eq__( other )
@@ -69,8 +72,8 @@ class hierarchy_info_t( object ):
     def __lt__(self, other):
         if not isinstance( other, self.__class__ ):
             return self.__class__.__name__ < other.__class__.__name__
-        return ( algorithm.declaration_path( self.related_class ), self.access  ) \
-               < ( algorithm.declaration_path( other.related_class ), other.access )
+        return ( algorithm.declaration_path( self.related_class ), self.access, self.is_virtual  ) \
+               < ( algorithm.declaration_path( other.related_class ), other.access, self.is_virtual )
 
     def _get_related_class(self):
         return self._related_class
@@ -89,6 +92,15 @@ class hierarchy_info_t( object ):
     access = property( _get_access, _set_access )
     access_type = property( _get_access, _set_access
                             , doc="describes L{hierarchy type<ACCESS_TYPES>}")
+
+    #TODO: check whether GCC XML support this and if so parser this information
+    def _get_is_virtual(self):
+        return self._is_virtual
+    def _set_is_virtual(self, new_is_virtual):
+        self._is_virtual = new_is_virtual
+    is_virtual = property( _get_is_virtual, _set_is_virtual
+                           , doc="indicates whether the inheritance is virtual or not")
+
 
 class class_declaration_t( declaration.declaration_t ):
     """describes class declaration"""
@@ -162,9 +174,9 @@ class class_t( scopedef.scopedef_t ):
                     if tmp.startswith( '::' ):
                         tmp = tmp[2:]
                     if '<' not in tmp and '<' in self._name:
-                        #we have template class, but for some reason demangled 
+                        #we have template class, but for some reason demangled
                         #name doesn't contain any template
-                        #This happens for std::string class, but this breaks 
+                        #This happens for std::string class, but this breaks
                         #other cases, because this behaviour is not consistent
                         self.cache.demangled_name = self._name
                         return self.cache.demangled_name
@@ -305,6 +317,8 @@ class class_t( scopedef.scopedef_t ):
                           , doc="Size of this class in bytes @type: int")
 
     def _get_byte_align(self):
+        if self.compiler == compilers.MSVC_PDB_9:
+            compilers.on_missing_functionality( self.compiler, "byte align" )
         return self._byte_align
     def _set_byte_align( self, new_byte_align ):
         self._byte_align = new_byte_align
@@ -450,7 +464,7 @@ class class_t( scopedef.scopedef_t ):
             return None
 
     def _get_partial_name_impl( self ):
-        import type_traits #prevent cyclic dependencies        
+        import type_traits #prevent cyclic dependencies
         if type_traits.is_std_string( self ):
             return 'string'
         elif type_traits.is_std_wstring( self ):

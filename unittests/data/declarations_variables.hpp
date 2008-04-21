@@ -18,6 +18,10 @@ struct struct_variables_t{
     mutable int m_mutable;
 };
 
+struct struct_variables_holder_t{
+	struct_variables_t m_struct_variables;
+};
+
 } }
 
 #endif//__declarations_variables_hpp__

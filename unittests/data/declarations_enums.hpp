@@ -17,6 +17,7 @@ private:
     enum EPrivColor{ priv_red, priv_green, priv_blue, priv_black, priv_white };
 
     void do_smth(EPrivColor x){}
+	EColor favorite_color;
 };
 
 } }

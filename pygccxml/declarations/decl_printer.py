@@ -115,9 +115,9 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.print_decl_header()
         if self.__print_details:
             self.writer( ' ' * ( self.level + 1 ) * self.INDENT_SIZE
-                         + 'copy constructor: ' + str(self.__inst.is_copy_constructor) 
+                         + 'copy constructor: ' + str(self.__inst.is_copy_constructor)
                          + os.linesep )
-        
+
     def visit_destructor( self ):
         self.print_decl_header()
 
@@ -144,8 +144,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.byte_size)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep )
-            byte_align = 'align: %d'%(self.__inst.byte_align)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
+            try:
+                byte_align = 'align: %d'%(self.__inst.byte_align)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
+            except NotImplementedError:
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "not implemented".ljust( self.JUSTIFY ) + os.linesep )
 
         if self.__inst.aliases:
             aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
@@ -158,8 +161,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             for class_ in classes:
                 class_str = 'class: ' + "'%s'" % str(class_.related_class.decl_string)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + class_str.ljust( self.JUSTIFY ) + os.linesep )
-                access = 'access: ' + "'%s'" % str(class_.access)
+                access = 'access type: ' + "'%s'" % str(class_.access)
                 self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + access.ljust( self.JUSTIFY ) + os.linesep )
+                if not ( None is class_.is_virtual ):
+                    is_virtual = 'virtual inheritance: ' + "'%s'" % str(class_.is_virtual)
+                    self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + is_virtual.ljust( self.JUSTIFY ) + os.linesep )
 
         def print_members(members_type, members, curr_level):
             self.writer( ' ' * curr_level * self.INDENT_SIZE + members_type.ljust( self.JUSTIFY ) + os.linesep )
@@ -209,8 +215,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.type.byte_size)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep )
-            byte_align = 'align: %d'%(self.__inst.type.byte_align)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
+            try:
+                byte_align = 'align: %d'%(self.__inst.type.byte_align)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
+            except NotImplementedError:
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "not implemented".ljust( self.JUSTIFY ) + os.linesep )
             byte_offset = 'offset: %d'%(self.__inst.byte_offset)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep)
 

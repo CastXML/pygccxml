@@ -46,7 +46,7 @@ def print_files( session ):
         print 'File: ', f.fileName
 
 class decl_loader_t(object):
-    COMPILER = 'MSVC PDB'
+    COMPILER = declarations.compilers.MSVC_PDB_9
     def __init__(self, pdb_file_path ):
         self.logger = utils.loggers.pdb_reader
         self.logger.setLevel(logging.INFO)
@@ -59,6 +59,8 @@ class decl_loader_t(object):
         self.logger.debug( 'opening session - done' )
         self.__global_ns = declarations.namespace_t( '::' )
         self.__global_ns.compiler = self.COMPILER
+        self.__id2decl = {} #cache symIndexId : decl
+        self.__types_cache = {} #smbl id : type
 
     def __find_table(self, name):
         valid_names = ( 'Symbols', 'SourceFiles', 'Sections'
@@ -164,6 +166,7 @@ class decl_loader_t(object):
                 if not parent_ns:
                     continue #in this case the parent scope is UDT
             ns_decl = declarations.namespace_t( name_splitter.name )
+            ns_decl.compiler = self.COMPILER
             parent_ns.adopt_declaration( ns_decl )
             nss[ ns_name ] = ns_decl
             self.logger.debug( 'inserting ns "%s" into declarations tree - done', ns_name )
@@ -173,20 +176,23 @@ class decl_loader_t(object):
 
     def __update_decls_tree( self, decl ):
         smbl = decl.dia_symbols[0]
-        name_splitter = impl_details.get_name_splitter( smbl.uname )
-        if not name_splitter.scope_names:
-            self.__adopt_declaration( self.global_ns, decl )
+        if smbl.classParentId in self.__id2decl:
+            self.__adopt_declaration( self.__id2decl[smbl.classParentId], decl )
         else:
-            parent_name = '::' + name_splitter.scope_names[-1]
-            try:
-                parent = self.global_ns.decl( parent_name )
-            except:
-                declarations.print_declarations( self.global_ns )
-                print 'identifiers:'
-                for index, identifier in enumerate(name_splitter.identifiers):
-                    print index, ':', identifier
-                raise
-            self.__adopt_declaration( parent, decl )
+            name_splitter = impl_details.get_name_splitter( smbl.uname )
+            if not name_splitter.scope_names:
+                self.__adopt_declaration( self.global_ns, decl )
+            else:
+                parent_name = '::' + name_splitter.scope_names[-1]
+                try:
+                    parent = self.global_ns.decl( parent_name )
+                except:
+                    declarations.print_declarations( self.global_ns )
+                    print 'identifiers:'
+                    for index, identifier in enumerate(name_splitter.identifiers):
+                        print index, ':', identifier
+                    raise
+                self.__adopt_declaration( parent, decl )
 
     def __adopt_declaration( self, parent, decl ):
         smbl = decl.dia_symbols[0]
@@ -196,11 +202,13 @@ class decl_loader_t(object):
                 parent.adopt_declaration( decl )
             else:
                 parent.adopt_declaration( decl, self.__guess_access_type( smbl ) )
+            self.__id2decl[ smbl.symIndexId ] = decl
         else:
             for other_decl in already_added:
                 for other_smbl in other_decl.dia_symbols:
                     if self.__are_symbols_equivalent( other_smbl, smbl ):
                         other_decl.dia_symbols.append( smbl )
+                        self.__id2decl[ smbl.symIndexId ] = other_decl
                         return
             else:
                 if isinstance( parent, declarations.namespace_t ):
@@ -222,41 +230,37 @@ class decl_loader_t(object):
             else:
                 return declarations.ACCESS_TYPES.PUBLIC
 
-    def __load_classes( self ):
-        classes = {}#unique symbol id : class decl
-        is_udt = lambda smbl: smbl.symTag == msdia.SymTagUDT
-        self.logger.info( 'building udt objects' )
-        for udt_smbl in itertools.ifilter( is_udt, self.symbols.itervalues() ):
-            classes[udt_smbl.symIndexId] = self.__create_class(udt_smbl)
-        self.logger.info( 'building udt objects(%d) - done', len(classes) )
+    class parent_exists_t:
+        def __init__( self, global_ns, classes, id2decl ):
+            self.global_ns = global_ns
+            self.classes = classes
+            self.id2decl = id2decl
+            self.__parent_exist = set()
 
-        def does_parent_exist_in_decls_tree( class_decl ):
-            class_smbl = class_decl.dia_symbols[0]
-            if classes.has_key( class_smbl.classParentId ):
+        def __call__( self, decl ):
+            smbl = decl.dia_symbols[0]
+            if smbl.classParent:
+                if smbl.classParentId in self.id2decl:
+                    return True
+                else:
+                    return False
+            if self.classes.has_key( smbl.classParentId ):
                 return False
-            name_splitter = impl_details.get_name_splitter( class_smbl.uname )
+            name_splitter = impl_details.get_name_splitter( smbl.uname )
             if not name_splitter.scope_names:
                 return True #global namespace
             else:
+                #print "I am here " + '::' + name_splitter.scope_names[-1]
                 parent_name = '::' + name_splitter.scope_names[-1]
+                if parent_name in self.__parent_exist:
+                    return True
                 found = self.global_ns.decls( parent_name
                                               , decl_type=declarations.scopedef_t
                                               , allow_empty=True
                                               , recursive=True )
+                if found:
+                    self.__parent_exist.add( parent_name )
                 return bool( found )
-        self.logger.info( 'integrating udt objects with namespaces' )
-        while classes:
-            to_be_integrated = len( classes )
-            self.logger.info( 'there are %d classes to go', len( classes ) )
-            to_be_deleted = filter( does_parent_exist_in_decls_tree, classes.itervalues() )
-            map( self.__update_decls_tree, to_be_deleted )
-            map( lambda decl: classes.pop( decl.dia_symbols[0].symIndexId )
-                 , to_be_deleted )
-            if not ( to_be_integrated - len( classes ) ):
-                for cls in classes.itervalues():
-                    self.logger.warning( 'unable to integrate class "%s" into declarations tree', cls.dia_symbols[0].uname )
-                break
-        self.logger.info( 'integrating udt objects with namespaces - done' )
 
     def __clear_symbols(self):
         self.logger.info( 'clearing symbols' )
@@ -270,11 +274,13 @@ class decl_loader_t(object):
         self.logger.info( 'clearing symbols(%d) - done', len( to_be_deleted ) )
 
     def read(self):
-        self.__clear_symbols()
+        #self.__clear_symbols()
         self.__load_nss()
         self.__load_classes()
+        self.__load_base_classes()
         self.__load_enums()
         self.__load_vars()
+        self.__load_typedefs()
 
     @property
     def dia_global_scope(self):
@@ -317,20 +323,65 @@ class decl_loader_t(object):
     def __update_decl( self, decl, smbl ):
         decl.dia_symbols = [smbl]
         decl.compiler = self.COMPILER
-        decl.byte_size = smbl.length
+        if not isinstance( decl, declarations.typedef_t ):
+            decl.byte_size = smbl.length
+            decl.byte_offset = smbl.offset
         decl.mangled = iif( smbl.name, smbl.name, '' )
         decl.demangled = iif( smbl.uname, smbl.uname, '' )
         decl.is_artificial = bool( smbl.compilerGenerated )
 
+
+    def __load_classes( self ):
+        classes = {}#unique symbol id : class decl
+        is_udt = lambda smbl: smbl.symTag == msdia.SymTagUDT
+        self.logger.info( 'building udt objects' )
+        for udt_smbl in itertools.ifilter( is_udt, self.symbols.itervalues() ):
+            classes[udt_smbl.symIndexId] = self.__create_class(udt_smbl)
+        self.logger.info( 'building udt objects(%d) - done', len(classes) )
+
+        self.logger.info( 'integrating udt objects with namespaces' )
+        does_parent_exists = self.parent_exists_t( self.global_ns, classes, self.__id2decl )
+        while classes:
+            to_be_integrated = len( classes )
+            self.logger.info( 'there are %d classes to go', len( classes ) )
+            to_be_deleted = filter( does_parent_exists, classes.itervalues() )
+            map( self.__update_decls_tree, to_be_deleted )
+            map( lambda decl: classes.pop( decl.dia_symbols[0].symIndexId )
+                 , to_be_deleted )
+            if not ( to_be_integrated - len( classes ) ):
+                for cls in classes.itervalues():
+                    self.logger.warning( 'unable to integrate class "%s" into declarations tree', cls.dia_symbols[0].uname )
+                break
+        self.logger.info( 'integrating udt objects with namespaces - done' )
+
+    def __load_base_classes( self ):
+        make_hi = declarations.hierarchy_info_t
+        is_base_class = lambda smbl: smbl.symTag == msdia.SymTagBaseClass \
+                                     and False == smbl.indirectVirtualBaseClass
+        self.logger.info( 'building class hierarchies' )
+        for count, smbl in enumerate( itertools.ifilter( is_base_class, self.symbols.itervalues() ) ):
+            base_id = smbl.type.symIndexId
+            derived_id = smbl.classParentId
+
+            hi_base = make_hi( self.__id2decl[base_id]
+                               , self.__guess_access_type( smbl )
+                               , bool( smbl.virtualBaseClass ) )
+            self.__id2decl[ derived_id ].bases.append( hi_base )
+
+            hi_derived = make_hi( self.__id2decl[derived_id]
+                                  , self.__guess_access_type( smbl )
+                                  , bool( smbl.virtualBaseClass ) )
+            self.__id2decl[ base_id ].derived.append( hi_derived )
+
+        self.logger.info( 'building class hierarchies(%d) - done', count )
+
     def __load_enums( self ):
         is_enum = lambda smbl: smbl.symTag == msdia.SymTagEnum
         self.logger.info( 'building enum objects' )
-        enums_count = 0
-        for enum_smbl in itertools.ifilter( is_enum, self.symbols.itervalues() ):
+        for enums_count, enum_smbl in enumerate( itertools.ifilter( is_enum, self.symbols.itervalues() ) ):
             enum_decl = self.__create_enum(enum_smbl)
             if not enum_decl:
                 continue
-            enums_count += 1
             self.__update_decls_tree( enum_decl )
         self.logger.info( 'building enum objects(%d) - done', enums_count )
 
@@ -373,13 +424,11 @@ class decl_loader_t(object):
 
     def __load_vars( self ):
         self.logger.info( 'building variable objects' )
-        vars_count = 0
-        for var_smbl in itertools.ifilter( self.__is_my_var, self.symbols.itervalues() ):
+
+        for vars_count, var_smbl in enumerate( itertools.ifilter( self.__is_my_var, self.symbols.itervalues() ) ):
             var_decl = self.__create_var(var_smbl)
-            if not var_decl:
-                continue
-            vars_count += 1
-            self.__update_decls_tree( var_decl )
+            if var_decl:
+                self.__update_decls_tree( var_decl )
         self.logger.info( 'building variable objects(%d) - done', vars_count )
 
     def __create_var( self, smbl ):
@@ -387,14 +436,34 @@ class decl_loader_t(object):
         name_splitter = impl_details.get_name_splitter( smbl.uname )
         decl = declarations.variable_t( name_splitter.name )
         self.__update_decl( decl, smbl )
-        #~ if decl.name == 'initialized':
-            #~ pdb.set_trace()
         decl.type = self.create_type( smbl.type )
         decl.value = str(smbl.value)
         self.logger.debug( 'creating variable "%s" - done', smbl.uname )
         return decl
 
+    def __load_typedefs( self ):
+        self.logger.info( 'building typedef objects' )
+        is_typedef = lambda smbl: smbl.symTag == msdia.SymTagTypedef
+        for typedefs_count, typedef_smbl in enumerate( itertools.ifilter( is_typedef, self.symbols.itervalues() ) ):
+            typedef_decl = self.__create_typedef(typedef_smbl)
+            self.__update_decls_tree( typedef_decl )
+        self.logger.info( 'building typedef objects(%d) - done', typedefs_count )
+
+    def __create_typedef( self, smbl ):
+        self.logger.debug( 'creating typedef "%s"', smbl.uname )
+        name_splitter = impl_details.get_name_splitter( smbl.uname )
+        #~ if decl.name == 'initialized':
+            #~ pdb.set_trace()
+        decl = declarations.typedef_t( name_splitter.name
+                                       , self.create_type( smbl.type ) )
+        self.__update_decl( decl, smbl )
+        self.logger.debug( 'creating typedef "%s" - done', smbl.uname )
+        return decl
+
+
     def create_type( self, smbl ):
+        if smbl.symIndexId in self.__types_cache:
+            return self.__types_cache[smbl.symIndexId]
         my_type = None
         if msdia.SymTagBaseType == smbl.symTag:
             if enums.BasicType.btNoType == smbl.baseType:
@@ -442,9 +511,18 @@ class decl_loader_t(object):
             if bytes and element_type.byte_size:
                 size = bytes / element_type.byte_size
             my_type = declarations.array_t( element_type, size )
+        elif smbl.symTag in ( msdia.SymTagUDT, msdia.SymTagTypedef, msdia.SymTagEnum ):
+            if smbl.symIndexId in self.__id2decl:
+                decl = self.__id2decl[ smbl.symIndexId ]
+                my_type = declarations.declarated_t( decl )
+            else:
+                my_type = declarations.unknown_t()
         else:
             my_type = declarations.unknown_t()
-        my_type.byte_size = smbl.length
+        try:
+            my_type.byte_size = smbl.length
+        except AttributeError:
+            pass
         if smbl.constType:
             my_type = declarations.const_t( my_type )
         if smbl.volatileType:

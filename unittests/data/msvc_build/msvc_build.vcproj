@@ -53,6 +53,7 @@
 				BrowseInformation="1"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4290;4584;4293;4244;4101"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -77,7 +78,8 @@
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
-				ValidateIntelliSense="true"
+				ValidateIntelliSense="false"
+				OutputDocumentFile=""
 			/>
 			<Tool
 				Name="VCBscMakeTool"
