@@ -59,4 +59,48 @@ void use_decls(){
 void use_core_types(){
 	core::types::members_pointers_t mem_ptrs;
 	core::types::typedef_const_int typedef_const_int_ = 0;
+	core::types::typedef_pointer_int typedef_pointer_int_ = 0;
+	int i = 0;
+	core::types::typedef_reference_int typedef_reference_int_ = i;
+	unsigned int j = 0;
+	core::types::typedef_const_unsigned_int_const_pointer typedef_const_unsigned_int_const_pointer_ = &j;
+	core::types::typedef_void* typedef_void = 0;
+	core::types::typedef_char typedef_char_;
+	core::types::typedef_signed_char typedef_signed_char_;
+	core::types::typedef_unsigned_char typedef_unsigned_char_;
+	core::types::typedef_wchar_t typedef_wchar_t_;
+	core::types::typedef_short_int typedef_short_int_;
+	core::types::typedef_signed_short_int typedef_signed_short_int_;
+	core::types::typedef_short_unsigned_int typedef_short_unsigned_int_;
+	core::types::typedef_bool typedef_bool_;
+	core::types::typedef_int typedef_int_;
+	core::types::typedef_signed_int typedef_signed_int_;    
+	core::types::typedef_unsigned_int typedef_unsigned_int_;
+	core::types::typedef_long_int typedef_long_int_;
+	core::types::typedef_long_unsigned_int typedef_long_unsigned_int_;
+	core::types::typedef_long_long_int typedef_long_long_int_;
+	core::types::typedef_long_long_unsigned_int typedef_long_long_unsigned_int_;
+	core::types::typedef_float typedef_float_;
+	core::types::typedef_double typedef_double_;
+	core::types::typedef_long_double typedef_long_double_;
+
+	core::types::member_variable_ptr_t member_variable_ptr_ = 0;
+
+}
+
+void use_core_ns_join_3(){
+	E31 e31_;
+	ns::E32 e32_;
+	ns::ns32::E33 e33_;
+	ns::E34 e34_;
+}
+
+void use_coremembership(){
+	namespace cm = core::membership;
+	int i = cm::enums_ns::WITHIN_NS_UNNAMED_ENUM;
+	i += cm::enums_ns::WITHIN_NS;
+	i += cm::WITHIN_UNNAMED_NS_UNNAMED_ENUM;
+	i += cm::WITHIN_UNNAMED_NS;
+	cm::class_for_nested_enums_t class_for_nested_enums_; 
+
 }

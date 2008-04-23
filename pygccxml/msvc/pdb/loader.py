@@ -452,7 +452,7 @@ class decl_loader_t(object):
     def __create_typedef( self, smbl ):
         self.logger.debug( 'creating typedef "%s"', smbl.uname )
         name_splitter = impl_details.get_name_splitter( smbl.uname )
-        #~ if decl.name == 'initialized':
+        #~ if name_splitter.name == 'typedef_pointer_int':
             #~ pdb.set_trace()
         decl = declarations.typedef_t( name_splitter.name
                                        , self.create_type( smbl.type ) )
@@ -462,6 +462,7 @@ class decl_loader_t(object):
 
 
     def create_type( self, smbl ):
+        #http://msdn2.microsoft.com/en-us/library/s3f49ktz(VS.80).aspx
         if smbl.symIndexId in self.__types_cache:
             return self.__types_cache[smbl.symIndexId]
         my_type = None
@@ -474,20 +475,34 @@ class decl_loader_t(object):
                 my_type = declarations.char_t()
             elif enums.BasicType.btWChar == smbl.baseType:
                 my_type = declarations.wchar_t()
-            elif enums.BasicType.btInt == smbl.baseType:
-                my_type = declarations.int_t()
+            elif smbl.baseType in ( enums.BasicType.btInt, enums.BasicType.btLong ):
+                if 8 == smbl.length:
+                    my_type = declarations.long_long_int_t()
+                elif 4 == smbl.length:
+                    my_type = declarations.long_int_t()
+                elif 2 == smbl.length:
+                    my_type = declarations.short_int_t()
+                else:
+                    my_type = declarations.int_t()
             elif enums.BasicType.btUInt == smbl.baseType:
-                my_type = declarations.unsigned_int_t()
+                if 2 == smbl.length:
+                    my_type = declarations.short_unsigned_int_t()
+                else:
+                    my_type = declarations.unsigned_int_t()
             elif enums.BasicType.btFloat == smbl.baseType:
-                my_type = declarations.float_t()
+                if 8 == smbl.length:
+                    my_type = declarations.double_t()
+                else:
+                    my_type = declarations.float_t()
             elif enums.BasicType.btBCD == smbl.baseType:
                 my_type = declarations.unknown_t()
             elif enums.BasicType.btBool == smbl.baseType:
                 my_type = declarations.bool_t()
-            elif enums.BasicType.btLong == smbl.baseType:
-                my_type = declarations.long_int_t()
             elif enums.BasicType.btULong == smbl.baseType:
-                my_type = declarations.long_unsigned_int_t()
+                if 8 == smbl.length:
+                    my_type = declarations.long_long_unsigned_int_t()
+                else:
+                    my_type = declarations.long_unsigned_int_t()
             elif enums.BasicType.btCurrency == smbl.baseType:
                 my_type = declarations.unknown_t()
             elif enums.BasicType.btDate == smbl.baseType:
@@ -504,6 +519,12 @@ class decl_loader_t(object):
                 my_type = declarations.unknown_t()
             else:
                 my_type = declarations.unknown_t()
+        elif msdia.SymTagPointerType == smbl.symTag:
+            base_type = self.create_type( smbl.type )
+            if smbl.reference:
+                my_type = declarations.reference_t( base_type )
+            else:
+                my_type = declarations.pointer_t( base_type )
         elif msdia.SymTagArrayType == smbl.symTag:
             bytes = smbl.length
             element_type = self.create_type( smbl.arrayIndexType )

@@ -49,7 +49,7 @@ def get_partial_name( name ):
 
 class hierarchy_info_t( object ):
     """describes class relationship"""
-    def __init__(self, related_class=None, access=None, is_virtual=None ):
+    def __init__(self, related_class=None, access=None, is_virtual=False ):
         """creates class that contains partial information about class relationship"""
         if related_class:
             assert( isinstance( related_class, class_t ) )
