@@ -59,6 +59,7 @@ class cxx_parsers_cfg:
 
 
 def get_pdb_global_ns():
+    return None
     return cxx_parsers_cfg.get_pdb_loader().global_ns
 
 

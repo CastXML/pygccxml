@@ -17,6 +17,7 @@ class type_t(object):
         self.cache = algorithms_cache.type_algs_cache_t()
         self._byte_size = 0
         self._byte_align = 0
+        self.compiler = None
 
     def __str__(self):
         res = self.decl_string

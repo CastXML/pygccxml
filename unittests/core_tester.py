@@ -359,10 +359,10 @@ class core_file_by_file_no_opt_t( core_gccxml_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    #~ suite.addTest( unittest.makeSuite(core_all_at_once_t))
-    #~ suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
-    #~ suite.addTest( unittest.makeSuite(core_file_by_file_t))
-    #~ suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
+    suite.addTest( unittest.makeSuite(core_all_at_once_t))
+    suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
+    suite.addTest( unittest.makeSuite(core_file_by_file_t))
+    suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
     if sys.platform == 'win32':
         suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
 

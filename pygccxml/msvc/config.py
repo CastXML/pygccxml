@@ -1,6 +1,7 @@
 import os
 import sys
 import comtypes
+from .. import utils
 import comtypes.client
 import _winreg as win_registry
 from distutils import msvccompiler
@@ -20,8 +21,12 @@ class binaries_searcher_t:
 
     def get_msvcr_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
-        #TODO: better algorithm to find the path
-        return os.path.join( vss_installed[0], 'vc', 'redist', 'x86', 'microsoft.vc90.crt', 'MSVCR90.DLL' )
+        for f in utils.files_walker( vss_installed, ["*.dll"], ):
+            f_path, f_name = os.path.split( f.upper() )
+            if f_name.startswith( 'MSVCR' ):
+                return f
+        else:
+            raise RuntimeError( 'Unable to find msvcrXX.dll. Search path is: %s' % vss_installed  )
 
     def get_msdia_path( self ):
         vss_installed = self.__get_installed_vs_dirs()
