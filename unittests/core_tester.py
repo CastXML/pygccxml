@@ -84,7 +84,10 @@ class core_t( parser_test_case.parser_test_case_t ):
 
     def _test_class_membership( self, class_inst, enum_name, access ):
         #getting enum through get_members function
-        nested_enum1 = class_inst.enum( name=enum_name, function=access_type_matcher_t( access ) )
+        if class_inst.compiler == compilers.MSVC_PDB_9:
+            nested_enum1 = class_inst.enum( name=enum_name )
+        else:
+            nested_enum1 = class_inst.enum( name=enum_name, function=access_type_matcher_t( access ) )
 
         #getting enum through declarations property
         nested_enum2 = class_inst.enum( enum_name )
@@ -180,7 +183,7 @@ class core_t( parser_test_case.parser_test_case_t ):
         if self.global_ns.compiler != compilers.MSVC_PDB_9:
             self.failIf( errors, pprint.pformat( errors ) )
         else:
-            self.failUnless( 6 == len( errors ), pprint.pformat( errors ) )
+            self.failUnless( 5 == len( errors ), pprint.pformat( errors ) )
 
     def test_compound_types(self):
         typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_int' )

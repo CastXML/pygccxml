@@ -83,8 +83,9 @@ void use_core_types(){
 	core::types::typedef_float typedef_float_;
 	core::types::typedef_double typedef_double_;
 	core::types::typedef_long_double typedef_long_double_;
-
+	core::types::typedef_volatile_int typedef_volatile_int_;
 	core::types::member_variable_ptr_t member_variable_ptr_ = 0;
+	core::types::typedef_EFavoriteDrinks typedef_EFavoriteDrinks_;
 
 }
 
@@ -93,6 +94,14 @@ void use_core_ns_join_3(){
 	ns::E32 e32_;
 	ns::ns32::E33 e33_;
 	ns::E34 e34_;
+
+
+	 E11 e11_;
+	 E21 e21_;
+	 ns::E12 e12_;
+	 ns::E22 e22_;
+	 ns::ns12::E13 e13_;
+	 ns::ns22::E23 e23_;
 }
 
 void use_coremembership(){
@@ -103,4 +112,7 @@ void use_coremembership(){
 	i += cm::WITHIN_UNNAMED_NS;
 	cm::class_for_nested_enums_t class_for_nested_enums_; 
 
+	i += ::GLOBAL_NS_UNNAMED_ENUM;
+	EGlobal eglobal_;
+	
 }

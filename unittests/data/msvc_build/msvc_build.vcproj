@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
-				ValidateIntelliSense="false"
+				ValidateIntelliSense="true"
 				OutputDocumentFile=""
 			/>
 			<Tool

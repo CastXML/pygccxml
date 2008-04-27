@@ -167,6 +167,8 @@ class decl_loader_t(object):
                     continue #in this case the parent scope is UDT
             ns_decl = declarations.namespace_t( name_splitter.name )
             ns_decl.compiler = self.COMPILER
+            ns_decl.mangled = ns_decl.name
+            ns_decl.demangled = ns_decl.name
             parent_ns.adopt_declaration( ns_decl )
             nss[ ns_name ] = ns_decl
             self.logger.debug( 'inserting ns "%s" into declarations tree - done', ns_name )
@@ -273,6 +275,31 @@ class decl_loader_t(object):
         map( lambda smbl_id: self.symbols.pop( smbl_id ), to_be_deleted )
         self.logger.info( 'clearing symbols(%d) - done', len( to_be_deleted ) )
 
+
+    def __normalize_name( self, decl ):
+        if decl.name == '<unnamed-tag>':
+            decl.name = ''
+        elif decl.name.startswith( '?' ):
+            decl.name = ''
+        elif isinstance( decl, declarations.namespace_t ) and 'anonymous-namespace' in decl.name:
+            decl.name = ''
+        else:
+            pass
+
+    def __join_unnamed_nss( self, ns_parent ):
+        child_nss = ns_parent.namespaces( name='', recursive=False, allow_empty=True )
+        if len(child_nss) > 1:
+            alive_ns = child_nss[0]
+            dead_nss = child_nss[1:]
+            for dead_ns in dead_nss:
+                decls = dead_ns.decls( recursive=False, allow_empty=True )
+                map( dead_ns.remove_declaration, decls )
+                map( alive_ns.adopt_declaration, decls )
+            map( ns_parent.remove_declaration, dead_nss )
+        map( self.__join_unnamed_nss
+             , ns_parent.namespaces( recursive=False, allow_empty=True ) )
+
+
     def read(self):
         #self.__clear_symbols()
         self.__load_nss()
@@ -281,6 +308,9 @@ class decl_loader_t(object):
         self.__load_enums()
         self.__load_vars()
         self.__load_typedefs()
+        map( self.__normalize_name, self.global_ns.decls(recursive=True) )
+        self.__join_unnamed_nss( self.global_ns )
+        #join unnamed namespaces
 
     @property
     def dia_global_scope(self):
@@ -460,7 +490,6 @@ class decl_loader_t(object):
         self.logger.debug( 'creating typedef "%s" - done', smbl.uname )
         return decl
 
-
     def create_type( self, smbl ):
         #http://msdn2.microsoft.com/en-us/library/s3f49ktz(VS.80).aspx
         if smbl.symIndexId in self.__types_cache:
@@ -479,7 +508,7 @@ class decl_loader_t(object):
                 if 8 == smbl.length:
                     my_type = declarations.long_long_int_t()
                 elif 4 == smbl.length:
-                    my_type = declarations.long_int_t()
+                    my_type = declarations.int_t() #long_int_t
                 elif 2 == smbl.length:
                     my_type = declarations.short_int_t()
                 else:
@@ -506,7 +535,7 @@ class decl_loader_t(object):
             elif enums.BasicType.btCurrency == smbl.baseType:
                 my_type = declarations.unknown_t()
             elif enums.BasicType.btDate == smbl.baseType:
-                my_type = declarations.unknown_t()
+                my_type = declarations.double_t()
             elif enums.BasicType.btVariant == smbl.baseType:
                 my_type = declarations.unknown_t()
             elif enums.BasicType.btComplex == smbl.baseType:
@@ -516,7 +545,7 @@ class decl_loader_t(object):
             elif enums.BasicType.btBSTR == smbl.baseType:
                 my_type = declarations.unknown_t()
             elif enums.BasicType.btHresult == smbl.baseType:
-                my_type = declarations.unknown_t()
+                my_type = declarations.long_int_t()
             else:
                 my_type = declarations.unknown_t()
         elif msdia.SymTagPointerType == smbl.symTag:
@@ -526,11 +555,12 @@ class decl_loader_t(object):
             else:
                 my_type = declarations.pointer_t( base_type )
         elif msdia.SymTagArrayType == smbl.symTag:
-            bytes = smbl.length
-            element_type = self.create_type( smbl.arrayIndexType )
+            element_type = self.create_type( smbl.type )
             size = declarations.array_t.SIZE_UNKNOWN
-            if bytes and element_type.byte_size:
-                size = bytes / element_type.byte_size
+            if smbl.count:
+                size = smbl.count
+            #~ if smbl.length and element_type.byte_size:
+                #~ size = smbl.length / element_type.byte_size
             my_type = declarations.array_t( element_type, size )
         elif smbl.symTag in ( msdia.SymTagUDT, msdia.SymTagTypedef, msdia.SymTagEnum ):
             if smbl.symIndexId in self.__id2decl:
