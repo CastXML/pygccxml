@@ -243,7 +243,6 @@ class core_t( parser_test_case.parser_test_case_t ):
                          , "member function type class should be '%s' instead of '%s'" \
                            % ( members_pointers.decl_string, function_type.class_inst.decl_string ) )
 
-        self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
         self.failUnless( isinstance( function_type.return_type, int_t )
                          , "return function type of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'int_t', function_type.return_type.__class__.__name__ ) )
@@ -253,6 +252,8 @@ class core_t( parser_test_case.parser_test_case_t ):
         self.failUnless( isinstance( function_type.arguments_types[0], double_t )
                          , "first argument of function of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
+
+        self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
     def test_member_variable_type(self):
         mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')

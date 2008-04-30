@@ -267,9 +267,14 @@ class decl_loader_t(object):
     def __clear_symbols(self):
         self.logger.info( 'clearing symbols' )
         to_be_deleted = []
+        useless_tags = (
+            msdia.SymTagAnnotation
+            , msdia.SymTagPublicSymbol
+            , msdia.SymTagBlock
+        )
         for smbl_id, smbl in self.symbols.iteritems():
-            if ( smbl.symTag == msdia.SymTagData and not self.__is_my_var( smbl ) ) \
-                or smbl.symTag in ( msdia.SymTagAnnotation, msdia.SymTagPublicSymbol ):
+            if smbl.symTag in useless_tags \
+               or ( smbl.symTag == msdia.SymTagData and not self.__is_my_var( smbl ) ):
                 to_be_deleted.append( smbl_id )
 
         map( lambda smbl_id: self.symbols.pop( smbl_id ), to_be_deleted )
@@ -301,7 +306,7 @@ class decl_loader_t(object):
 
 
     def read(self):
-        #self.__clear_symbols()
+        self.__clear_symbols()
         self.__load_nss()
         self.__load_classes()
         self.__load_base_classes()
@@ -482,13 +487,27 @@ class decl_loader_t(object):
     def __create_typedef( self, smbl ):
         self.logger.debug( 'creating typedef "%s"', smbl.uname )
         name_splitter = impl_details.get_name_splitter( smbl.uname )
-        #~ if name_splitter.name == 'typedef_pointer_int':
-            #~ pdb.set_trace()
         decl = declarations.typedef_t( name_splitter.name
                                        , self.create_type( smbl.type ) )
         self.__update_decl( decl, smbl )
         self.logger.debug( 'creating typedef "%s" - done', smbl.uname )
         return decl
+
+    def __create_function_type( self, smbl ):
+        return_type = self.create_type( smbl.type )
+        args_smbls = smbl.findChildren( msdia.SymTagFunctionArgType, None, 0 )
+        args_types = map( self.create_type, itertools.imap(as_symbol, args_smbls) )
+        if smbl.objectPointerType:
+            try:
+                class_ = self.create_type( smbl.objectPointerType )
+                class_ = declarations.base_type( class_ )
+                pdb.set_trace()
+                return declarations.member_function_type_t( class_, return_type, args_types )
+            except:
+                self.logger.warning( 'unable to find out the type of the object pointer for a class method.' )
+                return declarations.unknown_t()
+        else:
+            return declarations.free_function_type_t( return_type, args_types )
 
     def create_type( self, smbl ):
         #http://msdn2.microsoft.com/en-us/library/s3f49ktz(VS.80).aspx
@@ -568,6 +587,10 @@ class decl_loader_t(object):
                 my_type = declarations.declarated_t( decl )
             else:
                 my_type = declarations.unknown_t()
+        elif msdia.SymTagFunctionArgType == smbl.symTag:
+            my_type = self.create_type( smbl.type )
+        elif msdia.SymTagFunctionType == smbl.symTag:
+            my_type = self.__create_function_type( smbl )
         else:
             my_type = declarations.unknown_t()
         try:
@@ -575,7 +598,12 @@ class decl_loader_t(object):
         except AttributeError:
             pass
         if smbl.constType:
-            my_type = declarations.const_t( my_type )
+            if isinstance( my_type, declarations.member_function_type_t ):
+                my_type.has_const = True
+            else:
+                if not isinstance( my_type, declarations.const_t ):
+                    my_type = declarations.const_t( my_type )
         if smbl.volatileType:
-            my_type = declarations.volatile_t( my_type )
+            if not isinstance( my_type, declarations.volatile_t ):
+                my_type = declarations.volatile_t( my_type )
         return my_type

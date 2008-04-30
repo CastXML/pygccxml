@@ -1,3 +1,4 @@
+#include <string>
 #include "abstract_classes.hpp"
 #include "attributes.hpp"
 #include "bit_fields.hpp"
@@ -86,6 +87,11 @@ void use_core_types(){
 	core::types::typedef_volatile_int typedef_volatile_int_;
 	core::types::member_variable_ptr_t member_variable_ptr_ = 0;
 	core::types::typedef_EFavoriteDrinks typedef_EFavoriteDrinks_;
+
+	std::wstring hello_world;
+
+	core::types::function_ptr function_ptr_ = 0;
+	core::types::member_function_ptr_t member_function_ptr_ = 0;
 
 }
 
