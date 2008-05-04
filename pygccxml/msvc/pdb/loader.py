@@ -313,6 +313,7 @@ class decl_loader_t(object):
         self.__load_enums()
         self.__load_vars()
         self.__load_typedefs()
+        self.__load_calldefs()
         map( self.__normalize_name, self.global_ns.decls(recursive=True) )
         self.__join_unnamed_nss( self.global_ns )
         #join unnamed namespaces
@@ -493,6 +494,35 @@ class decl_loader_t(object):
         self.logger.debug( 'creating typedef "%s" - done', smbl.uname )
         return decl
 
+    def __load_calldefs( self ):
+        self.logger.info( 'building function objects' )
+        is_function = lambda smbl: smbl.symTag == msdia.SymTagFunction
+        for functions_count, function_smbl in enumerate( itertools.ifilter( is_function, self.symbols.itervalues() ) ):
+            function_decl = self.__create_calldef(function_smbl)
+            self.__update_decls_tree( function_decl )
+        self.logger.info( 'building function objects(%d) - done', functions_count )
+
+    def __create_calldef( self, smbl ):
+        self.logger.debug( 'creating calldef "%s"', smbl.uname )
+        name_splitter = impl_details.get_name_splitter( smbl.uname )
+        calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
+        if isinstance( calldef_type, declarations.member_function_type_t ):
+            decl = declarations.member_function_t()
+        else:
+            decl = declarations.free_function_t()
+        decl.name = smbl.uname
+        decl.arguments = map( lambda t: declarations.argument_t( type=t )
+                              , calldef_type.arguments_types )
+        decl.return_type = calldef_type.return_type
+
+        #~ args_smbls = smbl.findChildren( msdia.SymTagFunctionArgType, None, 0 )
+        #~ args = map( create_arg, itertools.imap(as_symbol, args_smbls) )
+        #~ if 'some_function' in smbl.name:
+            #~ pdb.set_trace()
+        self.__update_decl( decl, smbl )
+        self.logger.debug( 'creating calldef "%s" - done', smbl.uname )
+        return decl
+
     def __create_function_type( self, smbl ):
         return_type = self.create_type( smbl.type )
         args_smbls = smbl.findChildren( msdia.SymTagFunctionArgType, None, 0 )
@@ -501,7 +531,7 @@ class decl_loader_t(object):
             try:
                 class_ = self.create_type( smbl.objectPointerType )
                 class_ = declarations.base_type( class_ )
-                pdb.set_trace()
+                #~ pdb.set_trace()
                 return declarations.member_function_type_t( class_, return_type, args_types )
             except:
                 self.logger.warning( 'unable to find out the type of the object pointer for a class method.' )

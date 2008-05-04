@@ -253,9 +253,13 @@ class core_t( parser_test_case.parser_test_case_t ):
                          , "first argument of function of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
-        self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
+        if self.global_ns.compiler != compilers.MSVC_PDB_9:
+            self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
     def test_member_variable_type(self):
+        if self.global_ns.compiler == compilers.MSVC_PDB_9:
+            return
+
         mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')
         self._test_type_composition( mv.type, pointer_t, member_variable_type_t )
 

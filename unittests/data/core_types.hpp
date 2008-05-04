@@ -60,6 +60,8 @@ typedef int (members_pointers_t::*member_function_ptr_t)( double )const;
 
 typedef int (members_pointers_t::*member_variable_ptr_t);
 
+member_variable_ptr_t member_variable_ptr_ = 0;
+
 } }
 
 #endif//__core_types_hpp__
