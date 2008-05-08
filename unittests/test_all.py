@@ -49,6 +49,7 @@ import attributes_tester
 import type_as_exception_bug_tester
 import copy_constructor_tester
 import plain_c_tester
+import function_traits_tester
 
 testers = [
     decl_string_tester
@@ -94,6 +95,7 @@ testers = [
     , type_as_exception_bug_tester
     , copy_constructor_tester
     , plain_c_tester
+    , function_traits_tester
 ]
 
 def create_suite():
