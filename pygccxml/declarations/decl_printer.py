@@ -97,14 +97,17 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
 
     def __get_method_signature(self, decl=None):
-       """ Returns function signature: [retval, [arg1, ..., argN]]. """
-       if None is decl:
-           decl = self.__inst
-       retval = decl.return_type.decl_string
-       args = []
-       for arg in decl.arguments:
-          args.append(arg.type.decl_string)
-       return [retval, args]
+        """ Returns function signature: [retval, [arg1, ..., argN]]. """
+        if None is decl:
+            decl = self.__inst
+
+        retval = None
+        if decl.return_type:
+            retval = decl.return_type.decl_string
+        args = []
+        for arg in decl.arguments:
+            args.append(arg.type.decl_string)
+        return [retval, args]
 
     def visit_member_function( self ):
         self.print_decl_header()
@@ -113,6 +116,9 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
     def visit_constructor( self ):
         self.print_decl_header()
+        self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
+                        + "Signature: " + str( self.__get_method_signature() ) + os.linesep )
+
         if self.__print_details:
             self.writer( ' ' * ( self.level + 1 ) * self.INDENT_SIZE
                          + 'copy constructor: ' + str(self.__inst.is_copy_constructor)
@@ -123,15 +129,23 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
     def visit_member_operator( self ):
         self.print_decl_header()
+        self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
+                        + "Signature: " + str( self.__get_method_signature() ) + os.linesep )
 
     def visit_casting_operator( self ):
         self.print_decl_header()
+        self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
+                        + "Signature: " + str( self.__get_method_signature() ) + os.linesep )
 
     def visit_free_function( self ):
         self.print_decl_header()
+        self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
+                        + "Signature: " + str( self.__get_method_signature() ) + os.linesep )
 
     def visit_free_operator( self ):
         self.print_decl_header()
+        self.writer(  ' ' * (self.level+1) * self.INDENT_SIZE
+                        + "Signature: " + str( self.__get_method_signature() ) + os.linesep )
 
     def visit_class_declaration(self ):
         self.print_decl_header()
@@ -148,7 +162,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                 byte_align = 'align: %d'%(self.__inst.byte_align)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
             except NotImplementedError:
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + "not implemented".ljust( self.JUSTIFY ) + os.linesep )
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ) + os.linesep )
 
         if self.__inst.aliases:
             aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
@@ -219,7 +233,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                 byte_align = 'align: %d'%(self.__inst.type.byte_align)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep )
             except NotImplementedError:
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + "not implemented".ljust( self.JUSTIFY ) + os.linesep )
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ) + os.linesep )
             byte_offset = 'offset: %d'%(self.__inst.byte_offset)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep)
 

@@ -45,3 +45,16 @@ class NameSearchOptions(utils.enum):
    nsRegularExpression       = nsfRegularExpression | nsfCaseSensitive
    nsCaseInRegularExpression = nsfRegularExpression | nsfCaseInsensitive
 
+
+class DataKind( utils.enum ):
+   DataIsUnknown        = 0
+   DataIsLocal          = 1
+   DataIsStaticLocal    = 2
+   DataIsParam          = 3
+   DataIsObjectPtr      = 4
+   DataIsFileStatic     = 5
+   DataIsGlobal         = 6
+   DataIsMember         = 7
+   DataIsStaticMember   = 8
+   DataIsConstant       = 9
+

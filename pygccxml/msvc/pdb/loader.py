@@ -1,4 +1,5 @@
 import os
+import re
 import pdb
 import sys
 import ctypes
@@ -502,23 +503,62 @@ class decl_loader_t(object):
             self.__update_decls_tree( function_decl )
         self.logger.info( 'building function objects(%d) - done', functions_count )
 
+    def __guess_operator_type( self, smbl, operator_type ):
+        #assumption: the code deals with correct code
+        if not smbl.uname.startswith( 'operator' ) or smbl.uname == 'operator':
+            return None
+        oper_smbls = ('!', ' ', '*', '%', '&', '(', '+', '-', ',', '/', '|', '~', '[', '^', '=', '<')
+        if smbl.uname[ len( 'operator' ) ] not in oper_smbls:
+            return None
+        if smbl.uname[ len( 'operator' ) ] == ' ' \
+           and smbl.uname not in ['operator new', 'operator delete']:
+            #we have casting operator
+            return declarations.casting_operator_t()
+        if isinstance( operator_type, declarations.member_function_type_t ):
+            return declarations.member_operator_t()
+        else:
+            return declarations.free_operator_t()
+
+    def __guess_constructor( self, smbl, calldef_type ):
+        tmpls = declarations.templates
+        class_ = declarations.remove_declarated( calldef_type.class_inst )
+        if class_.name == smbl.uname \
+           or ( tmpls.is_instantiation( class_.name )
+                and tmpls.name( class_.name ) == smbl.uname ):
+            calldef_type.return_type = None
+            return declarations.constructor_t()
+
     def __create_calldef( self, smbl ):
         self.logger.debug( 'creating calldef "%s"', smbl.uname )
         name_splitter = impl_details.get_name_splitter( smbl.uname )
         calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
+        decl = None
         if isinstance( calldef_type, declarations.member_function_type_t ):
-            decl = declarations.member_function_t()
+            if smbl.uname.startswith( '~' ):
+                decl = declarations.destructor_t()
+            if not decl: #may be operator
+                decl = self.__guess_operator_type(smbl, calldef_type)
+            if not decl: #may be constructor
+                decl = self.__guess_constructor( smbl, calldef_type )
+            if not decl:
+                decl = declarations.member_function_t()
         else:
-            decl = declarations.free_function_t()
+            decl = self.__guess_operator_type(smbl, calldef_type)
+            if not decl:
+                decl = declarations.free_function_t()
         decl.name = smbl.uname
         decl.arguments = map( lambda t: declarations.argument_t( type=t )
                               , calldef_type.arguments_types )
+
+        args_smbls = map( as_symbol, smbl.findChildren( msdia.SymTagData, None, 0 ) )
+        args_smbls = filter( lambda smbl: smbl.dataKind == enums.DataKind.DataIsParam, args_smbls )
+
+        for index, arg_smbl in enumerate( args_smbls ):
+            arg_decl = decl.arguments[index]
+            arg_decl.name = arg_smbl.name
+            arg_decl.default_value = arg_smbl.value
         decl.return_type = calldef_type.return_type
 
-        #~ args_smbls = smbl.findChildren( msdia.SymTagFunctionArgType, None, 0 )
-        #~ args = map( create_arg, itertools.imap(as_symbol, args_smbls) )
-        #~ if 'some_function' in smbl.name:
-            #~ pdb.set_trace()
         self.__update_decl( decl, smbl )
         self.logger.debug( 'creating calldef "%s" - done', smbl.uname )
         return decl
