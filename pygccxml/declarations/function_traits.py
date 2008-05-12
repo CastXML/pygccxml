@@ -27,6 +27,7 @@ def is_same_return_type( f1, f2 ):
     #  cv-qualification than the class type in the return type of B::f.
 
     if not f1.__class__ is f2.__class__:
+        #it should be assert
         return False #2 different calldef types
     if not isinstance( f1, calldef.member_calldef_t ):
         #for free functions we compare return types as usual
@@ -58,7 +59,8 @@ def is_same_return_type( f1, f2 ):
     if c1.class_type == class_declaration.CLASS_TYPES.UNION \
        or c2.class_type == class_declaration.CLASS_TYPES.UNION:
         return type_traits.is_same( rt1, rt2 )
-    return type_traits.is_base_and_derived( c1, c2 ) \
+    return type_traits.is_same( c1, c2 ) \
+           or type_traits.is_base_and_derived( c1, c2 ) \
            or type_traits.is_base_and_derived( c2, c1 )
         
 
