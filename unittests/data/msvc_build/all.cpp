@@ -93,6 +93,10 @@ void use_core_types(){
 	core::types::function_ptr function_ptr_ = 0;
 	core::types::member_function_ptr_t member_function_ptr_ = 0;
 
+	core::types::members_pointers_t members_pointers_inst;
+	members_pointers_inst.some_function( 0.23 );
+	members_pointers_inst.some_function( 0.23, 11 );
+
 }
 
 void use_core_ns_join_3(){

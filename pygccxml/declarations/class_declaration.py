@@ -275,7 +275,18 @@ class class_t( scopedef.scopedef_t ):
         return self._recursive_derived
 
     def _get_is_abstract(self):
-        return self._is_abstract
+        if self.compiler == compilers.MSVC_PDB_9:
+            import calldef
+            import matchers #prevent cyclic dependencies
+            m = matchers.virtuality_type_matcher_t( calldef.VIRTUALITY_TYPES.PURE_VIRTUAL )
+            if self.calldefs( m, recursive=False, allow_empty=True ):
+                return True
+            for base in self.recursive_bases:
+                if base.related_class.calldefs( m, recursive=False, allow_empty=True ):
+                    return True
+            return False
+        else:
+            return self._is_abstract
     def _set_is_abstract( self, is_abstract ):
         self._is_abstract = is_abstract
     is_abstract = property( _get_is_abstract, _set_is_abstract

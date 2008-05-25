@@ -178,6 +178,8 @@ class decl_loader_t(object):
         self.logger.debug( 'scanning symbols table - done' )
 
     def __update_decls_tree( self, decl ):
+        #~ if decl.name == 'money_base' and isinstance( decl, declarations.class_t ):
+            #~ pdb.set_trace()
         smbl = decl.dia_symbols[0]
         if smbl.classParentId in self.__id2decl:
             self.__adopt_declaration( self.__id2decl[smbl.classParentId], decl )
@@ -208,16 +210,16 @@ class decl_loader_t(object):
             self.__id2decl[ smbl.symIndexId ] = decl
         else:
             for other_decl in already_added:
-                for other_smbl in other_decl.dia_symbols:
-                    if self.__are_symbols_equivalent( other_smbl, smbl ):
-                        other_decl.dia_symbols.append( smbl )
-                        self.__id2decl[ smbl.symIndexId ] = other_decl
-                        return
+                if self.__is_same_smbls( other_decl, decl ):
+                    other_decl.dia_symbols.append( smbl )
+                    self.__id2decl[ smbl.symIndexId ] = other_decl
+                    return
             else:
                 if isinstance( parent, declarations.namespace_t ):
                     parent.adopt_declaration( decl )
                 else:
                     parent.adopt_declaration( decl, self.__guess_access_type( smbl )  )
+                self.__id2decl[ smbl.symIndexId ] = decl
 
     def __guess_access_type( self, smbl ):
         if enums.CV_access_e.CV_private == smbl.access:
@@ -327,16 +329,18 @@ class decl_loader_t(object):
     def global_ns(self):
         return self.__global_ns
 
-    def __are_symbols_equivalent( self, smbl1, smbl2 ):
-        result = smbl1.symTag == smbl2.symTag and smbl1.uname == smbl2.uname
-        if not result:
-            result = self.__dia_session.symsAreEquiv( smbl1, smbl2 )
-        if result:
-            msg = 'Symbols "%s(%d)" and  "%s(%d)" are equivalent.'
+    def __is_same_smbls( self, decl1, decl2 ):
+        if not( decl1.__class__ is decl2.__class__ ):
+            return False
+        if decl1.name == decl2.name:
+            if isinstance( decl1, declarations.calldef_t ):
+                #TODO: well, I will have to fix this someday
+                return False
+            else:
+                return True
         else:
-            msg = 'Symbols "%s(%d)" and  "%s(%d)" are NOT equivalent.'
-        self.logger.debug( msg, smbl1.uname, smbl1.symIndexId, smbl2.uname, smbl2.symIndexId )
-        return result
+            return False
+            #~ return self.__dia_session.symsAreEquiv( decl1.dia_symbols[0], decl2.dia_symbols[0] )
 
     def __find_udt( self, name ):
         self.logger.debug( 'testing whether name( "%s" ) is UDT symbol' % name )
@@ -530,6 +534,8 @@ class decl_loader_t(object):
 
     def __create_calldef( self, smbl ):
         self.logger.debug( 'creating calldef "%s"', smbl.uname )
+        #~ if smbl.uname == 'some_function':
+            #~ pdb.set_trace()
         name_splitter = impl_details.get_name_splitter( smbl.uname )
         calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
         decl = None
@@ -542,6 +548,10 @@ class decl_loader_t(object):
                 decl = self.__guess_constructor( smbl, calldef_type )
             if not decl:
                 decl = declarations.member_function_t()
+            if smbl.virtual:
+                decl.virtuality = iif( smbl.pure
+                                       , declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
+                                       , declarations.VIRTUALITY_TYPES.VIRTUAL )
         else:
             decl = self.__guess_operator_type(smbl, calldef_type)
             if not decl:
