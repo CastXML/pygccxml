@@ -13,6 +13,7 @@ This modules contains definition for next C++ declarations:
 """
 
 import scopedef
+import itertools
 import compilers
 import algorithm
 import declaration
@@ -276,13 +277,28 @@ class class_t( scopedef.scopedef_t ):
 
     def _get_is_abstract(self):
         if self.compiler == compilers.MSVC_PDB_9:
+            #prevent cyclic dependencies
             import calldef
-            import matchers #prevent cyclic dependencies
-            m = matchers.virtuality_type_matcher_t( calldef.VIRTUALITY_TYPES.PURE_VIRTUAL )
-            if self.calldefs( m, recursive=False, allow_empty=True ):
+            import function_traits
+            from matchers import virtuality_type_matcher_t as vtmatcher_t
+            filter_pv = vtmatcher_t( calldef.VIRTUALITY_TYPES.PURE_VIRTUAL )
+            if self.calldefs( filter_pv, recursive=False, allow_empty=True ):
                 return True
+            filter_npv = vtmatcher_t( calldef.VIRTUALITY_TYPES.VIRTUAL ) \
+                         | vtmatcher_t( calldef.VIRTUALITY_TYPES.NOT_VIRTUAL )
+            pv_calldefs = []
+            npv_calldefs = []
+
+            npv_calldefs.extend( self.calldefs( filter_npv, recursive=False, allow_empty=True ) )
             for base in self.recursive_bases:
-                if base.related_class.calldefs( m, recursive=False, allow_empty=True ):
+                cls = base.related_class
+                pv_calldefs.extend( cls.calldefs( filter_pv, recursive=False, allow_empty=True ) )
+                npv_calldefs.extend( cls.calldefs( filter_npv, recursive=False, allow_empty=True ) )
+
+            for pure_virtual in pv_calldefs:
+                impl_found = filter( lambda f: function_traits.is_same_function( pure_virtual, f )
+                                     , npv_calldefs )
+                if not impl_found:
                     return True
             return False
         else:
