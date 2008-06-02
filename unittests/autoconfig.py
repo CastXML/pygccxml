@@ -41,26 +41,22 @@ except ImportError:
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 class cxx_parsers_cfg:
-    gccxml = pygccxml.parser.gccxml_configuration_t( gccxml_path=gccxml_path
-                                                     , working_directory=data_directory
-                                                     , define_symbols=[ gccxml_version ]
-                                                     , compiler=compiler )
-
+    gccxml = None
+    if os.path.exists( os.path.join( gccxml_path, 'gccxml' ) ) \
+       or os.path.exists( os.path.join( gccxml_path, 'gccxml.exe' ) ):
+        gccxml = pygccxml.parser.gccxml_configuration_t( gccxml_path=gccxml_path
+                                                        , working_directory=data_directory
+                                                        , define_symbols=[ gccxml_version ]
+                                                        , compiler=compiler )
     pdb_loader = None
-
-    @staticmethod
-    def get_pdb_loader():
-        if not cxx_parsers_cfg.pdb_loader and sys.platform == 'win32':
-            from pygccxml.msvc import pdb
-            pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
-            cxx_parsers_cfg.pdb_loader = pdb.decl_loader_t( pdb_file )
-            cxx_parsers_cfg.pdb_loader.read()
-        return cxx_parsers_cfg.pdb_loader
-
+    if sys.platform == 'win32':
+        from pygccxml.msvc import pdb
+        pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
+        pdb_loader = pdb.decl_loader_t( pdb_file )
+        pdb_loader.read()
 
 def get_pdb_global_ns():
-    return cxx_parsers_cfg.get_pdb_loader().global_ns
-
+    return cxx_parsers_cfg.pdb_loader.global_ns
 
 #~ try:
     #~ import pydsc

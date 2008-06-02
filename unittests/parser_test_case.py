@@ -14,15 +14,17 @@ from pygccxml.parser import *
 from pygccxml.declarations import *
 
 class parser_test_case_t( unittest.TestCase ):
-    
+
     CXX_PARSER_CFG = None
-    
+
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
         if self.CXX_PARSER_CFG:
             self.config = self.CXX_PARSER_CFG.clone()
-        else:
+        elif autoconfig.cxx_parsers_cfg.gccxml:
             self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
+        else:
+            pass
 
     def _test_type_composition( self, type, expected_compound, expected_base ):
         self.failUnless( isinstance( type, expected_compound)

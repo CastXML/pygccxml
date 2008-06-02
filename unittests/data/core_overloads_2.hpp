@@ -5,11 +5,12 @@
 
 #ifndef __core_overloads_2_hpp__
 #define __core_overloads_2_hpp__
-
+#include <string>
+#include <set>
 namespace core{ namespace overloads{
 
-void do_nothing( bool );
-void do_nothing( float );
+void do_nothing( std::set< std::string > );
+void do_nothing( std::set< std::wstring > );
 
 } }
 

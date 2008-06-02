@@ -6,10 +6,12 @@
 #ifndef __core_overloads_1_hpp__
 #define __core_overloads_1_hpp__
 
+#include <string>
+
 namespace core{ namespace overloads{
 
-void do_nothing( int );
-void do_nothing( double );
+void do_nothing( std::string );
+void do_nothing( std::wstring );
 
 } }
 

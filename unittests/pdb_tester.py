@@ -38,11 +38,8 @@ class tester_t( unittest.TestCase ):
         reader = pdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
-        x = []
-        declarations.print_declarations( reader.global_ns, writer=x.append )
-        x = filter( None, map( lambda l: l.rstrip(), x ) )
         f = file( 'decls.cpp', 'w+' )
-        f.write( os.linesep.join( x ) )
+        declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
         f.close()
 
         f = file( 'symbols.txt', 'w+')
@@ -75,6 +72,18 @@ class tester_t( unittest.TestCase ):
             #~ print '\n', pdb.impl_details.undecorate_name( decorated )
             #~ print undecorated
             self.failUnless( msvc_utils.undecorate_name( decorated ) == undecorated )
+
+    #todo: move to GUI
+    def test_pdbs( self ):
+        for f in filter( lambda f: f.endswith( 'pdb' ), os.listdir( r'E:\pdbs' ) ):
+            try:
+                reader = pdb.decl_loader_t( f )
+                reader.read()
+                f = file( d + '.txt', 'w+' )
+                declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
+                f.close()
+            except Exception, error:
+                print 'unable to load pdb file ', f, ' Error: ', str(error)
 
 
 def create_suite():

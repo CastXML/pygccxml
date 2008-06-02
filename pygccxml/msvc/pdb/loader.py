@@ -274,6 +274,8 @@ class decl_loader_t(object):
             msdia.SymTagAnnotation
             , msdia.SymTagPublicSymbol
             , msdia.SymTagBlock
+            , msdia.SymTagFuncDebugStart
+            , msdia.SymTagFuncDebugEnd
         )
         for smbl_id, smbl in self.symbols.iteritems():
             if smbl.symTag in useless_tags \
@@ -367,9 +369,10 @@ class decl_loader_t(object):
         if not isinstance( decl, declarations.typedef_t ):
             decl.byte_size = smbl.length
             decl.byte_offset = smbl.offset
-        decl.mangled = iif( smbl.name, smbl.name, '' )
+        decl.mangled = iif( smbl.get_undecoratedNameEx(0), smbl.name, '' )
         decl.demangled = iif( smbl.uname, smbl.uname, '' )
         decl.is_artificial = bool( smbl.compilerGenerated )
+        decl.location = declarations.location_t( smbl.lexicalParent.sourceFileName )
 
 
     def __load_classes( self ):
@@ -504,7 +507,8 @@ class decl_loader_t(object):
         is_function = lambda smbl: smbl.symTag == msdia.SymTagFunction
         for functions_count, function_smbl in enumerate( itertools.ifilter( is_function, self.symbols.itervalues() ) ):
             function_decl = self.__create_calldef(function_smbl)
-            self.__update_decls_tree( function_decl )
+            if function_decl:
+                self.__update_decls_tree( function_decl )
         self.logger.info( 'building function objects(%d) - done', functions_count )
 
     def __guess_operator_type( self, smbl, operator_type ):
@@ -540,21 +544,31 @@ class decl_loader_t(object):
         calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
         decl = None
         if isinstance( calldef_type, declarations.member_function_type_t ):
+            could_be_static = False
+            could_be_const = False
             if smbl.uname.startswith( '~' ):
                 decl = declarations.destructor_t()
             if not decl: #may be operator
                 decl = self.__guess_operator_type(smbl, calldef_type)
+                could_be_static = True
+                could_be_const = True
             if not decl: #may be constructor
                 decl = self.__guess_constructor( smbl, calldef_type )
             if not decl:
                 decl = declarations.member_function_t()
+                could_be_static = True
+                could_be_const = True
             if smbl.virtual:
                 decl.virtuality = iif( smbl.pure
                                        , declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
                                        , declarations.VIRTUALITY_TYPES.VIRTUAL )
+            decl.has_const = bool( could_be_const and smbl.constType )
+            decl.has_static = bool( could_be_static and smbl.isStatic )
         else:
             decl = self.__guess_operator_type(smbl, calldef_type)
             if not decl:
+                if 'instantiate::`dynamic initializer for' in smbl.uname:
+                    return #in this case we deal with initializer of some global variable
                 decl = declarations.free_function_t()
         decl.name = smbl.uname
         decl.arguments = map( lambda t: declarations.argument_t( type=t )

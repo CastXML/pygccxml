@@ -44,6 +44,16 @@
 #include "vector_traits.hpp"
 #include "core_types.hpp"
 
+
+namespace core{ namespace overloads{
+
+void do_nothing( std::string d){ std::cout << d; }
+void do_nothing( std::wstring d){ std::wcout << d; }
+void do_nothing( std::set< std::string > d ){ std::set< std::string >::size_type t = d.size(); }
+void do_nothing( std::set< std::wstring > d ){ std::set< std::wstring >::size_type t = d.size(); }
+
+} }
+
 namespace declarations{ namespace variables{
 
 int static_var = 0;
@@ -56,8 +66,12 @@ void use_decls(){
 	sizeof(core::types::exception );
 }
 
+void use_core_overloads(){
+	namespace co = core::overloads;
+}
 
 void use_core_types(){
+	use_core_overloads();
 	core::types::members_pointers_t mem_ptrs;
 	core::types::typedef_const_int typedef_const_int_ = 0;
 	core::types::typedef_pointer_int typedef_pointer_int_ = 0;

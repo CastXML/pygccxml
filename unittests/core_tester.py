@@ -256,6 +256,8 @@ class core_t( parser_test_case.parser_test_case_t ):
         if self.global_ns.compiler != compilers.MSVC_PDB_9:
             self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
+        sf = self.glo
+        members_pointers_t
     def test_member_variable_type(self):
         if self.global_ns.compiler == compilers.MSVC_PDB_9:
             return
@@ -379,13 +381,13 @@ class core_file_by_file_no_opt_t( core_gccxml_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    #~ suite.addTest( unittest.makeSuite(core_all_at_once_t))
-    #~ suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
-    #~ suite.addTest( unittest.makeSuite(core_file_by_file_t))
-    #~ suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
-    if sys.platform == 'win32':
+    if autoconfig.cxx_parsers_cfg.gccxml:
+        suite.addTest( unittest.makeSuite(core_all_at_once_t))
+        suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
+        suite.addTest( unittest.makeSuite(core_file_by_file_t))
+        suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
+    if autoconfig.cxx_parsers_cfg.pdb_loader:
         suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
-
     return suite
 
 def run_suite():
