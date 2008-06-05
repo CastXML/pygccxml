@@ -67,7 +67,9 @@ class core_t( parser_test_case.parser_test_case_t ):
                          , 'There are 2 or more instances of ns namespace.' )
 
     def _test_ns_membership(self, ns, enum_name ):
-        unnamed_enum = ns.enum( '', recursive=False )
+        unnamed_enum = ns.enum( lambda d: d.name == '' \
+                                          and d.location.file_name.startswith( autoconfig.data_directory )
+                                , recursive=False )
         self.failUnless( unnamed_enum in ns.declarations
                          , "namespace '%s' does not contains unnamed enum." % ns.name )
 
@@ -256,8 +258,6 @@ class core_t( parser_test_case.parser_test_case_t ):
         if self.global_ns.compiler != compilers.MSVC_PDB_9:
             self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
-        sf = self.glo
-        members_pointers_t
     def test_member_variable_type(self):
         if self.global_ns.compiler == compilers.MSVC_PDB_9:
             return
