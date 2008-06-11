@@ -173,6 +173,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
         if self.__inst.aliases:
             aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
+            aliases.sort()
             msg = 'aliases: ' + `aliases`
             self.writer( ' ' * curr_level * self.INDENT_SIZE + msg.ljust( self.JUSTIFY ))
 
