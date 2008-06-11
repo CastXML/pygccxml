@@ -8,19 +8,27 @@ import autoconfig
 import parser_test_case
 
 import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
+from pygccxml import utils 
+from pygccxml import parser 
+from pygccxml import declarations 
 
 class tester_t( parser_test_case.parser_test_case_t ):
+    global_ns = None
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
+        self.header = 'declarations_calldef.hpp'
+        self.global_ns = None
+
+    def setUp(self):        
+        if not tester_t.global_ns:
+            decls = parser.parse( [self.header], self.config )
+            tester_t.global_ns = declarations.get_global_namespace( decls )
+            tester_t.global_ns.init_optimizer()
+        self.global_ns = tester_t.global_ns
 
     def test_compound_argument_type(self):
-        reader = source_reader_t( self.config )
-        decls = reader.read_file( 'declarations_calldef.hpp' )
-        do_smth = find_declaration( decls, type=member_function_t, name='do_smth' )
-        self.failUnless( do_smth, "unable to find calldefs_t.do_smth" )
+        do_smth = self.global_ns.calldefs( 'do_smth' )
+        self.failUnless( do_smth, "unable to find do_smth" )
         cpptype = do_smth.function_type()
 
 def create_suite():
