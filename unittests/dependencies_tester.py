@@ -12,16 +12,18 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
+    global_ns = None
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'include_all.hpp'
         self.global_ns = None
         
-    def setUp(self):
-        if not self.global_ns:
+    def setUp(self):        
+        if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
-            self.global_ns = declarations.get_global_namespace( decls )
-            self.global_ns.init_optimizer()
+            tester_t.global_ns = declarations.get_global_namespace( decls )
+            tester_t.global_ns.init_optimizer()
+        self.global_ns = tester_t.global_ns
 
     def test_variable( self ):
         ns_vars = self.global_ns.namespace( '::declarations::variables' )
@@ -43,6 +45,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
         cls = ns_vars.class_( 'struct_variables_t' )
         dependencies = cls.i_depend_on_them()
         if '0.9' in cls.compiler:
+            #GCCXML R122 adds compiler generated constructors/destructors and operator=
+            #to the class, if it has
+            dependencies = filter( lambda d: not d.declaration.is_artificial, dependencies )
             self.failUnless( len(dependencies) == 1 )
         else:
             self.failUnless( len(dependencies) == 2 ) #compiler generated copy constructor
