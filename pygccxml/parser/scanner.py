@@ -530,7 +530,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         elif version <= 1.114:
             logger.info ( 'GCCXML version - 0.7' )
             self.__compiler = compilers.GCC_XML_07
-        elif version in ( 1.115, 1.116, 1.117 ):
+        elif version in ( 1.115, 1.116, 1.117, 1.118, 1.119, 1.120, 1.121 ):
             logger.info ( 'GCCXML version - 0.9 BUGGY' )
             self.__compiler = compilers.GCC_XML_09_BUGGY
         else:
