@@ -11,6 +11,10 @@ GCC_XML_06 = "GCC-XML 0.6"
 GCC_XML_07 = "GCC-XML 0.7"
 GCC_XML_09 = "GCC-XML 0.9"
 GCC_XML_09_BUGGY = "GCC-XML 0.9 BUGGY"
+#revision 122:
+#After this fix, all constructors and destructors that exist for a class
+#are dumped whether the user declared them or not.  Those that were
+#implicitly declared by the compiler are marked as "artificial".
 
 MSVC_PDB_9 = "MSVC PDB 9.0"
 
