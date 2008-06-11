@@ -2,26 +2,26 @@
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
-
+import os
 import unittest
 import autoconfig
 import parser_test_case
 
 import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
+from pygccxml import utils
+from pygccxml import parser
+from pygccxml import declarations 
 
 class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.__files = [
-            'core_ns_join_1.hpp'
+              'core_types.hpp'
+            , 'core_ns_join_1.hpp'
             , 'core_ns_join_2.hpp'
             , 'core_ns_join_3.hpp'
             , 'core_membership.hpp'
             , 'core_class_hierarchy.hpp'
-            , 'core_types.hpp'
             , 'core_diamand_hierarchy_base.hpp'
             , 'core_diamand_hierarchy_derived1.hpp'
             , 'core_diamand_hierarchy_derived2.hpp'
@@ -31,13 +31,21 @@ class tester_t( parser_test_case.parser_test_case_t ):
         ]
 
     def __test_correctness_impl(self, file_name ):
-        prj_reader = project_reader_t( self.config )
+        prj_reader = parser.project_reader_t( self.config )
         prj_decls = prj_reader.read_files( [file_name]*2
-                                           , compilation_mode=COMPILATION_MODE.FILE_BY_FILE )
-        src_reader = source_reader_t( self.config )
+                                           , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
+        src_reader = parser.source_reader_t( self.config )
         src_decls = src_reader.read_file( file_name )
-        self.failUnless( src_decls == prj_decls
-                         , "There is a difference between declarations in file %s." % file_name )
+        if src_decls != prj_decls:
+            s = src_decls[0]
+            p = prj_decls[0]
+            sr = file( os.path.join( autoconfig.build_directory , file_name + '.sr.txt'),'w+' )
+            pr = file( os.path.join( autoconfig.build_directory , file_name + '.pr.txt'), 'w+' )
+            declarations.print_declarations( s, writer=lambda l: sr.write( l + os.linesep ) )
+            declarations.print_declarations( p, writer=lambda l: pr.write( l + os.linesep ) )
+            sr.close()
+            pr.close()
+            self.fail( "There is a difference between declarations in file %s." % file_name )
 
     def test_correctness(self):
         for src in self.__files:
