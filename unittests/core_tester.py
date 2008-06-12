@@ -17,6 +17,12 @@ from pygccxml.utils import *
 from pygccxml.parser import *
 from pygccxml.declarations import *
 
+def is_sub_path( root, some_path ):
+    root = normalize_path( root )
+    some_path = normalize_path( some_path )
+    return some_path.startswith( root )
+    
+
 class core_t( parser_test_case.parser_test_case_t ):
     """Tests core algorithms of GCC-XML and GCC-XML file reader.
     Those most white-box testing.
@@ -68,7 +74,7 @@ class core_t( parser_test_case.parser_test_case_t ):
 
     def _test_ns_membership(self, ns, enum_name ):
         unnamed_enum = ns.enum( lambda d: d.name == '' \
-                                          and d.location.file_name.startswith( autoconfig.data_directory )
+                                          and is_sub_path( autoconfig.data_directory, d.location.file_name )
                                 , recursive=False )
         self.failUnless( unnamed_enum in ns.declarations
                          , "namespace '%s' does not contains unnamed enum." % ns.name )

@@ -52,11 +52,13 @@ class cxx_parsers_cfg:
     if sys.platform == 'win32':
         from pygccxml.msvc import pdb
         pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
-        pdb_loader = pdb.decl_loader_t( pdb_file )
-        pdb_loader.read()
+        if os.path.exists( pdb_file ):
+            pdb_loader = pdb.decl_loader_t( pdb_file )
+            pdb_loader.read()
 
 def get_pdb_global_ns():
-    return cxx_parsers_cfg.pdb_loader.global_ns
+    if cxx_parsers_cfg.pdb_loader:
+        return cxx_parsers_cfg.pdb_loader.global_ns
 
 #~ try:
     #~ import pydsc
