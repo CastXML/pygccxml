@@ -111,7 +111,7 @@ def does_match_definition(given, main, secondary ):
 def is_bool( type_ ):
     """returns True, if type represents C{bool}, False otherwise"""
     return remove_alias( type_ ) in create_cv_types( cpptypes.bool_t() )
-    
+
 def is_void( type ):
     """returns True, if type represents C{void}, False otherwise"""
     return remove_alias( type ) in create_cv_types( cpptypes.void_t() )
@@ -213,7 +213,7 @@ def array_item_type(type_):
         return remove_pointer( type_ )
     else:
         assert 0
-    
+
 def remove_reference(type):
     """removes reference from the type definition
 
@@ -348,115 +348,46 @@ def find_trivial_constructor( type ):
     assert isinstance( type, class_declaration.class_t )
     return type.find_trivial_constructor()
 
-def has_trivial_constructor( type ):
-    """returns True, if class has public trivial constructor, False otherwise"""
-    logger = utils.loggers.cxx_parser
-    true_header = "has_trivial_constructor(TRUE)- %s - " % type.decl_string
-    false_header = "has_trivial_constructor(false)- %s - " % type.decl_string
-    
-    if '0.9' in type.compiler:
-        trivial = type.constructors( lambda x: x.is_trivial_constructor
-                                     , recursive=False
-                                     , allow_empty=True )
-        if trivial:
-            if trivial[0].access_type == 'public':
-                logger.debug( true_header + "there is user defined public trivial constructor" )
-                return True
-            else:
-                logger.debug( false_header + "there is user defined non-public trivial constructor" )
-                return False
-        else: 
-            #there is no trivial constructor, so I should find out whether other constructors exist
-            if type.constructors( recursive=False, allow_empty=True ):
-                logger.debug( false_header + "there are other user defined constructors" )
-                return False
-            else:
-                if __contains_noncopyable_mem_var( type ):
-                    logger.debug( false_header + "class doesn't have any user defined constructor and BUT it is NOT copyable" )
-                    return False
-                else:
-                    logger.debug( true_header + "class doesn't have any user defined constructor and it is copyable" )
-                    return True
-    else:
-        cons = find_trivial_constructor( type )
-        return cons and cons.access_type == 'public'
-
-"""
-Question: Do I have to define a copy constructor and assignment operator?
-
-Answer: 
-  C++ implicitly declares a copy constructor and an assignment operator 
-  for every class, struct and union unless the user declared them explicitly. 
-  A copy constructor isnot implicitly declared if the class has any user-declared 
-  constructor(s). Implicitly defined copy constructor and assignment operator 
-  are said to be trivial if:
-
-    * their class has no virtual functions and no virtual base class(es)
-    * all direct base classes and nonstatic data members of their class have trivial constructors
-
-  Otherwise, the copy constructor and the assignment operator are non-trivial. 
-  Implicitly-declared non-trivial copy constructor and assignment operator are 
-  implicitly-defined.
-
-The assignment operator is called "copy assignment operator" in the standard. 
-This verbosity doesnot convey any new or hidden meanings. Perhaps it's meant to 
-differentiate between the assignment operator of fundamental types and the 
-assignment operator member function of class types. In this series I will stick 
-to the term assignment operator.
-"""
+def has_trivial_constructor( class_ ):
+    """if class has public trivial constructor, this function will return reference to it, None otherwise"""
+    class_ = class_traits.get_declaration( class_ )
+    trivial = class_.find_trivial_constructor()
+    if trivial and trivial.access_type == 'public':
+        return trivial
 
 def has_copy_constructor( class_ ):
-    """returns True, if class has public copy constructor, False otherwise"""
+    """if class has public copy constructor, this function will return reference to it, None otherwise"""
     class_ = class_traits.get_declaration( class_ )
-    if '0.9' in class_.compiler:
-        copy_ = class_.find_copy_constructor()
-        if copy_:
-            if copy_.access_type == 'public':
-                return True
-            else:
-                return False
-        else:
-            if __contains_noncopyable_mem_var( class_ ):
-                return False
-            else:
-                return True
-    else:
-        constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
-                                     and x.is_copy_constructor
-                           , class_.public_members )
-    return bool( constructors )
+    copy_constructor = class_.find_copy_constructor()
+    if copy_constructor and copy_constructor.access_type == 'public':
+        return copy_constructor
 
-def has_destructor(type):
-    """returns True, if class has destructor, False otherwise"""
-    assert isinstance( type, class_declaration.class_t )
-    return bool( algorithm.find_declaration( type.get_members()
-                                             , type=calldef.destructor_t
-                                             , recursive=False ) )
+def has_destructor(class_):
+    """if class has destructor, this function will return reference to it, None otherwise"""
+    class_ = class_traits.get_declaration( class_ )
+    destructor = class_.decls( decl_type=calldef.destructor_t, recursive=False, allow_empty=True )
+    if destructor:
+        return destructor[0]
 
-def has_public_constructor(type):
-    """returns True, if class has public constructor, False otherwise"""
-    assert isinstance( type, class_declaration.class_t )
-    decls = algorithm.find_all_declarations( type.public_members
-                                             , type=calldef.constructor_t
-                                             , recursive=False )
-    constructors = filter( lambda decl: not decl.is_copy_constructor, decls )
-    return bool( constructors ) or has_trivial_constructor( type )
+def has_public_constructor(class_):
+    """if class has any public constructor, this function will return list of them, otherwise None"""
+    class_ = class_traits.get_declaration(class_)
+    decls = class_.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
+                                 , recursive=False, allow_empty=True )
+    if decls:
+        return decls
 
-def has_public_assign(type):
+def has_public_assign(class_):
     """returns True, if class has public assign operator, False otherwise"""
-    assert isinstance( type, class_declaration.class_t )
-    decls = algorithm.find_all_declarations( type.public_members
-                                             , type=calldef.member_operator_t
-                                             , recursive=False )
-    decls = filter( lambda decl: decl.symbol == '=', decls )
+    class_ = class_traits.get_declaration( class_ )
+    decls = class_.mem_opers( lambda o: o.symbol == '=' and o.access_type == 'public'
+                              , recursive=False, allow_empty=True )
     return bool( decls )
 
 def has_public_destructor(type):
     """returns True, if class has public destructor, False otherwise"""
-    assert isinstance( type, class_declaration.class_t )
-    return bool( algorithm.find_declaration( type.public_members
-                                             , type=calldef.destructor_t
-                                             , recursive=False ) )
+    d = has_destructor( type )
+    return d and d.access_type == 'public'
 
 def is_base_and_derived( based, derived ):
     """returns True, if there is "base and derived" relationship between classes, False otherwise"""
@@ -468,20 +399,20 @@ def is_base_and_derived( based, derived ):
         all_derived = ( [derived] )
     else: #tuple
         all_derived = derived
-    
+
     for derived_cls in all_derived:
         for base_desc in derived_cls.recursive_bases:
             if base_desc.related_class == based:
                 return True
     return False
-    
+
 def has_any_non_copyconstructor( type):
-    """returns True, if class has any non "copy constructor", otherwise False"""
-    assert isinstance( type, class_declaration.class_t )
-    constructors = filter( lambda x: isinstance( x, calldef.constructor_t ) \
-                                     and not x.is_copy_constructor
-                           , type.public_members )
-    return bool( constructors ) or has_trivial_constructor( type )
+    """if class has any public constructor, which is not copy constructor, this function will return list of them, otherwise None"""
+    class_ = class_traits.get_declaration( type )
+    decls = class_.constructors( lambda c: not c.is_copy_constructor and c.access_type == 'public'
+                                 , recursive=False, allow_empty=True )
+    if decls:
+        return decls
 
 def has_public_binary_operator( type, operator_symbol ):
     """returns True, if type has public binary operator, otherwise False"""
@@ -916,18 +847,18 @@ def __is_noncopyable_single( class_):
     if __contains_noncopyable_mem_var( class_ ):
         logger.debug( "__is_noncopyable_single(TRUE) - %s - contains noncopyable members" % class_.decl_string )
         return True
-    else:        
+    else:
         logger.debug( "__is_noncopyable_single(FALSE) - %s - COPYABLE, because is doesn't contains noncopyable members" % class_.decl_string )
         return False
 
 def is_noncopyable( class_ ):
     """returns True, if class is noncopyable, False otherwise"""
-    logger = utils.loggers.cxx_parser        
+    logger = utils.loggers.cxx_parser
     class_ = class_traits.get_declaration( class_ )
-    
+
     true_header = "is_noncopyable(TRUE) - %s - " % class_.decl_string
     false_header = "is_noncopyable(false) - %s - " % class_.decl_string
-    
+
     if class_.class_type == class_declaration.CLASS_TYPES.UNION:
         return False
 
@@ -935,17 +866,17 @@ def is_noncopyable( class_ ):
         logger.debug( true_header + "abstract client" )
         return True
 
-    #if class has public, user defined copy constructor, than this class is 
+    #if class has public, user defined copy constructor, than this class is
     #copyable
     copy_ = class_.find_copy_constructor()
     if copy_ and copy_.access_type == 'public' and not copy_.is_artificial:
         return False
-    
+
     for base_desc in class_.recursive_bases:
-        assert isinstance( base_desc, class_declaration.hierarchy_info_t )    
+        assert isinstance( base_desc, class_declaration.hierarchy_info_t )
         if base_desc.related_class.decl_string in ('::boost::noncopyable', '::boost::noncopyable_::noncopyable' ):
             logger.debug( true_header + "derives from boost::noncopyable" )
-            return True        
+            return True
         if not has_copy_constructor( base_desc.related_class ):
             base_copy_ = base_desc.related_class.find_copy_constructor()
             if base_copy_:
@@ -959,7 +890,7 @@ def is_noncopyable( class_ ):
         if __is_noncopyable_single( base_desc.related_class ):
             logger.debug( true_header + "__is_noncopyable_single returned True" )
             return True
-        
+
     if not has_copy_constructor( class_ ):
         logger.debug( true_header + "does not have trival copy constructor" )
         return True
@@ -1032,9 +963,9 @@ class impl_details:
         found = global_ns.decls( name=value_type_str
                                  , function=lambda decl: not isinstance( decl, calldef.calldef_t )
                                  ,  allow_empty=True )
-        if not found:            
+        if not found:
             no_global_ns_value_type_str = value_type_str[2:]
-            if cpptypes.FUNDAMENTAL_TYPES.has_key( no_global_ns_value_type_str ): 
+            if cpptypes.FUNDAMENTAL_TYPES.has_key( no_global_ns_value_type_str ):
                 return cpptypes.FUNDAMENTAL_TYPES[ no_global_ns_value_type_str ]
             elif is_std_string( value_type_str ):
                 string_ = global_ns.typedef( '::std::string' )
@@ -1137,7 +1068,7 @@ def is_std_ostream( type ):
     else:
         type = remove_alias( type )
         return remove_cv( type ).decl_string in decl_strings
-    
+
 
 def is_std_wostream( type ):
     """returns True, if type represents C++ std::string, False otherwise"""
