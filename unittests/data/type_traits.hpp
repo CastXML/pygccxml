@@ -156,7 +156,11 @@ namespace detail{
     
     struct const_item{ const int values[10]; };
 
+    void test_const_item(const_item by_value);
+
     struct const_container{ const const_item items[10]; };
+
+    void test_const_container(const_container by_value);
 
     enum semantic{ position, normal, binormal };
     enum element_type{ float_, color, short_ };
@@ -182,9 +186,7 @@ namespace yes{
     typedef detail::d_t d_t;
     typedef detail::dd_t dd_t;
     typedef detail::f_t f_t;
-    typedef detail::g_t g_t;
-    typedef detail::const_item const_item_t;
-    typedef detail::const_container const_container_t;
+    typedef detail::g_t g_t;    
 }
 namespace no{
     typedef std::string string_type;
@@ -193,6 +195,9 @@ namespace no{
     typedef std::set< std::string > string_set_type;
     typedef std::multimap< std::string, std::string > s2s_multimap_type;
     typedef detail::vertex vertex_type;
+    typedef detail::const_container const_container_t;    
+    typedef detail::const_item const_item_t;    
+    
 }
 }
 
@@ -523,10 +528,24 @@ namespace no{
 
 namespace has_trivial_constructor{
 
+namespace details{
+    
+    struct const_item{ const int values[10]; };
+
+    void test_const_item( const_item x = const_item() );
+    
+    struct const_container{ const const_item items[10]; };
+
+    void test_const_container( const_container x = const_container() );
+
+}
+    
 namespace yes{
     struct x{
         x(){}
     };
+    typedef details::const_item const_item;
+    typedef details::const_container const_container;
 }
     
 namespace no{
@@ -534,9 +553,6 @@ namespace no{
         private: 
         y(){}
     };
-    
-    struct const_item{ const int values[10]; };
-    struct const_container{ const const_item items[10]; };
 
     class singleton_t
     {
