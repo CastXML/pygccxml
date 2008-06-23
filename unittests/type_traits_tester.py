@@ -42,11 +42,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 self.failUnless( controller( decl.type )
                                  , 'for type "%s" the answer to the question "%s" should be True' 
                                  % ( decl.type.decl_string, ns_name ) )
+            elif isinstance( decl, declarations.calldef_t ) and decl.name.startswith( 'test_' ):
+                continue
             else:
                 self.failUnless( controller( decl )
                                  , 'for type "%s" the answer to the question "%s" should be True' 
                                  % ( decl.decl_string, ns_name ) )
         for decl in ns_no.declarations:
+            if isinstance( decl, declarations.calldef_t ) and decl.name.startswith( 'test_' ):
+                continue
+
             self.failIf( controller( decl )
                          , 'for type "%s" the answer to the question "%s" should be False' 
                             % ( decl.decl_string, ns_name ) )
@@ -234,9 +239,21 @@ class tester_t( parser_test_case.parser_test_case_t ):
         for tester in filter( lambda decl: decl.name.startswith( 'x' ), ns_is_convertible.declarations ):
             self.__is_convertible_impl( tester )
         
+class missing_decls_tester_t(unittest.TestCase):
+    def __init__(self, *args ):
+        unittest.TestCase.__init__(self, *args)
+    def test( self ):
+        config =  autoconfig.cxx_parsers_cfg.gccxml
+        code = "struct const_item{ const int values[10]; };"
+        global_ns = parser.parse_string( code , config )[0]
+        ci = global_ns.class_( 'const_item' )
+        self.failUnless( len( ci.declarations ) == 5 )
+        #constructor, copy constructor, destructor, operator=, variable
+          
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))
+    suite.addTest( unittest.makeSuite(missing_decls_tester_t))
     return suite
 
 def run_suite():
