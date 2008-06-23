@@ -115,7 +115,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def _get_declarations_impl(self):
         raise NotImplementedError()
-    
+
     def _get_declarations(self):
         if True == self._optimized:
             return self._all_decls_not_recursive
@@ -213,7 +213,7 @@ class scopedef_t( declaration.declaration_t ):
             return name
         else:
             return function
-        
+
     def _build_operator_name( self, name, function, symbol ):
         """implementation details"""
         def add_operator( sym ):
@@ -418,7 +418,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file
                                   , recursive=recursive)
     var = variable #small alias
-    
+
     def variables( self, name=None, function=None, type=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of variable declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.variable ]
@@ -430,7 +430,7 @@ class scopedef_t( declaration.declaration_t ):
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
     vars = variables #small alias
-    
+
     def calldef( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to "calldef" declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.calldef ]
@@ -495,7 +495,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_file=header_file
                                   , recursive=recursive )
     mem_fun = member_function
-    
+
     def member_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of member function declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_function ]
@@ -509,7 +509,7 @@ class scopedef_t( declaration.declaration_t ):
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
     mem_funs = member_functions
-    
+
     def constructor( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to constructor declaration, that is matched defined criterias"""
         return self._find_single( self._impl_matchers[ scopedef_t.constructor ]
@@ -547,7 +547,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , header_dir=header_dir
                                   , header_file=header_file
                                   , recursive=recursive )
-
+    mem_oper = member_operator
     def member_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
         """returns a set of member operator declarations, that are matched defined criterias"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.member_operator ]
@@ -561,6 +561,7 @@ class scopedef_t( declaration.declaration_t ):
                                     , header_file=header_file
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
+    mem_opers = member_operators
 
     def casting_operator( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
         """returns reference to casting operator declaration, that is matched defined criterias"""
