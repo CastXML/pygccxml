@@ -198,7 +198,7 @@ def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(file_by_file_tester_t))
     suite.addTest( unittest.makeSuite(all_at_once_tester_t))
-    if sys.platform == 'win32':
+    if sys.platform == 'win32' and autoconfig.get_pdb_global_ns():
         suite.addTest( unittest.makeSuite(pdb_based_tester_t))
 
     return suite
