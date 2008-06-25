@@ -800,31 +800,6 @@ def is_convertible( source, target ):
     """returns True, if source could be converted to target, otherwise False"""
     return __is_convertible_t( source, target ).is_convertible()
 
-def __contains_noncopyable_mem_var( class_ ):
-    """implementation details"""
-    logger = utils.loggers.cxx_parser
-    mvars = class_.vars( lambda v: not v.type_qualifiers.has_static, recursive=False, allow_empty=True )
-    for mvar in mvars:
-        type_ = remove_alias( mvar.type )
-        type_ = remove_reference( type_ )
-        if is_const( type_ ):
-            no_const = remove_const( type_ )
-            if is_fundamental( no_const ) or is_enum( no_const):
-                logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - fundamental or enum" % class_.decl_string )
-                return True
-            if is_class( no_const ):
-                logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - class" % class_.decl_string )
-                return True
-            if is_array( no_const ):
-                logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - array" % class_.decl_string )
-                return True
-        if is_class( type_ ):
-            cls = type_.declaration
-            if is_noncopyable( cls ):
-                logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes member variable - class that is not copyable" % class_.decl_string )
-                return True
-    logger.debug( "__contains_noncopyable_mem_var - %s - false - doesn't contains noncopyable members" % class_.decl_string )
-
 def __is_noncopyable_single( class_):
     """implementation details"""
     #It is not enough to check base classes, we should also to check
@@ -844,7 +819,7 @@ def __is_noncopyable_single( class_):
         ])
         logger.debug( msg )
         return False
-    if __contains_noncopyable_mem_var( class_ ):
+    if class_.find_noncopyable_vars():
         logger.debug( "__is_noncopyable_single(TRUE) - %s - contains noncopyable members" % class_.decl_string )
         return True
     else:

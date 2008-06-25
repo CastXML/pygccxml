@@ -18,6 +18,7 @@ import compilers
 import algorithm
 import declaration
 import dependencies
+from pygccxml import utils
 
 class ACCESS_TYPES:
     """class that defines "access" constants"""
@@ -498,5 +499,33 @@ class class_t( scopedef.scopedef_t ):
             return 'wstring'
         else:
             return get_partial_name( self.name )
+    
+    def find_noncopyable_vars( self ):        
+        """returns list of all noncopyable variables"""
+        import type_traits as tt#prevent cyclic dependencies
+        logger = utils.loggers.cxx_parser
+        mvars = self.vars( lambda v: not v.type_qualifiers.has_static, recursive=False, allow_empty=True )
+        noncopyable_vars = []
+        for mvar in mvars:
+            type_ = tt.remove_reference( mvar.type )
+            if tt.is_const( type_ ):
+                no_const = remove_const( type_ )
+                if tt.is_fundamental( no_const ) or tt.is_enum( no_const):
+                    logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - fundamental or enum" % self.decl_string )
+                    noncopyable_vars.append( mvar )
+                if tt.is_class( no_const ):
+                    logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - class" % self.decl_string )
+                    noncopyable_vars.append( mvar )
+                if tt.is_array( no_const ):
+                    logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - array" % self.decl_string )
+                    noncopyable_vars.append( mvar )
+            if tt.is_class( type_ ):
+                cls = type_.declaration
+                if tt.is_noncopyable( cls ):
+                    logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes member variable - class that is not copyable" % self.decl_string )
+                    noncopyable_vars.append( mvar )                
+        logger.debug( "__contains_noncopyable_mem_var - %s - false - doesn't contains noncopyable members" % self.decl_string )
+        return noncopyable_vars
+
 
 class_types = ( class_t, class_declaration_t )
