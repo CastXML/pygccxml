@@ -509,7 +509,7 @@ class class_t( scopedef.scopedef_t ):
         for mvar in mvars:
             type_ = tt.remove_reference( mvar.type )
             if tt.is_const( type_ ):
-                no_const = remove_const( type_ )
+                no_const = tt.remove_const( type_ )
                 if tt.is_fundamental( no_const ) or tt.is_enum( no_const):
                     logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - fundamental or enum" % self.decl_string )
                     noncopyable_vars.append( mvar )
