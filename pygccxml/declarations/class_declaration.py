@@ -519,8 +519,8 @@ class class_t( scopedef.scopedef_t ):
                 if tt.is_array( no_const ):
                     logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes const member variable - array" % self.decl_string )
                     noncopyable_vars.append( mvar )
-            if tt.is_class( type_ ):
-                cls = type_.declaration
+            if tt.class_traits.is_my_case( type_ ):
+                cls = tt.class_traits.get_declaration( type_ )
                 if tt.is_noncopyable( cls ):
                     logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes member variable - class that is not copyable" % self.decl_string )
                     noncopyable_vars.append( mvar )                
