@@ -19,7 +19,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         
     def setUp(self):
         if not self.global_ns:
-            xml_file = os.path.join( autoconfig.data_directory, 'ogre1.4.xml' )
+            xml_file = os.path.join( autoconfig.data_directory, 'ogre.1.7.xml' )
             reader = parser.source_reader_t( autoconfig.cxx_parsers_cfg.gccxml )            
             self.global_ns = declarations.get_global_namespace( reader.read_xml_file(xml_file) )
             self.global_ns.init_optimizer()
