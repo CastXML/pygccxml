@@ -1,0 +1,88 @@
+=========================
+MS Visual Studio backends
+=========================
+
+.. contents:: Table of contents
+
+----------------------------------------
+Why we need other than GCC-XML backends?
+----------------------------------------
+
+It is not a secret, that Windows is not a native environment for GCC. There are 
+cases, that it cant compile the code, "produced" for other compilers. On Windows, 
+if you want to use `GCC-XML`_, you should treat it as another compiler and adopt 
+your source code. Sometimes, changing the source code is not an option and different
+solution is needed.
+
+Recently, I started to work on another back-end for `pygccxml`_, based on free tools,
+available and freely redistributable with MS Visual Studio:
+
+* PDB - program database. A .pdb files hold debugging information about your 
+  program. In other words, it contains information about every type and function 
+  you use. 
+* BSC - browse source code. A .bsc file is a comprehensive database that contains 
+  information about a program's symbols, including symbol references, 
+  function calltrees, and definition tables. 
+
+Both .pdb and .bsc files contain valuable information about your source code. 
+I guess, you will be surprised how much information it is possible to extract 
+from them.
+
+----------------------------
+How it works?
+----------------------------
+
+Microsoft provides API for extracting information from the files:
+
+* `DIA SDK`_ - Debug Interface Access Software Development Kit is able to read and 
+  provide more-or-less convenient access to the information stored in .pdb files. 
+  DIA SDK exposes it functionality via "COM" technology. `pygccxml`_ uses "comtypes" 
+  project to work with the API. 
+
+* `BSC Toolkit`_ comes with C API. `pygccxml`_ uses "ctypes" module, from the Python 
+  standard library.
+
+Both toolkits comes with their own terminolgy. Unless you want to help me, to 
+develop this backend, you can fully ignore this fact. `pygccxml`_ bridges the 
+domains and provide clear and consistent API.
+
+Both files, .pdb and .bsc, contain valuable information, but some pieces are 
+presented in one file and not in other one. In near future `pygccxml`_ will be able 
+to combine the information, extracted from the files. Hint: you can send me the 
+patch :-).
+
+------------------
+The backend status
+------------------
+
+The short version
+-----------------
+
+I feel like this backend has "beta" state.
+
+The long version
+----------------
+
+`pygccxml`_ pdb backend is able to extract almost all declarations from the .pdb 
+file. There are few exceptions and problems, that should be solved, before I will 
+consider this backend as "production" ready:
+
+* add support for bit fields - should not be a problem
+* function exception specification - this information is missing in the file
+* a declaration location within source code - from the DIA API I understand the 
+  information is there and should be available, but for some reason I can access 
+  it.
+* there is some problem with extracting the exact integral type, used in the 
+  source code - for example I have a problem to decide whether "long long int" 
+  or "long int" is used within the code. I believe, it should be possible to 
+  partially solve this problem.
+* unit test - `pygccxml`_ comes with impressive amount of unit tests. Today only 
+  small amount of them supports pdb backend. This should be fixed.
+* performance - the backend is very slow right now, but this is "by design" and 
+  I believe it is possible to improve it.
+
+
+.. _`DIA SDK`: http://msdn.microsoft.com/en-us/library/x93ctkx8.aspx
+.. _`BSC Toolkit`: http://www.microsoft.com/downloads/details.aspx?FamilyId=621AE185-1C2A-4D6B-8146-183D66FE709D&displaylang=en
+.. _`pygccxml`: ./../pygccxml.html
+.. _`GCC-XML`: http://www.gccxml.org
