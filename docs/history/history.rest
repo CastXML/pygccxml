@@ -30,21 +30,34 @@ Version SVN
 
 1. Support for ellipsis was added.
 
-   Warning: this feature introduce backward compatibility problem! 
+   Warning: this feature introduce backward compatibility problem!
 
-   Description: 
+   Description:
 
    .. code-block:: C++
 
       void do_smth( int, ... )
-      
-   Before this change, pygccxml would report that the function ``do_smth`` has 
+
+   Before this change, pygccxml would report that the function ``do_smth`` has
    only one argument.
-   
-   After this change, pygccxml will report that the function has two arguments. 
-   The second argument type will be ``declarations.ellipsis_t``. All classes, 
-   which describe callables, have new property ``has_ellipsis``. It the value of 
+
+   After this change, pygccxml will report that the function has two arguments.
+   The second argument type will be ``declarations.ellipsis_t``. All classes,
+   which describe callables, have new property ``has_ellipsis``. It the value of
    the property is ``True``, than the function has ellipsis in its definition.
+
+2. New expiremental back-end, based on ``.pdb`` (progam database file), was added.
+
+3. New high-level API wrapper for ``.bsc`` (browse source code file) was added.
+
+4. The recomended `GCC-XML`_ version to use with this release is CVS revision 123.
+   This revision introduces small, but very important feature. `GCC-XML`_
+   started to dump artificial declarations (constructor, destructor, operator=).
+   ``pygccxml.declarations.type_traits`` functions were updated to use new
+   information.
+
+5. ``declarations.decl_printer_t`` class dumps almost all available information
+   about a declaration.
 
 -------------
 Version 0.9.5
@@ -52,36 +65,36 @@ Version 0.9.5
 
 1. Class ``free_operator_t`` is now able to provide references to the class declarations
    instances it works on.
-    
-2. Support for `GCC-XML attributes`_ was added. Many thanks to Miguel Lobo for 
+
+2. Support for `GCC-XML attributes`_ was added. Many thanks to Miguel Lobo for
    the implementation.
 
 .. _`GCC-XML attributes`: http://www.gccxml.org/HTML/Running.html
 
-3. A bug in parsing a function exception specification was fixed. Many thanks to 
+3. A bug in parsing a function exception specification was fixed. Many thanks to
    Jeremy Sanders.
-   
-4. Support for a type/class "align", "offset" and "size" was added. Many thanks to 
+
+4. Support for a type/class "align", "offset" and "size" was added. Many thanks to
    Ben Schleimer for the implementation.
-   
+
 5. Support for GCC-XML 0.9 was added.
 
 6. Support for ``__restrict__`` was added.
 
-7. ``declarations.has_trivial_copy`` was renamed to ``declarations.has_copy_constructor``. 
+7. ``declarations.has_trivial_copy`` was renamed to ``declarations.has_copy_constructor``.
    The old name is still available, but will be removed soon.
-   
+
 8. ``declarations.priority_queue`` was renamed to ``declarations.priority_queue_traits``.
 
 9. ``declarations.find_container_traits`` function was added.
 
 10. Support for "partial name" was added. "Partial name" is the class name, without
-    template default arguments. The functionality was added to std containers 
+    template default arguments. The functionality was added to std containers
     classes.
-    
-11. ``declarations.class_t`` and ``declarations.class_declaration_t`` has new property - 
+
+11. ``declarations.class_t`` and ``declarations.class_declaration_t`` has new property -
     ``container_traits``. This property describes std container element class.
-    
+
 12. All logging is now done to ``stderr`` instead of ``stdout``.
 
 -------------
