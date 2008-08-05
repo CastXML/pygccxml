@@ -25,7 +25,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 
 
 -----------
-Version SVN
+Version 1.0
 -----------
 
 1. Support for ellipsis was added.
@@ -53,11 +53,14 @@ Version SVN
 4. The recomended `GCC-XML`_ version to use with this release is CVS revision 123.
    This revision introduces small, but very important feature. `GCC-XML`_
    started to dump artificial declarations (constructor, destructor, operator=).
-   ``pygccxml.declarations.type_traits`` functions were updated to use new
+   ``pygccxml.declarations.type_traits`` functions were updated to use the new
    information.
 
 5. ``declarations.decl_printer_t`` class dumps almost all available information
    about a declaration.
+
+6. ``declarations.is_same_function`` was fixed and now it treats
+   "covariant returns" right.
 
 -------------
 Version 0.9.5
