@@ -10,6 +10,7 @@ defines base class for L{namespace_t} and L{class_t} classes
 import time
 import algorithm
 import filtering
+import templates
 import declaration
 import mdecl_wrapper
 from pygccxml import utils
@@ -301,8 +302,15 @@ class scopedef_t( declaration.declaration_t ):
             decls = self.declarations
             if recursive:
                 decls = algorithm.make_flatten( self.declarations )
+            if decl_type:
+                decls = filter( lambda d: isinstance( d, decl_type ), decls )
             return decls
 
+        if name and templates.is_instantiation( name ):
+            #templates has tricky mode to compare them, so lets check the whole
+            #range
+            name = None
+        
         if name and decl_type:
             matcher = scopedef_t._impl_matchers[ scopedef_t.decl ]( name=name )
             if matcher.is_full_name():

@@ -65,3 +65,12 @@ def join( name, args ):
     """returns name< argument_1, argument_2, ..., argument_n >"""
     global __THE_PARSER
     return __THE_PARSER.join( name, args )
+
+def normalize( decl_string ):
+    """returns decl_string, which contains "normalized" spaces
+    
+    this functionality allows to implement comparison of 2 different string
+    which are actually same: x::y< z > and x::y<z>
+    """
+    global __THE_PARSER
+    return __THE_PARSER.normalize( decl_string )

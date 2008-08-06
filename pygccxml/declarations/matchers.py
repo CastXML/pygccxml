@@ -177,6 +177,7 @@ class declaration_matcher_t( matcher_base_t ):
                 else:
                     self.__opt_is_full_name = False
                     self.__decl_name_only = self.__opt_tmpl_name
+                self.__name = templates.normalize( name )            
             else:
                 if '::' in self.__name:
                     self.__opt_is_full_name = True
@@ -225,11 +226,12 @@ class declaration_matcher_t( matcher_base_t ):
         assert not None is self.name
         if self.__opt_is_tmpl_inst:
             if not self.__opt_is_full_name:
-                if self.name != decl.name and self.name != decl.partial_name:
+                if self.name != templates.normalize( decl.name ) \
+                   and self.name != templates.normalize( decl.partial_name ):
                     return False
-            else:
-                if self.name != algorithm.full_name( decl, with_defaults=True ) \
-                   and self.name != algorithm.full_name( decl, with_defaults=False ):
+            else:                
+                if self.name != templates.normalize( algorithm.full_name( decl, with_defaults=True ) ) \
+                   and self.name != templates.normalize( algorithm.full_name( decl, with_defaults=False ) ):
                     return False
         else:
             if not self.__opt_is_full_name:

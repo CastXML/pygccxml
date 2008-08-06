@@ -24,7 +24,7 @@ class parser_t( object ):
     def has_pattern( self, decl_string ):
         """implementation details"""
         last_part = decl_string.split( '::' )[-1]
-        return -1 != last_part.find( self.__end )
+        return -1 != decl_string.find( self.__begin ) and -1 != last_part.find( self.__end )
 
     def name( self, decl_string ):
         """implementation details"""
@@ -127,3 +127,14 @@ class parser_t( object ):
 
         return ''.join( [ name, self.__begin, args_str, self.__end ] )
 
+    def normalize( self, decl_string, arg_separator=None ):
+        """implementation details"""
+        if not self.has_pattern( decl_string ):
+            return decl_string
+        name, args = self.split( decl_string )
+        for i, arg in enumerate( args ):
+            args[i] = self.normalize( arg )
+        return self.join( name, args, arg_separator )
+            
+
+        
