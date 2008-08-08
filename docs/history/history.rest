@@ -62,6 +62,9 @@ Version 1.0
 6. ``declarations.is_same_function`` was fixed and now it treats
    "covariant returns" right.
 
+7. Search algorithm was improved for template instantiated classes. From
+   now, a spaces within the class name doesn't matter.
+
 -------------
 Version 0.9.5
 -------------
