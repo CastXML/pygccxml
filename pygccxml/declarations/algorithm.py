@@ -70,9 +70,27 @@ def partial_declaration_path( decl ):
     else:
         return decl.cache.partial_declaration_path
 
+def get_named_parent( decl ):
+    """
+    returns a reference to a named parent declaration
+
+    @param decl: the child declaration
+    @type decl: L{declaration_t}
+
+    @return: reference to L{declaration_t} or None if not found
+    """
+    if not decl:
+        return None
+
+    parent = decl.parent
+    while parent and ( not parent.name or parent.name == '::' ):
+        parent = parent.parent
+    return parent
+
+
 def full_name_from_declaration_path( dpath ):
     ##Here I have lack of knowledge:
-    ##TODO: "What is the full name of declaration declared in unnamed namespace?"  
+    ##TODO: "What is the full name of declaration declared in unnamed namespace?"
     result = filter( None, dpath )
     result = result[0] + '::'.join( result[1:] )
     return result
@@ -98,7 +116,7 @@ def full_name( decl, with_defaults=True ):
             decl.cache.full_partial_name \
                 = full_name_from_declaration_path( partial_declaration_path( decl ) )
         return decl.cache.full_partial_name
-        
+
 def make_flatten( decl_or_decls ):
     """
     converts tree representation of declarations to flatten one.
