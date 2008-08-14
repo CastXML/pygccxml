@@ -99,7 +99,7 @@ Free and member function default arguments
 ------------------------------------------
 
 Both versions of GCC-XML have a few issues, related to default arguments. GCC-XML 0.9
-fixes some issues, but introduces another ones. Take a look on next examples:
+fixes some issues, but introduces another ones. Take a look on the following examples:
 
 *
   .. code-block:: C++
@@ -209,7 +209,7 @@ Name mangling
 GCC-XML 0.9 mangles names different than the previous one. This change is the most
 dramatic one, because it may require from you to change the code.
 
-Consider next C++ code:
+Consider the following C++ code:
 
 .. code-block:: C++
 

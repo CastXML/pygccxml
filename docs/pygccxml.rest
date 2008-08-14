@@ -39,7 +39,7 @@ Features
 Query interface
 ---------------
 `pygccxml`_ provides simple and powerful API to query declarations tree. How many
-lines is needed to write next query?
+lines is needed to write the following query?
 ::
 
   select all free functions from the project

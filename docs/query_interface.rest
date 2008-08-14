@@ -38,7 +38,7 @@ This call will return all namespaces with name 'details'.
 User interface
 --------------
 
-As you already know, ``pygccxml.declarations`` package defines next classes:
+As you already know, ``pygccxml.declarations`` package defines the following classes:
 
 * ``scopedef_t`` - base class for all classes, that can contain other declarations
 
@@ -205,7 +205,7 @@ should have `call policies`_. For example:
   };
 
 ``clone`` member function `call policies`_ is ``return_value_policy<manage_new_object>()``.
-Next code applies the `call policies`_ on all ``clone`` member functions within the
+The following code applies the `call policies`_ on all ``clone`` member functions within the
 project:
 
 .. code-block:: Python
@@ -216,7 +216,7 @@ project:
 
 
 Another example, from `Py++`_ project. Sometimes it is desirable to
-exclude declaration, from being exported to Python. Next code will exclude
+exclude declaration, from being exported to Python. The following code will exclude
 ``clone`` member function from being exported:
 
 .. code-block:: Python
@@ -226,7 +226,7 @@ exclude declaration, from being exported to Python. Next code will exclude
 As you can see this class allows you to write less code. Basically using this
 class you don't have to write loops. If will do it for you. Also if you insist to
 write loops, ``mdecl_wrapper_t`` class implements ``__len__``, ``__getitem__``
-and ``__iter__`` methods. So you can write next code:
+and ``__iter__`` methods. So you can write the following code:
 
 .. code-block:: Python
 

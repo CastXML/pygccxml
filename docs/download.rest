@@ -58,7 +58,7 @@ There are few different ways to install GCC-XML on your system:
 pygccxml
 --------
 In command prompt or shell change current directory to be "pygccxml-X.Y.Z".
-"X.Y.Z" is version of `pygccxml`_. Type next command:
+"X.Y.Z" is version of `pygccxml`_. Type the following command:
 
 | ``python setup.py install``
 

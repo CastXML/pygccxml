@@ -184,7 +184,7 @@ Parser configuration classes
 
 
 ``file_configuration_t`` - a class, that contains some data and description how
-to treat the data. ``file_configuration_t`` can contain reference to the next types
+to treat the data. ``file_configuration_t`` can contain reference to the the following types
 of data:
 
 (1) path to C++ source file
