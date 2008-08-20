@@ -10,7 +10,7 @@ this module contains class that keeps dependency information of some declaration
 import cpptypes
 
 class dependency_info_t( object ):
-    def __init__( self, declaration, depend_on_it, access_type=None ):
+    def __init__( self, declaration, depend_on_it, access_type=None, hint=None ):
         object.__init__( self )
         #prevent recursive import
         import class_declaration
@@ -18,6 +18,7 @@ class dependency_info_t( object ):
         self._declaration = declaration
         self._depend_on_it = depend_on_it
         self._access_type = access_type
+        self._hint = hint
         
     @property
     def declaration( self ):
@@ -38,6 +39,12 @@ class dependency_info_t( object ):
     def __str__( self ):
         return 'declaration "%s" depends( %s ) on "%s" ' \
                % ( self.declaration, self.access_type, self.depend_on_it )
+
+    @property
+    def hint(self):
+        """the declaration, that report dependency can put some additional inforamtion
+        about dependency. It can be used later"""
+        return self._hint
 
     def find_out_depend_on_declaration( self ):
         """if declaration depends on other declaration and not on some type

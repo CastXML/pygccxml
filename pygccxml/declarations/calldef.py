@@ -310,13 +310,13 @@ class calldef_t( declaration.declaration_t ):
                               , doc="returns function demangled name. It can help you to deal with function template instantiations")
 
     def i_depend_on_them( self, recursive=True ):
-        report_dependency = lambda x: dependencies.dependency_info_t( self, x )
+        report_dependency = lambda *args, **keywd: dependencies.dependency_info_t( self, *args, **keywd )
         answer = []
+        if self.return_type:
+            answer.append( report_dependency( self.return_type, hint="return type" ) )       
         map( lambda arg: answer.append( report_dependency( arg.type ) )
              , self.arguments )
-        if self.return_type:
-            answer.append( report_dependency( self.return_type ) )
-        map( lambda exception: answer.append( report_dependency( exception ) )
+        map( lambda exception: answer.append( report_dependency( exception, hint="exception" ) )
              , self.exceptions )
         return answer
 

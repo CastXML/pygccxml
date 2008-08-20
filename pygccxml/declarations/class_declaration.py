@@ -457,9 +457,10 @@ class class_t( scopedef.scopedef_t ):
 
     def i_depend_on_them( self, recursive=True ):
         report_dependency = lambda *args: dependencies.dependency_info_t( self, *args )
+        
         answer = []
 
-        map( lambda base: answer.append( report_dependency( base.related_class, base.access_type ) )
+        map( lambda base: answer.append( report_dependency( base.related_class, base.access_type, "base class" ) )
              , self.bases )
 
         if recursive:
