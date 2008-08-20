@@ -172,6 +172,7 @@ from type_traits import find_trivial_constructor
 from type_traits import has_public_binary_operator
 from type_traits import has_any_non_copyconstructor
 
+from type_traits import auto_ptr_traits
 from type_traits import smart_pointer_traits
 
 from container_traits import list_traits

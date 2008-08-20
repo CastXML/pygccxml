@@ -1008,6 +1008,41 @@ class smart_pointer_traits:
                 raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
             return ref
 
+class auto_ptr_traits:
+    """implements functionality, needed for convinient work with std::auto_ptr pointers"""
+
+    @staticmethod
+    def is_smart_pointer( type ):
+        """returns True, if type represents instantiation of C{boost::shared_ptr}, False otherwise"""
+        type = remove_alias( type )
+        type = remove_cv( type )
+        type = remove_declarated( type )
+        if not isinstance( type, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
+            return False
+        if not impl_details.is_defined_in_xxx( 'std', type ):
+            return False
+        return type.decl_string.startswith( '::std::auto_ptr<' )
+
+    @staticmethod
+    def value_type( type ):
+        """returns reference to boost::shared_ptr value type"""
+        if not auto_ptr_traits.is_smart_pointer( type ):
+            raise TypeError( 'Type "%s" is not instantiation of std::auto_ptr' % type.decl_string )
+        type = remove_alias( type )
+        cls = remove_cv( type )
+        cls = remove_declarated( type )
+        if isinstance( cls, class_declaration.class_t ):
+            return remove_declarated( cls.typedef( "element_type", recursive=False ).type )
+        elif not isinstance( cls, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
+            raise RuntimeError( "Unable to find out auto_ptr value type. auto_ptr class is: %s" % cls.decl_string )
+        else:
+            value_type_str = templates.args( cls.name )[0]
+            ref = impl_details.find_value_type( cls.top_parent, value_type_str )
+            if None is ref:
+                raise RuntimeError( "Unable to find out auto_ptr value type. shared_ptr class is: %s" % cls.decl_string )
+            return ref
+
+
 def is_std_string( type ):
     """returns True, if type represents C++ std::string, False otherwise"""
     decl_strings = [
