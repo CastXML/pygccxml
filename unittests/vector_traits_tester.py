@@ -59,6 +59,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
         cnt = 'std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >@::std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >'
         traits = declarations.find_container_traits( cnt )
         self.failUnless( declarations.vector_traits is traits)
+
+    def test_element_type( self ):
+        do_nothing = self.global_ns.free_fun( 'do_nothing' )
+        v = declarations.remove_reference( declarations.remove_declarated( do_nothing.arguments[0].type )) 
+        declarations.vector_traits.element_type( v )
     
 def create_suite():
     suite = unittest.TestSuite()        

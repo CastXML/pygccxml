@@ -66,3 +66,5 @@ namespace no{
 }
     
 }
+
+void do_nothing( std::vector< std::wstring >& );
