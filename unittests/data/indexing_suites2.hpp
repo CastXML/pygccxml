@@ -85,4 +85,8 @@ namespace pyplusplus{ namespace aliases{
     typedef std::vector<indexing_suites2::item_t*> items_ptr_t;
 }}
 
+namespace infinite_loop{
+    std::map< std::string, int > test_infinite_loop();
+}
+
 #endif//__indexing_suites2_to_be_exported_hpp__

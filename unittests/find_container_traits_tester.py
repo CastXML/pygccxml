@@ -65,7 +65,14 @@ class tester_t( parser_test_case.parser_test_case_t ):
         x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
         ct = declarations.find_container_traits( x )
         y = ct.remove_defaults( x )
-        
+    
+    def test_infinite_loop(self):
+        rt = self.global_ns.free_fun( 'test_infinite_loop' ).return_type
+        map_traits = declarations.find_container_traits( rt )
+        self.failUnless( map_traits is declarations.map_traits )
+        elem = map_traits.element_type( rt )
+        self.failUnless( elem.decl_string == 'int' )
+    
 def create_suite():
     suite = unittest.TestSuite()        
     suite.addTest( unittest.makeSuite(tester_t))
