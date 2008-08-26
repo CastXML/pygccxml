@@ -65,15 +65,24 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.__cmp_traits( 'hmm_i2d', declarations.hash_multimap_traits, "hash_multimap< int, double >", 'int' )
 
     def test_multimap( self ):
-        mm = self.global_ns.classes( lambda decl: decl.name.startswith( 'multimap' ) )
-        for m in mm:
-            traits = declarations.find_container_traits( m )
-            print m.partial_name
+        m = self.global_ns.class_( lambda decl: decl.name.startswith( 'multimap' ) )
+        traits = declarations.find_container_traits( m )
+        self.failUness( m.partial_name == 'multimap< int, int >' )
 
     def test_recursive_partial_name( self ):
         f1 = self.global_ns.free_fun( 'f1' )
         t1 = declarations.class_traits.get_declaration( f1.arguments[0].type )
         self.failUnless( 'type< std::set< std::vector< int > > >' == t1.partial_name )
+
+    def test_remove_defaults_partial_name_namespace( self ):
+        f2 = self.global_ns.free_fun( 'f2' )
+        type_info = f2.return_type
+        traits = declarations.find_container_traits( type_info )
+        cls = traits .class_declaration( type_info )
+        decl_string = cls.partial_decl_string #traits.remove_defaults(type_info)
+        key_type_string = traits.key_type(type_info).partial_decl_string
+        self.assert_(decl_string.startswith('::std::'), "declaration string %r doesn't start with 'std::'" % decl_string)
+        self.assert_(key_type_string.startswith('::std::'), "key type string %r doesn't start with 'std::'" % key_type_string)
 
     def test_from_ogre( self ):
         x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
