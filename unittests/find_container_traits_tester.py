@@ -23,14 +23,14 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
     
-    def __cmp_traits( self, typedef, expected, partial_name ):
+    def __cmp_traits( self, typedef, expected, partial_name):
         if isinstance( typedef, str ):
             typedef = self.global_ns.typedef( typedef )
         traits = declarations.find_container_traits( typedef )
         self.failUnless( traits, 'container traits for "%s" not found' % str( typedef ) )
         self.failUnless( traits is expected
-                         , 'container "%s", expected %s, got %s' 
-                           % ( str(typedef), expected.__name__, traits.__name__ ) )
+                         , 'container "%s", expected %s_traits, got %s_traits' 
+                           % ( str(typedef), expected.name(), traits.name() ) )
         cls = declarations.remove_declarated( typedef )                                        
         self.failUnless( cls.container_traits is expected )
         self.failUnless( cls.partial_name == partial_name )
