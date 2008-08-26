@@ -41,13 +41,16 @@ except ImportError:
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 class cxx_parsers_cfg:
-    gccxml = None
+    
+    keywd = { 'working_directory' : data_directory
+              , 'define_symbols' : [ gccxml_version ]
+              , 'compiler' : compiler }
+              
     if os.path.exists( os.path.join( gccxml_path, 'gccxml' ) ) \
        or os.path.exists( os.path.join( gccxml_path, 'gccxml.exe' ) ):
-        gccxml = pygccxml.parser.gccxml_configuration_t( gccxml_path=gccxml_path
-                                                        , working_directory=data_directory
-                                                        , define_symbols=[ gccxml_version ]
-                                                        , compiler=compiler )
+        keywd[ 'gccxml_path'] = gccxml_path
+    gccxml = pygccxml.parser.gccxml_configuration_t( **keywd )
+    
     pdb_loader = None
     if sys.platform == 'win32':
         from pygccxml.msvc import pdb
