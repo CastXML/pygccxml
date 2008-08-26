@@ -312,21 +312,54 @@ class container_traits_impl_t:
             raise TypeError( 'Type "%s" is not instantiation of std::%s' % ( type.decl_string, self.name() ) )
         return cls
 
+    def is_sequence( self, type ):
+        #raise exception if type is not container
+        unused = self.class_declaration( type ) 
+        return self.key_type_index is None
+        
+    def is_mapping( self, type ):
+        return not self.is_sequence( type )
+
+    def __find_xxx_type( self, type, xxx_index, xxx_typedef, cache_property_name ):
+        cls = self.class_declaration( type )
+        result = getattr( cls.cache, cache_property_name )
+        if not result:            
+            if isinstance( cls, class_declaration.class_t ):
+                xxx_type = cls.typedef( xxx_typedef, recursive=False ).type
+                result = type_traits.remove_declarated( xxx_type )
+            else:
+                xxx_type_str = templates.args( cls.name )[xxx_index]
+                result = type_traits.impl_details.find_value_type( cls.top_parent, xxx_type_str )
+                if None is result:
+                    raise RuntimeError( "Unable to find out %s '%s' key\\value type."
+                                        % ( self.name(), cls.decl_string ) )
+            setattr( cls.cache, cache_property_name, result )
+        return result
+
     def element_type( self, type ):
         """returns reference to the class value\\mapped type declaration"""
-        cls = self.class_declaration( type )
-        if isinstance( cls, class_declaration.class_t ):
-            value_type = cls.typedef( self.element_type_typedef, recursive=False ).type
-            return type_traits.remove_declarated( value_type )
-        else:
-            value_type_str = templates.args( cls.name )[self.element_type_index]
-            ref = type_traits.impl_details.find_value_type( cls.top_parent, value_type_str )
-            if None is ref:
-                raise RuntimeError( "Unable to find out %s '%s' value type."
-                                    % ( self.name(), cls.decl_string ) )
-            return ref
+        return self.__find_xxx_type( type
+                                     , self.element_type_index
+                                     , self.element_type_typedef
+                                     , 'container_element_type')
+
+    def key_type( self, type ):
+        """returns reference to the class key type declaration"""        
+        if not self.is_mapping( type ):
+            raise TypeError( 'Type "%s" is not "mapping" container' % str( type ) )
+        return self.__find_xxx_type( type
+                                     , self.key_type_index
+                                     , self.key_type_typedef
+                                     , 'container_key_type' )
 
     def remove_defaults( self, type_or_string ):
+        """remove template defaults from a template class instantiation
+        
+        For example:
+            std::vector< int, std::allocator< int > > 
+        will become
+            std::vector< int > 
+        """
         name = type_or_string
         if not isinstance( type_or_string, types.StringTypes ):
             name = self.class_declaration( type_or_string ).name
@@ -338,29 +371,86 @@ class container_traits_impl_t:
         else:
             return no_defaults
 
-list_traits = container_traits_impl_t( 'list', 0, 'value_type', defaults_eraser.erase_allocator )
+create_traits = container_traits_impl_t
+list_traits = create_traits( 'list'
+                             , 0
+                             , 'value_type'
+                             , defaults_eraser.erase_allocator )
 
-deque_traits = container_traits_impl_t( 'deque', 0, 'value_type', defaults_eraser.erase_allocator )
+deque_traits = create_traits( 'deque'
+                              , 0
+                              , 'value_type'
+                              , defaults_eraser.erase_allocator )
 
-queue_traits = container_traits_impl_t( 'queue', 0, 'value_type', defaults_eraser.erase_container )
+queue_traits = create_traits( 'queue'
+                              , 0
+                              , 'value_type'
+                              , defaults_eraser.erase_container )
 
-priority_queue_traits = container_traits_impl_t( 'priority_queue', 0, 'value_type', defaults_eraser.erase_container_compare )
+priority_queue_traits = create_traits( 'priority_queue'
+                                       , 0
+                                       , 'value_type'
+                                       , defaults_eraser.erase_container_compare )
 
-vector_traits = container_traits_impl_t( 'vector', 0, 'value_type', defaults_eraser.erase_allocator )
+vector_traits = create_traits( 'vector'
+                               , 0
+                               , 'value_type'
+                               , defaults_eraser.erase_allocator )
 
-stack_traits = container_traits_impl_t( 'stack', 0, 'value_type', defaults_eraser.erase_container )
+stack_traits = create_traits( 'stack'
+                              , 0
+                              , 'value_type'
+                              , defaults_eraser.erase_container )
 
-map_traits = container_traits_impl_t( 'map', 1, 'mapped_type', defaults_eraser.erase_map_compare_allocator )
-multimap_traits = container_traits_impl_t( 'multimap', 1, 'mapped_type', defaults_eraser.erase_map_compare_allocator )
+map_traits = create_traits( 'map'
+                            , 1
+                            , 'mapped_type'
+                            , defaults_eraser.erase_map_compare_allocator
+                            , key_type_index=0
+                            , key_type_typedef='key_type')
+                            
+multimap_traits = create_traits( 'multimap'
+                                 , 1
+                                 , 'mapped_type'
+                                 , defaults_eraser.erase_map_compare_allocator 
+                                 , key_type_index=0
+                                 , key_type_typedef='key_type')
 
-hash_map_traits = container_traits_impl_t( 'hash_map', 1, 'mapped_type', defaults_eraser.erase_hashmap_compare_allocator )
-hash_multimap_traits = container_traits_impl_t( 'hash_multimap', 1, 'mapped_type', defaults_eraser.erase_hashmap_compare_allocator )
 
-set_traits = container_traits_impl_t( 'set', 0, 'value_type', defaults_eraser.erase_compare_allocator)
-multiset_traits = container_traits_impl_t( 'multiset', 0, 'value_type', defaults_eraser.erase_compare_allocator )
+hash_map_traits = create_traits( 'hash_map'
+                                 , 1
+                                 , 'mapped_type'
+                                 , defaults_eraser.erase_hashmap_compare_allocator 
+                                 , key_type_index=0
+                                 , key_type_typedef='key_type')
+                                 
+                                 
+hash_multimap_traits = create_traits( 'hash_multimap'
+                                      , 1
+                                      , 'mapped_type'
+                                      , defaults_eraser.erase_hashmap_compare_allocator 
+                                      , key_type_index=0
+                                      , key_type_typedef='key_type')
 
-hash_set_traits = container_traits_impl_t( 'hash_set', 0, 'value_type', defaults_eraser.erase_hash_allocator )
-hash_multiset_traits = container_traits_impl_t( 'hash_multiset', 0, 'value_type', defaults_eraser.erase_hash_allocator )
+set_traits = create_traits( 'set'
+                            , 0
+                            , 'value_type'
+                            , defaults_eraser.erase_compare_allocator)
+                            
+multiset_traits = create_traits( 'multiset'
+                                 , 0
+                                 , 'value_type'
+                                 , defaults_eraser.erase_compare_allocator )
+
+hash_set_traits = create_traits( 'hash_set'
+                                 , 0
+                                 , 'value_type'
+                                 , defaults_eraser.erase_hash_allocator )
+                                 
+hash_multiset_traits = create_traits( 'hash_multiset'
+                                      , 0
+                                      , 'value_type'
+                                      , defaults_eraser.erase_hash_allocator )
 
 container_traits = (
       list_traits

@@ -23,7 +23,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
     
-    def __cmp_traits( self, typedef, expected, partial_name):
+    def __cmp_traits( self, typedef, expected, partial_name, key_type=None):
         if isinstance( typedef, str ):
             typedef = self.global_ns.typedef( typedef )
         traits = declarations.find_container_traits( typedef )
@@ -34,7 +34,21 @@ class tester_t( parser_test_case.parser_test_case_t ):
         cls = declarations.remove_declarated( typedef )                                        
         self.failUnless( cls.container_traits is expected )
         self.failUnless( cls.partial_name == partial_name )
-
+        cls = traits.class_declaration( cls )
+        
+        self.failUnless( traits.element_type( typedef ) )
+        self.failUnless( cls.cache.container_element_type, "For some reason cache was not updated" )
+        
+        if key_type:
+            self.failUnless( traits.is_mapping( typedef ) )
+            real_key_type = traits.key_type( typedef )
+            self.failUnless( real_key_type.decl_string == key_type
+                             , 'Error extracting key type.  Expected type "%s", got "%s"'
+                               % ( key_type, real_key_type.decl_string ) )
+            self.failUnless( cls.cache.container_key_type, "For some reason cache was not updated" )                               
+        else:
+            self.failUnless( traits.is_sequence( typedef ) )
+            
     def test_find_traits( self ):
         self.__cmp_traits( 'v_int', declarations.vector_traits, "vector< int >" )
         self.__cmp_traits( 'l_int', declarations.list_traits, "list< int >" )
@@ -43,12 +57,12 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.__cmp_traits( 'pq_int', declarations.priority_queue_traits, "priority_queue< int >")
         self.__cmp_traits( 's_v_int', declarations.set_traits, "set< std::vector< int > >")
         self.__cmp_traits( 'ms_v_int', declarations.multiset_traits, "multiset< std::vector< int > >")
-        self.__cmp_traits( 'm_i2d', declarations.map_traits, "map< int, double >" )
-        self.__cmp_traits( 'mm_i2d', declarations.multimap_traits, "multimap< int, double >" )
+        self.__cmp_traits( 'm_i2d', declarations.map_traits, "map< int, double >", 'int' )
+        self.__cmp_traits( 'mm_i2d', declarations.multimap_traits, "multimap< int, double >", 'int' )
         self.__cmp_traits( 'hs_v_int', declarations.hash_set_traits, "hash_set< std::vector< int > >" )
         self.__cmp_traits( 'mhs_v_int', declarations.hash_multiset_traits, "hash_multiset< std::vector< int > >" )
-        self.__cmp_traits( 'hm_i2d', declarations.hash_map_traits, "hash_map< int, double >" )
-        self.__cmp_traits( 'hmm_i2d', declarations.hash_multimap_traits, "hash_multimap< int, double >" )
+        self.__cmp_traits( 'hm_i2d', declarations.hash_map_traits, "hash_map< int, double >", 'int' )
+        self.__cmp_traits( 'hmm_i2d', declarations.hash_multimap_traits, "hash_multimap< int, double >", 'int' )
 
     def test_multimap( self ):
         mm = self.global_ns.classes( lambda decl: decl.name.startswith( 'multimap' ) )
