@@ -56,7 +56,7 @@ Only 1 ( one ) line of code is needed:
   #global_ns is the reference to declarations, which describes global( :: ) namespace
   global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
 
-``None`` means "any type". In my opinion the code is prety clear and readable.
+``None`` means "any type". In my opinion, the code is prety clear and readable.
 
 If you want to know more about provided API read `query interface`__ document or 
 API documentation.

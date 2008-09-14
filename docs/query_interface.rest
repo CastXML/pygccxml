@@ -25,8 +25,8 @@ a reference to an integer. More over, I want those functions names to end with
   global_ns.member_functions( function=query, arg_types=[None, 'int &'] )
 
 The example is complex, but still readable. In many cases you will find 
-yourself looking for one or many declarations using one or two properties of that
-declaration(s). For example:
+yourself, looking for one or many declarations, using one or two declaration properties.
+For example:
 
 .. code-block:: Python
 

@@ -199,7 +199,7 @@ change the default value expression from the script:
 
   #f is "calldef_t" instance
   for arg in f.arguments:
-      arg.default_value = <new default value or None>
+      arg.default_value = <<<new default value or None>>>
 
 
 -------------
