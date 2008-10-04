@@ -76,8 +76,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( len(dependencies) == 3 )
         used_types = map( lambda dependency: dependency.depend_on_it.decl_string 
                           , dependencies )
-                          
-        self.failUnless( used_types == [ 'int', 'bool', 'int' ] )
+        self.failUnless( used_types == [ 'int', 'int', 'bool'] )
 
         some_exception = ns.class_( 'some_exception_t' )
         other_exception = ns.class_( 'other_exception_t' )
