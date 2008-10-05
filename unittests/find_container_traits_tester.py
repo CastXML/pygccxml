@@ -67,7 +67,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_multimap( self ):
         m = self.global_ns.class_( lambda decl: decl.name.startswith( 'multimap' ) )
         traits = declarations.find_container_traits( m )
-        self.failUness( m.partial_name == 'multimap< int, int >' )
+        self.failUnless( m.partial_name == 'multimap< int, int >' )
 
     def test_recursive_partial_name( self ):
         f1 = self.global_ns.free_fun( 'f1' )

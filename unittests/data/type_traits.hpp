@@ -187,6 +187,10 @@ namespace yes{
     typedef detail::dd_t dd_t;
     typedef detail::f_t f_t;
     typedef detail::g_t g_t;    
+    
+    typedef detail::const_container const_container_t;    
+    typedef detail::const_item const_item_t;    
+
 }
 namespace no{
     typedef std::string string_type;
@@ -194,10 +198,7 @@ namespace no{
     typedef std::vector< int > vector_of_int_type;
     typedef std::set< std::string > string_set_type;
     typedef std::multimap< std::string, std::string > s2s_multimap_type;
-    typedef detail::vertex vertex_type;
-    typedef detail::const_container const_container_t;    
-    typedef detail::const_item const_item_t;    
-    
+    typedef detail::vertex vertex_type;    
 }
 }
 
@@ -544,11 +545,13 @@ namespace yes{
     struct x{
         x(){}
     };
-    typedef details::const_item const_item;
-    typedef details::const_container const_container;
 }
     
 namespace no{
+
+    typedef details::const_item const_item;
+    typedef details::const_container const_container;
+    
     class y{
         private: 
         y(){}

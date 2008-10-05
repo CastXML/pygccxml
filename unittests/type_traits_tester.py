@@ -247,8 +247,8 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string( code , config )[0]
         ci = global_ns.class_( 'const_item' )
-        self.failUnless( len( ci.declarations ) == 5 )
-        #constructor, copy constructor, destructor, operator=, variable
+        self.failUnless( len( ci.declarations ) == 3 )
+        #copy constructor, destructor, variable
           
 def create_suite():
     suite = unittest.TestSuite()        
