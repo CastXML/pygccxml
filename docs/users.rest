@@ -29,7 +29,7 @@ pygccxml in blogs
 
   `pygccxml`_ is used to generate input files for `SIP`_ code generator.
 
-.. _`SIP` : http://www.riverbankcomputing.co.uk/sip/index.php
+.. _`SIP` : http://www.riverbankcomputing.com/software/sip/intro
 
 - http://blogs.sun.com/thorsten/entry/more_on_source_code_grokking
 

@@ -1,4 +1,4 @@
-# Copyright 2004 Roman Yakovenko, 2006 Allen Bierbaum, Matthias Baas
+# Copyright 2004-2008 Roman Yakovenko, 2006 Allen Bierbaum, Matthias Baas
 # Distributed under the Boost Software License, Version 1.0. (See
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
