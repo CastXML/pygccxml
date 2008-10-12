@@ -1,6 +1,6 @@
 Hello!
 
-I'm pleased to announce the 0.9.0 release of pygccxml.
+I'm pleased to announce the 1.0 release of pygccxml.
 
 What is pygccxml?
 =================
@@ -23,33 +23,20 @@ Download: http://language-binding.net/pygccxml/download.html
 What's new?
 ===========
 
-Performance
------------
+Features
+---------
 
-Performance was improved. pygccxml is now 30-50% faster. The improvement was
-achieved by using "cElementTree" package, "iterparse" functionality, instead of
-standard XML SAX API.
+* Support for ellipsis was added.
 
+* New expiremental back-end, based on ``.pdb`` (progam database file), was added.
 
-Small features
---------------
-
-* Class calldef_t has new property - "does_throw". It describes whether the
-  function throws any exception or not.
-
-* "is_base_and_derived" function arguments were changed. The second argument could be
-   a tuple, which contains classes. The function returns ``True`` if at least one
-   class derives from the base one.
+* New high-level API wrapper for ``.bsc`` (browse source code file) was added.
 
 
 Bug fixes
 ---------
 
-* C++ does not define implicit conversion between an integral type and ``void*``.
-  "declarations.is_convertible" type traits was fixed.
-
-* Small bug was fixed in functionality that corrects GCC-XML reported function
-  default arguments. Reference to "enum" declaration extracted properly.
+* Search algorithm, for template instantiated classes, was improved.
 
 
 For a more complete list, please see the news:

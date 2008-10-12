@@ -22,6 +22,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Miguel Lobo
 * Jeremy Sanders
 * Ben Schleimer
+* Gustavo Carneiro
 
 
 -----------
@@ -64,6 +65,8 @@ Version 1.0
 
 7. Search algorithm was improved for template instantiated classes. From
    now, a spaces within the class name doesn't matter.
+
+8. pygccxml unit tests functionality was improved. Many thanks to Gustavo Carneiro.
 
 -------------
 Version 0.9.5
