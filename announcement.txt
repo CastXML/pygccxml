@@ -28,7 +28,7 @@ Features
 
 * Support for ellipsis was added.
 
-* New expiremental back-end, based on ``.pdb`` (progam database file), was added.
+* New experimental back-end, based on ``.pdb`` (progam database file), was added.
 
 * New high-level API wrapper for ``.bsc`` (browse source code file) was added.
 
