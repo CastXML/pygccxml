@@ -26,12 +26,13 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     JUSTIFY = 20
     INDENT_SIZE = 4
 
-    def __init__( self, level=0, print_details=True, recursive=True, writer=None ):
+    def __init__( self, level=0, print_details=True, recursive=True, writer=None, verbose=True ):
         decl_visitor.decl_visitor_t.__init__(self)
         self.__inst = None
         self.__level = level
         self.__print_details = print_details
         self.__recursive = recursive
+        self.__verbose = verbose
         self.__writer = writer
         if not self.__writer:
             self.__writer = lambda x: sys.stdout.write( x + os.linesep )
@@ -43,6 +44,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         return decl_printer_t( level
                                , self.print_details
                                , recursive=self.recursive
+                               , verbose=self.__verbose
                                , writer=self.writer )
 
     def _get_recursive(self):
@@ -50,6 +52,12 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     def _set_recursive(self, recursive):
         self.__recursive = recursive
     recursive = property( _get_recursive, _set_recursive)
+
+    def _get_verbose(self):
+        return self.__verbose
+    def _set_verbose(self, verbose):
+        self.__verbose = verbose
+    verbose = property( _get_verbose, _set_verbose)
 
     def _get_level(self):
         return self.__level
@@ -75,6 +83,16 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.__inst = inst
     instance = property( _get_inst, _set_inst )
 
+    def is_builtin_decl( self, decl ):
+        if not decl.name.startswith( '__builtin_' ):
+            return False
+        if decl.location \
+           and decl.location.file_name \
+           and decl.location.file_name.endswith('gccxml_builtins.h'):
+            return True
+        else:
+            return False
+
     def __nice_decl_name( self, inst ):
         name = inst.__class__.__name__
         return name
@@ -90,19 +108,18 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             if self.__inst.location:
                 location = 'location: [%s]:%s'%(self.__inst.location.file_name, self.__inst.location.line)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + location)
-            artificial = 'artificial: ' + "'%s'" % str(self.__inst.is_artificial)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + artificial.ljust( self.JUSTIFY ))
-            if self.__inst.attributes:
+            if self.verbose:
+                artificial = 'artificial: ' + "'%s'" % str(self.__inst.is_artificial)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + artificial.ljust( self.JUSTIFY ))
+            if self.verbose and self.__inst.attributes:
                 attributes = 'attributes: %s'%(self.__inst.attributes)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + attributes)
-            if self.__inst.demangled:
+            if self.verbose and self.__inst.demangled:
                 demangled = 'demangled: %s'%(self.__inst.demangled)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + demangled)
-            if self.__inst.mangled:
+            if self.verbose and self.__inst.mangled:
                 mangled = 'mangled: %s'%(self.__inst.mangled)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + mangled)
-
-
 
     def print_calldef_info(self, decl=None):
         """ Returns function signature: [retval, [arg1, ..., argN]]. """
@@ -192,11 +209,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         def print_members(members_type, members, curr_level):
             self.writer( ' ' * curr_level * self.INDENT_SIZE + members_type.ljust( self.JUSTIFY ))
             if self.__recursive:
-               curr_level += 1
-               for member in members:
-                  prn = self.clone()
-                  prn.instance = member
-                  algorithm.apply_visitor( prn, member )
+                curr_level += 1
+                for member in members:
+                    prn = self.clone()
+                    prn.instance = member
+                    algorithm.apply_visitor( prn, member )
 
         if self.__inst.bases:
             print_hierarchy( 'base classes: ', self.__inst.bases, curr_level )
@@ -218,12 +235,16 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             self.writer( value_level + "%s : %s"% (name, value))
 
     def visit_namespace(self ):
+        if self.verbose == False and not self.__inst.declarations:
+            return #don't print info about empty namespaces
         self.print_decl_header()
         if self.__recursive:
-           for decl in self.__inst.declarations:
-              prn = self.clone()
-              prn.instance = decl
-              algorithm.apply_visitor( prn, decl )
+            for decl in self.__inst.declarations:
+                if self.is_builtin_decl( decl ):
+                    continue
+                prn = self.clone()
+                prn.instance = decl
+                algorithm.apply_visitor( prn, decl )
 
     def visit_typedef(self ):
         self.print_decl_header()
@@ -233,7 +254,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     def visit_variable(self ):
         self.print_decl_header()
         curr_level = self.level + 1
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value)  + os.linesep)
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value) )
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.type.byte_size)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ))
@@ -245,14 +266,18 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             byte_offset = 'offset: %d'%(self.__inst.byte_offset)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep)
 
-def print_declarations( decls, detailed=True, recursive=True, writer=lambda x: sys.stdout.write( x + os.linesep ) ):
+def print_declarations( decls
+                        , detailed=True
+                        , recursive=True
+                        , writer=lambda x: sys.stdout.write( x + os.linesep )
+                        , verbose=True):
     """ Print decl tree rooted at each of the included nodes.
         decls - either a single decl or a list of decls.
     """
-    prn = decl_printer_t(0, detailed, recursive, writer)
+    prn = decl_printer_t(0, detailed, recursive, writer, verbose=verbose)
     if type(decls) is not list:
-       decls = [decls]
+        decls = [decls]
     for d in decls:
-       prn.level = 0
-       prn.instance = d
-       algorithm.apply_visitor(prn, d)
+        prn.level = 0
+        prn.instance = d
+        algorithm.apply_visitor(prn, d)
