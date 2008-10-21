@@ -974,6 +974,28 @@ class impl_details:
         else:
             return None
 
+class internal_type_traits:
+    """small convenience class, which provides access to internal types"""
+    #TODO: add exists function
+    @staticmethod
+    def get_by_name( type, name ):
+        if class_traits.is_my_case( type ):
+            cls = class_traits.declaration_class( type )
+            return remove_declarated( cls.typedef( name, recursive=False ).type )
+        elif class_declaration_traits.is_my_case( type ):
+            cls = class_declaration_traits.get_declaration( type )
+            value_type_str = templates.args( cls.name )[0]
+            ref = impl_details.find_value_type( cls.top_parent, value_type_str )
+            if ref:
+                return ref
+            else:
+                raise RuntimeError( "Unable to find reference to internal type '%s' in type '%s'."
+                                    % ( name, cls.decl_string ) )
+        else:
+            raise RuntimeError( "Unable to find reference to internal type '%s' in type '%s'."
+                                % ( name, type.decl_string ) )
+
+
 class smart_pointer_traits:
     """implements functionality, needed for convinient work with smart pointers"""
 
@@ -994,19 +1016,7 @@ class smart_pointer_traits:
         """returns reference to boost::shared_ptr value type"""
         if not smart_pointer_traits.is_smart_pointer( type ):
             raise TypeError( 'Type "%s" is not instantiation of boost::shared_ptr' % type.decl_string )
-        type = remove_alias( type )
-        cls = remove_cv( type )
-        cls = remove_declarated( type )
-        if isinstance( cls, class_declaration.class_t ):
-            return remove_declarated( cls.typedef( "value_type", recursive=False ).type )
-        elif not isinstance( cls, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
-            raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
-        else:
-            value_type_str = templates.args( cls.name )[0]
-            ref = impl_details.find_value_type( cls.top_parent, value_type_str )
-            if None is ref:
-                raise RuntimeError( "Unable to find out shared_ptr value type. shared_ptr class is: %s" % cls.decl_string )
-            return ref
+        return internal_type_traits.get_by_name( type, "value_type" )
 
 class auto_ptr_traits:
     """implements functionality, needed for convinient work with std::auto_ptr pointers"""
@@ -1028,19 +1038,7 @@ class auto_ptr_traits:
         """returns reference to boost::shared_ptr value type"""
         if not auto_ptr_traits.is_smart_pointer( type ):
             raise TypeError( 'Type "%s" is not instantiation of std::auto_ptr' % type.decl_string )
-        type = remove_alias( type )
-        cls = remove_cv( type )
-        cls = remove_declarated( type )
-        if isinstance( cls, class_declaration.class_t ):
-            return remove_declarated( cls.typedef( "element_type", recursive=False ).type )
-        elif not isinstance( cls, ( class_declaration.class_declaration_t, class_declaration.class_t ) ):
-            raise RuntimeError( "Unable to find out auto_ptr value type. auto_ptr class is: %s" % cls.decl_string )
-        else:
-            value_type_str = templates.args( cls.name )[0]
-            ref = impl_details.find_value_type( cls.top_parent, value_type_str )
-            if None is ref:
-                raise RuntimeError( "Unable to find out auto_ptr value type. shared_ptr class is: %s" % cls.decl_string )
-            return ref
+        return internal_type_traits.get_by_name( type, "element_type" )
 
 
 def is_std_string( type ):
