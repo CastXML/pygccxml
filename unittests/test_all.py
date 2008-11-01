@@ -51,6 +51,7 @@ import copy_constructor_tester
 import plain_c_tester
 import function_traits_tester
 import better_templates_matcher_tester
+import declaration_matcher_tester
 
 testers = [
     decl_string_tester
@@ -98,6 +99,7 @@ testers = [
     , plain_c_tester
     , function_traits_tester
     , better_templates_matcher_tester
+    , declaration_matcher_tester
 ]
 
 def create_suite():
