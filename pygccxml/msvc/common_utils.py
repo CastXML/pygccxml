@@ -37,7 +37,7 @@ class UNDECORATE_NAME_OPTIONS:
 
 #__unDName definition was taken from:
 #http://www.tech-archive.net/Archive/VC/microsoft.public.vc.language/2006-02/msg00754.html
-msvcrxx = ctypes.CDLL( msvc_cfg.msvcr_path, mode=ctypes.RTLD_GLOBAL)
+msvcrxx = ctypes.windll.msvcr71 #ctypes.CDLL( msvc_cfg.msvcr_path, mode=ctypes.RTLD_GLOBAL)
 
 free_type = ctypes.CFUNCTYPE( None, ctypes.c_void_p ) #free type
 malloc_type = ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) #malloc type

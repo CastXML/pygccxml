@@ -12,23 +12,12 @@ import getpass
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 
-compiler = None
+
 data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
 
-gccxml_07_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v07', sys.platform, 'bin' )
-gccxml_09_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
-
-gccxml_path = gccxml_09_path
-
-gccxml_version = '__GCCXML_07__'
-if '09' in gccxml_path:
-    gccxml_version = '__GCCXML_09__'
-
-print 'compiler: ', gccxml_version
-
-if sys.platform == 'win32':
-    compiler = 'msvc71'
+gccxml_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
+gccxml_version = '__GCCXML_09__'
 
 try:
     import pygccxml
@@ -38,25 +27,31 @@ except ImportError:
     import pygccxml
     print 'unittests will run on DEVELOPMENT version'
 
+compiler = pygccxml.utils.native_compiler.get_version()
+if compiler:
+    compiler = compiler[0] + compiler[1].replace( '.', '' )
+
+print 'GCCXML configured to simulate compiler ', compiler
+
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 class cxx_parsers_cfg:
-    
+
     keywd = { 'working_directory' : data_directory
               , 'define_symbols' : [ gccxml_version ]
               , 'compiler' : compiler }
-              
+
     if os.path.exists( os.path.join( gccxml_path, 'gccxml' ) ) \
        or os.path.exists( os.path.join( gccxml_path, 'gccxml.exe' ) ):
         keywd[ 'gccxml_path'] = gccxml_path
     gccxml = pygccxml.parser.gccxml_configuration_t( **keywd )
-    
+
     pdb_loader = None
     if sys.platform == 'win32':
-        from pygccxml.msvc import pdb
+        from pygccxml.msvc import mspdb
         pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
         if os.path.exists( pdb_file ):
-            pdb_loader = pdb.decl_loader_t( pdb_file )
+            pdb_loader = mspdb.decl_loader_t( pdb_file )
             pdb_loader.read()
 
 def get_pdb_global_ns():

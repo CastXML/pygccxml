@@ -119,38 +119,50 @@ class cached(property):
         def fdel(s):
             del s.__dict__[private]
         super(cached, self).__init__(fget, fdel=fdel)
-        
+
     @staticmethod
     def reset(self):
         cls = self.__class__
         for name in dir(cls):
             attr = getattr(cls, name)
             if isinstance(attr, cached):
-                delattr(self, name) 
+                delattr(self, name)
 
 class enum( object ):
     """Usage example:
         class fruits(enum):
             apple = 0
             orange = 1
-            
+
         fruits.has_value( 1 )
         fruits.name_of( 1 )
     """
-    
+
     @classmethod
     def has_value( cls, enum_numeric_value ):
-        for name, value in cls.__dict__.iteritems():          
+        for name, value in cls.__dict__.iteritems():
             if enum_numeric_value == value:
                 return True
         else:
             return False
-    
+
     @classmethod
     def name_of( cls, enum_numeric_value ):
-        for name, value in cls.__dict__.iteritems():          
+        for name, value in cls.__dict__.iteritems():
             if enum_numeric_value == value:
                 return name
         else:
             raise RuntimeError( 'Unable to find name for value(%d) in enumeration "%s"'
                                 % ( enum_numeric_value, cls.__name__ ) )
+
+class native_compiler:
+    """provides information about "native compiler", which was used to build this Python executable"""
+
+    @staticmethod
+    def get_version():
+        if 'win' not in sys.platform:
+            return None #not implemented yet
+        from distutils import msvccompiler
+        return ( 'msvc', str( msvccompiler.get_build_version() ) )
+
+
