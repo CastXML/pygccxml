@@ -2,7 +2,7 @@ import os
 import unittest
 import autoconfig
 
-from pygccxml.msvc import pdb
+from pygccxml.msvc import mspdb
 from pygccxml import declarations
 from pygccxml.msvc import common_utils as msvc_utils
 
@@ -15,7 +15,7 @@ class tester_t( unittest.TestCase ):
                                       , 'msvc_build.pdb' )
 
     def __splitter_tester_impl( self, name, expected_result ):
-        splitter = pdb.impl_details.full_name_splitter_t( name )
+        splitter = mspdb.impl_details.full_name_splitter_t( name )
         self.failUnless( len(splitter.scope_names) == len(expected_result) )
         self.failUnless( splitter.scope_names == expected_result )
 
@@ -35,7 +35,7 @@ class tester_t( unittest.TestCase ):
         self.__splitter_tester_impl( name, expected_result )
 
     def test_create_nss(self):
-        reader = pdb.decl_loader_t( self.pdb_file )
+        reader = mspdb.decl_loader_t( self.pdb_file )
         print reader.symbols_table.name
         reader.read()
         f = file( 'decls.cpp', 'w+' )
@@ -77,7 +77,7 @@ class tester_t( unittest.TestCase ):
     def test_pdbs( self ):
         for f in filter( lambda f: f.endswith( 'pdb' ), os.listdir( r'E:\pdbs' ) ):
             try:
-                reader = pdb.decl_loader_t( f )
+                reader = mspdb.decl_loader_t( f )
                 reader.read()
                 f = file( d + '.txt', 'w+' )
                 declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
