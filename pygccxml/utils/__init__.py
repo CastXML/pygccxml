@@ -165,4 +165,12 @@ class native_compiler:
         from distutils import msvccompiler
         return ( 'msvc', str( msvccompiler.get_build_version() ) )
 
+    @staticmethod
+    def get_gccxml_compiler():
+        compiler = native_compiler.get_version()
+        if not compiler:
+            return None
+        else:
+            return compiler[0] + compiler[1].replace( '.', '' )
+
 

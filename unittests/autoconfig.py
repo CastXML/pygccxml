@@ -27,9 +27,7 @@ except ImportError:
     import pygccxml
     print 'unittests will run on DEVELOPMENT version'
 
-compiler = pygccxml.utils.native_compiler.get_version()
-if compiler:
-    compiler = compiler[0] + compiler[1].replace( '.', '' )
+compiler = pygccxml.utils.native_compiler.get_gccxml_compiler()
 
 print 'GCCXML configured to simulate compiler ', compiler
 
