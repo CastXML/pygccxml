@@ -83,11 +83,35 @@ class decl_loader_t(object):
         smbls = {}
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
             smbl.uname = msvc_utils.undecorate_name( smbl.name, msvc_utils.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
-            def smbl_undecorate_name( options = None ):
+            def smbl_undecorate_name( options=None ):
                 return msvc_utils.undecorate_name( smbl.name, options )
             smbl.undecorate_name = smbl_undecorate_name
             smbls[ smbl.symIndexId ] = smbl
         self.logger.info( 'loading symbols(%d) from the file - done', len( smbls ) )
+        return smbls
+
+    @utils.cached
+    def public_symbols( self ):
+        self.logger.info( 'loading public symbols from the file' )
+        smbls = {}
+        for smbl in self.symbols.itervalues():
+            if not smbl.function:
+                continue
+            if not smbl.name:
+                continue
+            undecorated_name = smbl.get_undecoratedNameEx( enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
+            if not undecorated_name:
+                continue
+            if smbl.name.startswith( '__' ):
+                continue
+            if undecorated_name.startswith( '__' ):
+                continue
+            if undecorated_name.startswith( '@' ):
+                continue
+            if undecorated_name.startswith( 'type_info::' ):
+                continue
+            smbls[ smbl.symIndexId ] = smbl
+        self.logger.info( 'loading public symbols(%d) from the file - done', len( smbls ) )
         return smbls
 
     def __load_nss(self):
@@ -701,3 +725,4 @@ class decl_loader_t(object):
             if not isinstance( my_type, declarations.volatile_t ):
                 my_type = declarations.volatile_t( my_type )
         return my_type
+

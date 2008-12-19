@@ -44,13 +44,13 @@ class cxx_parsers_cfg:
         keywd[ 'gccxml_path'] = gccxml_path
     gccxml = pygccxml.parser.gccxml_configuration_t( **keywd )
 
-    pdb_loader = None
-    if sys.platform == 'win32':
-        from pygccxml.msvc import mspdb
-        pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
-        if os.path.exists( pdb_file ):
-            pdb_loader = mspdb.decl_loader_t( pdb_file )
-            pdb_loader.read()
+    #~ pdb_loader = None
+    #~ if sys.platform == 'win32':
+        #~ from pygccxml.msvc import mspdb
+        #~ pdb_file = os.path.join( data_directory, 'msvc_build', 'Debug', 'msvc_build.pdb' )
+        #~ if os.path.exists( pdb_file ):
+            #~ pdb_loader = mspdb.decl_loader_t( pdb_file )
+            #~ pdb_loader.read()
 
 def get_pdb_global_ns():
     if cxx_parsers_cfg.pdb_loader:
