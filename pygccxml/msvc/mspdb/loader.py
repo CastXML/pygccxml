@@ -81,7 +81,14 @@ class decl_loader_t(object):
     def symbols(self):
         self.logger.info( 'loading symbols from the file' )
         smbls = {}
+        useless = ( msdia.SymTagAnnotation
+                    , msdia.SymTagBlock
+                    , msdia.SymTagFuncDebugStart
+                    , msdia.SymTagFuncDebugEnd
+                    , msdia.SymTagManagedType )
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
+            if smbl.symTag in useless:
+                continue
             smbl.uname = msvc_utils.undecorate_name( smbl.name, msvc_utils.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
             def smbl_undecorate_name( options=None ):
                 return msvc_utils.undecorate_name( smbl.name, options )
@@ -92,27 +99,50 @@ class decl_loader_t(object):
 
     @utils.cached
     def public_symbols( self ):
-        self.logger.info( 'loading public symbols from the file' )
-        smbls = {}
+        """dictionary, where key is reference to public symbol, and value is symbol itself"""
+        self.logger.info( 'loading public symbols' )
+        self.logger.info( 'looking for public symbols' )
+        public_smbls = {}
+        undname_flags = enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE
         for smbl in self.symbols.itervalues():
-            if not smbl.function:
+            if not smbl.function or not smbl.name or smbl.name.startswith( '__' ):
                 continue
-            if not smbl.name:
-                continue
-            undecorated_name = smbl.get_undecoratedNameEx( enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
+            undecorated_name = smbl.get_undecoratedNameEx( undname_flags )
             if not undecorated_name:
                 continue
-            if smbl.name.startswith( '__' ):
+            for prefix in ( '__', '@', 'type_info::' ):
+                if undecorated_name.startswith( prefix ):
+                    break
+            else:
+                assert undecorated_name not in public_smbls
+                public_smbls[ undecorated_name ] = smbl
+        self.logger.info( 'looking for public symbols(%d) - done', len(public_smbls) )
+        self.logger.info( 'mapping public symbols to real symbols')
+        smbls = {}
+        for smbl in self.symbols.itervalues():
+            undecorated_name = smbl.get_undecoratedNameEx( undname_flags )
+            if not undecorated_name:
                 continue
-            if undecorated_name.startswith( '__' ):
+            undecorated_name = undecorated_name.strip()
+            if undecorated_name not in public_smbls:
                 continue
-            if undecorated_name.startswith( '@' ):
-                continue
-            if undecorated_name.startswith( 'type_info::' ):
-                continue
-            smbls[ smbl.symIndexId ] = smbl
-        self.logger.info( 'loading public symbols(%d) from the file - done', len( smbls ) )
+            smbls[ public_smbls[undecorated_name] ] = smbl
+        self.logger.info( 'mapping public symbols(%d) to real symbols - done', len( smbls ) )
+        self.logger.info( 'loading public symbols(%d) - done', len( smbls ) )
         return smbls
+
+    @utils.cached
+    def public_classes( self ):
+        """returns set of public classes, which derives from the set of public symbols"""
+        self.logger.info( 'loading public classes' )
+        classes = {}
+        for smbl in self.public_symbols.itervalues():
+            parent = smbl.classParent
+            while parent:
+                classes[ parent.symIndexId ] = self.symbols[ parent.symIndexId ]
+                parent = parent.classParent
+        self.logger.info( 'loading public classes(%d) - done', len(classes) )
+        return classes
 
     def __load_nss(self):
         def ns_filter( smbl ):
@@ -120,19 +150,13 @@ class decl_loader_t(object):
             tags = ( msdia.SymTagFunction
                      , msdia.SymTagBlock
                      , msdia.SymTagData
-                     #~ , msdia.SymTagAnnotation
-                     #~ , msdia.SymTagPublicSymbol
                      , msdia.SymTagUDT
                      , msdia.SymTagEnum
-                     #~ , msdia.SymTagFunctionType
-                     #~ , msdia.SymTagPointerType
                      , msdia.SymTagArrayType
                      , msdia.SymTagBaseType
                      , msdia.SymTagTypedef
                      , msdia.SymTagBaseClass
                      , msdia.SymTagFriend
-                     #~ , msdia.SymTagFunctionArgType
-                     #~ , msdia.SymTagUsingNamespace
                     )
             if smbl.symTag not in tags:
                 self.logger.debug( 'smbl.symTag not in tags, %s', smbl.uname )
@@ -142,9 +166,6 @@ class decl_loader_t(object):
             elif not smbl.name:
                 self.logger.debug( 'not smbl.name, %s', smbl.uname )
                 return False
-            #~ elif '-' in smbl.name:
-                #~ self.logger.debug( '"-" in smbl.name, %s', smbl.uname )
-                #~ return False
             elif smbl.classParent:
                 parent_smbl = self.symbols[ smbl.classParentId ]
                 while parent_smbl:
@@ -291,25 +312,6 @@ class decl_loader_t(object):
                     self.__parent_exist.add( parent_name )
                 return bool( found )
 
-    def __clear_symbols(self):
-        self.logger.info( 'clearing symbols' )
-        to_be_deleted = []
-        useless_tags = (
-            msdia.SymTagAnnotation
-            , msdia.SymTagPublicSymbol
-            , msdia.SymTagBlock
-            , msdia.SymTagFuncDebugStart
-            , msdia.SymTagFuncDebugEnd
-        )
-        for smbl_id, smbl in self.symbols.iteritems():
-            if smbl.symTag in useless_tags \
-               or ( smbl.symTag == msdia.SymTagData and not self.__is_my_var( smbl ) ):
-                to_be_deleted.append( smbl_id )
-
-        map( lambda smbl_id: self.symbols.pop( smbl_id ), to_be_deleted )
-        self.logger.info( 'clearing symbols(%d) - done', len( to_be_deleted ) )
-
-
     def __normalize_name( self, decl ):
         if decl.name == '<unnamed-tag>':
             decl.name = ''
@@ -333,18 +335,23 @@ class decl_loader_t(object):
         map( self.__join_unnamed_nss
              , ns_parent.namespaces( recursive=False, allow_empty=True ) )
 
+    def __remove_empty_nss( self, ns_parent ):
+        for ns in ns_parent.namespaces( recursive=False, allow_empty=True ):
+            self.__remove_empty_nss( ns )
+            if 0 == len( ns.decls( recursive=False, allow_empty=True ) ):
+                ns_parent.remove_declaration( ns )
 
     def read(self):
-        self.__clear_symbols()
         self.__load_nss()
         self.__load_classes()
         self.__load_base_classes()
-        self.__load_enums()
-        self.__load_vars()
-        self.__load_typedefs()
-        self.__load_calldefs()
+        #~ self.__load_enums()
+        #~ self.__load_vars()
+        #~ self.__load_typedefs()
+        #~ self.__load_calldefs()
         map( self.__normalize_name, self.global_ns.decls(recursive=True) )
         self.__join_unnamed_nss( self.global_ns )
+        self.__remove_empty_nss( self.global_ns )
         #join unnamed namespaces
 
     @property
@@ -400,14 +407,15 @@ class decl_loader_t(object):
 
 
     def __load_classes( self ):
-        classes = {}#unique symbol id : class decl
-        is_udt = lambda smbl: smbl.symTag == msdia.SymTagUDT
+        classes = {}
+        #~ is_udt = lambda smbl: smbl.symTag == msdia.SymTagUDT
         self.logger.info( 'building udt objects' )
-        for udt_smbl in itertools.ifilter( is_udt, self.symbols.itervalues() ):
+        #for udt_smbl in itertools.ifilter( is_udt, self.symbols.itervalues() ):
+        for udt_smbl in self.public_classes.itervalues():
             classes[udt_smbl.symIndexId] = self.__create_class(udt_smbl)
         self.logger.info( 'building udt objects(%d) - done', len(classes) )
 
-        self.logger.info( 'integrating udt objects with namespaces' )
+        self.logger.info( 'integrating class objects with namespaces' )
         does_parent_exists = self.parent_exists_t( self.global_ns, classes, self.__id2decl )
         while classes:
             to_be_integrated = len( classes )
@@ -430,6 +438,9 @@ class decl_loader_t(object):
         for count, smbl in enumerate( itertools.ifilter( is_base_class, self.symbols.itervalues() ) ):
             base_id = smbl.type.symIndexId
             derived_id = smbl.classParentId
+
+            if base_id not in self.public_classes or derived_id not in self.public_classes:
+                continue
 
             hi_base = make_hi( self.__id2decl[base_id]
                                , self.__guess_access_type( smbl )
@@ -530,6 +541,8 @@ class decl_loader_t(object):
         self.logger.info( 'building function objects' )
         is_function = lambda smbl: smbl.symTag == msdia.SymTagFunction
         for functions_count, function_smbl in enumerate( itertools.ifilter( is_function, self.symbols.itervalues() ) ):
+            if function_smbl.classParent and function_smbl.classParentId not in self.public_classes: #what about base classes
+                continue
             function_decl = self.__create_calldef(function_smbl)
             if function_decl:
                 self.__update_decls_tree( function_decl )
@@ -562,15 +575,13 @@ class decl_loader_t(object):
 
     def __create_calldef( self, smbl ):
         self.logger.debug( 'creating calldef "%s"', smbl.uname )
-        #~ if smbl.uname == 'some_function':
-            #~ pdb.set_trace()
         name_splitter = impl_details.get_name_splitter( smbl.uname )
         calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
         decl = None
         if isinstance( calldef_type, declarations.member_function_type_t ):
             could_be_static = False
             could_be_const = False
-            if smbl.uname.startswith( '~' ):
+            if '~' in smbl.uname:
                 decl = declarations.destructor_t()
             if not decl: #may be operator
                 decl = self.__guess_operator_type(smbl, calldef_type)

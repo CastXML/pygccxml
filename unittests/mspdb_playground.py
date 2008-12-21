@@ -12,21 +12,37 @@ pdb_file = r'E:\development\language-binding\pyplusplus_dev\pyplusplus\cpptypes\
 reader = mspdb.decl_loader_t( pdb_file )
 opt = mspdb.enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE
 
-d = {}
-for smbl in reader.public_symbols.itervalues():
+public_smbls = {}
+for smbl in reader.public_symbols.iterkeys():
     name = smbl.name
     undecorated_name = smbl.get_undecoratedNameEx(opt).strip()
     if undecorated_name.endswith( ')const' ):
         undecorated_name = undecorated_name[ : -len('const')]
-    d[ name ] = undecorated_name
-    d[ undecorated_name ] = name
+    public_smbls[ name ] = undecorated_name
+    public_smbls[ undecorated_name ] = name
 
-pprint.pprint( d )
+pprint.pprint( public_smbls )
 
-#~ reader.read()
-#~ f = file( 'decls.cpp', 'w+' )
-#~ declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
-#~ f.close()
+#~ for smbl in reader.symbols.itervalues():
+    #~ if not smbl.classParent:
+        #~ continue
+    #~ undecorated_name = smbl.get_undecoratedNameEx(opt)
+    #~ if not undecorated_name:
+        #~ continue
+    #~ undecorated_name = undecorated_name.strip()
+    #~ if undecorated_name not in public_smbls:
+        #~ continue
+    #~ print '--------------------------------------'
+    #~ print 'mem fun: ', undecorated_name
+    #~ if smbl.classParent:
+        #~ print 'parent class: ', smbl.classParent.name
+    #~ else:
+        #~ print 'no parent'
+    #~ print '======================================'
+reader.read()
+f = file( 'decls.cpp', 'w+' )
+declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
+f.close()
 
 #~ f = file( 'symbols.txt', 'w+')
 #~ for smbl in reader.symbols.itervalues():
