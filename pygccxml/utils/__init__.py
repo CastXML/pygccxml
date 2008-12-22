@@ -171,6 +171,9 @@ class native_compiler:
         if not compiler:
             return None
         else:
-            return compiler[0] + compiler[1].replace( '.', '' )
+            n = compiler[1].replace( '.', '' )
+            if n.endswith('0'):
+                n = n[:-1]
+            return compiler[0] + n.replace( '.', '' )
 
 

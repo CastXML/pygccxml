@@ -1,6 +1,5 @@
 import os
 import re
-import pdb
 import sys
 import ctypes
 import pprint
@@ -89,10 +88,9 @@ class decl_loader_t(object):
         for smbl in itertools.imap( as_symbol, as_enum_variant( self.symbols_table._NewEnum ) ):
             if smbl.symTag in useless:
                 continue
-            smbl.uname = msvc_utils.undecorate_name( smbl.name, msvc_utils.UNDECORATE_NAME_OPTIONS.UNDNAME_SCOPES_ONLY )
-            def smbl_undecorate_name( options=None ):
-                return msvc_utils.undecorate_name( smbl.name, options )
-            smbl.undecorate_name = smbl_undecorate_name
+            smbl.uname = smbl.get_undecoratedNameEx( enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE )
+            if smbl.uname is None:
+                smbl.uname = smbl.name
             smbls[ smbl.symIndexId ] = smbl
         self.logger.info( 'loading symbols(%d) from the file - done', len( smbls ) )
         return smbls
@@ -223,8 +221,6 @@ class decl_loader_t(object):
         self.logger.debug( 'scanning symbols table - done' )
 
     def __update_decls_tree( self, decl ):
-        #~ if decl.name == 'money_base' and isinstance( decl, declarations.class_t ):
-            #~ pdb.set_trace()
         smbl = decl.dia_symbols[0]
         if smbl.classParentId in self.__id2decl:
             self.__adopt_declaration( self.__id2decl[smbl.classParentId], decl )
@@ -236,13 +232,14 @@ class decl_loader_t(object):
                 parent_name = '::' + name_splitter.scope_names[-1]
                 try:
                     parent = self.global_ns.decl( parent_name )
-                except:
-                    declarations.print_declarations( self.global_ns )
-                    print 'identifiers:'
-                    for index, identifier in enumerate(name_splitter.identifiers):
-                        print index, ':', identifier
-                    raise
-                self.__adopt_declaration( parent, decl )
+                    self.__adopt_declaration( parent, decl )
+                except declarations.matcher.declaration_not_found_t:
+                    pass
+                    #~ declarations.print_declarations( self.global_ns )
+                    #~ print 'identifiers:'
+                    #~ for index, identifier in enumerate(name_splitter.identifiers):
+                        #~ print index, ':', identifier
+                    #~ raise
 
     def __adopt_declaration( self, parent, decl ):
         smbl = decl.dia_symbols[0]
@@ -272,10 +269,11 @@ class decl_loader_t(object):
         elif enums.CV_access_e.CV_protected == smbl.access:
             return declarations.ACCESS_TYPES.PROTECTED
         else:
-            fully_undecorated_name = smbl.undecorate_name()
-            if fully_undecorated_name.startswith( 'private:' ):
+            if not smbl.undecoratedName:
+                return declarations.ACCESS_TYPES.PUBLIC
+            elif smbl.undecoratedName.startswith( 'private:' ):
                 declarations.ACCESS_TYPES.PRIVATE
-            elif fully_undecorated_name.startswith( 'protected:' ):
+            elif smbl.undecoratedName.startswith( 'protected:' ):
                 declarations.ACCESS_TYPES.PROTECTED
             else:
                 return declarations.ACCESS_TYPES.PUBLIC
@@ -348,7 +346,7 @@ class decl_loader_t(object):
         #~ self.__load_enums()
         #~ self.__load_vars()
         #~ self.__load_typedefs()
-        #~ self.__load_calldefs()
+        self.__load_calldefs()
         map( self.__normalize_name, self.global_ns.decls(recursive=True) )
         self.__join_unnamed_nss( self.global_ns )
         self.__remove_empty_nss( self.global_ns )
@@ -538,11 +536,15 @@ class decl_loader_t(object):
         return decl
 
     def __load_calldefs( self ):
+        compiler_defined_mmem_funs = [ '__vecDelDtor'
+                                       ,
+        ]
         self.logger.info( 'building function objects' )
         is_function = lambda smbl: smbl.symTag == msdia.SymTagFunction
         for functions_count, function_smbl in enumerate( itertools.ifilter( is_function, self.symbols.itervalues() ) ):
             if function_smbl.classParent and function_smbl.classParentId not in self.public_classes: #what about base classes
                 continue
+            if
             function_decl = self.__create_calldef(function_smbl)
             if function_decl:
                 self.__update_decls_tree( function_decl )
@@ -579,6 +581,8 @@ class decl_loader_t(object):
         calldef_type = self.create_type( smbl.type ) #what does happen with constructor?
         decl = None
         if isinstance( calldef_type, declarations.member_function_type_t ):
+            if isinstance( calldef_type.class_inst, declarations.unknown_t ):
+                return
             could_be_static = False
             could_be_const = False
             if '~' in smbl.uname:
@@ -630,7 +634,6 @@ class decl_loader_t(object):
             try:
                 class_ = self.create_type( smbl.objectPointerType )
                 class_ = declarations.base_type( class_ )
-                #~ pdb.set_trace()
                 return declarations.member_function_type_t( class_, return_type, args_types )
             except:
                 self.logger.warning( 'unable to find out the type of the object pointer for a class method.' )

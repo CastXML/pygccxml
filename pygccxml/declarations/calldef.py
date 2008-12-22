@@ -19,6 +19,7 @@ This modules contains definition for next C++ declarations:
 
 import cpptypes
 import algorithm
+import templates
 import declaration
 import type_traits
 import dependencies
@@ -44,11 +45,11 @@ class argument_t(object):
         self._name = name
         self._default_value = default_value
         self._type = type
-        self._attributes = attributes        
+        self._attributes = attributes
 
     def clone( self, **keywd ):
         """constructs new argument_t instance
-        
+
         return argument_t( name=keywd.get( 'name', self.name )
                            , type=keywd.get( 'type', self.type )
                            , default_value=keywd.get( 'default_value', self.default_value )
@@ -59,7 +60,7 @@ class argument_t(object):
                            , type=keywd.get( 'type', self.type )
                            , default_value=keywd.get( 'default_value', self.default_value )
                            , attributes=keywd.get( 'attributes', self.attributes ) )
-        
+
     def __str__(self):
         if self.ellipsis:
             return "..."
@@ -114,7 +115,7 @@ class argument_t(object):
     type = property( _get_type, _set_type
                      , doc="""The type of the argument.
                      @type: L{type_t}""")
-                     
+
     def _get_attributes( self ):
         return self._attributes
     def _set_attributes( self, attributes ):
@@ -203,7 +204,7 @@ class calldef_t( declaration.declaration_t ):
         self._does_throw = does_throw
     does_throw = property( _get_does_throw, _set_does_throw,
                            doc="""If False, than function does not throw any exception.
-                           In this case, function was declared with empty throw 
+                           In this case, function was declared with empty throw
                            statement.
                            """)
 
@@ -226,9 +227,9 @@ class calldef_t( declaration.declaration_t ):
     @property
     def overloads(self):
         """A list of overloaded "callables" (i.e. other callables with the same name within the same scope.
-        
+
         @type: list of L{calldef_t}
-        """ 
+        """
         if not self.parent:
             return []
         # finding all functions with the same name
@@ -313,7 +314,7 @@ class calldef_t( declaration.declaration_t ):
         report_dependency = lambda *args, **keywd: dependencies.dependency_info_t( self, *args, **keywd )
         answer = []
         if self.return_type:
-            answer.append( report_dependency( self.return_type, hint="return type" ) )       
+            answer.append( report_dependency( self.return_type, hint="return type" ) )
         map( lambda arg: answer.append( report_dependency( arg.type ) )
              , self.arguments )
         map( lambda exception: answer.append( report_dependency( exception, hint="exception" ) )
@@ -506,11 +507,11 @@ class constructor_t( member_calldef_t ):
         if not isinstance( unaliased.base, cpptypes.declarated_t ):
             return False
         return id(unaliased.base.declaration) == id(self.parent)
-    
+
     @property
     def is_trivial_constructor(self):
         return not bool( self.arguments )
-    
+
 
 class destructor_t( member_calldef_t ):
     """describes deconstructor declaration"""
@@ -541,7 +542,7 @@ class free_operator_t( free_calldef_t, operator_t ):
         free_calldef_t.__init__( self, *args, **keywords )
         operator_t.__init__( self, *args, **keywords )
         self.__class_types = None
-        
+
     @property
     def class_types( self ):
         """list of class/class declaration types, extracted from the operator arguments"""
@@ -559,3 +560,56 @@ class free_operator_t( free_calldef_t, operator_t ):
                 if decl:
                     self.__class_types.append( decl )
         return self.__class_types
+
+
+def __remove_leading_scope( s ):
+    if s and s.startswith( '::' ):
+        return s[2:]
+    else:
+        return s
+
+def __format_type_as_undecorated( type_ ):
+    result = []
+    type_ = type_traits.remove_alias( type_ )
+    base_type_ = type_traits.base_type( type_ )
+    base_type_ = type_traits.remove_declarated( base_type_ )
+    if type_traits.is_class( base_type_ ) and base_type_.class_type == "struct":
+        result.append('struct ')
+    result.append( __remove_leading_scope( type_.decl_string ) )
+    return ' '.join( result )
+
+def __format_args_as_undecorated( argtypes ):
+    if not argtypes:
+        return 'void'
+    else:
+        return ','.join( map( __format_type_as_undecorated, argtypes ) )
+
+def create_undecorated_name(calldef):
+    """returns string, which contains full function name formatted exactly as
+    result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
+    options.
+    """
+    calldef_type = calldef.function_type()
+
+    result = []
+    is_mem_fun = isinstance( calldef, member_calldef_t )
+    if is_mem_fun and calldef.virtuality != VIRTUALITY_TYPES.NOT_VIRTUAL:
+        result.append( 'virtual ' )
+    if calldef_type.return_type:
+        result.append( __format_type_as_undecorated( calldef.return_type ) )
+        result.append( ' ' )
+    if isinstance( calldef, member_calldef_t ):
+        result.append( __remove_leading_scope( calldef.parent.decl_string ) + '::')
+
+    result.append( calldef.name )
+    if isinstance( calldef, ( constructor_t, destructor_t) ) \
+       and templates.is_instantiation( calldef.parent.name ):
+        result.append( '<%s>' % ','.join( templates.args( calldef.parent.name ) ) )
+
+    result.append( '(%s)' % __format_args_as_undecorated( calldef_type.arguments_types ) )
+    if is_mem_fun and calldef.has_const:
+        result.append( 'const' )
+    return ''.join( result )
+
+
+

@@ -11,6 +11,7 @@ pdb_file = r'E:\development\language-binding\pyplusplus_dev\pyplusplus\cpptypes\
 
 reader = mspdb.decl_loader_t( pdb_file )
 opt = mspdb.enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE
+opt = 0
 
 public_smbls = {}
 for smbl in reader.public_symbols.iterkeys():

@@ -92,12 +92,11 @@ class UNDECORATE_NAME_OPTIONS:
                           | UNDNAME_NO_ECSU \
                           | UNDNAME_NO_IDENT_CHAR_CHECK
 
-    UNDNAME_SHORT_UNIQUE = UNDNAME_NO_LEADING_UNDERSCORES \
-                          | UNDNAME_NO_MS_KEYWORDS \
-                          | UNDNAME_NO_ALLOCATION_MODEL \
-                          | UNDNAME_NO_ALLOCATION_LANGUAGE \
-                          | UNDNAME_NO_ACCESS_SPECIFIERS \
-                          | UNDNAME_NO_THROW_SIGNATURES \
-                          | UNDNAME_NO_MEMBER_TYPE \
-                          | UNDNAME_NO_ECSU \
-                          | UNDNAME_NO_IDENT_CHAR_CHECK
+    UNDNAME_SHORT_UNIQUE = UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS
+    #~ UNDNAME_NO_LEADING_UNDERSCORES \
+                          #~ | UNDNAME_NO_ALLOCATION_MODEL \
+                          #~ | UNDNAME_NO_ALLOCATION_LANGUAGE \
+                          #~ | UNDNAME_NO_THROW_SIGNATURES \
+                          #~ | UNDNAME_NO_MEMBER_TYPE \
+                          #~ | UNDNAME_NO_ECSU \
+                          #~ | UNDNAME_NO_IDENT_CHAR_CHECK
