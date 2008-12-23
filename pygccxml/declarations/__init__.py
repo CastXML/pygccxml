@@ -104,8 +104,6 @@ from calldef import member_operator_t
 from calldef import casting_operator_t
 from calldef import free_function_t
 from calldef import free_operator_t
-from calldef import create_undecorated_name
-
 
 from decl_visitor import decl_visitor_t
 from type_visitor import type_visitor_t

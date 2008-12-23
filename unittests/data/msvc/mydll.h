@@ -22,4 +22,6 @@ template class __declspec(dllexport) std::auto_ptr< number_t >;
 
 typedef std::auto_ptr< number_t > number_aptr_t;
 
+enum{ auto_ptr_size = sizeof( number_aptr_t ) };
+
 void __declspec(dllexport) do_smth( number_aptr_t& );

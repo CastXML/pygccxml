@@ -8,7 +8,7 @@ from pygccxml import declarations
 from pygccxml.msvc import common_utils as msvc_utils
 
 pdb_file = r'E:\development\language-binding\pyplusplus_dev\pyplusplus\cpptypes\mydll\release\mydll.pdb'
-
+pdb_file = r'D:\AC_SERVER_4_VS2005\libs\Debug\SPDBLib_d.pdb'
 reader = mspdb.decl_loader_t( pdb_file )
 opt = mspdb.enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE
 opt = 0
