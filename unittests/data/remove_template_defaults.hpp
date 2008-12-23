@@ -13,7 +13,7 @@
 #else
     #include <hash_set>
     #include <hash_map>
-	#ifdef __GCCXML__
+	#if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
 		#define HASH_XXX_NS std
 	#else
 		#define HASH_XXX_NS stdext
@@ -31,22 +31,22 @@ namespace rtd{
 
 template <class T>
 struct type {};
-    
-namespace vectors{    
+
+namespace vectors{
     typedef std::vector< int > v_int;
     typedef std::vector< std::string > v_string;
     typedef std::vector< v_int > v_v_int;
-}    
+}
 
 namespace lists{
     typedef std::list< int > l_int;
     typedef std::list< std::wstring > l_wstring;
 }
 
-namespace deques{    
+namespace deques{
     typedef std::deque< std::vector< int > > d_v_int;
     typedef std::deque< std::list< std::string > > d_l_string;
-}    
+}
 
 namespace queues{
     typedef std::queue< int > q_int;
@@ -76,7 +76,7 @@ namespace maps{
     typedef std::map< int, double > m_i2d;
     typedef std::map< std::wstring, double > m_wstr2d;
     typedef std::map< const std::vector< int >, m_wstr2d > m_v_i2m_wstr2d;
-    
+
     inline std::map<std::string, int> f2(){}
 
 }
@@ -93,7 +93,7 @@ namespace hash_sets{
 
 }
 
-namespace hash_multisets{                 
+namespace hash_multisets{
     typedef HASH_XXX_NS::hash_multiset< std::vector< int > > mhs_v_int;
     typedef HASH_XXX_NS::hash_multiset< std::string > mhs_string;
 }
