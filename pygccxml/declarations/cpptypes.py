@@ -373,7 +373,7 @@ class volatile_t( compound_t ):
         compound_t.__init__( self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return 'volatile ' + self.base.build_decl_string(with_defaults)
+        return self.base.build_decl_string(with_defaults) + ' volatile'
 
     def _clone_impl( self ):
         return volatile_t( self.base.clone() )

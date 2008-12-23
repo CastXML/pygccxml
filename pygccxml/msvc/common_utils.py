@@ -79,6 +79,12 @@ class undname_creator:
     __undname = ctypes.windll.dbghelp.UnDecorateSymbolName
     __undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
     __clean_ecsu = re.compile( r'(?:(^|\W))(?:(class|enum|struct|union))' )
+    __fundamental_types = (
+          ( 'short unsigned int', 'unsigned short')
+        , ( 'short int', 'short' )
+        , ( 'long int', 'long' )
+        , ( 'long unsigned int', 'unsigned long' )
+    )
 
     def undecorate_blob( self, name, options=None ):
         if options is None:
@@ -99,17 +105,30 @@ class undname_creator:
         else:
             return s
 
-    def __format_type_as_undecorated( self, type_ ):
+    def __format_type_as_undecorated( self, type_, is_argument ):
         result = []
         type_ = declarations.remove_alias( type_ )
-        result.append( self.__remove_leading_scope( type_.decl_string ) )
+        if declarations.is_array( type_ ):
+            result.append( declarations.array_item_type( type_ ).decl_string )
+            result.append( '*' )
+            if is_argument:
+                result.append( 'const' )
+        else:
+            result.append( self.__remove_leading_scope( type_.decl_string ) )
         return ' '.join( result )
+
+    def __normalize( self, name ):
+        for what, with_ in self.__fundamental_types:
+            name = name.replace( what, with_ )
+        name = name.replace( ', ', ',' )
+        return name
 
     def __format_args_as_undecorated( self, argtypes ):
         if not argtypes:
             return 'void'
         else:
-            return ','.join( map( self.__format_type_as_undecorated, argtypes ) )
+            formater = lambda type_: self.__format_type_as_undecorated( type_, True )
+            return ','.join( map( formater, argtypes ) )
 
     def __undecorated_calldef( self, calldef ):
         calldef_type = calldef.function_type()
@@ -118,8 +137,10 @@ class undname_creator:
         is_mem_fun = isinstance( calldef, declarations.member_calldef_t )
         if is_mem_fun and calldef.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
             result.append( 'virtual ' )
+        if is_mem_fun and calldef.has_static:
+            result.append( 'static ' )
         if calldef_type.return_type:
-            result.append( self.__format_type_as_undecorated( calldef.return_type ) )
+            result.append( self.__format_type_as_undecorated( calldef.return_type, False ) )
             result.append( ' ' )
         if is_mem_fun:
             result.append( self.__remove_leading_scope( calldef.parent.decl_string ) + '::')
@@ -136,11 +157,12 @@ class undname_creator:
 
     def __undecorated_variable( self, decl ):
         result = []
-        if decl.type_qualifiers.has_static:
+        is_mem_var = isinstance( decl.parent, declarations.class_t )
+        if is_mem_var and decl.type_qualifiers.has_static:
             result.append( 'static ' )
-        result.append( self.__format_type_as_undecorated( decl.type ) )
+        result.append( self.__format_type_as_undecorated( decl.type, False ) )
         result.append( ' ' )
-        if isinstance( decl.parent, declarations.class_t ):
+        if is_mem_var:
             result.append( self.__remove_leading_scope( decl.parent.decl_string ) + '::' )
         result.append( decl.name )
         return ''.join( result )
@@ -150,12 +172,15 @@ class undname_creator:
         result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
         options.
         """
+        name = None
         if isinstance( decl, declarations.calldef_t ):
-            return self.__undecorated_calldef( decl )
+            name = self.__undecorated_calldef( decl )
         elif isinstance( decl, declarations.variable_t ):
-            return self.__undecorated_variable( decl )
+            name = self.__undecorated_variable( decl )
         else:
             raise NotImplementedError()
+        return self.__normalize( name )
+
 
 undecorate_blob = undname_creator().undecorate_blob
 undecorate_decl = undname_creator().undecorated_decl
@@ -177,6 +202,15 @@ class exported_symbols:
             found = exported_symbols.map_file_re.match( line )
             if found:
                 result[ found.group( 'decorated' ) ] = found.group( 'undecorated' )
+        return result
+
+    @staticmethod
+    def load_from_dll_file( fname ):
+        import get_exports
+        result = {}
+        blobs = get_exports.read_export_table( fname )
+        for blob in blobs:
+            result[ blob ] = undecorate_blob( blob )
         return result
 
 #~ quick & dirty test
