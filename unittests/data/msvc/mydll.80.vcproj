@@ -137,6 +137,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				GenerateMapFile="true"
+				MapFileName="$(TargetDir)$(TargetName).map"
 				MapExports="true"
 				SubSystem="2"
 				OptimizeReferences="2"

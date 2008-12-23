@@ -30,6 +30,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns.init_optimizer()
 
     def is_included( self, decl ):
+        if not isinstance( decl, ( declarations.calldef_t, declarations.variable_t) ):
+            return False
         for suffix in [ self.header, 'memory' ]:
             if decl.location.file_name.endswith( suffix ):
                 return True
@@ -49,7 +51,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             undecorated_blob_names.add( undname )
 
         undecorated_decl_names = set()
-        for f in self.global_ns.calldefs(self.is_included):
+        for f in self.global_ns.decls(self.is_included):
             undecorated_decl_names.add( msvc.undecorate_decl( f ) )
 
         issuperset = undecorated_decl_names.issuperset( undecorated_blob_names )

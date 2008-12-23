@@ -111,11 +111,7 @@ class undname_creator:
         else:
             return ','.join( map( self.__format_type_as_undecorated, argtypes ) )
 
-    def undecorated_decl(self, calldef):
-        """returns string, which contains full function name formatted exactly as
-        result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
-        options.
-        """
+    def __undecorated_calldef( self, calldef ):
         calldef_type = calldef.function_type()
 
         result = []
@@ -138,11 +134,34 @@ class undname_creator:
             result.append( 'const' )
         return ''.join( result )
 
+    def __undecorated_variable( self, decl ):
+        result = []
+        if decl.type_qualifiers.has_static:
+            result.append( 'static ' )
+        result.append( self.__format_type_as_undecorated( decl.type ) )
+        result.append( ' ' )
+        if isinstance( decl.parent, declarations.class_t ):
+            result.append( self.__remove_leading_scope( decl.parent.decl_string ) + '::' )
+        result.append( decl.name )
+        return ''.join( result )
+
+    def undecorated_decl(self, decl):
+        """returns string, which contains full function name formatted exactly as
+        result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
+        options.
+        """
+        if isinstance( decl, declarations.calldef_t ):
+            return self.__undecorated_calldef( decl )
+        elif isinstance( decl, declarations.variable_t ):
+            return self.__undecorated_variable( decl )
+        else:
+            raise NotImplementedError()
+
 undecorate_blob = undname_creator().undecorate_blob
 undecorate_decl = undname_creator().undecorated_decl
 
 class exported_symbols:
-    map_file_re = re.compile( r' +\d+    (?P<decorated>.+) \((?P<undecorated>.+)\)$' )
+    map_file_re = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
     @staticmethod
     def load_from_map_file( fname ):
         """returns dictionary { decorated symbol : orignal declaration name }"""

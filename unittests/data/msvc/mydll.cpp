@@ -41,6 +41,16 @@ std::auto_ptr<number_t> number_t::clone_ptr() const{
 void do_smth( number_aptr_t& ){
 }
 
+
+int myclass_t::my_static_member = 99;
+const int myclass_t::my_const_static_member = 10009;
+int my_global_int = 90;
+volatile int my_volatile_global_variable = 9;
+int my_global_array[10] = {0,1,2,3,4,5,6,7,8,9};
+
+void* get_pvoid(void*){ return 0;}
+void** get_ppvoid(void){return 0;}
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
