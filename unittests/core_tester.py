@@ -21,7 +21,7 @@ def is_sub_path( root, some_path ):
     root = normalize_path( root )
     some_path = normalize_path( some_path )
     return some_path.startswith( root )
-    
+
 
 class core_t( parser_test_case.parser_test_case_t ):
     """Tests core algorithms of GCC-XML and GCC-XML file reader.
@@ -392,8 +392,8 @@ def create_suite():
         suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
         suite.addTest( unittest.makeSuite(core_file_by_file_t))
         suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
-    if autoconfig.cxx_parsers_cfg.pdb_loader:
-        suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
+    #~ if autoconfig.cxx_parsers_cfg.pdb_loader:
+        #~ suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
     return suite
 
 def run_suite():
