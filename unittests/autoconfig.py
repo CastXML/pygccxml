@@ -35,7 +35,7 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 class cxx_parsers_cfg:
     keywd = { 'working_directory' : data_directory
-              , 'define_symbols' : [ gccxml_version ]#, '_HAS_TR1 0'  ]
+              , 'define_symbols' : [ gccxml_version ]
               , 'compiler' : compiler }
 
     if 'win' in sys.platform:

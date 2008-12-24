@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import re
 import ctypes
 import ctypes.wintypes
@@ -225,3 +226,14 @@ class exported_symbols:
         for blob in blobs:
             result[ blob ] = undecorate_blob( blob )
         return result
+
+    @staticmethod
+    def load_from_file( fname ):
+        ext = os.path.splitext( fname )[1]
+        if '.dll' == ext:
+            return exported_symbols.load_from_dll_file( fname )
+        elif '.map' == ext:
+            return exported_symbols.load_from_map_file( fname )
+        else:
+            raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
+                                % fname )

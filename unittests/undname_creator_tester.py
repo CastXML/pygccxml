@@ -48,7 +48,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
         else:
             return False
 
-    def __tester_impl( self, symbols ):
+    def __tester_impl( self, fname ):
+        symbols = msvc.exported_symbols.load_from_file( fname )
+
         undecorated_blob_names = set()
         for blob in symbols.iterkeys():
             undname = msvc.undecorate_blob( blob )
@@ -80,14 +82,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_map_file( self ):
         map_file = os.path.join( autoconfig.data_directory, 'msvc', 'release', 'mydll.map' )
-        symbols = msvc.exported_symbols.load_from_map_file( map_file )
-        self.__tester_impl( symbols )
-
+        self.__tester_impl( map_file )
 
     def test_dll_file( self ):
         dll_file = os.path.join( autoconfig.data_directory, 'msvc', 'release', 'mydll.dll' )
-        symbols = msvc.exported_symbols.load_from_dll_file( dll_file )
-        self.__tester_impl( symbols )
+        self.__tester_impl( dll_file )
 
 def create_suite():
     suite = unittest.TestSuite()
