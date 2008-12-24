@@ -185,6 +185,11 @@ class undname_creator:
 undecorate_blob = undname_creator().undecorate_blob
 undecorate_decl = undname_creator().undecorated_decl
 
+import exceptions
+class LicenseWarning( exceptions.UserWarning ):
+    def __init__( self, *args, **keywd ):
+        exceptions.UserWarning.__init__( self, *args, **keywd )
+
 class exported_symbols:
     map_file_re = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
     @staticmethod
@@ -206,19 +211,17 @@ class exported_symbols:
 
     @staticmethod
     def load_from_dll_file( fname ):
-        import get_exports
+        import warnings
+        warnings.warn( '\n'*2 + '-' * 30 + '>>LICENSE WARNING<<' + '-'*30
+                         + '\n"load_from_dll_file" functionality uses code licensed under MIT license.'
+                         + '\npygccxml project uses Boost Software License, Version 1.0. '
+                         + '\nFor more information about this functionality take a look on get_dll_exported_symbols.py file.'
+                         + '\n' + '='*79
+                         + '\n' * 2
+                       , LicenseWarning )
+        import get_dll_exported_symbols
         result = {}
-        blobs = get_exports.read_export_table( fname )
+        blobs = get_dll_exported_symbols.read_export_table( fname )
         for blob in blobs:
             result[ blob ] = undecorate_blob( blob )
         return result
-
-#~ quick & dirty test
-#~ symbols = exported_symbols.load_from_map_file( r'D:\dev\language-binding\sources\pygccxml_dev\unittests\data\msvc\Release\mydll.map' )
-#~ for decorated, undecorated in symbols.iteritems():
-    #~ print '---------------------------------------------------------------------'
-    #~ print decorated
-    #~ print undecorated
-    #~ print undecorate_blob( decorated )
-    #~ print '====================================================================='
-
