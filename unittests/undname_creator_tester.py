@@ -26,6 +26,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
         # array as function argument
         , 'int FA10_i_i(int * const)'
     ])
+    if 'msvc71' == utils.native_compiler.get_gccxml_compiler():
+        known_issues.add( 'std::auto_ptr<number_t> & std::auto_ptr<number_t>::operator=(std::auto_ptr_ref<number_t>)' )
 
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
@@ -64,7 +66,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
             undecorated_decl_names.difference_update(common)
             undecorated_blob_names.difference_update(common)
-            if undecorated_blob_names != self.known_issues:
+            if not self.known_issues.issubset( undecorated_blob_names ):
                 undecorated_blob_names.difference_update( self.known_issues )
                 msg = [ "undecorate_decl - failed" ]
                 msg.append( "undecorated_decl_names :" )
