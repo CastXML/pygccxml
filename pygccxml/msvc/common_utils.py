@@ -5,8 +5,8 @@
 
 import os
 import re
+import sys
 import ctypes
-import ctypes.wintypes
 from .. import declarations
 
 class UNDECORATE_NAME_OPTIONS:
@@ -77,15 +77,17 @@ class UNDECORATE_NAME_OPTIONS:
     #~ return undecorated_name.value
 
 class undname_creator:
-    __undname = ctypes.windll.dbghelp.UnDecorateSymbolName
-    __undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
-    __clean_ecsu = re.compile( r'(?:(^|\W))(?:(class|enum|struct|union))' )
-    __fundamental_types = (
-          ( 'short unsigned int', 'unsigned short')
-        , ( 'short int', 'short' )
-        , ( 'long int', 'long' )
-        , ( 'long unsigned int', 'unsigned long' )
-    )
+    def __init__( self ):
+        import ctypes.wintypes
+        self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
+        self.__undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
+        self.__clean_ecsu = re.compile( r'(?:(^|\W))(?:(class|enum|struct|union))' )
+        self.__fundamental_types = (
+              ( 'short unsigned int', 'unsigned short')
+            , ( 'short int', 'short' )
+            , ( 'long int', 'long' )
+            , ( 'long unsigned int', 'unsigned long' )
+        )
 
     def undecorate_blob( self, name, options=None ):
         if options is None:
@@ -182,9 +184,14 @@ class undname_creator:
             raise NotImplementedError()
         return self.__normalize( name )
 
-
-undecorate_blob = undname_creator().undecorate_blob
-undecorate_decl = undname_creator().undecorated_decl
+if 'win' in sys.platform:
+    undecorate_blob = undname_creator().undecorate_blob
+    undecorate_decl = undname_creator().undecorated_decl
+else:
+    def undecorate_blob( x ):
+        raise NotImplementedError()
+    def undecorate_decl( x ):
+        raise NotImplementedError()
 
 import exceptions
 class LicenseWarning( exceptions.UserWarning ):
