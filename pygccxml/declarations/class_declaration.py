@@ -457,7 +457,7 @@ class class_t( scopedef.scopedef_t ):
 
     def i_depend_on_them( self, recursive=True ):
         report_dependency = lambda *args: dependencies.dependency_info_t( self, *args )
-        
+
         answer = []
 
         map( lambda base: answer.append( report_dependency( base.related_class, base.access_type, "base class" ) )
@@ -500,8 +500,8 @@ class class_t( scopedef.scopedef_t ):
             return 'wstring'
         else:
             return get_partial_name( self.name )
-    
-    def find_noncopyable_vars( self ):        
+
+    def find_noncopyable_vars( self ):
         """returns list of all noncopyable variables"""
         import type_traits as tt#prevent cyclic dependencies
         logger = utils.loggers.cxx_parser
@@ -524,9 +524,17 @@ class class_t( scopedef.scopedef_t ):
                 cls = tt.class_traits.get_declaration( type_ )
                 if tt.is_noncopyable( cls ):
                     logger.debug( "__contains_noncopyable_mem_var - %s - TRUE - containes member variable - class that is not copyable" % self.decl_string )
-                    noncopyable_vars.append( mvar )                
+                    noncopyable_vars.append( mvar )
         logger.debug( "__contains_noncopyable_mem_var - %s - false - doesn't contains noncopyable members" % self.decl_string )
         return noncopyable_vars
 
+    @property
+    def has_vtable( self ):
+        """True, if class has virtual table, False otherwise"""
+        import calldef
+        return bool( self.calldefs( lambda f: isinstance( f, calldef.member_function_t ) \
+                                              and f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL
+                                    , recursive=False
+                                    , allow_empty=True ) )
 
 class_types = ( class_t, class_declaration_t )
