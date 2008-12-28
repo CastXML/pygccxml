@@ -331,4 +331,4 @@ def apply_visitor( visitor, decl_inst):
     fname = 'visit_' + decl_inst.__class__.__name__[:-2] #removing '_t' from class name
     if not hasattr(visitor, fname ):
         raise visit_function_has_not_been_found_t( visitor, decl_inst )
-    getattr( visitor, fname )()
+    return getattr( visitor, fname )()

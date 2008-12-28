@@ -15,6 +15,8 @@ from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
+print msvc.undecorate_blob( '?make_flatten@algorithms@reflection@engine_objects@@YAXAEBVinstance_info_t@23@V?$back_insert_iterator@V?$vector@Vinstance_info_t@reflection@engine_objects@@V?$allocator@Vinstance_info_t@reflection@engine_objects@@@std@@@std@@@std@@@Z' )
+
 class tester_t( parser_test_case.parser_test_case_t ):
 
     global_ns = None
@@ -50,6 +52,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def __tester_impl( self, fname ):
         symbols = msvc.exported_symbols.load_from_file( fname )
+        self.failUnless( 'identity' in symbols )
 
         undecorated_blob_names = set()
         for blob in symbols.iterkeys():

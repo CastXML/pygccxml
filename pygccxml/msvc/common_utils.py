@@ -199,22 +199,38 @@ class LicenseWarning( exceptions.UserWarning ):
         exceptions.UserWarning.__init__( self, *args, **keywd )
 
 class exported_symbols:
-    map_file_re = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
+    map_file_re_c = re.compile( r' +\d+    (?P<internall>.+?)(?:\s+exported name\:\s(?P<name>.*)$)')
+    map_file_re_cpp = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
+
     @staticmethod
     def load_from_map_file( fname ):
         """returns dictionary { decorated symbol : orignal declaration name }"""
         result = {}
         f = open( fname )
-        exports_started = False
+        lines = []
+        was_exports = False
         for line in f:
-            if not exports_started:
-                exports_started = bool( 'Exports' == line.strip() )
-            if not exports_started:
-                continue
-            line = line.rstrip()
-            found = exported_symbols.map_file_re.match( line )
+            if was_exports:
+                lines.append( line )
+            elif 'Exports' == line.strip():
+                was_exports = True
+            else:
+                pass
+        index = 0
+        while index < len( lines ):
+            line = lines[index].rstrip()
+            found = exported_symbols.map_file_re_cpp.match( line )
             if found:
                 result[ found.group( 'decorated' ) ] = found.group( 'undecorated' )
+            elif index + 1 < len( lines ):
+                two_lines = line + lines[index+1].rstrip()
+                found = exported_symbols.map_file_re_c.match( two_lines )
+                if found:
+                    result[ found.group( 'name' ) ] = found.group( 'name' )
+                    index += 1
+            else:
+                pass
+            index += 1
         return result
 
     @staticmethod
@@ -244,3 +260,7 @@ class exported_symbols:
         else:
             raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
                                 % fname )
+
+    @staticmethod
+    def is_c_function( decl, blob, undecorated_blob ):
+        return decl.name == blob == undecorated_blob

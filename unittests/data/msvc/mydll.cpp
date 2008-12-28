@@ -97,6 +97,9 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	return TRUE;
 }
 
+int identity( int i){
+    return i;
+}
 
 /*
 void __cdecl Fv_v_cdecl(void)

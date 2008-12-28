@@ -104,3 +104,7 @@ __declspec(dllexport) int Fv_i(void);
 __declspec(dllexport) long Fv_l(void);
 __declspec(dllexport) short Fv_s(void);
 __declspec(dllexport) void Fv_v(void);
+
+extern "C"{
+    int __declspec(dllexport) identity( int );
+}
