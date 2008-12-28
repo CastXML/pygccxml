@@ -102,24 +102,24 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
     def print_decl_header(self):
         header = self.__nice_decl_name( self.__inst ) + ": '%s'" % self.__inst.name
-        self.writer( ' ' * self.level * self.INDENT_SIZE + header.ljust( self.JUSTIFY ))
+        self.writer( ' ' * self.level * self.INDENT_SIZE + header.ljust( self.JUSTIFY ) + os.linesep)
         if self.__print_details:
             curr_level = self.level + 1
             if self.__inst.location:
                 location = 'location: [%s]:%s'%(self.__inst.location.file_name, self.__inst.location.line)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + location)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + location + os.linesep)
             if self.verbose:
                 artificial = 'artificial: ' + "'%s'" % str(self.__inst.is_artificial)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + artificial.ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + artificial.ljust( self.JUSTIFY ) + os.linesep)
             if self.verbose and self.__inst.attributes:
                 attributes = 'attributes: %s'%(self.__inst.attributes)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + attributes)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + attributes + os.linesep)
             if self.verbose and self.__inst.demangled:
                 demangled = 'demangled: %s'%(self.__inst.demangled)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + demangled)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + demangled + os.linesep)
             if self.verbose and self.__inst.mangled:
                 mangled = 'mangled: %s'%(self.__inst.mangled)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + mangled)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + mangled + os.linesep)
 
     def print_calldef_info(self, decl=None):
         """ Returns function signature: [retval, [arg1, ..., argN]]. """
@@ -133,12 +133,13 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         for arg in decl.arguments:
             args.append(arg.type.decl_string + ' ' + arg.name)
         indent = ' ' * (self.level+1) * self.INDENT_SIZE
-        self.writer( indent + "return type: " + str(retval) )
-        self.writer( indent + "arguments type: " + ', '.join(args))
+        self.writer( indent + "is extern: " + str(decl.has_extern)  + os.linesep)
+        self.writer( indent + "return type: " + str(retval)  + os.linesep)
+        self.writer( indent + "arguments type: " + ', '.join(args) + os.linesep)
         if isinstance( decl, calldef.member_calldef_t ):
-            self.writer( indent + "virtual: " + str(decl.virtuality))
-            self.writer( indent + "is const: " + str(decl.has_const))
-            self.writer( indent + "is static: " + str(decl.has_static))
+            self.writer( indent + "virtual: " + str(decl.virtuality) + os.linesep)
+            self.writer( indent + "is const: " + str(decl.has_const) + os.linesep)
+            self.writer( indent + "is static: " + str(decl.has_static) + os.linesep)
 
     def visit_member_function( self ):
         self.print_decl_header()
@@ -150,7 +151,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
 
         if self.__print_details:
             self.writer( ' ' * ( self.level + 1 ) * self.INDENT_SIZE
-                         + 'copy constructor: ' + str(self.__inst.is_copy_constructor) )
+                         + 'copy constructor: ' + str(self.__inst.is_copy_constructor) + os.linesep)
 
     def visit_destructor( self ):
         self.print_decl_header()
@@ -178,36 +179,36 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.print_decl_header()
         curr_level = self.level + 1
         class_type = 'class type: ' + "'%s'" % str(self.__inst.class_type)
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + class_type.ljust( self.JUSTIFY ))
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + class_type.ljust( self.JUSTIFY ) + os.linesep)
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.byte_size)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ))
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep)
             try:
                 byte_align = 'align: %d'%(self.__inst.byte_align)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep)
             except NotImplementedError:
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ) + os.linesep)
 
         if self.__inst.aliases:
             aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
             aliases.sort()
             msg = 'aliases: ' + `aliases`
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + msg.ljust( self.JUSTIFY ))
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + msg.ljust( self.JUSTIFY ) + os.linesep)
 
         def print_hierarchy(hierarchy_type, classes, curr_level):
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + hierarchy_type.ljust( self.JUSTIFY ))
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + hierarchy_type.ljust( self.JUSTIFY ) + os.linesep)
             curr_level += 1
             for class_ in classes:
                 class_str = 'class: ' + "'%s'" % str(class_.related_class.decl_string)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + class_str.ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + class_str.ljust( self.JUSTIFY ) + os.linesep)
                 access = 'access type: ' + "'%s'" % str(class_.access)
-                self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + access.ljust( self.JUSTIFY ))
+                self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + access.ljust( self.JUSTIFY ) + os.linesep)
                 if not ( None is class_.is_virtual ):
                     is_virtual = 'virtual inheritance: ' + "'%s'" % str(class_.is_virtual)
-                    self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + is_virtual.ljust( self.JUSTIFY ))
+                    self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + is_virtual.ljust( self.JUSTIFY ) + os.linesep)
 
         def print_members(members_type, members, curr_level):
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + members_type.ljust( self.JUSTIFY ))
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + members_type.ljust( self.JUSTIFY ) + os.linesep)
             if self.__recursive:
                 curr_level += 1
                 for member in members:
@@ -228,11 +229,11 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     def visit_enumeration(self):
         self.print_decl_header()
         curr_level = self.level + 1
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'values:'.ljust( self.JUSTIFY ) )
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'values:'.ljust( self.JUSTIFY )  + os.linesep)
         value_level = ' ' * ( curr_level + 1 )* self.INDENT_SIZE
-        self.writer( os.linesep )
+        self.writer( os.linesep  + os.linesep)
         for name, value in self.__inst.values:
-            self.writer( value_level + "%s : %s"% (name, value))
+            self.writer( value_level + "%s : %s"% (name, value) + os.linesep)
 
     def visit_namespace(self ):
         if self.verbose == False and not self.__inst.declarations:
@@ -249,22 +250,22 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     def visit_typedef(self ):
         self.print_decl_header()
         curr_level = self.level + 1
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'alias to: ' + self.__inst.type.decl_string)
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'alias to: ' + self.__inst.type.decl_string + os.linesep)
 
     def visit_variable(self ):
         self.print_decl_header()
         curr_level = self.level + 1
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value) )
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value)  + os.linesep)
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.type.byte_size)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ))
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep)
             try:
                 byte_align = 'align: %d'%(self.__inst.type.byte_align)
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_align.ljust( self.JUSTIFY ) + os.linesep)
             except NotImplementedError:
-                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ))
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ) + os.linesep)
             byte_offset = 'offset: %d'%(self.__inst.byte_offset)
-            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep)
+            self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_offset + os.linesep + os.linesep)
 
 def print_declarations( decls
                         , detailed=True
