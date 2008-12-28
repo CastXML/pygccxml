@@ -262,5 +262,5 @@ class exported_symbols:
                                 % fname )
 
     @staticmethod
-    def is_c_function( decl, blob, undecorated_blob ):
-        return decl.name == blob == undecorated_blob
+    def is_c_function( decl, blob ):
+        return decl.name == blob
