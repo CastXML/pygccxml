@@ -537,4 +537,17 @@ class class_t( scopedef.scopedef_t ):
                                     , recursive=False
                                     , allow_empty=True ) )
 
+    @property
+    def top_class( self ):
+        """reference to a parent class, which contains this class and defined
+        within a namespace
+
+        if this class is defined under a namespace, self will be returned"""
+        curr = self
+        parent = self.parent
+        while isinstance( parent, class_t ):
+            curr = parent
+            parent = parent.parent
+        return curr
+
 class_types = ( class_t, class_declaration_t )
