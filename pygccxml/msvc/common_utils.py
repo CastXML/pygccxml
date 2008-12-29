@@ -126,7 +126,7 @@ class undname_creator:
         name = name.replace( ', ', ',' )
         return name
 
-    def __format_args_as_undecorated( self, argtypes ):
+    def undecorate_argtypes( self, argtypes ):
         if not argtypes:
             return 'void'
         else:
@@ -153,7 +153,7 @@ class undname_creator:
            and declarations.templates.is_instantiation( calldef.parent.name ):
             result.append( '<%s>' % ','.join( declarations.templates.args( calldef.parent.name ) ) )
 
-        result.append( '(%s)' % self.__format_args_as_undecorated( calldef_type.arguments_types ) )
+        result.append( '(%s)' % self.undecorate_argtypes( calldef_type.arguments_types ) )
         if is_mem_fun and calldef.has_const:
             result.append( 'const' )
         return ''.join( result )
@@ -187,10 +187,13 @@ class undname_creator:
 if 'win' in sys.platform:
     undecorate_blob = undname_creator().undecorate_blob
     undecorate_decl = undname_creator().undecorated_decl
+    undecorate_argtypes = undname_creator().undecorate_argtypes
 else:
     def undecorate_blob( x ):
         raise NotImplementedError()
     def undecorate_decl( x ):
+        raise NotImplementedError()
+    def undecorate_argtypes( x ):
         raise NotImplementedError()
 
 import exceptions
