@@ -88,6 +88,21 @@ class undname_creator:
             , ( 'long int', 'long' )
             , ( 'long unsigned int', 'unsigned long' )
         )
+        self.__calling_conventions = re.compile( r'(?:(^|\s))(?:__(cdecl|clrcall|stdcall|fastcall|thiscall)\s)' )
+
+    def normalize_undecorated( self, undname, options=None ):
+        if options is None:
+            options = UNDECORATE_NAME_OPTIONS.SHORT_UNIQUE_NAME
+        if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ECSU & options:
+            undname = self.__clean_ecsu.sub( '', undname )
+        if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ACCESS_SPECIFIERS & options:
+            for prefix in ( 'public: ', 'private: ', 'protected: ' ):
+                if undname.startswith( prefix ):
+                    undname = undname[ len(prefix): ]
+                    break
+        if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_MS_KEYWORDS & options:
+            undname = self.__calling_conventions.sub( ' ', undname)
+        return undname.strip()
 
     def undecorate_blob( self, name, options=None ):
         if options is None:
@@ -95,10 +110,7 @@ class undname_creator:
         buffer = ctypes.create_string_buffer(1024*16)
         res = self.__undname( str(name), buffer, ctypes.sizeof(buffer), options)
         if res:
-            undname = str(buffer[:res])
-            if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ECSU & options:
-                undname = self.__clean_ecsu.sub( '', undname )
-            return undname.strip()
+            return self.normalize_undecorated_blob( str(buffer[:res]) )
         else:
             return name
 
@@ -188,12 +200,15 @@ if 'win' in sys.platform:
     undecorate_blob = undname_creator().undecorate_blob
     undecorate_decl = undname_creator().undecorated_decl
     undecorate_argtypes = undname_creator().undecorate_argtypes
+    normalize_undecorated = undname_creator().normalize_undecorated
 else:
     def undecorate_blob( x ):
         raise NotImplementedError()
     def undecorate_decl( x ):
         raise NotImplementedError()
     def undecorate_argtypes( x ):
+        raise NotImplementedError()
+    def normalize_undecorated( *args ):
         raise NotImplementedError()
 
 import exceptions
@@ -220,11 +235,12 @@ class exported_symbols:
             else:
                 pass
         index = 0
+
         while index < len( lines ):
             line = lines[index].rstrip()
             found = exported_symbols.map_file_re_cpp.match( line )
             if found:
-                result[ found.group( 'decorated' ) ] = found.group( 'undecorated' )
+                result[ found.group( 'decorated' ) ] = normalize_undecorated( found.group( 'undecorated' ) )
             elif index + 1 < len( lines ):
                 two_lines = line + lines[index+1].rstrip()
                 found = exported_symbols.map_file_re_c.match( two_lines )
