@@ -110,7 +110,7 @@ class undname_creator:
         buffer = ctypes.create_string_buffer(1024*16)
         res = self.__undname( str(name), buffer, ctypes.sizeof(buffer), options)
         if res:
-            return self.normalize_undecorated_blob( str(buffer[:res]) )
+            return self.normalize_undecorated( str(buffer[:res]) )
         else:
             return name
 
