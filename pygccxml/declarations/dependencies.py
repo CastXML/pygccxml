@@ -61,18 +61,27 @@ class dependency_info_t( object ):
         return None
 
     @staticmethod
+    def they_depend_on_me( decl ):
+        """returns set of declarations. every item in the returned set, depends on a
+        declaration from the input"""
+        import class_declaration #prevent cyclic imports
+        to_be_included = set()
+        for dependency_info in decl.i_depend_on_them():
+            ddecl = dependency_info.find_out_depend_on_declaration()
+            if ddecl:
+                to_be_included.add( ddecl )
+
+        if isinstance( decl.parent, class_declaration.class_t ):
+            to_be_included.add( decl.parent )
+        return to_be_included
+
+    @staticmethod
     def they_depend_on_us( decls ):
         """returns set of declarations. every item in the returned set, depends on a
         declaration from the input"""
         import class_declaration #prevent cyclic imports
         to_be_included = set()
         for decl in decls:
-            for dependency_info in decl.i_depend_on_them():
-                ddecl = dependency_info.find_out_depend_on_declaration()
-                if ddecl:
-                    to_be_included.add( ddecl )
-
-            if isinstance( decl.parent, class_declaration.class_t ):
-                to_be_included.add( decl.parent )
+            to_be_included.update( dependency_info_t.they_depend_on_me( decl ) )
         return to_be_included
 
