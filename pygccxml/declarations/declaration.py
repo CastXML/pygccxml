@@ -63,12 +63,14 @@ class declaration_t( object ):
         self._is_artificial = is_artificial
         self._mangled = mangled
         self._demangled = demangled
-        self._attributes = attributes        
+        self._attributes = attributes
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
         self._compiler = None
         self._partial_name = None
-        
+        self._decorated_name = None
+        self._undecorated_name = None
+
     def __str__(self):
         """Default __str__ method.
 
@@ -163,10 +165,10 @@ class declaration_t( object ):
 
     def _get_partial_name_impl( self ):
         return self.name
-    
+
     @property
     def partial_name( self ):
-        """declaration name, without template default arguments        
+        """declaration name, without template default arguments
         Right now std containers is the only classes that support this functionality"""
         if None is self._partial_name:
             self._partial_name = self._get_partial_name_impl()
@@ -220,7 +222,7 @@ class declaration_t( object ):
     def _set_mangled( self, mangled ):
         self._mangled = mangled
     mangled = property( _get_mangled, _set_mangled
-                        , doc="""Compiler generated declaration name
+                        , doc="""GCCXML generated unique declaration name
                         @type: str
                         """ )
 
@@ -229,7 +231,25 @@ class declaration_t( object ):
     def _set_demangled( self, demangled ):
         self._demangled = demangled
     demangled = property( _get_demangled, _set_demangled
-                        , doc="""Demangled compiler generated declaration name
+                        , doc="""declaration name, reconstructed from GCCXML generated unique name
+                        @type: str
+                        """ )
+
+    def _get_decorated_name( self ):
+        return self._decorated_name
+    def _set_decorated_name( self, decorated_name ):
+        self._decorated_name = decorated_name
+    decorated_name = property( _get_decorated_name, _set_decorated_name
+                        , doc="""unique declaration name extracted from a binary file ( .map, .dll, .so, etc )
+                        @type: str
+                        """ )
+
+    def _get_undecorated_name( self ):
+        return self._undecorated_name
+    def _set_undecorated_name( self, undecorated_name ):
+        self._undecorated_name = undecorated_name
+    undecorated_name = property( _get_undecorated_name, _set_undecorated_name
+                        , doc="""declaration name, which was created by pygccxml, for matching ( source code <==> binary ) purpose
                         @type: str
                         """ )
 

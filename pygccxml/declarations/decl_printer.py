@@ -120,6 +120,12 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             if self.verbose and self.__inst.mangled:
                 mangled = 'mangled: %s'%(self.__inst.mangled)
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + mangled + os.linesep)
+            if self.verbose and self.__inst.decorated_name:
+                decorated_name = 'decorated name: %s'%(self.__inst.decorated_name)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + decorated_name + os.linesep)
+            if self.verbose and self.__inst.undecorated_name:
+                undecorated_name = 'undecorated name: %s' % (self.__inst.undecorated_name)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + undecorated_name + os.linesep)
 
     def print_calldef_info(self, decl=None):
         """ Returns function signature: [retval, [arg1, ..., argN]]. """
