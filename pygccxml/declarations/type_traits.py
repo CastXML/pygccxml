@@ -104,7 +104,14 @@ def does_match_definition(given, main, secondary ):
     elif 3 <= len( types ):
         classes = set( [tp.__class__ for tp in types[:3]] )
         desired = set( [main] + list( secondary ) )
-        return classes == desired
+        diff = classes.symmetric_difference( desired )
+        if not diff:
+            return True
+        if len( diff ) == 2:
+            items = list( diff )
+            return issubclass( items[0], items[1] ) or issubclass( items[1], items[0] )
+        else:
+            return False
     else:
         return False
 
@@ -152,17 +159,16 @@ def is_arithmetic( type ):
 
 def is_pointer(type):
     """returns True, if type represents C++ pointer type, False otherwise"""
-    return does_match_definition( type
-                                  , cpptypes.pointer_t
-                                  , (cpptypes.const_t, cpptypes.volatile_t) )
+    return does_match_definition( type, cpptypes.pointer_t, (cpptypes.const_t, cpptypes.volatile_t) ) \
+           or does_match_definition( type, cpptypes.pointer_t, (cpptypes.volatile_t, cpptypes.const_t) )
+
 
 def is_calldef_pointer(type):
     """returns True, if type represents pointer to free/member function, False otherwise"""
     if not is_pointer(type):
         return False
     nake_type = remove_alias( type )
-    nake_type = remove_const( nake_type )
-    nake_type = remove_volatile( nake_type )
+    nake_type = remove_cv( nake_type )
     return isinstance( nake_type, cpptypes.compound_t ) \
            and isinstance( nake_type.base, cpptypes.calldef_type_t )
 
@@ -178,6 +184,10 @@ def remove_pointer(type):
         return cpptypes.volatile_t( nake_type.base.base )
     elif isinstance( nake_type, cpptypes.const_t ) and isinstance( nake_type.base, cpptypes.pointer_t ):
         return cpptypes.const_t( nake_type.base.base )
+    elif isinstance( nake_type, cpptypes.volatile_t ) \
+         and isinstance( nake_type.base, cpptypes.const_t ) \
+         and isinstance( nake_type.base.base, cpptypes.pointer_t ):
+        return cpptypes.volatile_t( ctypes.const_t( nake_type.base.base.base ) )
     elif isinstance( nake_type.base, cpptypes.calldef_type_t ):
         return type
     else:
@@ -285,13 +295,14 @@ def remove_cv(type):
         result = nake_type.base
     if is_volatile( result ):
         result = result.base
+    if is_const( result ):
+        result = result.base
     return result
 
 def is_fundamental(type):
     """returns True, if type represents C++ fundamental type"""
-    return does_match_definition( type
-                                  , cpptypes.fundamental_t
-                                  , (cpptypes.const_t, cpptypes.volatile_t) )
+    return does_match_definition( type, cpptypes.fundamental_t, (cpptypes.const_t, cpptypes.volatile_t) ) \
+           or does_match_definition( type, cpptypes.fundamental_t, (cpptypes.volatile_t, cpptypes.const_t) ) \
 
 class declaration_xxx_traits:
     """this class implements the functionality needed for convinient work with

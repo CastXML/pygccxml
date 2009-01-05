@@ -12,19 +12,19 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     declarations = None
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'type_traits.hpp'
         self.declarations = None
-        
+
     def setUp(self):
         if not tester_t.declarations:
             tester_t.declarations = parser.parse( [self.header], self.config )
         self.declarations = tester_t.declarations
-        
-    def __test_type_category( self, ns_name, controller ):                
+
+    def __test_type_category( self, ns_name, controller ):
         ns_control = declarations.find_declaration( self.declarations
                                                     , type=declarations.namespace_t
                                                     , name=ns_name )
@@ -37,23 +37,26 @@ class tester_t( parser_test_case.parser_test_case_t ):
                                                , type=declarations.namespace_t
                                                , name='no' )
         self.failUnless( ns_no, "unable to find 'no' namespace" )
-        for decl in ns_yes.declarations:   
+        for decl in ns_yes.declarations:
             if isinstance( decl, declarations.variable_t ):
                 self.failUnless( controller( decl.type )
-                                 , 'for type "%s" the answer to the question "%s" should be True' 
+                                 , 'for type "%s" the answer to the question "%s" should be True'
                                  % ( decl.type.decl_string, ns_name ) )
             elif isinstance( decl, declarations.calldef_t ) and decl.name.startswith( 'test_' ):
                 continue
             else:
+                #~ if 'mf1_type_const_volatile_t' in decl.name:
+                    #~ import pdb
+                    #~ pdb.set_trace()
                 self.failUnless( controller( decl )
-                                 , 'for type "%s" the answer to the question "%s" should be True' 
+                                 , 'for type "%s" the answer to the question "%s" should be True'
                                  % ( decl.decl_string, ns_name ) )
         for decl in ns_no.declarations:
             if isinstance( decl, declarations.calldef_t ) and decl.name.startswith( 'test_' ):
                 continue
 
             self.failIf( controller( decl )
-                         , 'for type "%s" the answer to the question "%s" should be False' 
+                         , 'for type "%s" the answer to the question "%s" should be False'
                             % ( decl.decl_string, ns_name ) )
 
     def __test_type_transformation( self, ns_name, transformer ):
@@ -69,8 +72,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
                                                   , type=declarations.namespace_t
                                                   , name='after' )
         self.failUnless( ns_after, "unable to find 'after' namespace" )
-        
-        for tbefore in ns_before.declarations:          
+
+        for tbefore in ns_before.declarations:
             tafter = declarations.find_declaration( ns_after, name=tbefore.name )
             self.failUnless( tafter, "unable to find transformed type definition for type '%s'" % tbefore.decl_string )
             transformed = transformer( tbefore )
@@ -151,14 +154,14 @@ class tester_t( parser_test_case.parser_test_case_t ):
         unrelated1 = declarations.find_declaration( ns.declarations
                                                     , type=declarations.class_t
                                                     , name='unrelated1' )
-        
+
         unrelated2 = declarations.find_declaration( ns.declarations
                                                     , type=declarations.class_t
                                                     , name='unrelated2' )
         self.failUnless( base and derived and not declarations.is_base_and_derived( unrelated1, unrelated2 ) )
 
     def test_is_same(self):
-        self.failUnless( declarations.is_same( declarations.int_t, declarations.int_t ) ) 
+        self.failUnless( declarations.is_same( declarations.int_t, declarations.int_t ) )
         self.failIf( declarations.is_same( declarations.int_t, declarations.float_t ) )
 
     def test_remove_const(self):
@@ -183,21 +186,21 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( operator_not, 'operator! was not found' )
         self.failUnless( declarations.is_unary_operator( operator_not ), 'operator! should be idenitified as unary operator' )
         self.failUnless( not declarations.is_binary_operator( operator_not ), 'operator! should be idenitified as unary operator' )
-        
+
         operator_class_p = declarations.find_declaration( self.declarations
                                                           , type=declarations.operator_t
                                                           , fullname='::is_unary_operator::dummy::operator+' )
         self.failUnless( operator_class_p, 'operator+ was not found' )
         self.failUnless( not declarations.is_unary_operator( operator_class_p ), 'operator+ should be idenitified as binary operator' )
         self.failUnless( declarations.is_binary_operator( operator_class_p ), 'operator! should be idenitified as binary operator' )
-        
+
         operator_class_pp = declarations.find_declaration( self.declarations
                                                            , type=declarations.operator_t
                                                            , fullname='::is_unary_operator::dummy::operator++' )
         self.failUnless( operator_class_pp, 'operator++ was not found' )
         self.failUnless( declarations.is_unary_operator( operator_class_pp ), 'operator++ should be idenitified as unary operator' )
         self.failUnless( not declarations.is_binary_operator( operator_class_pp ), 'operator++ should be idenitified as unary operator' )
-        
+
         operator_pp = declarations.find_declaration( self.declarations
                                                      , type=declarations.operator_t
                                                      , fullname='::is_unary_operator::operator++' )
@@ -229,16 +232,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
         expected_value = bool( expected_type.get_name2value_dict()['value'] )
         self.failUnless( expected_value == declarations.is_convertible( source_type, target_type )
                          , 'Check conversion failed for ' + decl.name )
-        
+
     def test_is_convertible( self ):
         ns_is_convertible = declarations.find_declaration( self.declarations
                                                            , type=declarations.namespace_t
                                                            , name="is_convertible" )
-                                                                   
+
         self.failUnless( ns_is_convertible, "namespace is_convertible was not found" )
         for tester in filter( lambda decl: decl.name.startswith( 'x' ), ns_is_convertible.declarations ):
             self.__is_convertible_impl( tester )
-        
+
 class missing_decls_tester_t(unittest.TestCase):
     def __init__(self, *args ):
         unittest.TestCase.__init__(self, *args)
@@ -249,9 +252,9 @@ class missing_decls_tester_t(unittest.TestCase):
         ci = global_ns.class_( 'const_item' )
         self.failUnless( len( ci.declarations ) == 3 )
         #copy constructor, destructor, variable
-          
+
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     suite.addTest( unittest.makeSuite(missing_decls_tester_t))
     return suite

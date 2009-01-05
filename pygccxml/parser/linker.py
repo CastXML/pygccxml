@@ -18,13 +18,13 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         self.__membership = membership
         self.__files = files
         self.__inst = None
-        
-        self.__compiler = None 
+
+        self.__compiler = None
         if self.__decls:
             for d in self.__decls.itervalues():
                 self.__compiler = d.compiler
                 break
-    
+
     def _get_inst(self):
         return self.__inst
     def _set_inst(self, inst):
@@ -48,12 +48,12 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         else:
             return unknown_t()
 
-    def __link_compound_type(self):        
+    def __link_compound_type(self):
         self.__inst.base = self.__link_type( self.__inst.base )
 
     def __link_members(self):
         if not self.__membership.has_key( id(self.__inst) ):
-            return 
+            return
         for member in self.__membership[ id(self.__inst) ]:
             if not self.__access.has_key( member ):
                 continue
@@ -85,7 +85,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
 
     def visit_constructor( self ):
         self.__link_calldef()
-            
+
     def visit_destructor( self ):
         self.__link_calldef()
 
@@ -109,13 +109,13 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_class(self ):
         self.__link_members()
         #GCC-XML sometimes generates constructors with names that does not match
-        #class name. I think this is because those constructors are compiler 
-        #generated. I need to find out more about this and to talk with Brad 
+        #class name. I think this is because those constructors are compiler
+        #generated. I need to find out more about this and to talk with Brad
 
         new_name = self.__inst._name
         if templates.is_instantiation( new_name ):
             new_name = templates.name( new_name )
-            
+
         for decl in self.__inst.declarations:
             if not isinstance( decl, constructor_t ):
                 continue
@@ -133,7 +133,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
                 access = data[0]
             self.__inst.bases.append( hierarchy_info_t( base_decl, access ) )
             base_decl.derived.append( hierarchy_info_t( self.__inst, access ) )
-        
+
     def visit_enumeration(self ):
         pass
 
@@ -208,30 +208,34 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
 
     def visit_jbyte(self):
         pass
-    
+
     def visit_jshort(self):
         pass
-    
+
     def visit_jint(self):
         pass
-    
+
     def visit_jlong(self):
         pass
-    
+
     def visit_jfloat(self):
         pass
-    
+
     def visit_jdouble(self):
         pass
-    
+
     def visit_jchar(self):
         pass
-    
+
     def visit_jboolean(self):
         pass
 
     def visit_volatile( self ):
-        self.__link_compound_type()
+        if isinstance( self.__inst.base, const_t ):
+            const_type_inst = self.__inst.base
+            const_type_inst.base = self.__link_type( const_type_inst.base )
+        else:
+            self.__link_compound_type()
 
     def visit_const( self ):
         self.__link_compound_type()
@@ -239,7 +243,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_pointer( self ):
         if '0.9' in self.__compiler and isinstance( self.__inst.base, member_variable_type_t ):
             original_inst = self.__inst
-            self.__inst = self.__inst.base 
+            self.__inst = self.__inst.base
             self.visit_member_variable_type()
             self.__inst = original_inst
         else:

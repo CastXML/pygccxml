@@ -338,7 +338,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         return array_t( type_, size + 1 )
 
     def __read_cv_qualified_type( self, attrs ):
-        if attrs.has_key( XML_AN_CONST ):
+        if attrs.has_key( XML_AN_CONST ) and attrs.has_key( XML_AN_VOLATILE ):
+            return volatile_t( const_t( attrs[XML_AN_TYPE] ) )
+        elif attrs.has_key( XML_AN_CONST ):
             return const_t( attrs[XML_AN_TYPE] )
         elif attrs.has_key( XML_AN_VOLATILE ):
             return volatile_t( attrs[XML_AN_TYPE] )
