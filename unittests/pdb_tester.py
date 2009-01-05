@@ -2,9 +2,9 @@ import os
 import unittest
 import autoconfig
 
-from pygccxml.msvc import mspdb
+from pygccxml.binary_parsers import mspdb
 from pygccxml import declarations
-from pygccxml.msvc import common_utils as msvc_utils
+from pygccxml.binary_parsers import common_utils as msvc_utils
 
 class tester_t( unittest.TestCase ):
     def __init__(self, *args):

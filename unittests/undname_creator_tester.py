@@ -10,12 +10,10 @@ import autoconfig
 import parser_test_case
 
 import pprint
-from pygccxml import msvc
+from pygccxml import binary_parsers
 from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
-
-print msvc.undecorate_blob( '?make_flatten@algorithms@reflection@engine_objects@@YAXAEBVinstance_info_t@23@V?$back_insert_iterator@V?$vector@Vinstance_info_t@reflection@engine_objects@@V?$allocator@Vinstance_info_t@reflection@engine_objects@@@std@@@std@@@std@@@Z' )
 
 class tester_t( parser_test_case.parser_test_case_t ):
 
@@ -51,19 +49,19 @@ class tester_t( parser_test_case.parser_test_case_t ):
             return False
 
     def __tester_impl( self, fname ):
-        symbols = msvc.exported_symbols.load_from_file( fname )
+        symbols = binary_parsers.exported_symbols.load_from_file( fname )
         self.failUnless( 'identity' in symbols )
 
         undecorated_blob_names = set()
         for blob in symbols.iterkeys():
-            undname = msvc.undecorate_blob( blob )
+            undname = binary_parsers.undecorate_blob( blob )
             if "`" in undname:
                 continue
             undecorated_blob_names.add( undname )
 
         undecorated_decl_names = set()
         for f in self.global_ns.decls(self.is_included):
-            undecorated_decl_names.add( msvc.undecorate_decl( f ) )
+            undecorated_decl_names.add( binary_parsers.undecorate_decl( f ) )
 
         issuperset = undecorated_decl_names.issuperset( undecorated_blob_names )
         if not issuperset:
