@@ -136,6 +136,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.writer( indent + "is extern: " + str(decl.has_extern)  + os.linesep)
         self.writer( indent + "return type: " + str(retval)  + os.linesep)
         self.writer( indent + "arguments type: " + ', '.join(args) + os.linesep)
+        self.writer( indent + "calling convention: __%s__" % decl.calling_convention + os.linesep)
         if isinstance( decl, calldef.member_calldef_t ):
             self.writer( indent + "virtual: " + str(decl.virtuality) + os.linesep)
             self.writer( indent + "is const: " + str(decl.has_const) + os.linesep)

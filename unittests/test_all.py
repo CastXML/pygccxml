@@ -53,6 +53,7 @@ import function_traits_tester
 import better_templates_matcher_tester
 import declaration_matcher_tester
 import undname_creator_tester
+import calling_convention_tester
 
 testers = [
     decl_string_tester
@@ -102,6 +103,7 @@ testers = [
     , better_templates_matcher_tester
     , declaration_matcher_tester
     , undname_creator_tester
+    , calling_convention_tester
 ]
 
 def create_suite():

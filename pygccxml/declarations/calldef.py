@@ -16,7 +16,7 @@ This modules contains definition for next C++ declarations:
     - constructor
     - destructor
 """
-
+import re
 import cpptypes
 import algorithm
 import templates
@@ -33,6 +33,32 @@ class VIRTUALITY_TYPES:
     ALL = [NOT_VIRTUAL, VIRTUAL, PURE_VIRTUAL]
 #preserving backward compatebility
 FUNCTION_VIRTUALITY_TYPES = VIRTUALITY_TYPES
+
+class CALLING_CONVENTION_TYPES:
+    """class that defines "calling convention" constants"""
+    UNKNOWN = ''
+    CDECL = 'cdecl'
+    STDCALL = 'stdcall'
+    THISCALL = 'thiscall'
+    FASTCALL = 'fastcall'
+    SYSTEM_DEFAULT = '<<<system default>>>'
+
+    ALL = ( UNKNOWN, CDECL, STDCALL, THISCALL, FASTCALL )
+
+    pattern = re.compile( r'.*(?:^|\s)(?:__)?(?P<cc>cdecl|stdcall|thiscall|fastcall)(?:__)?.*' )
+
+    @staticmethod
+    def extract( text, default=UNKNOWN ):
+        """extracts calling convention from the text. If the calling convention could not be found, the "default"is used"""
+        if not text:
+            return default
+        found = CALLING_CONVENTION_TYPES.pattern.match( text )
+        if found:
+            return found.group( 'cc' )
+        else:
+            return default
+
+
 
 #First level in hierarchy of calldef
 class argument_t(object):
@@ -140,6 +166,7 @@ class calldef_t( declaration.declaration_t ):
         self._return_type = return_type
         self._has_extern = has_extern
         self._demangled_name = None
+        self._calling_convention = None
 
     def _get__cmp__call_items(self):
         """implementation details"""
@@ -321,6 +348,25 @@ class calldef_t( declaration.declaration_t ):
              , self.exceptions )
         return answer
 
+    def guess_calling_convention( self ):
+        """This function should be overriden in the derived classes and return
+        more-or-less successfull guess about calling convention"""
+        return CALLING_CONVENTION_TYPES.UNKNOWN
+
+    def get_calling_convention( self ):
+        if self._calling_convention is None:
+            self._calling_convention = CALLING_CONVENTION_TYPES.extract( self.attributes )
+            if not self._calling_convention:
+                self._calling_convention = self.guess_calling_convention()
+        return self._calling_convention
+
+    def set_calling_convention( self, cc ):
+        self._calling_convention = cc
+
+    calling_convention = property( get_calling_convention, set_calling_convention
+                                   , doc="function calling convention. See L{CALLING_CONVENTION_TYPES} class for possible values" )
+
+
 #Second level in hierarchy of calldef
 class member_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ class or struct"""
@@ -412,6 +458,12 @@ class member_calldef_t( calldef_t ):
         else:
             return f_type.partial_decl_string
 
+    def guess_calling_convention( self ):
+        if self.has_static:
+            return CALLING_CONVENTION_TYPES.SYSTEM_DEFAULT
+        else:
+            return CALLING_CONVENTION_TYPES.THISCALL
+
 class free_calldef_t( calldef_t ):
     """base class for "callable" declarations that defined within C++ namespace"""
     def __init__( self, *args, **keywords ):
@@ -453,6 +505,11 @@ class free_calldef_t( calldef_t ):
             return f_type.decl_string
         else:
             return f_type.partial_decl_string
+
+    def guess_calling_convention( self ):
+        """This function should be overriden in the derived classes and return
+        more-or-less successfull guess about calling convention"""
+        return CALLING_CONVENTION_TYPES.UNKNOWN
 
 
 class operator_t(object):
