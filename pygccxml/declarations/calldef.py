@@ -43,7 +43,7 @@ class CALLING_CONVENTION_TYPES:
     FASTCALL = 'fastcall'
     SYSTEM_DEFAULT = '<<<system default>>>'
 
-    ALL = ( UNKNOWN, CDECL, STDCALL, THISCALL, FASTCALL )
+    all = ( UNKNOWN, CDECL, STDCALL, THISCALL, FASTCALL, SYSTEM_DEFAULT )
 
     pattern = re.compile( r'.*(?:^|\s)(?:__)?(?P<cc>cdecl|stdcall|thiscall|fastcall)(?:__)?.*' )
 
