@@ -3,6 +3,10 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+"""
+provides functionality needed to undecorate\demangle compiler generated unique names
+"""
+
 import os
 import re
 import sys

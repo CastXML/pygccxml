@@ -3,6 +3,14 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+
+"""
+defines few simple classes( parsers ), which deals with .dll, .map, .so files.
+
+Those classes extract decorated\mangled names from the files. Later, they undecorate
+the name and extract the functions calling convention.
+"""
+
 import os
 import re
 import sys
@@ -31,7 +39,11 @@ get_dll_exported_symbols.py file.
 """
 
 class libparser_t( object ):
+    """base class for .dll, .map, .so parser classes"""
     def __init__( self, global_ns, binary_file ):
+        """global_ns - reference to global namespace
+        binary_file - s
+        """
         self.__global_ns = global_ns
         self.__binary_file = binary_file
         self.__loaded_symbols = None
@@ -48,16 +60,33 @@ class libparser_t( object ):
 
     @property
     def loaded_symbols( self ):
-        """list of symbols, which were loaded from the binary file"""
+        """list of symbols, which were loaded from the binary file.
+        The actual type of return value defined by the derived class"""
         return self.__loaded_symbols
 
     def load_symbols( self ):
+        """loads public( shared ) symbols from the binary file.
+
+        This method should be overiden in the derived classes.
+        """
         raise NotImplementedError()
 
-    def merge( self ):
+    def merge( self, symbol):
+        """extracts and merges information from the symbol to the declarations tree.
+
+        This method should be overiden in the derived classes.
+        """
         raise NotImplementedError()
 
     def parse( self ):
+        """main class method
+
+        loads information from the binary file and merges it into the declarations
+        tree.
+
+        The return value of the function is dictionary, where key is decorated
+        declaration name and value is a declaration.
+        """
         self.__loaded_symbols = self.load_symbols()
         result = {}
         for smbl in self.__loaded_symbols:
@@ -73,6 +102,7 @@ CCTS = declarations.CALLING_CONVENTION_TYPES
 CCTS = declarations.CALLING_CONVENTION_TYPES
 
 class msvc_libparser_t( libparser_t ):
+    """base parser class for few MSVC binary files"""
     def __init__( self, global_ns, binary_file ):
         libparser_t.__init__( self, global_ns, binary_file )
         self.__formated_decls = {}
@@ -89,6 +119,7 @@ class msvc_libparser_t( libparser_t ):
         return self.__formated_decls
 
 class map_file_parser_t( msvc_libparser_t ):
+    """parser for MSVC .map file"""
     c_entry = re.compile( r' +\d+    (?P<internall>.+?)(?:\s+exported name\:\s(?P<name>.*)$)')
     cpp_entry = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
 
@@ -145,6 +176,7 @@ class map_file_parser_t( msvc_libparser_t ):
 
 
 class dll_file_parser_t( msvc_libparser_t ):
+    """parser for Windows .dll file"""
     def __init__( self, global_ns, map_file_path ):
         global dll_file_parser_warning
         warnings.warn( dll_file_parser_warning, LicenseWarning )
@@ -172,8 +204,9 @@ class dll_file_parser_t( msvc_libparser_t ):
                 decl.calling_convention = CCTS.extract( blob_undecorated, CCTS.CDECL )
             return blob, decl
 
-
 def merge_information( global_ns, fname, runs_under_unittest=False ):
+    """high level function - select the appropriate binary file parser and integrates
+    the information from the file to the declarations tree. """
     ext = os.path.splitext( fname )[1]
     parser = None
     if '.dll' == ext:
