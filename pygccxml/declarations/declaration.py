@@ -69,7 +69,6 @@ class declaration_t( object ):
         self._compiler = None
         self._partial_name = None
         self._decorated_name = None
-        self._undecorated_name = None
 
     def __str__(self):
         """Default __str__ method.
@@ -241,15 +240,6 @@ class declaration_t( object ):
         self._decorated_name = decorated_name
     decorated_name = property( _get_decorated_name, _set_decorated_name
                         , doc="""unique declaration name extracted from a binary file ( .map, .dll, .so, etc )
-                        @type: str
-                        """ )
-
-    def _get_undecorated_name( self ):
-        return self._undecorated_name
-    def _set_undecorated_name( self, undecorated_name ):
-        self._undecorated_name = undecorated_name
-    undecorated_name = property( _get_undecorated_name, _set_undecorated_name
-                        , doc="""declaration name, which was created by pygccxml, for matching ( source code <==> binary ) purpose
                         @type: str
                         """ )
 

@@ -3,7 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-from common_utils import undecorate_blob
-from common_utils import undecorate_decl
-from common_utils import exported_symbols
-from common_utils import UNDECORATE_NAME_OPTIONS
+import sys
+import undname
+from parsers import merge_information
+
+def undecorate_blob( blob ):
+    return undname.undname_creator_t().undecorate_blob( blob )

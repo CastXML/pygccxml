@@ -7,7 +7,7 @@ import os
 import re
 import sys
 import ctypes
-from .. import declarations
+from pygccxml import declarations
 
 class UNDECORATE_NAME_OPTIONS:
     UNDNAME_COMPLETE = 0x0000 #Enables full undecoration.
@@ -76,32 +76,36 @@ class UNDECORATE_NAME_OPTIONS:
                #~ , options )
     #~ return undecorated_name.value
 
-class undname_creator:
+class undname_creator_t:
     def __init__( self ):
         import ctypes.wintypes
         self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
         self.__undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
-        self.__clean_ecsu = re.compile( r'(?:(^|\W))(?:(class|enum|struct|union))' )
+        self.__clean_ecsu = ( re.compile( r'(?P<startswith>^|\W)(?:(class|enum|struct|union)\s)' )
+                              , '%(startswith)s' )
         self.__fundamental_types = (
               ( 'short unsigned int', 'unsigned short')
             , ( 'short int', 'short' )
             , ( 'long int', 'long' )
             , ( 'long unsigned int', 'unsigned long' )
         )
-        self.__calling_conventions = re.compile( r'(?:(^|\s))(?:__(cdecl|clrcall|stdcall|fastcall|thiscall)\s)' )
+        self.__calling_conventions = ( re.compile( r'(?P<startswith>^|\s)(?:__(cdecl|clrcall|stdcall|fastcall|thiscall)\s)' )
+                                       , '%(startswith)s' )
 
     def normalize_undecorated( self, undname, options=None ):
         if options is None:
             options = UNDECORATE_NAME_OPTIONS.SHORT_UNIQUE_NAME
         if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ECSU & options:
-            undname = self.__clean_ecsu.sub( '', undname )
+            expr, substitute = self.__clean_ecsu
+            undname = expr.sub( lambda m: substitute % m.groupdict(), undname )
         if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_ACCESS_SPECIFIERS & options:
             for prefix in ( 'public: ', 'private: ', 'protected: ' ):
                 if undname.startswith( prefix ):
                     undname = undname[ len(prefix): ]
                     break
         if UNDECORATE_NAME_OPTIONS.UNDNAME_NO_MS_KEYWORDS & options:
-            undname = self.__calling_conventions.sub( ' ', undname)
+            expr, substitute = self.__calling_conventions
+            undname = expr.sub( lambda m: substitute % m.groupdict(), undname )
         return undname.strip()
 
     def undecorate_blob( self, name, options=None ):
@@ -195,91 +199,3 @@ class undname_creator:
         else:
             raise NotImplementedError()
         return self.__normalize( name )
-
-if 'win' in sys.platform:
-    undecorate_blob = undname_creator().undecorate_blob
-    undecorate_decl = undname_creator().undecorated_decl
-    undecorate_argtypes = undname_creator().undecorate_argtypes
-    normalize_undecorated = undname_creator().normalize_undecorated
-else:
-    def undecorate_blob( x ):
-        raise NotImplementedError()
-    def undecorate_decl( x ):
-        raise NotImplementedError()
-    def undecorate_argtypes( x ):
-        raise NotImplementedError()
-    def normalize_undecorated( *args ):
-        raise NotImplementedError()
-
-import exceptions
-class LicenseWarning( exceptions.UserWarning ):
-    def __init__( self, *args, **keywd ):
-        exceptions.UserWarning.__init__( self, *args, **keywd )
-
-class exported_symbols:
-    map_file_re_c = re.compile( r' +\d+    (?P<internall>.+?)(?:\s+exported name\:\s(?P<name>.*)$)')
-    map_file_re_cpp = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
-
-    @staticmethod
-    def load_from_map_file( fname ):
-        """returns dictionary { decorated symbol : orignal declaration name }"""
-        result = {}
-        f = open( fname )
-        lines = []
-        was_exports = False
-        for line in f:
-            if was_exports:
-                lines.append( line )
-            elif 'Exports' == line.strip():
-                was_exports = True
-            else:
-                pass
-        index = 0
-
-        while index < len( lines ):
-            line = lines[index].rstrip()
-            found = exported_symbols.map_file_re_cpp.match( line )
-            if found:
-                result[ found.group( 'decorated' ) ] = normalize_undecorated( found.group( 'undecorated' ) )
-            elif index + 1 < len( lines ):
-                two_lines = line + lines[index+1].rstrip()
-                found = exported_symbols.map_file_re_c.match( two_lines )
-                if found:
-                    result[ found.group( 'name' ) ] = found.group( 'name' )
-                    index += 1
-            else:
-                pass
-            index += 1
-        return result
-
-    @staticmethod
-    def load_from_dll_file( fname ):
-        import warnings
-        warnings.warn( '\n'*2 + '-' * 30 + '>>LICENSE WARNING<<' + '-'*30
-                         + '\n"load_from_dll_file" functionality uses code licensed under MIT license.'
-                         + '\npygccxml project uses Boost Software License, Version 1.0. '
-                         + '\nFor more information about this functionality take a look on get_dll_exported_symbols.py file.'
-                         + '\n' + '='*79
-                         + '\n' * 2
-                       , LicenseWarning )
-        import get_dll_exported_symbols
-        result = {}
-        blobs = get_dll_exported_symbols.read_export_table( fname )
-        for blob in blobs:
-            result[ blob ] = undecorate_blob( blob )
-        return result
-
-    @staticmethod
-    def load_from_file( fname ):
-        ext = os.path.splitext( fname )[1]
-        if '.dll' == ext:
-            return exported_symbols.load_from_dll_file( fname )
-        elif '.map' == ext:
-            return exported_symbols.load_from_map_file( fname )
-        else:
-            raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
-                                % fname )
-
-    @staticmethod
-    def is_c_function( decl, blob ):
-        return decl.name == blob
