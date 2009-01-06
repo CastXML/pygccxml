@@ -60,9 +60,9 @@ setup( name = "pygccxml",
        packages = [ 'pygccxml',
                     'pygccxml.declarations',
                     'pygccxml.parser',
-                    'pygccxml.msvc',
-                    'pygccxml.msvc.bsc',
-                    'pygccxml.msvc.mspdb',
+                    'pygccxml.binary_parsers',
+                    'pygccxml.binary_parsers.bsc',
+                    'pygccxml.binary_parsers.mspdb',
                     'pygccxml.utils' ],
        cmdclass = {"doc" : doc_cmd}
 )
