@@ -253,8 +253,30 @@ class missing_decls_tester_t(unittest.TestCase):
         self.failUnless( len( ci.declarations ) == 3 )
         #copy constructor, destructor, variable
 
+#~ class tester_diff_t( parser_test_case.parser_test_case_t ):
+    #~ COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    #~ declarations = None
+    #~ def __init__(self, *args ):
+        #~ parser_test_case.parser_test_case_t.__init__( self, *args )
+        #~ self.header = 'type_traits.hpp'
+        #~ self.declarations = None
+
+    #~ def setUp(self):
+        #~ if not tester_t.declarations:
+            #~ tester_t.declarations = parser.parse( [self.header], self.config )
+        #~ self.declarations = tester_t.declarations
+
+    #~ def test( self ):
+        #~ x = declarations.find_declaration( self.declarations
+                                           #~ , type=declarations.typedef_t
+                                           #~ , name="s2s_multimap_type" )
+        #~ print declarations.is_noncopyable( x)
+        #~ declarations.print_declarations( [declarations.class_traits.get_declaration( x )] )
+
+
 def create_suite():
     suite = unittest.TestSuite()
+    #~ suite.addTest( unittest.makeSuite(tester_diff_t))
     suite.addTest( unittest.makeSuite(tester_t))
     suite.addTest( unittest.makeSuite(missing_decls_tester_t))
     return suite
