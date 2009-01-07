@@ -9,7 +9,7 @@ import unittest
 import autoconfig
 import parser_test_case
 
-import pprint
+import subprocess
 from pygccxml import binary_parsers
 from pygccxml import utils
 from pygccxml import parser
@@ -33,16 +33,33 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
-        self.header = r'msvc\mydll.h'
-
-        self.map_file = os.path.join( autoconfig.data_directory, 'msvc', 'release', 'mydll.map' )
-        self.dll_file = os.path.join( autoconfig.data_directory, 'msvc', 'release', 'mydll.dll' )
+        self.binary_parsers_dir = os.path.join( autoconfig.data_directory, 'binary_parsers' )
+        self.header = os.path.join( self.binary_parsers_dir, r'mydll.h' )
+        self.map_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.map' )
+        self.dll_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.dll' )
 
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
+
+
+            process = subprocess.Popen( args='scons msvc_compiler=%s' % autoconfig.compiler
+                                        , shell=True
+                                        , stdin=subprocess.PIPE
+                                        , stdout=subprocess.PIPE
+                                        , stderr=subprocess.STDOUT
+                                        , cwd=self.binary_parsers_dir )
+            process.stdin.close()
+
+            while process.poll() is None:
+                line = process.stdout.readline()
+                print line.rstrip()
+            for line in process.stdout.readlines():
+                print line.rstrip()
+            if process.returncode:
+                raise RuntimeError( "unable to compile binary parser module. See output for the errors." )
 
     def is_included( self, decl ):
         if not isinstance( decl, ( declarations.calldef_t, declarations.variable_t) ):
