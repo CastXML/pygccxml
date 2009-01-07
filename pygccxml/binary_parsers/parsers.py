@@ -18,6 +18,7 @@ import ctypes
 import undname
 import warnings
 import exceptions
+import subprocess
 from .. import declarations
 
 class LicenseWarning( exceptions.UserWarning ):
@@ -204,6 +205,52 @@ class dll_file_parser_t( msvc_libparser_t ):
                 decl.calling_convention = CCTS.extract( blob_undecorated, CCTS.CDECL )
             return blob, decl
 
+
+class so_file_parser_t( libparser_t ):
+    def __init__( self, global_ns, binary_file ):
+        libparser_t.__init__( self, global_ns, binary_file )
+        self.__mangled2decls = {}
+        
+        for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
+            self.__mangled2decls[ f.mangled ] = f
+            
+        for v in self.global_ns.variables( allow_empty=True, recursive=True ):
+            self.__mangled2decls[ v.mangled ] = v
+            
+    def load_symbols( self ):
+        cmd = 'nm --extern-only --dynamic --defined-only %s' % self.binary_file
+        process = subprocess.Popen( args=cmd
+                                    , shell=True
+                                    , stdin=subprocess.PIPE
+                                    , stdout=subprocess.PIPE
+                                    , stderr=subprocess.STDOUT
+                                    , cwd=os.path.dirname( self.binary_file ) )
+        process.stdin.close()
+
+        output = []
+        while process.poll() is None:
+            output.append( process.stdout.readline() )
+        #the process already finished, read th rest of the output
+        for line in process.stdout.readlines():
+            output.append( line )
+        if process.returncode:
+            msg = ["Unable to extract public\\exported symbols from '%s' file." % self.binary_file ]
+            msg.append( 'The command line, which was used to extract symbols, is "%s"' % cmd )
+            raise RuntimeError( os.linesep.join(msg) )
+            
+        result = []
+        for line in output:
+            line = line.strip()
+            if line:
+                result.append( line.split( ' ' )[-1] )
+        return result
+        
+    def merge( self, smbl ):
+        if smbl in self.__mangled2decls:
+            return smbl, self.__mangled2decls[smbl]
+        else:
+            return (None, None)
+            
 def merge_information( global_ns, fname, runs_under_unittest=False ):
     """high level function - select the appropriate binary file parser and integrates
     the information from the file to the declarations tree. """
@@ -213,6 +260,8 @@ def merge_information( global_ns, fname, runs_under_unittest=False ):
         parser = dll_file_parser_t( global_ns, fname )
     elif '.map' == ext:
         parser = map_file_parser_t( global_ns, fname )
+    elif '.so' == ext:
+        parser = so_file_parser_t( global_ns, fname )
     else:
         raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
                             % fname )

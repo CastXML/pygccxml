@@ -1,5 +1,4 @@
 #include "mydll.h"
-#include "windows.h"
 #include <iostream>
 
 number_t::number_t()
@@ -79,23 +78,6 @@ int Fv_i(void){ return 0;}
 long Fv_l(void){ return 0;}
 short Fv_s(void){ return 0;}
 void Fv_v(void){ return;}
-
-
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-					 )
-{
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
-		break;
-	}
-	return TRUE;
-}
 
 int identity( int i){
     return i;

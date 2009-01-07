@@ -29,7 +29,8 @@ if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
     env.Append( CPPPATH=[r"E:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"
                         , r"E:\Program Files\Microsoft Visual Studio 9.0\VC\include"])
 
-env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
-env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+if 'win32' in sys.platform:
+    env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
+    env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
 
 SConscript( 'sconscript', variant_dir='#binaries', duplicate=0, exports=["env"] )

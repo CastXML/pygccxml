@@ -37,6 +37,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.header = os.path.join( self.binary_parsers_dir, r'mydll.h' )
         self.map_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.map' )
         self.dll_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.dll' )
+        self.so_file = os.path.join( self.binary_parsers_dir, 'binaries', 'libmydll.so' )
 
     def setUp(self):
         if not tester_t.global_ns:
@@ -44,7 +45,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
 
-
+            declarations.print_declarations( tester_t.global_ns )
+       
             process = subprocess.Popen( args='scons msvc_compiler=%s' % autoconfig.compiler
                                         , shell=True
                                         , stdin=subprocess.PIPE
@@ -78,9 +80,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
         for blob in parser.loaded_symbols:
             if isinstance( blob, tuple ):
                 blob = blob[0]
-            undname = binary_parsers.undecorate_blob( blob )
-            if "`" in undname:
-                continue
+            if 'win32' in sys.platform:
+                #TODO: find out where undecorate function is exposed on linux
+                undname = binary_parsers.undecorate_blob( blob )
+                if "`" in undname:
+                    continue
             blob_names.add( blob )
 
         decl_blob_names = set( symbols.keys() )
@@ -104,12 +108,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 self.fail( os.linesep.join(msg) )
 
     def test_map_file( self ):
-        self.__tester_impl( self.map_file )
+        if 'win32' in sys.platform:
+            self.__tester_impl( self.map_file )
 
     def test_dll_file( self ):
-        self.__tester_impl( self.dll_file )
+        if 'win32' in sys.platform:
+            self.__tester_impl( self.dll_file )
 
-    def test_compare_parsers( self ):
+    def test_z_compare_parsers( self ):
+        if 'win32' not in sys.platform:
+            return 
         dsymbols, dparser = binary_parsers.merge_information( self.global_ns, self.dll_file, runs_under_unittest=True )
         msymbols, mparser = binary_parsers.merge_information( self.global_ns, self.map_file, runs_under_unittest=True )
 
@@ -126,10 +134,13 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 self.failUnless( mdecl is decl )
         self.failUnless( was_error == False )
 
+    def test_so_file( self ):
+        if 'linux2' in sys.platform:
+            self.__tester_impl( self.so_file )
+
 def create_suite():
     suite = unittest.TestSuite()
-    if 'win' in sys.platform:
-        suite.addTest( unittest.makeSuite(tester_t))
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

@@ -1,10 +1,12 @@
 #pragma once
 
+#include "libconfig.h"
+
 #include <memory>
 #include <string>
 #include <vector>
 
-class __declspec(dllexport) number_t{
+class EXPORT_SYMBOL number_t{
 public:
 	number_t();
 	explicit number_t(int value);
@@ -20,27 +22,27 @@ private:
 	int m_value;
 };
 
-template class __declspec(dllexport) std::auto_ptr< number_t >;
+template class EXPORT_SYMBOL std::auto_ptr< number_t >;
 
 typedef std::auto_ptr< number_t > number_aptr_t;
 
 enum{ auto_ptr_size = sizeof( number_aptr_t ) };
 
-__declspec(dllexport) void do_smth( number_aptr_t& );
+EXPORT_SYMBOL void do_smth( number_aptr_t& );
 
-__declspec(dllexport) extern int my_global_int;
+EXPORT_SYMBOL extern int my_global_int;
 
 typedef void(*do_smth_type)( number_aptr_t& );
 
-__declspec(dllexport) extern volatile int my_volatile_global_variable;
+EXPORT_SYMBOL extern volatile int my_volatile_global_variable;
 
-__declspec(dllexport) extern int my_global_array[10];
+EXPORT_SYMBOL extern int my_global_array[10];
 
-__declspec(dllexport) void* get_pvoid(void*);
-__declspec(dllexport) void** get_ppvoid(void);
+EXPORT_SYMBOL void* get_pvoid(void*);
+EXPORT_SYMBOL void** get_ppvoid(void);
 
 
-class __declspec(dllexport) myclass_t{
+class EXPORT_SYMBOL myclass_t{
 public:
 	myclass_t(int x){}
 	myclass_t(void){}
@@ -75,36 +77,36 @@ public:
 
 };
 
-struct __declspec(dllexport) X{};
+struct EXPORT_SYMBOL X{};
 
-__declspec(dllexport) int FA10_i_i(int a[10]);
-__declspec(dllexport) int FPi_i(int *a);
-__declspec(dllexport) int Fc_i(char bar);
-__declspec(dllexport) int Ff_i(float bar);
-__declspec(dllexport) int Fg_i(double bar);
-__declspec(dllexport) int Fi_i(int bar);
-__declspec(dllexport) int Fie_i(int bar, ...);
-__declspec(dllexport) int Fii_i(int bar, int goo);
-__declspec(dllexport) int Fiii_i(int bar, int goo, int hoo);
-__declspec(dllexport) void Fmxmx_v(myclass_t arg1, X arg2, myclass_t arg3, X arg4);
-__declspec(dllexport) void Fmyclass_v(myclass_t m);
-__declspec(dllexport) const int Fv_Ci(void);
-__declspec(dllexport) long double Fv_Lg(void);
-__declspec(dllexport) int& Fv_Ri(void);
-__declspec(dllexport) signed char Fv_Sc(void);
-__declspec(dllexport) unsigned char Fv_Uc(void);
-__declspec(dllexport) unsigned int Fv_Ui(void);
-__declspec(dllexport) unsigned long Fv_Ul(void);
-__declspec(dllexport) unsigned short Fv_Us(void);
-__declspec(dllexport) volatile int Fv_Vi(void);
-__declspec(dllexport) char Fv_c(void);
-__declspec(dllexport) float Fv_f(void);
-__declspec(dllexport) double Fv_g(void);
-__declspec(dllexport) int Fv_i(void);
-__declspec(dllexport) long Fv_l(void);
-__declspec(dllexport) short Fv_s(void);
-__declspec(dllexport) void Fv_v(void);
+EXPORT_SYMBOL int FA10_i_i(int a[10]);
+EXPORT_SYMBOL int FPi_i(int *a);
+EXPORT_SYMBOL int Fc_i(char bar);
+EXPORT_SYMBOL int Ff_i(float bar);
+EXPORT_SYMBOL int Fg_i(double bar);
+EXPORT_SYMBOL int Fi_i(int bar);
+EXPORT_SYMBOL int Fie_i(int bar, ...);
+EXPORT_SYMBOL int Fii_i(int bar, int goo);
+EXPORT_SYMBOL int Fiii_i(int bar, int goo, int hoo);
+EXPORT_SYMBOL void Fmxmx_v(myclass_t arg1, X arg2, myclass_t arg3, X arg4);
+EXPORT_SYMBOL void Fmyclass_v(myclass_t m);
+EXPORT_SYMBOL const int Fv_Ci(void);
+EXPORT_SYMBOL long double Fv_Lg(void);
+EXPORT_SYMBOL int& Fv_Ri(void);
+EXPORT_SYMBOL signed char Fv_Sc(void);
+EXPORT_SYMBOL unsigned char Fv_Uc(void);
+EXPORT_SYMBOL unsigned int Fv_Ui(void);
+EXPORT_SYMBOL unsigned long Fv_Ul(void);
+EXPORT_SYMBOL unsigned short Fv_Us(void);
+EXPORT_SYMBOL volatile int Fv_Vi(void);
+EXPORT_SYMBOL char Fv_c(void);
+EXPORT_SYMBOL float Fv_f(void);
+EXPORT_SYMBOL double Fv_g(void);
+EXPORT_SYMBOL int Fv_i(void);
+EXPORT_SYMBOL long Fv_l(void);
+EXPORT_SYMBOL short Fv_s(void);
+EXPORT_SYMBOL void Fv_v(void);
 
 extern "C"{
-    int __declspec(dllexport) identity( int );
+    int EXPORT_SYMBOL identity( int );
 }
