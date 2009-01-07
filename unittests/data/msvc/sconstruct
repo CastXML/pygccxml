@@ -1,0 +1,35 @@
+import os
+import sys
+
+opts = Options("options", ARGUMENTS)
+
+
+if 'win32' in sys.platform:
+    opts.Add( EnumOption( 'msvc_compiler'
+                          , 'prefered msvc compiler'
+                          , 'msvc71'
+                          , ['msvc71', 'msvc80', 'msvc90'] ) )
+
+env = Environment(options = opts)
+
+if 'win32' in sys.platform:
+    Help(opts.GenerateHelpText(env))
+    if env["msvc_compiler"] == "msvc71":
+        env["MSVS"] = {"VERSION": "7.1"}
+        env["MSVS_VERSION"] = "7.1"
+        Tool("msvc")(env)
+    elif env["msvc_compiler"] == "vc8":
+        env["MSVS"] = {"VERSION": "8.0"}
+        env["MSVS_VERSION"] = "8.0"
+        Tool("msvc")(env)
+
+if os.path.exists( r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib' ):
+    env.Append( LIBPATH=[ r'E:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib'
+                         , r'E:\Program Files\Microsoft Visual Studio 9.0\VC\lib'] )
+    env.Append( CPPPATH=[r"E:\Program Files\Microsoft SDKs\Windows\v6.0A\Include"
+                        , r"E:\Program Files\Microsoft Visual Studio 9.0\VC\include"])
+
+env.AppendUnique( CCFLAGS=[ r"/MD",r"/EHsc",r"/GR",r"/Zc:wchar_t",r"/Zc:forScope" ] )
+env.AppendUnique( LINKFLAGS=[r"/MAP:${TARGET.base}.map", r"/MAPINFO:EXPORTS"] )
+
+SConscript( 'sconscript', variant_dir='#binaries', duplicate=0, exports=["env"] )
