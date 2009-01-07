@@ -80,3 +80,10 @@ class variable_t( declaration.declaration_t ):
 
     def i_depend_on_them( self, recursive=True ):
         return [ dependencies.dependency_info_t( self, self.type ) ]
+
+    def get_mangled_name( self ):
+        if not self._mangled and not self._demangled \
+           and not isinstance( self.parent, class_declaration.class_t ):
+           return self.name
+        else:
+            return self._mangled

@@ -593,6 +593,15 @@ class free_function_t( free_calldef_t ):
     def __init__( self, *args, **keywords ):
         free_calldef_t.__init__( self, *args, **keywords )
 
+    def get_mangled_name( self ):
+        if not self._mangled and not self._demangled \
+           and not '<' in self.name and not self.overloads:
+           #it is possible we deal with C function, so lets put it name as mangled one
+           return self.name
+        else:
+            return self._mangled
+
+
 class free_operator_t( free_calldef_t, operator_t ):
     """describes free operator declaration"""
     def __init__( self, *args, **keywords ):

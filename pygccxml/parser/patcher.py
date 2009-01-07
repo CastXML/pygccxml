@@ -186,4 +186,9 @@ def fix_calldef_decls(decls, enums):
         default_arg_patcher( decl )
         if isinstance( decl, declarations.casting_operator_t):
             _casting_oper_patcher_( decl )
-    
+
+def fix_mangled( decls ):
+    suffix = ' *INTERNAL* '
+    for d in decls:
+        if d.mangled and d.mangled.endswith( suffix ):
+            d.mangled = d.mangled[:-len( suffix )]

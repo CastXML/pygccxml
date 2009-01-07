@@ -216,8 +216,11 @@ class declaration_t( object ):
                               @type: bool
                               """)
 
-    def _get_mangled( self ):
+    def get_mangled_name( self ):
         return self._mangled
+
+    def _get_mangled( self ):
+        return self.get_mangled_name()
     def _set_mangled( self, mangled ):
         self._mangled = mangled
     mangled = property( _get_mangled, _set_mangled
