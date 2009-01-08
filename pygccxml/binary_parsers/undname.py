@@ -128,7 +128,7 @@ class undname_creator_t:
         else:
             return s
 
-    def __format_type_as_undecorated( self, type_, is_argument ):
+    def __format_type_as_undecorated( self, type_, is_argument, hint ):
         result = []
         type_ = declarations.remove_alias( type_ )
         if declarations.is_array( type_ ):
@@ -138,7 +138,13 @@ class undname_creator_t:
                 result.append( 'const' )
         else:
             result.append( self.__remove_leading_scope( type_.decl_string ) )
-        return ' '.join( result )
+
+        result = ' '.join( result )
+        if hint == 'nm':
+            for x in ( '*', '&' ):
+                result = result.replace( ' ' + x, x )
+        return result
+
 
     def __normalize( self, name ):
         for what, with_ in self.__fundamental_types:
@@ -146,24 +152,28 @@ class undname_creator_t:
         name = name.replace( ', ', ',' )
         return name
 
-    def undecorate_argtypes( self, argtypes ):
+    def format_argtypes( self, argtypes, hint ):
         if not argtypes:
-            return 'void'
+            if hint == 'msvc':
+                return 'void'
+            else:
+                return ''
         else:
-            formater = lambda type_: self.__format_type_as_undecorated( type_, True )
+            formater = lambda type_: self.__format_type_as_undecorated( type_, True, hint )
             return ','.join( map( formater, argtypes ) )
 
-    def __undecorated_calldef( self, calldef ):
+    def format_calldef( self, calldef, hint ):
         calldef_type = calldef.function_type()
 
         result = []
         is_mem_fun = isinstance( calldef, declarations.member_calldef_t )
-        if is_mem_fun and calldef.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
+        if is_mem_fun and hint == 'msvc' and calldef.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
             result.append( 'virtual ' )
-        if is_mem_fun and calldef.has_static:
+        if is_mem_fun and hint == 'msvc'and calldef.has_static:
             result.append( 'static ' )
-        if calldef_type.return_type:
-            result.append( self.__format_type_as_undecorated( calldef.return_type, False ) )
+        if  hint == 'msvc' and calldef_type.return_type:
+            #nm doesn't dump return type information
+            result.append( self.__format_type_as_undecorated( calldef.return_type, False, hint ) )
             result.append( ' ' )
         if is_mem_fun:
             result.append( self.__remove_leading_scope( calldef.parent.decl_string ) + '::')
@@ -171,35 +181,50 @@ class undname_creator_t:
         result.append( calldef.name )
         if isinstance( calldef, ( declarations.constructor_t, declarations.destructor_t) ) \
            and declarations.templates.is_instantiation( calldef.parent.name ):
-            result.append( '<%s>' % ','.join( declarations.templates.args( calldef.parent.name ) ) )
+            if hint == 'msvc':
+                result.append( '<%s>' % ','.join( declarations.templates.args( calldef.parent.name ) ) )
 
-        result.append( '(%s)' % self.undecorate_argtypes( calldef_type.arguments_types ) )
+        result.append( '(%s)' % self.format_argtypes( calldef_type.arguments_types, hint ) )
         if is_mem_fun and calldef.has_const:
-            result.append( 'const' )
+            if hint == 'msvc':
+                result.append( 'const' )
+            else:
+                result.append( ' const' )
         return ''.join( result )
 
-    def __undecorated_variable( self, decl ):
+    def format_var( self, decl, hint ):
         result = []
         is_mem_var = isinstance( decl.parent, declarations.class_t )
         if is_mem_var and decl.type_qualifiers.has_static:
             result.append( 'static ' )
-        result.append( self.__format_type_as_undecorated( decl.type, False ) )
-        result.append( ' ' )
+        if hint == 'msvc':
+            result.append( self.__format_type_as_undecorated( decl.type, False, hint ) )
+            result.append( ' ' )
         if is_mem_var:
             result.append( self.__remove_leading_scope( decl.parent.decl_string ) + '::' )
         result.append( decl.name )
         return ''.join( result )
 
-    def undecorated_decl(self, decl):
+    def format_decl(self, decl, hint=None):
         """returns string, which contains full function name formatted exactly as
         result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
         options.
+
+        Different compilers\utilities undecorate/demangle magled string ( unique names ) in a different way.
+        hint argument will tell pygccxml how to format declarations, so it couls be mapped later to the blob.
+        The valid options are" msvc, nm
         """
         name = None
+        if hint is None:
+            if 'win32' in sys.platform:
+                hint = 'msvc'
+            else:
+                hint = 'nm'
+
         if isinstance( decl, declarations.calldef_t ):
-            name = self.__undecorated_calldef( decl )
+            name = self.format_calldef( decl, hint )
         elif isinstance( decl, declarations.variable_t ):
-            name = self.__undecorated_variable( decl )
+            name = self.format_var( decl, hint )
         else:
             raise NotImplementedError()
         return self.__normalize( name )

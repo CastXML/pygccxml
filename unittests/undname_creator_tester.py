@@ -45,8 +45,6 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
 
-            declarations.print_declarations( tester_t.global_ns )
-       
             process = subprocess.Popen( args='scons msvc_compiler=%s' % autoconfig.compiler
                                         , shell=True
                                         , stdin=subprocess.PIPE
@@ -117,7 +115,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_z_compare_parsers( self ):
         if 'win32' not in sys.platform:
-            return 
+            return
         dsymbols, dparser = binary_parsers.merge_information( self.global_ns, self.dll_file, runs_under_unittest=True )
         msymbols, mparser = binary_parsers.merge_information( self.global_ns, self.map_file, runs_under_unittest=True )
 
@@ -127,7 +125,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         for blob, decl in dsymbols.iteritems():
             if blob not in msymbols:
                 was_error = True
-                print '\n%s could not be found in map file loaded symbols' % binary_parsers.undecorate_blob( blob )
+                print '\n%s could not be found in .map file' % binary_parsers.undecorate_blob( blob )
                 #~ self.failUnless( blob in msymbols, binary_parsers.undecorate_blob( blob ) )
             else:
                 mdecl = msymbols[ blob ]
@@ -137,6 +135,12 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_so_file( self ):
         if 'linux2' in sys.platform:
             self.__tester_impl( self.so_file )
+
+    def test_print( self ):
+        symbols, parser = binary_parsers.merge_information( self.global_ns, self.map_file, runs_under_unittest=True )
+        for d in symbols.itervalues():
+            print binary_parsers.format_decl( d, 'nm' )
+
 
 def create_suite():
     suite = unittest.TestSuite()

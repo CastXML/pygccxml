@@ -14,3 +14,7 @@ from parsers import merge_information
 def undecorate_blob( blob ):
     """returns undecorated\unmangled string, created from blob"""
     return undname.undname_creator_t().undecorate_blob( blob )
+
+def format_decl( decl, hint=None ):
+    """returns string, that represents formatted decl, according to some rules"""
+    return undname.undname_creator_t().format_decl( decl, hint=hint )

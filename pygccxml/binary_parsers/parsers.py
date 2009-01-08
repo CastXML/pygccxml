@@ -102,30 +102,32 @@ CCTS = declarations.CALLING_CONVENTION_TYPES
 
 CCTS = declarations.CALLING_CONVENTION_TYPES
 
-class msvc_libparser_t( libparser_t ):
+class formated_mapping_parser_t( libparser_t ):
     """base parser class for few MSVC binary files"""
-    def __init__( self, global_ns, binary_file ):
+    def __init__( self, global_ns, binary_file, hint ):
         libparser_t.__init__( self, global_ns, binary_file )
         self.__formated_decls = {}
         self.undname_creator = undname.undname_creator_t()
 
+        formatter = lambda decl: self.undname_creator.format_decl( f, hint )
+
         for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
-            self.__formated_decls[ self.undname_creator.undecorated_decl( f ) ] = f
+            self.__formated_decls[ formatter( f ) ] = f
 
         for v in self.global_ns.variables( allow_empty=True, recursive=True ):
-            self.__formated_decls[ self.undname_creator.undecorated_decl( v ) ] = v
+            self.__formated_decls[ formatter( v ) ] = v
 
     @property
     def formated_decls( self ):
         return self.__formated_decls
 
-class map_file_parser_t( msvc_libparser_t ):
+class map_file_parser_t( formated_mapping_parser_t ):
     """parser for MSVC .map file"""
     c_entry = re.compile( r' +\d+    (?P<internall>.+?)(?:\s+exported name\:\s(?P<name>.*)$)')
     cpp_entry = re.compile( r' +\d+    (?P<decorated>.+?) \((?P<undecorated>.+)\)$' )
 
     def __init__( self, global_ns, map_file_path ):
-        msvc_libparser_t.__init__( self, global_ns, map_file_path )
+        formated_mapping_parser_t.__init__( self, global_ns, map_file_path, 'msvc' )
 
     def load_symbols( self ):
         """returns dictionary { decorated symbol : orignal declaration name }"""
@@ -176,12 +178,12 @@ class map_file_parser_t( msvc_libparser_t ):
             return decorated, decl
 
 
-class dll_file_parser_t( msvc_libparser_t ):
+class dll_file_parser_t( formated_mapping_parser_t ):
     """parser for Windows .dll file"""
     def __init__( self, global_ns, map_file_path ):
         global dll_file_parser_warning
         warnings.warn( dll_file_parser_warning, LicenseWarning )
-        msvc_libparser_t.__init__( self, global_ns, map_file_path )
+        formated_mapping_parser_t.__init__( self, global_ns, map_file_path, 'msvc' )
 
     def load_symbols( self ):
         import get_dll_exported_symbols
@@ -207,18 +209,23 @@ class dll_file_parser_t( msvc_libparser_t ):
 
 
 class so_file_parser_t( libparser_t ):
+    nm_executable = 'nm'
+    #numeric-sort used for mapping between mangled and unmangled name
+    cmd_mangled = '%(nm)s --extern-only --dynamic --defined-only --numeric-sort %(lib)s'
+    cmd_demangled = '%(nm)s --extern-only --dynamic --defined-only --demangle --numeric-sort %(lib)s'
+    entry = re.compile( r'^(?P<address>(?:\w|\d)+)\s\w\s(?P<symbol>.+)$' )
+
     def __init__( self, global_ns, binary_file ):
         libparser_t.__init__( self, global_ns, binary_file )
         self.__mangled2decls = {}
-        
+
         for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
             self.__mangled2decls[ f.mangled ] = f
-            
+
         for v in self.global_ns.variables( allow_empty=True, recursive=True ):
             self.__mangled2decls[ v.mangled ] = v
-            
-    def load_symbols( self ):
-        cmd = 'nm --extern-only --dynamic --defined-only %s' % self.binary_file
+
+    def __execute_nm( self, cmd ):
         process = subprocess.Popen( args=cmd
                                     , shell=True
                                     , stdin=subprocess.PIPE
@@ -231,26 +238,39 @@ class so_file_parser_t( libparser_t ):
         while process.poll() is None:
             output.append( process.stdout.readline() )
         #the process already finished, read th rest of the output
-        for line in process.stdout.readlines():
-            output.append( line )
+        output.extend( process.stdout.readlines() )
         if process.returncode:
             msg = ["Unable to extract public\\exported symbols from '%s' file." % self.binary_file ]
             msg.append( 'The command line, which was used to extract symbols, is "%s"' % cmd )
             raise RuntimeError( os.linesep.join(msg) )
-            
-        result = []
+        return output
+
+    def __extract_symbols( self, cmd ):
+        output = self.__execute_nm( cmd )
+        result = {}
         for line in output:
-            line = line.strip()
-            if line:
-                result.append( line.split( ' ' )[-1] )
+            found = self.entry.match( line )
+            if found:
+                result[ found.group( 'address' ) ] = found.group( 'symbol' )
         return result
-        
+
+    def load_symbols( self ):
+        tmpl_args = dict( nm=self.nm_executable, lib=self.binary_file )
+        mangled_smbls = self.__extract_symbols( self.cmd_mangled % tmpl_args )
+        demangled_smbls = self.__extract_symbols( self.cmd_demangled % tmpl_args )
+        result = []
+        for address, blob in mangled_smbls.iteritems():
+            if address in demangled_smbls:
+                result.append( blob, demangled_smbls[address] )
+        return result
+
     def merge( self, smbl ):
-        if smbl in self.__mangled2decls:
-            return smbl, self.__mangled2decls[smbl]
-        else:
-            return (None, None)
-            
+        decorated, undecorated = smbl
+        if undecorated not in self.formated_decls:
+            return None, None
+        decl = self.formated_decls[ undecorated ]
+        return decorated, decl
+
 def merge_information( global_ns, fname, runs_under_unittest=False ):
     """high level function - select the appropriate binary file parser and integrates
     the information from the file to the declarations tree. """
