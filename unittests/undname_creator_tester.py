@@ -19,17 +19,37 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     global_ns = None
 
-    known_issues = set([
-        # array as function argument: 'int FA10_i_i(int * const)'
-          '?FA10_i_i@@YAHQAH@Z'
-        #pointer to function: 'void myclass_t::set_do_smth(void (**)(std::auto_ptr<number_t> &))'
-        , '?set_do_smth@myclass_t@@QAEXPAP6AXAAV?$auto_ptr@Vnumber_t@@@std@@@Z@Z'
-        #pointer to functions: 'void (** myclass_t::get_do_smth(void))(std::auto_ptr<number_t> &)'
-        , '?get_do_smth@myclass_t@@QAEPAP6AXAAV?$auto_ptr@Vnumber_t@@@std@@@ZXZ'
-    ])
-    if 'msvc71' == utils.native_compiler.get_gccxml_compiler():
-        #missing reference in argument - compiler issue 'std::auto_ptr<number_t> & std::auto_ptr<number_t>::operator=(std::auto_ptr_ref<number_t>)'
-        known_issues.add( '??4?$auto_ptr@Vnumber_t@@@std@@QAEAAV01@U?$auto_ptr_ref@Vnumber_t@@@1@@Z' )
+    @property
+    def known_issues( self ):
+        if 'win32' in sys.platform:
+            issues = set([
+                # array as function argument: 'int FA10_i_i(int * const)'
+                  '?FA10_i_i@@YAHQAH@Z'
+                #pointer to function: 'void myclass_t::set_do_smth(void (**)(std::auto_ptr<number_t> &))'
+                , '?set_do_smth@myclass_t@@QAEXPAP6AXAAV?$auto_ptr@Vnumber_t@@@std@@@Z@Z'
+                #pointer to functions: 'void (** myclass_t::get_do_smth(void))(std::auto_ptr<number_t> &)'
+                , '?get_do_smth@myclass_t@@QAEPAP6AXAAV?$auto_ptr@Vnumber_t@@@std@@@ZXZ'
+            ])
+            if 'msvc71' == utils.native_compiler.get_gccxml_compiler():
+                #missing reference in argument - compiler issue 'std::auto_ptr<number_t> & std::auto_ptr<number_t>::operator=(std::auto_ptr_ref<number_t>)'
+                issues.add( '??4?$auto_ptr@Vnumber_t@@@std@@QAEAAV01@U?$auto_ptr_ref@Vnumber_t@@@1@@Z' )
+            return issues
+        else:
+            return set([
+                #even c++filt fails
+                  '_ZNSt8auto_ptrI8number_tEcvSt12auto_ptr_refIT_EIS0_EEv'
+                #typeinfo name for number_t
+                , '_ZTI8number_t'
+                , '_ZTV8number_t'
+                , '_ZTS8number_t' 
+                #it seems that gccxml doesn't report this one
+                , '_ZNSt12auto_ptr_refI8number_tEC1EPS0_'
+                #the following are some global symbols
+                , '_init'
+                , '_edata'
+                , '_fini'
+                , '_end' ])
+
 
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
@@ -70,8 +90,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
         else:
             return False
 
-    def __tester_impl( self, fname ):
+    def __tester_impl( self, fname, expected_symbols ):
         symbols, parser = binary_parsers.merge_information( self.global_ns, fname, runs_under_unittest=True )
+        self.failUnless( len(symbols) == expected_symbols
+                         , "The expected symbols number(%d), is different frm the actual one(%d)"
+                           % ( expected_symbols, len(symbols) ) )                         
         self.failUnless( 'identity' in symbols )
 
         blob_names = set()
@@ -134,12 +157,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_so_file( self ):
         if 'linux2' in sys.platform:
-            self.__tester_impl( self.so_file )
+            self.__tester_impl( self.so_file, 64 )
 
-    def test_print( self ):
-        symbols, parser = binary_parsers.merge_information( self.global_ns, self.map_file, runs_under_unittest=True )
-        for d in symbols.itervalues():
-            print binary_parsers.format_decl( d, 'nm' )
+    def dont_test_print( self ):                
+        """primary used for debugging"""
+        symbols, parser = binary_parsers.merge_information( self.global_ns, self.so_file, runs_under_unittest=True )
+        for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
+            print binary_parsers.format_decl( f, 'nm' )
+
+        for v in self.global_ns.variables( allow_empty=True, recursive=True ):
+            print binary_parsers.format_decl( v, 'nm' )
 
 
 def create_suite():

@@ -82,9 +82,11 @@ class UNDECORATE_NAME_OPTIONS:
 
 class undname_creator_t:
     def __init__( self ):
-        import ctypes.wintypes
-        self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
-        self.__undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
+        if 'win32' in sys.platform:
+            import ctypes.wintypes
+            self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
+            self.__undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
+
         self.__clean_ecsu = ( re.compile( r'(?P<startswith>^|\W)(?:(class|enum|struct|union)\s)' )
                               , '%(startswith)s' )
         self.__fundamental_types = (
@@ -160,11 +162,13 @@ class undname_creator_t:
                 return ''
         else:
             formater = lambda type_: self.__format_type_as_undecorated( type_, True, hint )
-            return ','.join( map( formater, argtypes ) )
+            argsep =','
+            if hint == 'nm':
+                argsep = ',  ' #ugly hack, later, I will replace ', ' with ',', so single space will still exist
+            return argsep.join( map( formater, argtypes ) )
 
     def format_calldef( self, calldef, hint ):
         calldef_type = calldef.function_type()
-
         result = []
         is_mem_fun = isinstance( calldef, declarations.member_calldef_t )
         if is_mem_fun and hint == 'msvc' and calldef.virtuality != declarations.VIRTUALITY_TYPES.NOT_VIRTUAL:
@@ -186,16 +190,15 @@ class undname_creator_t:
 
         result.append( '(%s)' % self.format_argtypes( calldef_type.arguments_types, hint ) )
         if is_mem_fun and calldef.has_const:
-            if hint == 'msvc':
-                result.append( 'const' )
-            else:
-                result.append( ' const' )
+            if hint == 'nm':
+                result.append( ' ' )
+            result.append( 'const' )
         return ''.join( result )
 
     def format_var( self, decl, hint ):
         result = []
         is_mem_var = isinstance( decl.parent, declarations.class_t )
-        if is_mem_var and decl.type_qualifiers.has_static:
+        if is_mem_var and decl.type_qualifiers.has_static and hint == 'msvc':
             result.append( 'static ' )
         if hint == 'msvc':
             result.append( self.__format_type_as_undecorated( decl.type, False, hint ) )

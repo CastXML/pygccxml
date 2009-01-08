@@ -109,7 +109,7 @@ class formated_mapping_parser_t( libparser_t ):
         self.__formated_decls = {}
         self.undname_creator = undname.undname_creator_t()
 
-        formatter = lambda decl: self.undname_creator.format_decl( f, hint )
+        formatter = lambda decl: self.undname_creator.format_decl( decl, hint )
 
         for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
             self.__formated_decls[ formatter( f ) ] = f
@@ -208,7 +208,7 @@ class dll_file_parser_t( formated_mapping_parser_t ):
             return blob, decl
 
 
-class so_file_parser_t( libparser_t ):
+class so_file_parser_t( formated_mapping_parser_t ):
     nm_executable = 'nm'
     #numeric-sort used for mapping between mangled and unmangled name
     cmd_mangled = '%(nm)s --extern-only --dynamic --defined-only --numeric-sort %(lib)s'
@@ -216,14 +216,7 @@ class so_file_parser_t( libparser_t ):
     entry = re.compile( r'^(?P<address>(?:\w|\d)+)\s\w\s(?P<symbol>.+)$' )
 
     def __init__( self, global_ns, binary_file ):
-        libparser_t.__init__( self, global_ns, binary_file )
-        self.__mangled2decls = {}
-
-        for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
-            self.__mangled2decls[ f.mangled ] = f
-
-        for v in self.global_ns.variables( allow_empty=True, recursive=True ):
-            self.__mangled2decls[ v.mangled ] = v
+        formated_mapping_parser_t.__init__( self, global_ns, binary_file, 'nm' )
 
     def __execute_nm( self, cmd ):
         process = subprocess.Popen( args=cmd
@@ -261,15 +254,32 @@ class so_file_parser_t( libparser_t ):
         result = []
         for address, blob in mangled_smbls.iteritems():
             if address in demangled_smbls:
-                result.append( blob, demangled_smbls[address] )
+                result.append( ( blob, demangled_smbls[address] ) )
         return result
 
     def merge( self, smbl ):
         decorated, undecorated = smbl
-        if undecorated not in self.formated_decls:
-            return None, None
-        decl = self.formated_decls[ undecorated ]
-        return decorated, decl
+        if decorated == undecorated:
+            #we deal with C function ( or may be we deal with variable?, I have to check the latest
+            try:
+                f = self.global_ns.free_fun( decorated )
+                #TODO create usecase, where C function uses different calling convention
+                f.calling_convention = CCTS.CDECL
+                return decorated, f
+            except self.global_ns.declaration_not_found_t:
+                v = self.global_ns.vars( decorated, allow_empty=True, recursive=False )
+                if v:
+                    return decorated, v[0]
+                else:
+                    return None, None
+        else:
+            undecorated_normalized = self.undname_creator.normalize_undecorated( undecorated )
+            if undecorated_normalized not in self.formated_decls:
+                return None, None
+            decl = self.formated_decls[ undecorated_normalized ]
+            if isinstance( decl, declarations.calldef_t ):
+                decl.calling_convention = CCTS.extract( undecorated, CCTS.CDECL )
+            return decorated, decl
 
 def merge_information( global_ns, fname, runs_under_unittest=False ):
     """high level function - select the appropriate binary file parser and integrates
