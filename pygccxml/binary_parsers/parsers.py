@@ -290,7 +290,7 @@ def merge_information( global_ns, fname, runs_under_unittest=False ):
         parser = dll_file_parser_t( global_ns, fname )
     elif '.map' == ext:
         parser = map_file_parser_t( global_ns, fname )
-    elif '.so' == ext:
+    elif '.so' == ext or '.so.' in os.path.basename(fname):
         parser = so_file_parser_t( global_ns, fname )
     else:
         raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
