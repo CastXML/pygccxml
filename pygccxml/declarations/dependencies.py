@@ -61,7 +61,7 @@ class dependency_info_t( object ):
         return None
 
     @staticmethod
-    def they_depend_on_me( decl ):
+    def i_depend_on_them( decl ):
         """returns set of declarations. every item in the returned set, depends on a
         declaration from the input"""
         import class_declaration #prevent cyclic imports
@@ -76,7 +76,7 @@ class dependency_info_t( object ):
         return to_be_included
 
     @staticmethod
-    def they_depend_on_us( decls ):
+    def we_depend_on_them( decls ):
         """returns set of declarations. every item in the returned set, depends on a
         declaration from the input"""
         import class_declaration #prevent cyclic imports
