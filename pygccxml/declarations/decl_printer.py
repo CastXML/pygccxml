@@ -259,7 +259,8 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
     def visit_variable(self ):
         self.print_decl_header()
         curr_level = self.level + 1
-        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s  value: %s'%(self.__inst.type.decl_string, self.__inst.value)  + os.linesep)
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s' % self.__inst.type.decl_string  + os.linesep)
+        self.writer( ' ' * curr_level * self.INDENT_SIZE + 'value: %s' % self.__inst.value + os.linesep)
         if self.__print_details:
             byte_size = 'size: %d'%(self.__inst.type.byte_size)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep)
