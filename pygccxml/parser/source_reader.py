@@ -320,28 +320,3 @@ class source_reader_t:
         decls = filter( lambda inst: isinstance( inst, namespace_t ) and not inst.parent
                         , decls.itervalues()  )
         return ( decls, files.values() )
-
-    def read_synopsis_file( self, source_file ):
-        import synopsis_scanner
-        from Synopsis import AST
-        from Synopsis.Parsers import Cxx
-
-        ffname = self.__file_full_name(source_file)
-
-        cppflags = []
-        map( lambda dpath: cppflags.append( '-I %s' % dpath )
-             , self.__config.include_paths )
-        map( lambda define: cppflags.append( '-D %s' % define )
-             , self.__config.define_symbols )
-        map( lambda define: cppflags.append( '-U %s' % define )
-             , self.__config.undefine_symbols )
-
-        cxx = Cxx.Parser( preprocess=True, cppflags=cppflags )
-        ast = AST.AST()
-        cxx.process( ast, input=[source_file] )
-        scanner = synopsis_scanner.scanner_t( ast, self.__decl_factory )
-        scanner.visitAST( ast )
-        declarations = [scanner.global_ns]
-        self.__dcache.update( ffname, self.__config, declarations, [] )
-        return declarations
-
