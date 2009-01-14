@@ -307,6 +307,44 @@ class project_reader_t:
         reader = source_reader.source_reader_t( self.__config, None, self.__decl_factory )
         return reader.read_string( content )
 
+    def read_xml( self, file_configuration ):
+        """parses C++ code, defined on the file_configurations and returns GCCXML
+        generated file content"""
+
+        xml_file_path = None
+        delete_xml_file = True
+        fc = file_configuration
+        reader = source_reader.source_reader_t( self.__config, None, self.__decl_factory )
+        try:
+            if fc.content_type == fc.CONTENT_TYPE.STANDARD_SOURCE_FILE:
+                self.logger.info( 'Parsing source file "%s" ... ' % fc.data )
+                xml_file_path = reader.create_xml_file( fc.data )
+            elif fc.content_type == file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE:
+                self.logger.info( 'Parsing xml file "%s" ... ' % fc.data )
+                xml_file_path = fc.data
+                delete_xml_file = False
+            elif fc.content_type == fc.CONTENT_TYPE.CACHED_SOURCE_FILE:
+                #TODO: raise error when header file does not exist
+                if not os.path.exists( fc.cached_source_file ):
+                    dir_ = os.path.split( fc.cached_source_file )[0]
+                    if dir_ and not os.path.exists( dir_ ):
+                        os.makedirs( dir_ )
+                    self.logger.info( 'Creating xml file "%s" from source file "%s" ... '
+                                      % ( fc.cached_source_file, header ) )
+                    xml_file_path = reader.create_xml_file( header, fc.cached_source_file )
+                else:
+                    xml_file_path = fc.cached_source_file
+            else:
+                xml_file_path = reader.create_xml_file_from_string( fc.data )
+            xml_file = file( xml_file_path, 'r' )
+            xml = xml_file.read()
+            xml_file.close()
+            utils.remove_file_no_raise( xml_file_path )
+            return xml
+        finally:
+            if xml_file_path and delete_xml_file:
+                utils.remove_file_no_raise( xml_file_path )
+
     def _join_top_namespaces(self, main_ns_list, other_ns_list):
         answer = main_ns_list[:]
         for other_ns in other_ns_list:
