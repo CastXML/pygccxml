@@ -8,6 +8,7 @@
 
 from config import config_t
 from config import gccxml_configuration_t
+from config import load_gccxml_configuration
 
 from project_reader import COMPILATION_MODE
 from project_reader import project_reader_t
@@ -27,6 +28,7 @@ from directory_cache import directory_cache_t
 CONTENT_TYPE = file_configuration_t.CONTENT_TYPE
 
 
+
 def parse( files
            , config=None
            , compilation_mode=COMPILATION_MODE.FILE_BY_FILE
@@ -43,7 +45,7 @@ def parse( files
     @type cache: L{cache_base_t} or str
     @returns: Declarations
     """
-        
+
     if not config:
         config = config_t()
     parser = project_reader_t( config=config, cache=cache )

@@ -9,6 +9,7 @@
 import os
 import sys
 import copy
+import types
 
 class parser_configuration_t(object):
     """Configuration object to collect parameters for invoking C++ parser
@@ -76,10 +77,13 @@ class parser_configuration_t(object):
         """list of "undefine" directives """
         return self.__undefine_symbols
 
-    @property
-    def compiler(self):
-        """compiler name to simulate"""
+    def get_compiler(self):
+        """get compiler name to simulate"""
         return self.__compiler
+    def set_compiler( self, compiler ):
+        """set compiler name to simulate"""
+        self.__compiler = compiler
+    compiler = property( get_compiler, set_compiler, doc="compiler name to simulate" )
 
     def __get_cflags(self):
         return self.__cflags
@@ -103,7 +107,6 @@ class parser_configuration_t(object):
         self.__ensure_dir_exists( self.working_directory, 'working directory' )
         map( lambda idir: self.__ensure_dir_exists( idir, 'include directory' )
              , self.include_paths )
-
 
 class gccxml_configuration_t(parser_configuration_t):
     """Configuration object to collect parameters for invoking gccxml.
@@ -189,3 +192,64 @@ class gccxml_configuration_t(parser_configuration_t):
                 raise RuntimeError( msg )
 
 config_t = gccxml_configuration_t #backward computability
+
+
+def load_gccxml_configuration( configuration ):
+    """loads GCC-XML configuration from a file
+
+    Configuration file sceleton:
+
+    >>> start <<<
+
+    [gccxml]
+    #path to gccxml executable file - optional, if not provided, os.environ['PATH']
+    #variable is used to find it
+    gccxml_path=
+    #gccxml working directory - optional, could be set to your source code directory
+    working_directory=
+    #additional include directories, separated by ';' or ':'
+    include_paths=
+    #gccxml has a nice algorithms, which selects what C++ compiler to emulate.
+    #You can explicitly set what compiler it should emulate.
+    #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
+    compiler=
+
+    #GCC-XML site: http://gccxml.org/
+
+    >>> end <<<
+
+
+    configuration could be string( configuration file path ) or instance of
+    ConfigParser.SafeConfigParser class
+    """
+    parser = configuration
+    if isinstance( configuration, types.StringTypes ):
+        from ConfigParser import SafeConfigParser
+        parser = SafeConfigParser()
+        parser.readfp( file( configuration, 'r' ) )
+    gccxml_cfg = gccxml_configuration_t()
+    if not parser.has_section( 'gccxml' ):
+        return gccxml_cfg
+    for name, value in parser.items( 'gccxml' ):
+        value = value.strip()
+        if name == 'gccxml_path':
+            gccxml_cfg.gccxml_path = value
+        elif name == 'working_directory':
+            gccxml_cfg.working_directory = value
+        elif name == 'include_paths':
+            for p in value.split( ';' ):
+                for pp in p.split( ':' ):
+                    pp = pp.strip()
+                    if pp:
+                        gccxml_cfg.include_paths.append( pp )
+        elif name == 'compiler':
+            gccxml_cfg.compiler = value
+        else:
+            print '\n%s entry was ignored' % name
+    return gccxml_cfg
+
+
+if __name__ == '__main__':
+    print load_gccxml_configuration( 'gccxml.cfg' ).__dict__
+
+
