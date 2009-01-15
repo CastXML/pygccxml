@@ -194,7 +194,7 @@ class gccxml_configuration_t(parser_configuration_t):
 config_t = gccxml_configuration_t #backward computability
 
 
-def load_gccxml_configuration( configuration ):
+def load_gccxml_configuration( configuration, **defaults ):
     """loads GCC-XML configuration from a file
 
     Configuration file sceleton:
@@ -230,7 +230,16 @@ def load_gccxml_configuration( configuration ):
     gccxml_cfg = gccxml_configuration_t()
     if not parser.has_section( 'gccxml' ):
         return gccxml_cfg
+
+    values = defaults
+    if not values:
+        values = {}
+
     for name, value in parser.items( 'gccxml' ):
+        if value.strip():
+            values[ name ] = value
+
+    for name, value in values.iteritems():
         value = value.strip()
         if name == 'gccxml_path':
             gccxml_cfg.gccxml_path = value

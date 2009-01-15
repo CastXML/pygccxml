@@ -41,7 +41,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 #typeinfo name for number_t
                 , '_ZTI8number_t'
                 , '_ZTV8number_t'
-                , '_ZTS8number_t' 
+                , '_ZTS8number_t'
                 #it seems that gccxml doesn't report this one
                 , '_ZNSt12auto_ptr_refI8number_tEC1EPS0_'
                 #the following are some global symbols
@@ -65,7 +65,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
 
-            process = subprocess.Popen( args='scons msvc_compiler=%s' % autoconfig.compiler
+            process = subprocess.Popen( args='scons msvc_compiler=%s' % autoconfig.cxx_parsers_cfg.gccxml.compiler
                                         , shell=True
                                         , stdin=subprocess.PIPE
                                         , stdout=subprocess.PIPE
@@ -94,7 +94,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         symbols, parser = binary_parsers.merge_information( self.global_ns, fname, runs_under_unittest=True )
         self.failUnless( len(symbols) == expected_symbols
                          , "The expected symbols number(%d), is different frm the actual one(%d)"
-                           % ( expected_symbols, len(symbols) ) )                         
+                           % ( expected_symbols, len(symbols) ) )
         self.failUnless( 'identity' in symbols )
 
         blob_names = set()
@@ -118,7 +118,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
             blob_names.difference_update(common)
             if not self.known_issues.issubset( blob_names ):
                 blob_names.difference_update( self.known_issues )
-                msg = [ "undecorate_decl - failed" ]
+                if sys.version_info[0] == 2 and sys.version_info[1] == 5:
+                    if 0 == len(decl_blob_names) and 0 ==len(blob_names):
+                        return
                 msg.append( "decl_blob_names :" )
                 for i in decl_blob_names:
                     msg.append( '\t==>%s<==' % i )
@@ -130,11 +132,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_map_file( self ):
         if 'win32' in sys.platform:
-            self.__tester_impl( self.map_file )
+            self.__tester_impl( self.map_file, 71 )
 
     def test_dll_file( self ):
         if 'win32' in sys.platform:
-            self.__tester_impl( self.dll_file )
+            self.__tester_impl( self.dll_file, 71 )
 
     def test_z_compare_parsers( self ):
         if 'win32' not in sys.platform:
@@ -159,7 +161,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         if 'linux2' in sys.platform:
             self.__tester_impl( self.so_file, 64 )
 
-    def dont_test_print( self ):                
+    def dont_test_print( self ):
         """primary used for debugging"""
         symbols, parser = binary_parsers.merge_information( self.global_ns, self.so_file, runs_under_unittest=True )
         for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
