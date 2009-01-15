@@ -14,7 +14,7 @@ The cache class is L{directory_cache_t} which can be passed to the C{cache}
 argument of the L{parse()} function.
 """
 
-import os, os.path, gzip, md5
+import os, os.path, gzip, hashlib
 import cPickle
 import declarations_cache
 
@@ -27,7 +27,7 @@ class index_entry_t:
 
     This class is a helper class for the directory_cache_t class.
     """
-    
+
     def __init__( self, filesigs, configsig ):
         """Constructor.
 
@@ -42,7 +42,7 @@ class index_entry_t:
 
     def __setstate__(self, state):
         self.filesigs, self.configsig = state
- 
+
 
 class directory_cache_t ( declarations_cache.cache_base_t ):
     """Cache class that stores its data as multiple files inside a directory.
@@ -103,7 +103,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def flush(self):
         """Save the index table to disk."""
 
-        self._save()      
+        self._save()
 #        self.__filename_rep._dump()
 
     def update(self, source_file, configuration, declarations, included_files):
@@ -152,7 +152,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         cachefilename = self._create_cache_filename(source_file)
         self._write_file(cachefilename, declarations)
 
-       
+
     def cached_value(self, source_file, configuration):
         """Return the cached declarations or None.
 
@@ -167,7 +167,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         key = self._create_cache_key(source_file)
         entry = self.__index.get(key)
         if entry==None:
-#            print "CACHE: %s: Not cached"%source_file            
+#            print "CACHE: %s: Not cached"%source_file
             return None
 
         # Check if the entry is still valid. It is not valid if:
@@ -220,7 +220,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         else:
             self.__index = {}
             self.__filename_rep = filename_repository_t(self.__md5_sigs)
-            
+
         self.__modified_flag = False
 
     def _save(self):
@@ -267,8 +267,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         else:
             f = file(filename, "wb")
         cPickle.dump(data, f, cPickle.HIGHEST_PROTOCOL)
-        f.close()        
-        
+        f.close()
+
     def _remove_entry(self, source_file, key):
         """Remove an entry from the cache.
 
@@ -285,7 +285,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         @param key: Key value for the specified header file
         @type key: hashable object
         """
-        
+
         entry = self.__index.get(key)
         if entry==None:
             return
@@ -340,7 +340,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         @returns: Signature
         @rtype: str
         """
-        m = md5.new()
+        m = hashlib.md5()
         m.update(config.working_directory)
         map(lambda p: m.update(p), config.include_paths)
         map(lambda p: m.update(p), config.define_symbols)
@@ -349,7 +349,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         return m.digest()
 
 
-        
+
 
 class filename_entry_t:
     """This is a record stored in the filename_repository_t class.
@@ -368,7 +368,7 @@ class filename_entry_t:
         self.filename = filename
         # Reference count
         self.refcount = 0
-        
+
         # Cached signature value for the file.
         # If sig_valid flag is False, the signature still has to be computed,
         # otherwise the cached value can be used.
@@ -410,7 +410,7 @@ class filename_repository_t:
     def __init__( self, md5_sigs ):
         """Constructor.
         """
-        
+
         # Flag that determines whether the signature is a md5 digest or
         # the modification time
         # (this flag is passed to the filename_repository_t class)
@@ -433,7 +433,7 @@ class filename_repository_t:
         """Acquire a file name and return its id and its signature.
         """
         id_ = self.__id_lut.get(name)
-        # Is this a new entry? 
+        # Is this a new entry?
         if id_==None:
             # then create one...
             id_ = self.__next_id
@@ -447,7 +447,7 @@ class filename_repository_t:
 
         entry.inc_ref_count()
         return id_, self._get_signature(entry)
-            
+
     def release_filename(self, id_):
         """Release a file name.
         """
@@ -467,7 +467,7 @@ class filename_repository_t:
         if entry==None:
             raise ValueError, "Invalid filename id_ (%d)"%id_
 
-        # Is the signature already known? 
+        # Is the signature already known?
         if entry.sig_valid:
             # use the cached signature
             filesig = entry.signature
@@ -501,7 +501,7 @@ class filename_repository_t:
                 return None
             data = f.read()
             f.close()
-            return md5.new(data).digest()
+            return hashlib.md5(data).digest()
         else:
             # return file modification date...
             try:
