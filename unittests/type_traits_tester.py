@@ -45,9 +45,6 @@ class tester_t( parser_test_case.parser_test_case_t ):
             elif isinstance( decl, declarations.calldef_t ) and decl.name.startswith( 'test_' ):
                 continue
             else:
-                #~ if 'mf1_type_const_volatile_t' in decl.name:
-                    #~ import pdb
-                    #~ pdb.set_trace()
                 self.failUnless( controller( decl )
                                  , 'for type "%s" the answer to the question "%s" should be True'
                                  % ( decl.decl_string, ns_name ) )
