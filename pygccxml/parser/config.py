@@ -226,21 +226,21 @@ def load_gccxml_configuration( configuration, **defaults ):
     if isinstance( configuration, types.StringTypes ):
         from ConfigParser import SafeConfigParser
         parser = SafeConfigParser()
-        parser.readfp( file( configuration, 'r' ) )
+        parser.read( configuration )
     gccxml_cfg = gccxml_configuration_t()
-    if not parser.has_section( 'gccxml' ):
-        return gccxml_cfg
 
     values = defaults
     if not values:
         values = {}
-
-    for name, value in parser.items( 'gccxml' ):
-        if value.strip():
-            values[ name ] = value
+        
+    if parser.has_section( 'gccxml' ):
+        for name, value in parser.items( 'gccxml' ):
+            if value.strip():
+                values[ name ] = value
 
     for name, value in values.iteritems():
-        value = value.strip()
+        if isinstance( value, types.StringTypes ):
+            value = value.strip()
         if name == 'gccxml_path':
             gccxml_cfg.gccxml_path = value
         elif name == 'working_directory':
