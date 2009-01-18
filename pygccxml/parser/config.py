@@ -92,6 +92,9 @@ class parser_configuration_t(object):
     cflags = property( __get_cflags, __set_cflags
                       , doc="additional flags to pass to compiler" )
 
+    def append_cflags( self, val ):
+        self.__cflags = self.__cflags + ' ' + val
+
     def __ensure_dir_exists( self, dir_path, meaning ):
         if os.path.isdir( dir_path ):
             return
@@ -232,7 +235,7 @@ def load_gccxml_configuration( configuration, **defaults ):
     values = defaults
     if not values:
         values = {}
-        
+
     if parser.has_section( 'gccxml' ):
         for name, value in parser.items( 'gccxml' ):
             if value.strip():
