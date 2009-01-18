@@ -162,8 +162,9 @@ class native_compiler:
     def get_version():
         if 'win' not in sys.platform:
             return None #not implemented yet
-        from distutils import msvccompiler
-        return ( 'msvc', str( msvccompiler.get_build_version() ) )
+        else:
+            from distutils import msvccompiler
+            return ( 'msvc', str( msvccompiler.get_build_version() ) )
 
     @staticmethod
     def get_gccxml_compiler():

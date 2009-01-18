@@ -9,6 +9,7 @@
 from config import config_t
 from config import gccxml_configuration_t
 from config import load_gccxml_configuration
+from config import gccxml_configuration_example
 
 from project_reader import COMPILATION_MODE
 from project_reader import project_reader_t
