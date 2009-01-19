@@ -11,7 +11,7 @@ class default_argument_patcher_t( object ):
     def __init__( self, enums ):
         object.__init__( self )
         self.__enums = enums
-        
+
     def __call__(self, decl):
         for arg in decl.arguments:
             if not arg.default_value:
@@ -26,7 +26,7 @@ class default_argument_patcher_t( object ):
         elif self.__is_unqualified_enum( func, arg ):
             return self.__fix_unqualified_enum
         elif self.__is_double_call( func, arg ):
-            return self.__fix_double_call       
+            return self.__fix_double_call
         elif self.__is_invalid_integral( func, arg ):
             return self.__fix_invalid_integral
         elif self.__is_constructor_call( func, arg ):
@@ -39,9 +39,9 @@ class default_argument_patcher_t( object ):
             return '::' + suffix
         else:
             return prefix + '::' + suffix
-  
+
     def __is_unqualified_enum(self, func, arg):
-        type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )        
+        type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )
         if not declarations.is_enum( type_ ):
             return False
         enum_type = declarations.enum_declaration( type_ )
@@ -53,7 +53,7 @@ class default_argument_patcher_t( object ):
         return self.__join_names( enum_type.parent.decl_string, arg.default_value )
 
     def __is_invalid_integral(self, func, arg):
-        type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )        
+        type_ = declarations.remove_reference( declarations.remove_cv( arg.type ) )
         if not declarations.is_integral( type_ ):
             return False
         try:
@@ -68,7 +68,7 @@ class default_argument_patcher_t( object ):
             return arg.default_value
         except:
             pass
-                
+
         try:
             int( arg.default_value, 16 )
             if 64 == utils.get_architecture():
@@ -83,7 +83,7 @@ class default_argument_patcher_t( object ):
                 return '0x' + default_value
         except:
             pass
-        
+
         #may be we deal with enum
         parent = func.parent
         while parent:
@@ -103,7 +103,7 @@ class default_argument_patcher_t( object ):
         #this algorithm could be improved: it could take into account
         #1. unnamed namespaced
         #2. location within files
-        
+
         for enum in self.__enums:
             if enum.parent is scope and enum.has_value_name( default_value ):
                 return enum
@@ -121,7 +121,7 @@ class default_argument_patcher_t( object ):
         args1 = call_invocation.args( dv[ found1[0] : found1[1] + 1 ] )
         args2 = call_invocation.args( dv[ found2[0] : found2[1] + 1 ] )
         return len(args1) == len(args2)
-    
+
     def __fix_double_call( self, func, arg ):
         call_invocation = declarations.call_invocation
         dv = arg.default_value
@@ -167,7 +167,7 @@ class default_argument_patcher_t( object ):
                                               , decl.name )
         else:
             f_q_name = self.__join_names( declarations.full_name( decl.parent ), name )
-            
+
         return call_invocation.join( f_q_name, args )
 
 class casting_operator_patcher_t( object ):
@@ -186,9 +186,3 @@ def fix_calldef_decls(decls, enums):
         default_arg_patcher( decl )
         if isinstance( decl, declarations.casting_operator_t):
             _casting_oper_patcher_( decl )
-
-def fix_mangled( decls ):
-    suffix = ' *INTERNAL* '
-    for d in decls:
-        if d.mangled and d.mangled.endswith( suffix ):
-            d.mangled = d.mangled[:-len( suffix )]

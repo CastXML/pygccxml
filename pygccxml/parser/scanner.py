@@ -149,8 +149,10 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         self.__inst = None
         #mapping from id to members
         self.__members = {}
-
         self.__compiler = None
+
+        self.__mangled_suffix = ' *INTERNAL* '
+        self.__mangled_suffix_len = len( self.__mangled_suffix )
 
     def read( self ):
         xml.sax.parse( self.gccxml_file, self )
@@ -257,7 +259,11 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         decl.is_artificial = attrs.get( XML_AN_ARTIFICIAL, False )
 
     def __read_mangled( self, decl, attrs ):
-        decl.mangled = attrs.get( XML_AN_MANGLED, None )
+        mangled = attrs.get( XML_AN_MANGLED, None )
+        #the following patch is defined here for performance reasons
+        if isinstance( mangled, types.StringType ) and mangled.endswith( self.__mangled_suffix ):
+            mangled = mangled[:self.__mangled_suffix_len]
+        decl.mangled = mangled
 
     def __read_demangled( self, decl, attrs ):
         decl.demangled = attrs.get( XML_AN_DEMANGLED, None )
