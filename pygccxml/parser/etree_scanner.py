@@ -4,6 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import scanner
+
+#keep py2exe happy
+import xml.etree.ElementTree
+
 import xml.etree.cElementTree as ElementTree
 
 class etree_saxifier_t(object):
