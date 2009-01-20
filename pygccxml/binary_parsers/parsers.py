@@ -19,7 +19,7 @@ import undname
 import warnings
 import exceptions
 import subprocess
-from .. import declarations
+from pygccxml import declarations
 
 class LicenseWarning( exceptions.UserWarning ):
     def __init__( self, *args, **keywd ):

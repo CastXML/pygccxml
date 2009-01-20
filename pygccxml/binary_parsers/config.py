@@ -1,7 +1,7 @@
 import os
 import sys
 import comtypes
-from .. import utils
+from pygccxml import utils
 import comtypes.client
 import _winreg as win_registry
 from distutils import msvccompiler
