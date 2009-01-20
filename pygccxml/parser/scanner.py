@@ -530,18 +530,18 @@ class scanner_t( xml.sax.handler.ContentHandler ):
 
     def __read_version(self, attrs):
         logger = utils.loggers.cxx_parser
-
-        version = float( attrs.get(XML_AN_CVS_REVISION, 0.6) )
+        version_str = attrs.get(XML_AN_CVS_REVISION, 0.6)
+        version = float( version_str )
         if version is None:
             logger.info ( 'GCCXML version - 0.6' )
             self.__compiler = compilers.GCC_XML_06
         elif version <= 1.114:
             logger.info ( 'GCCXML version - 0.7' )
             self.__compiler = compilers.GCC_XML_07
-        elif version in ( 1.115, 1.116, 1.117, 1.118, 1.119, 1.120, 1.121 ):
-            logger.info ( 'GCCXML version - 0.9 BUGGY' )
+        elif 1.115 <= version <= 1.126:
+            logger.info ( 'GCCXML version - 0.9 BUGGY( %s )', version_str )
             self.__compiler = compilers.GCC_XML_09_BUGGY
         else:
-            logger.info ( 'GCCXML version - 0.9' )
+            logger.info ( 'GCCXML version - 0.9( %s )', version_str )
             self.__compiler = compilers.GCC_XML_09
 
