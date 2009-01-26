@@ -37,7 +37,7 @@ with reference to "OffsetType". The new version removes "PointerType" from this 
 
 C++ code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct xyz_t{
     int do_smth( double );
@@ -50,7 +50,7 @@ C++ code:
 
 GCC-XML 0.7:
 
-.. code-block:: XML
+.. code-block:: xml
 
   <Typedef id="_6" name="mfun_ptr_t" type="_5" />
   <PointerType id="_5" type="_128" size="32" align="32"/>
@@ -64,7 +64,7 @@ GCC-XML 0.7:
 
 GCC-XML 0.9:
 
-.. code-block:: XML
+.. code-block:: xml
 
   <Typedef id="_97" name="mfun_ptr_t" type="_96" />
   <PointerType id="_96" type="_147" size="32" align="32"/>
@@ -85,7 +85,7 @@ GCC-XML 0.9 uses suffix to report the constant variable value
 
 For example:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   const long unsigned int initialized = 10122004;
 
@@ -102,100 +102,100 @@ Both versions of GCC-XML have a few issues, related to default arguments. GCC-XM
 fixes some issues, but introduces another ones. Take a look on the following examples:
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
     void fix_numeric( ull arg=(ull)-1 );
 
   GCC-XML 0.7
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="arg" type="_7" default="0xffffffffffffffff"/>
 
 
   GCC-XML 0.9
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="arg" type="_103" default="0xffffffffffffffffu"/>
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
     void fix_function_call( int i=calc( 1,2,3) );
 
   GCC-XML 0.7
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="i" type="_9" default="function_call::calc(int, int, int)(1, 2, 3)"/>
 
 
   GCC-XML 0.9
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="i" type="_34" default="function_call::calc(1, 2, 3)"/>
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
     void typedef__func( const typedef_::alias& position = typedef_::alias() );
 
   GCC-XML 0.7
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="position" type="_1458" default="alias()"/>
 
 
   GCC-XML 0.9
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
     void typedef__func2( const typedef_::alias& position = alias() );
 
   GCC-XML 0.7
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="position" type="_1458" default="alias()"/>
 
 
   GCC-XML 0.9
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
 
 *
-  .. code-block:: cpp
+  .. code-block:: c++
 
     node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
 
   GCC-XML 0.7
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="types" type="_3336" default="vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;,std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;((&amp;allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))"/>
 
 
   GCC-XML 0.9
 
-  .. code-block:: XML
+  .. code-block:: xml
 
     <Argument name="types" type="_3096" default="std::vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;(((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;&amp;)((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;*)(&amp; std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))))"/>
 
 Basically `pygccxml`_ can't help you here. The good news is that you always can
 change the default value expression from the script:
 
-.. code-block:: Python
+.. code-block:: python
 
   #f is "calldef_t" instance
   for arg in f.arguments:
@@ -211,7 +211,7 @@ dramatic one, because it may require from you to change the code.
 
 Consider the following C++ code:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   template< unsigned long i1>
   struct item_t{

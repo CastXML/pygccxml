@@ -16,7 +16,7 @@ I don't care about first argument type, but I do want second argument type to be
 a reference to an integer. More over, I want those functions names to end with
 "impl" string and they should be protected or private.
 
-.. code-block:: Python
+.. code-block:: python
 
   #global_ns is the reference to an instance of namespace_t object, that
   #represents global namespace
@@ -28,7 +28,7 @@ The example is complex, but still readable. In many cases you will find
 yourself, looking for one or many declarations, using one or two declaration properties.
 For example:
 
-.. code-block:: Python
+.. code-block:: python
 
   global_ns.namespaces( 'details' )
 
@@ -56,7 +56,7 @@ I will explain the usage of ``member_function`` and ``member_functions`` methods
 The usage of other methods is very similar to them. Here is definition of those
 methods:
 
-.. code-block:: Python
+.. code-block:: python
 
   def member_function(  self,
                         name=None,
@@ -88,7 +88,7 @@ by:
 
     Python string, that contains member function name or full name.
 
-    .. code-block:: Python
+    .. code-block:: python
 
       do_smth = my_class.member_function( 'do_smth' )
       do_smth = my_class.member_function( 'my_namespace::my_class::do_smth' )
@@ -99,7 +99,7 @@ by:
     build custom query. This object will be called with one argument - declaration,
     and it should return ``True`` or ``False``.
 
-    .. code-block:: Python
+    .. code-block:: python
 
       impls = my_class.member_functions( lambda decl: decl.name.endswith( 'impl' ) )
 
@@ -111,7 +111,7 @@ by:
     the function return type. This argument can be string or an object that describes 
     C++ type.
 
-    .. code-block:: Python
+    .. code-block:: python
 
       mem_funcs = my_class.member_functions( return_type='int' )
       
@@ -128,7 +128,7 @@ by:
     to skip some argument type from within comparison, you put ``None``, into
     relevant position within the list.
 
-    .. code-block:: Python
+    .. code-block:: python
 
       mem_funcs = my_class.member_functions( arg_types=[ None, 'int'] ) 
 
@@ -190,14 +190,14 @@ objects at once. I will give an example from another project - `Py++`_.
 In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct A{
       A* clone() const { return new A(); }
       ...
   };
 
-.. code-block:: cpp
+.. code-block:: c++
 
   struct B{
       B* clone() const { return new B(); }
@@ -208,7 +208,7 @@ should have `call policies`_. For example:
 The following code applies the `call policies`_ on all ``clone`` member functions within the
 project:
 
-.. code-block:: Python
+.. code-block:: python
 
   #global_ns - instance of namespace_t class, that contains reference to global namespace
   clone = global_ns.member_functions( 'clone' )
@@ -219,7 +219,7 @@ Another example, from `Py++`_ project. Sometimes it is desirable to
 exclude declaration, from being exported to Python. The following code will exclude
 ``clone`` member function from being exported:
 
-.. code-block:: Python
+.. code-block:: python
 
   global_ns.member_functions( 'clone' ).exclude()
 
@@ -228,7 +228,7 @@ class you don't have to write loops. If will do it for you. Also if you insist t
 write loops, ``mdecl_wrapper_t`` class implements ``__len__``, ``__getitem__``
 and ``__iter__`` methods. So you can write the following code:
 
-.. code-block:: Python
+.. code-block:: python
 
   for clone in global_ns.member_functions( 'clone' ):
       print clone.parent.name

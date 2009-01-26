@@ -47,7 +47,7 @@ Version 1.0
 
    Description:
 
-   .. code-block:: cpp
+   .. code-block:: c++
 
       void do_smth( int, ... )
 
@@ -322,7 +322,7 @@ Version 0.8.1
 
 4. Now you can pass operator symbol, as a name to query functions:
 
-  .. code-block:: Python
+  .. code-block:: python
 
      cls = global_namespace.class_( 'my_class' )
      op = cls.operator( '<' )
@@ -355,7 +355,7 @@ Version 0.8.1
 
     So for example:
 
-    .. code-block:: Python
+    .. code-block:: python
 
       classes = ns.decls("class")
       classes.decls("method")

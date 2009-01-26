@@ -51,7 +51,7 @@ lines is needed to write the following query?
 
 Only 1 ( one ) line of code is needed:
 
-.. code-block:: Python
+.. code-block:: python
 
   #global_ns is the reference to declarations, which describes global( :: ) namespace
   global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
