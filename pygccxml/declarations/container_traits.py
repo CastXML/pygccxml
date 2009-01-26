@@ -258,7 +258,7 @@ class container_traits_impl_t:
                   , container_name
                   , element_type_index
                   , element_type_typedef
-                  , defaults_remover                  
+                  , defaults_remover
                   , key_type_index=None
                   , key_type_typedef=None ):
         """
@@ -267,7 +267,7 @@ class container_traits_impl_t:
           arguments list
         element_type_typedef - class typedef to the value\\mapped type
         key_type_index - position of key type within template arguments list
-        key_type_typedef - class typedef to the key type        
+        key_type_typedef - class typedef to the key type
         """
         self._name = container_name
         self.remove_defaults_impl = defaults_remover
@@ -279,18 +279,18 @@ class container_traits_impl_t:
     def name(self):
         return self._name
 
-    def get_container_or_none( self, type ):
+    def get_container_or_none( self, type_ ):
         """returns reference to the class declaration or None"""
-        type = type_traits.remove_alias( type )
-        type = type_traits.remove_cv( type )
+        type_ = type_traits.remove_alias( type_ )
+        type_ = type_traits.remove_cv( type_ )
 
         cls = None
-        if isinstance( type, cpptypes.declarated_t ):
-            cls = type_traits.remove_alias( type.declaration )
-        elif isinstance( type, class_declaration.class_t ):
-            cls = type
-        elif isinstance( type, class_declaration.class_declaration_t ):
-            cls = type
+        if isinstance( type_, cpptypes.declarated_t ):
+            cls = type_traits.remove_alias( type_.declaration )
+        elif isinstance( type_, class_declaration.class_t ):
+            cls = type_
+        elif isinstance( type_, class_declaration.class_declaration_t ):
+            cls = type_
         else:
             return
 
@@ -301,29 +301,29 @@ class container_traits_impl_t:
             if type_traits.impl_details.is_defined_in_xxx( ns, cls ):
                 return cls
 
-    def is_my_case( self, type ):
+    def is_my_case( self, type_ ):
         """checks, whether type is STD container or not"""
-        return bool( self.get_container_or_none( type ) )
+        return bool( self.get_container_or_none( type_ ) )
 
-    def class_declaration( self, type ):
+    def class_declaration( self, type_ ):
         """returns reference to the class declaration"""
-        cls = self.get_container_or_none( type )
+        cls = self.get_container_or_none( type_ )
         if not cls:
-            raise TypeError( 'Type "%s" is not instantiation of std::%s' % ( type.decl_string, self.name() ) )
+            raise TypeError( 'Type "%s" is not instantiation of std::%s' % ( type_.decl_string, self.name() ) )
         return cls
 
-    def is_sequence( self, type ):
+    def is_sequence( self, type_ ):
         #raise exception if type is not container
-        unused = self.class_declaration( type ) 
+        unused = self.class_declaration( type_ )
         return self.key_type_index is None
-        
-    def is_mapping( self, type ):
-        return not self.is_sequence( type )
 
-    def __find_xxx_type( self, type, xxx_index, xxx_typedef, cache_property_name ):
-        cls = self.class_declaration( type )
+    def is_mapping( self, type_ ):
+        return not self.is_sequence( type_ )
+
+    def __find_xxx_type( self, type_, xxx_index, xxx_typedef, cache_property_name ):
+        cls = self.class_declaration( type_ )
         result = getattr( cls.cache, cache_property_name )
-        if not result:            
+        if not result:
             if isinstance( cls, class_declaration.class_t ):
                 xxx_type = cls.typedef( xxx_typedef, recursive=False ).type
                 result = type_traits.remove_declarated( xxx_type )
@@ -336,29 +336,29 @@ class container_traits_impl_t:
             setattr( cls.cache, cache_property_name, result )
         return result
 
-    def element_type( self, type ):
+    def element_type( self, type_ ):
         """returns reference to the class value\\mapped type declaration"""
-        return self.__find_xxx_type( type
+        return self.__find_xxx_type( type_
                                      , self.element_type_index
                                      , self.element_type_typedef
                                      , 'container_element_type')
 
-    def key_type( self, type ):
-        """returns reference to the class key type declaration"""        
-        if not self.is_mapping( type ):
-            raise TypeError( 'Type "%s" is not "mapping" container' % str( type ) )
-        return self.__find_xxx_type( type
+    def key_type( self, type_ ):
+        """returns reference to the class key type declaration"""
+        if not self.is_mapping( type_ ):
+            raise TypeError( 'Type "%s" is not "mapping" container' % str( type_ ) )
+        return self.__find_xxx_type( type_
                                      , self.key_type_index
                                      , self.key_type_typedef
                                      , 'container_key_type' )
 
     def remove_defaults( self, type_or_string ):
         """remove template defaults from a template class instantiation
-        
+
         For example:
-            std::vector< int, std::allocator< int > > 
+            std::vector< int, std::allocator< int > >
         will become
-            std::vector< int > 
+            std::vector< int >
         """
         name = type_or_string
         if not isinstance( type_or_string, types.StringTypes ):
@@ -408,11 +408,11 @@ map_traits = create_traits( 'map'
                             , defaults_eraser.erase_map_compare_allocator
                             , key_type_index=0
                             , key_type_typedef='key_type')
-                            
+
 multimap_traits = create_traits( 'multimap'
                                  , 1
                                  , 'mapped_type'
-                                 , defaults_eraser.erase_map_compare_allocator 
+                                 , defaults_eraser.erase_map_compare_allocator
                                  , key_type_index=0
                                  , key_type_typedef='key_type')
 
@@ -420,15 +420,15 @@ multimap_traits = create_traits( 'multimap'
 hash_map_traits = create_traits( 'hash_map'
                                  , 1
                                  , 'mapped_type'
-                                 , defaults_eraser.erase_hashmap_compare_allocator 
+                                 , defaults_eraser.erase_hashmap_compare_allocator
                                  , key_type_index=0
                                  , key_type_typedef='key_type')
-                                 
-                                 
+
+
 hash_multimap_traits = create_traits( 'hash_multimap'
                                       , 1
                                       , 'mapped_type'
-                                      , defaults_eraser.erase_hashmap_compare_allocator 
+                                      , defaults_eraser.erase_hashmap_compare_allocator
                                       , key_type_index=0
                                       , key_type_typedef='key_type')
 
@@ -436,7 +436,7 @@ set_traits = create_traits( 'set'
                             , 0
                             , 'value_type'
                             , defaults_eraser.erase_compare_allocator)
-                            
+
 multiset_traits = create_traits( 'multiset'
                                  , 0
                                  , 'value_type'
@@ -446,7 +446,7 @@ hash_set_traits = create_traits( 'hash_set'
                                  , 0
                                  , 'value_type'
                                  , defaults_eraser.erase_hash_allocator )
-                                 
+
 hash_multiset_traits = create_traits( 'hash_multiset'
                                       , 0
                                       , 'value_type'

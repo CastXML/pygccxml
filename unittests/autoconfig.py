@@ -7,8 +7,8 @@ import os
 import sys
 import getpass
 
-#__pychecker__ = 'limit=1000'
-#import pychecker.checker
+#~ os.environ['PYCHECKER'] = '--limit=1000 -q --no-argsused'
+#~ import pychecker.checker
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
 

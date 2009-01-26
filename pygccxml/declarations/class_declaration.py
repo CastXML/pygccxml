@@ -13,7 +13,6 @@ This modules contains definition for next C++ declarations:
 """
 
 import scopedef
-import itertools
 import compilers
 import algorithm
 import declaration

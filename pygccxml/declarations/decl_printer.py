@@ -240,7 +240,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             self.writer( value_level + "%s : %s"% (name, value) + os.linesep)
 
     def visit_namespace(self ):
-        if self.verbose == False and not self.__inst.declarations:
+        if not self.verbose and not self.__inst.declarations:
             return #don't print info about empty namespaces
         self.print_decl_header()
         if self.__recursive:

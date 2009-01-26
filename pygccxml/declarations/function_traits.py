@@ -13,17 +13,17 @@ import class_declaration
 
 def is_same_return_type( f1, f2 ):
     #covariant returns
-    #The return type of an overriding function shall be either identical to the 
-    #return type of the overridden function or covariant with the classes of the 
-    #functions. If a function D::f overrides a function B::f, the return types 
+    #The return type of an overriding function shall be either identical to the
+    #return type of the overridden function or covariant with the classes of the
+    #functions. If a function D::f overrides a function B::f, the return types
     #of the functions are covariant if they satisfy the following criteria:
 
     #* both are pointers to classes or references to classes
-    #* the class in the return type of B::f is the same class as the class in 
-    #  the return type of D::f or, is an unambiguous direct or indirect base 
+    #* the class in the return type of B::f is the same class as the class in
+    #  the return type of D::f or, is an unambiguous direct or indirect base
     #  class of the class in the return type of D::f and is accessible in D
-    #* both pointers or references have the same cv-qualification and the class 
-    #  type in the return type of D::f has the same cv-qualification as or less 
+    #* both pointers or references have the same cv-qualification and the class
+    #  type in the return type of D::f has the same cv-qualification as or less
     #  cv-qualification than the class type in the return type of B::f.
 
     if not f1.__class__ is f2.__class__:
@@ -43,11 +43,11 @@ def is_same_return_type( f1, f2 ):
         rt2 = type_traits.remove_pointer( rt2 )
     elif type_traits.is_reference( rt1 ) and type_traits.is_reference( rt2 ):
         rt1 = type_traits.remove_reference( rt1 )
-        rt2 = type_traits.remove_reference( rt2 )        
+        rt2 = type_traits.remove_reference( rt2 )
     else:
         return type_traits.is_same( f1.return_type, f2.return_type)
     if ( type_traits.is_const( rt1 ) and type_traits.is_const( rt2 ) ) \
-       or ( False == type_traits.is_const( rt1 ) and False == type_traits.is_const( rt2 ) ):
+       or ( not type_traits.is_const( rt1 ) and not type_traits.is_const( rt2 ) ):
         rt1 = type_traits.remove_const( rt1 )
         rt2 = type_traits.remove_const( rt2 )
     else:
@@ -62,7 +62,7 @@ def is_same_return_type( f1, f2 ):
     return type_traits.is_same( c1, c2 ) \
            or type_traits.is_base_and_derived( c1, c2 ) \
            or type_traits.is_base_and_derived( c2, c1 )
-        
+
 
 def is_same_function( f1, f2 ):
     """returns true if f1 and f2 is same function

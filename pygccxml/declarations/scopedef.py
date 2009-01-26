@@ -117,7 +117,7 @@ class scopedef_t( declaration.declaration_t ):
         raise NotImplementedError()
 
     def _get_declarations(self):
-        if True == self._optimized:
+        if self._optimized:
             return self._all_decls_not_recursive
         else:
             return self._get_declarations_impl()
@@ -309,7 +309,7 @@ class scopedef_t( declaration.declaration_t ):
             #templates has tricky mode to compare them, so lets check the whole
             #range
             name = None
-        
+
         if name and decl_type:
             matcher = scopedef_t._impl_matchers[ scopedef_t.decl ]( name=name )
             if matcher.is_full_name():

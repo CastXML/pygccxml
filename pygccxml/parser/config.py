@@ -98,7 +98,6 @@ class parser_configuration_t(object):
     def __ensure_dir_exists( self, dir_path, meaning ):
         if os.path.isdir( dir_path ):
             return
-        msg = None
         if os.path.exists( self.working_directory ):
             raise RuntimeError( '%s("%s") does not exist!' % ( meaning, dir_path ) )
         else:
@@ -219,9 +218,9 @@ def load_gccxml_configuration( configuration, **defaults ):
     Configuration file sceleton:
 
     >>> start <<<
-    
+
     %s
-    
+
     >>> end <<<
 
     configuration could be string( configuration file path ) or instance of

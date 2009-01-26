@@ -79,9 +79,8 @@ class dependency_info_t( object ):
     def we_depend_on_them( decls ):
         """returns set of declarations. every item in the returned set, depends on a
         declaration from the input"""
-        import class_declaration #prevent cyclic imports
         to_be_included = set()
         for decl in decls:
-            to_be_included.update( dependency_info_t.they_depend_on_me( decl ) )
+            to_be_included.update( dependency_info_t.i_depend_on_them( decl ) )
         return to_be_included
 

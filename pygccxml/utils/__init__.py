@@ -79,7 +79,7 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
     This function is a wrapper aroung Python built-in function - tempfile.mkstemp
     """
     if not prefix:
-        prefix = tempfile.template
+        prefix = tempfile.gettempprefix()
     fd, name = tempfile.mkstemp( suffix=suffix, prefix=prefix, dir=dir )
     file_obj = os.fdopen( fd )
     file_obj.close()
@@ -93,7 +93,8 @@ def contains_parent_dir( fpath, dirs ):
     """returns bool( filter( lambda dir: fpath.startswith( dir ), dirs ) )
     precondition: dirs and fpath should be normalize_path'ed before calling this function
     """
-    return bool( filter( lambda dir: fpath.startswith( dir ), dirs ) )
+    f = lambda dir_: fpath.startswith( dir_ )
+    return bool( filter( f, dirs ) )
 
 
 def get_architecture():

@@ -330,8 +330,8 @@ class project_reader_t:
                     if dir_ and not os.path.exists( dir_ ):
                         os.makedirs( dir_ )
                     self.logger.info( 'Creating xml file "%s" from source file "%s" ... '
-                                      % ( fc.cached_source_file, header ) )
-                    xml_file_path = reader.create_xml_file( header, fc.cached_source_file )
+                                      % ( fc.cached_source_file, fc.data ) )
+                    xml_file_path = reader.create_xml_file( fc.data, fc.cached_source_file )
                 else:
                     xml_file_path = fc.cached_source_file
             else:

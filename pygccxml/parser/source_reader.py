@@ -193,10 +193,7 @@ class source_reader_t:
         return gccxml_file
 
     def read_file( self, source_file ):
-        if isinstance( self.__config, config.gccxml_configuration_t ):
-            return self.read_gccxml_file( source_file )
-        else:
-            return self.read_synopsis_file( source_file )
+        return self.read_gccxml_file( source_file )
 
     def read_gccxml_file(self, source_file):
         """
@@ -205,7 +202,7 @@ class source_reader_t:
         @param source_file: path to C++ source file
         @type source_file: str
         """
-        declarations, types = None, None
+        declarations = None
         gccxml_file = ''
         try:
             ffname = self.__file_full_name(source_file)

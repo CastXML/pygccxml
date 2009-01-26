@@ -17,8 +17,8 @@ class declaration_algs_cache_t( object ):
         self._access_type = None
         self._demangled_name = None
         self._declaration_path = None
-        self._partial_declaration_path = None        
-        self._container_key_type = None        
+        self._partial_declaration_path = None
+        self._container_key_type = None
         self._container_element_type = None
 
     def disable( self ):
@@ -36,7 +36,7 @@ class declaration_algs_cache_t( object ):
     def _set_full_name( self, fname ):
         if not self.enabled:
             fname = None
-        self._full_name = fname        
+        self._full_name = fname
     full_name = property( _get_full_name, _set_full_name )
 
     def _get_full_partial_name( self ):
@@ -44,7 +44,7 @@ class declaration_algs_cache_t( object ):
     def _set_full_partial_name( self, fname ):
         if not self.enabled:
             fname = None
-        self._full_partial_name = fname       
+        self._full_partial_name = fname
     full_partial_name = property( _get_full_partial_name, _set_full_partial_name )
 
     def _get_access_type( self ):
@@ -59,8 +59,8 @@ class declaration_algs_cache_t( object ):
         return self._demangled_name
     def _set_demangled_name( self, demangled_name ):
         if not self.enabled:
-            demangled_name = None        
-        self._demangled_name = demangled_name    
+            demangled_name = None
+        self._demangled_name = demangled_name
     demangled_name = property( _get_demangled_name, _set_demangled_name )
 
     def _get_declaration_path( self ):
@@ -87,14 +87,14 @@ class declaration_algs_cache_t( object ):
             etype = None
         self._container_element_type = etype
     container_element_type = property( _get_container_element_type, _set_container_element_type )
-    
+
     def _get_container_key_type( self ):
         return self._container_key_type
     def _set_container_key_type( self, ktype ):
         if not self.enabled:
             ktype = None
         self._container_key_type = ktype
-    container_key_type = property( _get_container_key_type, _set_container_key_type )    
+    container_key_type = property( _get_container_key_type, _set_container_key_type )
 
     def reset( self ):
         self.full_name = None
@@ -120,13 +120,13 @@ class declaration_algs_cache_t( object ):
 
 class type_algs_cache_t( object ):
     enabled = True
-    
+
     @staticmethod
     def disable():
         type_algs_cache_t.enabled = False
 
     @staticmethod
-    def enable( self ):
+    def enable():
         type_algs_cache_t.enabled = True
 
     def __init__( self ):
@@ -139,9 +139,9 @@ class type_algs_cache_t( object ):
         if not type_algs_cache_t.enabled:
             remove_alias = None
         self._remove_alias = remove_alias
-    
+
     remove_alias = property( _get_remove_alias, _set_remove_alias )
 
     def reset(self):
         self.remove_alias = None
-        
+
