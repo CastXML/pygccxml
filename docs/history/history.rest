@@ -26,6 +26,18 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 
 
 -----------
+Version 1.1
+-----------
+
+1. Experimental back-ends based on ``.pdb`` and ``.bsc`` files were removed.
+
+2. Ability to extract different information from binary files ( ``.pdb``, ``.so``,
+   ``.map`` ) and merge it with a declarations tree was added.
+
+3. Ability to load `GCC-XML`_ configuration from ``.ini`` like file was added
+
+
+-----------
 Version 1.0
 -----------
 
@@ -47,7 +59,7 @@ Version 1.0
    which describe callables, have new property ``has_ellipsis``. It the value of
    the property is ``True``, than the function has ellipsis in its definition.
 
-2. New expiremental back-end, based on ``.pdb`` (progam database file), was added.
+2. New experimental back-end, based on ``.pdb`` (progam database file), was added.
 
 3. New high-level API wrapper for ``.bsc`` (browse source code file) was added.
 
