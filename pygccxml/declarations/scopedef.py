@@ -9,7 +9,6 @@ defines base class for L{namespace_t} and L{class_t} classes
 
 import time
 import algorithm
-import filtering
 import templates
 import declaration
 import mdecl_wrapper

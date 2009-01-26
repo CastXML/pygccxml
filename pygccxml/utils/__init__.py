@@ -89,6 +89,13 @@ def normalize_path( some_path ):
     """return os.path.normpath( os.path.normcase( some_path ) )"""
     return os.path.normpath( os.path.normcase( some_path ) )
 
+def contains_parent_dir( fpath, dirs ):
+    """returns bool( filter( lambda dir: fpath.startswith( dir ), dirs ) )
+    precondition: dirs and fpath should be normalize_path'ed before calling this function
+    """
+    return bool( filter( lambda dir: fpath.startswith( dir ), dirs ) )
+
+
 def get_architecture():
     """returns computer architecture: 32 or 64.
 

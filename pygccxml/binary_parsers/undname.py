@@ -4,7 +4,14 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-provides functionality needed to undecorate\demangle compiler generated unique names
+provides low-level functionality, needed to undecorate\demangle compiler generated
+unique names and map them to the declarations
+
+On Windows:
+    ctypes package is used to call UnDecorateSymbolName function from dbghelp.dll
+
+On Linux:
+    "nm" utility is used.
 """
 
 import os
@@ -14,6 +21,8 @@ import ctypes
 from pygccxml import declarations
 
 class UNDECORATE_NAME_OPTIONS:
+    """defines few constants for UnDecorateSymbolName function"""
+
     UNDNAME_COMPLETE = 0x0000 #Enables full undecoration.
     UNDNAME_NO_LEADING_UNDERSCORES = 0x0001 #Removes leading underscores from Microsoft extended keywords.
     UNDNAME_NO_MS_KEYWORDS = 0x0002 #Disables expansion of Microsoft extended keywords.
@@ -48,39 +57,19 @@ class UNDECORATE_NAME_OPTIONS:
 
     SHORT_UNIQUE_NAME = UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
 
-#~ The following code doesn't work - access violation
-
-#~__unDName definition was taken from:
-#~http://www.tech-archive.net/Archive/VC/microsoft.public.vc.language/2006-02/msg00754.html
-
-#~ msvcrxx = ctypes.windll.msvcr90
-#~ free_type = ctypes.CFUNCTYPE( None, ctypes.c_void_p ) #free type
-#~ malloc_type = ctypes.CFUNCTYPE( ctypes.c_void_p, ctypes.c_uint ) #malloc type
-#~ __unDName = msvcrxx.__unDName
-#~ __unDName.argtypes = [ ctypes.c_char_p #undecorated name
-                       #~ , ctypes.c_char_p #decorated name
-                       #~ , ctypes.c_int #sizeof undecorated name
-                       #~ , malloc_type
-                       #~ , free_type
-                       #~ , ctypes.c_ushort #flags
-                     #~ ]
-#~ __unDName.restype = ctypes.c_char_p
-#~ def undecorate_name( name, options=None ):
-    #~ if not name:
-        #~ return ''
-    #~ if options is None:
-        #~ options = UNDECORATE_NAME_OPTIONS.SHORT_UNIQUE_NAME
-    #~ buffer_size = 1024 * 32
-    #~ undecorated_name = ctypes.create_string_buffer('\0' * buffer_size) #should be enouph for any symbol
-    #~ __unDName( undecorated_name
-               #~ , str(name)
-               #~ , buffer_size
-               #~ , malloc_type( msvcrxx.malloc )
-               #~ , free_type( msvcrxx.free )
-               #~ , options )
-    #~ return undecorated_name.value
-
 class undname_creator_t:
+    """formats declarations string representation and exported symbols, so they
+    could be matched later.
+
+    The class formats variables, free and member functions, symbols exported from
+    .dll, .map and .so files.
+
+    On Windows, the class works with unique name produced by MSVC compiler and
+    with undecorated names produced by dbghelp.dll
+
+    On Linux, the class works with mangled names produced by GCC-XML ( GCC 4.2 )
+    compiler and demangled name produced by "nm" utility.
+    """
     def __init__( self ):
         if 'win32' in sys.platform:
             import ctypes.wintypes
@@ -146,7 +135,6 @@ class undname_creator_t:
             for x in ( '*', '&' ):
                 result = result.replace( ' ' + x, x )
         return result
-
 
     def __normalize( self, name ):
         for what, with_ in self.__fundamental_types:

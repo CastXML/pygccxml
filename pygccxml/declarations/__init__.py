@@ -217,8 +217,6 @@ sequential_container_traits = \
 import templates
 import call_invocation
 
-from filtering import filtering
-
 from decl_factory import decl_factory_t
 
 from matchers import matcher_base_t

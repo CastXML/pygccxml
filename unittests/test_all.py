@@ -19,7 +19,6 @@ import templates_tester
 import type_traits_tester
 import core_tester
 import xmlfile_reader_tester
-import filtering_tester
 import text_reader_tester
 import hierarchy_traveling
 import patcher_tester
@@ -70,7 +69,6 @@ testers = [
     , type_traits_tester
     , core_tester
     , xmlfile_reader_tester
-    , filtering_tester
     , text_reader_tester
     , hierarchy_traveling
     , patcher_tester
