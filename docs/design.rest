@@ -255,13 +255,13 @@ Patchers
 
 Well, `GCC-XML`_ has few bugs, which could not be fixed from it. For example
 
-.. code-block:: C++
+.. code-block:: cpp
 
   namespace ns1{ namespace ns2{
       enum fruit{ apple, orange };
   } }
 
-.. code-block:: C++
+.. code-block:: cpp
 
   void fix_enum( ns1::ns2::fruit arg=ns1::ns2::apple );
 

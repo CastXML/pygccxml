@@ -47,7 +47,7 @@ Version 1.0
 
    Description:
 
-   .. code-block:: C++
+   .. code-block:: cpp
 
       void do_smth( int, ... )
 

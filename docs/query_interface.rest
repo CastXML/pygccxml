@@ -190,14 +190,14 @@ objects at once. I will give an example from another project - `Py++`_.
 In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct A{
       A* clone() const { return new A(); }
       ...
   };
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct B{
       B* clone() const { return new B(); }

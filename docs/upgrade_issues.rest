@@ -37,7 +37,7 @@ with reference to "OffsetType". The new version removes "PointerType" from this 
 
 C++ code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   struct xyz_t{
     int do_smth( double );
@@ -85,7 +85,7 @@ GCC-XML 0.9 uses suffix to report the constant variable value
 
 For example:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   const long unsigned int initialized = 10122004;
 
@@ -102,7 +102,7 @@ Both versions of GCC-XML have a few issues, related to default arguments. GCC-XM
 fixes some issues, but introduces another ones. Take a look on the following examples:
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
     void fix_numeric( ull arg=(ull)-1 );
 
@@ -120,7 +120,7 @@ fixes some issues, but introduces another ones. Take a look on the following exa
     <Argument name="arg" type="_103" default="0xffffffffffffffffu"/>
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
     void fix_function_call( int i=calc( 1,2,3) );
 
@@ -138,7 +138,7 @@ fixes some issues, but introduces another ones. Take a look on the following exa
     <Argument name="i" type="_34" default="function_call::calc(1, 2, 3)"/>
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
     void typedef__func( const typedef_::alias& position = typedef_::alias() );
 
@@ -156,7 +156,7 @@ fixes some issues, but introduces another ones. Take a look on the following exa
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
     void typedef__func2( const typedef_::alias& position = alias() );
 
@@ -175,7 +175,7 @@ fixes some issues, but introduces another ones. Take a look on the following exa
 
 
 *
-  .. code-block:: C++
+  .. code-block:: cpp
 
     node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
 
@@ -211,7 +211,7 @@ dramatic one, because it may require from you to change the code.
 
 Consider the following C++ code:
 
-.. code-block:: C++
+.. code-block:: cpp
 
   template< unsigned long i1>
   struct item_t{
