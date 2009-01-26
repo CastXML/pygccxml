@@ -7,8 +7,10 @@
 """
 defines few simple classes( parsers ), which deals with .dll, .map, .so files.
 
-Those classes extract decorated\mangled names from the files. Later, they undecorate
-the name and extract the functions calling convention.
+Those classes extract decorated\mangled names from the files. Later the extracted
+symbols are used for:
+* building "dynamic library" public interface
+* extracting function calling convention
 """
 
 import os
@@ -80,13 +82,13 @@ class libparser_t( object ):
         raise NotImplementedError()
 
     def parse( self ):
-        """main class method
+        """the main method of the class
 
         loads information from the binary file and merges it into the declarations
         tree.
 
-        The return value of the function is dictionary, where key is decorated
-        declaration name and value is a declaration.
+        The return value of the function is dictionary, where the key is
+        decorated/mangled declaration name and the value is a declaration.
         """
         self.__loaded_symbols = self.load_symbols()
         result = {}
@@ -103,7 +105,7 @@ CCTS = declarations.CALLING_CONVENTION_TYPES
 CCTS = declarations.CALLING_CONVENTION_TYPES
 
 class formated_mapping_parser_t( libparser_t ):
-    """base parser class for few MSVC binary files"""
+    """convenience class, which formats existing declarations"""
     def __init__( self, global_ns, binary_file, hint ):
         libparser_t.__init__( self, global_ns, binary_file )
         self.__formated_decls = {}
@@ -209,6 +211,7 @@ class dll_file_parser_t( formated_mapping_parser_t ):
 
 
 class so_file_parser_t( formated_mapping_parser_t ):
+    """parser for Linux .so file"""
     nm_executable = 'nm'
     #numeric-sort used for mapping between mangled and unmangled name
     cmd_mangled = '%(nm)s --extern-only --dynamic --defined-only --numeric-sort %(lib)s'

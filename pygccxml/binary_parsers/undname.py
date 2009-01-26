@@ -58,7 +58,9 @@ class UNDECORATE_NAME_OPTIONS:
     SHORT_UNIQUE_NAME = UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
 
 class undname_creator_t:
-    """formats declarations string representation and exported symbols, so they
+    """implementation details - should not be used directly
+
+    formats declarations string representation and exported symbols, so they
     could be matched later.
 
     The class formats variables, free and member functions, symbols exported from
