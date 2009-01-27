@@ -177,7 +177,7 @@ class declaration_matcher_t( matcher_base_t ):
                 else:
                     self.__opt_is_full_name = False
                     self.__decl_name_only = self.__opt_tmpl_name
-                self.__name = templates.normalize( name )            
+                self.__name = templates.normalize( name )
             else:
                 if '::' in self.__name:
                     self.__opt_is_full_name = True
@@ -210,15 +210,21 @@ class declaration_matcher_t( matcher_base_t ):
         if not None is self.name:
             if not self.check_name( decl ):
                 return False
-        if not None is self.header_dir and decl.location:
-            decl_dir = os.path.abspath( os.path.dirname( decl.location.file_name ) )
-            decl_dir = utils.normalize_path( decl_dir )
-            if decl_dir[:len(self.header_dir)] != self.header_dir:
+        if not None is self.header_dir:
+            if decl.location:
+                decl_dir = os.path.abspath( os.path.dirname( decl.location.file_name ) )
+                decl_dir = utils.normalize_path( decl_dir )
+                if decl_dir[:len(self.header_dir)] != self.header_dir:
+                    return False
+            else:
                 return False
-        if not None is self.header_file and decl.location:
-            decl_file = os.path.abspath( decl.location.file_name )
-            decl_file = utils.normalize_path( decl_file )
-            if decl_file != self.header_file:
+        if not None is self.header_file:
+            if decl.location:
+                decl_file = os.path.abspath( decl.location.file_name )
+                decl_file = utils.normalize_path( decl_file )
+                if decl_file != self.header_file:
+                    return False
+            else:
                 return False
         return True
 
@@ -229,7 +235,7 @@ class declaration_matcher_t( matcher_base_t ):
                 if self.name != templates.normalize( decl.name ) \
                    and self.name != templates.normalize( decl.partial_name ):
                     return False
-            else:                
+            else:
                 if self.name != templates.normalize( algorithm.full_name( decl, with_defaults=True ) ) \
                    and self.name != templates.normalize( algorithm.full_name( decl, with_defaults=False ) ):
                     return False
