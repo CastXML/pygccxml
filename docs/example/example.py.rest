@@ -1,3 +1,2 @@
-.. code-block::
-     :language: Python
-     :source-file: ./example.py
+.. literalinclude:: ./example.py
+     :language: python

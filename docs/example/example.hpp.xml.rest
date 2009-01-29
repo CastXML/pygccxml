@@ -1,3 +1,2 @@
-.. code-block::
-     :language: XML
-     :source-file: ./example.hpp.xml
+.. literalinclude:: ./example.hpp.xml
+     :language: xml

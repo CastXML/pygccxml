@@ -1,3 +1,2 @@
-.. code-block::
-     :language: C++
-     :source-file: ./example.hpp
+.. literalinclude:: ./example.hpp
+     :language: c++

@@ -1,3 +1,2 @@
-.. code-block::
+.. literalinclude:: ./output.txt
      :language: text
-     :source-file: ./output.txt
