@@ -1,0 +1,39 @@
+===========================
+pygccxml.binary_parsers API
+===========================
+
+This page contains the `pygccxml.binary_parsers` package API documentation.
+
+The :mod:`pygccxml.binary_parsers` package
+------------------------------------------
+
+.. automodule:: pygccxml.binary_parsers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+The :mod:`pygccxml.binary_parsers.get_dll_exported_symbols` module
+------------------------------------------------------------------
+
+.. automodule:: pygccxml.binary_parsers.get_dll_exported_symbols
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`pygccxml.binary_parsers.parsers` module
+-------------------------------------------------
+
+.. automodule:: pygccxml.binary_parsers.parsers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`pygccxml.binary_parsers.undname` module
+-------------------------------------------------
+
+.. automodule:: pygccxml.binary_parsers.undname
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

@@ -1,2 +1,7 @@
-.. literalinclude:: ./example.py
-     :language: python
+=========================
+Python API usage example
+=========================
+
+.. literalinclude:: example.py
+   :language: python
+

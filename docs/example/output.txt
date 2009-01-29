@@ -1,144 +1,581 @@
->e:\Python25\pythonw.exe -u "example.py"
+>e:\Python26\pythonw.exe -u "example.py"
+D:\dev\language-binding\sources\pygccxml_dev\docs\example\..\..\pygccxml\parser\declarations_cache.py:8: DeprecationWarning: the md5 module is deprecated; use hashlib instead
+  import md5
+INFO Parsing source file "example.hpp" ...
+INFO gccxml cmd: ""D:\dev\language-binding\sources\gccxml_bin\v09\win32\bin\gccxml.exe"  -I"."   "example.hpp" -fxml="e:\docume~1\romany\locals~1\temp\tmpewcrem.xml"  --gccxml-compiler msvc71"
+INFO GCCXML version - 0.9( 1.127 )
+"unittests" declarations:
 
-
-INFO Parsing source file "example.hpp" ... 
-
-
-INFO gccxml cmd: ""D:\dev\language-binding\sources\gccxml_bin\v09\win32\bin\gccxml.exe"  -I"."   "example.hpp" -fxml="e:\docume~1\romany\locals~1\temp\tmprehxyi.xml""
-
-
-INFO GCCXML version - 0.9
-D:\dev\language-binding\sources\pygccxml_dev\docs\example\..\..\pygccxml\parser\scanner.py:333: UserWarning: unable to find out array size from expression ""
-  warnings.warn( msg )
-"unittests" declarations: 
 namespace_t: 'unittests'
-    artificial: 'False' 
+
+    artificial: 'False'
+
+    demangled: unittests
+
+    mangled: _Z9unittests
+
     class_t: 'test_suite'
-        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:45
-        artificial: '1'     
+
+        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:35
+
+        artificial: '1'
+
+        demangled: unittests::test_suite
+
+        mangled: N9unittests10test_suiteE
+
         class type: 'struct'
-        size: 60            
-        align: 4            
-        base classes:       
+
+        size: 16
+
+        align: 4
+
+        base classes:
+
             class: '::unittests::test_case'
-                access: 'public'    
-        public:             
-        typedef_t: 'test_container'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:47
-            artificial: 'False' 
-            alias to: ::std::vector<unittests::test_case*, std::allocator<unittests::test_case*> >
-        constructor_t: 'test_suite'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:49
-            artificial: 'False' 
-            copy constructor: False
-        member_function_t: 'run'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:54
-            artificial: 'False' 
-            Signature: ['void', []]
-        member_function_t: 'get_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:56
-            artificial: 'False' 
-            Signature: ['::unittests::test_results const &', []]
-        protected:          
-        private:            
-        variable_t: 'm_tests'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:60
-            artificial: 'False' 
-            type: ::std::vector<unittests::test_case*, std::allocator<unittests::test_case*> > const  value: None
-            size: 0             
-            align: 0            
-            offset: 32
-        variable_t: 'm_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:61
-            artificial: 'False' 
-            type: ::unittests::test_results  value: None
-            size: 12            
-            align: 4            
-            offset: 48
-    class_t: 'test_results'
-        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:15
-        artificial: '1'     
-        class type: 'struct'
-        size: 12            
-        align: 4            
-        public:             
-        enumeration_t: 'status'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:17
-            artificial: '1'     
-            values:             
-                ok : 0
-                fail : 1
-                error : 2
-        typedef_t: 'result_container'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:19
-            artificial: 'False' 
-            alias to: ::std::map<std::string, unittests::test_results::status, std::less<std::string>, std::allocator<std::pair<std::string const, unittests::test_results::status> > >
-        destructor_t: '~test_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:15
-            artificial: '1'     
-        constructor_t: 'test_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:15
-            artificial: '1'     
-            copy constructor: True
-        constructor_t: 'test_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:15
-            artificial: '1'     
-            copy constructor: False
-        member_function_t: 'update'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:21
-            artificial: 'False' 
-            Signature: ['void', ['::std::string const &', '::unittests::test_results::status']]
-        protected:          
-        private:            
-        variable_t: 'm_results'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:26
-            artificial: 'False' 
-            type: ::std::map<std::string, unittests::test_results::status, std::less<std::string>, std::allocator<std::pair<std::string const, unittests::test_results::status> > >  value: None
-            size: 12            
-            align: 4            
-            offset: 0
-    class_t: 'test_case'
-        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:29
-        artificial: '1'     
-        class type: 'struct'
-        size: 32            
-        align: 4            
-        derived classes:    
-            class: '::unittests::test_suite'
-                access: 'public'    
-        public:             
-        destructor_t: '~test_case'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:29
-            artificial: '1'     
-        constructor_t: 'test_case'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:29
-            artificial: '1'     
-            copy constructor: True
-        constructor_t: 'test_case'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:31
-            artificial: 'False' 
-            copy constructor: False
-        member_function_t: 'set_up'
+
+                access type: 'public'
+
+                virtual inheritance: 'False'
+
+        public:
+
+        destructor_t: '~test_suite'
+
             location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:35
-            artificial: 'False' 
-            Signature: ['void', []]
-        member_function_t: 'tear_down'
+
+            artificial: '1'
+
+            demangled: unittests::test_suite::~test_suite()
+
+            mangled: _ZN9unittest
+
+        member_operator_t: 'operator='
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:35
+
+            artificial: '1'
+
+            demangled: unittests::test_suite::operator=(unittests::test_suite const&)
+
+            mangled: _ZN9unittests10test_suiteaSERKS0_
+
+            is extern: False
+
+            return type: ::unittests::test_suite &
+
+            arguments type: ::unittests::test_suite const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+        constructor_t: 'test_suite'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:35
+
+            artificial: '1'
+
+            demangled: unittests::test_suite::test_suite(unittests::test_suite const&)
+
+            mangled: _ZN9unittest
+
+            is extern: False
+
+            return type: None
+
+            arguments type: ::unittests::test_suite const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: True
+
+        constructor_t: 'test_suite'
+
             location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:37
-            artificial: 'False' 
-            Signature: ['void', []]
+
+            artificial: 'False'
+
+            demangled: unittests::test_suite::test_suite(char const*, unittests::test_container const&)
+
+            mangled: _ZN9unittest
+
+            is extern: 1
+
+            return type: None
+
+            arguments type: char const * name, ::unittests::test_container const & tests
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: False
+
         member_function_t: 'run'
+
             location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:39
-            artificial: 'False' 
-            Signature: ['void', []]
-        protected:          
-        private:            
+
+            artificial: 'False'
+
+            demangled: unittests::test_suite::run()
+
+            mangled: _ZN9unittests10test_suite3runEv
+
+            is extern: 1
+
+            return type: void
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: virtual
+
+            is const: False
+
+            is static: False
+
+        member_function_t: 'get_results'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:41
+
+            artificial: 'False'
+
+            demangled: unittests::test_suite::get_results() const
+
+            mangled: _ZNK9unittests10test_suite11get_resultsEv
+
+            is extern: False
+
+            return type: ::unittests::test_results const &
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: 1
+
+            is static: False
+
+        protected:
+
+        private:
+
+        variable_t: 'm_tests'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:45
+
+            artificial: 'False'
+
+            type: ::unittests::test_container *
+
+            value: None
+
+            size: 4
+
+            align: 4
+
+            offset: 8
+
+
+        variable_t: 'm_results'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:46
+
+            artificial: 'False'
+
+            type: ::unittests::test_results
+
+            value: None
+
+            size: 1
+
+            align: 1
+
+            offset: 12
+
+
+    class_declaration_t: 'test_container'
+
+        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:33
+
+        artificial: '1'
+
+        demangled: unittests::test_container
+
+        mangled: N9unittests14test_containerE
+
+    class_t: 'test_results'
+
+        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:12
+
+        artificial: '1'
+
+        demangled: unittests::test_results
+
+        mangled: N9unittests12test_resultsE
+
+        class type: 'struct'
+
+        size: 1
+
+        align: 1
+
+        public:
+
+        enumeration_t: 'status'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:14
+
+            artificial: '1'
+
+            values:
+
+
+
+
+                ok : 0
+
+                fail : 1
+
+                error : 2
+
+        destructor_t: '~test_results'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:12
+
+            artificial: '1'
+
+            demangled: unittests::test_results::~test_results()
+
+            mangled: _ZN9unittest
+
+        member_operator_t: 'operator='
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:12
+
+            artificial: '1'
+
+            demangled: unittests::test_results::operator=(unittests::test_results const&)
+
+            mangled: _ZN9unittests12test_resultsaSERKS0_
+
+            is extern: False
+
+            return type: ::unittests::test_results &
+
+            arguments type: ::unittests::test_results const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+        constructor_t: 'test_results'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:12
+
+            artificial: '1'
+
+            demangled: unittests::test_results::test_results(unittests::test_results const&)
+
+            mangled: _ZN9unittest
+
+            is extern: False
+
+            return type: None
+
+            arguments type: ::unittests::test_results const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: True
+
+        constructor_t: 'test_results'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:12
+
+            artificial: '1'
+
+            demangled: unittests::test_results::test_results()
+
+            mangled: _ZN9unittest
+
+            is extern: False
+
+            return type: None
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: False
+
+        member_function_t: 'update'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:16
+
+            artificial: 'False'
+
+            demangled: unittests::test_results::update(char const*, unittests::test_results::status)
+
+            mangled: _ZN9unittests12test_results6updateEPKcNS0_6statusE
+
+            is extern: 1
+
+            return type: void
+
+            arguments type: char const * test_name, ::unittests::test_results::status result
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+        protected:
+
+        private:
+
+    class_t: 'test_case'
+
+        location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:19
+
+        artificial: '1'
+
+        demangled: unittests::test_case
+
+        mangled: N9unittests9test_caseE
+
+        class type: 'struct'
+
+        size: 8
+
+        align: 4
+
+        derived classes:
+
+            class: '::unittests::test_suite'
+
+                access type: 'public'
+
+                virtual inheritance: 'False'
+
+        public:
+
+        destructor_t: '~test_case'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:19
+
+            artificial: '1'
+
+            demangled: unittests::test_case::~test_case()
+
+            mangled: _ZN9unittest
+
+        member_operator_t: 'operator='
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:19
+
+            artificial: '1'
+
+            demangled: unittests::test_case::operator=(unittests::test_case const&)
+
+            mangled: _ZN9unittests9test_caseaSERKS0_
+
+            is extern: False
+
+            return type: ::unittests::test_case &
+
+            arguments type: ::unittests::test_case const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+        constructor_t: 'test_case'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:19
+
+            artificial: '1'
+
+            demangled: unittests::test_case::test_case(unittests::test_case const&)
+
+            mangled: _ZN9unittest
+
+            is extern: False
+
+            return type: None
+
+            arguments type: ::unittests::test_case const & arg0
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: True
+
+        constructor_t: 'test_case'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:21
+
+            artificial: 'False'
+
+            demangled: unittests::test_case::test_case(char const*)
+
+            mangled: _ZN9unittest
+
+            is extern: 1
+
+            return type: None
+
+            arguments type: char const * test_case_name
+
+            calling convention: __thiscall__
+
+            virtual: not virtual
+
+            is const: False
+
+            is static: False
+
+            copy constructor: False
+
+        member_function_t: 'set_up'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:23
+
+            artificial: 'False'
+
+            demangled: unittests::test_case::set_up()
+
+            mangled: _ZN9unittests9test_case6set_upEv
+
+            is extern: False
+
+            return type: void
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: virtual
+
+            is const: False
+
+            is static: False
+
+        member_function_t: 'tear_down'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:25
+
+            artificial: 'False'
+
+            demangled: unittests::test_case::tear_down()
+
+            mangled: _ZN9unittests9test_case9tear_downEv
+
+            is extern: False
+
+            return type: void
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: virtual
+
+            is const: False
+
+            is static: False
+
+        member_function_t: 'run'
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:27
+
+            artificial: 'False'
+
+            demangled: unittests::test_case::run()
+
+            mangled: _ZN9unittests9test_case3runEv
+
+            is extern: 1
+
+            return type: void
+
+            arguments type:
+
+            calling convention: __thiscall__
+
+            virtual: pure virtual
+
+            is const: False
+
+            is static: False
+
+        protected:
+
+        private:
+
         variable_t: 'm_name'
-            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:42
-            artificial: 'False' 
-            type: ::std::string const  value: None
-            size: 0             
-            align: 0            
+
+            location: [D:\dev\language-binding\sources\pygccxml_dev\docs\example\example.hpp]:30
+
+            artificial: 'False'
+
+            type: char const *
+
+            value: None
+
+            size: 4
+
+            align: 4
+
             offset: 4
+
+
 class "test_suite" hierarchy information:
 	base classes   :  ['test_case']
 	derived classes:  []
@@ -155,7 +592,7 @@ class "test_case" hierarchy information:
 
 
 the namespace contains 2 "run" member functions
-they are: 
+they are:
 	::unittests::test_suite::run
 	::unittests::test_case::run
 Does all test_container_* refer to the same object?  True

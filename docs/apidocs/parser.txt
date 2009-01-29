@@ -1,0 +1,85 @@
+..\Pygccxml_Dev\Pygccxml\Parser Documentation
+=============================================
+
+This page contains the ..\Pygccxml_Dev\Pygccxml\Parser Package documentation.
+
+The :mod:`parser.config` Modules
+--------------------------------
+
+.. automodule:: parser.config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.declarations_cache` Modules
+--------------------------------------------
+
+.. automodule:: parser.declarations_cache
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.directory_cache` Modules
+-----------------------------------------
+
+.. automodule:: parser.directory_cache
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.etree_scanner` Modules
+---------------------------------------
+
+.. automodule:: parser.etree_scanner
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.linker` Modules
+--------------------------------
+
+.. automodule:: parser.linker
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.patcher` Modules
+---------------------------------
+
+.. automodule:: parser.patcher
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.project_reader` Modules
+----------------------------------------
+
+.. automodule:: parser.project_reader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.scanner` Modules
+---------------------------------
+
+.. automodule:: parser.scanner
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`parser.source_reader` Modules
+---------------------------------------
+
+.. automodule:: parser.source_reader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+The :mod:`..\pygccxml_dev\pygccxml\parser` Package
+--------------------------------------------------
+
+.. automodule:: ..\pygccxml_dev\pygccxml\parser
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

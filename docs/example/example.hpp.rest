@@ -1,2 +1,6 @@
-.. literalinclude:: ./example.hpp
-     :language: c++
+===============
+C++ header file
+===============
+
+.. literalinclude:: example.hpp
+   :language: c++

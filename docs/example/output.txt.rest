@@ -1,2 +1,6 @@
+======
+Output
+======
+
 .. literalinclude:: ./output.txt
-     :language: text
+   :language: text

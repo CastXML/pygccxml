@@ -2,13 +2,6 @@
 pygccxml documentation
 ======================
 
-.. contents:: Table of contents
-
-.. toctree::
-   :maxdepth: 1
-
-   API <api>
-
 .. meta::
    :description: C++ declarations parser
    :keywords: C++, source code, header file, parser, UML, free, declarations
@@ -113,14 +106,31 @@ License
 
 `Boost Software License`_.
 
------------------
-Test environments
------------------
+----------------
+Test environment
+----------------
 
-`pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and
-`Ubuntu`_. I am using `Python`_ 2.4\\2.5 and `GCC-XML`_ CVS. `pygccxml`_ has
-more then 215 tests. They test almost every piece of code. It also has performance
-tests. Most of the time I am using "white box" testing strategy.
+`pygccxml`_ comes with comprehensive unit tests. They are executed on Windows XP
+and `Ubuntu`_ Linux operating system. In most cases Python 2.5 and 2.6 are used.
+I still maintain backward compatibility to Python 2.4. All in all, `pygccxml` has
+more than 230 tests.
+
+-------------------------------
+pygccxml documentation contents
+-------------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   example/example.rest
+   download.rest
+   design.rest
+   query_interface.rest
+   upgrade_issues.rest
+   users.rest
+   links.rest
+   history/history.rest
+   apidocs/api.rest
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
 .. _`Py++`: ./../pyplusplus/pyplusplus.html

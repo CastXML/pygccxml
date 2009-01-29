@@ -4,12 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines 2 important classes
-
-This module defines:
-* declaration_t - base class for all pygccxml defined classes, which describe
-  a C++ declaration
-* location_t - provides information about physical location of the declaration
+defines :class:`pygccxml.declarations.declaration_t` class - all declarations base class
 """
 
 import algorithm
@@ -71,7 +66,8 @@ class declaration_t( object ):
         self._decorated_name = None
 
     def __str__(self):
-        """Default __str__ method.
+        """
+        Default __str__ method.
 
         This version just returns the decl_string and the class.
         Derived classes may override this method to provide more detailed
