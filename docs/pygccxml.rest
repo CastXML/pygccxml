@@ -14,7 +14,7 @@ pygccxml documentation
 ------------
 Introduction
 ------------
-.. include:: ./definition.rest
+.. include:: ./definition.irest
 
 ------------------------
 What can you do with it?
