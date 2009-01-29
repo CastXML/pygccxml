@@ -4,13 +4,18 @@ pygccxml documentation
 
 .. contents:: Table of contents
 
+.. toctree::
+   :maxdepth: 1
+
+   API <api>
+
 .. meta::
    :description: C++ declarations parser
    :keywords: C++, source code, header file, parser, UML, free, declarations
-              , XML, class hierarchy, analyze, AST, code generator, 
+              , XML, class hierarchy, analyze, AST, code generator,
               , синтаксический анализатор, исходный текст, исходная программа
               , описание, определение, иерархия классов, генератор кода
-   
+
 ------------
 Introduction
 ------------
@@ -25,8 +30,8 @@ Using `pygccxml`_ you can:
 * create a powerful code generator
 
   + `Py++`_ is heavily based on `pygccxml`_
-  + generate `WSDL`_ file from sources 
-  + ...    
+  + generate `WSDL`_ file from sources
+  + ...
 
 * generate UML diagrams
 * build code analyzer
@@ -43,7 +48,7 @@ lines is needed to write the following query?
 ::
 
   select all free functions from the project
-  where 
+  where
       name equal to "do_smth"
       return type is void
       function has two arguments
@@ -58,7 +63,7 @@ Only 1 ( one ) line of code is needed:
 
 ``None`` means "any type". In my opinion, the code is prety clear and readable.
 
-If you want to know more about provided API read `query interface`__ document or 
+If you want to know more about provided API read `query interface`__ document or
 API documentation.
 
 .. __: ./query_interface.html
@@ -66,38 +71,38 @@ API documentation.
 Type traits
 -----------
 `pygccxml`_ provides a lot of functionality to analyze C++ types and relationship
-between them. For more information please refer to `design`__ document or API 
+between them. For more information please refer to `design`__ document or API
 documentation. Just a few names of algorithms:
 
 * ``is_convertible( from, to )``
 
-  returns ``True`` if there is a conversion from type ``from`` to type ``to``, 
+  returns ``True`` if there is a conversion from type ``from`` to type ``to``,
   otherwise ``False``
-  
+
 * ``is_unary_operator( oper )``
 
   returns ``True`` if ``oper`` describes unary operator
-  
+
 .. __: ./design.html
 
 
 Declaration dependencies
 ------------------------
 You can query a declaration, about it dependencies - declarations it depends on.
-This is very powerful and useful feature. `Py++`_, for example, uses this 
-functionality to check that user creates Python bindings for all relevant 
-declarations. 
+This is very powerful and useful feature. `Py++`_, for example, uses this
+functionality to check that user creates Python bindings for all relevant
+declarations.
 
 Caching
 -------
-Consider the following situation: you have to parse the same set of files every 
+Consider the following situation: you have to parse the same set of files every
 day. There are 2 possible ways to complete the task:
 
 * create a header file that includes all files you need to parse
 
 * parse each file separately and then join the results
 
-The difference between these approaches is the caching algorithm used in the 
+The difference between these approaches is the caching algorithm used in the
 second case. `pygccxml`_ supports both of them. Actually `pygccxml`_ supports
 more caching strategies, read the API documentation for more information.
 
@@ -106,15 +111,15 @@ more caching strategies, read the API documentation for more information.
 License
 -------
 
-`Boost Software License`_. 
+`Boost Software License`_.
 
 -----------------
 Test environments
 -----------------
 
-`pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and 
-`Ubuntu`_. I am using `Python`_ 2.4\\2.5 and `GCC-XML`_ CVS. `pygccxml`_ has 
-more then 215 tests. They test almost every piece of code. It also has performance 
+`pygccxml`_ comes with comprehensive unit tests. It is running on Windows XP and
+`Ubuntu`_. I am using `Python`_ 2.4\\2.5 and `GCC-XML`_ CVS. `pygccxml`_ has
+more then 215 tests. They test almost every piece of code. It also has performance
 tests. Most of the time I am using "white box" testing strategy.
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
