@@ -111,7 +111,7 @@ Test environment
 ----------------
 
 `pygccxml`_ comes with comprehensive unit tests. They are executed on Windows XP
-and `Ubuntu`_ Linux operating system. In most cases Python 2.5 and 2.6 are used.
+and `Ubuntu`_ Linux operating systems. In most cases Python 2.5 and 2.6 are used.
 I still maintain backward compatibility to Python 2.4. All in all, `pygccxml` has
 more than 230 tests.
 
@@ -120,7 +120,6 @@ pygccxml documentation contents
 -------------------------------
 
 .. toctree::
-   :maxdepth: 2
 
    example/example.rest
    download.rest

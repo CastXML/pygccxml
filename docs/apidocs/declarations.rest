@@ -1,7 +1,17 @@
-..\Pygccxml_Dev\Pygccxml\Declarations Documentation
-===================================================
+=============================
+pygccxml.declarations package
+=============================
 
-This page contains the ..\Pygccxml_Dev\Pygccxml\Declarations Package documentation.
+This page contains the `pygccxml.declarations` package API documentation.
+
+The :mod:`pygccxml.declarations` package
+----------------------------------------
+
+.. automodule:: pygccxml.declarations
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 The :mod:`pygccxml.declarations.algorithm` module
 -------------------------------------------------

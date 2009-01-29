@@ -1,14 +1,13 @@
-﻿============
-pygccxml API
-============
+﻿===
+API
+===
 
-Modules:
---------
+`pygccxml` consists from 4 sub packages
 
 .. toctree::
    :maxdepth: 4
 
-   binary_parsers
-   declarations
-   parser
-   utils
+   declarations - contains classes, which describe C++ declarations <declarations>
+   parser - contains classes, which parse GCC-XML generated file <parser>
+   binary_parsers - contains classes, which extract some information from `.dll`, `.map`, `.so` files <binary_parsers>
+   utils - few useful utilities <utils>

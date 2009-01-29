@@ -34,7 +34,8 @@ def parse( files
            , config=None
            , compilation_mode=COMPILATION_MODE.FILE_BY_FILE
            , cache=None ):
-    """Parse header files.
+    """
+    Parse header files.
 
     @param files: The header files that should be parsed
     @type files: list of str
@@ -46,7 +47,6 @@ def parse( files
     @type cache: L{cache_base_t} or str
     @returns: Declarations
     """
-
     if not config:
         config = config_t()
     parser = project_reader_t( config=config, cache=cache )
