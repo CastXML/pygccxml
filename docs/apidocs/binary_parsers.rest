@@ -5,7 +5,7 @@ pygccxml.binary_parsers package
 This page contains the `pygccxml.binary_parsers` package API documentation.
 
 The :mod:`pygccxml.binary_parsers` package
------------------------------------------------------------
+------------------------------------------
 
 .. automodule:: pygccxml.binary_parsers
     :members:
