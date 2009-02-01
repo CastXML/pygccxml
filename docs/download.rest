@@ -2,8 +2,6 @@
 pygccxml download
 =================
 
-.. contents:: Table of contents
-
 -------------------------
 pygccxml on SourceForge
 -------------------------

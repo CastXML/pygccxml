@@ -2,8 +2,6 @@
 Who is using pygccxml?
 ======================
 
-.. contents:: Table of contents
-
 Users
 -----
 

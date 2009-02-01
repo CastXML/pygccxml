@@ -2,8 +2,6 @@
 C++ Reflection
 ==============
 
-.. contents:: Table of contents
-
 -----
 Links
 -----

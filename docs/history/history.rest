@@ -2,8 +2,6 @@
 pygccxml development history
 ============================
 
-.. contents:: Table of contents
-
 ------------
 Contributors
 ------------

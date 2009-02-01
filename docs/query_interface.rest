@@ -2,8 +2,6 @@
 pygccxml.declarations query API
 ===============================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

@@ -2,8 +2,6 @@
 GCC-XML 0.7 -> 0.9 upgrade issues
 =================================
 
-.. contents:: Table of contents
-
 ------------
 Introduction
 ------------

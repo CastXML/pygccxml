@@ -2,8 +2,6 @@
 pygccxml design
 ===============
 
-.. contents:: Table of contents
-
 ------------------------
 The view from 10000 fits
 ------------------------
