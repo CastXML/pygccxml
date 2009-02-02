@@ -112,8 +112,9 @@ Test environment
 
 `pygccxml`_ comes with comprehensive unit tests. They are executed on Windows XP
 and `Ubuntu`_ Linux operating systems. In most cases Python 2.5 and 2.6 are used.
-I still maintain backward compatibility to Python 2.4. All in all, `pygccxml` has
-more than 230 tests.
+All in all, `pygccxml` has more than 230 tests.
+
+Support for Python 2.4 was dropped.
 
 -------------------------------
 pygccxml documentation contents

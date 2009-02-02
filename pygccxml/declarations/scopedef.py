@@ -3,9 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""
-defines base class for L{namespace_t} and L{class_t} classes
-"""
+"""defines :class:`scopedef_t` class"""
 
 import time
 import algorithm
@@ -16,7 +14,8 @@ from pygccxml import utils
 import matcher as matcher_module
 
 class scopedef_t( declaration.declaration_t ):
-    """Base class for L{namespace_t} and L{class_t} classes.
+    """
+    Base class for :class:`namespace_t` and :class:`class_t` classes.
 
     This is the base class for all declaration classes that may have
     children nodes. The children can be accessed via the C{declarations}
@@ -26,35 +25,44 @@ class scopedef_t( declaration.declaration_t ):
     can get instance or instances of internal declaration(s).
 
     You can find declaration(s) using next criteria:
-        1. name - declaration name, could be full qualified name
-        2. header_dir - directory, to which belongs file, that the declaration was declarated in.
-           header_dir should be absolute path.
-        3. header_file - file that the declaration was declarated in.
-        4. function - user ( your ) custom criteria. The interesting thing is that
+
+        1. `name` - declaration name, could be full qualified name
+
+        2. `header_dir` - directory, to which belongs file, that the declaration was declarated in.
+           `header_dir` should be absolute path.
+
+        3. `header_file` - file that the declaration was declarated in.
+
+        4. `function` - user ( your ) custom criteria. The interesting thing is that
            this function will be joined with other arguments ( criteria ).
-        5. recursive - the search declaration range, if True will be search in
-          internal declarations too.
+
+        5. `recursive` - the search declaration range, if True will be search in
+           internal declarations too.
+
 
     Every "select" API you can invoke and pass as first argument at declaration
     name or function. This class will find out correctly what argument represents.
 
-    Example::
+    Example: ::
         ns - referrers to global namespace
         ns.member_function( "do_something ) - will return reference to member
         function named "do_something". If there is no such function exception
         will be raised. If there is more then one function exception will be
         raised too.
 
-    Example 2::
+    Example 2: ::
         ns - referers to global namespace
         do_smths = ns.member_functions( "do_something ) - will return instance
         of L{mdecl_wrapper_t} object. This object allows you few things:
 
         1. To iterate on selected declarations
+
         2. To set some property to desired value using one line of code only:
            do_smths.call_policies = x
+
         3. To call some function on every instance using one line of code:
            do_smths.exclude()
+
 
         Pay attention: you can not use "get" functions or properties.
     """

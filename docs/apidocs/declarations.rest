@@ -161,7 +161,7 @@ The :mod:`templates <pygccxml.declarations.templates>` module
     :show-inheritance:
 
 The :mod:`typedef <pygccxml.declarations.typedef>` module
------------------------------------------------
+---------------------------------------------------------
 
 .. automodule:: pygccxml.declarations.typedef
     :members:
