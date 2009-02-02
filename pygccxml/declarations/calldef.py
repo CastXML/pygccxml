@@ -139,8 +139,7 @@ class argument_t(object):
     def _set_type(self, type):
         self._type = type
     type = property( _get_type, _set_type
-                     , doc="""The type of the argument.
-                     @type: :class:type_t""")
+                     , doc="""The argument :class:`type <type_t>`""")
 
     def _get_attributes( self ):
         return self._attributes
@@ -198,7 +197,7 @@ class calldef_t( declaration.declaration_t ):
         self._arguments = arguments
     arguments = property( _get_arguments , _set_arguments
                           , doc="""The argument list.
-                          @type: list of :class:argument_t""")
+                          @type: list of :class:`argument_t`""")
 
     @property
     def has_ellipsis( self ):
@@ -241,7 +240,7 @@ class calldef_t( declaration.declaration_t ):
         self._exceptions = exceptions
     exceptions = property( _get_exceptions, _set_exceptions
                            , doc="""The list of exceptions.
-                           @type: list of :class:declaration_t""")
+                           @type: list of :class:`declaration_t`""")
 
     def _get_return_type(self):
         return self._return_type
@@ -249,13 +248,13 @@ class calldef_t( declaration.declaration_t ):
         self._return_type = return_type
     return_type = property( _get_return_type, _set_return_type
                             , doc='''The type of the return value of the "callable" or None (constructors).
-                            @type: :class:type_t
+                            @type: :class:`type_t`
                             ''')
     @property
     def overloads(self):
         """A list of overloaded "callables" (i.e. other callables with the same name within the same scope.
 
-        @type: list of L{calldef_t}
+        @type: list of :class:`calldef_t`
         """
         if not self.parent:
             return []
@@ -364,7 +363,7 @@ class calldef_t( declaration.declaration_t ):
         self._calling_convention = cc
 
     calling_convention = property( get_calling_convention, set_calling_convention
-                                   , doc="function calling convention. See L{CALLING_CONVENTION_TYPES} class for possible values" )
+                                   , doc="function calling convention. See :class:CALLING_CONVENTION_TYPES class for possible values" )
 
 
 #Second level in hierarchy of calldef
@@ -417,7 +416,7 @@ class member_calldef_t( calldef_t ):
         assert virtuality in VIRTUALITY_TYPES.ALL
         self._virtuality = virtuality
     virtuality = property( get_virtuality, set_virtuality
-                           , doc="""Describes the "virtuality" of the member (as defined by the string constants in the class L{VIRTUALITY_TYPES}).
+                           , doc="""Describes the "virtuality" of the member (as defined by the string constants in the class :class:VIRTUALITY_TYPES).
                            @type: str""")
 
     def _get_access_type(self):
@@ -441,7 +440,7 @@ class member_calldef_t( calldef_t ):
                            , doc="""describes, whether "callable" has static modifier or not""")
 
     def function_type(self):
-        """returns function type. See :class:type_t hierarchy"""
+        """returns function type. See :class:`type_t` hierarchy"""
         if self.has_static:
             return cpptypes.free_function_type_t( return_type=self.return_type
                                            , arguments_types=[ arg.type for arg in self.arguments ] )
@@ -495,7 +494,7 @@ class free_calldef_t( calldef_t ):
         return []
 
     def function_type(self):
-        """returns function type. See :class:type_t hierarchy"""
+        """returns function type. See :class:`type_t` hierarchy"""
         return cpptypes.free_function_type_t( return_type=self.return_type
                                      , arguments_types=[ arg.type for arg in self.arguments ] )
 

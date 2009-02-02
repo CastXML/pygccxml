@@ -17,4 +17,4 @@ Links
 
 .. _`XTI An Extended Type Information Library` : http://lcgapp.cern.ch/project/architecture/XTI_accu.pdf
 
-.. _`pygccxml`: ./pygccxml.html
+

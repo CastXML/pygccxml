@@ -73,7 +73,7 @@ GCC-XML 0.9:
   <Typedef id="_52" name="mvar_ptr_t" type="_139" />
   <OffsetType id="_139" basetype="_92" type="_131" size="32" align="32"/>
 
-`pygccxml`_ handles this issue automatically, you don't have to change your code.
+:doc:`pygccxml <pygccxml>` handles this issue automatically, you don't have to change your code.
 
 -----------------------
 Constant variable value
@@ -90,7 +90,7 @@ For example:
 GCC-XML 0.9 will report the ``initialized`` value as ``10122004ul``, while GCC-XML
 0.7 as ``10122004``.
 
-`pygccxml`_ handles  this problem automatically, you don't have to change your code.
+:doc:`pygccxml <pygccxml>` handles  this problem automatically, you don't have to change your code.
 
 ------------------------------------------
 Free and member function default arguments
@@ -190,7 +190,7 @@ fixes some issues, but introduces another ones. Take a look on the following exa
 
     <Argument name="types" type="_3096" default="std::vector&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;, std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt; &gt;(((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;&amp;)((const std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;*)(&amp; std::allocator&lt;std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;()))))"/>
 
-Basically `pygccxml`_ can't help you here. The good news is that you always can
+Basically :doc:`pygccxml <pygccxml>` can't help you here. The good news is that you always can
 change the default value expression from the script:
 
 .. code-block:: python
@@ -230,11 +230,11 @@ class mangled name    6item_tILm3740067437EE  6item_tILm3740067437EE
 class demangled name  item_t<3740067437l>     item_t<3740067437ul>
 ====================  ======================  =======================
 
-`pygccxml`_ uses class demangled name as a "name" of the class. This was done to
+:doc:`pygccxml <pygccxml>` uses class demangled name as a "name" of the class. This was done to
 overcome few bugs GCC-XML has, when it works on libraries with extreme usage of
 templates.
 
-As you can see the name of the class is different. `pygccxml`_ is unable to help
+As you can see the name of the class is different. :doc:`pygccxml <pygccxml>` is unable to help
 you in such situations. I suggest you to use query API strict mode. This is the
 default one. If the class/declaration with the given name could not be found, it
 will raise an error with clear description of the problem.
@@ -243,6 +243,6 @@ You can also to print the declarations tree to ``stdout`` and find out the name
 of the class/declaration from it.
 
 
-.. _`pygccxml`: ./pygccxml.html
+
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

@@ -6,7 +6,7 @@ pygccxml.declarations query API
 Introduction
 ------------
 You parsed the source files. Now you have to do some real work with the extracted
-information, right? `pygccxml`_ provides very powerful and simple interface to
+information, right? :doc:`pygccxml <pygccxml>` provides very powerful and simple interface to
 query about extracted declarations.
 
 Just an example. I want to select all member functions, which have 2 arguments.
@@ -161,11 +161,11 @@ by:
     ``RECURSIVE_DEFAULT`` variable. Its initial value is ``True``. So, if you
     don't pass ``recursive`` argument, the value of ``RECURSIVE_DEFAULT`` variable
     will be used. This "yet another level of indirection" allows you to configure
-    `pygccxml`_ "select" functions in one place for all project.
+    :doc:`pygccxml <pygccxml>` "select" functions in one place for all project.
 
   * ``allow_empty``
 
-    Python boolean object, it says `pygccxml`_ what to do if query returns empty.
+    Python boolean object, it says :doc:`pygccxml <pygccxml>` what to do if query returns empty.
 
     If ``allow_empty`` is ``False``, then exception
     ``RuntimeError( "Multi declaration query returned 0 declarations." )``
@@ -285,7 +285,7 @@ query method, you can take a look on API documentation or into source code.
 .. _`Boost.Python`: http://boost.org/libs/python/doc/tutorial/doc/html/index.html
 .. _`call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 .. _`Call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
-.. _`pygccxml`: ./pygccxml.html
+
 .. _`Py++`: ./../pyplusplus/pyplusplus.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org

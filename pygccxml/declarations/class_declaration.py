@@ -83,7 +83,7 @@ class hierarchy_info_t( object ):
             assert( isinstance( new_related_class, class_t ) )
         self._related_class = new_related_class
     related_class = property( _get_related_class, _set_related_class
-                              , doc="reference to base or derived L{class<class_t>}")
+                              , doc="reference to base or derived :class:`class <class_t>`")
 
     def _get_access(self):
         return self._access
@@ -92,7 +92,7 @@ class hierarchy_info_t( object ):
         self._access = new_access
     access = property( _get_access, _set_access )
     access_type = property( _get_access, _set_access
-                            , doc="describes L{hierarchy type<ACCESS_TYPES>}")
+                            , doc="describes :class:`hierarchy type <ACCESS_TYPES>`")
 
     #TODO: check whether GCC XML support this and if so parser this information
     def _get_is_virtual(self):
@@ -124,11 +124,11 @@ class class_declaration_t( declaration.declaration_t ):
     def _set_aliases( self, new_aliases ):
         self._aliases = new_aliases
     aliases = property( _get_aliases, _set_aliases
-                         , doc="List of L{aliases<typedef_t>} to this instance")
+                         , doc="List of :class:`aliases <typedef_t>` to this instance")
 
     @property
     def container_traits( self ):
-        """reference to L{container traits<container_traits.py>} or None"""
+        """reference to :class:`container_traits_impl_t` or None"""
         if self._container_traits_set == False:
             import container_traits #prevent cyclic dependencies
             self._container_traits_set = True
@@ -231,18 +231,18 @@ class class_t( scopedef.scopedef_t ):
             assert( new_class_type in CLASS_TYPES.ALL )
         self._class_type = new_class_type
     class_type = property( _get_class_type, _set_class_type
-                           , doc="describes class L{type<CLASS_TYPES>}")
+                           , doc="describes class :class:`type <CLASS_TYPES>`")
 
     def _get_bases(self):
         return self._bases
     def _set_bases( self, new_bases ):
         self._bases = new_bases
     bases = property( _get_bases, _set_bases
-                      , doc="list of L{base classes<hierarchy_info_t>}")
+                      , doc="list of :class:`base classes <hierarchy_info_t>`")
 
     @property
     def recursive_bases(self):
-        """list of all L{base classes<hierarchy_info_t>}"""
+        """list of all :class:`base classes <hierarchy_info_t>`"""
         if self._recursive_bases is None:
             to_go = self.bases[:]
             all_bases = []
@@ -259,11 +259,11 @@ class class_t( scopedef.scopedef_t ):
     def _set_derived( self, new_derived ):
         self._derived = new_derived
     derived = property( _get_derived, _set_derived
-                        , doc="list of L{derived classes<hierarchy_info_t>}")
+                        , doc="list of :class:`derived classes <hierarchy_info_t>`")
 
     @property
     def recursive_derived(self):
-        """list of all L{derive classes<hierarchy_info_t>}"""
+        """list of all :class:`derive classes <hierarchy_info_t>`"""
         if self._recursive_derived is None:
             to_go = self.derived[:]
             all_derived = []
@@ -334,7 +334,7 @@ class class_t( scopedef.scopedef_t ):
     def _set_aliases( self, new_aliases ):
         self._aliases = new_aliases
     aliases = property( _get_aliases, _set_aliases
-                         , doc="List of L{aliases<typedef_t>} to this instance")
+                         , doc="List of :class:`aliases <typedef_t>` to this instance")
 
     def _get_byte_size(self):
         return self._byte_size
@@ -384,7 +384,7 @@ class class_t( scopedef.scopedef_t ):
     def adopt_declaration( self, decl, access ):
         """adds new declaration to the class
 
-        :param decl: reference to a L{declaration<declaration_t>}
+        :param decl: reference to a :class:`declaration_t`
 
         :param access: member access type
         :type access: :class:ACCESS_TYPES
@@ -406,7 +406,7 @@ class class_t( scopedef.scopedef_t ):
         removes decl from  members list
 
         :param decl: declaration to be removed
-        :type decl: :class:declaration_t
+        :type decl: :class:`declaration_t`
         """
         container = None
         access_type = self.find_out_member_access_type( decl )
@@ -424,7 +424,7 @@ class class_t( scopedef.scopedef_t ):
         returns member access type
 
         :param member: member of the class
-        :type member: :class:declaration_t
+        :type member: :class:`declaration_t`
 
         :rtype: :class:ACCESS_TYPES
         """
@@ -470,7 +470,7 @@ class class_t( scopedef.scopedef_t ):
 
     @property
     def container_traits( self ):
-        """reference to L{container traits<container_traits.py>} or None"""
+        """reference to :class:`container_traits_impl_t` or None"""
         if self._container_traits_set == False:
             import container_traits #prevent cyclic dependencies
             self._container_traits_set = True

@@ -21,16 +21,14 @@ pygccxml in blogs
 
 - http://cysquatch.net/blog/2007/09/01/c-code-metrics-with-pygccxml
 
-  `pygccxml`_ is used to calculate the Weighted Methods per Class (WMC) metric.
+  :doc:`pygccxml <pygccxml>` is used to calculate the Weighted Methods per Class (WMC) metric.
 
 - http://www.garagegames.com/blogs/4280/13907
 
-  `pygccxml`_ is used to generate input files for `SIP`_ code generator.
+  :doc:`pygccxml <pygccxml>` is used to generate input files for `SIP`_ code generator.
 
 .. _`SIP` : http://www.riverbankcomputing.com/software/sip/intro
 
 - http://blogs.sun.com/thorsten/entry/more_on_source_code_grokking
 
   Short listing of C++ parsers and their description.
-
- .. _`pygccxml` : ./pygccxml.html

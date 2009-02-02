@@ -53,7 +53,7 @@ class scopedef_t( declaration.declaration_t ):
     Example 2: ::
         ns - referers to global namespace
         do_smths = ns.member_functions( "do_something ) - will return instance
-        of L{mdecl_wrapper_t} object. This object allows you few things:
+        of :class:`mdecl_wrapper_t` object. This object allows you few things:
 
         1. To iterate on selected declarations
 
@@ -129,7 +129,7 @@ class scopedef_t( declaration.declaration_t ):
             return self._all_decls_not_recursive
         else:
             return self._get_declarations_impl()
-    declarations = property( _get_declarations, doc="list of children L{declarations<declaration_t>}" )
+    declarations = property( _get_declarations, doc="list of children :class:`declarations <declaration_t>`" )
 
     def remove_declaration( self, decl ):
         raise NotImplementedError()

@@ -17,12 +17,12 @@ Introduction
 ------------------------
 What can you do with it?
 ------------------------
-Using `pygccxml`_ you can:
+Using :doc:`pygccxml <pygccxml>` you can:
 
 * parse C++ source code
 * create a powerful code generator
 
-  + `Py++`_ is heavily based on `pygccxml`_
+  + `Py++`_ is heavily based on :doc:`pygccxml <pygccxml>`
   + generate `WSDL`_ file from sources
   + ...
 
@@ -36,7 +36,7 @@ Features
 
 Query interface
 ---------------
-`pygccxml`_ provides simple and powerful API to query declarations tree. How many
+:doc:`pygccxml <pygccxml>` provides simple and powerful API to query declarations tree. How many
 lines is needed to write the following query?
 ::
 
@@ -63,7 +63,7 @@ API documentation.
 
 Type traits
 -----------
-`pygccxml`_ provides a lot of functionality to analyze C++ types and relationship
+:doc:`pygccxml <pygccxml>` provides a lot of functionality to analyze C++ types and relationship
 between them. For more information please refer to `design`__ document or API
 documentation. Just a few names of algorithms:
 
@@ -96,7 +96,7 @@ day. There are 2 possible ways to complete the task:
 * parse each file separately and then join the results
 
 The difference between these approaches is the caching algorithm used in the
-second case. `pygccxml`_ supports both of them. Actually `pygccxml`_ supports
+second case. :doc:`pygccxml <pygccxml>` supports both of them. Actually :doc:`pygccxml <pygccxml>` supports
 more caching strategies, read the API documentation for more information.
 
 
@@ -110,7 +110,7 @@ License
 Test environment
 ----------------
 
-`pygccxml`_ comes with comprehensive unit tests. They are executed on Windows XP
+:doc:`pygccxml <pygccxml>` comes with comprehensive unit tests. They are executed on Windows XP
 and `Ubuntu`_ Linux operating systems. In most cases Python 2.5 and 2.6 are used.
 All in all, `pygccxml` has more than 230 tests.
 
@@ -134,7 +134,7 @@ pygccxml documentation contents
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
 .. _`Py++`: ./../pyplusplus/pyplusplus.html
-.. _`pygccxml`: ./pygccxml.html
+
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Docutils`: http://docutils.sourceforge.net
 .. _`Python`: http://www.python.org

@@ -61,7 +61,7 @@ def find_args( text, start=None ):
     finds arguments within function invocation.
 
     :type text: str
-    :rtype: [ arguments ] or L{NOT_FOUND} if arguments could not be found
+    :rtype: [ arguments ] or :data:NOT_FOUND if arguments could not be found
     """
     global __THE_PARSER
     return __THE_PARSER.find_args( text, start )

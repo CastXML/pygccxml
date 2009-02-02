@@ -200,7 +200,7 @@ class declaration_t( object ):
         self._location = new_location
     location = property( _get_location, _set_location
                         , doc="""Location of the declaration within source file
-                        @type: L{location_t}
+                        @type: :class:`location_t`
                         """)
 
     def _get_is_artificial( self ):
@@ -268,7 +268,7 @@ class declaration_t( object ):
     def cache( self ):
         """implementation details
 
-        reference to instance of L{algorithms_cache.algorithms_cache_t} class.
+        reference to instance of :class:`algorithms_cache_t` class.
         """
         return self._cache
 

@@ -120,7 +120,7 @@ Version 0.9.5
 Version 0.9.0
 -------------
 
-1. Performance was improved. `pygccxml`_ is now 30-50% faster. The improvement
+1. Performance was improved. :doc:`pygccxml <../pygccxml>` is now 30-50% faster. The improvement
    was achieved by using `cElementTree`_ package, ``iterparse`` functionality,
    instead of standard XML SAX API. If `cElementTree`_ package is not available,
    the built-in XML SAX package is used.
@@ -188,7 +188,7 @@ Version 0.8.5
    types and declarations it depends on.
 
 2. ``signed char`` and ``char`` are two different types. This bug was fixed and
-   now `pygccxml`_ treats them right. Many thanks to Gaetan Lehmann for reporting
+   now :doc:`pygccxml <../pygccxml>` treats them right. Many thanks to Gaetan Lehmann for reporting
    the bug.
 
 3. Declarations, read from GCC-XML generated file, could be saved in cache.
@@ -225,7 +225,7 @@ Version 0.8.2
    small example that reproduced the error.
 
 2. Huge speed improvement has been achieved (x10). Allen Bierbaum suggested to
-   save and reuse results of different `pygccxml`_ algorithms:
+   save and reuse results of different :doc:`pygccxml <../pygccxml>` algorithms:
 
    * ``declarations.remove_alias``
    * ``declarations.full_name``
@@ -259,7 +259,7 @@ Version 0.8.2
 Version 0.8.1
 -------------
 
-1. `pygccxml`_ has been ported to MacOS X. Many thanks to Darren Garnier!
+1. :doc:`pygccxml <../pygccxml>` has been ported to MacOS X. Many thanks to Darren Garnier!
 
 2. New type traits have been added:
 
@@ -327,7 +327,7 @@ Version 0.8.1
      #instead of
      op = cls.operator( symbol='<' )
 
-5. `pygccxml`_ improved a lot functionality related to providing feedback to user:
+5. :doc:`pygccxml <../pygccxml>` improved a lot functionality related to providing feedback to user:
 
    * every package has its own logger
 
@@ -364,10 +364,10 @@ Version 0.8.1
 Version 0.8
 -----------
 
-1. `pygccxml`_ now has power "select" interface. Read more about this cool feature
+1. :doc:`pygccxml <../pygccxml>` now has power "select" interface. Read more about this cool feature
    in tutorials.
 
-2. Improved support for template instantiations. `pygccxml`_ now take into
+2. Improved support for template instantiations. :doc:`pygccxml <../pygccxml>` now take into
    account demangled name of declarations. Please refer to documentation for
    more explanantion.
 
@@ -429,8 +429,8 @@ Version 0.7.1
    easily extend functionality provided by built-in declarations.
 
 6. Sometimes, there is a need to find a declaration that match some criteria.
-   The was such functionality in `pygccxml`_, but it was too limited. This
-   release fix the situation. `pygccxml`_ adds a set of classes that will help
+   The was such functionality in :doc:`pygccxml <../pygccxml>`, but it was too limited. This
+   release fix the situation. :doc:`pygccxml <../pygccxml>` adds a set of classes that will help
    you to deal with this problem.
 
 7. New cache - ``parser.directory_cache_t`` has been implemented.
@@ -463,8 +463,8 @@ Version 0.7.1
 12. Documentation. Allen Bierbaum and Matthias Baas contributed so much in this
     area. Almost every public function/class has now documentation string.
 
-13. Logging functionality has been added. `pygccxml`_ creates new logger
-    "pygccxml". Now it is possible to see what `pygccxml`_ is doing right now.
+13. Logging functionality has been added. :doc:`pygccxml <../pygccxml>` creates new logger
+    "pygccxml". Now it is possible to see what :doc:`pygccxml <../pygccxml>` is doing right now.
 
 14. I am sure I forgot something.
 
@@ -547,9 +547,8 @@ Version 0.6.7
    time.
 
 8. There are some cases when `GCC-XML`_ reports *"restricted"*. In this case
-   `pygccxml`_ replaces *"restricted"* with *"volatile"*.
+   :doc:`pygccxml <../pygccxml>` replaces *"restricted"* with *"volatile"*.
 
 
-.. _`pygccxml`: ./../pygccxml.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`GCC-XML`: http://www.gccxml.org

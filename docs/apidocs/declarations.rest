@@ -72,8 +72,8 @@ decl_factory
     :members:
     :show-inheritance:
 
-ecl_printer
------------
+decl_printer
+------------
 
 .. automodule:: pygccxml.declarations.decl_printer
     :members:

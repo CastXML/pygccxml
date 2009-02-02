@@ -112,13 +112,13 @@ class declaration_matcher_t( matcher_base_t ):
           - declaration name, also could be fully qualified name
             Example: wstring or ::std::wstring
           - declaration type
-            Example: :class:class_t, :class:namespace_t, :class:enumeration_t
+            Example: :class:`class_t`, :class:`namespace_t`, :class:`enumeration_t`
           - location within file system ( file or directory )
     """
     def __init__( self, name=None, decl_type=None, header_dir=None, header_file=None ):
         """
-        :param decl_type: declaration type to match by. For example :class:enumeration_t.
-        :type decl_type: any class that derives from L{declarations.declaration_t} class
+        :param decl_type: declaration type to match by. For example :class:`enumeration_t`.
+        :type decl_type: any class that derives from :class:`declaration_t` class
 
         :param name: declaration name, could be full name.
         :type name: str
@@ -259,13 +259,13 @@ class declaration_matcher_t( matcher_base_t ):
 class variable_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match variables by next criteria:
-        - :class:declaration_matcher_t criteria
-        - variable type. Example: L{int_t} or 'int'
+        - :class:`declaration_matcher_t` criteria
+        - variable type. Example: :class:`int_t` or 'int'
     """
     def __init__( self, name=None, type=None, header_dir=None, header_file=None ):
         """
         :param type: variable type
-        :type type: string or instance of :class:type_t derived class
+        :type type: string or instance of :class:`type_t` derived class
         """
         declaration_matcher_t.__init__( self
                                         , name=name
@@ -315,18 +315,18 @@ class namespace_matcher_t( declaration_matcher_t ):
 class calldef_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match callable by next criteria:
-        - :class:declaration_matcher_t criteria
-        - return type. Example: L{int_t} or 'int'
+        - :class:`declaration_matcher_t` criteria
+        - return type. Example: :class:`int_t` or 'int'
         - argument types
     """
 
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
         :param return_type: callable return type
-        :type return_type: string or instance of :class:type_t derived class
+        :type return_type: string or instance of :class:`type_t` derived class
 
         :param arg_types: list of function argument types. arg_types can contain.
-        Any item within the list could be string or instance of :class:type_t derived
+        Any item within the list could be string or instance of :class:`type_t` derived
         class. If you don't want some argument to participate in match you can
         put None. For example:
 
@@ -397,7 +397,7 @@ class calldef_matcher_t( declaration_matcher_t ):
 class operator_matcher_t( calldef_matcher_t ):
     """
     Instance of this class will match operators by next criteria:
-        - L{calldef_matcher_t} criteria
+        - :class:`calldef_matcher_t` criteria
         - operator symbol: =, !=, (), [] and etc
     """
     def __init__( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
@@ -499,7 +499,7 @@ class virtuality_type_matcher_t( matcher_base_t ):
     def __init__( self, virtuality_type ):
         """
         :param access_type: declaration access type
-        :type access_type: L{VIRTUALITY_TYPES} defines few consts for your convinience.
+        :type access_type: :class:VIRTUALITY_TYPES defines few consts for your convinience.
         """
         matcher_base_t.__init__( self )
         self.virtuality_type = virtuality_type

@@ -58,7 +58,7 @@ class namespace_t( scopedef.scopedef_t ):
         removes decl from  members list
 
         :param decl: declaration to be removed
-        :type decl: :class:declaration_t
+        :type decl: :class:`declaration_t`
         """
         del self.declarations[ self.declarations.index( decl ) ]
         decl.cache.reset()

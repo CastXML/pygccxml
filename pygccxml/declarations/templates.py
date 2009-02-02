@@ -12,7 +12,7 @@ the string like this C{ std::vector<int> }.
     - name ( std::vector )
     - list of arguments ( int )
 
-This module also defines few convenience function like L{split} and L{join}.
+This module also defines few convenience function like :function:split and :function:join.
 """
 
 import pattern_parser

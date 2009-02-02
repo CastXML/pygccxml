@@ -80,7 +80,7 @@ class type_t(object):
 
 
 class dummy_type_t( type_t ):
-    """provides :class:type_t interface for a string, that defines C++ type.
+    """provides :class:`type_t` interface for a string, that defines C++ type.
 
     This class could be very useful in the code generator.
     """
@@ -467,14 +467,14 @@ class calldef_type_t( object ):
     def _set_return_type(self, new_return_type):
         self._return_type = new_return_type
     return_type = property( _get_return_type, _set_return_type
-                            , doc="reference to L{return type<type_t>}")
+                            , doc="reference to :class:`return type <type_t>`")
 
     def _get_arguments_types(self):
         return self._arguments_types
     def _set_arguments_types(self, new_arguments_types):
         self._arguments_types = new_arguments_types
     arguments_types = property( _get_arguments_types, _set_arguments_types
-                                , doc="list of argument L{types<type_t>}")
+                                , doc="list of argument :class:`types <type_t>`")
 
     @property
     def has_ellipsis( self ):
@@ -495,11 +495,9 @@ class free_function_type_t( type_t, calldef_type_t ):
         returns free function type
 
         :param return_type: function return type
-        :type return_type: :class:type_t
-
+        :type return_type: :class:`type_t`
         :param arguments_types: list of argument :class:`type <type_t>`
-
-        :rtype: L{free_function_type_t}
+        :rtype: :class:`free_function_type_t`
         """
         f = lambda x: x.build_decl_string( with_defaults )
         return free_function_type_t.NAME_TEMPLATE % {
@@ -552,7 +550,7 @@ class member_function_type_t( type_t, calldef_type_t ):
     def _set_class_inst(self, class_inst ):
         self._class_inst = class_inst
     class_inst = property( _get_class_inst, _set_class_inst
-                           ,doc="reference to parent L{class<declaration_t>}" )
+                           ,doc="reference to parent :class:`class <declaration_t>`" )
 
     #TODO: create real typedef
     def create_typedef( self, typedef_name, class_alias=None, with_defaults=True):
@@ -644,7 +642,7 @@ class member_variable_type_t( compound_t ):
 ## declarated types:
 
 class declarated_t( type_t ):
-    """class that binds between to hierarchies: :class:type_t and :class:declaration_t"""
+    """class that binds between to hierarchies: :class:`type_t` and :class:`declaration_t`"""
     def __init__( self, declaration ):
         type_t.__init__( self )
         self._declaration = declaration
@@ -654,7 +652,7 @@ class declarated_t( type_t ):
     def _set_declaration(self, new_declaration):
         self._declaration = new_declaration
     declaration = property( _get_declaration, _set_declaration
-                            , doc="reference to L{declaration<declaration_t>}")
+                            , doc="reference to :class:`declaration_t`")
 
     def build_decl_string(self, with_defaults=True):
         if with_defaults:

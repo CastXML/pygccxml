@@ -12,7 +12,7 @@ it. Using functions defined in this module you can
     - modify type
 
 Those functions are very valuable for code generation. Almost all functions
-within this module works on :class:type_t class hierarchy and\\or :class:class_t.
+within this module works on :class:`type_t` class hierarchy and\\or :class:class_t.
 """
 
 import os
@@ -252,9 +252,9 @@ def remove_const(type):
         return nake_type.base
 
 def remove_declarated( type_ ):
-    """removes type-declaration class-binder L{declarated_t} from the type_
+    """removes type-declaration class-binder :class:`declarated_t` from the type_
 
-    If type_ is not L{declarated_t}, it will be returned as is
+    If type_ is not :class:`declarated_t`, it will be returned as is
     """
     type_ = remove_alias( type_ )
     if isinstance( type_, cpptypes.declarated_t ):

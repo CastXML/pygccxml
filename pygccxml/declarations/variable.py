@@ -48,7 +48,7 @@ class variable_t( declaration.declaration_t ):
     def _set_type_qualifiers(self, type_qualifiers):
         self._type_qualifiers = type_qualifiers
     type_qualifiers = property( _get_type_qualifiers, _set_type_qualifiers
-                                , doc="reference to the L{type_qualifiers_t} instance" )
+                                , doc="reference to the :class:`type_qualifiers_t` instance" )
 
     def _get_value(self):
         return self._value

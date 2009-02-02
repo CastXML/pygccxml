@@ -12,7 +12,7 @@ def declaration_path( decl, with_defaults=True ):
     returns a list of parent declarations names
 
     :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:declaration_t
+    :type decl: :class:`declaration_t`
 
     :rtype: [names], where first item contains top parent name and last item
              contains decl name
@@ -42,7 +42,7 @@ def partial_declaration_path( decl ):
     have default value
 
     :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:declaration_t
+    :type decl: :class:`declaration_t`
 
     :rtype: [names], where first item contains top parent name and last item
              contains decl name
@@ -75,9 +75,9 @@ def get_named_parent( decl ):
     returns a reference to a named parent declaration
 
     :param decl: the child declaration
-    :type decl: :class:declaration_t
+    :type decl: :class:`declaration_t`
 
-    :rtype: reference to :class:declaration_t or None if not found
+    :rtype: reference to :class:`declaration_t` or None if not found
     """
     if not decl:
         return None
@@ -100,8 +100,8 @@ def full_name( decl, with_defaults=True ):
     returns declaration full qualified name
     
     If `decl` belongs to anonymious namespace or class, the function will return C++ illegal qualified name.
-    :param decl: :class:declaration_t
-    :type decl: :class:declaration_t
+    :param decl: :class:`declaration_t`
+    :type decl: :class:`declaration_t`
     :rtype: full name of declarations.
     """
     if None is decl:
@@ -121,7 +121,7 @@ def make_flatten( decl_or_decls ):
     converts tree representation of declarations to flatten one.
 
     :param decl_or_decls: reference to list of declaration's or single declaration
-    :type decl_or_decls: :class:declaration_t or [ :class:declaration_t ]
+    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
 
     :rtype: [ all internal declarations ]
     """
@@ -152,7 +152,7 @@ def __make_flatten_generator( decl_or_decls ):
     converts tree representation of declarations to flatten one.
 
     :param decl_or_decls: reference to list of declaration's or single declaration
-    :type decl_or_decls: :class:declaration_t or [ :class:declaration_t ]
+    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
 
     :rtype: [ all internal declarations ]
     """
@@ -191,7 +191,7 @@ class match_declaration_t:
     helper class for different search algorithms.
 
     This class will help developer to match declaration by:
-        - declaration type, for example :class:class_t or L{operator_t}.
+        - declaration type, for example :class:`class_t` or :class:`operator_t`.
         - declaration name
         - declaration full name
         - reference to parent declaration
@@ -208,7 +208,7 @@ class match_declaration_t:
         returns True if inst do match one of specified criteria
 
         :param inst: declaration instance
-        :type inst: :class:declaration_t
+        :type inst: :class:`declaration_t`
 
         :rtype: bool
         """
@@ -239,7 +239,7 @@ def find_all_declarations( declarations
     """
     returns a list of all declarations that match criteria, defined by developer
 
-    For more information about arguments see :class:match_declaration_t class.
+    For more information about arguments see :class:`match_declaration_t` class.
 
     :rtype: [ matched declarations ]
     """
@@ -261,9 +261,9 @@ def find_declaration( declarations
     returns single declaration that match criteria, defined by developer.
     If more the one declaration was found None will be returned.
 
-    For more information about arguments see :class:match_declaration_t class.
+    For more information about arguments see :class:`match_declaration_t` class.
 
-    :rtype: matched declaration :class:declaration_t or None
+    :rtype: matched declaration :class:`declaration_t` or None
     """
     decl = find_all_declarations( declarations, type=type, name=name, parent=parent, recursive=recursive, fullname=fullname )
     if len( decl ) == 1:
@@ -273,9 +273,9 @@ def find_first_declaration( declarations, type=None, name=None, parent=None, rec
     """
     returns first declaration that match criteria, defined by developer
 
-    For more information about arguments see :class:match_declaration_t class.
+    For more information about arguments see :class:`match_declaration_t` class.
 
-    :rtype: matched declaration :class:declaration_t or None
+    :rtype: matched declaration :class:`declaration_t` or None
     """
     matcher = match_declaration_t(type, name, fullname, parent)
     if recursive:
@@ -295,7 +295,7 @@ def declaration_files(decl_or_decls):
     contains all file names of declarations.
 
     :param decl_or_decls: reference to list of declaration's or single declaration
-    :type decl_or_decls: :class:declaration_t or [ :class:declaration_t ]
+    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
 
     :rtype: set( declaration file names )
     """
@@ -308,7 +308,7 @@ def declaration_files(decl_or_decls):
 
 class visit_function_has_not_been_found_t( RuntimeError ):
     """
-    exception that is raised, from L{apply_visitor}, when a visitor could not be
+    exception that is raised, from :function:`apply_visitor`, when a visitor could not be
     applied.
 
     """
@@ -325,7 +325,7 @@ def apply_visitor( visitor, decl_inst):
     applies a visitor on declaration instance
 
     :param visitor: instance
-    :type visitor: L{type_visitor_t} or L{decl_visitor_t}
+    :type visitor: :class:`type_visitor_t` or :class:`decl_visitor_t`
     """
     fname = 'visit_' + decl_inst.__class__.__name__[:-2] #removing '_t' from class name
     if not hasattr(visitor, fname ):

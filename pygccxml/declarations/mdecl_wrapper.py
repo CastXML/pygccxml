@@ -4,10 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines class L{mdecl_wrapper_t} that allows to work on set of declarations,
+defines class :class:`mdecl_wrapper_t` that allows to work on set of declarations,
 as it was one declaration.
 
-The L{class<mdecl_wrapper_t>} allows user to not write "for" loops within the code.
+The :class:`class <mdecl_wrapper_t>` allows user to not write "for" loops within the code.
 """
 
 import os
@@ -46,7 +46,7 @@ class mdecl_wrapper_t( object ):
 
     def __init__( self, decls ):
         """:param decls: list of declarations to operate on.
-        :type decls: list of L{declaration wrappers<decl_wrapper_t>}
+        :type decls: list of :class:`declaration wrappers <decl_wrapper_t>`
         """
         object.__init__( self )
         self.__dict__['declarations'] = decls
