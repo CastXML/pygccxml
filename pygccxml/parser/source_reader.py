@@ -27,10 +27,10 @@ def bind_aliases( decls ):
     """
     This function binds between class and it's typedefs.
 
-    @param decls: list of all declarations
-    @type all_classes: list of L{declaration_t} items
+    :param decls: list of all declarations
+    :type all_classes: list of L{declaration_t} items
 
-    @return: None
+    :rtype: None
     """
     visited = set()
     typedefs = filter( lambda decl: isinstance( decl, typedef_t ), decls )
@@ -65,15 +65,15 @@ class source_reader_t:
     """
     def __init__( self, config, cache=None, decl_factory=None ):
         """
-        @param config: instance of L{config_t} class, that contains GCC-XML
+        :param config: instance of L{config_t} class, that contains GCC-XML
                        configuration
-        @type config: L{config_t}
+        :type config: L{config_t}
 
-        @param cache: reference to cache object, that will be updated after
+        :param cache: reference to cache object, that will be updated after
                       file has been parsed.
-        @param cache: instance of class, that derives from {cache_base_t}
+        :param cache: instance of class, that derives from {cache_base_t}
 
-        @param decl_factory: declarations factory, if not given default
+        :param decl_factory: declarations factory, if not given default
                              declarations factory L{decl_factory_t} will be used
         """
         self.logger = utils.loggers.cxx_parser
@@ -128,14 +128,14 @@ class source_reader_t:
         for "header" file. If destination_file_path is not None, then this file
         path will be used and returned.
 
-        @param header: path to source file, that should be parsed
-        @type header: str
+        :param header: path to source file, that should be parsed
+        :type header: str
 
-        @param destination: if given, will be used as target file/path for
+        :param destination: if given, will be used as target file/path for
                             GCC-XML generated file.
-        @type destination: str
+        :type destination: str
 
-        @return: path to GCC-XML generated file
+        :rtype: path to GCC-XML generated file
         """
         gccxml_file = destination
         # If file specified, remove it to start else create new file name
@@ -173,13 +173,13 @@ class source_reader_t:
         """
         Creates XML file from text.
 
-        @param content: C++ source code
-        @type content: str
+        :param content: C++ source code
+        :type content: str
 
-        @param destination: file name for GCC-XML generated file
-        @type destination: str
+        :param destination: file name for GCC-XML generated file
+        :type destination: str
 
-        @return: returns file name of GCC-XML generated file
+        :rtype: returns file name of GCC-XML generated file
         """
         header_file = pygccxml.utils.create_temp_file_name( suffix='.h' )
         gccxml_file = None
@@ -199,8 +199,8 @@ class source_reader_t:
         """
         Reads C++ source file and returns declarations tree
 
-        @param source_file: path to C++ source file
-        @type source_file: str
+        :param source_file: path to C++ source file
+        :type source_file: str
         """
         declarations = None
         gccxml_file = ''
@@ -227,10 +227,10 @@ class source_reader_t:
         """
         Reads GCC-XML generated XML file.
 
-        @param gccxml_created_file: path to GCC-XML generated file
-        @type gccxml_created_file: str
+        :param gccxml_created_file: path to GCC-XML generated file
+        :type gccxml_created_file: str
 
-        @return: declarations tree
+        :rtype: declarations tree
         """
         assert(self.__config!=None)
 

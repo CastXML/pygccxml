@@ -34,9 +34,9 @@ class matcher:
     def find( decl_matcher, decls, recursive=True ):
         """returns a list of declarations that match "decl_matcher" defined criretia or None
 
-        @param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        @param decls: reference to declaration or list of declarations to be searched in
-        @param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
+        :param decls: reference to declaration or list of declarations to be searched in
+        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
         """
 
         where = []
@@ -54,9 +54,9 @@ class matcher:
         criretia, if a unique declaration could not be found the method will return
         None.
 
-        @param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        @param decls: reference to declaration or list of declarations to be searched in
-        @param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
+        :param decls: reference to declaration or list of declarations to be searched in
+        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
         """
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:
@@ -68,9 +68,9 @@ class matcher:
         criretia, if a unique declaration could not be found, an appropriate
         exception will be raised.
 
-        @param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        @param decls: reference to declaration or list of declarations to be searched in
-        @param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
+        :param decls: reference to declaration or list of declarations to be searched in
+        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
         """
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:

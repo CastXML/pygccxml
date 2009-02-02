@@ -92,10 +92,10 @@ def create_text_fc( text ):
     Creates L{file_configuration_t} instance, configured to contain Python string,
     that contains valid C++ code
 
-    @param text: C++ code
-    @type text: str
+    :param text: C++ code
+    :type text: str
 
-    @return: L{file_configuration_t}
+    :rtype: L{file_configuration_t}
     """
     return file_configuration_t( data=text
                                  , content_type=file_configuration_t.CONTENT_TYPE.TEXT )
@@ -105,10 +105,10 @@ def create_source_fc( header ):
     Creates L{file_configuration_t} instance, configured to contain path to
     C++ source file
 
-    @param header: path to C++ source file
-    @type header: str
+    :param header: path to C++ source file
+    :type header: str
 
-    @return: L{file_configuration_t}
+    :rtype: L{file_configuration_t}
     """
     return file_configuration_t( data=header
                                  , content_type=file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE )
@@ -118,10 +118,10 @@ def create_gccxml_fc( xml_file ):
     Creates L{file_configuration_t} instance, configured to contain path to
     GCC-XML generated XML file.
 
-    @param xml_file: path to GCC-XML generated XML file
-    @type xml_file: str
+    :param xml_file: path to GCC-XML generated XML file
+    :type xml_file: str
 
-    @return: L{file_configuration_t}
+    :rtype: L{file_configuration_t}
     """
     return file_configuration_t( data=xml_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE )
@@ -133,13 +133,13 @@ def create_cached_source_fc( header, cached_source_file ):
     it will be created and used for parsing. If XML file exists, it will be used
     for parsing.
 
-    @param header: path to C++ source file
-    @type header: str
+    :param header: path to C++ source file
+    :type header: str
 
-    @param cached_source_file: path to GCC-XML generated XML file
-    @type cached_source_file: str
+    :param cached_source_file: path to GCC-XML generated XML file
+    :type cached_source_file: str
 
-    @return: L{file_configuration_t}
+    :rtype: L{file_configuration_t}
     """
     return file_configuration_t( data=header
                                  , cached_source_file=cached_source_file
@@ -161,12 +161,12 @@ class project_reader_t:
         appropriate declaration class.  By default, the declaration
         classes defined in the L{declarations} package are used.
 
-        @param config: Configuration object
-        @type config: L{config_t}
-        @param cache: Declaration cache (None=no cache)
-        @type cache: L{cache_base_t} or str
-        @param decl_factory: Custom declaration factory object or None
-        @type decl_factory: decl_factory_t
+        :param config: Configuration object
+        :type config: L{config_t}
+        :param cache: Declaration cache (None=no cache)
+        :type cache: L{cache_base_t} or str
+        :param decl_factory: Custom declaration factory object or None
+        :type decl_factory: decl_factory_t
         """
         self.__config = config
         self.__dcache = None
@@ -186,9 +186,9 @@ class project_reader_t:
     def get_os_file_names( files ):
         """Returns a list of OS file names
 
-        @param files: list of strings or L{file_configuration_t} instances.
+        :param files: list of strings or L{file_configuration_t} instances.
                       files could contain a mix of them
-        @type files: list
+        :type files: list
         """
         fnames = []
         for f in files:
@@ -205,11 +205,11 @@ class project_reader_t:
     def read_files( self, files, compilation_mode=COMPILATION_MODE.FILE_BY_FILE):
         """Parse header files.
 
-        @param files: list of strings or L{file_configuration_t} instances.
+        :param files: list of strings or L{file_configuration_t} instances.
                       files could contain a mix of them
-        @type files: list
-        @param compilation_mode: Determines whether the files are parsed individually or as one single chunk
-        @type compilation_mode: L{COMPILATION_MODE}
+        :type files: list
+        :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
+        :type compilation_mode: L{COMPILATION_MODE}
         @returns: Declarations
         """
         if compilation_mode == COMPILATION_MODE.ALL_AT_ONCE \
@@ -300,8 +300,8 @@ class project_reader_t:
     def read_string(self, content):
         """Parse a string containing C/C++ source code.
 
-        @param content: C/C++ source code.
-        @type content: str
+        :param content: C/C++ source code.
+        :type content: str
         @returns: Declarations
         """
         reader = source_reader.source_reader_t( self.__config, None, self.__decl_factory )

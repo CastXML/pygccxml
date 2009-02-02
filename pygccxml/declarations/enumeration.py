@@ -22,12 +22,12 @@ class enumeration_t( declaration.declaration_t ):
         The items of the list 'values' may either be strings containing
         the enumeration value name or tuples (name, numvalue).
 
-        @param name: Enum name
-        @type name: str
-        @param parent: Parent declaration
-        @type parent: declaration_t
-        @param values: Enumeration values
-        @type values: list
+        :param name: Enum name
+        :type name: str
+        :param parent: Parent declaration
+        :type parent: declaration_t
+        :param values: Enumeration values
+        :type values: list
         """
         declaration.declaration_t.__init__( self, name )
 
@@ -83,10 +83,10 @@ class enumeration_t( declaration.declaration_t ):
         When the 'values' attribute is accessed the resulting list will be in the same
         order as append_value() was called.
 
-        @param valuename: The name of the value.
-        @type valuename: str
-        @param valuenum: The numeric value or None.
-        @type valuenum: int
+        :param valuename: The name of the value.
+        :type valuename: str
+        :param valuenum: The numeric value or None.
+        :type valuenum: int
         """
         # No number given? Then use the previous one + 1
         if valuenum==None:
@@ -101,9 +101,9 @@ class enumeration_t( declaration.declaration_t ):
     def has_value_name(self, name):
         """Check if this enum has a particular name among its values.
 
-        @param name: Enumeration value name
-        @type name: str
-        @return: True if there is an enumeration value with the given name
+        :param name: Enumeration value name
+        :type name: str
+        :rtype: True if there is an enumeration value with the given name
         """
         for val,num in self._values:
             if val==name:

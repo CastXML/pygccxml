@@ -11,10 +11,10 @@ def declaration_path( decl, with_defaults=True ):
     """
     returns a list of parent declarations names
 
-    @param decl: declaration for which declaration path should be calculated
-    @type decl: L{declaration_t}
+    :param decl: declaration for which declaration path should be calculated
+    :type decl: L{declaration_t}
 
-    @return: [names], where first item contains top parent name and last item
+    :rtype: [names], where first item contains top parent name and last item
              contains decl name
     """
     if not decl:
@@ -41,10 +41,10 @@ def partial_declaration_path( decl ):
     returns a list of parent declarations names without template arguments that
     have default value
 
-    @param decl: declaration for which declaration path should be calculated
-    @type decl: L{declaration_t}
+    :param decl: declaration for which declaration path should be calculated
+    :type decl: L{declaration_t}
 
-    @return: [names], where first item contains top parent name and last item
+    :rtype: [names], where first item contains top parent name and last item
              contains decl name
     """
     #TODO:
@@ -74,10 +74,10 @@ def get_named_parent( decl ):
     """
     returns a reference to a named parent declaration
 
-    @param decl: the child declaration
-    @type decl: L{declaration_t}
+    :param decl: the child declaration
+    :type decl: L{declaration_t}
 
-    @return: reference to L{declaration_t} or None if not found
+    :rtype: reference to L{declaration_t} or None if not found
     """
     if not decl:
         return None
@@ -98,12 +98,12 @@ def full_name_from_declaration_path( dpath ):
 def full_name( decl, with_defaults=True ):
     """
     returns full name of the declaration
-    @param decl: declaration for which full name should be calculated. If decl
+    :param decl: declaration for which full name should be calculated. If decl
     belongs to unnamed namespace, then L{full_name} is not valid C++ full name.
 
-    @type decl: L{declaration_t}
+    :type decl: L{declaration_t}
 
-    @return: full name of declarations.
+    :rtype: full name of declarations.
     """
     if None is decl:
         raise RuntimeError( "Unable to generate full name for None object!" )
@@ -121,10 +121,10 @@ def make_flatten( decl_or_decls ):
     """
     converts tree representation of declarations to flatten one.
 
-    @param decl_or_decls: reference to list of declaration's or single declaration
-    @type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
+    :param decl_or_decls: reference to list of declaration's or single declaration
+    :type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
 
-    @return: [ all internal declarations ]
+    :rtype: [ all internal declarations ]
     """
     import pygccxml.declarations #prevent cyclic import
     def proceed_single( decl ):
@@ -152,10 +152,10 @@ def __make_flatten_generator( decl_or_decls ):
     """
     converts tree representation of declarations to flatten one.
 
-    @param decl_or_decls: reference to list of declaration's or single declaration
-    @type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
+    :param decl_or_decls: reference to list of declaration's or single declaration
+    :type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
 
-    @return: [ all internal declarations ]
+    :rtype: [ all internal declarations ]
     """
 
     import pygccxml.declarations
@@ -208,10 +208,10 @@ class match_declaration_t:
         """
         returns True if inst do match one of specified criteria
 
-        @param inst: declaration instance
-        @type inst: L{declaration_t}
+        :param inst: declaration instance
+        :type inst: L{declaration_t}
 
-        @return: bool
+        :rtype: bool
         """
         answer = True
         if None != self.type:
@@ -242,7 +242,7 @@ def find_all_declarations( declarations
 
     For more information about arguments see L{match_declaration_t} class.
 
-    @return: [ matched declarations ]
+    :rtype: [ matched declarations ]
     """
     decls = []
     if recursive:
@@ -264,7 +264,7 @@ def find_declaration( declarations
 
     For more information about arguments see L{match_declaration_t} class.
 
-    @return: matched declaration L{declaration_t} or None
+    :rtype: matched declaration L{declaration_t} or None
     """
     decl = find_all_declarations( declarations, type=type, name=name, parent=parent, recursive=recursive, fullname=fullname )
     if len( decl ) == 1:
@@ -276,7 +276,7 @@ def find_first_declaration( declarations, type=None, name=None, parent=None, rec
 
     For more information about arguments see L{match_declaration_t} class.
 
-    @return: matched declaration L{declaration_t} or None
+    :rtype: matched declaration L{declaration_t} or None
     """
     matcher = match_declaration_t(type, name, fullname, parent)
     if recursive:
@@ -295,10 +295,10 @@ def declaration_files(decl_or_decls):
     Every declaration is declared in some file. This function returns set, that
     contains all file names of declarations.
 
-    @param decl_or_decls: reference to list of declaration's or single declaration
-    @type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
+    :param decl_or_decls: reference to list of declaration's or single declaration
+    :type decl_or_decls: L{declaration_t} or [ L{declaration_t} ]
 
-    @return: set( declaration file names )
+    :rtype: set( declaration file names )
     """
     files = set()
     decls = make_flatten( decl_or_decls )
@@ -325,8 +325,8 @@ def apply_visitor( visitor, decl_inst):
     """
     applies a visitor on declaration instance
 
-    @param visitor: instance
-    @type visitor: L{type_visitor_t} or L{decl_visitor_t}
+    :param visitor: instance
+    :type visitor: L{type_visitor_t} or L{decl_visitor_t}
     """
     fname = 'visit_' + decl_inst.__class__.__name__[:-2] #removing '_t' from class name
     if not hasattr(visitor, fname ):

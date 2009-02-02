@@ -117,17 +117,17 @@ class declaration_matcher_t( matcher_base_t ):
     """
     def __init__( self, name=None, decl_type=None, header_dir=None, header_file=None ):
         """
-        @param decl_type: declaration type to match by. For example L{enumeration_t}.
-        @type decl_type: any class that derives from L{declarations.declaration_t} class
+        :param decl_type: declaration type to match by. For example L{enumeration_t}.
+        :type decl_type: any class that derives from L{declarations.declaration_t} class
 
-        @param name: declaration name, could be full name.
-        @type name: str
+        :param name: declaration name, could be full name.
+        :type name: str
 
-        @param header_dir: absolute directory path
-        @type header_dir: str
+        :param header_dir: absolute directory path
+        :type header_dir: str
 
-        @param header_file: absolute file path
-        @type header_file: str
+        :param header_file: absolute file path
+        :type header_file: str
 
         """
         #An other option is that pygccxml will create absolute path using
@@ -264,8 +264,8 @@ class variable_matcher_t( declaration_matcher_t ):
     """
     def __init__( self, name=None, type=None, header_dir=None, header_file=None ):
         """
-        @param type: variable type
-        @type type: string or instance of L{type_t} derived class
+        :param type: variable type
+        :type type: string or instance of L{type_t} derived class
         """
         declaration_matcher_t.__init__( self
                                         , name=name
@@ -322,10 +322,10 @@ class calldef_matcher_t( declaration_matcher_t ):
 
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
-        @param return_type: callable return type
-        @type return_type: string or instance of L{type_t} derived class
+        :param return_type: callable return type
+        :type return_type: string or instance of L{type_t} derived class
 
-        @param arg_types: list of function argument types. arg_types can contain.
+        :param arg_types: list of function argument types. arg_types can contain.
         Any item within the list could be string or instance of L{type_t} derived
         class. If you don't want some argument to participate in match you can
         put None. For example:
@@ -334,7 +334,7 @@ class calldef_matcher_t( declaration_matcher_t ):
 
         will match all functions that takes 2 arguments, where the first one is
         reference to integer and second any
-        @type arg_types: list
+        :type arg_types: list
         """
         if None is decl_type:
             decl_type = calldef.calldef_t
@@ -402,8 +402,8 @@ class operator_matcher_t( calldef_matcher_t ):
     """
     def __init__( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
-        @param symbol: operator symbol
-        @type symbol: str
+        :param symbol: operator symbol
+        :type symbol: str
         """
         if None is decl_type:
             decl_type = calldef.operator_t
@@ -443,10 +443,10 @@ class regex_matcher_t( matcher_base_t ):
     """
     def __init__( self, regex, function=None ):
         """
-        @param regex: regular expression
-        @type regex: string, an instance of this class will compile it for you
+        :param regex: regular expression
+        :type regex: string, an instance of this class will compile it for you
 
-        @param function: function that will be called to get an information from
+        :param function: function that will be called to get an information from
         declaration as string. As input this function takes 1 argument: reference
         to declaration. Return value should be string. If function is None, then
         the matcher will use declaration name.
@@ -474,8 +474,8 @@ class access_type_matcher_t( matcher_base_t ):
 
     def __init__( self, access_type ):
         """
-        @param access_type: declaration access type
-        @type access_type: L{ACCESS_TYPES} defines few consts for your convinience.
+        :param access_type: declaration access type
+        :type access_type: L{ACCESS_TYPES} defines few consts for your convinience.
         Any way you can pass public, private or protected as argument to this function
         """
         matcher_base_t.__init__( self )
@@ -498,8 +498,8 @@ class virtuality_type_matcher_t( matcher_base_t ):
 
     def __init__( self, virtuality_type ):
         """
-        @param access_type: declaration access type
-        @type access_type: L{VIRTUALITY_TYPES} defines few consts for your convinience.
+        :param access_type: declaration access type
+        :type access_type: L{VIRTUALITY_TYPES} defines few consts for your convinience.
         """
         matcher_base_t.__init__( self )
         self.virtuality_type = virtuality_type
@@ -520,7 +520,7 @@ class custom_matcher_t( matcher_base_t ):
 
     def __init__( self, function ):
         """
-        @param function: callable, that takes single argument - declaration instance
+        :param function: callable, that takes single argument - declaration instance
                          should return True or False
         """
         matcher_base_t.__init__( self )

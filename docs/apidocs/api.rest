@@ -7,7 +7,7 @@ API
 .. toctree::
    :maxdepth: 4
 
-   declarations - contains classes, which describe C++ declarations <declarations>
-   parser - contains classes, which parse GCC-XML generated file <parser>
-   binary_parsers - contains classes, which extract some information from `.dll`, `.map`, `.so` files <binary_parsers>
-   utils - few useful utilities <utils>
+   declarations.rest
+   parser.rest
+   binary_parsers.rest
+   utils.rest

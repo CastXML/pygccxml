@@ -363,10 +363,10 @@ class class_t( scopedef.scopedef_t ):
         You should not modify the list content, otherwise different optimization
         data will stop work and may to give you wrong results.
 
-        @param access: describes desired members
-        @type access: L{ACCESS_TYPES}
+        :param access: describes desired members
+        :type access: L{ACCESS_TYPES}
 
-        @return: [ members ]
+        :rtype: [ members ]
         """
         if access == ACCESS_TYPES.PUBLIC:
             return self.public_members
@@ -384,10 +384,10 @@ class class_t( scopedef.scopedef_t ):
     def adopt_declaration( self, decl, access ):
         """adds new declaration to the class
 
-        @param decl: reference to a L{declaration<declaration_t>}
+        :param decl: reference to a L{declaration<declaration_t>}
 
-        @param access: member access type
-        @type access: L{ACCESS_TYPES}
+        :param access: member access type
+        :type access: L{ACCESS_TYPES}
         """
         if access == ACCESS_TYPES.PUBLIC:
             self.public_members.append( decl )
@@ -405,8 +405,8 @@ class class_t( scopedef.scopedef_t ):
         """
         removes decl from  members list
 
-        @param decl: declaration to be removed
-        @type decl: L{declaration_t}
+        :param decl: declaration to be removed
+        :type decl: L{declaration_t}
         """
         container = None
         access_type = self.find_out_member_access_type( decl )
@@ -423,10 +423,10 @@ class class_t( scopedef.scopedef_t ):
         """
         returns member access type
 
-        @param member: member of the class
-        @type member: L{declaration_t}
+        :param member: member of the class
+        :type member: L{declaration_t}
 
-        @return: L{ACCESS_TYPES}
+        :rtype: L{ACCESS_TYPES}
         """
         assert member.parent is self
         if not member.cache.access_type:

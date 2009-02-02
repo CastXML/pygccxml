@@ -3,9 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""
-contains classes that describe different C++ declarations
-"""
+"""contains classes that describe different C++ declarations"""
 
 import compilers
 

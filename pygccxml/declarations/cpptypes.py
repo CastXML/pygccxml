@@ -494,12 +494,12 @@ class free_function_type_t( type_t, calldef_type_t ):
         """
         returns free function type
 
-        @param return_type: function return type
-        @type return_type: L{type_t}
+        :param return_type: function return type
+        :type return_type: L{type_t}
 
-        @param arguments_types: list of argument L{type<type_t>}
+        :param arguments_types: list of argument L{type<type_t>}
 
-        @return: L{free_function_type_t}
+        :rtype: L{free_function_type_t}
         """
         f = lambda x: x.build_decl_string( with_defaults )
         return free_function_type_t.NAME_TEMPLATE % {
@@ -520,7 +520,7 @@ class free_function_type_t( type_t, calldef_type_t ):
     def create_typedef( self, typedef_name, unused=None, with_defaults=True):
         """returns string, that contains valid C++ code, that defines typedef to function type
 
-        @param name: the desired name of typedef
+        :param name: the desired name of typedef
         """
         #unused argument simplifies user code
         f = lambda x: x.build_decl_string( with_defaults )
@@ -558,8 +558,8 @@ class member_function_type_t( type_t, calldef_type_t ):
     def create_typedef( self, typedef_name, class_alias=None, with_defaults=True):
         """creates typedef to the function type
 
-        @param typedef_name: desired type name
-        @return: string
+        :param typedef_name: desired type name
+        :rtype: string
         """
         has_const_str = ''
         if self.has_const:

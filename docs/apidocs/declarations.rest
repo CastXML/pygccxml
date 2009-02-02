@@ -2,187 +2,176 @@
 pygccxml.declarations package
 =============================
 
-This page contains the `pygccxml.declarations` package API documentation.
-
-The :mod:`pygccxml.declarations` package
-----------------------------------------
-
-.. automodule:: pygccxml.declarations
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-The :mod:`algorithm <pygccxml.declarations.algorithm>` module
---------------------------------------------------------------
+algorithm
+---------
 
 .. automodule:: pygccxml.declarations.algorithm
     :members:
     :show-inheritance:
 
-The :mod:`algorithms_cache <pygccxml.declarations.algorithms_cache>` module
----------------------------------------------------------------------------
+algorithms_cache
+----------------
 
 .. automodule:: pygccxml.declarations.algorithms_cache
     :members:
     :show-inheritance:
 
-The :mod:`calldef <pygccxml.declarations.calldef>` module
----------------------------------------------------------
+calldef
+-------
 
 .. automodule:: pygccxml.declarations.calldef
     :members:
     :show-inheritance:
 
-The :mod:`call_invocation <pygccxml.declarations.call_invocation>` module
--------------------------------------------------------------------------
+call_invocation
+---------------
 
 .. automodule:: pygccxml.declarations.call_invocation
     :members:
     :show-inheritance:
 
-The :mod:`class_declaration <pygccxml.declarations.class_declaration>` module
------------------------------------------------------------------------------
+class_declaration
+-----------------
 
 .. automodule:: pygccxml.declarations.class_declaration
     :members:
     :show-inheritance:
 
-The :mod:`compilers <pygccxml.declarations.compilers>` module
--------------------------------------------------------------
+compilers
+---------
 
 .. automodule:: pygccxml.declarations.compilers
     :members:
     :show-inheritance:
 
-The :mod:`container_traits <pygccxml.declarations.container_traits>` module
----------------------------------------------------------------------------
+container_traits
+----------------
 
 .. automodule:: pygccxml.declarations.container_traits
     :members:
     :show-inheritance:
 
-The :mod:`cpptypes <pygccxml.declarations.cpptypes>` module
------------------------------------------------------------
+cpptypes
+--------
 
 .. automodule:: pygccxml.declarations.cpptypes
     :members:
     :show-inheritance:
 
-The :mod:`declaration <pygccxml.declarations.declaration>` module
------------------------------------------------------------------
+declaration
+-----------
 
 .. automodule:: pygccxml.declarations.declaration
     :members:
     :show-inheritance:
 
-The :mod:`decl_factory <pygccxml.declarations.decl_factory>` module
--------------------------------------------------------------------
+decl_factory
+------------
 
 .. automodule:: pygccxml.declarations.decl_factory
     :members:
     :show-inheritance:
 
-The :mod:`decl_printer <pygccxml.declarations.decl_printer>` module
--------------------------------------------------------------------
+ecl_printer
+-----------
 
 .. automodule:: pygccxml.declarations.decl_printer
     :members:
     :show-inheritance:
 
-The :mod:`decl_visitor <pygccxml.declarations.decl_visitor>` module
---------------------------------------------------------------------
+decl_visitor
+------------
 
 .. automodule:: pygccxml.declarations.decl_visitor
     :members:
     :show-inheritance:
 
-The :mod:`dependencies <pygccxml.declarations.dependencies>` module
---------------------------------------------------------------------
+dependencies
+------------
 
 .. automodule:: pygccxml.declarations.dependencies
     :members:
     :show-inheritance:
 
-The :mod:`enumeration <pygccxml.declarations.enumeration>` module
-------------------------------------------------------------------
+enumeration
+-----------
 
 .. automodule:: pygccxml.declarations.enumeration
     :members:
     :show-inheritance:
 
-The :mod:`function_traits <pygccxml.declarations.function_traits>` module
--------------------------------------------------------------------------
+function_traits
+---------------
 
 .. automodule:: pygccxml.declarations.function_traits
     :members:
     :show-inheritance:
 
-The :mod:`matcher <pygccxml.declarations.matcher>` module
----------------------------------------------------------
+matcher
+-------
 
 .. automodule:: pygccxml.declarations.matcher
     :members:
     :show-inheritance:
 
-The :mod:`matchers <pygccxml.declarations.matchers>` module
------------------------------------------------------------
+matchers
+--------
 
 .. automodule:: pygccxml.declarations.matchers
     :members:
     :show-inheritance:
 
-The :mod:`mdecl_wrapper <pygccxml.declarations.mdecl_wrapper>` module
----------------------------------------------------------------------
+mdecl_wrapper
+-------------
 
 .. automodule:: pygccxml.declarations.mdecl_wrapper
     :members:
     :show-inheritance:
 
-The :mod:`namespace <pygccxml.declarations.namespace>` module
--------------------------------------------------------------
+namespace
+---------
 
 .. automodule:: pygccxml.declarations.namespace
     :members:
     :show-inheritance:
 
-The :mod:`scopedef <pygccxml.declarations.scopedef>` module
------------------------------------------------------------
+scopedef
+--------
 
 .. automodule:: pygccxml.declarations.scopedef
     :members:
     :show-inheritance:
 
-The :mod:`templates <pygccxml.declarations.templates>` module
--------------------------------------------------------------
+templates
+---------
 
 .. automodule:: pygccxml.declarations.templates
     :members:
     :show-inheritance:
 
-The :mod:`typedef <pygccxml.declarations.typedef>` module
----------------------------------------------------------
+typedef
+-------
 
 .. automodule:: pygccxml.declarations.typedef
     :members:
     :show-inheritance:
 
-The :mod:`type_traits <pygccxml.declarations.type_traits>` module
------------------------------------------------------------------
+type_traits
+-----------
 
 .. automodule:: pygccxml.declarations.type_traits
     :members:
     :show-inheritance:
 
-The :mod:`type_visitor <pygccxml.declarations.type_visitor>` module
--------------------------------------------------------------------
+type_visitor
+------------
 
 .. automodule:: pygccxml.declarations.type_visitor
     :members:
     :show-inheritance:
 
-The :mod:`variable <pygccxml.declarations.variable>` module
------------------------------------------------------------
+variable
+--------
 
 .. automodule:: pygccxml.declarations.variable
     :members:

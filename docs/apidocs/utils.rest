@@ -2,23 +2,11 @@
 pygccxml.utils package
 ======================
 
-This page contains the `pygccxml.utils` package API documentation.
 
-The :mod:`pygccxml.utils` package
----------------------------------
-
-.. automodule:: pygccxml.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-
-The :mod:`utils.fs_utils` module
----------------------------------
+fs_utils
+--------
 
 .. automodule:: pygccxml.utils.fs_utils
     :members:
-    :undoc-members:
     :show-inheritance:
 

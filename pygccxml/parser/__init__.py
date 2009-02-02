@@ -37,14 +37,14 @@ def parse( files
     """
     Parse header files.
 
-    @param files: The header files that should be parsed
-    @type files: list of str
-    @param config: Configuration object or None
-    @type config: L{config_t}
-    @param compilation_mode: Determines whether the files are parsed individually or as one single chunk
-    @type compilation_mode: L{COMPILATION_MODE}
-    @param cache: Declaration cache (None=no cache)
-    @type cache: L{cache_base_t} or str
+    :param files: The header files that should be parsed
+    :type files: list of str
+    :param config: Configuration object or None
+    :type config: L{config_t}
+    :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
+    :type compilation_mode: L{COMPILATION_MODE}
+    :param cache: Declaration cache (None=no cache)
+    :type cache: L{cache_base_t} or str
     @returns: Declarations
     """
     if not config:

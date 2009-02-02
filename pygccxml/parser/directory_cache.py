@@ -109,14 +109,14 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def update(self, source_file, configuration, declarations, included_files):
         """Replace a cache entry by a new value.
 
-        @param source_file: Header file name.
-        @type source_file: str
-        @param configuration: Configuration  object.
-        @type configuration: L{config_t}
-        @param declarations: Declarations contained in the header file.
-        @type declarations: picklable object
-        @param included_files: Dependent files
-        @type included_files: list of str
+        :param source_file: Header file name.
+        :type source_file: str
+        :param configuration: Configuration  object.
+        :type configuration: L{config_t}
+        :param declarations: Declarations contained in the header file.
+        :type declarations: picklable object
+        :param included_files: Dependent files
+        :type included_files: list of str
         """
         # Normlize all paths...
         source_file = os.path.normpath(source_file)
@@ -156,11 +156,11 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def cached_value(self, source_file, configuration):
         """Return the cached declarations or None.
 
-        @param source_file: Header file name
-        @type source_file: str
-        @param configuration: Configuration object
-        @type configuration: L{config_t}
-        @return: Cached declarations or None
+        :param source_file: Header file name
+        :type source_file: str
+        :param configuration: Configuration object
+        :type configuration: L{config_t}
+        :rtype: Cached declarations or None
         """
 
         # Check if the cache contains an entry for source_file
@@ -240,8 +240,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         Reads a pickled object from disk and returns it.
 
-        @param filename: Name of the file that should be read.
-        @type filename: str
+        :param filename: Name of the file that should be read.
+        :type filename: str
         @returns: Unpickled file contents
         """
         if self.__compression:
@@ -257,10 +257,10 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         The data object is written to a file using the pickle mechanism.
 
-        @param filename: Output file name
-        @type filename: str
-        @param data: A Python object that will be pickled
-        @type data: picklable object
+        :param filename: Output file name
+        :type filename: str
+        :param data: A Python object that will be pickled
+        :type data: picklable object
         """
         if self.__compression:
             f = gzip.GzipFile(filename, "wb")
@@ -280,10 +280,10 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         If key references a non-existing entry, the method returns
         immediately.
 
-        @param source_file: Header file name
-        @type source_file: str
-        @param key: Key value for the specified header file
-        @type key: hashable object
+        :param source_file: Header file name
+        :type source_file: str
+        :param key: Key value for the specified header file
+        :type key: hashable object
         """
 
         entry = self.__index.get(key)
@@ -309,8 +309,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def _create_cache_key(self, source_file):
         """Return the cache key for a header file.
 
-        @param source_file: Header file name
-        @type source_file: str
+        :param source_file: Header file name
+        :type source_file: str
         @returns: Key for the given header file
         @rtype: str
         """
@@ -320,8 +320,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def _create_cache_filename(self, source_file):
         """Return the cache file name for a header file.
 
-        @param source_file: Header file name
-        @type source_file: str
+        :param source_file: Header file name
+        :type source_file: str
         @returns: Cache file name (*.cache)
         @rtype: str
         """
@@ -335,8 +335,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         working_directory, include_paths, define_symbols and
         undefine_symbols.
 
-        @param config: Configuration object
-        @type config: L{config_t}
+        :param config: Configuration object
+        :type config: L{config_t}
         @returns: Signature
         @rtype: str
         """

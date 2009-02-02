@@ -27,10 +27,10 @@ def is_call_invocation( decl_string ):
     """
     returns True if `decl_string` is function invocation and False otherwise
 
-    @param decl_string: string that should be checked for pattern presence
-    @type decl_string: str
+    :param decl_string: string that should be checked for pattern presence
+    :type decl_string: str
 
-    @return: bool
+    :rtype: bool
     """
     global __THE_PARSER
     return __THE_PARSER.has_pattern( decl_string )
@@ -39,8 +39,8 @@ def name( decl_string ):
     """
     returns name of function
 
-    @type decl_string: str
-    @return: str
+    :type decl_string: str
+    :rtype: str
     """
     global __THE_PARSER
     return __THE_PARSER.name( decl_string )
@@ -49,8 +49,8 @@ def args( decl_string ):
     """
     returns list of function arguments
 
-    @type decl_string: str
-    @return: [str]
+    :type decl_string: str
+    :rtype: [str]
     """
     global __THE_PARSER
     return __THE_PARSER.args( decl_string )
@@ -60,8 +60,8 @@ def find_args( text, start=None ):
     """
     finds arguments within function invocation.
 
-    @type text: str
-    @return: [ arguments ] or L{NOT_FOUND} if arguments could not be found
+    :type text: str
+    :rtype: [ arguments ] or L{NOT_FOUND} if arguments could not be found
     """
     global __THE_PARSER
     return __THE_PARSER.find_args( text, start )

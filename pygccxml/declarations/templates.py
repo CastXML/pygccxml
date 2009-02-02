@@ -23,10 +23,10 @@ def is_instantiation( decl_string ):
     """
     returns True if decl_string is template instantiation and False otherwise
     
-    @param decl_string: string that should be checked for pattern presence
-    @type decl_string: str
+    :param decl_string: string that should be checked for pattern presence
+    :type decl_string: str
     
-    @return: bool
+    :rtype: bool
     """
     global __THE_PARSER
     return __THE_PARSER.has_pattern( decl_string )
@@ -35,8 +35,8 @@ def name( decl_string ):
     """
     returns name of instantiated template
     
-    @type decl_string: str
-    @return: str
+    :type decl_string: str
+    :rtype: str
     """
     global __THE_PARSER
     return __THE_PARSER.name( decl_string )
@@ -45,8 +45,8 @@ def args( decl_string ):
     """
     returns list of template arguments
     
-    @type decl_string: str
-    @return: [str]
+    :type decl_string: str
+    :rtype: [str]
     """
     global __THE_PARSER
     return __THE_PARSER.args( decl_string )

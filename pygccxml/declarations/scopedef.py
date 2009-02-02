@@ -652,7 +652,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def __getitem__(self, name_or_function):
         """ Allow simple name based find of decls.  Internally just calls decls() method.
-            @param name_or_function  Name of decl to lookup or finder function.
+            :param name_or_function  Name of decl to lookup or finder function.
         """
         return self.decls(name_or_function)
 

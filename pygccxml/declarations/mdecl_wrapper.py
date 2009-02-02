@@ -17,8 +17,8 @@ class call_redirector_t( object ):
     def __init__( self, name, decls ):
         """creates call_redirector_t instance.
 
-        @param name: name of method, to be called on every object in C{decls} list
-        @param decls: list of objects
+        :param name: name of method, to be called on every object in C{decls} list
+        :param decls: list of objects
         """
         object.__init__( self )
         self.name = name
@@ -45,8 +45,8 @@ class mdecl_wrapper_t( object ):
     """
 
     def __init__( self, decls ):
-        """@param decls: list of declarations to operate on.
-        @type decls: list of L{declaration wrappers<decl_wrapper_t>}
+        """:param decls: list of declarations to operate on.
+        :type decls: list of L{declaration wrappers<decl_wrapper_t>}
         """
         object.__init__( self )
         self.__dict__['declarations'] = decls
@@ -74,15 +74,15 @@ class mdecl_wrapper_t( object ):
 
     def __setattr__( self, name, value ):
         """Updates the value of attribute on all declarations.
-        @param name: name of attribute
-        @param value: new value of attribute
+        :param name: name of attribute
+        :param value: new value of attribute
         """
         self.__ensure_attribute( name )
         for d in self.declarations:
             setattr( d, name, value )
 
     def __getattr__( self, name ):
-        """@param name: name of method
+        """:param name: name of method
         """
         return call_redirector_t( name, self.declarations )
 

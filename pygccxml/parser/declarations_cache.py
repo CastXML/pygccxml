@@ -58,18 +58,18 @@ class cache_base_t( object ):
 
     def update(self, source_file, configuration, declarations, included_files):
         """ Update cache entry.
-        @param source_file: path to the C++ source file being parsed
-        @param configuration: configuration used in parsing (config_t)
-        @param declarations: declaration tree found when parsing
-        @param included_files: files included by parsing.
+        :param source_file: path to the C++ source file being parsed
+        :param configuration: configuration used in parsing (config_t)
+        :param declarations: declaration tree found when parsing
+        :param included_files: files included by parsing.
         """
         raise NotImplementedError()
 
     def cached_value(self, source_file, configuration):
-        """ Return declarations we have cached for the source_file and configuration
-            given.
-        @param source_file: path to the C++ source file being parsed.
-        @param configuration: configuration to use for parsing (config_t)
+        """
+        Return declarations, we have cached, for the source_file and the given configuration.
+        :param source_file: path to the C++ source file being parsed.
+        :param configuration: configuration to use for parsing (config_t)
         """
         raise NotImplementedError()
 
@@ -131,7 +131,7 @@ class file_cache_t( cache_base_t ):
 
     def __init__( self, name ):
         """
-        @param name: name of the cache file.
+        :param name: name of the cache file.
         """
         cache_base_t.__init__( self )
         self.__name = name                              # Name of cache file
