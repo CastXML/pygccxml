@@ -184,7 +184,7 @@ match query ``RuntimeError`` exception will be raised.
 
 Return value of ``member_functions`` is not Python list or set, but instance
 of ``mdecl_wrapper_t`` class. This class allows you to work on all selected
-objects at once. I will give an example from another project - `Py++`_.
+objects at once. I will give an example from another project - :doc:`Py++ <../pyplusplus/pyplusplus>`.
 In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
 
@@ -213,7 +213,7 @@ project:
   clone.call_policies = return_value_policy( manage_new_object )
 
 
-Another example, from `Py++`_ project. Sometimes it is desirable to
+Another example, from :doc:`Py++ <../pyplusplus/pyplusplus>` project. Sometimes it is desirable to
 exclude declaration, from being exported to Python. The following code will exclude
 ``clone`` member function from being exported:
 
@@ -286,7 +286,6 @@ query method, you can take a look on API documentation or into source code.
 .. _`call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 .. _`Call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 
-.. _`Py++`: ./../pyplusplus/pyplusplus.html
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org

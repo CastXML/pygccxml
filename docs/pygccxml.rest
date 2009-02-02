@@ -22,7 +22,7 @@ Using :doc:`pygccxml <pygccxml>` you can:
 * parse C++ source code
 * create a powerful code generator
 
-  + `Py++`_ is heavily based on :doc:`pygccxml <pygccxml>`
+  + :doc:`Py++ <../pyplusplus/pyplusplus>` is heavily based on :doc:`pygccxml <pygccxml>`
   + generate `WSDL`_ file from sources
   + ...
 
@@ -82,7 +82,7 @@ documentation. Just a few names of algorithms:
 Declaration dependencies
 ------------------------
 You can query a declaration, about it dependencies - declarations it depends on.
-This is very powerful and useful feature. `Py++`_, for example, uses this
+This is very powerful and useful feature. :doc:`Py++ <../pyplusplus/pyplusplus>`, for example, uses this
 functionality to check that user creates Python bindings for all relevant
 declarations.
 
@@ -133,8 +133,6 @@ pygccxml documentation contents
    apidocs/api.rest
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl
-.. _`Py++`: ./../pyplusplus/pyplusplus.html
-
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Docutils`: http://docutils.sourceforge.net
 .. _`Python`: http://www.python.org
