@@ -20,11 +20,8 @@ GCC-XML 0.9 doesn't report compiler generated default and copy constructors as
 an implicit ones.
 
 If you rely heavily on their existence in the generated XML, I suggest you to switch
-to `type_traits.has_trivial_constructor`_/`type_traits.has_trivial_copy`_ functions.
-
-.. _`type_traits.has_trivial_constructor` : ./apidocs/pygccxml.declarations.type_traits-pysrc.html#has_trivial_constructor
-.. _`type_traits.has_trivial_copy` : ./apidocs/pygccxml.declarations.type_traits-pysrc.html#has_trivial_copy
-
+to :func:`has_trivial_constructor <pygccxml.declarations.type_traits.has_trivial_constructor>`
+and to :func:`has_trivial_copy <pygccxml.declarations.type_traits.has_copy_constructor>` functions.
 
 --------------------------
 Pointer to member variable

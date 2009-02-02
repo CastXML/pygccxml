@@ -56,15 +56,13 @@ Only 1 ( one ) line of code is needed:
 
 ``None`` means "any type". In my opinion, the code is prety clear and readable.
 
-If you want to know more about provided API read `query interface`__ document or
-API documentation.
-
-.. __: ./query_interface.html
+If you want to know more about provided API read :doc:`query interface <query_interface>`
+document or :doc:`API documentation <apidocs/api>`
 
 Type traits
 -----------
 :doc:`pygccxml <pygccxml>` provides a lot of functionality to analyze C++ types and relationship
-between them. For more information please refer to `design`__ document or API
+between them. For more information please refer to :doc:`design <design>` document or API
 documentation. Just a few names of algorithms:
 
 * ``is_convertible( from, to )``
@@ -75,8 +73,6 @@ documentation. Just a few names of algorithms:
 * ``is_unary_operator( oper )``
 
   returns ``True`` if ``oper`` describes unary operator
-
-.. __: ./design.html
 
 
 Declaration dependencies
