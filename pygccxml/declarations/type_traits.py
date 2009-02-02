@@ -12,7 +12,7 @@ it. Using functions defined in this module you can
     - modify type
 
 Those functions are very valuable for code generation. Almost all functions
-within this module works on L{type_t} class hierarchy and\\or L{class_t}.
+within this module works on :class:type_t class hierarchy and\\or :class:class_t.
 """
 
 import os

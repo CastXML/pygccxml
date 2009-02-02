@@ -313,21 +313,21 @@ class class_t( scopedef.scopedef_t ):
     def _set_public_members( self, new_public_members ):
         self._public_members = new_public_members
     public_members = property( _get_public_members, _set_public_members
-                               , doc="list of all public L{members<declaration_t>}")
+                               , doc="list of all public :class:`members <declarationt_>`")
 
     def _get_private_members(self):
         return self._private_members
     def _set_private_members( self, new_private_members ):
         self._private_members = new_private_members
     private_members = property( _get_private_members, _set_private_members
-                                , doc="list of all private L{members<declaration_t>}")
+                                , doc="list of all private :class:`members <declarationt_>`")
 
     def _get_protected_members(self):
         return self._protected_members
     def _set_protected_members( self, new_protected_members ):
         self._protected_members = new_protected_members
     protected_members = property( _get_protected_members, _set_protected_members
-                                  , doc="list of all protected L{members<declaration_t>}" )
+                                  , doc="list of all protected :class:`members <declarationt_>`" )
 
     def _get_aliases(self):
         return self._aliases
@@ -364,7 +364,7 @@ class class_t( scopedef.scopedef_t ):
         data will stop work and may to give you wrong results.
 
         :param access: describes desired members
-        :type access: L{ACCESS_TYPES}
+        :type access: :class:ACCESS_TYPES
 
         :rtype: [ members ]
         """
@@ -387,7 +387,7 @@ class class_t( scopedef.scopedef_t ):
         :param decl: reference to a L{declaration<declaration_t>}
 
         :param access: member access type
-        :type access: L{ACCESS_TYPES}
+        :type access: :class:ACCESS_TYPES
         """
         if access == ACCESS_TYPES.PUBLIC:
             self.public_members.append( decl )
@@ -406,7 +406,7 @@ class class_t( scopedef.scopedef_t ):
         removes decl from  members list
 
         :param decl: declaration to be removed
-        :type decl: L{declaration_t}
+        :type decl: :class:declaration_t
         """
         container = None
         access_type = self.find_out_member_access_type( decl )
@@ -424,9 +424,9 @@ class class_t( scopedef.scopedef_t ):
         returns member access type
 
         :param member: member of the class
-        :type member: L{declaration_t}
+        :type member: :class:declaration_t
 
-        :rtype: L{ACCESS_TYPES}
+        :rtype: :class:ACCESS_TYPES
         """
         assert member.parent is self
         if not member.cache.access_type:

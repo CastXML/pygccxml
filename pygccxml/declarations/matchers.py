@@ -112,12 +112,12 @@ class declaration_matcher_t( matcher_base_t ):
           - declaration name, also could be fully qualified name
             Example: wstring or ::std::wstring
           - declaration type
-            Example: L{class_t}, L{namespace_t}, L{enumeration_t}
+            Example: :class:class_t, :class:namespace_t, :class:enumeration_t
           - location within file system ( file or directory )
     """
     def __init__( self, name=None, decl_type=None, header_dir=None, header_file=None ):
         """
-        :param decl_type: declaration type to match by. For example L{enumeration_t}.
+        :param decl_type: declaration type to match by. For example :class:enumeration_t.
         :type decl_type: any class that derives from L{declarations.declaration_t} class
 
         :param name: declaration name, could be full name.
@@ -259,13 +259,13 @@ class declaration_matcher_t( matcher_base_t ):
 class variable_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match variables by next criteria:
-        - L{declaration_matcher_t} criteria
+        - :class:declaration_matcher_t criteria
         - variable type. Example: L{int_t} or 'int'
     """
     def __init__( self, name=None, type=None, header_dir=None, header_file=None ):
         """
         :param type: variable type
-        :type type: string or instance of L{type_t} derived class
+        :type type: string or instance of :class:type_t derived class
         """
         declaration_matcher_t.__init__( self
                                         , name=name
@@ -315,7 +315,7 @@ class namespace_matcher_t( declaration_matcher_t ):
 class calldef_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match callable by next criteria:
-        - L{declaration_matcher_t} criteria
+        - :class:declaration_matcher_t criteria
         - return type. Example: L{int_t} or 'int'
         - argument types
     """
@@ -323,10 +323,10 @@ class calldef_matcher_t( declaration_matcher_t ):
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
         :param return_type: callable return type
-        :type return_type: string or instance of L{type_t} derived class
+        :type return_type: string or instance of :class:type_t derived class
 
         :param arg_types: list of function argument types. arg_types can contain.
-        Any item within the list could be string or instance of L{type_t} derived
+        Any item within the list could be string or instance of :class:type_t derived
         class. If you don't want some argument to participate in match you can
         put None. For example:
 
@@ -475,7 +475,7 @@ class access_type_matcher_t( matcher_base_t ):
     def __init__( self, access_type ):
         """
         :param access_type: declaration access type
-        :type access_type: L{ACCESS_TYPES} defines few consts for your convinience.
+        :type access_type: :class:ACCESS_TYPES defines few consts for your convinience.
         Any way you can pass public, private or protected as argument to this function
         """
         matcher_base_t.__init__( self )

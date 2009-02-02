@@ -140,7 +140,7 @@ class argument_t(object):
         self._type = type
     type = property( _get_type, _set_type
                      , doc="""The type of the argument.
-                     @type: L{type_t}""")
+                     @type: :class:type_t""")
 
     def _get_attributes( self ):
         return self._attributes
@@ -198,7 +198,7 @@ class calldef_t( declaration.declaration_t ):
         self._arguments = arguments
     arguments = property( _get_arguments , _set_arguments
                           , doc="""The argument list.
-                          @type: list of L{argument_t}""")
+                          @type: list of :class:argument_t""")
 
     @property
     def has_ellipsis( self ):
@@ -241,7 +241,7 @@ class calldef_t( declaration.declaration_t ):
         self._exceptions = exceptions
     exceptions = property( _get_exceptions, _set_exceptions
                            , doc="""The list of exceptions.
-                           @type: list of L{declaration_t}""")
+                           @type: list of :class:declaration_t""")
 
     def _get_return_type(self):
         return self._return_type
@@ -249,7 +249,7 @@ class calldef_t( declaration.declaration_t ):
         self._return_type = return_type
     return_type = property( _get_return_type, _set_return_type
                             , doc='''The type of the return value of the "callable" or None (constructors).
-                            @type: L{type_t}
+                            @type: :class:type_t
                             ''')
     @property
     def overloads(self):
@@ -423,7 +423,7 @@ class member_calldef_t( calldef_t ):
     def _get_access_type(self):
         return self.parent.find_out_member_access_type( self )
     access_type = property( _get_access_type
-                            , doc="""Return the access type of the member (as defined by the string constants in the class L{ACCESS_TYPES}.
+                            , doc="""Return the access type of the member (as defined by the string constants in the class :class:ACCESS_TYPES.
                             @type: str""")
 
     def _get_has_const(self):
@@ -441,7 +441,7 @@ class member_calldef_t( calldef_t ):
                            , doc="""describes, whether "callable" has static modifier or not""")
 
     def function_type(self):
-        """returns function type. See L{type_t} hierarchy"""
+        """returns function type. See :class:type_t hierarchy"""
         if self.has_static:
             return cpptypes.free_function_type_t( return_type=self.return_type
                                            , arguments_types=[ arg.type for arg in self.arguments ] )
@@ -495,7 +495,7 @@ class free_calldef_t( calldef_t ):
         return []
 
     def function_type(self):
-        """returns function type. See L{type_t} hierarchy"""
+        """returns function type. See :class:type_t hierarchy"""
         return cpptypes.free_function_type_t( return_type=self.return_type
                                      , arguments_types=[ arg.type for arg in self.arguments ] )
 

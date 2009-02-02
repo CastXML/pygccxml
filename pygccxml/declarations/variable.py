@@ -41,7 +41,7 @@ class variable_t( declaration.declaration_t ):
     def _set_type(self, type):
         self._type = type
     type = property( _get_type, _set_type
-                     , doc="reference to the variable L{type<type_t>}"    )
+                     , doc="reference to the variable :class:`type <type_t>`"    )
 
     def _get_type_qualifiers(self):
         return self._type_qualifiers

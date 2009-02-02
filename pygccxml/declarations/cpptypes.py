@@ -80,7 +80,7 @@ class type_t(object):
 
 
 class dummy_type_t( type_t ):
-    """provides L{type_t} interface for a string, that defines C++ type.
+    """provides :class:type_t interface for a string, that defines C++ type.
 
     This class could be very useful in the code generator.
     """
@@ -495,9 +495,9 @@ class free_function_type_t( type_t, calldef_type_t ):
         returns free function type
 
         :param return_type: function return type
-        :type return_type: L{type_t}
+        :type return_type: :class:type_t
 
-        :param arguments_types: list of argument L{type<type_t>}
+        :param arguments_types: list of argument :class:`type <type_t>`
 
         :rtype: L{free_function_type_t}
         """
@@ -629,7 +629,7 @@ class member_variable_type_t( compound_t ):
     def _set_variable_type(self, new_type):
         self._mv_type = new_type
     variable_type = property( _get_variable_type, _set_variable_type
-                              , doc="describes member variable L{type<type_t>}")
+                              , doc="describes member variable :class:`type <type_t>`")
 
     def build_decl_string(self, with_defaults=True):
         return self.NAME_TEMPLATE % { 'type' : self.variable_type.build_decl_string(with_defaults)
@@ -644,7 +644,7 @@ class member_variable_type_t( compound_t ):
 ## declarated types:
 
 class declarated_t( type_t ):
-    """class that binds between to hierarchies: L{type_t} and L{declaration_t}"""
+    """class that binds between to hierarchies: :class:type_t and :class:declaration_t"""
     def __init__( self, declaration ):
         type_t.__init__( self )
         self._declaration = declaration

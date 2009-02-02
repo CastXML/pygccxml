@@ -233,29 +233,29 @@ from matchers import virtuality_type_matcher_t
 
 #make matchers to look more like functors
 or_matcher = or_matcher_t
-"""see L{or_matcher} for documentation"""
+"""see :class:or_matcher for documentation"""
 and_matcher = and_matcher_t
-"""see L{and_matcher} for documentation"""
+"""see :class:and_matcher for documentation"""
 not_matcher = not_matcher_t
-"""see L{not_matcher} for documentation"""
+"""see :class:not_matcher for documentation"""
 declaration_matcher = declaration_matcher_t
-"""see L{declaration_matcher} for documentation"""
+"""see :class:declaration_matcher for documentation"""
 calldef_matcher = calldef_matcher_t
-"""see L{calldef_matcher} for documentation"""
+"""see :class:calldef_matcher for documentation"""
 namespace_matcher = namespace_matcher_t
-"""see L{namespace_matcher} for documentation"""
+"""see :class:namespace_matcher for documentation"""
 variable_matcher = variable_matcher_t
-"""see L{variable_matcher} for documentation"""
+"""see :class:variable_matcher for documentation"""
 regex_matcher = regex_matcher_t
-"""see L{regex_matcher} for documentation"""
+"""see :class:regex_matcher for documentation"""
 access_type_matcher = access_type_matcher_t
-"""see L{access_type_matcher} for documentation"""
+"""see :class:access_type_matcher for documentation"""
 operator_matcher = operator_matcher_t
-"""see L{operator_matcher} for documentation"""
+"""see :class:operator_matcher for documentation"""
 custom_matcher = custom_matcher_t
-"""see L{custom_matcher} for documentation"""
+"""see :class:custom_matcher for documentation"""
 virtuality_type_matcher = virtuality_type_matcher_t
-"""see L{virtuality_type_matcher} for documentation"""
+"""see :class:virtuality_type_matcher for documentation"""
 
 from matcher import matcher
 

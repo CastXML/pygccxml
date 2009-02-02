@@ -32,7 +32,7 @@ class typedef_t( declaration.declaration_t ):
     def _set_type(self, type):
         self._type = type
     type = property( _get_type, _set_type
-                     , doc="reference to the original L{type<type_t>}"    )
+                     , doc="reference to the original :class:`type <type_t>`"    )
 
     def i_depend_on_them( self, recursive=True ):
         return [ dependencies.dependency_info_t( self, self.type ) ]
