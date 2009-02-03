@@ -308,7 +308,7 @@ def declaration_files(decl_or_decls):
 
 class visit_function_has_not_been_found_t( RuntimeError ):
     """
-    exception that is raised, from :function:`apply_visitor`, when a visitor could not be
+    exception that is raised, from :func:`apply_visitor`, when a visitor could not be
     applied.
 
     """
