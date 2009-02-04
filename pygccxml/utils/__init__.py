@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines logger classes and few convinience methods, not related to the declarations
+defines logger classes and few convenience methods, not related to the declarations
 tree
 """
 
@@ -59,7 +59,7 @@ class loggers:
     """
 
     root = logging.getLogger( 'pygccxml' )
-    """root logger exists for your convinience only"""
+    """root logger exists for your convenience only"""
 
     all = [ root, cxx_parser, queries_engine, declarations_cache, pdb_reader ]
     """contains all logger classes, defined by the class"""
@@ -74,7 +74,7 @@ def remove_file_no_raise(file_name ):
                             % ( file_name, str( error ) ) )
 
 def create_temp_file_name(suffix, prefix=None, dir=None):
-    """small convinience function that creates temporal file.
+    """small convenience function that creates temporal file.
 
     This function is a wrapper aroung Python built-in function - tempfile.mkstemp
     """

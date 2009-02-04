@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines class, that describes C++ enum
+defines class, that describes C++ `enum`
 """
 
 import copy
@@ -14,15 +14,15 @@ import declaration
 
 class enumeration_t( declaration.declaration_t ):
     """
-    describes C++ enum
+    describes C++ `enum`
     """
     def __init__( self, name='', values=None ):
-        """creates class that describes C++ enum declaration
+        """creates class that describes C++ `enum` declaration
 
         The items of the list 'values' may either be strings containing
         the enumeration value name or tuples (name, numvalue).
 
-        :param name: Enum name
+        :param name: `enum` name
         :type name: str
         :param parent: Parent declaration
         :type parent: declaration_t
@@ -75,7 +75,7 @@ class enumeration_t( declaration.declaration_t ):
                        @type: list""")
 
     def append_value(self, valuename, valuenum=None):
-        """Append another enumeration value to the enum.
+        """Append another enumeration value to the `enum`.
 
         The numeric value may be None in which case it is automatically determined by
         increasing the value of the last item.
@@ -99,7 +99,7 @@ class enumeration_t( declaration.declaration_t ):
         self._values.append((valuename, int(valuenum)))
 
     def has_value_name(self, name):
-        """Check if this enum has a particular name among its values.
+        """Check if this `enum` has a particular name among its values.
 
         :param name: Enumeration value name
         :type name: str
@@ -111,7 +111,7 @@ class enumeration_t( declaration.declaration_t ):
         return False
 
     def get_name2value_dict( self ):
-        """returns a dictionary, that maps between enum name( key ) and enum value( value )"""
+        """returns a dictionary, that maps between `enum` name( key ) and `enum` value( value )"""
         x = {}
         for val, num in self._values:
             x[val] = num

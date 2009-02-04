@@ -32,11 +32,12 @@ class matcher:
 
     @staticmethod
     def find( decl_matcher, decls, recursive=True ):
-        """returns a list of declarations that match "decl_matcher" defined criretia or None
+        """
+        returns a list of declarations that match `decl_matcher` defined criteria or None
 
-        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        :param decls: reference to declaration or list of declarations to be searched in
-        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        :param decl_matcher: Python callable object, that takes one argument - reference to a declaration
+        :param decls: the search scope, :class:declaration_t object or :class:declaration_t objects list t
+        :param recursive: boolean, if True, the method will run `decl_matcher` on the internal declarations too
         """
 
         where = []
@@ -50,13 +51,14 @@ class matcher:
 
     @staticmethod
     def find_single( decl_matcher, decls, recursive=True ):
-        """returns a reference to declaration, that match "decl_matcher" defined
-        criretia, if a unique declaration could not be found the method will return
-        None.
+        """
+        returns a reference to the declaration, that match `decl_matcher` defined criteria.
 
-        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        :param decls: reference to declaration or list of declarations to be searched in
-        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        if a unique declaration could not be found the method will return None.
+
+        :param decl_matcher: Python callable object, that takes one argument - reference to a declaration
+        :param decls: the search scope, :class:declaration_t object or :class:declaration_t objects list t
+        :param recursive: boolean, if True, the method will run `decl_matcher` on the internal declarations too
         """
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:
@@ -64,13 +66,14 @@ class matcher:
 
     @staticmethod
     def get_single( decl_matcher, decls, recursive=True ):
-        """returns a reference to declaration, that match "decl_matcher" defined
-        criretia, if a unique declaration could not be found, an appropriate
-        exception will be raised.
+        """
+        returns a reference to declaration, that match `decl_matcher` defined criteria.
 
-        :param decl_matcher: Python callable object, that takes one argument - reference to declaration
-        :param decls: reference to declaration or list of declarations to be searched in
-        :param recursive: boolean, if True the method will run decl_matcher, on internal declarations too
+        If a unique declaration could not be found, an appropriate exception will be raised.
+
+        :param decl_matcher: Python callable object, that takes one argument - reference to a declaration
+        :param decls: the search scope, :class:declaration_t object or :class:declaration_t objects list t
+        :param recursive: boolean, if True, the method will run `decl_matcher` on the internal declarations too
         """
         answer = matcher.find( decl_matcher, decls, recursive )
         if len(answer) == 1:

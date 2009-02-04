@@ -31,17 +31,26 @@ class call_redirector_t( object ):
             callable_( *arguments, **keywords )
 
 class mdecl_wrapper_t( object ):
-    """Multiple declarations wrapper.
+    """
+    multiple declarations class wrapper
 
-    The main purpose of this class is to allow an user to work on many
-    declarations, as they were only one single declaration.
+    The main purpose of this class is to allow an user to work on many declarations,
+    as they were only one single declaration.
 
-    Example:
-    mb = module_builder_t( ... )
-    #lets say we want to exclude all member functions, that returns reference to int:
-    mb.member_functions( return_type='int &' ).exclude()
+    For example, instead of writing `for` loop like the following
 
-    "exclude" function will be called on every function that match the criteria.
+    .. code-block:: python
+
+       for c in global_namespace.classes():
+           c.compiler = "GCCXML 1.127"
+
+    you can write:
+
+    .. code-block:: python
+
+       global_namespace.classes().compiler = "GCCXML 1.127"
+
+    The same functionality could be applied on "set" methods too.
     """
 
     def __init__( self, decls ):
@@ -69,7 +78,7 @@ class mdecl_wrapper_t( object ):
         invalid_decls = filter( lambda d: not hasattr( d, name ), self.declarations )
         sep = os.linesep + '    '
         if invalid_decls:
-            raise RuntimeError( "Next declarations don't have '%s' attribute: %s" 
+            raise RuntimeError( "Next declarations don't have '%s' attribute: %s"
                                 % ( name, sep.join( map( str, invalid_decls ) ) ) )
 
     def __setattr__( self, name, value ):

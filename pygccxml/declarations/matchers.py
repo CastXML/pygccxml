@@ -110,7 +110,7 @@ class declaration_matcher_t( matcher_base_t ):
     """
     Instance of this class will match declarations by next criteria:
           - declaration name, also could be fully qualified name
-            Example: wstring or ::std::wstring
+            Example: `wstring` or `::std::wstring`
           - declaration type
             Example: :class:`class_t`, :class:`namespace_t`, :class:`enumeration_t`
           - location within file system ( file or directory )
@@ -491,15 +491,15 @@ class access_type_matcher_t( matcher_base_t ):
 
 class virtuality_type_matcher_t( matcher_base_t ):
     """
-    Instance of this class will match declaration by its virtuality type: not virtual,
-    virtual or pure virtual. If declarations does not have virtuality type, for example
-    free function, then False will be returned.
+    Instance of this class will match declaration by its virtual type: not virtual,
+    virtual or pure virtual. If declarations does not have "virtual" property,
+    for example free function, then `False` will be returned.
     """
 
     def __init__( self, virtuality_type ):
         """
         :param access_type: declaration access type
-        :type access_type: :class:VIRTUALITY_TYPES defines few consts for your convinience.
+        :type access_type: :class:VIRTUALITY_TYPES defines few constants for your convenience.
         """
         matcher_base_t.__init__( self )
         self.virtuality_type = virtuality_type

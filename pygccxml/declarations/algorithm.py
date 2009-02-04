@@ -15,7 +15,7 @@ def declaration_path( decl, with_defaults=True ):
     :type decl: :class:`declaration_t`
 
     :rtype: [names], where first item contains top parent name and last item
-             contains decl name
+             contains the `decl` name
     """
     if not decl:
         return []
@@ -45,7 +45,7 @@ def partial_declaration_path( decl ):
     :type decl: :class:`declaration_t`
 
     :rtype: [names], where first item contains top parent name and last item
-             contains decl name
+             contains the `decl` name
     """
     #TODO:
     #If parent declaration cache already has declaration_path, reuse it for
@@ -98,8 +98,8 @@ def full_name_from_declaration_path( dpath ):
 def full_name( decl, with_defaults=True ):
     """
     returns declaration full qualified name
-    
-    If `decl` belongs to anonymious namespace or class, the function will return C++ illegal qualified name.
+
+    If `decl` belongs to anonymous namespace or class, the function will return C++ illegal qualified name.
     :param decl: :class:`declaration_t`
     :type decl: :class:`declaration_t`
     :rtype: full name of declarations.

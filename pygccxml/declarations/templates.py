@@ -3,11 +3,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-""" 
+"""
 template instantiation parser
 
 This module implements all functionality necessary to parse C++ template
-instantiations.In other words this module is able to extract next information from 
+instantiations.In other words this module is able to extract next information from
 the string like this C{ std::vector<int> }.
     - name ( std::vector )
     - list of arguments ( int )
@@ -21,11 +21,11 @@ __THE_PARSER = pattern_parser.parser_t( '<', '>', ',' )
 
 def is_instantiation( decl_string ):
     """
-    returns True if decl_string is template instantiation and False otherwise
-    
+    returns True if `decl_string` is template instantiation and False otherwise
+
     :param decl_string: string that should be checked for pattern presence
     :type decl_string: str
-    
+
     :rtype: bool
     """
     global __THE_PARSER
@@ -34,7 +34,7 @@ def is_instantiation( decl_string ):
 def name( decl_string ):
     """
     returns name of instantiated template
-    
+
     :type decl_string: str
     :rtype: str
     """
@@ -44,18 +44,18 @@ def name( decl_string ):
 def args( decl_string ):
     """
     returns list of template arguments
-    
-    :type decl_string: str
-    :rtype: [str]
+
+    :type decl_string: `str`
+    :rtype: [`str`]
     """
     global __THE_PARSER
     return __THE_PARSER.args( decl_string )
-        
+
 def split( decl_string ):
     """returns (name, [arguments] )"""
     global __THE_PARSER
     return __THE_PARSER.split( decl_string )
-    
+
 def split_recursive( decl_string ):
     """returns [(name, [arguments])]"""
     global __THE_PARSER
@@ -67,8 +67,8 @@ def join( name, args ):
     return __THE_PARSER.join( name, args )
 
 def normalize( decl_string ):
-    """returns decl_string, which contains "normalized" spaces
-    
+    """returns `decl_string`, which contains "normalized" spaces
+
     this functionality allows to implement comparison of 2 different string
     which are actually same: x::y< z > and x::y<z>
     """

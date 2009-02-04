@@ -50,9 +50,9 @@ class namespace_t( scopedef.scopedef_t ):
 
     def adopt_declaration( self, decl ):
         self.declarations.append( decl )
-        decl.parent = self 
+        decl.parent = self
         decl.cache.reset()
-        
+
     def remove_declaration( self, decl ):
         """
         removes decl from  members list
@@ -67,24 +67,24 @@ class namespace_t( scopedef.scopedef_t ):
         #    decl.parent=None
 
     def namespace( self, name=None, function=None, recursive=None ):
-        """returns reference to namespace declaration, that is matched defined criterias"""
+        """returns reference to namespace declaration, that is matched defined criteria"""
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.namespace ]
                                   , name=name
                                   , function=function
                                   , recursive=recursive )
     ns = namespace
-    
+
     def namespaces( self, name=None, function=None, recursive=None, allow_empty=None ):
-        """returns a set of namespace declarations, that are matched defined criterias"""
+        """returns a set of namespace declarations, that are matched defined criteria"""
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.namespace ]
                                     , name=name
                                     , function=function
                                     , recursive=recursive
                                     , allow_empty=allow_empty)
     nss = namespaces
-    
+
     def free_function( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
-        """returns reference to free function declaration, that is matched defined criterias"""
+        """returns reference to free function declaration, that is matched defined criteria"""
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_function ]
                                   , name=name
                                   , function=function
@@ -95,9 +95,9 @@ class namespace_t( scopedef.scopedef_t ):
                                   , header_file=header_file
                                   , recursive=recursive )
     free_fun = free_function
-    
+
     def free_functions( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
-        """returns a set of free function declarations, that are matched defined criterias"""
+        """returns a set of free function declarations, that are matched defined criteria"""
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_function ]
                                     , name=name
                                     , function=function
@@ -111,7 +111,7 @@ class namespace_t( scopedef.scopedef_t ):
     free_funs = free_functions
 
     def free_operator( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None ):
-        """returns reference to free operator declaration, that is matched defined criterias"""
+        """returns reference to free operator declaration, that is matched defined criteria"""
         return self._find_single( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
                                   , name=self._build_operator_name( name, function, symbol )
                                   , symbol=symbol
@@ -124,7 +124,7 @@ class namespace_t( scopedef.scopedef_t ):
                                   , recursive=recursive )
 
     def free_operators( self, name=None, function=None, symbol=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
-        """returns a set of free operator declarations, that are matched defined criterias"""
+        """returns a set of free operator declarations, that are matched defined criteria"""
         return self._find_multiple( scopedef.scopedef_t._impl_matchers[ namespace_t.free_operator ]
                                     , name=self._build_operator_name( name, function, symbol )
                                     , symbol=symbol

@@ -501,7 +501,7 @@ class class_t( scopedef.scopedef_t ):
             return get_partial_name( self.name )
 
     def find_noncopyable_vars( self ):
-        """returns list of all noncopyable variables"""
+        """returns list of all `noncopyable` variables"""
         import type_traits as tt#prevent cyclic dependencies
         logger = utils.loggers.cxx_parser
         mvars = self.vars( lambda v: not v.type_qualifiers.has_static, recursive=False, allow_empty=True )
