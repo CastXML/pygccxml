@@ -18,35 +18,35 @@ class COMPILATION_MODE:
 
 class file_configuration_t( object ):
     """
-    file_configuration_t - a class, that contains some data and description how
-    to treat the data. file_configuration_t can contain reference to the next types
-    of data:
+    source code location configuration.
 
-    1) path to C++ source file
+    The class instance uses "variant" interface to represent the following data:
 
-    2) path to `GCC-XML`_ generated XML file
+    1) path to a C++ source file
 
-    3) path to C++ source file and path to `GCC-XML`_ generated XML file
+    2) path to GCC-XML generated XML file
+
+    3) path to a C++ source file and path to GCC-XML generated file
 
         In this case, if XML file does not exists, it will be created. Next time
         you will ask to parse the source file, the XML file will be used instead.
 
         Small tip: you can setup your makefile to delete XML files every time,
-        the relevant source file has changed.
+        the relevant source file was changed.
 
     4) Python string, that contains valid C++ code
 
 
-    There are few functions, that will help you to construct file_configuration_t
+    There are few functions, that will help you to construct :class:`file_configuration_t`
     object:
 
-    * L{create_source_fc}
+    * :func:`create_source_fc`
 
-    * L{create_gccxml_fc}
+    * :func:`create_gccxml_fc`
 
-    * L{create_cached_source_fc}
+    * :func:`create_cached_source_fc`
 
-    * L{create_text_fc}
+    * :func:`create_text_fc`
 
     """
     class CONTENT_TYPE:
@@ -146,27 +146,18 @@ def create_cached_source_fc( header, cached_source_file ):
                                  , content_type=file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE )
 
 class project_reader_t:
-    """Parses header files and returns the contained declarations.
-    """
+    """parses header files and returns the contained declarations"""
+
     def __init__( self, config, cache=None, decl_factory=None):
-        """Constructor.
+        """
+        :param config: GCCXML configuration
+        :type config: :class:config_t
 
-        config is a configuration object that contains the parameters
-        for invoking gccxml. cache specifies the cache to use for
-        caching declarations between separate runs. By default, no
-        cache is used.  decl_factory is an object that must provide
-        the same interface than
-        L{decl_factory_t<declarations.decl_factory_t>}, i.e. there must
-        be a set of C{create_*} methods that return an instance of an
-        appropriate declaration class.  By default, the declaration
-        classes defined in the L{declarations} package are used.
+        :param cache: declaration cache, by default a cache functionality will not be used
+        :type cache: :class:`cache_base_t` instance or `str`
 
-        :param config: Configuration object
-        :type config: L{config_t}
-        :param cache: Declaration cache (None=no cache)
-        :type cache: L{cache_base_t} or str
-        :param decl_factory: Custom declaration factory object or None
-        :type decl_factory: decl_factory_t
+        :param decl_factory: declaration factory
+        :type decl_factory: :class:`decl_factory_t`
         """
         self.__config = config
         self.__dcache = None
@@ -184,10 +175,10 @@ class project_reader_t:
 
     @staticmethod
     def get_os_file_names( files ):
-        """Returns a list of OS file names
+        """
+        returns file names
 
-        :param files: list of strings or L{file_configuration_t} instances.
-                      files could contain a mix of them
+        :param files: list of strings and\\or :class:`file_configuration_t` instances.
         :type files: list
         """
         fnames = []
@@ -203,14 +194,15 @@ class project_reader_t:
         return fnames
 
     def read_files( self, files, compilation_mode=COMPILATION_MODE.FILE_BY_FILE):
-        """Parse header files.
+        """
+        parses a set of files
 
-        :param files: list of strings or L{file_configuration_t} instances.
-                      files could contain a mix of them
+        :param files: list of strings and\\or :class:`file_configuration_t` instances.
         :type files: list
-        :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
-        :type compilation_mode: L{COMPILATION_MODE}
-        @returns: Declarations
+
+        :param compilation_mode: determines whether the files are parsed individually or as one single chunk
+        :type compilation_mode: :class:`COMPILATION_MODE`
+        :rtype: [:class:`declaration_t`]
         """
         if compilation_mode == COMPILATION_MODE.ALL_AT_ONCE \
            and len( files ) == len( self.get_os_file_names(files) ):
@@ -302,7 +294,7 @@ class project_reader_t:
 
         :param content: C/C++ source code.
         :type content: str
-        @returns: Declarations
+        :rtype: Declarations
         """
         reader = source_reader.source_reader_t( self.__config, None, self.__decl_factory )
         return reader.read_string( content )

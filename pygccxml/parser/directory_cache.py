@@ -29,10 +29,9 @@ class index_entry_t:
     """
 
     def __init__( self, filesigs, configsig ):
-        """Constructor.
-
-        filesigs is a list of tuples (fileid, sig)...
-        configsig is the signature of the configuration object.
+        """
+        :param filesigs: a list of tuples( `fileid`, `sig`)...
+        :param configsig: the signature of the configuration object.
         """
         self.filesigs = filesigs
         self.configsig = configsig
@@ -45,9 +44,9 @@ class index_entry_t:
 
 
 class directory_cache_t ( declarations_cache.cache_base_t ):
-    """Cache class that stores its data as multiple files inside a directory.
+    """cache class that stores its data as multiple files inside a directory.
 
-    The cache stores one index file called "index.dat" which is always
+    The cache stores one index file called `index.dat` which is always
     read by the cache when the cache object is created. Each header file
     will have its corresponding *.cache file that stores the declarations
     found in the header file. The index file is used to determine whether
@@ -57,13 +56,13 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     """
 
     def __init__( self, dir="cache", compression=False, md5_sigs=True ):
-        """Constructor.
+        """
+        :param dir: cache directory path, it is created, if it does not exist
 
-        dir is the cache directory (it is created if it does not exist).
-        If compression is set to True the cache files will be compressed
-        using gzip.
-        md5_sigs determines whether file modifications is checked by
-        computing a md5 digest or by checking the modification date.
+        :param compression: if `True`, the cache files will be compressed using `gzip`
+
+        :param md5_sigs: `md5_sigs` determines whether file modifications is checked
+                         by computing a `md5` digest or by checking the modification date
         """
         declarations_cache.cache_base_t.__init__(self)
 
@@ -102,20 +101,18 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
     def flush(self):
         """Save the index table to disk."""
-
         self._save()
-#        self.__filename_rep._dump()
 
     def update(self, source_file, configuration, declarations, included_files):
         """Replace a cache entry by a new value.
 
-        :param source_file: Header file name.
+        :param source_file: a C++ source file name.
         :type source_file: str
-        :param configuration: Configuration  object.
-        :type configuration: L{config_t}
-        :param declarations: Declarations contained in the header file.
+        :param configuration: configuration  object.
+        :type configuration: :class:config_t
+        :param declarations: declarations contained in the `source_file`
         :type declarations: picklable object
-        :param included_files: Dependent files
+        :param included_files: included files
         :type included_files: list of str
         """
         # Normlize all paths...
@@ -224,10 +221,10 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         self.__modified_flag = False
 
     def _save(self):
-        """Save the cache index if it was modified.
+        """
+        save the cache index, in case it was modified.
 
-        Saves the index table and the file name repository in the file
-        index.dat.
+        Saves the index table and the file name repository in the file `index.dat`
         """
         if self.__modified_flag:
             self.__filename_rep.update_id_counter()
@@ -236,13 +233,14 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
             self.__modified_flag = False
 
     def _read_file(self, filename):
-        """Read a Python object from a cache file.
+        """
+        read a Python object from a cache file.
 
         Reads a pickled object from disk and returns it.
 
         :param filename: Name of the file that should be read.
         :type filename: str
-        @returns: Unpickled file contents
+        :rtype: object
         """
         if self.__compression:
             f = gzip.GzipFile(filename, "rb")
@@ -283,7 +281,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param source_file: Header file name
         :type source_file: str
         :param key: Key value for the specified header file
-        :type key: hashable object
+        :type key: hash table object
         """
 
         entry = self.__index.get(key)
@@ -307,29 +305,30 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
 
     def _create_cache_key(self, source_file):
-        """Return the cache key for a header file.
+        """
+        return the cache key for a header file.
 
         :param source_file: Header file name
         :type source_file: str
-        @returns: Key for the given header file
-        @rtype: str
+        :rtype: str
         """
         path, name = os.path.split(source_file)
         return name+str(hash(path))
 
     def _create_cache_filename(self, source_file):
-        """Return the cache file name for a header file.
+        """
+        return the cache file name for a header file.
 
         :param source_file: Header file name
         :type source_file: str
-        @returns: Cache file name (*.cache)
-        @rtype: str
+        :rtype: str
         """
         res = self._create_cache_key(source_file)+".cache"
         return os.path.join(self.__dir, res)
 
     def _create_config_signature(self, config):
-        """Return the signature for a config object.
+        """
+        return the signature for a config object.
 
         The signature is computed as md5 digest of the contents of
         working_directory, include_paths, define_symbols and
@@ -337,8 +336,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         :param config: Configuration object
         :type config: L{config_t}
-        @returns: Signature
-        @rtype: str
+        :rtype: str
         """
         m = hashlib.md5()
         m.update(config.working_directory)

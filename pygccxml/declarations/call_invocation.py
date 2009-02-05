@@ -11,10 +11,10 @@ invocation statement. For example, for the following code
 
 .. code-block:: c++
 
-  do_smth( x1, x2, x3 )
+  do_something( x1, x2, x3 )
 
 the parser will extract
-- function name - `do_stmh`
+- function name - `do_something`
 - argument names - `[ x1, x2, x3 ]`
 
 """

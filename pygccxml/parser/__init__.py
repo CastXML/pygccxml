@@ -45,7 +45,7 @@ def parse( files
     :type compilation_mode: L{COMPILATION_MODE}
     :param cache: Declaration cache (None=no cache)
     :type cache: L{cache_base_t} or str
-    @returns: Declarations
+    :rtype: Declarations
     """
     if not config:
         config = config_t()

@@ -243,7 +243,7 @@ class defaults_eraser:
 
 
 class container_traits_impl_t:
-    """this class implements the functionality needed for convinient work with
+    """this class implements the functionality needed for convenient work with
     STD container classes.
 
     Implemented functionality:

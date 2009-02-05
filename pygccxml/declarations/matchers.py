@@ -46,11 +46,14 @@ class matcher_base_t(object):
         return "base class for all matchers"
 
 class and_matcher_t(matcher_base_t):
-    """Combine several other matchers with "&".
+    """
+    Combine several other matchers with "&" (and) operator.
 
     For example: find all private functions with name XXX
 
-    C{ matcher = access_type_matcher_t( 'private' ) & calldef_matcher_t( name='XXX' ) }
+    .. code-block:: python
+
+       matcher = access_type_matcher_t( 'private' ) & calldef_matcher_t( name='XXX' )
     """
     def __init__(self, matchers):
         matcher_base_t.__init__(self)
@@ -67,11 +70,13 @@ class and_matcher_t(matcher_base_t):
 
 
 class or_matcher_t(matcher_base_t):
-    """Combine several other matchers with "|".
+    """Combine several other matchers with "|" (or) operator.
 
     For example: find all functions and variables with name 'XXX'
 
-    C{ matcher = variable_matcher_t( name='XXX' ) | calldef_matcher_t( name='XXX' ) }
+    .. code-block:: python
+
+       matcher = variable_matcher_t( name='XXX' ) | calldef_matcher_t( name='XXX' )
 
     """
     def __init__(self, matchers):
@@ -325,16 +330,20 @@ class calldef_matcher_t( declaration_matcher_t ):
         :param return_type: callable return type
         :type return_type: string or instance of :class:`type_t` derived class
 
-        :param arg_types: list of function argument types. arg_types can contain.
+        :param arg_types: list of function argument types. `arg_types` can contain.
         Any item within the list could be string or instance of :class:`type_t` derived
         class. If you don't want some argument to participate in match you can
         put None. For example:
 
-        C{ calldef_matcher_t( arg_types=[ 'int &', None ] ) }
+        .. code-block:: python
+
+           calldef_matcher_t( arg_types=[ 'int &', None ] )
 
         will match all functions that takes 2 arguments, where the first one is
         reference to integer and second any
+
         :type arg_types: list
+
         """
         if None is decl_type:
             decl_type = calldef.calldef_t
@@ -475,7 +484,7 @@ class access_type_matcher_t( matcher_base_t ):
     def __init__( self, access_type ):
         """
         :param access_type: declaration access type
-        :type access_type: :class:ACCESS_TYPES defines few consts for your convinience.
+        :type access_type: :class:ACCESS_TYPES defines few constants for your convenience.
         Any way you can pass public, private or protected as argument to this function
         """
         matcher_base_t.__init__( self )

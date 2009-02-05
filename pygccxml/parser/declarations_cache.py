@@ -57,9 +57,11 @@ class cache_base_t( object ):
         raise NotImplementedError()
 
     def update(self, source_file, configuration, declarations, included_files):
-        """ Update cache entry.
+        """
+        update cache entry
+
         :param source_file: path to the C++ source file being parsed
-        :param configuration: configuration used in parsing (config_t)
+        :param configuration: configuration used in parsing :class:`config_t`
         :param declarations: declaration tree found when parsing
         :param included_files: files included by parsing.
         """
@@ -69,7 +71,7 @@ class cache_base_t( object ):
         """
         Return declarations, we have cached, for the source_file and the given configuration.
         :param source_file: path to the C++ source file being parsed.
-        :param configuration: configuration to use for parsing (config_t)
+        :param configuration: configuration( :class:`config_t` ) that was used for parsing
         """
         raise NotImplementedError()
 
@@ -199,8 +201,9 @@ class file_cache_t( cache_base_t ):
         self.__needs_flushed = True
 
     def cached_value(self, source_file, configuration):
-        """ Attempt to lookup the cached decls for the given file and configuration.
-            If not found or signature check fails, returns None.
+        """
+        attempt to lookup the cached declarations for the given file and configuration.
+        If not found or signature check fails, returns None.
         """
         key = record_t.create_key(source_file, configuration)
         if not self.__cache.has_key( key ):

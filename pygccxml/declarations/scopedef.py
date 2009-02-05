@@ -455,7 +455,7 @@ class scopedef_t( declaration.declaration_t ):
                                   , recursive=recursive )
 
     def calldefs( self, name=None, function=None, return_type=None, arg_types=None, header_dir=None, header_file=None, recursive=None, allow_empty=None ):
-        """returns a set of calldef declarations, that are matched defined criteria"""
+        """returns a set of :class:`calldef_t` declarations, that are matched defined criteria"""
         return self._find_multiple( self._impl_matchers[ scopedef_t.calldef ]
                                     , name=name
                                     , function=function

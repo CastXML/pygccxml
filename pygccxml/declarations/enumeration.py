@@ -20,7 +20,7 @@ class enumeration_t( declaration.declaration_t ):
         """creates class that describes C++ `enum` declaration
 
         The items of the list 'values' may either be strings containing
-        the enumeration value name or tuples (name, numvalue).
+        the enumeration value name or tuples (name, numeric value).
 
         :param name: `enum` name
         :type name: str

@@ -112,7 +112,7 @@ class declaration_t( object ):
         function will return true, if both declarations refers to the same object.
         This function could be implemented in terms of _get__cmp__data, but in
         this case it will downgrade performance. self.mangled property is not
-        compared, because it could be chaned from one compilation time to an
+        compared, because it could be changed from one compilation time to an
         other.
         """
         if not isinstance( other, self.__class__ ):

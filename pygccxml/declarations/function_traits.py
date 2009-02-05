@@ -69,7 +69,7 @@ def is_same_function( f1, f2 ):
 
     Use case: sometimes when user defines some virtual function in base class,
     it overrides it in a derived one. Sometimes we need to know whether two member
-    functions is actualy same function.
+    functions is actually same function.
     """
     if f1 is f2:
         return True

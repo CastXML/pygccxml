@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines class, decl_printer_t that prints declarations tree in a user friendly format
+defines class, :class:`decl_printer_t` that prints declarations tree in a user friendly format
 """
 
 import os
@@ -15,14 +15,8 @@ import decl_visitor
 
 
 class decl_printer_t( decl_visitor.decl_visitor_t ):
-    """Helper class for printing decl tree.
+    """helper class for printing declarations tree"""
 
-    This class provides more information than the __str__() methods do.
-    The class is not just meant to provide a unique "id" for a declaration
-    but to inspect an entire declaration tree. This is particularly useful
-    for new users who want to find out how Py++ works and how it
-    stores its data.
-    """
     JUSTIFY = 20
     INDENT_SIZE = 4
 
@@ -125,7 +119,6 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + decorated_name + os.linesep)
 
     def print_calldef_info(self, decl=None):
-        """ Returns function signature: [retval, [arg1, ..., argN]]. """
         if None is decl:
             decl = self.__inst
 
@@ -277,8 +270,10 @@ def print_declarations( decls
                         , recursive=True
                         , writer=lambda x: sys.stdout.write( x + os.linesep )
                         , verbose=True):
-    """ Print decl tree rooted at each of the included nodes.
-        decls - either a single decl or a list of decls.
+    """
+    print declarations tree rooted at each of the included nodes.
+
+    :param decls: either a single :class:declaration_t object or list of :class:declaration_t objects
     """
     prn = decl_printer_t(0, detailed, recursive, writer, verbose=verbose)
     if type(decls) is not list:

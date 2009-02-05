@@ -304,7 +304,7 @@ def is_fundamental(type):
            or does_match_definition( type, cpptypes.fundamental_t, (cpptypes.volatile_t, cpptypes.const_t) ) \
 
 class declaration_xxx_traits:
-    """this class implements the functionality needed for convinient work with
+    """this class implements the functionality needed for convenient work with
     declaration classes
 
     Implemented functionality:
@@ -333,7 +333,7 @@ class declaration_xxx_traits:
         return self.__apply_sequence( type_ )
 
 enum_traits = declaration_xxx_traits( enumeration.enumeration_t )
-"""implements functionality, needed for convinient work with C++ enums"""
+"""implements functionality, needed for convenient work with C++ enums"""
 
 is_enum = enum_traits.is_my_case
 """returns True, if type represents C++ enumeration declaration, False otherwise"""
@@ -342,13 +342,13 @@ enum_declaration = enum_traits.get_declaration
 """returns reference to enum declaration"""
 
 class_traits = declaration_xxx_traits( class_declaration.class_t )
-"""implements functionality, needed for convinient work with C++ classes"""
+"""implements functionality, needed for convenient work with C++ classes"""
 
 is_class = class_traits.is_my_case
 """returns True, if type represents C++ class definition, False otherwise"""
 
 class_declaration_traits = declaration_xxx_traits( class_declaration.class_declaration_t )
-"""implements functionality, needed for convinient work with C++ class declarations"""
+"""implements functionality, needed for convenient work with C++ class declarations"""
 
 is_class_declaration = class_declaration_traits.is_my_case
 """returns True, if type represents C++ class declaration, False otherwise"""
@@ -1007,11 +1007,11 @@ class internal_type_traits:
 
 
 class smart_pointer_traits:
-    """implements functionality, needed for convinient work with smart pointers"""
+    """implements functionality, needed for convenient work with smart pointers"""
 
     @staticmethod
     def is_smart_pointer( type_ ):
-        """returns True, if type represents instantiation of C{boost::shared_ptr}, False otherwise"""
+        """returns True, if type represents instantiation of `boost::shared_ptr`, False otherwise"""
         type_ = remove_alias( type_ )
         type_ = remove_cv( type_ )
         type_ = remove_declarated( type_ )
@@ -1023,17 +1023,17 @@ class smart_pointer_traits:
 
     @staticmethod
     def value_type( type_ ):
-        """returns reference to boost::shared_ptr value type"""
+        """returns reference to `boost::shared_ptr` value type"""
         if not smart_pointer_traits.is_smart_pointer( type_ ):
             raise TypeError( 'Type "%s" is not instantiation of boost::shared_ptr' % type_.decl_string )
         return internal_type_traits.get_by_name( type_, "value_type" )
 
 class auto_ptr_traits:
-    """implements functionality, needed for convinient work with std::auto_ptr pointers"""
+    """implements functionality, needed for convenient work with `std::auto_ptr` pointers"""
 
     @staticmethod
     def is_smart_pointer( type_ ):
-        """returns True, if type represents instantiation of C{boost::shared_ptr}, False otherwise"""
+        """returns True, if type represents instantiation of `boost::shared_ptr`, False otherwise"""
         type_ = remove_alias( type_ )
         type_ = remove_cv( type_ )
         type_ = remove_declarated( type_ )
@@ -1045,14 +1045,14 @@ class auto_ptr_traits:
 
     @staticmethod
     def value_type( type_ ):
-        """returns reference to boost::shared_ptr value type"""
+        """returns reference to `boost::shared_ptr` value type"""
         if not auto_ptr_traits.is_smart_pointer( type_ ):
             raise TypeError( 'Type "%s" is not instantiation of std::auto_ptr' % type_.decl_string )
         return internal_type_traits.get_by_name( type_, "element_type" )
 
 
 def is_std_string( type_ ):
-    """returns True, if type represents C++ std::string, False otherwise"""
+    """returns True, if type represents C++ `std::string`, False otherwise"""
     decl_strings = [
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
         , '::std::basic_string<char, std::char_traits<char>, std::allocator<char> >'
@@ -1064,7 +1064,7 @@ def is_std_string( type_ ):
         return remove_cv( type_ ).decl_string in decl_strings
 
 def is_std_wstring( type_ ):
-    """returns True, if type represents C++ std::wstring, False otherwise"""
+    """returns True, if type represents C++ `std::wstring`, False otherwise"""
     decl_strings = [
         '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
         , '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'

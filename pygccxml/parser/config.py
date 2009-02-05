@@ -3,7 +3,8 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""This module contains the implementation of the L{config_t} class.
+"""
+defines C++ parser configuration classes
 """
 
 import os
@@ -12,17 +13,18 @@ import copy
 import types
 
 class parser_configuration_t(object):
-    """Configuration object to collect parameters for invoking C++ parser
+    """
+    C++ parser configuration holder
 
     This class serves as a base class for the parameters that can be used
-    to customize the call to C++ parser. This class also allows users to work with
-    relative files paths. In this case files are searched in the following order:
+    to customize the call to a C++ parser.
 
-    1. current directory
+    This class also allows users to work with relative files paths. In this case
+    files are searched in the following order:
 
-    2. working directory
-
-    3. additional include paths specified by the user
+       1. current directory
+       2. working directory
+       3. additional include paths specified by the user
 
     """
     def __init__( self
