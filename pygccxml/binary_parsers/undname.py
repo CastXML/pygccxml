@@ -67,7 +67,7 @@ class undname_creator_t:
     .dll, .map and .so files.
 
     On Windows, the class works with unique name produced by MSVC compiler and
-    with undecorated names produced by dbghelp.dll
+    with undecorated names produced by `dbghelp.dll`
 
     On Linux, the class works with mangled names produced by GCC-XML ( GCC 4.2 )
     compiler and demangled name produced by "nm" utility.

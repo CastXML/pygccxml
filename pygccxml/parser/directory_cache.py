@@ -156,7 +156,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param source_file: Header file name
         :type source_file: str
         :param configuration: Configuration object
-        :type configuration: L{config_t}
+        :type configuration: :class:`parser.config_t`
         :rtype: Cached declarations or None
         """
 
@@ -199,10 +199,9 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     def _load(self):
         """Load the cache.
 
-        Loads the file index.dat which contains the index table and
-        the file name repository.
+        Loads the `index.dat` file, which contains the index table and the file name repository.
 
-        This method is called by the constructor.
+        This method is called by the :meth:`__init__`
         """
 
         indexfilename = os.path.join(self.__dir, "index.dat")
