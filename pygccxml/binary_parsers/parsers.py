@@ -70,14 +70,14 @@ class libparser_t( object ):
     def load_symbols( self ):
         """loads public( shared ) symbols from the binary file.
 
-        This method should be overiden in the derived classes.
+        This method should be overridden in the derived classes.
         """
         raise NotImplementedError()
 
     def merge( self, symbol):
         """extracts and merges information from the symbol to the declarations tree.
 
-        This method should be overiden in the derived classes.
+        This method should be overridden in the derived classes.
         """
         raise NotImplementedError()
 
@@ -132,7 +132,7 @@ class map_file_parser_t( formated_mapping_parser_t ):
         formated_mapping_parser_t.__init__( self, global_ns, map_file_path, 'msvc' )
 
     def load_symbols( self ):
-        """returns dictionary { decorated symbol : orignal declaration name }"""
+        """returns dictionary { decorated symbol : original declaration name }"""
         f = file( self.binary_file )
         lines = []
         was_exports = False

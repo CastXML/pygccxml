@@ -8,7 +8,7 @@ provides low-level functionality, needed to undecorate\demangle compiler generat
 unique names and map them to the declarations
 
 On Windows:
-    ctypes package is used to call UnDecorateSymbolName function from dbghelp.dll
+    ctypes package is used to call `UnDecorateSymbolName` function from `dbghelp.dll`
 
 On Linux:
     "nm" utility is used.
@@ -21,7 +21,7 @@ import ctypes
 from pygccxml import declarations
 
 class UNDECORATE_NAME_OPTIONS:
-    """defines few constants for UnDecorateSymbolName function"""
+    """defines few constants for `UnDecorateSymbolName` function"""
 
     UNDNAME_COMPLETE = 0x0000 #Enables full undecoration.
     UNDNAME_NO_LEADING_UNDERSCORES = 0x0001 #Removes leading underscores from Microsoft extended keywords.
@@ -200,12 +200,12 @@ class undname_creator_t:
 
     def format_decl(self, decl, hint=None):
         """returns string, which contains full function name formatted exactly as
-        result of dbghelp.UnDecorateSymbolName, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
+        result of `dbghelp.UnDecorateSymbolName`, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
         options.
 
-        Different compilers\utilities undecorate/demangle magled string ( unique names ) in a different way.
-        hint argument will tell pygccxml how to format declarations, so it couls be mapped later to the blob.
-        The valid options are" msvc, nm
+        Different compilers\utilities undecorate/demangle mangled string ( unique names ) in a different way.
+        `hint` argument will tell pygccxml how to format declarations, so they could be mapped later to the blobs.
+        The valid options are: "msvc" and "nm".
         """
         name = None
         if hint is None:
