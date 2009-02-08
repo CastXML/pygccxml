@@ -7,19 +7,10 @@ import os
 import sys
 import getpass
 
-
-
 #~ os.environ['PYCHECKER'] = '--limit=1000 -q --no-argsused'
 #~ import pychecker.checker
 
 this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].__file__) )
-
-sys.path.append( os.path.abspath( os.path.join( this_module_dir_path, '..', '..', 'pydsc_dev' ) ) )
-
-import pydsc
-pydsc.ignore_dictionary( 'ignore_dictionary.txt' )
-pydsc.set_text_preprocessor( pydsc.sphinx_preprocessor )
-pydsc.include_paths( os.path.join( this_module_dir_path, '..', '..', 'pygccxml_dev' ) )
 
 data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
