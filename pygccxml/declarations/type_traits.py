@@ -4,15 +4,17 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines few algorithms, that deals with different properties of C++ types
+defines few algorithms, that deals with different C++ type properties
 
-Do you aware of boost::type_traits library? pygccxml has functionality similar to
-it. Using functions defined in this module you can
-    - find out some properties of the type
-    - modify type
+Do you aware of `boost::type_traits <http://www.boost.org/doc/libs/1_37_0/libs/type_traits/doc/html/boost_typetraits/intro.html>`_
+library? pygccxml implements the same functionality.
 
-Those functions are very valuable for code generation. Almost all functions
-within this module works on :class:`type_t` class hierarchy and\\or :class:class_t.
+This module contains a set of very specific traits functions\\classes, each of
+which encapsulate a single trait from the C++ type system. For example:
+* is a type a pointer or a reference type ?
+* does a type have a trivial constructor ?
+* does a type have a  const-qualifier ?
+
 """
 
 import os
@@ -891,7 +893,7 @@ def is_noncopyable( class_ ):
 def is_defined_in_xxx( xxx, cls ):
     """
     small helper function, that checks whether the class `cls` is defined under `::xxx` namespace
-    """    
+    """
     if not cls.parent:
         return False
 

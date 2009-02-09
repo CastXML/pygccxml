@@ -6,13 +6,14 @@
 """
 template instantiation parser
 
-This module implements all functionality necessary to parse C++ template
-instantiations.In other words this module is able to extract next information from
-the string like this `std::vector<int>`.
-    - name ( `std::vector` )
-    - list of arguments ( `int` )
+This module provides functionality necessary to
 
-This module also defines few convenience function like :func:split and :func:join.
+* :func:`parse <pygccxml.declarations.templates.parse>`
+* :func:`split <pygccxml.declarations.templates.split>`
+* :func:`join <pygccxml.declarations.templates.join>`
+* :func:`normalize <pygccxml.declarations.templates.normalize>`
+
+C++ template instantiations
 """
 
 import pattern_parser
