@@ -112,9 +112,9 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param source_file: a C++ source file name.
         :type source_file: str
         :param configuration: configuration  object.
-        :type configuration: :class:config_t
+        :type configuration: :class:`config_t`
         :param declarations: declarations contained in the `source_file`
-        :type declarations: picklable object
+        :type declarations: pickable object
         :param included_files: included files
         :type included_files: list of str
         """
@@ -260,7 +260,6 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param filename: Output file name
         :type filename: str
         :param data: A Python object that will be pickled
-        :type data: pickable object
         """
         if self.__compression:
             f = gzip.GzipFile(filename, "wb")
