@@ -40,12 +40,12 @@ def parse( files
     :param files: The header files that should be parsed
     :type files: list of str
     :param config: Configuration object or None
-    :type config: L{config_t}
+    :type config: :class:`parser.config_t`
     :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
-    :type compilation_mode: L{COMPILATION_MODE}
+    :type compilation_mode: :class:`parser.COMPILATION_MODE`
     :param cache: Declaration cache (None=no cache)
-    :type cache: L{cache_base_t} or str
-    :rtype: Declarations
+    :type cache: :class:`parser.cache_base_t` or str
+    :rtype: list of :class:`declarations.declaration_t`
     """
     if not config:
         config = config_t()

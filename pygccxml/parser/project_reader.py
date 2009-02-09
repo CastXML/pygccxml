@@ -89,46 +89,46 @@ class file_configuration_t( object ):
 
 def create_text_fc( text ):
     """
-    Creates L{file_configuration_t} instance, configured to contain Python string,
+    Creates :class:`parser.file_configuration_t` instance, configured to contain Python string,
     that contains valid C++ code
 
     :param text: C++ code
     :type text: str
 
-    :rtype: L{file_configuration_t}
+    :rtype: :class:`parser.file_configuration_t`
     """
     return file_configuration_t( data=text
                                  , content_type=file_configuration_t.CONTENT_TYPE.TEXT )
 
 def create_source_fc( header ):
     """
-    Creates L{file_configuration_t} instance, configured to contain path to
+    Creates :class:`parser.file_configuration_t` instance, configured to contain path to
     C++ source file
 
     :param header: path to C++ source file
     :type header: str
 
-    :rtype: L{file_configuration_t}
+    :rtype: :class:`parser.file_configuration_t`
     """
     return file_configuration_t( data=header
                                  , content_type=file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE )
 
 def create_gccxml_fc( xml_file ):
     """
-    Creates L{file_configuration_t} instance, configured to contain path to
+    Creates :class:`parser.file_configuration_t` instance, configured to contain path to
     GCC-XML generated XML file.
 
     :param xml_file: path to GCC-XML generated XML file
     :type xml_file: str
 
-    :rtype: L{file_configuration_t}
+    :rtype: :class:`parser.file_configuration_t`
     """
     return file_configuration_t( data=xml_file
                                  , content_type=file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE )
 
 def create_cached_source_fc( header, cached_source_file ):
     """
-    Creates L{file_configuration_t} instance, configured to contain path to
+    Creates :class:`parser.file_configuration_t` instance, configured to contain path to
     GCC-XML generated XML file and C++ source file. If XML file does not exists,
     it will be created and used for parsing. If XML file exists, it will be used
     for parsing.
@@ -139,7 +139,7 @@ def create_cached_source_fc( header, cached_source_file ):
     :param cached_source_file: path to GCC-XML generated XML file
     :type cached_source_file: str
 
-    :rtype: L{file_configuration_t}
+    :rtype: :class:`parser.file_configuration_t`
     """
     return file_configuration_t( data=header
                                  , cached_source_file=cached_source_file

@@ -17,7 +17,7 @@ class call_redirector_t( object ):
     def __init__( self, name, decls ):
         """creates call_redirector_t instance.
 
-        :param name: name of method, to be called on every object in C{decls} list
+        :param name: name of method, to be called on every object in the `decls` list
         :param decls: list of objects
         """
         object.__init__( self )
@@ -25,7 +25,7 @@ class call_redirector_t( object ):
         self.decls = decls
 
     def __call__( self, *arguments, **keywords ):
-        """calls method C{self.name} on every object within C{self.decls} list"""
+        """calls method :attr:`call_redirector_t.name` on every object within the :attr:`call_redirector_t.decls` list"""
         for d in self.decls:
             callable_ = getattr(d, self.name)
             callable_( *arguments, **keywords )

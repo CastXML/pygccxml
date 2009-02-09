@@ -7,7 +7,7 @@
 
 This package provides functionality to extract and inspect
 declarations from C/C++ header files. This is accomplished
-by invoking the external tool U{gccxml<http://www.gccxml.org/>}
+by invoking the external tool `gccxml <http://www.gccxml.org/>`_
 which parses a header file and dumps the declarations as a
 XML file. This XML file is then read by pygccxml and the contents
 are made available as appropriate Python objects.

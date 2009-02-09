@@ -8,9 +8,9 @@ template instantiation parser
 
 This module implements all functionality necessary to parse C++ template
 instantiations.In other words this module is able to extract next information from
-the string like this C{ std::vector<int> }.
-    - name ( std::vector )
-    - list of arguments ( int )
+the string like this `std::vector<int>`.
+    - name ( `std::vector` )
+    - list of arguments ( `int` )
 
 This module also defines few convenience function like :func:split and :func:join.
 """

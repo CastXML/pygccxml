@@ -84,7 +84,7 @@ def decompose_class(type):
 def base_type(type):
     """returns base type.
 
-    For C{const int} will return C{int}
+    For `const int` will return `int`
     """
     types = decompose_type( type )
     return types[-1]
@@ -115,15 +115,15 @@ def does_match_definition(given, main, secondary ):
         return False
 
 def is_bool( type_ ):
-    """returns True, if type represents C{bool}, False otherwise"""
+    """returns True, if type represents `bool`, False otherwise"""
     return remove_alias( type_ ) in create_cv_types( cpptypes.bool_t() )
 
 def is_void( type ):
-    """returns True, if type represents C{void}, False otherwise"""
+    """returns True, if type represents `void`, False otherwise"""
     return remove_alias( type ) in create_cv_types( cpptypes.void_t() )
 
 def is_void_pointer( type ):
-    """returns True, if type represents C{void*}, False otherwise"""
+    """returns True, if type represents `void*`, False otherwise"""
     return is_same( type, cpptypes.pointer_t( cpptypes.void_t() ) )
 
 def is_integral( type ):
@@ -889,8 +889,9 @@ def is_noncopyable( class_ ):
         return __is_noncopyable_single( class_ )
 
 def is_defined_in_xxx( xxx, cls ):
-    """small helper function, that checks whether class ( C{cls} ) is defined
-    under C{::xxx} namespace"""
+    """
+    small helper function, that checks whether the class `cls` is defined under `::xxx` namespace
+    """    
     if not cls.parent:
         return False
 

@@ -94,12 +94,14 @@ class or_matcher_t(matcher_base_t):
 
 
 class not_matcher_t(matcher_base_t):
-    """Return the inverse result of matcher, using "~"
+    """
+    return the inverse result of a matcher
 
-    For example: find all private and protected declarations
+    For example: find all public and protected declarations
 
-    C{ matcher = ~access_type_matcher_t( 'private' ) }
+	.. code-block:: python
 
+       matcher = ~access_type_matcher_t( 'private' )
     """
     def __init__(self, matcher):
         matcher_base_t.__init__(self)
@@ -343,7 +345,6 @@ class calldef_matcher_t( declaration_matcher_t ):
         reference to integer and second any
 
         :type arg_types: list
-
         """
         if None is decl_type:
             decl_type = calldef.calldef_t

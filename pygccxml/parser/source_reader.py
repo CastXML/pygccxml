@@ -28,7 +28,7 @@ def bind_aliases( decls ):
     This function binds between class and it's typedefs.
 
     :param decls: list of all declarations
-    :type all_classes: list of L{declaration_t} items
+    :type all_classes: list of :class:`declarations.declaration_t` items
 
     :rtype: None
     """

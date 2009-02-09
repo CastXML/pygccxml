@@ -227,7 +227,11 @@ class match_declaration_t:
         return answer
 
     def __call__(self, inst):
-        """C{return self.does_match_exist(inst)}"""
+        """
+        .. code-block:: python
+        
+           return self.does_match_exist(inst)
+        """
         return self.does_match_exist(inst)
 
 def find_all_declarations( declarations

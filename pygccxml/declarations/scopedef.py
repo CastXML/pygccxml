@@ -18,7 +18,7 @@ class scopedef_t( declaration.declaration_t ):
     Base class for :class:`namespace_t` and :class:`class_t` classes.
 
     This is the base class for all declaration classes that may have
-    children nodes. The children can be accessed via the C{declarations}
+    children nodes. The children can be accessed via the :attr:`scopedef_t.declarations`
     property.
 
     Also this class provides "get/select/find" interface. Using this class you
@@ -84,7 +84,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def _get_logger( self ):
         return utils.loggers.queries_engine
-    _logger = property( _get_logger, doc="reference to C{queries_engine} logger" )
+    _logger = property( _get_logger, doc="reference to :attr:`pygccxml.utils.loggers.queries_engine` logger" )
 
     def _get__cmp__scope_items(self):
         """implementation details"""

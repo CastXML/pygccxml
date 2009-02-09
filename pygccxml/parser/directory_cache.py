@@ -10,8 +10,8 @@
 
 This module contains the implementation of a cache that uses individual
 files stored in a dedicated cache directory to store the cached contents.
-The cache class is L{directory_cache_t} which can be passed to the C{cache}
-argument of the L{parse()} function.
+The cache class is :class:`parser.directory_cache_t` which can be passed as the `cache`
+argument of the :func:`parser.parse` function.
 """
 
 import os, os.path, gzip, hashlib
@@ -257,7 +257,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param filename: Output file name
         :type filename: str
         :param data: A Python object that will be pickled
-        :type data: picklable object
+        :type data: pickable object
         """
         if self.__compression:
             f = gzip.GzipFile(filename, "wb")
@@ -270,7 +270,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """Remove an entry from the cache.
 
         source_file is the name of the header and key is its corresponding
-        cache key (obtained by a call to L{_create_cache_key()}).
+        cache key (obtained by a call to :meth:_create_cache_key ).
         The entry is removed from the index table, any referenced file
         name is released and the cache file is deleted.
 
@@ -334,7 +334,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         undefine_symbols.
 
         :param config: Configuration object
-        :type config: L{config_t}
+        :type config: :class:`parser.config_t`
         :rtype: str
         """
         m = hashlib.md5()

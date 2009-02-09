@@ -128,9 +128,11 @@ class declaration_t( object ):
 
     def __lt__(self, other):
         """
-        C{if not isinstance( other, self.__class__ ):}
-        C{    return self.__class__.__name__ < other.__class__.__name__}
-        C{return self._get__cmp__data() < other._get__cmp__data()}
+        .. code-block:: python
+        
+           if not isinstance( other, self.__class__ ):
+               return self.__class__.__name__ < other.__class__.__name__
+           return self._get__cmp__data() < other._get__cmp__data()          
         """
         if not isinstance( other, self.__class__ ):
             return self.__class__.__name__ < other.__class__.__name__

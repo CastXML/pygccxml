@@ -354,7 +354,7 @@ of class that describes the type
 ## Compaund types:
 
 class compound_t( type_t ):
-    """class that allows to represent compound types like C{const int*}"""
+    """class that allows to represent compound types like `const int*`"""
     def __init__( self, base ):
         type_t.__init__( self )
         self._base = base
@@ -368,7 +368,7 @@ class compound_t( type_t ):
                      , doc="reference to internal/base class")
 
 class volatile_t( compound_t ):
-    """represents C{volatile whatever} type"""
+    """represents `volatile whatever` type"""
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
@@ -379,7 +379,7 @@ class volatile_t( compound_t ):
         return volatile_t( self.base.clone() )
 
 class restrict_t( compound_t ):
-    """represents C{restrict whatever} type"""
+    """represents `restrict whatever` type"""
 
     #The restrict keyword can be considered an extension to the strict aliasing
     #rule. It allows the programmer to declare that pointers which share the same
@@ -400,7 +400,7 @@ class restrict_t( compound_t ):
         return restrict_t( self.base.clone() )
 
 class const_t( compound_t ):
-    """represents C{whatever const} type"""
+    """represents `whatever const` type"""
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
@@ -411,7 +411,7 @@ class const_t( compound_t ):
         return const_t( self.base.clone() )
 
 class pointer_t( compound_t ):
-    """represents C{whatever*} type"""
+    """represents `whatever*` type"""
     def __init__( self, base ):
         compound_t.__init__( self, base )
 
@@ -422,7 +422,7 @@ class pointer_t( compound_t ):
         return pointer_t( self.base.clone() )
 
 class reference_t( compound_t ):
-    """represents C{whatever&} type"""
+    """represents `whatever&` type"""
     def __init__( self, base ):
         compound_t.__init__( self, base)
 
