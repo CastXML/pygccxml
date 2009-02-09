@@ -6,11 +6,13 @@
 # The initial version of the directory_cache_t class was written
 # by Matthias Baas (baas@ira.uka.de).
 
-"""Directory cache implementation.
+"""
+directory cache implementation.
 
 This module contains the implementation of a cache that uses individual
-files stored in a dedicated cache directory to store the cached contents.
-The cache class is :class:`parser.directory_cache_t` which can be passed as the `cache`
+files, stored in a dedicated cache directory, to store the cached contents.
+
+The :class:`parser.directory_cache_t` class instance could be passed as the `cache`
 argument of the :func:`parser.parse` function.
 """
 
@@ -19,9 +21,10 @@ import cPickle
 import declarations_cache
 
 class index_entry_t:
-    """Entry of the index table in the directory cache index.
+    """
+    Entry of the index table in the directory cache index.
 
-    Each cached header file (i.e. each *.cache file) has a corresponding
+    Each cached header file (i.e. each .cache file) has a corresponding
     index_entry_t object. This object is used to determine whether the
     cache file with the declarations is still valid or not.
 
@@ -48,9 +51,9 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
     The cache stores one index file called `index.dat` which is always
     read by the cache when the cache object is created. Each header file
-    will have its corresponding *.cache file that stores the declarations
+    will have its corresponding .cache file that stores the declarations
     found in the header file. The index file is used to determine whether
-    a *.cache file is still valid or not (by checking if one of the dependent
+    a .cache file is still valid or not (by checking if one of the dependent
     files (i.e. the header file itself and all included files) have been
     modified since the last run).
     """
