@@ -9,8 +9,10 @@ defines few simple classes( parsers ), which deals with .dll, .map, .so files.
 
 Those classes extract decorated\mangled names from the files. Later the extracted
 symbols are used for:
-* building "dynamic library" public interface
-* extracting function calling convention
+
+   * building "dynamic library" public interface
+   * extracting function calling convention
+
 """
 
 import os

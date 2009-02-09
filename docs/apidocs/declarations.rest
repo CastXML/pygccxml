@@ -2,176 +2,184 @@
 pygccxml.declarations package
 =============================
 
-algorithm
----------
+declarations package
+--------------------
+
+.. automodule:: pygccxml.declarations
+    :members:
+    :show-inheritance:
+
+
+algorithm module
+----------------
 
 .. automodule:: pygccxml.declarations.algorithm
     :members:
     :show-inheritance:
 
-algorithms_cache
-----------------
+algorithms_cache module
+-------------------------
 
 .. automodule:: pygccxml.declarations.algorithms_cache
     :members:
     :show-inheritance:
 
-calldef
--------
+calldef module
+----------------
 
 .. automodule:: pygccxml.declarations.calldef
     :members:
     :show-inheritance:
 
-call_invocation
----------------
+call_invocation module
+------------------------
 
 .. automodule:: pygccxml.declarations.call_invocation
     :members:
     :show-inheritance:
 
-class_declaration
------------------
+class_declaration module
+--------------------------
 
 .. automodule:: pygccxml.declarations.class_declaration
     :members:
     :show-inheritance:
 
-compilers
----------
+compilers module
+------------------
 
 .. automodule:: pygccxml.declarations.compilers
     :members:
     :show-inheritance:
 
-container_traits
-----------------
+container_traits module
+-------------------------
 
 .. automodule:: pygccxml.declarations.container_traits
     :members:
     :show-inheritance:
 
-cpptypes
---------
+cpptypes module
+-----------------
 
 .. automodule:: pygccxml.declarations.cpptypes
     :members:
     :show-inheritance:
 
-declaration
------------
+declaration module
+--------------------
 
 .. automodule:: pygccxml.declarations.declaration
     :members:
     :show-inheritance:
 
-decl_factory
-------------
+decl_factory module
+---------------------
 
 .. automodule:: pygccxml.declarations.decl_factory
     :members:
     :show-inheritance:
 
-decl_printer
-------------
+decl_printer module
+---------------------
 
 .. automodule:: pygccxml.declarations.decl_printer
     :members:
     :show-inheritance:
 
-decl_visitor
-------------
+decl_visitor module
+---------------------
 
 .. automodule:: pygccxml.declarations.decl_visitor
     :members:
     :show-inheritance:
 
-dependencies
-------------
+dependencies module
+---------------------
 
 .. automodule:: pygccxml.declarations.dependencies
     :members:
     :show-inheritance:
 
-enumeration
------------
+enumeration module
+--------------------
 
 .. automodule:: pygccxml.declarations.enumeration
     :members:
     :show-inheritance:
 
-function_traits
----------------
+function_traits module
+------------------------
 
 .. automodule:: pygccxml.declarations.function_traits
     :members:
     :show-inheritance:
 
-matcher
--------
+matcher module
+----------------
 
 .. automodule:: pygccxml.declarations.matcher
     :members:
     :show-inheritance:
 
-matchers
---------
+matchers module
+-----------------
 
 .. automodule:: pygccxml.declarations.matchers
     :members:
     :show-inheritance:
 
-mdecl_wrapper
--------------
+mdecl_wrapper module
+----------------------
 
 .. automodule:: pygccxml.declarations.mdecl_wrapper
     :members:
     :show-inheritance:
 
-namespace
----------
+namespace module
+------------------
 
 .. automodule:: pygccxml.declarations.namespace
     :members:
     :show-inheritance:
 
-scopedef
---------
+scopedef module
+-----------------
 
 .. automodule:: pygccxml.declarations.scopedef
     :members:
     :show-inheritance:
 
-templates
----------
+templates module
+------------------
 
 .. automodule:: pygccxml.declarations.templates
     :members:
     :show-inheritance:
 
-typedef
--------
+typedef module
+----------------
 
 .. automodule:: pygccxml.declarations.typedef
     :members:
     :show-inheritance:
 
-type_traits
------------
+type_traits module
+--------------------
 
 .. automodule:: pygccxml.declarations.type_traits
     :members:
     :show-inheritance:
 
-type_visitor
-------------
+type_visitor module
+---------------------
 
 .. automodule:: pygccxml.declarations.type_visitor
     :members:
     :show-inheritance:
 
-variable
---------
+variable module
+---------------
 
 .. automodule:: pygccxml.declarations.variable
     :members:

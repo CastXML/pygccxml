@@ -5,9 +5,9 @@
 
 """
 contains classes that allows to extract different information from binary files
-( .pdb, .map, .dll, .bsc, .so ) and integrate it with existing declarations tree
+( .map, .dll, .so ) and integrate it with existing declarations tree
 
-The main function of this package is "merge_information"
+The main function of this package is :func:`pygccxml.binary_parsers.parsers.merge_information`.
 """
 
 import undname
@@ -18,7 +18,8 @@ def undecorate_blob( blob ):
     return undname.undname_creator_t().undecorate_blob( blob )
 
 def format_decl( decl, hint=None ):
-    """returns string, that represents formatted declaration, according to some rules
-    hint valid values are: "msvc" and "nm"
+    """
+    returns string, that represents formatted declaration, according to some rules
+    :param hint: valid values are: "msvc" and "nm"
     """
     return undname.undname_creator_t().format_decl( decl, hint=hint )

@@ -4,8 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 """
-defines logger classes and few convenience methods, not related to the declarations
-tree
+defines logger classes and few convenience methods, not related to the declarations tree
 """
 
 import os

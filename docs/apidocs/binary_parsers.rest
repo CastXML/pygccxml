@@ -2,8 +2,15 @@
 pygccxml.binary_parsers API
 ===========================
 
-parsers
--------
+binary_parsers package
+----------------------
+
+.. automodule:: pygccxml.binary_parsers
+    :members:
+    :show-inheritance:
+
+parsers module
+--------------
 
 .. automodule:: pygccxml.binary_parsers.parsers
     :members:

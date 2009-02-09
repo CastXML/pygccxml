@@ -1,4 +1,4 @@
-﻿======================
+======================
 pygccxml documentation
 ======================
 
@@ -17,12 +17,12 @@ Introduction
 ------------------------
 What can you do with it?
 ------------------------
-Using :doc:`pygccxml <pygccxml>` you can:
+Using `pygccxml` you can:
 
 * parse C++ source code
 * create a powerful code generator
 
-  + :doc:`Py++ <../pyplusplus/pyplusplus>` is heavily based on :doc:`pygccxml <pygccxml>`
+  + :doc:`Py++ <../pyplusplus/pyplusplus>` is heavily based on `pygccxml`
   + generate `WSDL`_ file from sources
   + ...
 
@@ -36,8 +36,9 @@ Features
 
 Query interface
 ---------------
-:doc:`pygccxml <pygccxml>` provides simple and powerful API to query declarations tree. How many
-lines is needed to write the following query?
+`pygccxml` provides simple and powerful API to query declarations tree.
+
+How many lines is needed to write the following query?
 ::
 
   select all free functions from the project
@@ -47,7 +48,7 @@ lines is needed to write the following query?
       function has two arguments
       second argument type is int
 
-Only 1 ( one ) line of code is needed:
+Only single line of code is needed:
 
 .. code-block:: python
 
@@ -61,7 +62,7 @@ document or :doc:`API documentation <apidocs/api>`
 
 Type traits
 -----------
-:doc:`pygccxml <pygccxml>` provides a lot of functionality to analyze C++ types and relationship
+`pygccxml` provides a lot of functionality to analyze C++ types and relationship
 between them. For more information please refer to :doc:`design <design>` document or API
 documentation. Just a few names of algorithms:
 
@@ -92,7 +93,7 @@ day. There are 2 possible ways to complete the task:
 * parse each file separately and then join the results
 
 The difference between these approaches is the caching algorithm used in the
-second case. :doc:`pygccxml <pygccxml>` supports both of them. Actually :doc:`pygccxml <pygccxml>` supports
+second case. `pygccxml` supports both of them. Actually `pygccxml` supports
 more caching strategies, read the API documentation for more information.
 
 
@@ -106,7 +107,7 @@ License
 Test environment
 ----------------
 
-:doc:`pygccxml <pygccxml>` comes with comprehensive unit tests. They are executed on Windows XP
+`pygccxml` comes with comprehensive unit tests. They are executed on Windows XP
 and `Ubuntu`_ Linux operating systems. In most cases Python 2.5 and 2.6 are used.
 All in all, `pygccxml` has more than 230 tests.
 
@@ -119,9 +120,9 @@ pygccxml documentation contents
 .. toctree::
 
    example/example.rest
+   query_interface.rest
    download.rest
    design.rest
-   query_interface.rest
    upgrade_issues.rest
    users.rest
    links.rest
