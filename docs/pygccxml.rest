@@ -114,7 +114,7 @@ All in all, `pygccxml` has more than 230 tests.
 Support for Python 2.4 was dropped.
 
 -------------------------------
-pygccxml documentation contents
+Documentation contents
 -------------------------------
 
 .. toctree::

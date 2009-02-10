@@ -2,15 +2,19 @@
 pygccxml.utils package
 ======================
 
-utils package
--------------
+--------
+Overview
+--------
 
 .. automodule:: pygccxml.utils
     :members:
     :show-inheritance:
 
+--------
+Modules
+--------
 
-fs_utils module
+fs_utils
 ---------------
 
 .. automodule:: pygccxml.utils.fs_utils

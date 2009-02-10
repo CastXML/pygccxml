@@ -2,42 +2,47 @@
 pygccxml.parser package
 =======================
 
-parser package
---------------
+--------
+Overview
+--------
 
 .. automodule:: pygccxml.parser
     :members:
     :show-inheritance:
 
-config module
+--------
+Modules
+--------
+
+config
 ---------------
 
 .. automodule:: pygccxml.parser.config
     :members:
     :show-inheritance:
 
-declarations_cache module
+declarations_cache
 ----------------------------
 
 .. automodule:: pygccxml.parser.declarations_cache
     :members:
     :show-inheritance:
 
-directory_cache module
+directory_cache
 ------------------------
 
 .. automodule:: pygccxml.parser.directory_cache
     :members:
     :show-inheritance:
 
-patcher module
+patcher
 ----------------
 
 .. automodule:: pygccxml.parser.patcher
     :members:
     :show-inheritance:
 
-project_reader module
+project_reader
 ---------------------
 
 .. automodule:: pygccxml.parser.project_reader
@@ -45,7 +50,7 @@ project_reader module
     :show-inheritance:
 
 
-source_reader module
+source_reader
 ----------------------
 
 .. automodule:: pygccxml.parser.source_reader

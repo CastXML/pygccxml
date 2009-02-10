@@ -3,9 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-"""
-defines logger classes and few convenience methods, not related to the declarations tree
-"""
+"""defines logger classes and few convenience methods, not related to the declarations tree"""
 
 import os
 import sys
@@ -37,9 +35,9 @@ class loggers:
     gccxml = cxx_parser #backward compatability
 
     pdb_reader = _create_logger_( 'pygccxml.pdb_reader' )
-    """logger for MS .pdb file reader functionality
     """
-
+    logger for MS .pdb file reader functionality
+    """
 
     queries_engine = _create_logger_( 'pygccxml.queries_engine' )
     """logger for query engine functionality.
@@ -136,13 +134,18 @@ class cached(property):
                 delattr(self, name)
 
 class enum( object ):
-    """Usage example:
-        class fruits(enum):
-            apple = 0
-            orange = 1
+    """
+    Usage example:
+    
+    .. code-block:: python
 
-        fruits.has_value( 1 )
-        fruits.name_of( 1 )
+       class fruits(enum):
+           apple = 0
+           orange = 1
+
+       fruits.has_value( 1 )
+       fruits.name_of( 1 )
+
     """
 
     @classmethod
@@ -163,7 +166,7 @@ class enum( object ):
                                 % ( enum_numeric_value, cls.__name__ ) )
 
 class native_compiler:
-    """provides information about "native compiler", which was used to build this Python executable"""
+    """provides information about the compiler, which was used to build the Python executable"""
 
     @staticmethod
     def get_version():
