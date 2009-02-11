@@ -331,7 +331,6 @@ class declaration_xxx_traits:
 
         Precondition: self.is_my_case( type ) == True
         """
-        assert self.is_my_case( type_ )
         return self.__apply_sequence( type_ )
 
 enum_traits = declaration_xxx_traits( enumeration.enumeration_t )

@@ -271,9 +271,48 @@ class missing_decls_tester_t(unittest.TestCase):
         #~ declarations.print_declarations( [declarations.class_traits.get_declaration( x )] )
 
 
+class class_traits_tester_t(unittest.TestCase):
+    def __init__(self, *args ):
+        unittest.TestCase.__init__(self, *args)
+            
+    def test(self):
+        code = """
+            namespace A{
+            struct B{
+                int c;
+            };
+
+            template <class T>
+            struct C: public T{
+                int d;
+            };
+
+            template <class T>
+            struct D{
+                int dD;
+            };
+
+            typedef C<B> easy;
+            typedef D<easy> Deasy;
+
+            inline void instantiate(){
+                sizeof(easy);
+            }
+
+            }
+        """
+
+        global_ns = parser.parse_string( code, autoconfig.cxx_parsers_cfg.gccxml)
+        global_ns = declarations.get_global_namespace( global_ns )
+        easy = global_ns.typedef( 'easy' )
+        c_a = declarations.class_traits.get_declaration( easy )  #this works very well
+        deasy = global_ns.typedef( 'Deasy' )
+        d_a = declarations.class_traits.get_declaration( deasy )  
+        self.failUnless( isinstance( d_a, declarations.class_types ) )
+        
 def create_suite():
     suite = unittest.TestSuite()
-    #~ suite.addTest( unittest.makeSuite(tester_diff_t))
+    suite.addTest( unittest.makeSuite(class_traits_tester_t))
     suite.addTest( unittest.makeSuite(tester_t))
     suite.addTest( unittest.makeSuite(missing_decls_tester_t))
     return suite
