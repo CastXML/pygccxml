@@ -289,7 +289,7 @@ query method, you can take a look on API documentation or into source code.
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
-.. _`UML diagram` : ./declarations_uml.png
-.. _`parser package UML diagram` : ./parser_uml.png
+.. _`UML diagram` : declarations_uml.png
+.. _`parser package UML diagram` : parser_uml.png
 .. _`ReleaseForge` : http://releaseforge.sourceforge.net
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html
