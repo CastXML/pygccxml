@@ -1,6 +1,6 @@
-======================
-pygccxml documentation
-======================
+================
+pygccxml package
+================
 
 .. meta::
    :description: C++ declarations parser
