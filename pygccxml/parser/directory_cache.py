@@ -460,7 +460,7 @@ class filename_repository_t:
             del self.__id_lut[entry.filename]
 
     def is_file_modified(self, id_, signature):
-        """Check if the file referred to by id_ has been modified.
+        """Check if the file referred to by `id_` has been modified.
         """
         entry = self.__entries.get(id_)
         if entry==None:
@@ -479,7 +479,7 @@ class filename_repository_t:
         return filesig!=signature
 
     def update_id_counter(self):
-        """Update the id_ counter so that it doesn't grow forever.
+        """Update the `id_` counter so that it doesn't grow forever.
         """
         if len(self.__entries)==0:
             self.__next_id = 1

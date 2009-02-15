@@ -254,9 +254,9 @@ def remove_const(type):
         return nake_type.base
 
 def remove_declarated( type_ ):
-    """removes type-declaration class-binder :class:`declarated_t` from the type_
+    """removes type-declaration class-binder :class:`declarated_t` from the `type_`
 
-    If type_ is not :class:`declarated_t`, it will be returned as is
+    If `type_` is not :class:`declarated_t`, it will be returned as is
     """
     type_ = remove_alias( type_ )
     if isinstance( type_, cpptypes.declarated_t ):
@@ -426,7 +426,7 @@ def has_any_non_copyconstructor( type):
         return decls
 
 def has_public_binary_operator( type_, operator_symbol ):
-    """returns True, if type_ has public binary operator, otherwise False"""
+    """returns True, if `type_` has public binary operator, otherwise False"""
     not_artificial = lambda decl: not decl.is_artificial
     type_ = remove_alias( type_ )
     type_ = remove_cv( type_ )
