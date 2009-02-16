@@ -22,7 +22,7 @@ a reference to an integer. More over, I want those functions names to end with
   query = query & ~declarations.access_type_matcher_t( 'public' )
   global_ns.member_functions( function=query, arg_types=[None, 'int &'] )
 
-The example is complex, but still readable. In many cases you will find 
+The example is complex, but still readable. In many cases you will find
 yourself, looking for one or many declarations, using one or two declaration properties.
 For example:
 
@@ -38,11 +38,16 @@ User interface
 
 As you already know, ``pygccxml.declarations`` package defines the following classes:
 
-* ``scopedef_t`` - base class for all classes, that can contain other declarations
+* :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` - base class
+  for all classes, that can contain other declarations
 
-* ``namespace_t`` - derives from ``scopedef_t`` class, represents C++ namespace
+* :class:`namespace_t  <pygccxml.declarations.namespace.namespace_t>` - derives
+  from :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` class,
+  represents C++ namespace
 
-* ``class_t`` - derives from ``scopedef_t`` class, represents C++ class/struct/union.
+* :class:`class_t  <pygccxml.declarations.class_declaration.class_t>` - derives
+  from :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` class,
+  represents C++ class/struct/union.
 
 So, the query methods defined on ``scopedef_t`` class could be used on instances
 of ``class_t`` and ``namespace_t`` classes. I am sure you knew that.
@@ -64,9 +69,9 @@ methods:
                         header_dir=None,
                         header_file=None,
                         recursive=None )
-  
+
   mem_fun = member_function #just an alias
-  
+
   def member_functions( self,
                         name=None,
                         function=None,
@@ -76,7 +81,7 @@ methods:
                         header_file=None,
                         recursive=None,
                         allow_empty=None )
-  mem_funs = member_functions 
+  mem_funs = member_functions
 
 
 As you can see, from the method arguments you can search for member function
@@ -106,13 +111,13 @@ by:
 
   * ``return_type``
 
-    the function return type. This argument can be string or an object that describes 
+    the function return type. This argument can be string or an object that describes
     C++ type.
 
     .. code-block:: python
 
       mem_funcs = my_class.member_functions( return_type='int' )
-      
+
       i = declarations.int_t()
       ref_i = declarations.reference_t( i )
       const_ref_i = declarations.const_t( ref_i )
@@ -128,7 +133,7 @@ by:
 
     .. code-block:: python
 
-      mem_funcs = my_class.member_functions( arg_types=[ None, 'int'] ) 
+      mem_funcs = my_class.member_functions( arg_types=[ None, 'int'] )
 
     ``mem_funcs`` will contain all member functions, which have two arguments
     and type of second argument is ``int``.
@@ -286,10 +291,8 @@ query method, you can take a look on API documentation or into source code.
 .. _`call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 .. _`Call policies`: http://boost.org/libs/python/doc/tutorial/doc/html/python/functions.html#python.call_policies
 
-.. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`UML diagram` : declarations_uml.png
 .. _`parser package UML diagram` : parser_uml.png
-.. _`ReleaseForge` : http://releaseforge.sourceforge.net
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html

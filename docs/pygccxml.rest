@@ -1,4 +1,4 @@
-================
+﻿================
 pygccxml package
 ================
 
@@ -95,6 +95,12 @@ day. There are 2 possible ways to complete the task:
 The difference between these approaches is the caching algorithm used in the
 second case. `pygccxml` supports both of them. Actually `pygccxml` supports
 more caching strategies, read the API documentation for more information.
+
+Binary files parser
+-------------------
+`pygccxml` contains functionality which allows to extract different information
+from binary files ( `.map`, `.dll`, `.so` ) and integrate it with the existing
+declarations tree.
 
 
 -------
