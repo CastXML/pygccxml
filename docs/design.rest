@@ -6,13 +6,18 @@ pygccxml design
 The view from 10000 fits
 ------------------------
 
-:doc:`pygccxml <pygccxml>` has 3 packages:
+:doc:`pygccxml <pygccxml>` has 4 packages:
 
-* ``declarations`` package defines classes that describe C++ declarations and types
+* :mod:`declarations <pygccxml.declarations>` package defines classes that describe 
+  C++ declarations and types
 
-* ``parser`` package defines classes that parse `GCC-XML`_ generated files. Also
-  it defines few classes that will help you to eliminate unnecessary parsing of
-  C++ source files.
+* :mod:`parser <pygccxml.parser>` package defines classes that parse `GCC-XML`_ 
+  generated files. Also it defines few classes that will help you to eliminate 
+  unnecessary parsing of C++ source files.
+
+* :mod:`binary_parsers <pygccxml.binary_parsers>` package extracts some 
+  information from binary files ( `.so`, `.dll`, `.map` ) and merges it with
+  the declarations tree.
 
 * ``utils`` package defines few functions, I found useful in the whole project.
 
@@ -20,7 +25,7 @@ The view from 10000 fits
 ``declarations`` package
 -------------------------
 
-Please take a look on `UML diagram`_. This `UML diagram`_ describes almost all
+Please take a look on the `UML diagram`_. This `UML diagram`_ describes almost all
 classes defined in the package and their relationship. ``declarations`` package
 defines two hierarchies of class:
 
