@@ -32,7 +32,8 @@ Version 1.1
 2. Ability to extract different information from binary files ( ``.pdb``, ``.so``,
    ``.map`` ) and merge it with a declarations tree was added.
 
-3. Ability to load `GCC-XML`_ configuration from ``.ini`` like file was added
+3. Ability to load `GCC-XML`_ configuration from ``.ini`` like file was added.
+   See :func:`pygccxml.parser.config.load_gccxml_configuration` for details.
 
 4. From now on, :doc:`pygccxml <../pygccxml>` will use `Sphinx <http://sphinx.pocoo.org/>`_
    for all documentation.

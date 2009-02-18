@@ -198,7 +198,8 @@ class gccxml_configuration_t(parser_configuration_t):
 config_t = gccxml_configuration_t #backward computability
 
 gccxml_configuration_example = \
-"""[gccxml]
+"""
+[gccxml]
 #path to gccxml executable file - optional, if not provided, os.environ['PATH']
 #variable is used to find it
 gccxml_path=
@@ -210,24 +211,34 @@ include_paths=
 #You can explicitly set what compiler it should emulate.
 #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
 compiler=
-
-#GCC-XML site: http://gccxml.org/
 """
 
 def load_gccxml_configuration( configuration, **defaults ):
-    """loads GCC-XML configuration from a file
+    """
+    loads GCC-XML configuration from an `.ini` file or any other file class
+    :class:`ConfigParser.SafeConfigParser` is able to parse.
 
-    Configuration file sceleton:
+    :param configuration: configuration could be string( configuration file path )
+                          or instance of :class:`ConfigParser.SafeConfigParser` class
 
-    >>> start <<<
+    :rtype: :class:`.gccxml_configuration_t`
 
-    %s
+    Configuration file sceleton::
 
-    >>> end <<<
+       [gccxml]
+       #path to gccxml executable file - optional, if not provided, os.environ['PATH']
+       #variable is used to find it
+       gccxml_path=
+       #gccxml working directory - optional, could be set to your source code directory
+       working_directory=
+       #additional include directories, separated by ';' or ':'
+       include_paths=
+       #gccxml has a nice algorithms, which selects what C++ compiler to emulate.
+       #You can explicitly set what compiler it should emulate.
+       #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
+       compiler=
 
-    configuration could be string( configuration file path ) or instance of
-    ConfigParser.SafeConfigParser class
-    """ % gccxml_configuration_example
+    """
     parser = configuration
     if isinstance( configuration, types.StringTypes ):
         from ConfigParser import SafeConfigParser
