@@ -22,7 +22,6 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Ben Schleimer
 * Gustavo Carneiro
 
-
 -----------
 Version 1.1
 -----------
@@ -37,6 +36,12 @@ Version 1.1
 
 4. From now on, :doc:`pygccxml <../pygccxml>` will use `Sphinx <http://sphinx.pocoo.org/>`_
    for all documentation.
+
+5. From now on, `pygccxml` will provide convenient setup for latest `GCC-XML`_
+   version (CVS). See :doc:`download <../download>` document.
+
+6. Bug `[ 2431993 ] pygccxml parses const volatile variable args as just const <http://sourceforge.net/tracker/index.php?func=detail&aid=2431993&group_id=118209&atid=684318>`_
+   was fixed.
 
 -----------
 Version 1.0
