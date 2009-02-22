@@ -321,10 +321,10 @@ class namespace_matcher_t( declaration_matcher_t ):
 
 class calldef_matcher_t( declaration_matcher_t ):
     """
-    Instance of this class will match callable by next criteria:
-        - :class:`declaration_matcher_t` criteria
-        - return type. Example: :class:`int_t` or 'int'
-        - argument types
+    Instance of this class will match callable by the following criteria:
+        * :class:`declaration_matcher_t` criteria
+        * return type. For example: :class:`int_t` or 'int'
+        * argument types
     """
 
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
@@ -407,8 +407,8 @@ class calldef_matcher_t( declaration_matcher_t ):
 class operator_matcher_t( calldef_matcher_t ):
     """
     Instance of this class will match operators by next criteria:
-        - :class:`calldef_matcher_t` criteria
-        - operator symbol: =, !=, (), [] and etc
+        * :class:`calldef_matcher_t` criteria
+        * operator symbol: =, !=, (), [] and etc
     """
     def __init__( self, name=None, symbol=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
         """
@@ -479,14 +479,13 @@ class access_type_matcher_t( matcher_base_t ):
     """
     Instance of this class will match declaration by its access type: public,
     private or protected. If declarations does not have access type, for example
-    free function, then False will be returned.
+    free function, then `False` will be returned.
     """
 
     def __init__( self, access_type ):
         """
-        :param access_type: declaration access type
-        :type access_type: :class:ACCESS_TYPES defines few constants for your convenience.
-        Any way you can pass public, private or protected as argument to this function
+        :param access_type: declaration access type, could be "public", "private", "protected"
+        :type access_type: :class: `str`
         """
         matcher_base_t.__init__( self )
         self.access_type = access_type

@@ -8,6 +8,7 @@ Overview
 
 .. automodule:: pygccxml.utils
     :members:
+    :undoc-members:
     :show-inheritance:
 
 --------
@@ -19,5 +20,6 @@ fs_utils
 
 .. automodule:: pygccxml.utils.fs_utils
     :members:
+    :undoc-members:
     :show-inheritance:
 

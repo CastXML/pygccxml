@@ -8,6 +8,7 @@ Overview
 
 .. automodule:: pygccxml.declarations
     :members:
+    :undoc-members:
     :show-inheritance:
 
 --------
@@ -19,6 +20,7 @@ algorithm
 
 .. automodule:: pygccxml.declarations.algorithm
     :members:
+    :undoc-members:
     :show-inheritance:
 
 algorithms_cache
@@ -26,6 +28,7 @@ algorithms_cache
 
 .. automodule:: pygccxml.declarations.algorithms_cache
     :members:
+    :undoc-members:
     :show-inheritance:
 
 calldef
@@ -33,6 +36,7 @@ calldef
 
 .. automodule:: pygccxml.declarations.calldef
     :members:
+    :undoc-members:
     :show-inheritance:
 
 call_invocation
@@ -40,6 +44,7 @@ call_invocation
 
 .. automodule:: pygccxml.declarations.call_invocation
     :members:
+    :undoc-members:
     :show-inheritance:
 
 class_declaration
@@ -47,6 +52,7 @@ class_declaration
 
 .. automodule:: pygccxml.declarations.class_declaration
     :members:
+    :undoc-members:
     :show-inheritance:
 
 compilers
@@ -54,6 +60,7 @@ compilers
 
 .. automodule:: pygccxml.declarations.compilers
     :members:
+    :undoc-members:
     :show-inheritance:
 
 container_traits
@@ -61,6 +68,7 @@ container_traits
 
 .. automodule:: pygccxml.declarations.container_traits
     :members:
+    :undoc-members:
     :show-inheritance:
 
 cpptypes
@@ -68,6 +76,7 @@ cpptypes
 
 .. automodule:: pygccxml.declarations.cpptypes
     :members:
+    :undoc-members:
     :show-inheritance:
 
 declaration
@@ -75,6 +84,7 @@ declaration
 
 .. automodule:: pygccxml.declarations.declaration
     :members:
+    :undoc-members:
     :show-inheritance:
 
 decl_factory
@@ -82,6 +92,7 @@ decl_factory
 
 .. automodule:: pygccxml.declarations.decl_factory
     :members:
+    :undoc-members:
     :show-inheritance:
 
 decl_printer
@@ -89,6 +100,7 @@ decl_printer
 
 .. automodule:: pygccxml.declarations.decl_printer
     :members:
+    :undoc-members:
     :show-inheritance:
 
 decl_visitor
@@ -96,6 +108,7 @@ decl_visitor
 
 .. automodule:: pygccxml.declarations.decl_visitor
     :members:
+    :undoc-members:
     :show-inheritance:
 
 dependencies
@@ -103,6 +116,7 @@ dependencies
 
 .. automodule:: pygccxml.declarations.dependencies
     :members:
+    :undoc-members:
     :show-inheritance:
 
 enumeration
@@ -110,6 +124,7 @@ enumeration
 
 .. automodule:: pygccxml.declarations.enumeration
     :members:
+    :undoc-members:
     :show-inheritance:
 
 function_traits
@@ -117,6 +132,7 @@ function_traits
 
 .. automodule:: pygccxml.declarations.function_traits
     :members:
+    :undoc-members:
     :show-inheritance:
 
 matcher
@@ -124,6 +140,7 @@ matcher
 
 .. automodule:: pygccxml.declarations.matcher
     :members:
+    :undoc-members:
     :show-inheritance:
 
 matchers
@@ -131,6 +148,7 @@ matchers
 
 .. automodule:: pygccxml.declarations.matchers
     :members:
+    :undoc-members:
     :show-inheritance:
 
 mdecl_wrapper
@@ -138,6 +156,7 @@ mdecl_wrapper
 
 .. automodule:: pygccxml.declarations.mdecl_wrapper
     :members:
+    :undoc-members:
     :show-inheritance:
 
 namespace
@@ -145,6 +164,7 @@ namespace
 
 .. automodule:: pygccxml.declarations.namespace
     :members:
+    :undoc-members:
     :show-inheritance:
 
 scopedef
@@ -152,6 +172,7 @@ scopedef
 
 .. automodule:: pygccxml.declarations.scopedef
     :members:
+    :undoc-members:
     :show-inheritance:
 
 templates
@@ -159,6 +180,7 @@ templates
 
 .. automodule:: pygccxml.declarations.templates
     :members:
+    :undoc-members:
     :show-inheritance:
 
 typedef
@@ -166,6 +188,7 @@ typedef
 
 .. automodule:: pygccxml.declarations.typedef
     :members:
+    :undoc-members:
     :show-inheritance:
 
 type_traits
@@ -173,6 +196,7 @@ type_traits
 
 .. automodule:: pygccxml.declarations.type_traits
     :members:
+    :undoc-members:
     :show-inheritance:
 
 type_visitor
@@ -180,6 +204,7 @@ type_visitor
 
 .. automodule:: pygccxml.declarations.type_visitor
     :members:
+    :undoc-members:
     :show-inheritance:
 
 variable
@@ -187,5 +212,6 @@ variable
 
 .. automodule:: pygccxml.declarations.variable
     :members:
+    :undoc-members:
     :show-inheritance:
 

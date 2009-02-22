@@ -243,16 +243,16 @@ class defaults_eraser:
 
 
 class container_traits_impl_t:
-    """this class implements the functionality needed for convenient work with
-    STD container classes.
+    """
+    implements the functionality needed for convenient work with STD container classes
 
     Implemented functionality:
-        - find out whether a declaration is STD container or not
-        - find out container value( mapped ) type
+      * find out whether a declaration is STD container or not
+      * find out container value( mapped ) type
 
     This class tries to be useful as much, as possible. For example, for class
     declaration( and not definition ) it parsers the class name in order to
-    extract all the information.
+    extract the information.
     """
     def __init__( self
                   , container_name
@@ -262,12 +262,11 @@ class container_traits_impl_t:
                   , key_type_index=None
                   , key_type_typedef=None ):
         """
-        container_name - std container name
-        element_type_index - position of value\\mapped type within template
-          arguments list
-        element_type_typedef - class typedef to the value\\mapped type
-        key_type_index - position of key type within template arguments list
-        key_type_typedef - class typedef to the key type
+        :param container_name: std container name
+        :param element_type_index: position of value\\mapped type within template arguments list
+        :param element_type_typedef: class typedef to the value\\mapped type
+        :param key_type_index: position of key type within template arguments list
+        :param key_type_typedef: class typedef to the key type
         """
         self._name = container_name
         self.remove_defaults_impl = defaults_remover
@@ -353,12 +352,18 @@ class container_traits_impl_t:
                                      , 'container_key_type' )
 
     def remove_defaults( self, type_or_string ):
-        """remove template defaults from a template class instantiation
+        """
+        removes template defaults from a template class instantiation
 
         For example:
-            std::vector< int, std::allocator< int > >
+            .. code-block:: c++
+
+               std::vector< int, std::allocator< int > >
+
         will become
-            std::vector< int >
+            .. code-block:: c++
+
+               std::vector< int >
         """
         name = type_or_string
         if not isinstance( type_or_string, types.StringTypes ):

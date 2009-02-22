@@ -8,6 +8,7 @@ Overview
 
 .. automodule:: pygccxml.binary_parsers
     :members:
+    :undoc-members:
     :show-inheritance:
 
 --------
@@ -19,4 +20,5 @@ parsers
 
 .. automodule:: pygccxml.binary_parsers.parsers
     :members:
+    :undoc-members:
     :show-inheritance:
