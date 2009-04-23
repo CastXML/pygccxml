@@ -231,7 +231,7 @@ def load_gccxml_configuration( configuration, **defaults ):
        gccxml_path=
        #gccxml working directory - optional, could be set to your source code directory
        working_directory=
-       #additional include directories, separated by ';' or ':'
+       #additional include directories, separated by ';'
        include_paths=
        #gccxml has a nice algorithms, which selects what C++ compiler to emulate.
        #You can explicitly set what compiler it should emulate.
@@ -264,10 +264,9 @@ def load_gccxml_configuration( configuration, **defaults ):
             gccxml_cfg.working_directory = value
         elif name == 'include_paths':
             for p in value.split( ';' ):
-                for pp in p.split( ':' ):
-                    pp = pp.strip()
-                    if pp:
-                        gccxml_cfg.include_paths.append( pp )
+                p = p.strip()
+                if p:
+                    gccxml_cfg.include_paths.append( p )
         elif name == 'compiler':
             gccxml_cfg.compiler = value
         else:
