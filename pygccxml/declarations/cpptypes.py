@@ -65,8 +65,6 @@ class type_t(object):
                           , doc="Size of this type in bytes @type: int")
 
     def _get_byte_align(self):
-        if self.compiler == compilers.MSVC_PDB_9:
-            compilers.on_missing_functionality( self.compiler, "byte align" )
         return self._byte_align
     def _set_byte_align( self, new_byte_align ):
         self._byte_align = new_byte_align

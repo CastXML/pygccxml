@@ -92,10 +92,7 @@ class core_t( parser_test_case.parser_test_case_t ):
 
     def _test_class_membership( self, class_inst, enum_name, access ):
         #getting enum through get_members function
-        if class_inst.compiler == compilers.MSVC_PDB_9:
-            nested_enum1 = class_inst.enum( name=enum_name )
-        else:
-            nested_enum1 = class_inst.enum( name=enum_name, function=access_type_matcher_t( access ) )
+        nested_enum1 = class_inst.enum( name=enum_name, function=access_type_matcher_t( access ) )
 
         #getting enum through declarations property
         nested_enum2 = class_inst.enum( enum_name )
@@ -188,10 +185,7 @@ class core_t( parser_test_case.parser_test_case_t ):
             if typedef.type.decl_string != fundamental_type.decl_string:
                 errors.append( "there is a difference between typedef base type name('%s') and expected one('%s')"
                                % (typedef.type.decl_string, fundamental_type.decl_string) )
-        if self.global_ns.compiler != compilers.MSVC_PDB_9:
-            self.failIf( errors, pprint.pformat( errors ) )
-        else:
-            self.failUnless( 5 == len( errors ), pprint.pformat( errors ) )
+        self.failIf( errors, pprint.pformat( errors ) )
 
     def test_compound_types(self):
         typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_int' )
@@ -261,13 +255,9 @@ class core_t( parser_test_case.parser_test_case_t ):
                          , "first argument of function of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
-        if self.global_ns.compiler != compilers.MSVC_PDB_9:
-            self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
+        self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
     def test_member_variable_type(self):
-        if self.global_ns.compiler == compilers.MSVC_PDB_9:
-            return
-
         mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')
         self._test_type_composition( mv.type, pointer_t, member_variable_type_t )
 
@@ -318,17 +308,12 @@ class core_t( parser_test_case.parser_test_case_t ):
 
     def test_byte_align( self ):
         mptrs = self.global_ns.class_( 'members_pointers_t' )
-        if mptrs.compiler != compilers.MSVC_PDB_9:
-            self.failUnless( mptrs.byte_align != 0 )
+        self.failUnless( mptrs.byte_align != 0 )
 
     def test_byte_offset( self ):
         mptrs = self.global_ns.class_( 'members_pointers_t' )
         self.failUnless( mptrs.var( 'xxx' ).byte_offset != 0 )
 
-class pdb_based_core_tester_t( core_t ):
-    def __init__(self, *args ):
-        core_t.__init__( self, *args )
-        self.global_ns = autoconfig.get_pdb_global_ns()
 
 class core_gccxml_t( core_t ):
     """Tests core algorithms of GCC-XML and GCC-XML file reader.
@@ -392,8 +377,6 @@ def create_suite():
         suite.addTest( unittest.makeSuite(core_all_at_once_no_opt_t))
         suite.addTest( unittest.makeSuite(core_file_by_file_t))
         suite.addTest( unittest.makeSuite(core_file_by_file_no_opt_t))
-    #~ if autoconfig.cxx_parsers_cfg.pdb_loader:
-        #~ suite.addTest( unittest.makeSuite(pdb_based_core_tester_t))
     return suite
 
 def run_suite():

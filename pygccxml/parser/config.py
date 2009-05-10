@@ -205,7 +205,7 @@ gccxml_configuration_example = \
 gccxml_path=
 #gccxml working directory - optional, could be set to your source code directory
 working_directory=
-#additional include directories, separated by ';' or ':'
+#additional include directories, separated by ';'
 include_paths=
 #gccxml has a nice algorithms, which selects what C++ compiler to emulate.
 #You can explicitly set what compiler it should emulate.

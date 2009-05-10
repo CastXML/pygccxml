@@ -276,33 +276,7 @@ class class_t( scopedef.scopedef_t ):
         return self._recursive_derived
 
     def _get_is_abstract(self):
-        if self.compiler == compilers.MSVC_PDB_9:
-            #prevent cyclic dependencies
-            import calldef
-            import function_traits
-            from matchers import virtuality_type_matcher_t as vtmatcher_t
-            filter_pv = vtmatcher_t( calldef.VIRTUALITY_TYPES.PURE_VIRTUAL )
-            if self.calldefs( filter_pv, recursive=False, allow_empty=True ):
-                return True
-            filter_npv = vtmatcher_t( calldef.VIRTUALITY_TYPES.VIRTUAL ) \
-                         | vtmatcher_t( calldef.VIRTUALITY_TYPES.NOT_VIRTUAL )
-            pv_calldefs = []
-            npv_calldefs = []
-
-            npv_calldefs.extend( self.calldefs( filter_npv, recursive=False, allow_empty=True ) )
-            for base in self.recursive_bases:
-                cls = base.related_class
-                pv_calldefs.extend( cls.calldefs( filter_pv, recursive=False, allow_empty=True ) )
-                npv_calldefs.extend( cls.calldefs( filter_npv, recursive=False, allow_empty=True ) )
-
-            for pure_virtual in pv_calldefs:
-                impl_found = filter( lambda f: function_traits.is_same_function( pure_virtual, f )
-                                     , npv_calldefs )
-                if not impl_found:
-                    return True
-            return False
-        else:
-            return self._is_abstract
+        return self._is_abstract
     def _set_is_abstract( self, is_abstract ):
         self._is_abstract = is_abstract
     is_abstract = property( _get_is_abstract, _set_is_abstract
@@ -344,8 +318,6 @@ class class_t( scopedef.scopedef_t ):
                           , doc="Size of this class in bytes @type: int")
 
     def _get_byte_align(self):
-        if self.compiler == compilers.MSVC_PDB_9:
-            compilers.on_missing_functionality( self.compiler, "byte align" )
         return self._byte_align
     def _set_byte_align( self, new_byte_align ):
         self._byte_align = new_byte_align

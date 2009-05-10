@@ -16,8 +16,6 @@ GCC_XML_09_BUGGY = "GCC-XML 0.9 BUGGY"
 #are dumped whether the user declared them or not.  Those that were
 #implicitly declared by the compiler are marked as "artificial".
 
-MSVC_PDB_9 = "MSVC PDB 9.0"
-
 def on_missing_functionality( compiler, functionality ):
     raise  NotImplementedError( '"%s" compiler doesn\'t support functionality "%s"'
                                 % ( compiler, functionality ))
