@@ -1,6 +1,6 @@
-===============================
-pygccxml.declarations query API
-===============================
+======================
+Declarations query API
+======================
 
 ------------
 Introduction

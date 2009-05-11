@@ -1,6 +1,6 @@
-============================
-pygccxml development history
-============================
+===================
+Development history
+===================
 
 ------------
 Contributors

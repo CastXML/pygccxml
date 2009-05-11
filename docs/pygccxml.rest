@@ -1,6 +1,6 @@
-﻿================
+﻿=================
 pygccxml package
-================
+=================
 
 .. meta::
    :description: C++ declarations parser
@@ -55,7 +55,7 @@ Only single line of code is needed:
   #global_ns is the reference to declarations, which describes global( :: ) namespace
   global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
 
-``None`` means "any type". In my opinion, the code is prety clear and readable.
+``None`` means "any type". In my opinion, the code is pretty clear and readable.
 
 If you want to know more about provided API read :doc:`query interface <query_interface>`
 document or :doc:`API documentation <apidocs/api>`
@@ -114,8 +114,8 @@ Test environment
 ----------------
 
 `pygccxml` comes with comprehensive unit tests. They are executed on Windows XP
-and `Ubuntu`_ Linux operating systems. In most cases Python 2.5 and 2.6 are used.
-All in all, `pygccxml` has more than 230 tests.
+and `Ubuntu`_ Linux operating systems. All in all, `pygccxml` has more than 230 tests.
+I am using Python 2.6 to run tests against.
 
 Support for Python 2.4 was dropped.
 
@@ -124,12 +124,13 @@ Documentation contents
 -------------------------------
 
 .. toctree::
+   :maxdepth: 1
 
-   example/example.rest
-   query_interface.rest
    download.rest
+   query_interface.rest
    design.rest
    upgrade_issues.rest
+   example/example.rest
    users.rest
    links.rest
    history/history.rest

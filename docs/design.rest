@@ -1,5 +1,5 @@
 ===============
-pygccxml design
+Design overview
 ===============
 
 ------------------------
@@ -8,14 +8,14 @@ The view from 10000 fits
 
 :doc:`pygccxml <pygccxml>` has 4 packages:
 
-* :mod:`declarations <pygccxml.declarations>` package defines classes that describe 
+* :mod:`declarations <pygccxml.declarations>` package defines classes that describe
   C++ declarations and types
 
-* :mod:`parser <pygccxml.parser>` package defines classes that parse `GCC-XML`_ 
-  generated files. Also it defines few classes that will help you to eliminate 
+* :mod:`parser <pygccxml.parser>` package defines classes that parse `GCC-XML`_
+  generated files. Also it defines few classes that will help you to eliminate
   unnecessary parsing of C++ source files.
 
-* :mod:`binary_parsers <pygccxml.binary_parsers>` package extracts some 
+* :mod:`binary_parsers <pygccxml.binary_parsers>` package extracts some
   information from binary files ( `.so`, `.dll`, `.map` ) and merges it with
   the declarations tree.
 
@@ -43,10 +43,10 @@ is the base class.
 ``type_traits``
 ~~~~~~~~~~~~~~~
 
-Are you aware of `boost::type_traits`_ library? The `boost::type_traits`_  
-library contains a set of very specific traits classes, each of which 
-encapsulate a single trait from the C++ type system; for example, is a type 
-a pointer or a reference? Or does a type have a trivial constructor, or a 
+Are you aware of `boost::type_traits`_ library? The `boost::type_traits`_
+library contains a set of very specific traits classes, each of which
+encapsulate a single trait from the C++ type system; for example, is a type
+a pointer or a reference? Or does a type have a trivial constructor, or a
 const-qualifier?
 
 :doc:`pygccxml <pygccxml>` implements a lot of functionality from the library:
@@ -228,10 +228,10 @@ object:
 Cache classes
 -------------
 
-There are few cache classes, which implements different cache strategies. 
+There are few cache classes, which implements different cache strategies.
 
 1. ``file_configuration_t`` class, that keeps path to C++ source file and path to
-   `GCC-XML`_ generated XML file. 
+   `GCC-XML`_ generated XML file.
 
 2. ``file_cache_t`` class, will save all declarations from all files within single
    binary file.
@@ -242,14 +242,14 @@ There are few cache classes, which implements different cache strategies.
    in the header file. The index file is used to determine whether a \*.cache file
    is still valid or not (by checking if one of the dependent files
    (i.e. the header file itself and all included files) have been modified since
-   the last run). 
+   the last run).
 
 In some cases, ``directory_cache_t`` class gives much better performance, than
 ``file_cache_t``. Many thanks to Matthias Baas for its implementation.
 
 **Warning**: when :doc:`pygccxml <pygccxml>` writes information to files, using cache classes,
-it does not write any version information. It means, that when you upgrade 
-:doc:`pygccxml <pygccxml>` you have to delete all your cache files. Otherwise you will get very 
+it does not write any version information. It means, that when you upgrade
+:doc:`pygccxml <pygccxml>` you have to delete all your cache files. Otherwise you will get very
 strange errors. For example: missing attribute.
 
 
@@ -269,7 +269,7 @@ Well, `GCC-XML`_ has few bugs, which could not be fixed from it. For example
   void fix_enum( ns1::ns2::fruit arg=ns1::ns2::apple );
 
 `GCC-XML`_ will report the default value of ``arg`` as ``apple``. Obviously
-this in an error. :doc:`pygccxml <pygccxml>` knows how to fix this bug. 
+this in an error. :doc:`pygccxml <pygccxml>` knows how to fix this bug.
 
 This is not the only bug, which could be fixed, there are few of them. :doc:`pygccxml <pygccxml>`
 introduces few classes, which knows how to deal with specific bug. More over, those
@@ -279,8 +279,8 @@ bugs are fixed, only if I am 101% sure, that this is the right thing to do.
 Summary
 -------
 
-That's all. I hope I was clear, at least I tried. Any way, :doc:`pygccxml <pygccxml>` is an open 
-source project. You always can take a look on the source code. If you need more 
+That's all. I hope I was clear, at least I tried. Any way, :doc:`pygccxml <pygccxml>` is an open
+source project. You always can take a look on the source code. If you need more
 information please read API documentation.
 
 
