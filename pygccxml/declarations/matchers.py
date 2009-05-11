@@ -322,9 +322,10 @@ class namespace_matcher_t( declaration_matcher_t ):
 class calldef_matcher_t( declaration_matcher_t ):
     """
     Instance of this class will match callable by the following criteria:
-        * :class:`declaration_matcher_t` criteria
-        * return type. For example: :class:`int_t` or 'int'
-        * argument types
+       * :class:`declaration_matcher_t` criteria
+       * return type. For example: :class:`int_t` or 'int'
+       * argument types
+
     """
 
     def __init__( self, name=None, return_type=None, arg_types=None, decl_type=None, header_dir=None, header_file=None):
@@ -332,19 +333,20 @@ class calldef_matcher_t( declaration_matcher_t ):
         :param return_type: callable return type
         :type return_type: string or instance of :class:`type_t` derived class
 
+        :type arg_types: list
         :param arg_types: list of function argument types. `arg_types` can contain.
-        Any item within the list could be string or instance of :class:`type_t` derived
-        class. If you don't want some argument to participate in match you can
-        put None. For example:
+                          Any item within the list could be string or instance
+                          of :class:`type_t` derived class. If you don't want
+                          some argument to participate in match you can put None.
 
-        .. code-block:: python
+        For example:
 
-           calldef_matcher_t( arg_types=[ 'int &', None ] )
+          .. code-block:: python
+
+             calldef_matcher_t( arg_types=[ 'int &', None ] )
 
         will match all functions that takes 2 arguments, where the first one is
         reference to integer and second any
-
-        :type arg_types: list
         """
         if None is decl_type:
             decl_type = calldef.calldef_t
@@ -457,9 +459,10 @@ class regex_matcher_t( matcher_base_t ):
         :type regex: string, an instance of this class will compile it for you
 
         :param function: function that will be called to get an information from
-        declaration as string. As input this function takes 1 argument: reference
-        to declaration. Return value should be string. If function is None, then
-        the matcher will use declaration name.
+                         declaration as string. As input this function takes single
+                         argument - reference to a declaration. Return value
+                         should be string. If function is None, then the matcher
+                         will use declaration name.
 
         """
         matcher_base_t.__init__(self)
