@@ -1,17 +1,11 @@
-﻿=================
+﻿================
 pygccxml package
-=================
-
-.. meta::
-   :description: C++ declarations parser
-   :keywords: C++, source code, header file, parser, UML, free, declarations
-              , XML, class hierarchy, analyze, AST, code generator,
-              , синтаксический анализатор, исходный текст, исходная программа
-              , описание, определение, иерархия классов, генератор кода
+================
 
 ------------
 Introduction
 ------------
+
 .. include:: ./definition.irest
 
 ------------------------
