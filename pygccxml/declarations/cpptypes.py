@@ -446,7 +446,22 @@ class array_t( compound_t ):
                      doc="returns array size" )
 
     def build_decl_string(self, with_defaults=True):
-        return self.base.build_decl_string(with_defaults) + '[%d]' %  self.size
+        #return self.base.build_decl_string(with_defaults) + '[%d]' %  self.size
+        return self.__bds_for_multi_dim_arrays( None, with_defaults )
+
+    def __bds_for_multi_dim_arrays(self, parent_dims=None, with_defaults=True):
+        if parent_dims:
+            parent_dims.append( self.size )
+        else:
+            parent_dims = [self.size]
+
+        if isinstance( self.base, array_t ):
+            return self.base.__bds_for_multi_dim_arrays( parent_dims, with_defaults)
+        else:
+            tmp = []
+            for s in parent_dims:
+                tmp.append( '[%d]' % s )
+            return self.base.build_decl_string(with_defaults) + ''.join( tmp )
 
     def _clone_impl( self ):
         return array_t( self.base.clone(), self.size )
