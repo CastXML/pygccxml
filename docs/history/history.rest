@@ -43,6 +43,9 @@ Version 1.1
 6. Bug `[ 2431993 ] pygccxml parses const volatile variable args as just const <http://sourceforge.net/tracker/index.php?func=detail&aid=2431993&group_id=118209&atid=684318>`_
    was fixed.
 
+7. Bug `[ 2779781 ] pygccxml reverses array dimensions <https://sourceforge.net/tracker/index.php?func=detail&aid=2779781&group_id=118209&atid=684318>`_
+   was fixed.
+
 
 -----------
 Version 1.0
