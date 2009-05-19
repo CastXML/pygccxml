@@ -33,6 +33,6 @@ import pygccxml.utils as utils
 #TODO:
 #  1. Add "explicit" property for constructors
 
-__version__ = '1.1.0'
+__version__ = '1.5.0'
 
 __revision__ = 1080

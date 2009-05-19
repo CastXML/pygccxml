@@ -23,7 +23,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Gustavo Carneiro
 
 -----------
-Version 1.1
+SVN Version
 -----------
 
 1. Experimental back-ends based on ``.pdb`` and ``.bsc`` files were removed.
