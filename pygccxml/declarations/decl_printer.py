@@ -29,7 +29,7 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.__verbose = verbose
         self.__writer = writer
         if not self.__writer:
-            self.__writer = lambda x: sys.stdout.write( x + os.linesep )
+            self.__writer = lambda x: sys.stdout.write( x )
 
     def clone(self, increment_level=True):
         level = self.__level
