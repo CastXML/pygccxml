@@ -8,6 +8,7 @@ import sys
 import linker
 import config
 import patcher
+import subprocess
 import pygccxml.utils
 
 try: #select the faster xml parser
@@ -148,16 +149,25 @@ class source_reader_t:
             if not os.path.isabs( ffname ):
                   ffname = self.__file_full_name(header)
             command_line = self.__create_command_line( ffname, gccxml_file )
-            input_, output = os.popen4( command_line )
-            input_.close()
+
+            process = subprocess.Popen( args=command_line
+                                        , shell=True
+                                        , stdin=subprocess.PIPE
+                                        , stdout=subprocess.PIPE
+                                        , stderr=subprocess.STDOUT )
+            process.stdin.close()
+
             gccxml_reports = []
-            while True:
-                  data = output.readline()
-                  gccxml_reports.append( data )
-                  if not data:
-                       break
-            exit_status = output.close()
-            gccxml_msg = ''.join(gccxml_reports)
+            while process.poll() is None:
+                line = process.stdout.readline()
+                if line.strip():
+                    gccxml_reports.append( line.rstrip() )
+            for line in process.stdout.readlines():
+                if line.strip():
+                    gccxml_reports.append( line.rstrip() )
+
+            exit_status = process.returncode
+            gccxml_msg = os.linesep.join(gccxml_reports)
             if self.__config.ignore_gccxml_output:
                 if not os.path.isfile(gccxml_file):
                     raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s status:%s" % (gccxml_msg, exit_status) )
