@@ -40,9 +40,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
         public_members = declarations.matcher.find( criteria, self.global_ns )
         if '0.9' in public_members[0].compiler:
             public_members = filter( lambda d: not d.is_artificial, public_members )
-            self.failUnless( 16 == len( public_members ) ) 
+            self.failUnless( 17 == len( public_members ) ) 
         else:
-            self.failUnless( 20 == len( public_members ) )
+            self.failUnless( 21 == len( public_members ) )
         
     def test_or_matcher( self ):
         criteria1 = declarations.regex_matcher_t( 'oper.*'

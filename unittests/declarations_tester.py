@@ -123,7 +123,7 @@ class declarations_t( parser_test_case.parser_test_case_t ):
 
         destructor = struct_calldefs.calldef( '~calldefs_t' )
         self._test_calldef_args( destructor, [] )
-        self._test_calldef_return_type( destructor, None.__class__)
+        self._test_calldef_return_type( destructor, None.__class__)        
 
         #well, now we have a few functions ( constructors ) with the same name, there is no easy way
         #to find the desired one. Well in my case I have only 4 constructors
@@ -132,13 +132,22 @@ class declarations_t( parser_test_case.parser_test_case_t ):
         #3. default
         #4. copy constructor
         constructor_found = struct_calldefs.constructors( 'calldefs_t' )
-        self.failUnless( len( constructor_found ) == 4
-                         , "struct 'calldefs_t' has 4 constructors, pygccxml parser reports only about %d." \
+        self.failUnless( len( constructor_found ) == 5
+                         , "struct 'calldefs_t' has 5 constructors, pygccxml parser reports only about %d." \
                            % len( constructor_found ) )
         self.failUnless( 1 == len( filter( lambda constructor: constructor.is_copy_constructor, constructor_found ) )
                          , "copy constructor has not been found" )
         #there is nothing to check about constructors - I know the implementation of parser
         #In this case it doesn't different from any other function
+
+        c = struct_calldefs.constructor( 'calldefs_t', arg_types=['char'] )
+        self.failUnless( c.explicit == True
+                         , "calldef_t constructor defined with 'explicit' keyword, for some reason the value is False ")
+
+        arg_type = declarated_t( self.global_ns.class_('some_exception_t') )
+        c = struct_calldefs.constructor( 'calldefs_t', arg_types=[arg_type] )
+        self.failUnless( c.explicit == False
+                         , "calldef_t constructor defined without 'explicit' keyword, for some reason the value is True ")
 
     def test_operator_symbol(self):
         calldefs_operators = ['=', '==' ]

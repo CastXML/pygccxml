@@ -27,7 +27,9 @@ void calldef_with_throw() throw( some_exception_t, other_exception_t );
 struct calldefs_t{
     calldefs_t();
 
-    calldefs_t(char);
+    explicit calldefs_t(char);
+
+    calldefs_t(some_exception_t);
 
     calldefs_t(int,double);
 

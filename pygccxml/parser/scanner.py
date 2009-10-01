@@ -29,6 +29,7 @@ XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_DEFAULT = "default"
 XML_AN_DEMANGLED = "demangled"
+XML_AN_EXPLICIT = "explicit"
 XML_AN_EXTERN = "extern"
 XML_AN_FILE = "file"
 XML_AN_ID = "id"
@@ -494,6 +495,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_constructor( self, attrs ):
         constructor = self.__decl_factory.create_constructor()
         self.__read_member_function( constructor, attrs, True )
+        constructor.explicit = attrs.get( XML_AN_EXPLICIT, False )
         return constructor
 
     def __read_function(self, attrs):

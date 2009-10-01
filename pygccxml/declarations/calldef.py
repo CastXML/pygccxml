@@ -532,6 +532,18 @@ class constructor_t( member_calldef_t ):
     """describes constructor declaration"""
     def __init__( self, *args, **keywords ):
         member_calldef_t.__init__( self, *args, **keywords )
+        self._explicit = True
+
+    def _get_explicit(self):
+        return self._explicit        
+    def _set_explicit(self, explicit):
+        if explicit in [True, '1']:        
+            self._explicit = True
+        else:
+            self._explicit = False
+    explicit = property( _get_explicit, _set_explicit
+                     , doc="""True, if constructor has "explicit" keyword, False otherwise
+                              @type: bool""" )
 
     def __str__(self):
         # Get the full name of the calldef...
@@ -567,7 +579,6 @@ class constructor_t( member_calldef_t ):
     @property
     def is_trivial_constructor(self):
         return not bool( self.arguments )
-
 
 class destructor_t( member_calldef_t ):
     """describes deconstructor declaration"""
