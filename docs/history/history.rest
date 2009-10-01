@@ -21,6 +21,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Jeremy Sanders
 * Ben Schleimer
 * Gustavo Carneiro
+* Christopher Bruns
 
 -----------
 SVN Version
@@ -46,7 +47,10 @@ SVN Version
 7. Bug `[ 2779781 ] pygccxml reverses array dimensions <https://sourceforge.net/tracker/index.php?func=detail&aid=2779781&group_id=118209&atid=684318>`_
    was fixed.
 
-
+8. "explicit" property was added to ``declarations.constructor_t`` class.
+   Many thanks to Christopher Bruns, for finding out how this property
+   works in `GCC-XML`_.
+   
 -----------
 Version 1.0
 -----------
