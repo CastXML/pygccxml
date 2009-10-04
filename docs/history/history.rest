@@ -22,6 +22,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Ben Schleimer
 * Gustavo Carneiro
 * Christopher Bruns
+* Alejandro Dubrovsky
 
 -----------
 SVN Version
@@ -50,7 +51,11 @@ SVN Version
 8. "explicit" property was added to ``declarations.constructor_t`` class.
    Many thanks to Christopher Bruns, for finding out how this property
    works in `GCC-XML`_.
-   
+
+9. "List symbols" (`nm`) utility invocation was improved and now handles
+   right relative paths and paths with spaces. Many thanks to Alejandro Dubrovsky
+   for providing the patch.
+
 -----------
 Version 1.0
 -----------

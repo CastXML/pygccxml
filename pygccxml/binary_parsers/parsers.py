@@ -216,8 +216,9 @@ class so_file_parser_t( formated_mapping_parser_t ):
     """parser for Linux .so file"""
     nm_executable = 'nm'
     #numeric-sort used for mapping between mangled and unmangled name
-    cmd_mangled = '%(nm)s --extern-only --dynamic --defined-only --numeric-sort %(lib)s'
-    cmd_demangled = '%(nm)s --extern-only --dynamic --defined-only --demangle --numeric-sort %(lib)s'
+    cmd_mangled = '%(nm)s --extern-only --dynamic --defined-only --numeric-sort %(lib)s'.split()
+    cmd_demangled = '%(nm)s --extern-only --dynamic --defined-only --demangle --numeric-sort %(lib)s'.split()
+
     entry = re.compile( r'^(?P<address>(?:\w|\d)+)\s\w\s(?P<symbol>.+)$' )
 
     def __init__( self, global_ns, binary_file ):
@@ -225,11 +226,9 @@ class so_file_parser_t( formated_mapping_parser_t ):
 
     def __execute_nm( self, cmd ):
         process = subprocess.Popen( args=cmd
-                                    , shell=True
                                     , stdin=subprocess.PIPE
                                     , stdout=subprocess.PIPE
-                                    , stderr=subprocess.STDOUT
-                                    , cwd=os.path.dirname( self.binary_file ) )
+                                    , stderr=subprocess.STDOUT )
         process.stdin.close()
 
         output = []
@@ -254,8 +253,9 @@ class so_file_parser_t( formated_mapping_parser_t ):
 
     def load_symbols( self ):
         tmpl_args = dict( nm=self.nm_executable, lib=self.binary_file )
-        mangled_smbls = self.__extract_symbols( self.cmd_mangled % tmpl_args )
-        demangled_smbls = self.__extract_symbols( self.cmd_demangled % tmpl_args )
+        mangled_smbls = self.__extract_symbols( [part % tmpl_args for part in self.cmd_mangled] )
+        demangled_smbls = self.__extract_symbols(  [part % tmpl_args for part in self.cmd_demangled] )
+
         result = []
         for address, blob in mangled_smbls.iteritems():
             if address in demangled_smbls:
