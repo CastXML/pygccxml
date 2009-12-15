@@ -9,6 +9,28 @@ this module contains class that keeps dependency information of some declaration
 
 import cpptypes
 
+class impl_details:
+    @staticmethod
+    def dig_declarations( depend_on_it ):
+        #prevent recursive import
+        from pygccxml import declarations
+
+        if isinstance( depend_on_it, declarations.declaration_t ):
+            return [depend_on_it]
+        base_type = declarations.base_type( declarations.remove_alias( depend_on_it ) )
+        if isinstance( base_type, cpptypes.declarated_t ):
+            return [base_type.declaration]
+        elif isinstance( base_type, cpptypes.calldef_type_t ):
+            result = []
+            result.extend( impl_details.dig_declarations( base_type.return_type ) )
+            for argtype in base_type.arguments_types:
+                result.extend( impl_details.dig_declarations( argtype ) )
+            if isinstance( base_type, cpptypes.member_function_type_t ):
+                result.extend( impl_details.dig_declarations( base_type.class_inst ) )
+            return result
+        return []
+
+
 class dependency_info_t( object ):
     def __init__( self, declaration, depend_on_it, access_type=None, hint=None ):
         object.__init__( self )
@@ -46,19 +68,11 @@ class dependency_info_t( object ):
         about dependency. It can be used later"""
         return self._hint
 
-    def find_out_depend_on_declaration( self ):
+    def find_out_depend_on_it_declarations( self ):
         """if declaration depends on other declaration and not on some type
            this function will return reference to it. Otherwise None will be returned
         """
-        #prevent recursive import
-        from pygccxml import declarations
-
-        if isinstance( self.depend_on_it, declarations.declaration_t ):
-            return self.depend_on_it
-        base_type = declarations.base_type( declarations.remove_alias( self.depend_on_it ) )
-        if isinstance( base_type, cpptypes.declarated_t ):
-            return base_type.declaration
-        return None
+        return impl_details.dig_declarations( self.depend_on_it )
 
     @staticmethod
     def i_depend_on_them( decl ):
@@ -67,9 +81,9 @@ class dependency_info_t( object ):
         import class_declaration #prevent cyclic imports
         to_be_included = set()
         for dependency_info in decl.i_depend_on_them():
-            ddecl = dependency_info.find_out_depend_on_declaration()
-            if ddecl:
-                to_be_included.add( ddecl )
+            for ddecl in dependency_info.find_out_depend_on_it_declarations():
+                if ddecl:
+                    to_be_included.add( ddecl )
 
         if isinstance( decl.parent, class_declaration.class_t ):
             to_be_included.add( decl.parent )
