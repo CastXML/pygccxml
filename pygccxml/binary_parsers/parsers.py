@@ -23,6 +23,7 @@ import undname
 import warnings
 import exceptions
 import subprocess
+from pygccxml import utils
 from pygccxml import declarations
 
 class LicenseWarning( exceptions.UserWarning ):
@@ -95,10 +96,13 @@ class libparser_t( object ):
         self.__loaded_symbols = self.load_symbols()
         result = {}
         for smbl in self.__loaded_symbols:
-            decorated, decl = self.merge( smbl )
-            if decl:
-                decl.decorated_name = decorated
-                result[ decorated ] = decl
+            try:
+                decorated, decl = self.merge( smbl )
+                if decl:
+                    decl.decorated_name = decorated
+                    result[ decorated ] = decl
+            except declarations.matcher.declaration_not_found_t:
+                pass
         return result
 
 CCTS = declarations.CALLING_CONVENTION_TYPES
