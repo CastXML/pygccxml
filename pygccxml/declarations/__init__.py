@@ -262,6 +262,7 @@ from matcher import matcher
 from mdecl_wrapper import mdecl_wrapper_t
 
 from decl_printer import decl_printer_t
+from decl_printer import dump_declarations
 from decl_printer import print_declarations
 
 
@@ -333,11 +334,4 @@ __impl_decl_types[ namespace_t.free_function ] = free_function_t
 
 __impl_matchers[ namespace_t.free_operator ] = operator_matcher_t
 __impl_decl_types[ namespace_t.free_operator ] = free_operator_t
-
-
-
-
-
-
-
 

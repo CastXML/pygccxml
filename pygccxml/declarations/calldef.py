@@ -177,7 +177,8 @@ class calldef_t( declaration.declaration_t ):
                   , self.return_type
                   , self.has_extern
                   , self.does_throw
-                  , self._sorted_list( self.exceptions ) ]
+                  , self._sorted_list( self.exceptions )
+                  , self.demangled_name ]
         items.extend( self._get__cmp__call_items() )
         return items
 
@@ -188,8 +189,8 @@ class calldef_t( declaration.declaration_t ):
                and self.arguments == other.arguments \
                and self.has_extern == other.has_extern \
                and self.does_throw == other.does_throw \
-               and self._sorted_list( self.exceptions ) \
-                   == other._sorted_list( other.exceptions )
+               and self._sorted_list( self.exceptions ) == other._sorted_list( other.exceptions ) \
+               and self.demangled_name == other.demangled_name                  
 
     def _get_arguments(self):
         return self._arguments

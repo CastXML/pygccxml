@@ -285,3 +285,14 @@ def print_declarations( decls
         prn.level = 0
         prn.instance = d
         algorithm.apply_visitor(prn, d)
+
+def dump_declarations( decls, fpath ):
+    """
+    dump declarations tree rooted at each of the included nodes to the file
+
+    :param decls: either a single :class:declaration_t object or list of :class:declaration_t objects
+    :param fpath: file name 
+    """
+    fobj = file( fpath, 'w+' )
+    print_declarations( decls, writer=fobj.write )
+    fobj.close()
