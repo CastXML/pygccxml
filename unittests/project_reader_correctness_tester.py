@@ -67,16 +67,14 @@ class tester2_t( parser_test_case.parser_test_case_t ):
                                            , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
         src_reader = parser.source_reader_t( self.config )
         src_decls = src_reader.read_file( 'separate_compilation/all.h' )
-        if src_decls != prj_decls:
-            s = src_decls[0]
-            p = prj_decls[0]
-            sr = file( os.path.join( autoconfig.build_directory , 'separate_compilation.sr.txt'),'w+b' )
-            pr = file( os.path.join( autoconfig.build_directory , 'separate_compilation.pr.txt'), 'w+b' )
-            declarations.print_declarations( s, writer=lambda l: sr.write( l ) )
-            declarations.print_declarations( p, writer=lambda l: pr.write( l ) )
-            sr.close()
-            pr.close()
-            self.fail( "Expected - There is a difference between declarations" )
+        
+        declarations.dump_declarations( src_decls
+                                        , os.path.join( autoconfig.build_directory, 'separate_compilation.sr.txt' ) )
+
+        declarations.dump_declarations( prj_decls
+                                        , os.path.join( autoconfig.build_directory, 'separate_compilation.pr.txt' ) )
+
+        self.failUnless( src_decls == prj_decls, "There is a difference between declarations" )
 
 
 def create_suite():

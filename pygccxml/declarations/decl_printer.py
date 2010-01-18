@@ -208,6 +208,8 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                     self.writer( ' ' * (curr_level + 1)* self.INDENT_SIZE + is_virtual.ljust( self.JUSTIFY ) + os.linesep)
 
         def print_members(members_type, members, curr_level):
+            members = members[:]
+            members.sort()
             self.writer( ' ' * curr_level * self.INDENT_SIZE + members_type.ljust( self.JUSTIFY ) + os.linesep)
             if self.__recursive:
                 curr_level += 1
@@ -240,7 +242,9 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
             return #don't print info about empty namespaces
         self.print_decl_header()
         if self.__recursive:
-            for decl in self.__inst.declarations:
+            inst_decls = self.__inst.declarations[:]
+            inst_decls.sort()
+            for decl in inst_decls:
                 if self.is_builtin_decl( decl ):
                     continue
                 prn = self.clone()
