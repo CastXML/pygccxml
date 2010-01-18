@@ -384,6 +384,26 @@ class project_reader_t:
                         assert 1 == len( joined_decls[ decl._name ] )
                         if isinstance( decl, pygccxml.declarations.namespace_t ):
                             joined_decls[ decl._name ][0].take_parenting( decl )
+                            
+        class_t = pygccxml.declarations.class_t
+        class_declaration_t = pygccxml.declarations.class_declaration_t
+        if class_t in ddhash and class_declaration_t in ddhash:
+            #if there is a class and its forward declaration - get rid of the 
+            #second one.
+            class_names = set()
+            for name, same_name_classes in ddhash[ class_t ].iteritems():
+                if not name:
+                    continue
+                class_names.add( same_name_classes[0].mangled )
+
+            class_declarations = ddhash[ class_declaration_t ]
+            for name, same_name_class_declarations in class_declarations.iteritems():
+                if not name:
+                    continue
+                for class_declaration in same_name_class_declarations :
+                    if class_declaration.mangled and class_declaration.mangled in class_names:
+                        decls.remove( class_declaration )
+
         nsref.declarations = decls
 
     def _join_class_hierarchy( self, namespaces ):
@@ -454,6 +474,12 @@ class project_reader_t:
     def _relink_declarated_types(self, leaved_classes, declarated_types):
         create_key = lambda decl:( decl.location.as_tuple()
                                    , tuple( pygccxml.declarations.declaration_path( decl ) ) )
+        create_mangled_key = lambda decl:( decl.location.as_tuple(), decl.mangled )
+                                   
+        mangled_leaved_classes = {}
+        for cls in leaved_classes.itervalues():
+            mangled_leaved_classes[ create_mangled_key( cls ) ] = cls
+        
         for decl_wrapper_type in declarated_types:
             #it is possible, that cache contains reference to dropped class
             #We need to clear it
@@ -461,7 +487,7 @@ class project_reader_t:
             if isinstance( decl_wrapper_type.declaration, pygccxml.declarations.class_t ):
                 key = create_key(decl_wrapper_type.declaration)
                 if leaved_classes.has_key( key ):
-                    decl_wrapper_type.declaration = leaved_classes[ create_key(decl_wrapper_type.declaration) ]
+                    decl_wrapper_type.declaration = leaved_classes[ key ]
                 else:
                     if decl_wrapper_type.declaration._name.startswith( '__vmi_class_type_info_pseudo' ):
                         continue
@@ -472,6 +498,10 @@ class project_reader_t:
                     msg.append( "    1. There are different preprocessor definitions applied on same file during compilation" )
                     msg.append( "    2. Bug in pygccxml." )
                     self.logger.error( os.linesep.join(msg) )
+            elif isinstance( decl_wrapper_type.declaration, pygccxml.declarations.class_declaration_t ):
+                key = create_mangled_key(decl_wrapper_type.declaration)
+                if mangled_leaved_classes.has_key( key ):
+                    decl_wrapper_type.declaration = mangled_leaved_classes[ key ]
 
     def _join_declarations( self, declref ):
         self._join_namespaces( declref )
