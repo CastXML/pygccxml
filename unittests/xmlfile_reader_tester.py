@@ -15,8 +15,8 @@ from pygccxml import declarations
 class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        #self.__fname = 'core_types.hpp'
-        self.__fname = 'merge_free_functions.hpp'
+        self.__fname = 'core_types.hpp'
+        #self.__fname = 'merge_free_functions.hpp'
 
     def test(self):
         src_reader = parser.source_reader_t( self.config )
