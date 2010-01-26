@@ -1,16 +1,15 @@
 import os
 import sys
 
-opts = Options("options", ARGUMENTS)
-
+vars = Variables()
 
 if 'win32' in sys.platform:
-    opts.Add( EnumOption( 'msvc_compiler'
-                          , 'prefered msvc compiler'
-                          , 'msvc71'
-                          , ['msvc71', 'msvc80', 'msvc90'] ) )
+    vars.Add( EnumVariable( 'msvc_compiler'
+                            , 'prefered msvc compiler'
+                            , 'msvc71'
+                            , ['msvc71', 'msvc80', 'msvc90'] ) )
 
-env = Environment(options = opts)
+env = Environment(variables=vars)
 
 if 'win32' in sys.platform:
     Help(opts.GenerateHelpText(env))
