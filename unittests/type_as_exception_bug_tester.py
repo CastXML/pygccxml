@@ -24,14 +24,13 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns.init_optimizer()
 
     def test( self ):                
-        pass
-        #~ buggy = self.global_ns.mem_fun( 'buggy' )
-        #~ ExpressionError = self.global_ns.class_( 'ExpressionError' )
-        #~ self.failUnless( len( buggy.exceptions ) == 1 )
-        #~ err = buggy.exceptions[0]
-        #~ self.failUnless( declarations.is_reference( err ) )
-        #~ err = declarations.remove_declarated( declarations.remove_reference( err ) )
-        #~ self.failUnless( err is ExpressionError )
+        buggy = self.global_ns.mem_fun( 'buggy' )
+        ExpressionError = self.global_ns.class_( 'ExpressionError' )
+        self.failUnless( len( buggy.exceptions ) == 1 )
+        err = buggy.exceptions[0]
+        self.failUnless( declarations.is_reference( err ) )
+        err = declarations.remove_declarated( declarations.remove_reference( err ) )
+        self.failUnless( err is ExpressionError )
         
 
 def create_suite():
