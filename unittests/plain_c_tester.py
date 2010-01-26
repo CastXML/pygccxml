@@ -26,10 +26,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test( self ):                
         self.global_ns.free_fun( 'hello_sum' )
         self.global_ns.free_fun( 'hello_print' )
-        declarations.print_declarations( self.global_ns )
         f = self.global_ns.free_fun( 'do_smth' )
         for arg in f.arguments:
-            print arg.type.decl_string
+            self.failUnless( arg.type.decl_string )
         
 def create_suite():
     suite = unittest.TestSuite()        
