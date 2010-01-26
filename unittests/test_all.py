@@ -55,8 +55,9 @@ import undname_creator_tester
 import calling_convention_tester
 import const_volatile_arg_tester
 import array_bug_tester
-import gccxml10185_tester
 import gccxml10183_tester
+import gccxml10184_tester
+import gccxml10185_tester
 
 testers = [
     decl_string_tester
@@ -108,8 +109,9 @@ testers = [
     , calling_convention_tester
     , const_volatile_arg_tester
     , array_bug_tester
-    , gccxml10185_tester
-    , gccxml10183_tester    
+    , gccxml10183_tester
+    , gccxml10184_tester
+    , gccxml10185_tester    
 ]
 
 def create_suite():

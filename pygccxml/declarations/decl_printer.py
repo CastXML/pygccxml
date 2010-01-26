@@ -262,6 +262,10 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
         self.writer( ' ' * curr_level * self.INDENT_SIZE + 'type: %s' % self.__inst.type.decl_string  + os.linesep)
         self.writer( ' ' * curr_level * self.INDENT_SIZE + 'value: %s' % self.__inst.value + os.linesep)
         if self.__print_details:
+            if self.__inst.bits:
+                bits = 'bits: %d'%(self.__inst.bits)
+                self.writer( ' ' * curr_level * self.INDENT_SIZE + bits.ljust( self.JUSTIFY ) + os.linesep)
+
             byte_size = 'size: %d'%(self.__inst.type.byte_size)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + byte_size.ljust( self.JUSTIFY ) + os.linesep)
             try:
