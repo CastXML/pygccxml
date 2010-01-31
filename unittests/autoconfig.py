@@ -6,6 +6,7 @@
 import os
 import sys
 import getpass
+import platform
 
 #~ os.environ['PYCHECKER'] = '--limit=1000 -q --no-argsused'
 #~ import pychecker.checker
@@ -15,7 +16,9 @@ this_module_dir_path = os.path.abspath ( os.path.dirname( sys.modules[__name__].
 data_directory = os.path.join( this_module_dir_path, 'data' )
 build_directory = os.path.join( this_module_dir_path, 'temp' )
 
-gccxml_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
+gccxml_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', platform.system(), platform.machine(), 'bin' )
+if not os.path.exists( gccxml_path ):
+    gccxml_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 gccxml_version = '__GCCXML_09__'
 
 try:

@@ -5,6 +5,7 @@
 
 import os
 import unittest
+import platform
 import autoconfig
 import parser_test_case
 
@@ -17,7 +18,7 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.architecture = architecture
         self.global_ns = None
-            
+
     def test_enum_patcher(self):
         fix_enum = self.global_ns.free_fun( 'fix_enum' )
         self.failUnless( fix_enum.arguments[0].default_value == '::ns1::ns2::apple' )
@@ -28,12 +29,19 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         fix_numeric = self.global_ns.free_fun( 'fix_numeric' )
         if 32 == self.architecture:
             if '0.9' in fix_numeric.compiler:
-                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffffu" )
+                if platform.machine() == 'x86_64':
+                    self.failUnless( fix_numeric.arguments[0].default_value == u"-1u"
+                                     , fix_numeric.arguments[0].default_value )
+                else:
+                    self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffffu"
+                                     , fix_numeric.arguments[0].default_value )
             else:
-                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffff" )
-        else: 
-            self.failUnless( fix_numeric.arguments[0].default_value == u"0ffffffff" )
-            
+                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffff"
+                                 , fix_numeric.arguments[0].default_value )
+        else:
+            self.failUnless( fix_numeric.arguments[0].default_value == u"0ffffffff"
+                             , fix_numeric.arguments[0].default_value )
+
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun( 'fix_unnamed' )
         self.failUnless( fix_unnamed.arguments[0].default_value == u"int(::fx::unnamed)" )
@@ -65,11 +73,11 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
                 default_values = [
                     'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >()'
                     , 'vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >,std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >((&allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >()))'
-                ]   
+                ]
                 self.failUnless( clone_tree.arguments[0].default_value in default_values)
-        
+
 class tester_32_t( tester_impl_t ):
-    global_ns = None    
+    global_ns = None
     def __init__(self, *args):
         tester_impl_t.__init__(self, 32, *args)
 
@@ -77,7 +85,7 @@ class tester_32_t( tester_impl_t ):
         if not tester_32_t.global_ns:
             reader = parser.source_reader_t( self.config )
             tester_32_t.global_ns = reader.read_file( 'patcher.hpp' )[0].top_parent
-        self.global_ns = tester_32_t.global_ns 
+        self.global_ns = tester_32_t.global_ns
 
 
 class tester_64_t( tester_impl_t ):
@@ -92,17 +100,17 @@ class tester_64_t( tester_impl_t ):
 
         if not tester_64_t.global_ns:
             reader = parser.source_reader_t( self.config )
-            tester_64_t.global_ns = reader.read_xml_file( 
+            tester_64_t.global_ns = reader.read_xml_file(
                         os.path.join( autoconfig.data_directory, 'patcher_tester_64bit.xml' ) )[0].top_parent
         self.global_ns = tester_64_t.global_ns
-                
+
     def tearDown( self ):
         utils.get_architecture = self.original_get_architecture
 
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_32_t))    
-    suite.addTest( unittest.makeSuite(tester_64_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_32_t))
+    suite.addTest( unittest.makeSuite(tester_64_t))
     return suite
 
 def run_suite():

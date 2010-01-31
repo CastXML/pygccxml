@@ -4,6 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
+import platform
 import unittest
 import autoconfig
 import parser_test_case
@@ -18,7 +19,7 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         self.header = 'demangled.hpp'
         self.global_ns = None
         self.architecture = architecture
-        
+
     def setUp(self):
         reader = parser.source_reader_t( self.config )
         decls = None
@@ -27,17 +28,22 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         else:
             original_get_architecture = utils.get_architecture
             utils.get_architecture = lambda: 64
-            decls = reader.read_xml_file( 
+            decls = reader.read_xml_file(
                     os.path.join( autoconfig.data_directory, 'demangled_tester_64bit.xml' ) )
             utils.get_architecture = original_get_architecture
         self.global_ns = declarations.get_global_namespace( decls )
-            
-    def test( self ):                
+
+    def test( self ):
         demangled = self.global_ns.namespace( 'demangled' )
         if 32 == self.architecture:
             if '0.9' in demangled.compiler:
-                cls = demangled.class_( 'item_t<3740067437ul, 11ul, 2147483648ul>' )
-                self.failUnless( cls._name == 'item_t<-554899859ul,11ul,-2147483648ul>' )
+                if platform.machine() == 'x86_64':
+                    cls = demangled.class_( 'item_t<25214903917ul, 11ul, 2147483648ul>' )
+                    self.failUnless( cls._name == 'item_t<25214903917ul,11ul,2147483648ul>'
+                                     , cls._name )
+                else:
+                    cls = demangled.class_( 'item_t<3740067437ul, 11ul, 2147483648ul>' )
+                    self.failUnless( cls._name == 'item_t<-554899859ul,11ul,-2147483648ul>')
             else:
                 cls = demangled.class_( 'item_t<3740067437l, 11l, 2147483648l>' )
                 self.failUnless( cls._name == 'item_t<0x0deece66d,11,0x080000000>' )
@@ -48,7 +54,7 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
     def test_free_function( self ):
         f = self.global_ns.free_functions('set_a', allow_empty=True)
         if not f:
-            return 
+            return
         f = f[0]
         self.failUnless( f.mangled )
 
@@ -60,11 +66,11 @@ class tester_64_t( tester_impl_t ):
     def __init__(self, *args):
         tester_impl_t.__init__(self, 64, *args)
 
-            
+
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_32_t))    
-    suite.addTest( unittest.makeSuite(tester_64_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_32_t))
+    suite.addTest( unittest.makeSuite(tester_64_t))
     return suite
 
 def run_suite():
