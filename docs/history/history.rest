@@ -56,6 +56,10 @@ SVN Version
    right relative paths and paths with spaces. Many thanks to Alejandro Dubrovsky
    for providing the patch.
 
+10. Small fix, which allows pygccxml to be usable on FreeBSD too: replace
+    `elif sys.platform == 'linux2' or sys.platform == 'darwin'` with `os.name == 'posix'`,
+    as suggested by `Jakub Wilk <http://groups.google.com/group/linux.debian.bugs.dist/browse_thread/thread/572d2286ca0b2cec?pli=1>`
+
 -----------
 Version 1.0
 -----------

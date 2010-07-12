@@ -176,7 +176,7 @@ class gccxml_configuration_t(parser_configuration_t):
         if sys.platform == 'win32':
             gccxml_name = 'gccxml' + '.exe'
             environment_var_delimiter = ';'
-        elif sys.platform == 'linux2' or sys.platform == 'darwin':
+        elif os.name == 'posix':
             gccxml_name = 'gccxml'
             environment_var_delimiter = ':'
         else:
