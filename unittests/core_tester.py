@@ -177,6 +177,8 @@ class core_t( parser_test_case.parser_test_case_t ):
         for fundamental_type_name, fundamental_type in FUNDAMENTAL_TYPES.iteritems():
             if 'complex' in fundamental_type_name:
                 continue #I check this in an other tester
+            if isinstance( fundamental_type, (int128_t, uint128_t) ):
+                continue #I don't have test case for this
             if isinstance( fundamental_type, java_fundamental_t ):
                 continue #I don't check this at all
             typedef_name = 'typedef_' + fundamental_type_name.replace( ' ', '_' )

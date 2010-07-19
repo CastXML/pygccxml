@@ -58,6 +58,12 @@ class type_visitor_t(object):
     def visit_long_long_unsigned_int( self ):
         raise NotImplementedError()
 
+    def visit_int128( self ):
+        raise NotImplementedError()
+
+    def visit_uint128( self ):
+        raise NotImplementedError()
+
     def visit_float( self ):
         raise NotImplementedError()
 

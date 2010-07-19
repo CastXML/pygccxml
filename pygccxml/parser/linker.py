@@ -188,6 +188,12 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def visit_long_long_unsigned_int( self ):
         pass
 
+    def visit_int128( self ):
+        pass
+
+    def visit_uint128( self ):
+        pass
+
     def visit_float( self ):
         pass
 

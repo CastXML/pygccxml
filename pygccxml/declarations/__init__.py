@@ -42,6 +42,8 @@ from cpptypes import long_int_t
 from cpptypes import long_unsigned_int_t
 from cpptypes import long_long_int_t
 from cpptypes import long_long_unsigned_int_t
+from cpptypes import int128_t
+from cpptypes import uint128_t
 from cpptypes import float_t
 from cpptypes import double_t
 from cpptypes import long_double_t

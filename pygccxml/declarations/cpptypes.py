@@ -302,6 +302,19 @@ class jboolean_t( java_fundamental_t ):
     def __init__( self ):
         java_fundamental_t.__init__( self, jboolean_t.JNAME )
 
+class int128_t( fundamental_t ):
+    """represents __int128_t type"""
+    CPPNAME = '__int128_t'
+    def __init__( self ):
+        fundamental_t.__init__( self, int128_t.CPPNAME )
+
+class uint128_t( fundamental_t ):
+    """represents __uint128_t type"""
+    CPPNAME = '__uint128_t'
+    def __init__( self ):
+        fundamental_t.__init__( self, uint128_t.CPPNAME )
+
+
 FUNDAMENTAL_TYPES = {
     void_t.CPPNAME : void_t()
     , char_t.CPPNAME : char_t()
@@ -319,6 +332,8 @@ FUNDAMENTAL_TYPES = {
     , long_unsigned_int_t.CPPNAME : long_unsigned_int_t()
     , long_long_int_t.CPPNAME : long_long_int_t()
     , long_long_unsigned_int_t.CPPNAME : long_long_unsigned_int_t()
+    , int128_t.CPPNAME : int128_t()
+    , uint128_t.CPPNAME : uint128_t()
     , float_t.CPPNAME : float_t()
     , double_t.CPPNAME : double_t()
     , long_double_t.CPPNAME : long_double_t()

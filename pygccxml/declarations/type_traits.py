@@ -142,7 +142,9 @@ def is_integral( type ):
                    + create_cv_types( cpptypes.long_int_t() )              \
                    + create_cv_types( cpptypes.long_unsigned_int_t() )     \
                    + create_cv_types( cpptypes.long_long_int_t() )         \
-                   + create_cv_types( cpptypes.long_long_unsigned_int_t() )
+                   + create_cv_types( cpptypes.long_long_unsigned_int_t() ) \
+                   + create_cv_types( cpptypes.int128_t() )                 \
+                   + create_cv_types( cpptypes.uint128_t() )
 
     return remove_alias( type ) in integral_def
 

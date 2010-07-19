@@ -60,6 +60,9 @@ SVN Version
     `elif sys.platform == 'linux2' or sys.platform == 'darwin'` with `os.name == 'posix'`,
     as suggested by `Jakub Wilk <http://groups.google.com/group/linux.debian.bugs.dist/browse_thread/thread/572d2286ca0b2cec?pli=1>`
 
+11. "__int128_t" and "__uint128_t" types were introduced. Many thanks to Gustavo Carneiro
+   for providing the patch.
+
 -----------
 Version 1.0
 -----------
