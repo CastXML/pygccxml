@@ -35,6 +35,7 @@ XML_AN_FILE = "file"
 XML_AN_ID = "id"
 XML_AN_INCOMPLETE = "incomplete"
 XML_AN_INIT = "init"
+XML_AN_INLINE = "inline"
 XML_AN_LINE = "line"
 XML_AN_MANGLED = "mangled"
 XML_AN_MAX = "max"
@@ -406,6 +407,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
             self.__calldefs.append( calldef )
             calldef.name = attrs.get(XML_AN_NAME, '')
             calldef.has_extern = attrs.get( XML_AN_EXTERN, False )
+            calldef.has_inline = bool( attrs.get( XML_AN_INLINE, "" ) == "1" )
             throw_stmt = attrs.get( XML_AN_THROW, None )
             if None is throw_stmt:
                 calldef.does_throw = True

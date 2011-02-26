@@ -58,6 +58,7 @@ import array_bug_tester
 import gccxml10183_tester
 import gccxml10184_tester
 import gccxml10185_tester
+import inline_specifier_tester
 
 testers = [
     decl_string_tester
@@ -112,6 +113,7 @@ testers = [
     , gccxml10183_tester
     , gccxml10184_tester
     , gccxml10185_tester    
+    , inline_specifier_tester
 ]
 
 def create_suite():

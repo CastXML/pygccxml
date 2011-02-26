@@ -65,7 +65,9 @@ SVN Version
    for providing the patch.
 
 12. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
-    instead of "sys.platform" for platform specific logic
+    instead of "sys.platform" for platform specific logic.
+    
+13. "has_inline" property was added to ``declarations.calldef_t`` class.
 
 
 -----------

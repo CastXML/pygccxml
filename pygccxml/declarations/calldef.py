@@ -166,6 +166,7 @@ class calldef_t( declaration.declaration_t ):
         self._has_extern = has_extern
         self._demangled_name = None
         self._calling_convention = None
+        self._has_inline = None
 
     def _get__cmp__call_items(self):
         """implementation details"""
@@ -178,7 +179,8 @@ class calldef_t( declaration.declaration_t ):
                   , self.has_extern
                   , self.does_throw
                   , self._sorted_list( self.exceptions )
-                  , self.demangled_name ]
+                  , self.demangled_name
+                  , self.has_inline ]
         items.extend( self._get__cmp__call_items() )
         return items
 
@@ -271,6 +273,15 @@ class calldef_t( declaration.declaration_t ):
         self._has_extern = has_extern
     has_extern = property( _get_has_extern, _set_has_extern,
                            doc="""Was this callable declared as "extern"?
+                           @type: bool
+                           """)
+
+    def _get_has_inline(self):
+        return self._has_inline
+    def _set_has_inline(self, has_inline):
+        self._has_inline = has_inline
+    has_inline = property( _get_has_inline, _set_has_inline,
+                           doc="""Was this callable declared with "inline" specifier
                            @type: bool
                            """)
 
