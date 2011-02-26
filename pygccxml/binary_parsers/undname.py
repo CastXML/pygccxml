@@ -73,7 +73,7 @@ class undname_creator_t:
     compiler and demangled name produced by "nm" utility.
     """
     def __init__( self ):
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             import ctypes.wintypes
             self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
             self.__undname.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
@@ -209,7 +209,7 @@ class undname_creator_t:
         """
         name = None
         if hint is None:
-            if 'win32' in sys.platform:
+            if 'nt' == os.name:
                 hint = 'msvc'
             else:
                 hint = 'nm'

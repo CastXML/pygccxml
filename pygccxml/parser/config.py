@@ -173,7 +173,7 @@ class gccxml_configuration_t(parser_configuration_t):
         super( gccxml_configuration_t, self ).raise_on_wrong_settings()
         if os.path.isfile( self.gccxml_path ):
             return
-        if sys.platform == 'win32':
+        if os.name == 'nt':
             gccxml_name = 'gccxml' + '.exe'
             environment_var_delimiter = ';'
         elif os.name == 'posix':

@@ -170,7 +170,7 @@ class native_compiler:
 
     @staticmethod
     def get_version():
-        if 'win' not in sys.platform:
+        if 'nt' != os.name:
             return None #not implemented yet
         else:
             from distutils import msvccompiler

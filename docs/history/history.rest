@@ -23,6 +23,7 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Gustavo Carneiro
 * Christopher Bruns
 * Alejandro Dubrovsky
+* Aron Xu
 
 -----------
 SVN Version
@@ -62,6 +63,10 @@ SVN Version
 
 11. "__int128_t" and "__uint128_t" types were introduced. Many thanks to Gustavo Carneiro
    for providing the patch.
+
+12. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
+    instead of "sys.platform" for platform specific logic
+
 
 -----------
 Version 1.0

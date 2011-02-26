@@ -39,7 +39,7 @@ class cxx_parsers_cfg:
                                                         , compiler=pygccxml.utils.native_compiler.get_gccxml_compiler() )
 
     gccxml.define_symbols.append( gccxml_version )
-    if 'win' in sys.platform:
+    if 'nt' == os.name:
         gccxml.define_symbols.append( '__PYGCCXML_%s__' % gccxml.compiler.upper() )
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )

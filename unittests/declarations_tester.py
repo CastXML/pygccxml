@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import sys
 import pprint
 import unittest
@@ -205,7 +206,7 @@ def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(file_by_file_tester_t))
     suite.addTest( unittest.makeSuite(all_at_once_tester_t))
-    #~ if sys.platform == 'win32' and autoconfig.get_pdb_global_ns():
+    #~ if os.name == 'nt' and autoconfig.get_pdb_global_ns():
         #~ suite.addTest( unittest.makeSuite(pdb_based_tester_t))
 
     return suite

@@ -21,7 +21,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     @property
     def known_issues( self ):
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             issues = set([
                 # array as function argument: 'int FA10_i_i(int * const)'
                   '?FA10_i_i@@YAHQAH@Z'
@@ -101,7 +101,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         for blob in parser.loaded_symbols:
             if isinstance( blob, tuple ):
                 blob = blob[0]
-            if 'win32' in sys.platform:
+            if 'nt' == os.name:
                 #TODO: find out where undecorate function is exposed on linux
                 undname = binary_parsers.undecorate_blob( blob )
                 if "`" in undname:
@@ -131,15 +131,15 @@ class tester_t( parser_test_case.parser_test_case_t ):
                 self.fail( os.linesep.join(msg) )
 
     def test_map_file( self ):
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             self.__tester_impl( self.map_file, 71 )
 
     def test_dll_file( self ):
-        if 'win32' in sys.platform:
+        if 'nt' == os.name:
             self.__tester_impl( self.dll_file, 71 )
 
     def test_z_compare_parsers( self ):
-        if 'win32' not in sys.platform:
+        if 'nt' != os.name:
             return
         dsymbols, dparser = binary_parsers.merge_information( self.global_ns, self.dll_file, runs_under_unittest=True )
         msymbols, mparser = binary_parsers.merge_information( self.global_ns, self.map_file, runs_under_unittest=True )
@@ -158,7 +158,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( was_error == False )
 
     def test_so_file( self ):
-        if 'linux2' in sys.platform:
+        if 'posix' in os.name:
             self.__tester_impl( self.so_file, 64 )
 
     def dont_test_print( self ):

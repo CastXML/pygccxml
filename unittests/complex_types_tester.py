@@ -3,6 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import sys
 import unittest
 import autoconfig
@@ -32,7 +33,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
 def create_suite():
     suite = unittest.TestSuite()
-    if sys.platform != 'win32':
+    if os.name != 'nt':
         suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
