@@ -5,7 +5,6 @@ Author: Roman Yakovenko
 Author-email: roman yakovenko at gmail com
 Maintainer: Roman Yakovenko
 Maintainer-email: roman yakovenko at gmail com
-Home-page: http://www.language-binding.net/
 Download-url: http://sourceforge.net/project/showfiles.php?group_id=118209
 Summary: Python package for easy C++ declarations navigation
 License: Boost Software License

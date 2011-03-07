@@ -62,7 +62,7 @@ SVN Version
     as suggested by `Jakub Wilk <http://groups.google.com/group/linux.debian.bugs.dist/browse_thread/thread/572d2286ca0b2cec?pli=1>`
 
 11. "__int128_t" and "__uint128_t" types were introduced. Many thanks to Gustavo Carneiro
-   for providing the patch.
+    for providing the patch.
 
 12. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
     instead of "sys.platform" for platform specific logic.
