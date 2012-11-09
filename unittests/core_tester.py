@@ -174,7 +174,7 @@ class core_t( parser_test_case.parser_test_case_t ):
     def test_fundamental_types(self):
         #check whether all build in types could be constructed
         errors = []
-        for fundamental_type_name, fundamental_type in FUNDAMENTAL_TYPES.iteritems():
+        for fundamental_type_name, fundamental_type in FUNDAMENTAL_TYPES.items():
             if 'complex' in fundamental_type_name:
                 continue #I check this in an other tester
             if isinstance( fundamental_type, (int128_t, uint128_t) ):
@@ -281,12 +281,12 @@ class core_t( parser_test_case.parser_test_case_t ):
         for index, do_nothing in enumerate(do_nothings):
             others = do_nothings[:index] + do_nothings[index+1:]
             if set( do_nothing.overloads ) != set( others ):
-                print '\nexisting: '
+                print('\nexisting: ')
                 for x in do_nothing.overloads:
-                    print str(x)
-                print '\nexpected: '
+                    print(str(x))
+                print('\nexpected: ')
                 for x in others:
-                    print str(x)
+                    print(str(x))
 
             self.failUnless( set( do_nothing.overloads ) == set( others )
                              , "there is a difference between expected function overloads and existing ones." )

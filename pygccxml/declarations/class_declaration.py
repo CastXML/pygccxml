@@ -12,11 +12,11 @@ This modules contains definition for next C++ declarations:
     - small helper class for describing C++ class hierarchy
 """
 
-import scopedef
-import compilers
-import algorithm
-import declaration
-import dependencies
+from . import scopedef
+from . import compilers
+from . import algorithm
+from . import declaration
+from . import dependencies
 from pygccxml import utils
 
 class ACCESS_TYPES:
@@ -34,8 +34,8 @@ class CLASS_TYPES:
     ALL = [ CLASS, STRUCT, UNION ]
 
 def get_partial_name( name ):
-    import templates
-    import container_traits #prevent cyclic dependencies
+    from . import templates
+    from . import container_traits #prevent cyclic dependencies
     ct = container_traits.find_container_traits( name )
     if ct:
         return ct.remove_defaults( name )
@@ -130,7 +130,7 @@ class class_declaration_t( declaration.declaration_t ):
     def container_traits( self ):
         """reference to :class:`container_traits_impl_t` or None"""
         if self._container_traits_set == False:
-            import container_traits #prevent cyclic dependencies
+            from . import container_traits #prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits( self )
         return self._container_traits
@@ -419,8 +419,9 @@ class class_t( scopedef.scopedef_t ):
     def __find_out_member_dependencies( self, access_type ):
         members = self.get_members( access_type )
         answer = []
-        map( lambda mem: answer.extend( mem.i_depend_on_them(recursive=True) ), members )
-        member_ids = set( map( lambda m: id( m ), members ) )
+        for mem in members:
+            answer.extend( mem.i_depend_on_them(recursive=True) )
+        member_ids = set( [id( m ) for m in members] )
         for dependency in answer:
             if id( dependency.declaration ) in member_ids:
                 dependency.access_type = access_type
@@ -431,12 +432,12 @@ class class_t( scopedef.scopedef_t ):
 
         answer = []
 
-        map( lambda base: answer.append( report_dependency( base.related_class, base.access_type, "base class" ) )
-             , self.bases )
+        for base in self.bases:
+            answer.append( report_dependency( base.related_class, base.access_type, "base class" ) )
 
         if recursive:
-            map( lambda access_type: answer.extend( self.__find_out_member_dependencies( access_type ) )
-                 , ACCESS_TYPES.ALL )
+            for access_type in ACCESS_TYPES.ALL:
+                answer.extend( self.__find_out_member_dependencies( access_type ) )
 
         return answer
 
@@ -444,7 +445,7 @@ class class_t( scopedef.scopedef_t ):
     def container_traits( self ):
         """reference to :class:`container_traits_impl_t` or None"""
         if self._container_traits_set == False:
-            import container_traits #prevent cyclic dependencies
+            from . import container_traits #prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits( self )
         return self._container_traits
@@ -464,7 +465,7 @@ class class_t( scopedef.scopedef_t ):
             return None
 
     def _get_partial_name_impl( self ):
-        import type_traits #prevent cyclic dependencies
+        from . import type_traits #prevent cyclic dependencies
         if type_traits.is_std_string( self ):
             return 'string'
         elif type_traits.is_std_wstring( self ):
@@ -474,7 +475,7 @@ class class_t( scopedef.scopedef_t ):
 
     def find_noncopyable_vars( self ):
         """returns list of all `noncopyable` variables"""
-        import type_traits as tt#prevent cyclic dependencies
+        from . import type_traits as tt#prevent cyclic dependencies
         logger = utils.loggers.cxx_parser
         mvars = self.vars( lambda v: not v.type_qualifiers.has_static, recursive=False, allow_empty=True )
         noncopyable_vars = []
@@ -502,7 +503,7 @@ class class_t( scopedef.scopedef_t ):
     @property
     def has_vtable( self ):
         """True, if class has virtual table, False otherwise"""
-        import calldef
+        from . import calldef
         return bool( self.calldefs( lambda f: isinstance( f, calldef.member_function_t ) \
                                               and f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL
                                     , recursive=False

@@ -7,9 +7,9 @@
 defines :class:`pygccxml.declarations.declaration_t` class - all declarations base class
 """
 
-import algorithm
-import templates
-import algorithms_cache
+from . import algorithm
+from . import templates
+from . import algorithms_cache
 
 class location_t(object):
     """provides information about the location of the declaration within the source file"""
@@ -98,7 +98,7 @@ class declaration_t( object ):
         #Every derived class should implement this method. This method should
         #return a list of items, that should be compared.
 
-        print '_get__cmp__items not implemented for class ', self.__class__.__name__
+        print('_get__cmp__items not implemented for class ', self.__class__.__name__)
         raise NotImplemented()
 
     def _get__cmp__data(self):
@@ -129,10 +129,10 @@ class declaration_t( object ):
     def __lt__(self, other):
         """
         .. code-block:: python
-        
+
            if not isinstance( other, self.__class__ ):
                return self.__class__.__name__ < other.__class__.__name__
-           return self._get__cmp__data() < other._get__cmp__data()          
+           return self._get__cmp__data() < other._get__cmp__data()
         """
         if not isinstance( other, self.__class__ ):
             return self.__class__.__name__ < other.__class__.__name__
@@ -276,7 +276,7 @@ class declaration_t( object ):
 
     def i_depend_on_them( self, recursive=True ):
         """return list of all types and declarations the declaration depends on"""
-        print self
+        print(self)
         raise NotImplementedError()
 
     def _get_compiler( self ):

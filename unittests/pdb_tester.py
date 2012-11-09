@@ -36,14 +36,14 @@ class tester_t( unittest.TestCase ):
 
     def test_create_nss(self):
         reader = mspdb.decl_loader_t( self.pdb_file )
-        print reader.symbols_table.name
+        print(reader.symbols_table.name)
         reader.read()
         f = file( 'decls.cpp', 'w+' )
         declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
         f.close()
 
         f = file( 'symbols.txt', 'w+')
-        for smbl in reader.symbols.itervalues():
+        for smbl in reader.symbols.values():
             f.write( smbl.uname )
             f.write( os.linesep )
             f.write( '\t' + str(smbl.name) )
@@ -75,15 +75,15 @@ class tester_t( unittest.TestCase ):
 
     #todo: move to GUI
     def test_pdbs( self ):
-        for f in filter( lambda f: f.endswith( 'pdb' ), os.listdir( r'E:\pdbs' ) ):
+        for f in [f for f in os.listdir( r'E:\pdbs' ) if f.endswith( 'pdb' )]:
             try:
                 reader = mspdb.decl_loader_t( f )
                 reader.read()
                 f = file( d + '.txt', 'w+' )
                 declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
                 f.close()
-            except Exception, error:
-                print 'unable to load pdb file ', f, ' Error: ', str(error)
+            except Exception as error:
+                print('unable to load pdb file ', f, ' Error: ', str(error))
 
 
 def create_suite():

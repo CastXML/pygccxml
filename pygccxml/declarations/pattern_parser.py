@@ -28,7 +28,7 @@ class parser_t( object ):
 
     def name( self, decl_string ):
         """implementation details"""
-        assert isinstance( decl_string, types.StringTypes )
+        assert isinstance( decl_string, str )
         if not self.has_pattern( decl_string ):
             return decl_string
         args_begin = decl_string.find( self.__begin )
@@ -116,7 +116,7 @@ class parser_t( object ):
         """implementation details"""
         if None is arg_separator:
             arg_separator = ', '
-        args = filter( None, args)
+        args = [_f for _f in args if _f]
         args_str = ''
         if not args:
             args_str = ' '
@@ -135,6 +135,6 @@ class parser_t( object ):
         for i, arg in enumerate( args ):
             args[i] = self.normalize( arg )
         return self.join( name, args, arg_separator )
-            
 
-        
+
+

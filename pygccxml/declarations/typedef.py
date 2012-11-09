@@ -7,8 +7,8 @@
 defines class that describes C++ typedef declaration
 """
 
-import declaration
-import dependencies
+from . import declaration
+from . import dependencies
 
 class typedef_t( declaration.declaration_t ):
     """describes C++ typedef declaration"""

@@ -280,11 +280,11 @@ for details on Portable Executable (PE) file format
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 2:
-        print 'usage: %s dll_file_name'%sys.argv[0]
+        print('usage: %s dll_file_name'%sys.argv[0])
         sys.exit()
 ##    names = read_export_table(sys.argv[1], mmap=False, use_kernel=False)
     names = read_export_table(sys.argv[1], mmap=False, use_kernel=False)
     for name in names:
-        print name
+        print(name)
 
 

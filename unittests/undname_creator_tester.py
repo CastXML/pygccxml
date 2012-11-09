@@ -75,9 +75,9 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
             while process.poll() is None:
                 line = process.stdout.readline()
-                print line.rstrip()
+                print(line.rstrip())
             for line in process.stdout.readlines():
-                print line.rstrip()
+                print(line.rstrip())
             if process.returncode:
                 raise RuntimeError( "unable to compile binary parser module. See output for the errors." )
 
@@ -147,10 +147,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( len( dparser.loaded_symbols ) == len( mparser.loaded_symbols ) )
 
         was_error = False
-        for blob, decl in dsymbols.iteritems():
+        for blob, decl in dsymbols.items():
             if blob not in msymbols:
                 was_error = True
-                print '\n%s could not be found in .map file' % binary_parsers.undecorate_blob( blob )
+                print('\n%s could not be found in .map file' % binary_parsers.undecorate_blob( blob ))
                 #~ self.failUnless( blob in msymbols, binary_parsers.undecorate_blob( blob ) )
             else:
                 mdecl = msymbols[ blob ]
@@ -165,10 +165,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
         """primary used for debugging"""
         symbols, parser = binary_parsers.merge_information( self.global_ns, self.so_file, runs_under_unittest=True )
         for f in self.global_ns.calldefs( allow_empty=True, recursive=True ):
-            print binary_parsers.format_decl( f, 'nm' )
+            print(binary_parsers.format_decl( f, 'nm' ))
 
         for v in self.global_ns.variables( allow_empty=True, recursive=True ):
-            print binary_parsers.format_decl( v, 'nm' )
+            print(binary_parsers.format_decl( v, 'nm' ))
 
 
 def create_suite():

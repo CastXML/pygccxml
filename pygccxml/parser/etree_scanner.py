@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import scanner
+from . import scanner
 
 #keep py2exe happy
 import xml.etree.ElementTree
@@ -22,7 +22,7 @@ class etree_saxifier_t(object):
 
     def __recursive_saxify(self, element ):
         self.__handler.startElement( element.tag, element.attrib )
-        map( self.__recursive_saxify, element )
+        for e in element: self.__recursive_saxify(e)
         self.__handler.endElement( element.tag )
 
 class etree_scanner_t( scanner.scanner_t ):

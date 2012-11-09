@@ -27,7 +27,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         parsed.sort()
         copied.sort()
         failuers = []
-        for parsed_decl, copied_decl, index in zip( parsed, copied, range(len(copied)) ):
+        for parsed_decl, copied_decl, index in zip( parsed, copied, list(range(len(copied))) ):
             if parsed_decl != copied_decl:
                 failuers.append( "__lt__ and/or __qe__ does not working properly in case of %s, %s, index %d" \
                                  % ( parsed_decl.__class__.__name__, copied_decl.__class__.__name__, index ) )
@@ -65,7 +65,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                          , "__lt__ and/or __qe__ does not working properly" )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

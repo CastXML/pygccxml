@@ -9,12 +9,12 @@ defines few algorithms, that deals with different properties of std containers
 
 import types
 import string
-import calldef
-import cpptypes
-import namespace
-import templates
-import type_traits
-import class_declaration
+from . import calldef
+from . import cpptypes
+from . import namespace
+from . import templates
+from . import type_traits
+from . import class_declaration
 
 std_namespaces = ( 'std', 'stdext', '__gnu_cxx' )
 
@@ -32,7 +32,7 @@ class defaults_eraser:
                                  , 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >' ) }
 
         new_name = cls_name
-        for short_name, long_names in strings.iteritems():
+        for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace( lname, short_name )
         return new_name
@@ -366,7 +366,7 @@ class container_traits_impl_t:
                std::vector< int >
         """
         name = type_or_string
-        if not isinstance( type_or_string, types.StringTypes ):
+        if not isinstance( type_or_string, str ):
             name = self.class_declaration( type_or_string ).name
         if not self.remove_defaults_impl:
             return name
@@ -475,7 +475,7 @@ container_traits = (
 """tuple of all STD container traits classes"""
 
 def find_container_traits( cls_or_string ):
-    if isinstance( cls_or_string, types.StringTypes ):
+    if isinstance( cls_or_string, str ):
         if not templates.is_instantiation( cls_or_string ):
             return None
         name = templates.name( cls_or_string )

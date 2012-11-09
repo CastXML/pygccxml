@@ -20,19 +20,19 @@ def _make_list( argument ):
         return argument
     else:
         raise TypeError( 'Argument "%s" must be or list of strings or string.' % argument )
-        
+
 class base_files_iterator:
     def __init__(self, file_exts, is_include_exts = True):
         self.__file_exts = _make_list( file_exts )
         self.__is_include_exts = is_include_exts
 
-    def _is_to_skip(self, file_path):     
+    def _is_to_skip(self, file_path):
         if not self.__file_exts:
             return 0
         file_ext = os.path.splitext( file_path )[1]
         if not file_ext:
             file_ext = '.' + file_ext
-        file_ext = '*' + file_ext 
+        file_ext = '*' + file_ext
         if file_ext.lower() in self.__file_exts:
             return not self.__is_include_exts
         else:
@@ -54,7 +54,7 @@ class base_files_iterator:
     def __iter__(self):
         raise NotImplementedError
 
-    def next(self):
+    def __next__(self):
         raise NotImplementedError
 
     def restart(self):
@@ -81,8 +81,8 @@ class files_walker(base_files_iterator):
         self.__file_generator = self.__walk()
         return self
 
-    def next(self):
-        return self.__file_generator.next()
+    def __next__(self):
+        return next(self.__file_generator)
 
     def restart(self):
         self.__file_generator = None
@@ -95,7 +95,7 @@ class directories_walker:
             self.__directories.extend( self.__sub_directories( root ) )
         self.__is_recursive = is_recursive
         self.__directory_generator = None
-        
+
     def __sub_directories(self, directory_path):
         sub_directories = []
         directory_contains = os.listdir(directory_path)
@@ -112,13 +112,13 @@ class directories_walker:
             if self.__is_recursive:
                 for f in directories_walker( [curr_directory], True ):
                     yield f
-                
+
     def __iter__(self):
         self.__directory_generator = self.__walk()
         return self
 
-    def next(self):
-        return self.__directory_generator.next()
+    def __next__(self):
+        return next(self.__directory_generator)
 
     def restart(self):
         self.__directory_generator = None

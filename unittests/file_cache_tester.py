@@ -30,7 +30,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def touch(self):
         #os.utime( self.header, ( os.stat( self.header )[ stat.ST_ATIME ], int( time.time() ) ) )
         # Need to change file.
-        header = file(self.header, "a")
+        header = open(self.header, "a")
         header.write("//touch")
         header.close()
 

@@ -12,7 +12,6 @@ from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
-
 class tester_t( parser_test_case.parser_test_case_t ):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     global_ns = None
@@ -36,11 +35,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
         decls = parser.parse_string( self.template % member_inline_call.decl_string, self.config )
         self.failUnless( decls, "Created decl_string for member function containes mistake" )
 
-    def test_free_function(self):        
+    def test_free_function(self):
         return_default_args = self.global_ns.free_fun( 'return_default_args' )
         decls = parser.parse_string( self.template % return_default_args.decl_string, self.config )
         self.failUnless( decls, "Created decl_string for global function containes mistake" )
-    
+
     def test_all_mem_and_free_funs( self ):
         ns = self.global_ns.ns( '::declarations::calldef' )
         for f in ns.mem_funs():
@@ -51,7 +50,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             self.failUnless( decls, "Created decl_string for member function containes mistake" )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

@@ -6,7 +6,7 @@
 """implements few "find" algorithms on declarations tree"""
 
 import types
-import algorithm
+from . import algorithm
 
 class matcher:
     """class-namespace, contains implementation of few "find" algorithms and
@@ -41,13 +41,13 @@ class matcher:
         """
 
         where = []
-        if isinstance( decls, types.ListType ):
+        if isinstance( decls, list ):
             where.extend( decls )
         else:
             where.append( decls )
         if recursive:
             where = algorithm.make_flatten( where )
-        return filter( decl_matcher, where )
+        return list(filter( decl_matcher, where ))
 
     @staticmethod
     def find_single( decl_matcher, decls, recursive=True ):

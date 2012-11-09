@@ -6,25 +6,25 @@
 """Parser sub-package.
 """
 
-from config import config_t
-from config import gccxml_configuration_t
-from config import load_gccxml_configuration
-from config import gccxml_configuration_example
+from .config import config_t
+from .config import gccxml_configuration_t
+from .config import load_gccxml_configuration
+from .config import gccxml_configuration_example
 
-from project_reader import COMPILATION_MODE
-from project_reader import project_reader_t
-from project_reader import file_configuration_t
-from project_reader import create_text_fc
-from project_reader import create_source_fc
-from project_reader import create_gccxml_fc
-from project_reader import create_cached_source_fc
+from .project_reader import COMPILATION_MODE
+from .project_reader import project_reader_t
+from .project_reader import file_configuration_t
+from .project_reader import create_text_fc
+from .project_reader import create_source_fc
+from .project_reader import create_gccxml_fc
+from .project_reader import create_cached_source_fc
 
-from source_reader import source_reader_t
-from source_reader import gccxml_runtime_error_t
-from declarations_cache import cache_base_t
-from declarations_cache import file_cache_t
-from declarations_cache import dummy_cache_t
-from directory_cache import directory_cache_t
+from .source_reader import source_reader_t
+from .source_reader import gccxml_runtime_error_t
+from .declarations_cache import cache_base_t
+from .declarations_cache import file_cache_t
+from .declarations_cache import dummy_cache_t
+from .directory_cache import directory_cache_t
 #shortcut
 CONTENT_TYPE = file_configuration_t.CONTENT_TYPE
 

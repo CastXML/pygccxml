@@ -9,9 +9,9 @@ defines class, :class:`decl_printer_t` that prints declarations tree in a user f
 
 import os
 import sys
-import calldef
-import algorithm
-import decl_visitor
+from . import calldef
+from . import algorithm
+from . import decl_visitor
 
 
 class decl_printer_t( decl_visitor.decl_visitor_t ):
@@ -190,9 +190,9 @@ class decl_printer_t( decl_visitor.decl_visitor_t ):
                 self.writer( ' ' * curr_level * self.INDENT_SIZE + "align: not implemented".ljust( self.JUSTIFY ) + os.linesep)
 
         if self.__inst.aliases:
-            aliases = map( lambda typedef: typedef.name, self.__inst.aliases )
+            aliases = [typedef.name for typedef in self.__inst.aliases]
             aliases.sort()
-            msg = 'aliases: ' + `aliases`
+            msg = 'aliases: ' + repr(aliases)
             self.writer( ' ' * curr_level * self.INDENT_SIZE + msg.ljust( self.JUSTIFY ) + os.linesep)
 
         def print_hierarchy(hierarchy_type, classes, curr_level):
@@ -299,8 +299,8 @@ def dump_declarations( decls, fpath ):
     dump declarations tree rooted at each of the included nodes to the file
 
     :param decls: either a single :class:declaration_t object or list of :class:declaration_t objects
-    :param fpath: file name 
+    :param fpath: file name
     """
-    fobj = file( fpath, 'w+' )
+    fobj = open( fpath, 'w+' )
     print_declarations( decls, writer=fobj.write )
     fobj.close()

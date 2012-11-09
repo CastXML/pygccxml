@@ -6,12 +6,13 @@
 """defines :class:`scopedef_t` class"""
 
 import time
-import algorithm
-import templates
-import declaration
-import mdecl_wrapper
+from . import algorithm
+from . import templates
+from . import declaration
+from . import mdecl_wrapper
 from pygccxml import utils
-import matcher as matcher_module
+from . import matcher as matcher_module
+import collections
 
 class scopedef_t( declaration.declaration_t ):
     """
@@ -157,9 +158,9 @@ class scopedef_t( declaration.declaration_t ):
         self._all_decls = None
         self._all_decls_not_recursive = None
 
-        map( lambda decl: decl.clear_optimizer()
-             , filter( lambda decl: isinstance( decl, scopedef_t )
-                       ,  self.declarations ) )
+        for decl in self.declarations:
+            if isinstance( decl, scopedef_t ):
+                decl.clear_optimizer()
 
     def init_optimizer(self):
         """
@@ -194,26 +195,26 @@ class scopedef_t( declaration.declaration_t ):
             for type_ in types:
                 self._type2decls[ type_ ].append( decl )
                 name2decls = self._type2name2decls[ type_ ]
-                if not name2decls.has_key( decl.name ):
+                if decl.name not in name2decls:
                     name2decls[ decl.name ] = []
                 name2decls[ decl.name ].append( decl )
                 if self is decl.parent:
                     self._type2decls_nr[ type_ ].append( decl )
                     name2decls_nr = self._type2name2decls_nr[ type_ ]
-                    if not name2decls_nr.has_key( decl.name ):
+                    if decl.name not in name2decls_nr:
                         name2decls_nr[ decl.name ] = []
                     name2decls_nr[ decl.name ].append( decl )
 
-        map( lambda decl: decl.init_optimizer()
-             , filter( lambda decl: isinstance( decl, scopedef_t )
-                       ,  self._all_decls_not_recursive ) )
+        for decl in self._all_decls_not_recursive:
+            if isinstance( decl, scopedef_t ):
+                decl.init_optimizer()
         if self.name == '::':
             self._logger.debug( "preparing data structures for query optimizer - done( %f seconds ). "
                                 % ( time.clock() - start_time ) )
         self._optimized = True
 
     def _build_operator_function( self, name, function ):
-        if callable( name ):
+        if isinstance( name, collections.Callable):
             return name
         else:
             return function
@@ -225,7 +226,7 @@ class scopedef_t( declaration.declaration_t ):
                 return 'operator ' + sym
             else:
                 return 'operator'+ sym
-        if callable( name ) and None is function:
+        if isinstance( name, collections.Callable) and None is function:
             name = None
         if name:
             if not 'operator' in name:
@@ -247,7 +248,7 @@ class scopedef_t( declaration.declaration_t ):
 
     def __normalize_args( self, **keywds ):
         """implementation details"""
-        if callable( keywds['name'] ) and None is keywds['function']:
+        if isinstance( keywds['name'], collections.Callable) and None is keywds['function']:
             keywds['function'] = keywds['name']
             keywds['name'] = None
         return keywds
@@ -268,13 +269,13 @@ class scopedef_t( declaration.declaration_t ):
 
     def __findout_decl_type( self, match_class, **keywds ):
         """implementation details"""
-        if keywds.has_key( 'decl_type' ):
+        if 'decl_type' in keywds:
             return keywds['decl_type']
 
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
-        if matcher_args.has_key('allow_empty'):
+        if 'allow_empty' in matcher_args:
             del matcher_args['allow_empty']
 
         matcher = match_class( **matcher_args )
@@ -287,7 +288,7 @@ class scopedef_t( declaration.declaration_t ):
         matcher_args = keywds.copy()
         del matcher_args['function']
         del matcher_args['recursive']
-        if matcher_args.has_key('allow_empty'):
+        if 'allow_empty' in matcher_args:
             del matcher_args['allow_empty']
 
         matcher = match_class( **matcher_args )
@@ -306,7 +307,7 @@ class scopedef_t( declaration.declaration_t ):
             if recursive:
                 decls = algorithm.make_flatten( self.declarations )
             if decl_type:
-                decls = filter( lambda d: isinstance( d, decl_type ), decls )
+                decls = [d for d in decls if isinstance( d, decl_type )]
             return decls
 
         if name and templates.is_instantiation( name ):
@@ -320,13 +321,13 @@ class scopedef_t( declaration.declaration_t ):
                 name = matcher.decl_name_only
             if recursive:
                 self._logger.debug( 'query has been optimized on type and name' )
-                if self._type2name2decls[decl_type].has_key( name ):
+                if name in self._type2name2decls[decl_type]:
                     return self._type2name2decls[decl_type][name]
                 else:
                     return []
             else:
                 self._logger.debug( 'non recursive query has been optimized on type and name' )
-                if self._type2name2decls_nr[decl_type].has_key( name ):
+                if name in self._type2name2decls_nr[decl_type]:
                     return self._type2name2decls_nr[decl_type][name]
                 else:
                     return []

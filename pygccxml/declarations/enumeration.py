@@ -9,8 +9,8 @@ defines class, that describes C++ `enum`
 
 import copy
 import types
-import compilers
-import declaration
+from . import compilers
+from . import declaration
 
 class enumeration_t( declaration.declaration_t ):
     """
@@ -58,18 +58,18 @@ class enumeration_t( declaration.declaration_t ):
             return
         # Check that we have indeed a list...
         if type(values)!=list:
-            raise ValueError, "'values' must be a list (got a %s instead)"%type(values).__name__
+            raise ValueError("'values' must be a list (got a %s instead)"%type(values).__name__)
         # Append the items individually. This has the effect that there's
         # some additional type checking and that a copy of 'values' is stored
         # and the caller cannot further manipulate the list via his own reference
         for item in values:
-            if isinstance(item, types.StringTypes):
+            if isinstance(item, str):
                 self.append_value(item)
             elif type(item)==tuple:
                 name,num = item
                 self.append_value(name, num)
             else:
-                raise ValueError, "'values' contains an invalid item: %s"%item
+                raise ValueError("'values' contains an invalid item: %s"%item)
     values = property( _get_values, _set_values
                        , doc="""A list of tuples (valname(str), valnum(int)) that contain the enumeration values.
                        @type: list""")

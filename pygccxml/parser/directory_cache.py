@@ -17,8 +17,11 @@ argument of the :func:`parser.parse` function.
 """
 
 import os, os.path, gzip, hashlib
-import cPickle
-import declarations_cache
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+from . import declarations_cache
 
 class index_entry_t:
     """
@@ -93,7 +96,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         # Check if dir refers to an existing file...
         if os.path.isfile(self.__dir):
-            raise ValueError, "Cannot use %s as cache directory. There is already a file with that name."%self.__dir
+            raise ValueError("Cannot use %s as cache directory. There is already a file with that name."%self.__dir)
 
         # Load the cache or create the cache directory...
         if os.path.isdir(self.__dir):
@@ -120,14 +123,14 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """
         # Normlize all paths...
         source_file = os.path.normpath(source_file)
-        included_files = map(lambda p: os.path.normpath(p), included_files)
+        included_files = [os.path.normpath(p) for p in included_files]
 
         # Create the list of dependent files. This is the included_files list
         # + the source file. Duplicate names are removed.
         dependent_files = {}
         for name in [source_file]+included_files:
             dependent_files[name] = 1
-        dependent_files = dependent_files.keys()
+        dependent_files = list(dependent_files.keys())
 
         key = self._create_cache_key(source_file)
         # Remove an existing entry (if there is one)
@@ -213,8 +216,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
             self.__index = data[0]
             self.__filename_rep = data[1]
             if self.__filename_rep._md5_sigs!=self.__md5_sigs:
-                print "CACHE: Warning: md5_sigs stored in the cache is set to %s."%self.__filename_rep._md5_sigs
-                print "       Please remove the cache to change this setting."
+                print("CACHE: Warning: md5_sigs stored in the cache is set to %s."%self.__filename_rep._md5_sigs)
+                print("       Please remove the cache to change this setting.")
                 self.__md5_sigs = self.__filename_rep._md5_sigs
         else:
             self.__index = {}
@@ -248,7 +251,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
             f = gzip.GzipFile(filename, "rb")
         else:
             f = file(filename, "rb")
-        res = cPickle.load(f)
+        res = pickle.load(f)
         f.close()
         return res
 
@@ -265,7 +268,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
             f = gzip.GzipFile(filename, "wb")
         else:
             f = file(filename, "wb")
-        cPickle.dump(data, f, cPickle.HIGHEST_PROTOCOL)
+        pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
     def _remove_entry(self, source_file, key):
@@ -301,8 +304,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         cachefilename = self._create_cache_filename(source_file)
         try:
             os.remove(cachefilename)
-        except OSError, e:
-            print "Could not remove cache file (%s)"%e
+        except OSError as e:
+            print("Could not remove cache file (%s)"%e)
 
 
     def _create_cache_key(self, source_file):
@@ -341,10 +344,10 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """
         m = hashlib.md5()
         m.update(config.working_directory)
-        map(lambda p: m.update(p), config.include_paths)
-        map(lambda p: m.update(p), config.define_symbols)
-        map(lambda p: m.update(p), config.undefine_symbols)
-        map(lambda p: m.update(p), config.cflags)
+        for p in config.include_paths: m.update(p)
+        for p in config.define_symbols: m.update(p)
+        for p in config.undefine_symbols: m.update(p)
+        for p in config.cflags: m.update(p)
         return m.digest()
 
 
@@ -452,7 +455,7 @@ class filename_repository_t:
         """
         entry = self.__entries.get(id_)
         if entry==None:
-            raise ValueError, "Invalid filename id (%d)"%id_
+            raise ValueError("Invalid filename id (%d)"%id_)
 
         # Decrease reference count and check if the entry has to be removed...
         if entry.dec_ref_count()==0:
@@ -464,7 +467,7 @@ class filename_repository_t:
         """
         entry = self.__entries.get(id_)
         if entry==None:
-            raise ValueError, "Invalid filename id_ (%d)"%id_
+            raise ValueError("Invalid filename id_ (%d)"%id_)
 
         # Is the signature already known?
         if entry.sig_valid:
@@ -495,8 +498,8 @@ class filename_repository_t:
                 return None
             try:
                 f = file(entry.filename)
-            except IOError, e:
-                print "Cannot determine md5 digest:",e
+            except IOError as e:
+                print("Cannot determine md5 digest:",e)
                 return None
             data = f.read()
             f.close()
@@ -505,23 +508,23 @@ class filename_repository_t:
             # return file modification date...
             try:
                 return os.path.getmtime(entry.filename)
-            except OSError, e:
+            except OSError as e:
                 return None
 
     def _dump(self):
         """Dump contents for debugging/testing.
         """
 
-        print 70*"-"
-        print "ID lookup table:"
+        print(70*"-")
+        print("ID lookup table:")
         for name in self.__id_lut:
             id_ = self.__id_lut[name]
-            print "  %s -> %d"%(name, id_)
+            print("  %s -> %d"%(name, id_))
 
-        print 70*"-"
-        print "%-4s %-60s %s"%("ID", "Filename", "Refcount")
-        print 70*"-"
+        print(70*"-")
+        print("%-4s %-60s %s"%("ID", "Filename", "Refcount"))
+        print(70*"-")
         for id_ in self.__entries:
             entry = self.__entries[id_]
-            print "%04d %-60s %d"%(id_, entry.filename, entry.refcount)
+            print("%04d %-60s %d"%(id_, entry.filename, entry.refcount))
 

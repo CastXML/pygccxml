@@ -23,12 +23,13 @@ gccxml_version = '__GCCXML_09__'
 
 try:
     import pygccxml
-    print 'unittests will run on INSTALLED version'
+    print('unittests will run on INSTALLED version')
 except ImportError:
     sys.path.append( os.path.join( os.curdir, '..' ) )
     import pygccxml
-    print 'unittests will run on DEVELOPMENT version'
-
+    print('unittests will run on DEVELOPMENT version')
+import pygccxml.declarations
+import pygccxml.parser
 
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
@@ -44,4 +45,4 @@ class cxx_parsers_cfg:
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )
 
-print 'GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler
+print('GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler)

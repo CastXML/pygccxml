@@ -18,16 +18,17 @@ which encapsulate a single trait from the C++ type system. For example:
 """
 
 import os
-import matchers
-import typedef
-import calldef
-import cpptypes
-import variable
-import algorithm
-import namespace
-import templates
-import enumeration
-import class_declaration
+
+from . import matchers
+from . import typedef
+from . import calldef
+from . import cpptypes
+from . import variable
+from . import algorithm
+from . import namespace
+from . import templates
+from . import enumeration
+from . import class_declaration
 from pygccxml import utils
 import types as build_in_types
 
@@ -93,7 +94,7 @@ def base_type(type):
 
 def does_match_definition(given, main, secondary ):
     """implementation details"""
-    assert isinstance( secondary, build_in_types.TupleType )
+    #assert isinstance( secondary, build_in_types.tuple )
     assert 2 == len( secondary ) #general solution could be provided
     types = decompose_type( given )
     if isinstance( types[0], main ):
@@ -954,7 +955,7 @@ class impl_details:
                                  ,  allow_empty=True )
         if not found:
             no_global_ns_value_type_str = value_type_str[2:]
-            if cpptypes.FUNDAMENTAL_TYPES.has_key( no_global_ns_value_type_str ):
+            if no_global_ns_value_type_str in cpptypes.FUNDAMENTAL_TYPES:
                 return cpptypes.FUNDAMENTAL_TYPES[ no_global_ns_value_type_str ]
             elif is_std_string( value_type_str ):
                 string_ = global_ns.typedef( '::std::string' )
@@ -1061,7 +1062,7 @@ def is_std_string( type_ ):
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
         , '::std::basic_string<char, std::char_traits<char>, std::allocator<char> >'
         , '::std::string' ]
-    if isinstance( type_, build_in_types.StringTypes ):
+    if isinstance( type_, str ):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1073,7 +1074,7 @@ def is_std_wstring( type_ ):
         '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
         , '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
         , '::std::wstring' ]
-    if isinstance( type_, build_in_types.StringTypes ):
+    if isinstance( type_, str ):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1085,7 +1086,7 @@ def is_std_ostream( type_ ):
         '::std::basic_ostream<char, std::char_traits<char> >'
         , '::std::basic_ostream<char,std::char_traits<char> >'
         , '::std::ostream' ]
-    if isinstance( type_, build_in_types.StringTypes ):
+    if isinstance( type_, str ):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1098,7 +1099,7 @@ def is_std_wostream( type_ ):
         '::std::basic_ostream<wchar_t, std::char_traits<wchar_t> >'
         , '::std::basic_ostream<wchar_t,std::char_traits<wchar_t> >'
         , '::std::wostream' ]
-    if isinstance( type_, build_in_types.StringTypes ):
+    if isinstance( type_, str ):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )

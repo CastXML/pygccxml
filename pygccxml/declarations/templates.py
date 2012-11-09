@@ -16,7 +16,7 @@ This module provides functionality necessary to
 C++ template instantiations
 """
 
-import pattern_parser
+from . import pattern_parser
 
 __THE_PARSER = pattern_parser.parser_t( '<', '>', ',' )
 

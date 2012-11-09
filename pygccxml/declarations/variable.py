@@ -7,9 +7,9 @@
 defines class that describes C++ global and member variable declaration
 """
 
-import declaration
-import dependencies
-import class_declaration
+from . import declaration
+from . import dependencies
+from . import class_declaration
 
 class variable_t( declaration.declaration_t ):
     """describes C++ global and member variable declaration"""
@@ -22,7 +22,7 @@ class variable_t( declaration.declaration_t ):
         self._value = value
         self._bits = bits
         self._byte_offset = 0
-        
+
     def _get__cmp__items( self ):
         """implementation details"""
         return [ self.type, self.type_qualifiers, self.value ]

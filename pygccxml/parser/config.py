@@ -109,8 +109,8 @@ class parser_configuration_t(object):
     def raise_on_wrong_settings( self ):
         """validates the configuration settings and raises RuntimeError on error"""
         self.__ensure_dir_exists( self.working_directory, 'working directory' )
-        map( lambda idir: self.__ensure_dir_exists( idir, 'include directory' )
-             , self.include_paths )
+        for idir in self.include_paths:
+            self.__ensure_dir_exists( idir, 'include directory' )
 
 class gccxml_configuration_t(parser_configuration_t):
     """Configuration object to collect parameters for invoking gccxml.
@@ -240,8 +240,11 @@ def load_gccxml_configuration( configuration, **defaults ):
 
     """
     parser = configuration
-    if isinstance( configuration, types.StringTypes ):
-        from ConfigParser import SafeConfigParser
+    if isinstance( configuration, str ):
+        try:
+            from configparser import SafeConfigParser
+        except ImportError:
+            from ConfigParser import SafeConfigParser
         parser = SafeConfigParser()
         parser.read( configuration )
     gccxml_cfg = gccxml_configuration_t()
@@ -255,8 +258,8 @@ def load_gccxml_configuration( configuration, **defaults ):
             if value.strip():
                 values[ name ] = value
 
-    for name, value in values.iteritems():
-        if isinstance( value, types.StringTypes ):
+    for name, value in values.items():
+        if isinstance( value, str ):
             value = value.strip()
         if name == 'gccxml_path':
             gccxml_cfg.gccxml_path = value
@@ -270,11 +273,11 @@ def load_gccxml_configuration( configuration, **defaults ):
         elif name == 'compiler':
             gccxml_cfg.compiler = value
         else:
-            print '\n%s entry was ignored' % name
+            print('\n%s entry was ignored' % name)
     return gccxml_cfg
 
 
 if __name__ == '__main__':
-    print load_gccxml_configuration( 'gccxml.cfg' ).__dict__
+    print(load_gccxml_configuration( 'gccxml.cfg' ).__dict__)
 
 

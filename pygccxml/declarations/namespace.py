@@ -5,9 +5,9 @@
 
 """defines class, that describes C++ namespace declaration"""
 
-import declaration
-import scopedef
-import algorithm
+from . import declaration
+from . import scopedef
+from . import algorithm
 
 class namespace_t( scopedef.scopedef_t ):
     """
@@ -140,5 +140,6 @@ class namespace_t( scopedef.scopedef_t ):
     def i_depend_on_them( self, recursive=True ):
         answer = []
         if recursive:
-            map( lambda decl: answer.extend( decl.i_depend_on_them() ), self.declarations )
+            for decl in self.declarations:
+                answer.extend( decl.i_depend_on_them() )
         return answer

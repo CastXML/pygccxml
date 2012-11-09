@@ -21,7 +21,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
 
         self.__compiler = None
         if self.__decls:
-            for d in self.__decls.itervalues():
+            for d in self.__decls.values():
                 self.__compiler = d.compiler
                 break
 
@@ -37,9 +37,9 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
     def __link_type(self, type_id):
         if type_id is None:
             return None #in some situations type_id is None, return_type of constructor or destructor
-        elif self.__types.has_key( type_id ):
+        elif type_id in self.__types:
             return self.__types[type_id]
-        elif self.__decls.has_key( type_id ):
+        elif type_id in self.__decls:
             base = declarated_t( declaration=self.__decls[ type_id ] )
             self.__types[type_id] = base
             return base
@@ -52,13 +52,13 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         self.__inst.base = self.__link_type( self.__inst.base )
 
     def __link_members(self):
-        if not self.__membership.has_key( id(self.__inst) ):
+        if id(self.__inst) not in self.__membership:
             return
         for member in self.__membership[ id(self.__inst) ]:
-            if not self.__access.has_key( member ):
+            if member not in self.__access:
                 continue
             access = self.__access[member]
-            if not self.__decls.has_key( member ):
+            if member not in self.__decls:
                 continue
             decl = self.__decls[member]
             if isinstance( self.__inst, class_t ):
@@ -274,7 +274,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         self.__link_compound_type()
 
     def visit_declarated( self ):
-        if isinstance( self.__inst.declaration, types.StringTypes ):
+        if isinstance( self.__inst.declaration, str ):
             self.__inst.declaration = self.__decls[self.__inst.declaration]
 
     def visit_restrict( self ):

@@ -6,8 +6,8 @@
 import os
 import time
 import types
-import source_reader
-import declarations_cache
+from . import source_reader
+from . import declarations_cache
 import pygccxml.declarations
 from pygccxml import utils
 
@@ -163,7 +163,7 @@ class project_reader_t:
         self.__dcache = None
         if isinstance( cache, declarations_cache.cache_base_t ):
             self.__dcache = cache
-        elif isinstance( cache, types.StringTypes ):
+        elif isinstance( cache, str ):
             self.__dcache = declarations_cache.file_cache_t(cache)
         else:
             self.__dcache = declarations_cache.dummy_cache_t()
@@ -183,7 +183,7 @@ class project_reader_t:
         """
         fnames = []
         for f in files:
-            if isinstance( f, types.StringTypes ):
+            if isinstance( f, str ):
                 fnames.append( f )
             elif isinstance( f, file_configuration_t ):
                 if f.content_type in ( file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE
@@ -356,12 +356,12 @@ class project_reader_t:
         decls = []
 
         for decl in nsref.declarations:
-            if not ddhash.has_key( decl.__class__ ):
+            if decl.__class__ not in ddhash:
                 ddhash[ decl.__class__ ] = { decl._name : [ decl ] }
                 decls.append( decl )
             else:
                 joined_decls = ddhash[ decl.__class__ ]
-                if not joined_decls.has_key( decl._name ):
+                if decl._name not in joined_decls:
                     decls.append( decl )
                     joined_decls[decl._name] = [ decl ]
                 else:
@@ -384,20 +384,20 @@ class project_reader_t:
                         assert 1 == len( joined_decls[ decl._name ] )
                         if isinstance( decl, pygccxml.declarations.namespace_t ):
                             joined_decls[ decl._name ][0].take_parenting( decl )
-                            
+
         class_t = pygccxml.declarations.class_t
         class_declaration_t = pygccxml.declarations.class_declaration_t
         if class_t in ddhash and class_declaration_t in ddhash:
-            #if there is a class and its forward declaration - get rid of the 
+            #if there is a class and its forward declaration - get rid of the
             #second one.
             class_names = set()
-            for name, same_name_classes in ddhash[ class_t ].iteritems():
+            for name, same_name_classes in ddhash[ class_t ].items():
                 if not name:
                     continue
                 class_names.add( same_name_classes[0].mangled )
 
             class_declarations = ddhash[ class_declaration_t ]
-            for name, same_name_class_declarations in class_declarations.iteritems():
+            for name, same_name_class_declarations in class_declarations.items():
                 if not name:
                     continue
                 for class_declaration in same_name_class_declarations :
@@ -409,8 +409,7 @@ class project_reader_t:
     def _join_class_hierarchy( self, namespaces ):
         create_key = lambda decl:( decl.location.as_tuple()
                                    , tuple( pygccxml.declarations.declaration_path( decl ) ) )
-        classes = filter( lambda decl: isinstance(decl, pygccxml.declarations.class_t )
-                          , pygccxml.declarations.make_flatten( namespaces ) )
+        classes = [decl for decl in pygccxml.declarations.make_flatten( namespaces ) if isinstance(decl, pygccxml.declarations.class_t )]
         leaved_classes = {}
         #selecting classes to leave
         for class_ in classes:
@@ -475,18 +474,18 @@ class project_reader_t:
         create_key = lambda decl:( decl.location.as_tuple()
                                    , tuple( pygccxml.declarations.declaration_path( decl ) ) )
         create_mangled_key = lambda decl:( decl.location.as_tuple(), decl.mangled )
-                                   
+
         mangled_leaved_classes = {}
-        for cls in leaved_classes.itervalues():
+        for cls in leaved_classes.values():
             mangled_leaved_classes[ create_mangled_key( cls ) ] = cls
-        
+
         for decl_wrapper_type in declarated_types:
             #it is possible, that cache contains reference to dropped class
             #We need to clear it
             decl_wrapper_type.cache.reset()
             if isinstance( decl_wrapper_type.declaration, pygccxml.declarations.class_t ):
                 key = create_key(decl_wrapper_type.declaration)
-                if leaved_classes.has_key( key ):
+                if key in leaved_classes:
                     decl_wrapper_type.declaration = leaved_classes[ key ]
                 else:
                     if decl_wrapper_type.declaration._name.startswith( '__vmi_class_type_info_pseudo' ):
@@ -500,7 +499,7 @@ class project_reader_t:
                     self.logger.error( os.linesep.join(msg) )
             elif isinstance( decl_wrapper_type.declaration, pygccxml.declarations.class_declaration_t ):
                 key = create_mangled_key(decl_wrapper_type.declaration)
-                if mangled_leaved_classes.has_key( key ):
+                if key in mangled_leaved_classes:
                     decl_wrapper_type.declaration = mangled_leaved_classes[ key ]
 
     def _join_declarations( self, declref ):

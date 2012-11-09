@@ -77,7 +77,7 @@ class default_argument_patcher_t( object ):
                 #users will have to fix the default value manually
                 return arg.default_value
             default_value = arg.default_value.lower()
-            found_hex = filter( lambda ch: ch in 'abcdef', default_value )
+            found_hex = [ch for ch in default_value if ch in 'abcdef']
             if found_hex and not default_value.startswith( '0x' ):
                 int( '0x' + default_value, 16 )
                 return '0x' + default_value
@@ -145,7 +145,7 @@ class default_argument_patcher_t( object ):
         decl = base_type.declaration
         return decl.name == name \
                or ( isinstance( decl, declarations.class_t ) \
-                    and name in map( lambda typedef: typedef.name, decl.aliases ) )
+                    and name in [typedef.name for typedef in decl.aliases] )
 
     def __fix_constructor_call( self, func, arg ):
         call_invocation = declarations.call_invocation
@@ -157,8 +157,7 @@ class default_argument_patcher_t( object ):
         name, args = call_invocation.split( dv )
         if decl.name != name:
             #we have some alias to the class
-            relevant_typedefs = filter( lambda typedef: typedef.name == name
-                                        , decl.aliases )
+            relevant_typedefs = [typedef for typedef in decl.aliases if typedef.name == name]
             if 1 == len( relevant_typedefs ):
                 f_q_name = self.__join_names( declarations.full_name( relevant_typedefs[0].parent )
                                               , name )

@@ -13,12 +13,12 @@ from pygccxml import declarations
 
 class tester_src_t( parser_test_case.parser_test_case_t ):
     #tester source reader
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'typedefs_base.hpp'
         self.declarations = None
-        
+
     def setUp(self):
         if not self.declarations:
             self.declarations = parser.parse( [self.header], self.config )
@@ -27,7 +27,7 @@ class tester_src_t( parser_test_case.parser_test_case_t ):
                                                             , name='::' )
             self.global_ns.init_optimizer()
 
-    def test( self ):                
+    def test( self ):
         item_cls = self.global_ns.class_( name='item_t' )
         self.failUnless( item_cls, "unable to find class 'item_t'" )
         self.failUnless( len( item_cls.aliases ) == 1 )
@@ -40,26 +40,26 @@ class tester_prj_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.declarations = None
-        
+
     def setUp(self):
         if not self.declarations:
             self.declarations = parser.parse( [ 'typedefs1.hpp', 'typedefs2.hpp' ]
                                               , self.config
                                               , self.COMPILATION_MODE )
-            
-    def test( self ):                
+
+    def test( self ):
         item_cls = declarations.find_declaration( self.declarations
                                               , type=declarations.class_t
                                               , name='item_t' )
         self.failUnless( item_cls, "unable to find class 'item_t'" )
         self.failUnless( len( item_cls.aliases ) == 3 )
         expected_aliases = set( ['Item', 'Item1', 'Item2' ] )
-        real_aliases = set( map( lambda typedef: typedef.name, item_cls.aliases ) )
+        real_aliases = set( [typedef.name for typedef in item_cls.aliases] )
         self.failUnless( real_aliases == expected_aliases )
 
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_src_t))
     suite.addTest( unittest.makeSuite(tester_prj_t))
     return suite

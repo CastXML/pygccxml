@@ -7,8 +7,8 @@
 defines classes, that describe C++ types
 """
 
-import compilers
-import algorithms_cache
+from . import compilers
+from . import algorithms_cache
 
 class type_t(object):
     """base class for all types"""

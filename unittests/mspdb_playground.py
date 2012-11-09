@@ -14,7 +14,7 @@ opt = mspdb.enums.UNDECORATE_NAME_OPTIONS.UNDNAME_SHORT_UNIQUE
 opt = 0
 
 public_smbls = {}
-for smbl in reader.public_symbols.iterkeys():
+for smbl in reader.public_symbols.keys():
     name = smbl.name
     undecorated_name = smbl.get_undecoratedNameEx(opt).strip()
     if undecorated_name.endswith( ')const' ):

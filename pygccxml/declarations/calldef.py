@@ -17,13 +17,14 @@ This modules contains definition for next C++ declarations:
     - destructor
 """
 import re
-import cpptypes
-import algorithm
-import templates
-import declaration
-import type_traits
-import dependencies
-import call_invocation
+from . import cpptypes
+from . import algorithm
+from . import templates
+from . import declaration
+# circular import
+#from . import type_traits
+from . import dependencies
+from . import call_invocation
 
 class VIRTUALITY_TYPES:
     """class that defines "virtuality" constants"""
@@ -192,7 +193,7 @@ class calldef_t( declaration.declaration_t ):
                and self.has_extern == other.has_extern \
                and self.does_throw == other.does_throw \
                and self._sorted_list( self.exceptions ) == other._sorted_list( other.exceptions ) \
-               and self.demangled_name == other.demangled_name                  
+               and self.demangled_name == other.demangled_name
 
     def _get_arguments(self):
         return self._arguments
@@ -295,6 +296,7 @@ class calldef_t( declaration.declaration_t ):
         return demangled
 
     def _get_demangled_name( self ):
+        from . import type_traits
         if not self.demangled:
             self._demangled_name = ''
 
@@ -353,10 +355,10 @@ class calldef_t( declaration.declaration_t ):
         answer = []
         if self.return_type:
             answer.append( report_dependency( self.return_type, hint="return type" ) )
-        map( lambda arg: answer.append( report_dependency( arg.type ) )
-             , self.arguments )
-        map( lambda exception: answer.append( report_dependency( exception, hint="exception" ) )
-             , self.exceptions )
+        for arg in self.arguments:
+            answer.append( report_dependency( arg.type ) )
+        for exc in self.exceptions:
+            answer.append( report_dependency( exc, hint="exception" ) )
         return answer
 
     def guess_calling_convention( self ):
@@ -393,7 +395,7 @@ class member_calldef_t( calldef_t ):
         if name[:2]=="::":
             name = name[2:]
         # Add the arguments...
-        args = map(lambda a: str(a), self.arguments)
+        args = [str(a) for a in self.arguments]
         res = "%s(%s)"%(name, ", ".join(args))
         # Add the return type...
         if self.return_type!=None:
@@ -486,7 +488,7 @@ class free_calldef_t( calldef_t ):
         if name[:2]=="::":
             name = name[2:]
         # Add the arguments...
-        args = map(lambda a: str(a), self.arguments)
+        args = [str(a) for a in self.arguments]
         res = "%s(%s)"%(name, ", ".join(args))
         # Add the return type...
         if self.return_type!=None:
@@ -547,9 +549,9 @@ class constructor_t( member_calldef_t ):
         self._explicit = True
 
     def _get_explicit(self):
-        return self._explicit        
+        return self._explicit
     def _set_explicit(self, explicit):
-        if explicit in [True, '1']:        
+        if explicit in [True, '1']:
             self._explicit = True
         else:
             self._explicit = False
@@ -563,7 +565,7 @@ class constructor_t( member_calldef_t ):
         if name[:2]=="::":
             name = name[2:]
         # Add the arguments...
-        args = map(lambda a: str(a), self.arguments)
+        args = [str(a) for a in self.arguments]
         res = "%s(%s)"%(name, ", ".join(args))
         # Append the declaration class
         cls = 'constructor'
@@ -574,6 +576,7 @@ class constructor_t( member_calldef_t ):
     @property
     def is_copy_constructor(self):
         """returns True if described declaration is copy constructor, otherwise False"""
+        from . import type_traits
         args = self.arguments
         if 1 != len( args ):
             return False
@@ -615,6 +618,9 @@ class free_function_t( free_calldef_t ):
     def __init__( self, *args, **keywords ):
         free_calldef_t.__init__( self, *args, **keywords )
 
+    def __hash__(self):
+        return hash(self.get_mangled_name())
+
     def get_mangled_name( self ):
         if not self._mangled and not self._demangled \
            and not '<' in self.name and not self.overloads:
@@ -634,6 +640,7 @@ class free_operator_t( free_calldef_t, operator_t ):
     @property
     def class_types( self ):
         """list of class/class declaration types, extracted from the operator arguments"""
+        from . import type_traits
         if None is self.__class_types:
             self.__class_types = []
             for type_ in self.argument_types:

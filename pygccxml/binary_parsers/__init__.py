@@ -10,16 +10,16 @@ contains classes that allows to extract different information from binary files
 The main function of this package is :func:`pygccxml.binary_parsers.parsers.merge_information`.
 """
 
-import undname
-from parsers import merge_information
+from .undname import undname_creator_t
+from .parsers import merge_information
 
 def undecorate_blob( blob ):
-    """returns undecorated\unmangled string, created from blob(exported symbol name)"""
-    return undname.undname_creator_t().undecorate_blob( blob )
+    """returns undecorated/unmangled string, created from blob(exported symbol name)"""
+    return undname_creator_t().undecorate_blob( blob )
 
 def format_decl( decl, hint=None ):
     """
     returns string, that represents formatted declaration, according to some rules
     :param hint: valid values are: "msvc" and "nm"
     """
-    return undname.undname_creator_t().format_decl( decl, hint=hint )
+    return undname_creator_t().format_decl( decl, hint=hint )

@@ -26,9 +26,9 @@ sub-package.
 
 """
 
-import pygccxml.declarations as declarations
-import pygccxml.parser as parser
-import pygccxml.utils as utils
+from . import declarations
+from . import parser
+from . import utils
 
 #TODO:
 #  1. Add "explicit" property for constructors

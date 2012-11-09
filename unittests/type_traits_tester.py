@@ -236,7 +236,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
                                                            , name="is_convertible" )
 
         self.failUnless( ns_is_convertible, "namespace is_convertible was not found" )
-        for tester in filter( lambda decl: decl.name.startswith( 'x' ), ns_is_convertible.declarations ):
+        for tester in [decl for decl in ns_is_convertible.declarations if decl.name.startswith( 'x' )]:
             self.__is_convertible_impl( tester )
 
 class missing_decls_tester_t(unittest.TestCase):
@@ -274,7 +274,7 @@ class missing_decls_tester_t(unittest.TestCase):
 class class_traits_tester_t(unittest.TestCase):
     def __init__(self, *args ):
         unittest.TestCase.__init__(self, *args)
-            
+
     def test(self):
         code = """
             namespace A{
@@ -307,9 +307,9 @@ class class_traits_tester_t(unittest.TestCase):
         easy = global_ns.typedef( 'easy' )
         c_a = declarations.class_traits.get_declaration( easy )  #this works very well
         deasy = global_ns.typedef( 'Deasy' )
-        d_a = declarations.class_traits.get_declaration( deasy )  
+        d_a = declarations.class_traits.get_declaration( deasy )
         self.failUnless( isinstance( d_a, declarations.class_types ) )
-        
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(class_traits_tester_t))

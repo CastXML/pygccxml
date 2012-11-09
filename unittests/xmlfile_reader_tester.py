@@ -20,15 +20,15 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test(self):
         src_reader = parser.source_reader_t( self.config )
-        src_decls = src_reader.read_file( self.__fname )        
+        src_decls = src_reader.read_file( self.__fname )
 
         xmlfile = src_reader.create_xml_file( self.__fname )
-        print xmlfile
+        print(xmlfile)
         try:
             fconfig = parser.file_configuration_t( data=xmlfile
                                                    , start_with_declarations=None
                                                    , content_type=parser.file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE )
-            
+
             prj_reader = parser.project_reader_t( self.config )
             prj_decls = prj_reader.read_files( [fconfig]
                                                , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
@@ -39,13 +39,13 @@ class tester_t( parser_test_case.parser_test_case_t ):
                                             , os.path.join( autoconfig.build_directory, 'xmlfile_reader.prj.txt' ) )
 
             if src_decls != prj_decls:
-                self.fail( "There is a difference between declarations in file %s." % self.__fname )                
+                self.fail( "There is a difference between declarations in file %s." % self.__fname )
         finally:
             pass #utils.remove_file_no_raise( xmlfile )
-   
+
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

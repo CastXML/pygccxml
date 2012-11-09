@@ -91,7 +91,7 @@ def get_named_parent( decl ):
 def full_name_from_declaration_path( dpath ):
     ##Here I have lack of knowledge:
     ##TODO: "What is the full name of declaration declared in unnamed namespace?"
-    result = filter( None, dpath )
+    result = [_f for _f in dpath if _f]
     result = result[0] + '::'.join( result[1:] )
     return result
 
@@ -138,7 +138,7 @@ def make_flatten( decl_or_decls ):
         return answer
 
     decls = []
-    if isinstance( decl_or_decls, types.ListType ):
+    if isinstance( decl_or_decls, list ):
         decls.extend( decl_or_decls )
     else:
         decls.append( decl_or_decls )
@@ -169,7 +169,7 @@ def __make_flatten_generator( decl_or_decls ):
             else:
                 yield internal
 
-    if isinstance( decl_or_decls, types.ListType ):
+    if isinstance( decl_or_decls, list ):
         for creator in decl_or_decls:
             for internal in proceed_single( creator ):
                 yield internal
@@ -179,9 +179,8 @@ def __make_flatten_generator( decl_or_decls ):
 
 def get_global_namespace(decls):
     import pygccxml.declarations
-    found = filter( lambda decl: decl.name == '::'
-                                 and isinstance( decl, pygccxml.declarations.namespace_t )
-                    , make_flatten( decls ) )
+    found = [decl for decl in make_flatten( decls ) if decl.name == '::'
+                                 and isinstance( decl, pygccxml.declarations.namespace_t )]
     if len( found ) == 1:
         return found[0]
     raise RuntimeError( "Unable to find global namespace." )
@@ -229,7 +228,7 @@ class match_declaration_t:
     def __call__(self, inst):
         """
         .. code-block:: python
-        
+
            return self.does_match_exist(inst)
         """
         return self.does_match_exist(inst)
@@ -253,7 +252,7 @@ def find_all_declarations( declarations
     else:
         decls = declarations
 
-    return filter( match_declaration_t(type, name, fullname, parent), decls )
+    return list(filter( match_declaration_t(type, name, fullname, parent), decls ))
 
 def find_declaration( declarations
                       , type=None

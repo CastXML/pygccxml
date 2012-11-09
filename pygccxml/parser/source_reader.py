@@ -5,18 +5,18 @@
 
 import os
 import sys
-import linker
-import config
-import patcher
+from . import linker
+from . import config
+from . import patcher
 import subprocess
 import pygccxml.utils
 
 try: #select the faster xml parser
-    from etree_scanner import etree_scanner_t as scanner_t
+    from .etree_scanner import etree_scanner_t as scanner_t
 except:
-    from scanner import scanner_t
+    from .scanner import scanner_t
 
-import declarations_cache
+from . import declarations_cache
 from pygccxml import utils
 from pygccxml.declarations import *
 
@@ -34,7 +34,7 @@ def bind_aliases( decls ):
     :rtype: None
     """
     visited = set()
-    typedefs = filter( lambda decl: isinstance( decl, typedef_t ), decls )
+    typedefs = [decl for decl in decls if isinstance( decl, typedef_t )]
     for decl in typedefs:
         type_ = remove_alias( decl.type )
         if not isinstance( type_, declarated_t ):
@@ -167,14 +167,14 @@ class source_reader_t:
                     gccxml_reports.append( line.rstrip() )
 
             exit_status = process.returncode
-            gccxml_msg = os.linesep.join(gccxml_reports)
+            gccxml_msg = os.linesep.join([str(s) for s in gccxml_reports])
             if self.__config.ignore_gccxml_output:
                 if not os.path.isfile(gccxml_file):
                     raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s status:%s" % (gccxml_msg, exit_status) )
             else:
                 if gccxml_msg or exit_status or not os.path.isfile(gccxml_file):
                     raise gccxml_runtime_error_t( "Error occured while running GCC-XML: %s" % gccxml_msg )
-        except Exception, error:
+        except Exception as error:
             pygccxml.utils.remove_file_no_raise( gccxml_file )
             raise error
         return gccxml_file
@@ -194,7 +194,7 @@ class source_reader_t:
         header_file = pygccxml.utils.create_temp_file_name( suffix='.h' )
         gccxml_file = None
         try:
-            header_file_obj = file(header_file, 'w+')
+            header_file_obj = open(header_file, 'w+')
             header_file_obj.write( content )
             header_file_obj.close()
             gccxml_file = self.create_xml_file( header_file, destination )
@@ -225,7 +225,7 @@ class source_reader_t:
                 self.__dcache.update( ffname, self.__config, declarations, files )
             else:
                 self.logger.debug( "File has not been changed, reading declarations from cache." )
-        except Exception, error:
+        except Exception as error:
             if gccxml_file:
                 pygccxml.utils.remove_file_no_raise( gccxml_file )
             raise error
@@ -262,13 +262,13 @@ class source_reader_t:
         declarations tree.
         """
         header_file = pygccxml.utils.create_temp_file_name( suffix='.h' )
-        header_file_obj = file(header_file, 'w+')
+        header_file_obj = open(header_file, 'w+')
         header_file_obj.write( content )
         header_file_obj.close()
         declarations = None
         try:
             declarations = self.read_file( header_file )
-        except Exception, error:
+        except Exception as error:
             pygccxml.utils.remove_file_no_raise( header_file )
             raise error
         pygccxml.utils.remove_file_no_raise( header_file )
@@ -302,27 +302,26 @@ class source_reader_t:
         decls = scanner_.declarations()
         types = scanner_.types()
         files = {}
-        for file_id, file_path in scanner_.files().iteritems():
+        for file_id, file_path in scanner_.files().items():
             files[file_id] = self.__produce_full_file(file_path)
         linker_ = linker.linker_t( decls=decls
                                    , types=types
                                    , access=scanner_.access()
                                    , membership=scanner_.members()
                                    , files=files )
-        for type_ in types.values():
+        for type_ in list(types.values()):
             #I need this copy because internaly linker change types collection
             linker_.instance = type_
             apply_visitor( linker_, type_ )
-        for decl in decls.itervalues():
+        for decl in decls.values():
             linker_.instance = decl
             apply_visitor( linker_, decl )
-        bind_aliases( decls.itervalues() )
+        bind_aliases( iter(decls.values()) )
         #some times gccxml report typedefs defined in no namespace
         #it happens for example in next situation
         #template< typename X>
         #void ddd(){ typedef typename X::Y YY;}
         #if I will fail on this bug next time, the right way to fix it may be different
         patcher.fix_calldef_decls( scanner_.calldefs(), scanner_.enums() )
-        decls = filter( lambda inst: isinstance( inst, namespace_t ) and not inst.parent
-                        , decls.itervalues()  )
-        return ( decls, files.values() )
+        decls = [inst for inst in iter(decls.values()) if isinstance( inst, namespace_t ) and not inst.parent]
+        return ( decls, list(files.values()) )

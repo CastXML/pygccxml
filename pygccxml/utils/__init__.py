@@ -9,8 +9,8 @@ import os
 import sys
 import logging
 import tempfile
-from fs_utils import files_walker
-from fs_utils import directories_walker
+from .fs_utils import files_walker
+from .fs_utils import directories_walker
 
 def _create_logger_( name ):
     """implementation details"""
@@ -66,7 +66,7 @@ def remove_file_no_raise(file_name ):
     try:
         if os.path.exists(file_name):
             os.remove( file_name )
-    except Exception, error:
+    except Exception as error:
         loggers.root.error( "Error ocured while removing temprorary created file('%s'): %s"
                             % ( file_name, str( error ) ) )
 
@@ -91,7 +91,7 @@ def contains_parent_dir( fpath, dirs ):
     precondition: dirs and fpath should be normalize_path'ed before calling this function
     """
     f = lambda dir_: fpath.startswith( dir_ )
-    return bool( filter( f, dirs ) )
+    return bool( list(filter( f, dirs )) )
 
 
 def get_architecture():
@@ -99,9 +99,9 @@ def get_architecture():
 
     The guess is based on maxint.
     """
-    if sys.maxint == 2147483647:
+    if sys.maxsize == 2147483647:
         return 32
-    elif sys.maxint == 9223372036854775807:
+    elif sys.maxsize == 9223372036854775807:
         return 64
     else:
         raise RuntimeError( "Unknown architecture" )
@@ -136,7 +136,7 @@ class cached(property):
 class enum( object ):
     """
     Usage example:
-    
+
     .. code-block:: python
 
        class fruits(enum):
@@ -150,7 +150,7 @@ class enum( object ):
 
     @classmethod
     def has_value( cls, enum_numeric_value ):
-        for name, value in cls.__dict__.iteritems():
+        for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return True
         else:
@@ -158,7 +158,7 @@ class enum( object ):
 
     @classmethod
     def name_of( cls, enum_numeric_value ):
-        for name, value in cls.__dict__.iteritems():
+        for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return name
         else:

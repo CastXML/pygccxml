@@ -13,4 +13,4 @@ unittest.TextTestRunner(verbosity=2).run( create_suite() )
 """
 
 timer = Timer( stmt )
-print timer.timeit(3)
+print(timer.timeit(3))

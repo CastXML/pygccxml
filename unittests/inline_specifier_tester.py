@@ -12,36 +12,36 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    
+
     global_ns = None
-    
+
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'inline_specifier.hpp'
-        
+
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
-            
-    def test( self ):                
-		inlined_funcs = self.global_ns.calldefs( 'inlined' )
-		self.failUnless( len(inlined_funcs) )
-		for f in inlined_funcs:
-			self.failUnless( f.has_inline == True )
 
-		not_inlined_funcs = self.global_ns.calldefs( 'not_inlined' )
-		self.failUnless( len(not_inlined_funcs) )
-		for f in not_inlined_funcs:
-			self.failUnless( f.has_inline == False )
+    def test( self ):
+        inlined_funcs = self.global_ns.calldefs( 'inlined' )
+        self.failUnless( len(inlined_funcs) )
+        for f in inlined_funcs:
+            self.failUnless( f.has_inline == True )
 
-        
+        not_inlined_funcs = self.global_ns.calldefs( 'not_inlined' )
+        self.failUnless( len(not_inlined_funcs) )
+        for f in not_inlined_funcs:
+            self.failUnless( f.has_inline == False )
+
+
     def test2( self ):
         pass
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

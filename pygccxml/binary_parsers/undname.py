@@ -18,7 +18,7 @@ import os
 import re
 import sys
 import ctypes
-from pygccxml import declarations
+from .. import declarations
 
 class UNDECORATE_NAME_OPTIONS:
     """defines few constants for `UnDecorateSymbolName` function"""
@@ -203,7 +203,7 @@ class undname_creator_t:
         result of `dbghelp.UnDecorateSymbolName`, with UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
         options.
 
-        Different compilers\utilities undecorate/demangle mangled string ( unique names ) in a different way.
+        Different compilers/utilities undecorate/demangle mangled string ( unique names ) in a different way.
         `hint` argument will tell pygccxml how to format declarations, so they could be mapped later to the blobs.
         The valid options are: "msvc" and "nm".
         """

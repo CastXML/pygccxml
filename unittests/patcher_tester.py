@@ -30,39 +30,39 @@ class tester_impl_t( parser_test_case.parser_test_case_t ):
         if 32 == self.architecture:
             if '0.9' in fix_numeric.compiler:
                 if platform.machine() == 'x86_64':
-                    self.failUnless( fix_numeric.arguments[0].default_value == u"-1u"
+                    self.failUnless( fix_numeric.arguments[0].default_value == "-1u"
                                      , fix_numeric.arguments[0].default_value )
                 else:
-                    self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffffu"
+                    self.failUnless( fix_numeric.arguments[0].default_value == "0xffffffffffffffffu"
                                      , fix_numeric.arguments[0].default_value )
             else:
-                self.failUnless( fix_numeric.arguments[0].default_value == u"0xffffffffffffffff"
+                self.failUnless( fix_numeric.arguments[0].default_value == "0xffffffffffffffff"
                                  , fix_numeric.arguments[0].default_value )
         else:
-            self.failUnless( fix_numeric.arguments[0].default_value == u"0ffffffff"
+            self.failUnless( fix_numeric.arguments[0].default_value == "0ffffffff"
                              , fix_numeric.arguments[0].default_value )
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun( 'fix_unnamed' )
-        self.failUnless( fix_unnamed.arguments[0].default_value == u"int(::fx::unnamed)" )
+        self.failUnless( fix_unnamed.arguments[0].default_value == "int(::fx::unnamed)" )
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun( 'fix_function_call' )
         if '0.9' in fix_function_call.compiler:
-            self.failUnless( fix_function_call.arguments[0].default_value == u"function_call::calc(1, 2, 3)" )
+            self.failUnless( fix_function_call.arguments[0].default_value == "function_call::calc(1, 2, 3)" )
         else:
-            self.failUnless( fix_function_call.arguments[0].default_value == u"function_call::calc( 1, 2, 3 )" )
+            self.failUnless( fix_function_call.arguments[0].default_value == "function_call::calc( 1, 2, 3 )" )
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun( 'fix_fundamental' )
-        self.failUnless( fcall.arguments[0].default_value == u"(unsigned int)(::fundamental::eggs)" )
+        self.failUnless( fcall.arguments[0].default_value == "(unsigned int)(::fundamental::eggs)" )
 
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_fun( 'typedef__func' )
         if '0.9' in typedef__func.compiler:
-            self.failUnless( typedef__func.arguments[0].default_value == u"typedef_::original_name()" )
+            self.failUnless( typedef__func.arguments[0].default_value == "typedef_::original_name()" )
         else:
-            self.failUnless( typedef__func.arguments[0].default_value == u"::typedef_::alias( )" )
+            self.failUnless( typedef__func.arguments[0].default_value == "::typedef_::alias( )" )
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun( 'clone_tree' )
             default_values = []

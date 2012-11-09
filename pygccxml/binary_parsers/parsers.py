@@ -19,16 +19,16 @@ import os
 import re
 import sys
 import ctypes
-import undname
+from . import undname
 import warnings
-import exceptions
+#import exceptions
 import subprocess
-from pygccxml import utils
-from pygccxml import declarations
+from .. import utils
+from .. import declarations
 
-class LicenseWarning( exceptions.UserWarning ):
-    def __init__( self, *args, **keywd ):
-        exceptions.UserWarning.__init__( self, *args, **keywd )
+# class LicenseWarning( exceptions.UserWarning ):
+#     def __init__( self, *args, **keywd ):
+#         exceptions.UserWarning.__init__( self, *args, **keywd )
 
 
 dll_file_parser_warning = \
@@ -194,7 +194,7 @@ class dll_file_parser_t( formated_mapping_parser_t ):
         formated_mapping_parser_t.__init__( self, global_ns, map_file_path, 'msvc' )
 
     def load_symbols( self ):
-        import get_dll_exported_symbols
+        from . import get_dll_exported_symbols
         return get_dll_exported_symbols.read_export_table( self.binary_file )
 
     def merge( self, smbl ):
@@ -261,7 +261,7 @@ class so_file_parser_t( formated_mapping_parser_t ):
         demangled_smbls = self.__extract_symbols(  [part % tmpl_args for part in self.cmd_demangled] )
 
         result = []
-        for address, blob in mangled_smbls.iteritems():
+        for address, blob in mangled_smbls.items():
             if address in demangled_smbls:
                 result.append( ( blob, demangled_smbls[address] ) )
         return result

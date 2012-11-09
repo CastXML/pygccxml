@@ -11,13 +11,13 @@ according to some criteria
 import os
 import re
 import types
-import algorithm
-import variable
-import namespace
-import calldef
-import cpptypes
-import templates
-import class_declaration
+from . import algorithm
+from . import variable
+from . import namespace
+from . import calldef
+from . import cpptypes
+from . import templates
+from . import class_declaration
 from pygccxml import utils
 
 class matcher_base_t(object):
@@ -66,7 +66,7 @@ class and_matcher_t(matcher_base_t):
         return True
 
     def __str__(self):
-        return " & ".join( map( lambda x: "(%s)" % str( x ), self.matchers ) )
+        return " & ".join( ["(%s)" % str( x ) for x in self.matchers] )
 
 
 class or_matcher_t(matcher_base_t):
@@ -90,7 +90,7 @@ class or_matcher_t(matcher_base_t):
         return False
 
     def __str__(self):
-        return " | ".join( map( lambda x: "(%s)" % str( x ), self.matchers ) )
+        return " | ".join( ["(%s)" % str( x ) for x in self.matchers] )
 
 
 class not_matcher_t(matcher_base_t):
@@ -99,7 +99,7 @@ class not_matcher_t(matcher_base_t):
 
     For example: find all public and protected declarations
 
-	.. code-block:: python
+    .. code-block:: python
 
        matcher = ~access_type_matcher_t( 'private' )
     """
@@ -366,7 +366,7 @@ class calldef_matcher_t( declaration_matcher_t ):
            and not self.__compare_types( self.return_type, decl.return_type ):
             return False
         if self.arg_types:
-            if isinstance( self.arg_types, (types.ListType, types.TupleType)):
+            if isinstance( self.arg_types, (list, tuple)):
                 if len(self.arg_types) != len( decl.arguments ):
                     return False
                 for type_or_str, arg in zip( self.arg_types, decl.arguments ):

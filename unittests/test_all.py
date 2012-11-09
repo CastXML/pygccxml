@@ -112,7 +112,7 @@ testers = [
     , array_bug_tester
     , gccxml10183_tester
     , gccxml10184_tester
-    , gccxml10185_tester    
+    , gccxml10185_tester
     , inline_specifier_tester
 ]
 
@@ -132,7 +132,7 @@ def run_suite():
     return True
 
 if __name__ == "__main__":
-    print run_suite()
+    print(run_suite())
 ##~     import hotshot
 ##~     import hotshot.stats
 ##~     statistics_file = tempfile.mkstemp( suffix='.stat' )[1]

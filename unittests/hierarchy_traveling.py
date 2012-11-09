@@ -27,7 +27,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             , 'struct h : public f{};'
             , 'struct i : public h, public g{};'
         ] )
-        
+
         self.__recursive_bases = {
             'a' : set()
             , 'b' : set()
@@ -39,7 +39,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             , 'h' : set( ['f'] )
             , 'i' : set( ['h', 'g', 'd', 'f', 'a'] )
         }
-        
+
         self.__recursive_derived = {
             'a' : set(['d', 'e', 'g', 'i'])
             , 'b' : set(['e'])
@@ -51,34 +51,34 @@ class tester_t( parser_test_case.parser_test_case_t ):
             , 'h' : set( ['i'] )
             , 'i' : set()
         }
-        
+
     def test_recursive_bases(self):
         src_reader = parser.source_reader_t( self.config )
         decls = declarations.make_flatten( src_reader.read_string( self.__code ) )
-        classes = filter( lambda inst: isinstance( inst, declarations.class_t ), decls )
+        classes = [inst for inst in decls if isinstance( inst, declarations.class_t )]
         for class_ in classes:
-            self.failUnless( self.__recursive_bases.has_key( class_.name  ) )
+            self.failUnless( class_.name in self.__recursive_bases )
             all_bases = class_.recursive_bases
             control_bases = self.__recursive_bases[ class_.name ]
             self.failUnless( len(control_bases) == len( all_bases ) )
-            all_bases_names = map( lambda hi: hi.related_class.name, all_bases )
+            all_bases_names = [hi.related_class.name for hi in all_bases]
             self.failUnless( set( all_bases_names ) == control_bases )
 
     def test_recursive_derived(self):
         src_reader = parser.source_reader_t( self.config )
         decls = declarations.make_flatten( src_reader.read_string( self.__code ) )
-        classes = filter( lambda inst: isinstance( inst, declarations.class_t ), decls )
+        classes = [inst for inst in decls if isinstance( inst, declarations.class_t )]
         for class_ in classes:
-            self.failUnless( self.__recursive_derived.has_key( class_.name  ) )
+            self.failUnless( class_.name in self.__recursive_derived )
             all_derived = class_.recursive_derived
             control_derived = self.__recursive_derived[ class_.name ]
             self.failUnless( len(control_derived) == len( all_derived ) )
-            all_derived_names = map( lambda hi: hi.related_class.name, all_derived )
+            all_derived_names = [hi.related_class.name for hi in all_derived]
             self.failUnless( set( all_derived_names ) == control_derived )
 
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

@@ -162,7 +162,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def endDocument( self ):
         #updating membership
         members_mapping = {}
-        for gccxml_id, members in self.__members.iteritems():
+        for gccxml_id, members in self.__members.items():
             decl = self.__declarations.get( gccxml_id, None )
             if not decl or not isinstance( decl, scopedef_t):
                 continue
@@ -225,15 +225,15 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 self.__types[ element_id ] = obj
                 self.__read_byte_size(obj, attrs)
                 self.__read_byte_align(obj, attrs)
-            elif isinstance( obj, types.StringTypes ):
+            elif isinstance( obj, str ):
                 self.__files[ element_id ] = obj
             else:
                 self.logger.warning( 'Unknown object type has been found.'
                                      + ' Please report this bug to pygccxml development team.' )
-        except Exception, error:
+        except Exception as error:
             msg = 'error occured, while parsing element with name "%s" and attrs "%s".'
             msg = msg + os.linesep + 'Error: %s.' % str( error )
-            self.logger.error( msg % ( name, pprint.pformat( attrs.keys() ) ) )
+            self.logger.error( msg % ( name, pprint.pformat( list(attrs.keys()) ) ) )
             raise
 
     def endElement(self, name):
@@ -247,7 +247,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         parent = attrs.get( XML_AN_CONTEXT, None )
         if not parent:
             return
-        if not self.__members.has_key( parent ):
+        if parent not in self.__members:
             self.__members[ parent ] = []
         self.__members[parent].append( attrs[XML_AN_ID] )
 
@@ -263,7 +263,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
     def __read_mangled( self, decl, attrs ):
         mangled = attrs.get( XML_AN_MANGLED, None )
         #the following patch is defined here for performance reasons
-        if isinstance( mangled, types.StringType ) and mangled.endswith( self.__mangled_suffix ):
+        if isinstance( mangled, bytes ) and mangled.endswith( self.__mangled_suffix ):
             mangled = mangled[:self.__mangled_suffix_len]
         decl.mangled = mangled
 
@@ -341,20 +341,20 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         size = self.__guess_int_value( attrs.get(XML_AN_MAX, '' ) )
         if size is None:
             size = array_t.SIZE_UNKNOWN
-            #The following warning is pretty useless, as it cant say what the 
+            #The following warning is pretty useless, as it cant say what the
             #problematic declaration is.
             #msg = 'unable to find out array size from expression "%s"' % attrs[ XML_AN_MAX ]
             #warnings.warn( msg )
         return array_t( type_, size + 1 )
 
     def __read_cv_qualified_type( self, attrs ):
-        if attrs.has_key( XML_AN_CONST ) and attrs.has_key( XML_AN_VOLATILE ):
+        if XML_AN_CONST in attrs and XML_AN_VOLATILE in attrs:
             return volatile_t( const_t( attrs[XML_AN_TYPE] ) )
-        elif attrs.has_key( XML_AN_CONST ):
+        elif XML_AN_CONST in attrs:
             return const_t( attrs[XML_AN_TYPE] )
-        elif attrs.has_key( XML_AN_VOLATILE ):
+        elif XML_AN_VOLATILE in attrs:
             return volatile_t( attrs[XML_AN_TYPE] )
-        elif attrs.has_key( XML_AN_RESTRICT ):
+        elif XML_AN_RESTRICT in attrs:
             return restrict_t( attrs[XML_AN_TYPE] )
         else:
             assert 0
@@ -424,9 +424,9 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         calldef.has_const = attrs.get( XML_AN_CONST, False )
         if is_declaration:
             calldef.has_static = attrs.get( XML_AN_STATIC, False )
-            if attrs.has_key( XML_AN_PURE_VIRTUAL ):
+            if XML_AN_PURE_VIRTUAL in attrs:
                 calldef.virtuality = VIRTUALITY_TYPES.PURE_VIRTUAL
-            elif attrs.has_key( XML_AN_VIRTUAL ):
+            elif XML_AN_VIRTUAL in attrs:
                 calldef.virtuality = VIRTUALITY_TYPES.VIRTUAL
             else:
                 calldef.virtuality = VIRTUALITY_TYPES.NOT_VIRTUAL
@@ -468,7 +468,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
         name = attrs.get(XML_AN_NAME, '')
         if '$' in name or '.' in name:
             name = ''
-        if attrs.has_key( XML_AN_INCOMPLETE ):
+        if XML_AN_INCOMPLETE in attrs:
             decl = self.__decl_factory.create_class_declaration(name=name)
         else:
             decl = self.__decl_factory.create_class( name=name, class_type=class_type )

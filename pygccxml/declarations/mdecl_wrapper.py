@@ -60,7 +60,7 @@ class mdecl_wrapper_t( object ):
         object.__init__( self )
         self.__dict__['declarations'] = decls
 
-    def __nonzero__( self ):
+    def __bool__( self ):
         return bool( self.declarations )
 
     def __len__( self ):
@@ -75,7 +75,7 @@ class mdecl_wrapper_t( object ):
         return iter(self.declarations)
 
     def __ensure_attribute( self, name ):
-        invalid_decls = filter( lambda d: not hasattr( d, name ), self.declarations )
+        invalid_decls = [d for d in self.declarations if not hasattr( d, name )]
         sep = os.linesep + '    '
         if invalid_decls:
             raise RuntimeError( "Next declarations don't have '%s' attribute: %s"

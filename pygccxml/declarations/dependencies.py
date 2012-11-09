@@ -7,7 +7,7 @@
 this module contains class that keeps dependency information of some declaration
 """
 
-import cpptypes
+from . import cpptypes
 
 class impl_details:
     @staticmethod
@@ -35,7 +35,7 @@ class dependency_info_t( object ):
     def __init__( self, declaration, depend_on_it, access_type=None, hint=None ):
         object.__init__( self )
         #prevent recursive import
-        import class_declaration
+        from . import class_declaration
         assert isinstance( depend_on_it, ( class_declaration.class_t, cpptypes.type_t ) )
         self._declaration = declaration
         self._depend_on_it = depend_on_it
@@ -78,7 +78,7 @@ class dependency_info_t( object ):
     def i_depend_on_them( decl ):
         """returns set of declarations. every item in the returned set, depends on a
         declaration from the input"""
-        import class_declaration #prevent cyclic imports
+        from . import class_declaration #prevent cyclic imports
         to_be_included = set()
         for dependency_info in decl.i_depend_on_them():
             for ddecl in dependency_info.find_out_depend_on_it_declarations():
