@@ -30,7 +30,6 @@ from . import templates
 from . import enumeration
 from . import class_declaration
 from pygccxml import utils
-import types as build_in_types
 
 def __remove_alias(type_):
     """implementation details"""
@@ -94,7 +93,7 @@ def base_type(type):
 
 def does_match_definition(given, main, secondary ):
     """implementation details"""
-    #assert isinstance( secondary, build_in_types.tuple )
+    assert isinstance( secondary, tuple )
     assert 2 == len( secondary ) #general solution could be provided
     types = decompose_type( given )
     if isinstance( types[0], main ):

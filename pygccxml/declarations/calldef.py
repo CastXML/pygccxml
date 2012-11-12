@@ -21,8 +21,8 @@ from . import cpptypes
 from . import algorithm
 from . import templates
 from . import declaration
-# circular import
-#from . import type_traits
+#from . import type_traits # moved below to fix a cyclic dependency problem
+type_traits = None
 from . import dependencies
 from . import call_invocation
 
@@ -104,6 +104,12 @@ class argument_t(object):
                and self.default_value == other.default_value \
                and self.type == other.type
 
+    def __hash__(self, other):
+        return (hash(self.__class__) ^
+                hash(self.name) ^
+                hash(self.default_value) ^
+                hash(self.type))
+
     def __ne__( self, other):
         return not self.__eq__( other )
 
@@ -155,6 +161,11 @@ class argument_t(object):
 class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
     def __init__( self, name='', arguments=None, exceptions=None, return_type=None, has_extern=False, does_throw=True ):
+        # moved here to fix a cyclic dependency problem
+        from . import type_traits as tt
+        global type_traits
+        type_traits = tt
+
         declaration.declaration_t.__init__( self, name )
         if not arguments:
             arguments = []
@@ -194,6 +205,11 @@ class calldef_t( declaration.declaration_t ):
                and self.does_throw == other.does_throw \
                and self._sorted_list( self.exceptions ) == other._sorted_list( other.exceptions ) \
                and self.demangled_name == other.demangled_name
+
+    def __hash__(self):
+        return (super.__hash__(self) ^
+                hash(self.return_type) ^
+                hash(self.demangled_name))
 
     def _get_arguments(self):
         return self._arguments
@@ -296,7 +312,6 @@ class calldef_t( declaration.declaration_t ):
         return demangled
 
     def _get_demangled_name( self ):
-        from . import type_traits
         if not self.demangled:
             self._demangled_name = ''
 
@@ -423,6 +438,8 @@ class member_calldef_t( calldef_t ):
         return self.virtuality == other.virtuality \
                and self.has_static == other.has_static \
                and self.has_const == other.has_const
+
+    def __hash__(self): return super.__hash__(self)
 
     def get_virtuality(self):
         return self._virtuality
@@ -576,7 +593,6 @@ class constructor_t( member_calldef_t ):
     @property
     def is_copy_constructor(self):
         """returns True if described declaration is copy constructor, otherwise False"""
-        from . import type_traits
         args = self.arguments
         if 1 != len( args ):
             return False
@@ -618,9 +634,6 @@ class free_function_t( free_calldef_t ):
     def __init__( self, *args, **keywords ):
         free_calldef_t.__init__( self, *args, **keywords )
 
-    def __hash__(self):
-        return hash(self.get_mangled_name())
-
     def get_mangled_name( self ):
         if not self._mangled and not self._demangled \
            and not '<' in self.name and not self.overloads:
@@ -640,7 +653,6 @@ class free_operator_t( free_calldef_t, operator_t ):
     @property
     def class_types( self ):
         """list of class/class declaration types, extracted from the operator arguments"""
-        from . import type_traits
         if None is self.__class_types:
             self.__class_types = []
             for type_ in self.argument_types:

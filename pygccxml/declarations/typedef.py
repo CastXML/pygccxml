@@ -27,6 +27,9 @@ class typedef_t( declaration.declaration_t ):
             return False
         return self.type == other.type
 
+    def __hash__(self):
+        return super.__hash__(self)
+
     def _get_type(self):
         return self._type
     def _set_type(self, type):

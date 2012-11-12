@@ -36,6 +36,8 @@ class variable_t( declaration.declaration_t ):
                and self.value == other.value \
                and self.bits == other.bits
 
+    def __hash__(self): return super.__hash__(self)
+
     def _get_type(self):
         return self._type
     def _set_type(self, type):

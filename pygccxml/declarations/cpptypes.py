@@ -30,6 +30,9 @@ class type_t(object):
             return False
         return self.decl_string == other.decl_string
 
+    def __hash__(self):
+        return hash(self.decl_string)
+
     def __ne__( self, other):
         return not self.__eq__( other )
 
@@ -712,6 +715,8 @@ class type_qualifiers_t( object ):
             return False
         return self.has_static == other.has_static \
                and self.has_mutable == other.has_mutable
+
+    def __hash__(self): return super.__hash__(self)
 
     def __ne__( self, other):
         return not self.__eq__( other )

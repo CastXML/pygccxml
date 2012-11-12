@@ -116,6 +116,9 @@ class scopedef_t( declaration.declaration_t ):
         #else:
             #return  self_decls == other_decls
 
+    def __hash__(self):
+        return super.__hash__(self)
+
     def _get_declarations_impl(self):
         raise NotImplementedError()
 

@@ -139,7 +139,7 @@ class map_file_parser_t( formated_mapping_parser_t ):
 
     def load_symbols( self ):
         """returns dictionary { decorated symbol : original declaration name }"""
-        f = file( self.binary_file )
+        f = open( self.binary_file )
         lines = []
         was_exports = False
         for line in f:
@@ -154,7 +154,7 @@ class map_file_parser_t( formated_mapping_parser_t ):
         result = []
         while index < len( lines ):
             line = lines[index].rstrip()
-            found = self.cpp_entry.match( line )
+            found = self.cpp_entry.match( line.decode('ascii') )
             if found:
                 result.append( ( found.group( 'decorated' ), found.group( 'undecorated' ) ) )
             elif index + 1 < len( lines ):

@@ -24,6 +24,9 @@ class location_t(object):
         return self.line == other.line \
                and self.file_name == other.file_name
 
+    def __hash__(self):
+        return hash(self.__class__) ^ hash(self.line) ^ hash(self.file_name)
+
     def __ne__( self, other):
         return not self.__eq__( other )
 
@@ -121,6 +124,11 @@ class declaration_t( object ):
                and self.location == other.location \
                and algorithm.declaration_path( self.parent ) \
                    == algorithm.declaration_path( other.parent )
+
+    def __hash__(self):
+        return (hash(self.__class__) ^
+                hash(self.name) ^
+                hash(self.location))
 
     def __ne__( self, other):
         """return not self.__eq__( other )"""

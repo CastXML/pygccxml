@@ -67,6 +67,9 @@ class hierarchy_info_t( object ):
                and self.access == other.access \
                and self.is_virtual == other.is_virtual
 
+    def __hash__(self):
+        return hash(algorithm.declaration_path(self.related_class))
+
     def __ne__( self, other):
         return not self.__eq__( other )
 
@@ -223,6 +226,9 @@ class class_t( scopedef.scopedef_t ):
                    == other._sorted_list( other.private_members ) \
                and self._sorted_list( self.protected_members ) \
                    == self._sorted_list( other.protected_members )
+
+    def __hash__(self):
+        return hash(self.class_type)
 
     def _get_class_type(self):
         return self._class_type

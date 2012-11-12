@@ -37,7 +37,7 @@ def configuration_signature( config ):
     """
     sig = hashlib.md5()
     if isinstance( config, cxx_parsers_cfg.gccxml_configuration_t ):
-        sig.update(str(config.gccxml_path).encode('utf-8'))
+        sig.update(str(config.gccxml_path).encode())
     sig.update(str(config.working_directory).encode('utf-8'))
     if isinstance( config, cxx_parsers_cfg.gccxml_configuration_t ):
         sig.update(str(config.cflags).encode('utf-8'))

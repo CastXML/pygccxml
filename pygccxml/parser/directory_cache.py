@@ -250,7 +250,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         if self.__compression:
             f = gzip.GzipFile(filename, "rb")
         else:
-            f = file(filename, "rb")
+            f = open(filename, "rb")
         res = pickle.load(f)
         f.close()
         return res
@@ -267,7 +267,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         if self.__compression:
             f = gzip.GzipFile(filename, "wb")
         else:
-            f = file(filename, "wb")
+            f = open(filename, "wb")
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
@@ -497,7 +497,7 @@ class filename_repository_t:
             if not os.path.exists(entry.filename):
                 return None
             try:
-                f = file(entry.filename)
+                f = open(entry.filename)
             except IOError as e:
                 print("Cannot determine md5 digest:",e)
                 return None
