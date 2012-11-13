@@ -153,8 +153,7 @@ class source_reader_t:
             process = subprocess.Popen( args=command_line
                                         , shell=True
                                         , stdin=subprocess.PIPE
-                                        , stdout=subprocess.PIPE
-                                        , stderr=subprocess.STDOUT )
+                                        , stdout=subprocess.PIPE )
             process.stdin.close()
 
             gccxml_reports = []
