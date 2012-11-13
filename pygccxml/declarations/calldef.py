@@ -312,6 +312,12 @@ class calldef_t( declaration.declaration_t ):
         return demangled
 
     def _get_demangled_name( self ):
+        if type_traits==None:
+            # this shouldn't be necessary; the same code exists in the constructor
+            from . import type_traits as tt
+            global type_traits
+            type_traits = tt
+
         if not self.demangled:
             self._demangled_name = ''
 
