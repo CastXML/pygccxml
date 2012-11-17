@@ -22,7 +22,6 @@ from . import algorithm
 from . import templates
 from . import declaration
 #from . import type_traits # moved below to fix a cyclic dependency problem
-type_traits = None
 from . import dependencies
 from . import call_invocation
 
@@ -161,11 +160,6 @@ class argument_t(object):
 class calldef_t( declaration.declaration_t ):
     """base class for all "callable" declarations"""
     def __init__( self, name='', arguments=None, exceptions=None, return_type=None, has_extern=False, does_throw=True ):
-        # moved here to fix a cyclic dependency problem
-        from . import type_traits as tt
-        global type_traits
-        type_traits = tt
-
         declaration.declaration_t.__init__( self, name )
         if not arguments:
             arguments = []
@@ -312,11 +306,7 @@ class calldef_t( declaration.declaration_t ):
         return demangled
 
     def _get_demangled_name( self ):
-        if type_traits==None:
-            # this shouldn't be necessary; the same code exists in the constructor
-            from . import type_traits as tt
-            global type_traits
-            type_traits = tt
+        from . import type_traits
 
         if not self.demangled:
             self._demangled_name = ''
@@ -599,6 +589,7 @@ class constructor_t( member_calldef_t ):
     @property
     def is_copy_constructor(self):
         """returns True if described declaration is copy constructor, otherwise False"""
+        from . import type_traits
         args = self.arguments
         if 1 != len( args ):
             return False
@@ -659,6 +650,7 @@ class free_operator_t( free_calldef_t, operator_t ):
     @property
     def class_types( self ):
         """list of class/class declaration types, extracted from the operator arguments"""
+        from . import type_traits
         if None is self.__class_types:
             self.__class_types = []
             for type_ in self.argument_types:
