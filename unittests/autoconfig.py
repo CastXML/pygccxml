@@ -21,13 +21,8 @@ if not os.path.exists( gccxml_path ):
     gccxml_path = os.path.join( this_module_dir_path, '..', '..', 'gccxml_bin', 'v09', sys.platform, 'bin' )
 gccxml_version = '__GCCXML_09__'
 
-try:
-    import pygccxml
-    print('unittests will run on INSTALLED version')
-except ImportError:
-    sys.path.append( os.path.join( os.curdir, '..' ) )
-    import pygccxml
-    print('unittests will run on DEVELOPMENT version')
+sys.path.insert(0, os.path.join( os.curdir, '..' ) )
+import pygccxml
 import pygccxml.declarations
 import pygccxml.parser
 
@@ -45,4 +40,4 @@ class cxx_parsers_cfg:
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append( '_HAS_TR1=0' )
 
-print('GCCXML configured to simulate compiler ', cxx_parsers_cfg.gccxml.compiler)
+print('GCCXML configured to simulate compiler %s' % cxx_parsers_cfg.gccxml.compiler)

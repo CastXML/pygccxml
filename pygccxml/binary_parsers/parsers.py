@@ -290,6 +290,80 @@ class so_file_parser_t( formated_mapping_parser_t ):
                 decl.calling_convention = CCTS.extract( undecorated, CCTS.CDECL )
             return decorated, decl
 
+class dylib_file_parser_t( formated_mapping_parser_t ):
+    """parser for Darwin .dylib file"""
+    nm_executable = 'nm'
+    #numeric-sort used for mapping between mangled and unmangled name
+    cmd_mangled = ['-c', '%(nm)s -gfUn %(lib)s | sed "s/ _/ /"']
+    cmd_demangled = ['-c', '%(nm)s -gfUn %(lib)s | sed "s/ _/ /" | c++filt']
+
+    entry = re.compile( r'^(?P<address>(?:\w|\d)+)\s\w\s(?P<symbol>.+)$' )
+
+    def __init__( self, global_ns, binary_file ):
+        formated_mapping_parser_t.__init__( self, global_ns, binary_file, 'nm' )
+
+    def __execute_nm( self, cmd ):
+        process = subprocess.Popen( args=cmd
+                                  , stdin=subprocess.PIPE
+                                  , stdout=subprocess.PIPE
+                                  , stderr=subprocess.STDOUT
+                                  , shell=True )
+        process.stdin.close()
+        output = []
+        while process.poll() is None:
+            output.append( process.stdout.readline() )
+        #the process already finished, read the rest of the output
+        output.extend( process.stdout.readlines() )
+        if process.returncode:
+            msg = ["Unable to extract public/exported symbols from '%s' file." % self.binary_file ]
+            msg.append( 'The command line, which was used to extract symbols, is "%s"' % cmd )
+            raise RuntimeError( os.linesep.join(msg) )
+        return output
+
+    def __extract_symbols( self, cmd ):
+        output = self.__execute_nm( cmd )
+        result = {}
+        for line in output:
+            found = self.entry.match( line )
+            if found:
+                result[ found.group( 'address' ) ] = found.group( 'symbol' )
+        return result
+
+    def load_symbols( self ):
+        tmpl_args = dict( nm=self.nm_executable, lib=self.binary_file )
+        mangled_smbls = self.__extract_symbols( [part % tmpl_args for part in self.cmd_mangled] )
+        demangled_smbls = self.__extract_symbols(  [part % tmpl_args for part in self.cmd_demangled] )
+
+        result = []
+        for address, blob in mangled_smbls.items():
+            if address in demangled_smbls:
+                result.append( ( blob, demangled_smbls[address] ) )
+        return result
+
+    def merge( self, smbl ):
+        decorated, undecorated = smbl
+        if decorated == undecorated:
+            #we deal with C function ( or may be we deal with variable?, I have to check the latest
+            try:
+                f = self.global_ns.free_fun( decorated )
+                #TODO create usecase, where C function uses different calling convention
+                f.calling_convention = CCTS.CDECL
+                return decorated, f
+            except self.global_ns.declaration_not_found_t:
+                v = self.global_ns.vars( decorated, allow_empty=True, recursive=False )
+                if v:
+                    return decorated, v[0]
+                else:
+                    return None, None
+        else:
+            undecorated_normalized = self.undname_creator.normalize_undecorated( undecorated )
+            if undecorated_normalized not in self.formated_decls:
+                return None, None
+            decl = self.formated_decls[ undecorated_normalized ]
+            if isinstance( decl, declarations.calldef_t ):
+                decl.calling_convention = CCTS.extract( undecorated, CCTS.CDECL )
+            return decorated, decl
+
 def merge_information( global_ns, fname, runs_under_unittest=False ):
     """high level function - select the appropriate binary file parser and integrates
     the information from the file to the declarations tree. """
@@ -301,6 +375,8 @@ def merge_information( global_ns, fname, runs_under_unittest=False ):
         parser = map_file_parser_t( global_ns, fname )
     elif '.so' == ext or '.so.' in os.path.basename(fname):
         parser = so_file_parser_t( global_ns, fname )
+    elif '.dylib' == ext:
+        parser = dylib_file_parser_t( global_ns, fname)
     else:
         raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
                             % fname )

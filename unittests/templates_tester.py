@@ -59,10 +59,11 @@ class tester_t( unittest.TestCase ):
     def test_bug_is_tmpl_inst(self):
         self.failUnless( False == declarations.templates.is_instantiation( "::FX::QMemArray<unsigned char>::setRawData" ) )
 
-    def test_split_bug_fptr(self):
-        x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
-        name, args = declarations.templates.split( x )
-        self.failUnless( len(x) == 4, "This test is expected to fail." )
+    # disable broken test
+    # def test_split_bug_fptr(self):
+    #     x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
+    #     name, args = declarations.templates.split( x )
+    #     self.failUnless( len(x) == 4, "This test is expected to fail." )
 
 def create_suite():
     suite = unittest.TestSuite()
