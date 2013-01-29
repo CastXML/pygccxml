@@ -18,6 +18,7 @@ symbols are used for:
 import os
 import re
 import sys
+import platform
 import ctypes
 from . import undname
 import warnings
@@ -324,7 +325,7 @@ class dylib_file_parser_t( formated_mapping_parser_t ):
         output = self.__execute_nm( cmd )
         result = {}
         for line in output:
-            found = self.entry.match( line )
+            found = self.entry.match( str(line) )
             if found:
                 result[ found.group( 'address' ) ] = found.group( 'symbol' )
         return result
@@ -373,10 +374,10 @@ def merge_information( global_ns, fname, runs_under_unittest=False ):
         parser = dll_file_parser_t( global_ns, fname )
     elif '.map' == ext:
         parser = map_file_parser_t( global_ns, fname )
+    elif '.dylib' == ext or ('.so' == ext and platform.system() == 'Darwin'):
+        parser = dylib_file_parser_t( global_ns, fname)
     elif '.so' == ext or '.so.' in os.path.basename(fname):
         parser = so_file_parser_t( global_ns, fname )
-    elif '.dylib' == ext:
-        parser = dylib_file_parser_t( global_ns, fname)
     else:
         raise RuntimeError( "Don't know how to read exported symbols from file '%s'"
                             % fname )
