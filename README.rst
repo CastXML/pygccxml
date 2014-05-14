@@ -1,11 +1,10 @@
-pygccxml - Reading GCCXML output
-================================
+========
+pygccxml
+========
 
-pygccxml is a specialized XML reader that reads the output from GCCXML.
+pygccxml is a specialized XML reader that reads the output from GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
 
-Homepage: http://www.language-binding.net/pygccxml/pygccxml.html
-
-
+-------
 Install
 -------
 
@@ -16,7 +15,7 @@ The package uses the Python distutils so you can do the usual procedure:
 For more information about using the distutils see the Python manual
 "Installing Python Modules".
 
-
+-------------
 Documentation
 -------------
 
@@ -32,7 +31,6 @@ setup script:
 In order for this to work you need epydoc (http://epydoc.sourceforge.net).
 
 
---------------------------------------------------------------------------
 Copyright 2004-2008 Roman Yakovenko.
 Distributed under the Boost Software License, Version 1.0. (See
 accompanying file LICENSE_1_0.txt or copy at
