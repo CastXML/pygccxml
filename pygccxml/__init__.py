@@ -33,6 +33,4 @@ from . import utils
 #TODO:
 #  1. Add "explicit" property for constructors
 
-__version__ = '1.5.1'
-
-__revision__ = 1080
+__version__ = 'v1.5.2'
