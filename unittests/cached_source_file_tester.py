@@ -6,12 +6,10 @@
 import os 
 import stat
 import unittest
-import autoconfig
 import parser_test_case
 
 from pygccxml import utils
 from pygccxml import parser
-from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args):
@@ -23,11 +21,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
                     , content_type=parser.CONTENT_TYPE.CACHED_SOURCE_FILE )
         try:
             prj_reader = parser.project_reader_t( self.config )
-            prj_decls = prj_reader.read_files( [fconfig]
+            prj_reader.read_files( [fconfig]
                                                , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
             self.failUnless( os.path.exists( fconfig.cached_source_file ) )
             mtime1 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME] 
-            prj_decls = prj_reader.read_files( [fconfig]
+            prj_reader.read_files( [fconfig]
                                                , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
             mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME] 
             self.failUnless( mtime1 == mtime2 )

@@ -3,12 +3,9 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
 import unittest
-import autoconfig
 import parser_test_case
 
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -27,7 +24,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         src_reader = parser.source_reader_t( self.config )
         global_ns = declarations.get_global_namespace( src_reader.read_string( code ) )
         a = global_ns.class_( 'A<const char [N]>' )
-        size = a.mem_fun( 'size' )
+        a.mem_fun( 'size' )
  
 
 def create_suite():

@@ -1,11 +1,7 @@
-import os
-import unittest
-import autoconfig
 
 import pprint
 from pygccxml.binary_parsers import mspdb
 from pygccxml import declarations
-from pygccxml.binary_parsers import common_utils as msvc_utils
 
 pdb_file = r'E:\development\language-binding\pyplusplus_dev\pyplusplus\cpptypes\mydll\release\mydll.pdb'
 pdb_file = r'D:\AC_SERVER_4_VS2005\libs\Debug\SPDBLib_d.pdb'

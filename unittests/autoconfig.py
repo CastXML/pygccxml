@@ -5,7 +5,6 @@
 
 import os
 import sys
-import getpass
 import platform
 
 #~ os.environ['PYCHECKER'] = '--limit=1000 -q --no-argsused'
