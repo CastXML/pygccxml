@@ -26,9 +26,11 @@ class tester_t( parser_test_case.parser_test_case_t ):
             bz2_path = os.path.join(autoconfig.data_directory, 'ogre.1.7.xml.bz2')
             self.xml_path = os.path.join( autoconfig.data_directory, 'ogre.1.7.xml' )
             with open(self.xml_path, 'wb') as new_file:
-                with bz2.BZ2File(bz2_path, 'rb') as bz2_file:
-                    for data in iter(lambda : bz2_file.read(100 * 1024), b''):
-                        new_file.write(data)           
+                # bz2.BZ2File can not be used in a with statement in python 2.6
+                bz2_file = bz2.BZ2File(bz2_path, 'rb')
+                for data in iter(lambda : bz2_file.read(100 * 1024), b''):
+                    new_file.write(data)
+                bz2_file.close()
             
             reader = parser.source_reader_t( autoconfig.cxx_parsers_cfg.gccxml )            
             self.global_ns = declarations.get_global_namespace( reader.read_xml_file(self.xml_path) )
@@ -38,7 +40,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         # Delete the extracted xml file
         os.remove(self.xml_path)
             
-    def test( self ):                
+    def test( self ):
         for x in self.global_ns.typedefs( 'SettingsMultiMap' ):
             self.failUnless( not declarations.is_noncopyable( x ) ) 
   
