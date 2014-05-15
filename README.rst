@@ -30,8 +30,10 @@ setup script:
 
 In order for this to work you need epydoc (http://epydoc.sourceforge.net).
 
+-------
+Testing
+-------
 
-Copyright 2004-2008 Roman Yakovenko.
-Distributed under the Boost Software License, Version 1.0. (See
-accompanying file LICENSE_1_0.txt or copy at
-http://www.boost.org/LICENSE_1_0.txt)
+pygccxml has more than 200 unit tests. They are run after each code commit to ensure
+that the code stays functional and stable. You can find the builds here:
+https://travis-ci.org/gccxml/pygccxml/builds
