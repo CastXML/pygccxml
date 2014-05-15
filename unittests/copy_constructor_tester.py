@@ -25,9 +25,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
             # Extract the xml file from the bz2 archive
             bz2_path = os.path.join(autoconfig.data_directory, 'ogre.1.7.xml.bz2')
             self.xml_path = os.path.join( autoconfig.data_directory, 'ogre.1.7.xml' )
-            with open(self.xml_path, 'wb') as new_file, bz2.BZ2File(bz2_path, 'rb') as bz2_file:
-                for data in iter(lambda : bz2_file.read(100 * 1024), b''):
-                    new_file.write(data)           
+            with open(self.xml_path, 'wb') as new_file:
+                with bz2.BZ2File(bz2_path, 'rb') as bz2_file:
+                    for data in iter(lambda : bz2_file.read(100 * 1024), b''):
+                        new_file.write(data)           
             
             reader = parser.source_reader_t( autoconfig.cxx_parsers_cfg.gccxml )            
             self.global_ns = declarations.get_global_namespace( reader.read_xml_file(self.xml_path) )
