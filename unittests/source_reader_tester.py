@@ -4,11 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-import autoconfig
 import parser_test_case
 
-import pygccxml
-from pygccxml import utils 
 from pygccxml import parser 
 from pygccxml import declarations 
 
@@ -29,7 +26,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_compound_argument_type(self):
         do_smth = self.global_ns.calldefs( 'do_smth' )
         self.failUnless( do_smth, "unable to find do_smth" )
-        cpptype = do_smth.function_type()
+        do_smth.function_type()
 
 def create_suite():
     suite = unittest.TestSuite()        

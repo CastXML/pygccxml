@@ -11,7 +11,6 @@ import parser_test_case
 
 from pygccxml import utils
 from pygccxml import parser
-from pygccxml import declarations
 
 class tester_impl_t( parser_test_case.parser_test_case_t ):
     def __init__(self, architecture, *args):

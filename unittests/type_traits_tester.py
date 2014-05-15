@@ -7,7 +7,6 @@ import unittest
 import autoconfig
 import parser_test_case
 
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -305,7 +304,7 @@ class class_traits_tester_t(unittest.TestCase):
         global_ns = parser.parse_string( code, autoconfig.cxx_parsers_cfg.gccxml)
         global_ns = declarations.get_global_namespace( global_ns )
         easy = global_ns.typedef( 'easy' )
-        c_a = declarations.class_traits.get_declaration( easy )  #this works very well
+        declarations.class_traits.get_declaration( easy )  #this works very well
         deasy = global_ns.typedef( 'Deasy' )
         d_a = declarations.class_traits.get_declaration( deasy )
         self.failUnless( isinstance( d_a, declarations.class_types ) )
