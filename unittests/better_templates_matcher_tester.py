@@ -4,10 +4,8 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-import autoconfig
 import parser_test_case
 
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -30,7 +28,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
                     , '::std::vector<Ogre::Plane,  std::allocator<Ogre::Plane>>'
                     , '::Ogre::Singleton<    Ogre::PCZoneFactoryManager>' ]             
         for i in classes:
-            c = self.global_ns.class_( i )
+            self.global_ns.class_( i )
 
 def create_suite():
     suite = unittest.TestSuite()        

@@ -3,11 +3,10 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os, sys, unittest, os.path
+import os, unittest, os.path
 import autoconfig
-import pygccxml.parser
 from pygccxml.parser.config import config_t
-from pygccxml.parser.declarations_cache import *
+from pygccxml.parser import declarations_cache
 
 class decl_cache_tester(unittest.TestCase):
     def __init__(self, *args ):
@@ -19,24 +18,24 @@ class decl_cache_tester(unittest.TestCase):
         file1 = os.path.join(autoconfig.data_directory, 'decl_cache_file1.txt')
         file1_dup = os.path.join(autoconfig.data_directory, 'decl_cache_file1_duplicate.txt')
         file2 = os.path.join(autoconfig.data_directory, 'decl_cache_file2.txt')
-        sig1 = file_signature(file1)
-        sig1_dup = file_signature(file1_dup)
-        sig2 = file_signature(file2)
+        sig1 = declarations_cache.file_signature(file1)
+        sig1_dup = declarations_cache.file_signature(file1_dup)
+        sig2 = declarations_cache.file_signature(file2)
         self.assert_(sig1 == sig1_dup)
         self.assert_(sig1 != sig2)
         
     def test_config_signature(self):
         diff_cfg_list = self.build_differing_cfg_list()
         def_cfg = diff_cfg_list[0]
-        def_sig = configuration_signature(def_cfg)
+        def_sig = declarations_cache.configuration_signature(def_cfg)
         
         # Test changes that should cause sig changes
         for cfg in diff_cfg_list[1:]:
-            self.assert_(configuration_signature(cfg) != def_sig)
+            self.assert_(declarations_cache.configuration_signature(cfg) != def_sig)
         
         # Test changes that should not cause sig changes
         no_changes = def_cfg.clone()
-        self.assert_(configuration_signature(no_changes) == def_sig)
+        self.assert_(declarations_cache.configuration_signature(no_changes) == def_sig)
         
         #start_decls_changed = def_cfg.clone()
         #start_decls_changed.start_with_declarations = "test object"
@@ -44,7 +43,7 @@ class decl_cache_tester(unittest.TestCase):
                
         ignore_changed = def_cfg.clone()
         ignore_changed.ignore_gccxml_output = True
-        self.assert_(configuration_signature(ignore_changed) == def_sig)
+        self.assert_(declarations_cache.configuration_signature(ignore_changed) == def_sig)
         
     def test_cache_interface(self):
         cache_file = os.path.join(autoconfig.build_directory, 'decl_cache_test.test_cache_read.cache')
@@ -57,7 +56,7 @@ class decl_cache_tester(unittest.TestCase):
         if os.path.exists(cache_file):
             os.remove(cache_file)
         
-        cache = file_cache_t(cache_file)
+        cache = declarations_cache.file_cache_t(cache_file)
         self.assert_(len(cache._file_cache_t__cache) == 0)
         
         # test creating new entries for differing files
@@ -73,23 +72,23 @@ class decl_cache_tester(unittest.TestCase):
         
         # Test reading again
         cache.flush()
-        cache = file_cache_t(cache_file)
+        cache = declarations_cache.file_cache_t(cache_file)
         self.assert_(len(cache._file_cache_t__cache) == 2)
         self.assert_(cache.cached_value(file1,def_cfg) == 2)
         self.assert_(cache.cached_value(file2,def_cfg) == 3)
         
         # Test flushing doesn't happen if we don't touch the cache
-        cache = file_cache_t(cache_file)        
+        cache = declarations_cache.file_cache_t(cache_file)        
         self.assert_(cache.cached_value(file1,def_cfg) == 2)  # Read from cache
         cache.flush()    # should not actually flush
-        cache = file_cache_t(cache_file)
+        cache = declarations_cache.file_cache_t(cache_file)
         self.assert_(len(cache._file_cache_t__cache) == 2)
         
         # Test flush culling
-        cache = file_cache_t(cache_file)
+        cache = declarations_cache.file_cache_t(cache_file)
         cache.update(file1_dup, def_cfg, 4,[])    # Modify cache
         cache.flush()    # should cull off one entry
-        cache = file_cache_t(cache_file)
+        cache = declarations_cache.file_cache_t(cache_file)
         self.assert_(len(cache._file_cache_t__cache) == 1)
         
         

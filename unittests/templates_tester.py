@@ -5,10 +5,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-import autoconfig
-import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
+
 from pygccxml import declarations
 
 class tester_t( unittest.TestCase ):

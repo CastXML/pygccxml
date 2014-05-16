@@ -8,11 +8,6 @@ import unittest
 import autoconfig
 
 
-import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
-
 class parser_test_case_t( unittest.TestCase ):
 
     CXX_PARSER_CFG = None
