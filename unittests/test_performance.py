@@ -4,14 +4,12 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import sys
 import time
 import hotshot
 import hotshot.stats
 import autoconfig
-from pygccxml import *
-
-
+from pygccxml import parser
+from pyggcxml import declarations
 
 dcache_file_name = os.path.join( autoconfig.data_directory, 'pygccxml.cache' )
 if os.path.exists(dcache_file_name):

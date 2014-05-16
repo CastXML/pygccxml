@@ -3,23 +3,19 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os
-import sys
 import pprint
 import unittest
-import tempfile
 import autoconfig
 import parser_test_case
-from pprint import pformat
 
 import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
+from pygccxml import utils
+from pygccxml import parser
+from pygccxml import declarations
 
 def is_sub_path( root, some_path ):
-    root = normalize_path( root )
-    some_path = normalize_path( some_path )
+    root = utils.normalize_path( root )
+    some_path = utils.normalize_path( some_path )
     return some_path.startswith( root )
 
 
@@ -41,7 +37,7 @@ class core_t( parser_test_case.parser_test_case_t ):
         #list of all namespaces
         nss = [ '::ns', '::ns::ns12', '::ns::ns22', '::ns::ns32' ]
         #list of all namespaces that have unnamed namespace
-        unnamed_nss = nss[1:]
+        # unnamed_nss = nss[1:] doing nothing with this list ?
         #list of all enums [0:2] [3:5] [6:8] - has same parent
         enums = [ '::E11', '::E21', '::E31'
                   , '::ns::E12', '::ns::E22', '::ns::E32'
@@ -92,7 +88,7 @@ class core_t( parser_test_case.parser_test_case_t ):
 
     def _test_class_membership( self, class_inst, enum_name, access ):
         #getting enum through get_members function
-        nested_enum1 = class_inst.enum( name=enum_name, function=access_type_matcher_t( access ) )
+        nested_enum1 = class_inst.enum( name=enum_name, function=declarations.access_type_matcher_t( access ) )
 
         #getting enum through declarations property
         nested_enum2 = class_inst.enum( enum_name )
@@ -113,9 +109,9 @@ class core_t( parser_test_case.parser_test_case_t ):
         self._test_ns_membership( core_membership.namespace('enums_ns'), 'EWithin' )
         self._test_ns_membership( core_membership.namespace( '' ), 'EWithinUnnamed' )
         class_nested_enums = core_membership.class_( 'class_for_nested_enums_t' )
-        self._test_class_membership( class_nested_enums, 'ENestedPublic', ACCESS_TYPES.PUBLIC )
-        self._test_class_membership( class_nested_enums, 'ENestedProtected', ACCESS_TYPES.PROTECTED )
-        self._test_class_membership( class_nested_enums, 'ENestedPrivate', ACCESS_TYPES.PRIVATE )
+        self._test_class_membership( class_nested_enums, 'ENestedPublic', declarations.ACCESS_TYPES.PUBLIC )
+        self._test_class_membership( class_nested_enums, 'ENestedProtected', declarations.ACCESS_TYPES.PROTECTED )
+        self._test_class_membership( class_nested_enums, 'ENestedPrivate', declarations.ACCESS_TYPES.PRIVATE )
 
     def test_mangled(self):
         std = self.global_ns.namespace( 'std' )
@@ -123,13 +119,13 @@ class core_t( parser_test_case.parser_test_case_t ):
         self.failUnless( std.mangled, 'mangled name of std namespace should be different from None' )
 
     def _test_is_based_and_derived(self, base, derived, access):
-        dhi_v = hierarchy_info_t( derived, access, True )
-        dhi_not_v = hierarchy_info_t( derived, access, False )
+        dhi_v = declarations.hierarchy_info_t( derived, access, True )
+        dhi_not_v = declarations.hierarchy_info_t( derived, access, False )
         self.failUnless( dhi_v in base.derived or dhi_not_v in base.derived
                          , "base class '%s' doesn't has derived class '%s'" %( base.name, derived.name ) )
 
-        bhi_v = hierarchy_info_t( base, access, True )
-        bhi_not_v = hierarchy_info_t( base, access, False )
+        bhi_v = declarations.hierarchy_info_t( base, access, True )
+        bhi_not_v = declarations.hierarchy_info_t( base, access, False )
 
         self.failUnless( bhi_v in derived.bases or bhi_not_v in derived.bases
                          , "derive class '%s' doesn't has base class '%s'" %( derived.name, base.name ) )
@@ -144,12 +140,12 @@ class core_t( parser_test_case.parser_test_case_t ):
         derived_private = class_hierarchy.class_( 'derived_private_t' )
         multi_derived = class_hierarchy.class_( 'multi_derived_t' )
 
-        self._test_is_based_and_derived( base, derived_public, ACCESS_TYPES.PUBLIC )
-        self._test_is_based_and_derived( base, derived_protected, ACCESS_TYPES.PROTECTED )
-        self._test_is_based_and_derived( base, derived_private, ACCESS_TYPES.PRIVATE )
-        self._test_is_based_and_derived( base, multi_derived, ACCESS_TYPES.PROTECTED )
-        self._test_is_based_and_derived( other_base, multi_derived, ACCESS_TYPES.PRIVATE )
-        self._test_is_based_and_derived( derived_private, multi_derived, ACCESS_TYPES.PRIVATE )
+        self._test_is_based_and_derived( base, derived_public, declarations.ACCESS_TYPES.PUBLIC )
+        self._test_is_based_and_derived( base, derived_protected, declarations.ACCESS_TYPES.PROTECTED )
+        self._test_is_based_and_derived( base, derived_private, declarations.ACCESS_TYPES.PRIVATE )
+        self._test_is_based_and_derived( base, multi_derived, declarations.ACCESS_TYPES.PROTECTED )
+        self._test_is_based_and_derived( other_base, multi_derived, declarations.ACCESS_TYPES.PRIVATE )
+        self._test_is_based_and_derived( derived_private, multi_derived, declarations.ACCESS_TYPES.PRIVATE )
 
     def _test_is_same_bases(self, derived1, derived2 ):
         bases1 = set([ id(hierarchy_info.related_class) for hierarchy_info in derived1.bases ])
@@ -165,24 +161,24 @@ class core_t( parser_test_case.parser_test_case_t ):
         derived2 = diamand_hierarchy.class_( 'derived2_t' )
         final_derived = diamand_hierarchy.class_( 'final_derived_t' )
 
-        self._test_is_based_and_derived( base, derived1, ACCESS_TYPES.PUBLIC )
-        self._test_is_based_and_derived( base, derived2, ACCESS_TYPES.PUBLIC )
-        self._test_is_based_and_derived( derived1, final_derived, ACCESS_TYPES.PUBLIC )
-        self._test_is_based_and_derived( derived2, final_derived, ACCESS_TYPES.PUBLIC )
+        self._test_is_based_and_derived( base, derived1, declarations.ACCESS_TYPES.PUBLIC )
+        self._test_is_based_and_derived( base, derived2, declarations.ACCESS_TYPES.PUBLIC )
+        self._test_is_based_and_derived( derived1, final_derived, declarations.ACCESS_TYPES.PUBLIC )
+        self._test_is_based_and_derived( derived2, final_derived, declarations.ACCESS_TYPES.PUBLIC )
         self._test_is_same_bases(derived1, derived2)
 
     def test_fundamental_types(self):
         #check whether all build in types could be constructed
         errors = []
-        for fundamental_type_name, fundamental_type in FUNDAMENTAL_TYPES.items():
+        for fundamental_type_name, fundamental_type in declarations.FUNDAMENTAL_TYPES.items():
             if 'complex' in fundamental_type_name:
                 continue #I check this in an other tester
-            if isinstance( fundamental_type, (int128_t, uint128_t) ):
+            if isinstance( fundamental_type, (declarations.int128_t, declarations.uint128_t) ):
                 continue #I don't have test case for this
-            if isinstance( fundamental_type, java_fundamental_t ):
+            if isinstance( fundamental_type, declarations.java_fundamental_t ):
                 continue #I don't check this at all
             typedef_name = 'typedef_' + fundamental_type_name.replace( ' ', '_' )
-            typedef = self.global_ns.decl( decl_type=typedef_t, name=typedef_name )
+            typedef = self.global_ns.decl( decl_type=declarations.typedef_t, name=typedef_name )
             self.failUnless( typedef, "unable to find typedef to build-in type '%s'" % fundamental_type_name )
             if typedef.type.decl_string != fundamental_type.decl_string:
                 errors.append( "there is a difference between typedef base type name('%s') and expected one('%s')"
@@ -190,29 +186,29 @@ class core_t( parser_test_case.parser_test_case_t ):
         self.failIf( errors, pprint.pformat( errors ) )
 
     def test_compound_types(self):
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_int' )
-        self._test_type_composition( typedef_inst.type, const_t, int_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_const_int' )
+        self._test_type_composition( typedef_inst.type, declarations.const_t, declarations.int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_pointer_int' )
-        self._test_type_composition( typedef_inst.type, pointer_t, int_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_pointer_int' )
+        self._test_type_composition( typedef_inst.type, declarations.pointer_t, declarations.int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_reference_int' )
-        self._test_type_composition( typedef_inst.type, reference_t, int_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_reference_int' )
+        self._test_type_composition( typedef_inst.type, declarations.reference_t, declarations.int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_const_unsigned_int_const_pointer' )
-        self._test_type_composition( typedef_inst.type, const_t, pointer_t )
-        self._test_type_composition( typedef_inst.type.base, pointer_t, const_t )
-        self._test_type_composition( typedef_inst.type.base.base, const_t, unsigned_int_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_const_unsigned_int_const_pointer' )
+        self._test_type_composition( typedef_inst.type, declarations.const_t, declarations.pointer_t )
+        self._test_type_composition( typedef_inst.type.base, declarations.pointer_t, declarations.const_t )
+        self._test_type_composition( typedef_inst.type.base.base, declarations.const_t, declarations.unsigned_int_t )
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_volatile_int' )
-        self._test_type_composition( typedef_inst.type, volatile_t, int_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_volatile_int' )
+        self._test_type_composition( typedef_inst.type, declarations.volatile_t, declarations.int_t )
 
         var_inst = self.global_ns.variable( 'array255' )
-        self._test_type_composition( var_inst.type, array_t, int_t )
+        self._test_type_composition( var_inst.type, declarations.array_t, declarations.int_t )
 
 
-        typedef_inst = self.global_ns.decl( decl_type=typedef_t, name='typedef_EFavoriteDrinks' )
-        self.failUnless( isinstance( typedef_inst.type, declarated_t )
+        typedef_inst = self.global_ns.decl( decl_type=declarations.typedef_t, name='typedef_EFavoriteDrinks' )
+        self.failUnless( isinstance( typedef_inst.type, declarations.declarated_t )
                          , " typedef to enum should be 'declarated_t' instead of '%s'" % typedef_inst.type.__class__.__name__ )
         enum_declaration = self.global_ns.enum( 'EFavoriteDrinks' )
         self.failUnless( typedef_inst.type.declaration is enum_declaration
@@ -220,25 +216,25 @@ class core_t( parser_test_case.parser_test_case_t ):
                            % ( typedef_inst.type.declaration.name, enum_declaration.name ) )
 
     def test_free_function_type(self):
-        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='function_ptr' )
-        self._test_type_composition( function_ptr.type, pointer_t, free_function_type_t )
+        function_ptr = self.global_ns.decl( decl_type=declarations.typedef_t, name='function_ptr' )
+        self._test_type_composition( function_ptr.type, declarations.pointer_t, declarations.free_function_type_t )
         function_type = function_ptr.type.base
-        self.failUnless( isinstance( function_type.return_type, int_t )
+        self.failUnless( isinstance( function_type.return_type, declarations.int_t )
                          , "return function type of typedef 'function_ptr' should be '%s' instead of '%s' " \
                            %( 'int_t', function_type.return_type.__class__.__name__ ) )
         self.failUnless( len( function_type.arguments_types ) == 2
                          , "number of arguments of function of typedef 'function_ptr' should be 2 instead of '%d' " \
                            % len( function_type.arguments_types ) )
-        self.failUnless( isinstance( function_type.arguments_types[0], int_t )
+        self.failUnless( isinstance( function_type.arguments_types[0], declarations.int_t )
                          , "first argument of function of typedef 'function_ptr' should be '%s' instead of '%s' " \
                            %( 'int_t', function_type.arguments_types[0].__class__.__name__ ) )
-        self.failUnless( isinstance( function_type.arguments_types[1], double_t )
+        self.failUnless( isinstance( function_type.arguments_types[1], declarations.double_t )
                          , "first argument of function of typedef 'function_ptr' should be '%s' instead of '%s' " \
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
     def test_member_function_type(self):
-        function_ptr = self.global_ns.decl( decl_type=typedef_t, name='member_function_ptr_t')
-        self._test_type_composition( function_ptr.type, pointer_t, member_function_type_t )
+        function_ptr = self.global_ns.decl( decl_type=declarations.typedef_t, name='member_function_ptr_t')
+        self._test_type_composition( function_ptr.type, declarations.pointer_t, declarations.member_function_type_t )
 
         function_type = function_ptr.type.base
 
@@ -247,25 +243,25 @@ class core_t( parser_test_case.parser_test_case_t ):
                          , "member function type class should be '%s' instead of '%s'" \
                            % ( members_pointers.decl_string, function_type.class_inst.decl_string ) )
 
-        self.failUnless( isinstance( function_type.return_type, int_t )
+        self.failUnless( isinstance( function_type.return_type, declarations.int_t )
                          , "return function type of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'int_t', function_type.return_type.__class__.__name__ ) )
         self.failUnless( len( function_type.arguments_types ) == 1
                          , "number of arguments of function of typedef 'member_function_ptr_t' should be 1 instead of '%d' " \
                            % len( function_type.arguments_types ) )
-        self.failUnless( isinstance( function_type.arguments_types[0], double_t )
+        self.failUnless( isinstance( function_type.arguments_types[0], declarations.double_t )
                          , "first argument of function of typedef 'member_function_ptr_t' should be '%s' instead of '%s' " \
                            %( 'double_t', function_type.arguments_types[0].__class__.__name__ ) )
 
         self.failUnless( function_type.has_const, " 'member_function_ptr_t' should be const function." )
 
     def test_member_variable_type(self):
-        mv = self.global_ns.decl( decl_type=typedef_t, name='member_variable_ptr_t')
-        self._test_type_composition( mv.type, pointer_t, member_variable_type_t )
+        mv = self.global_ns.decl( decl_type=declarations.typedef_t, name='member_variable_ptr_t')
+        self._test_type_composition( mv.type, declarations.pointer_t, declarations.member_variable_type_t )
 
         members_pointers = self.global_ns.class_( 'members_pointers_t' )
         self.failUnless( members_pointers, "unable to find class('%s')" % 'members_pointers_t' )
-        self._test_type_composition( mv.type.base, member_variable_type_t, declarated_t )
+        self._test_type_composition( mv.type.base, declarations.member_variable_type_t, declarations.declarated_t )
         mv_type = mv.type.base
         self.failUnless( mv_type.base.declaration is members_pointers
                          , "member function type class should be '%s' instead of '%s'" \
@@ -342,32 +338,32 @@ class core_gccxml_t( core_t ):
 
     def setUp(self):
         if not core_t.global_ns:
-            decls = parse( self.test_files, self.config, self.COMPILATION_MODE )
+            decls = parser.parse( self.test_files, self.config, self.COMPILATION_MODE )
             core_t.global_ns = pygccxml.declarations.get_global_namespace( decls )
             if self.INIT_OPTIMIZER:
                 core_t.global_ns.init_optimizer()
         self.global_ns = core_t.global_ns
 
 class core_all_at_once_t( core_gccxml_t ):
-    COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
     def __init__(self, *args):
         core_gccxml_t.__init__(self, *args)
 
 class core_all_at_once_no_opt_t( core_gccxml_t ):
-    COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = False
     def __init__(self, *args):
         core_gccxml_t.__init__(self, *args)
 
 class core_file_by_file_t( core_gccxml_t ):
-    COMPILATION_MODE = COMPILATION_MODE.FILE_BY_FILE
+    COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = True
     def __init__(self, *args):
         core_gccxml_t.__init__(self, *args)
 
 class core_file_by_file_no_opt_t( core_gccxml_t ):
-    COMPILATION_MODE = COMPILATION_MODE.FILE_BY_FILE
+    COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = False
     def __init__(self, *args):
         core_gccxml_t.__init__(self, *args)

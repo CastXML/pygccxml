@@ -4,10 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-import autoconfig
 import parser_test_case
-
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -24,7 +21,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             
     def test( self ):       
         criteria = declarations.namespace_matcher_t( name='bit_fields' )
-        x = declarations.matcher.get_single( criteria, self.declarations )
+        declarations.matcher.get_single( criteria, self.declarations )
         self.failUnless( str(criteria) == '(decl type==namespace_t) and (name==bit_fields)' )
         
     def test_allow_empty( self ):
