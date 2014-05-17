@@ -3,14 +3,12 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os
 import unittest
-import autoconfig
 import parser_test_case
+from pygccxml import parser
+from pygccxml import declarations
 
-import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
 
 class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args):
@@ -31,10 +29,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
         ]
 
     def test(self):
-        prj_reader = project_reader_t( self.config )
+        prj_reader = parser.project_reader_t( self.config )
         decls = prj_reader.read_files( self.__files
-                                           , compilation_mode=COMPILATION_MODE.ALL_AT_ONCE )
-        files = declaration_files( decls )
+                                           , compilation_mode=parser.COMPILATION_MODE.ALL_AT_ONCE )
+        files = declarations.declaration_files( decls )
         result = set()
         for fn in files:
             result.add( os.path.split( fn )[1] )

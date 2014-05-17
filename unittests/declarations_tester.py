@@ -32,7 +32,7 @@ class declarations_t( parser_test_case.parser_test_case_t ):
         pass #tested in core_tester
 
     def test_variables(self):
-        variables = self.global_ns.namespace( 'variables' )
+        self.global_ns.namespace( 'variables' )
         initialized = self.global_ns.variable( name='initialized' )
 
         expected_value = None

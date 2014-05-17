@@ -4,14 +4,10 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import sys
 import unittest
-import autoconfig
 import parser_test_case
-
-from pygccxml import utils
 from pygccxml import parser
-from pygccxml import declarations
+
 
 class tester_t( parser_test_case.parser_test_case_t ):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE

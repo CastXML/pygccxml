@@ -5,10 +5,7 @@
 
 import os
 import unittest
-import autoconfig
 import parser_test_case
-
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -54,7 +51,7 @@ class tester_2_t( parser_test_case.parser_test_case_t ):
             self.global_ns = declarations.get_global_namespace( parser.parse( [self.header], self.config ) )
 
     def test_no_defaults( self ):
-        vectors = self.global_ns.decls( lambda decl: 'vector<' in decl.name )
+        self.global_ns.decls( lambda decl: 'vector<' in decl.name )
         self.global_ns.decl( 'vector< _0_ >' )
         self.global_ns.class_( 'vector< std::vector< int > >' )
         self.global_ns.class_( 'vector< std::string >' )

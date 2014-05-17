@@ -5,25 +5,21 @@
 
 import copy
 import unittest
-import autoconfig
 import parser_test_case
-
-import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
+from pygccxml import parser
+from pygccxml import declarations
 
 class tester_t(parser_test_case.parser_test_case_t):
-    COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'declarations_comparison.hpp'
 
     def test_comparison_declaration_by_declaration(self):
-        parsed = parse( [self.header], self.config )
+        parsed = parser.parse( [self.header], self.config )
         copied = copy.deepcopy( parsed )
-        parsed = make_flatten( parsed )
-        copied = make_flatten( copied )
+        parsed = declarations.make_flatten( parsed )
+        copied = declarations.make_flatten( copied )
         parsed.sort()
         copied.sort()
         failuers = []
@@ -34,7 +30,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.failUnless( not failuers, 'Failures: ' + '\n\t'.join(failuers) )
 
     def test_comparison_from_reverse(self):
-        parsed = parse( [self.header], self.config )
+        parsed = parser.parse( [self.header], self.config )
         copied = copy.deepcopy( parsed )
         parsed.sort()
         copied.reverse()
@@ -47,9 +43,9 @@ class tester_t(parser_test_case.parser_test_case_t):
                          , "__lt__ and/or __qe__ does not working properly" )
 
     def test___lt__transitivnost(self):
-        ns_std = namespace_t(name='std')
-        ns_global = namespace_t(name='::')
-        ns_internal = namespace_t(name='ns')
+        ns_std = declarations.namespace_t(name='std')
+        ns_global = declarations.namespace_t(name='::')
+        ns_internal = declarations.namespace_t(name='ns')
         ns_internal.parent = ns_global
         ns_global.declarations.append( ns_internal )
         left2right = [ ns_std, ns_global ]
@@ -59,7 +55,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.failUnless( left2right == right2left, "bug: find me" )
 
     def test_same_declarations_different_intances(self):
-        parsed = parse( [self.header], self.config )
+        parsed = parser.parse( [self.header], self.config )
         copied = copy.deepcopy( parsed )
         self.failUnless( parsed == copied
                          , "__lt__ and/or __qe__ does not working properly" )

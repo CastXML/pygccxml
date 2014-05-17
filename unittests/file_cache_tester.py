@@ -4,22 +4,14 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import sys
-import stat
-import time
 import unittest
-import tempfile
 import autoconfig
 import parser_test_case
-from pprint import pformat
+from pygccxml import parser
 
-import pygccxml
-from pygccxml.utils import *
-from pygccxml.parser import *
-from pygccxml.declarations import *
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    COMPILATION_MODE = COMPILATION_MODE.ALL_AT_ONCE
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = os.path.join( autoconfig.data_directory, 'core_cache.hpp' )
@@ -36,8 +28,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
 
     def test_update(self):
-        declarations = parse( [self.header], self.config )
-        cache = file_cache_t( self.cache_file )
+        declarations = parser.parse( [self.header], self.config )
+        cache = parser.file_cache_t( self.cache_file )
         cache.update( source_file=self.header
                       , configuration=self.config
                       , declarations=declarations
@@ -49,8 +41,8 @@ class tester_t( parser_test_case.parser_test_case_t ):
                          , "cache didn't recognize that some files on disk has been changed" )
 
     def test_from_file(self):
-        declarations = parse( [self.header], self.config )
-        cache = file_cache_t( self.cache_file )
+        declarations = parser.parse( [self.header], self.config )
+        cache = parser.file_cache_t( self.cache_file )
         cache.update( source_file=self.header
                       , configuration=self.config
                       , declarations=declarations
@@ -58,7 +50,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( declarations == cache.cached_value(self.header, self.config)
                          , "cached declarations and source declarations are different")
         cache.flush()
-        cache = file_cache_t( self.cache_file )
+        cache = parser.file_cache_t( self.cache_file )
         self.failUnless( declarations == cache.cached_value(self.header, self.config)
                          , "cached declarations and source declarations are different, after pickling")
 
