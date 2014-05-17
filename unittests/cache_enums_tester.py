@@ -4,12 +4,9 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import sys
 import unittest
 import autoconfig
 import parser_test_case
-
-import pygccxml
 from pygccxml import parser
 from pygccxml import declarations
 

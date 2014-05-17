@@ -4,10 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import unittest
-import autoconfig
 import parser_test_case
-
-from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -66,7 +63,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test_multimap( self ):
         m = self.global_ns.class_( lambda decl: decl.name.startswith( 'multimap' ) )
-        traits = declarations.find_container_traits( m )
+        declarations.find_container_traits( m )
         self.failUnless( m.partial_name == 'multimap< int, int >' )
 
     def test_recursive_partial_name( self ):
@@ -87,7 +84,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_from_ogre( self ):
         x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
         ct = declarations.find_container_traits( x )
-        y = ct.remove_defaults( x )
+        ct.remove_defaults( x )
 
     def test_infinite_loop(self):
         rt = self.global_ns.free_fun( 'test_infinite_loop' ).return_type

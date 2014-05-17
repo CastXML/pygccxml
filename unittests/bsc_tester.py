@@ -2,7 +2,7 @@ import os
 import unittest
 import autoconfig
 
-from pygccxml.binary_parsers binary_parsers import bsc
+from pygccxml.binary_parsers import bsc
 
 class tester_t( unittest.TestCase ):
     def __init__(self, *args):

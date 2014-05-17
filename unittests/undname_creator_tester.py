@@ -4,7 +4,6 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 import os
-import sys
 from platform import system
 import unittest
 import autoconfig
@@ -58,10 +57,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.header = os.path.join( self.binary_parsers_dir, r'mydll.h' )
         self.map_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.map' )
         self.dll_file = os.path.join( self.binary_parsers_dir, 'binaries', 'mydll.dll' )
-        sys = system()
-        if sys=='Darwin':
+        system_name = system()
+        if system_name=='Darwin':
             ext = '.dylib'
-        elif sys=='Windows':
+        elif system_name=='Windows':
             ext = '.dll'
         else:
             ext = '.so'

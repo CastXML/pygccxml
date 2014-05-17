@@ -79,6 +79,7 @@ class tester_t( unittest.TestCase ):
             try:
                 reader = mspdb.decl_loader_t( f )
                 reader.read()
+                d = ''
                 f = file( d + '.txt', 'w+' )
                 declarations.print_declarations( reader.global_ns, writer=lambda line: f.write(line+'\n') )
                 f.close()
