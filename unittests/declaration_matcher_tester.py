@@ -11,38 +11,38 @@ from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
     global_ns = None
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'classes.hpp'
         self.global_ns = None
-        
+
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
         self.global_ns = tester_t.global_ns
-            
-    def test_global( self ):       
+
+    def test_global( self ):
         gns = self.global_ns
         gns.class_( 'cls' )
         gns.class_( '::cls' )
-        
-    def test_ns1( self ):       
+
+    def test_ns1( self ):
         gns = self.global_ns
         ns1 = gns.namespace( 'ns' )
-        
+
         gns.class_( 'nested_cls' )
         self.failUnlessRaises( Exception, lambda: gns.class_( 'ns::nested_cls' ) )
         gns.class_( '::ns::nested_cls' )
-        
+
         self.failUnlessRaises( Exception, lambda: ns1.class_( '::nested_cls' ) )
         ns1.class_( 'nested_cls' )
-        ns1.class_( '::ns::nested_cls' )        
+        ns1.class_( '::ns::nested_cls' )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

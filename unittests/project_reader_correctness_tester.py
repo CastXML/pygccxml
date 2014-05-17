@@ -66,7 +66,7 @@ class tester2_t( parser_test_case.parser_test_case_t ):
                                            , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
         src_reader = parser.source_reader_t( self.config )
         src_decls = src_reader.read_file( 'separate_compilation/all.h' )
-        
+
         declarations.dump_declarations( src_decls
                                         , os.path.join( autoconfig.build_directory, 'separate_compilation.sr.txt' ) )
 

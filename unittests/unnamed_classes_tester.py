@@ -14,20 +14,20 @@ class tester_t( parser_test_case.parser_test_case_t ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'unnamed_classes.hpp'
         self.global_ns = None
-        
+
     def setUp(self):
         if not self.global_ns:
             decls = parser.parse( [self.header], self.config )
             self.global_ns = declarations.get_global_namespace( decls )
             self.global_ns.init_optimizer()
-            
-    def test( self ):                
-        #bf_x = self.global_ns.variable( 'x' )        
+
+    def test( self ):
+        #bf_x = self.global_ns.variable( 'x' )
         #self.failUnless( bf_x.bits == 1 )
         pass
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

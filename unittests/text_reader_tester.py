@@ -16,17 +16,17 @@ class tester_t( parser_test_case.parser_test_case_t ):
         fconfig = parser.file_configuration_t( data='int i;'
                                                , start_with_declarations=None
                                                , content_type=parser.file_configuration_t.CONTENT_TYPE.TEXT )
-        
+
         prj_reader = parser.project_reader_t( self.config )
         decls = prj_reader.read_files( [fconfig]
                                        , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
 
         var_i = declarations.find_declaration( decls, type=declarations.variable_t, name='i' )
         self.failUnless( var_i, "Variable i has not been found." )
-   
+
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

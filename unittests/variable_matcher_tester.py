@@ -59,7 +59,7 @@ class tester_2_t( parser_test_case.parser_test_case_t ):
         self.global_ns.class_( 'vector< std::vector< int > >' )
         self.global_ns.class_( 'vector< std::string >' )
         self.global_ns.decl( 'vector< const int >' )
-    
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_1_t))

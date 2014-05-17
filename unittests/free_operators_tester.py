@@ -17,13 +17,13 @@ class tester_t( parser_test_case.parser_test_case_t ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'free_operators.hpp'
         self.global_ns = None
-        
+
     def setUp(self):
         reader = parser.source_reader_t( self.config )
         decls = reader.read_file( self.header )
         self.global_ns = declarations.get_global_namespace( decls )
-            
-    def test( self ):                
+
+    def test( self ):
         fo = self.global_ns.namespace( 'free_operators' )
         number =  fo.class_( 'number' )
         rational = fo.class_( 'rational' )
@@ -33,10 +33,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
             if rational.name in str( oper ):
                 self.failUnless( rational in oper.class_types )
 
-            
+
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

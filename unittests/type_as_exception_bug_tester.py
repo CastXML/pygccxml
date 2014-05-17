@@ -14,14 +14,14 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'type_as_exception_bug.h'
-        
+
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
 
-    def test( self ):                
+    def test( self ):
         buggy = self.global_ns.mem_fun( 'buggy' )
         ExpressionError = self.global_ns.class_( 'ExpressionError' )
         self.failUnless( len( buggy.exceptions ) == 1 )
@@ -29,10 +29,10 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( declarations.is_reference( err ) )
         err = declarations.remove_declarated( declarations.remove_reference( err ) )
         self.failUnless( err is ExpressionError )
-        
+
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

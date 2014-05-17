@@ -10,13 +10,13 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    
+
     global_ns = None
-    
+
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'covariant_returns.hpp'
-        
+
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
@@ -26,14 +26,14 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def test_is_same_function( self ):
         d = self.global_ns.class_( 'better_algorithm_t' )
         b = self.global_ns.class_( 'algorithm_t' )
-        
+
         df = d.mem_fun( 'f' )
         bf = b.mem_fun( 'f' )
-        
+
         self.failUnless( id(df) != id(bf) and declarations.is_same_function( df, bf ) )
-        
+
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

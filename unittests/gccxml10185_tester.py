@@ -25,7 +25,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         global_ns = declarations.get_global_namespace( src_reader.read_string( code ) )
         a = global_ns.class_( 'A<const char [N]>' )
         a.mem_fun( 'size' )
- 
+
 
 def create_suite():
     suite = unittest.TestSuite()

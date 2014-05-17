@@ -32,7 +32,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
     def test(self):
         prj_reader = project_reader_t( self.config )
-        decls = prj_reader.read_files( self.__files 
+        decls = prj_reader.read_files( self.__files
                                            , compilation_mode=COMPILATION_MODE.ALL_AT_ONCE )
         files = declaration_files( decls )
         result = set()
@@ -42,7 +42,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

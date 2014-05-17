@@ -22,7 +22,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnlessRaises( gccxml_runtime_error_t, parse_string, self.content, self.config )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

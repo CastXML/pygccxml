@@ -13,18 +13,18 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'declarations_calldef.hpp'
         self.declarations = None
-        
+
     def setUp(self):
         if not self.declarations:
             self.declarations = parser.parse( [self.header], self.config )
-            
-    def test( self ):       
-        criteria = declarations.calldef_matcher_t( 
+
+    def test( self ):
+        criteria = declarations.calldef_matcher_t(
             name='return_default_args'
             , return_type='int'
             , arg_types=[ None, declarations.bool_t() ] )
@@ -32,7 +32,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.failUnless( rda, "return_default_args function was not found." )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

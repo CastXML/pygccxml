@@ -27,7 +27,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             , 'core_overloads_2.hpp'
             , 'typedefs_base.hpp'
         ]
-        
+
         #~ for i, f in enumerate(self.__files):
             #~ f = parser.create_cached_source_fc( os.path.join( autoconfig.data_directory, f)
                                                 #~ , os.path.join( autoconfig.data_directory, f + '.xml') )

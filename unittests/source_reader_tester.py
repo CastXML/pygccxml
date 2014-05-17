@@ -6,8 +6,8 @@
 import unittest
 import parser_test_case
 
-from pygccxml import parser 
-from pygccxml import declarations 
+from pygccxml import parser
+from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
     global_ns = None
@@ -16,7 +16,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.header = 'declarations_calldef.hpp'
         self.global_ns = None
 
-    def setUp(self):        
+    def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
@@ -29,7 +29,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         do_smth.function_type()
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

@@ -14,22 +14,22 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'complex_types.hpp'
         self.declarations = None
-        
+
     def setUp(self):
         if not self.declarations:
             self.declarations = parser.parse( [self.header], self.config )
-            
-    def test( self ):                
+
+    def test( self ):
         """
-        This test tests presence of complex long double, float within 
+        This test tests presence of complex long double, float within
         FUNDAMENTAL_TYPES map
         """
-        pass 
+        pass
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -9,19 +9,19 @@ from pygccxml import parser
 from pygccxml import declarations
 
 class tester_t( parser_test_case.parser_test_case_t ):
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE    
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     global_ns = None
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.header = 'string_traits.hpp'
         self.global_ns = None
-        
+
     def setUp(self):
         if not tester_t.global_ns:
-            decls = parser.parse( [self.header], self.config ) 
+            decls = parser.parse( [self.header], self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
         self.global_ns = tester_t.global_ns
-    
+
     def validate_yes( self, ns, controller ):
         for typedef in ns.typedefs():
             self.failUnless( controller( typedef.type ) )
@@ -41,7 +41,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         self.validate_no( wstring_traits.namespace( 'no' ), declarations.is_std_wstring )
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

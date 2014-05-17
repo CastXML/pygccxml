@@ -3,7 +3,7 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
-import os 
+import os
 import stat
 import unittest
 import parser_test_case
@@ -24,17 +24,17 @@ class tester_t( parser_test_case.parser_test_case_t ):
             prj_reader.read_files( [fconfig]
                                                , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
             self.failUnless( os.path.exists( fconfig.cached_source_file ) )
-            mtime1 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME] 
+            mtime1 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
             prj_reader.read_files( [fconfig]
                                                , compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE )
-            mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME] 
+            mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
             self.failUnless( mtime1 == mtime2 )
         finally:
             utils.remove_file_no_raise( fconfig.cached_source_file )
-   
+
 def create_suite():
-    suite = unittest.TestSuite()        
-    suite.addTest( unittest.makeSuite(tester_t))    
+    suite = unittest.TestSuite()
+    suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
 def run_suite():

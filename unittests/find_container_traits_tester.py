@@ -16,39 +16,39 @@ class tester_t( parser_test_case.parser_test_case_t ):
     def __init__(self, *args ):
         parser_test_case.parser_test_case_t.__init__( self, *args )
         self.headers = [ 'remove_template_defaults.hpp', 'indexing_suites2.hpp' ]
-        
+
     def setUp(self):
         if not tester_t.global_ns:
             decls = parser.parse( self.headers, self.config )
             tester_t.global_ns = declarations.get_global_namespace( decls )
             tester_t.global_ns.init_optimizer()
-    
+
     def __cmp_traits( self, typedef, expected, partial_name, key_type=None):
         if isinstance( typedef, str ):
             typedef = self.global_ns.typedef( typedef )
         traits = declarations.find_container_traits( typedef )
         self.failUnless( traits, 'container traits for "%s" not found' % str( typedef ) )
         self.failUnless( traits is expected
-                         , 'container "%s", expected %s_traits, got %s_traits' 
+                         , 'container "%s", expected %s_traits, got %s_traits'
                            % ( str(typedef), expected.name(), traits.name() ) )
-        cls = declarations.remove_declarated( typedef )                                        
+        cls = declarations.remove_declarated( typedef )
         self.failUnless( cls.container_traits is expected )
         self.failUnless( cls.partial_name == partial_name )
         cls = traits.class_declaration( cls )
-        
+
         self.failUnless( traits.element_type( typedef ) )
         self.failUnless( cls.cache.container_element_type, "For some reason cache was not updated" )
-        
+
         if key_type:
             self.failUnless( traits.is_mapping( typedef ) )
             real_key_type = traits.key_type( typedef )
             self.failUnless( real_key_type.decl_string == key_type
                              , 'Error extracting key type.  Expected type "%s", got "%s"'
                                % ( key_type, real_key_type.decl_string ) )
-            self.failUnless( cls.cache.container_key_type, "For some reason cache was not updated" )                               
+            self.failUnless( cls.cache.container_key_type, "For some reason cache was not updated" )
         else:
             self.failUnless( traits.is_sequence( typedef ) )
-            
+
     def test_find_traits( self ):
         self.__cmp_traits( 'v_int', declarations.vector_traits, "vector< int >" )
         self.__cmp_traits( 'l_int', declarations.list_traits, "list< int >" )
@@ -88,16 +88,16 @@ class tester_t( parser_test_case.parser_test_case_t ):
         x = 'map<std::string, bool (*)(std::string&, Ogre::MaterialScriptContext&), std::less<std::string>, std::allocator<std::pair<std::string const, bool (*)(std::string&, Ogre::MaterialScriptContext&)> > >'
         ct = declarations.find_container_traits( x )
         y = ct.remove_defaults( x )
-    
+
     def test_infinite_loop(self):
         rt = self.global_ns.free_fun( 'test_infinite_loop' ).return_type
         map_traits = declarations.find_container_traits( rt )
         self.failUnless( map_traits is declarations.map_traits )
         elem = map_traits.element_type( rt )
         self.failUnless( elem.decl_string == 'int' )
-    
+
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 

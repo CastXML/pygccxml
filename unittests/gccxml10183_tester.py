@@ -25,7 +25,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         global_ns.decl( 'A<int>' )
         f = global_ns.free_fun( 'f' )
         self.failUnless( f.demangled == 'void f<int>(A<int> const&)' )
- 
+
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -12,9 +12,9 @@ Description: "...The purpose of the GCC-XML extension is to generate an XML desc
         C++ program from GCC's internal representation. Since XML is easy to parse,
         other development tools will be able to work with C++ programs without the
         burden of a complicated C++ parser..."
-        
+
         -- Introduction to GCC-XML
-        
+
         The purpose of pygccxml is to read a GCC-XML generated file and provide simple
         framework to navigate C++ declarations using python classes.
 Keywords: C++ declaration parser reader

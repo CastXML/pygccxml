@@ -34,7 +34,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
         header.write("//touch")
         header.close()
 
-        
+
     def test_update(self):
         declarations = parse( [self.header], self.config )
         cache = file_cache_t( self.cache_file )
@@ -64,7 +64,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
 
 
 def create_suite():
-    suite = unittest.TestSuite()        
+    suite = unittest.TestSuite()
     suite.addTest( unittest.makeSuite(tester_t))
     return suite
 
