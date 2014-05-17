@@ -30,7 +30,7 @@ def file_signature( filename ):
     return sig.hexdigest()
 
 def configuration_signature( config ):
-    """ Return a signature for a configuration (config_t)
+    """ Return a signature for a configuration (gccxml_configuration_t)
         object.  This can then be used as a key in the cache.
         This method must take into account anything about
         a configuration that could cause the declarations generated
@@ -65,7 +65,7 @@ class cache_base_t( object ):
         update cache entry
 
         :param source_file: path to the C++ source file being parsed
-        :param configuration: configuration used in parsing :class:`config_t`
+        :param configuration: configuration used in parsing :class:`gccxml_configuration_t`
         :param declarations: declaration tree found when parsing
         :param included_files: files included by parsing.
         """
@@ -75,7 +75,7 @@ class cache_base_t( object ):
         """
         Return declarations, we have cached, for the source_file and the given configuration.
         :param source_file: path to the C++ source file being parsed.
-        :param configuration: configuration( :class:`config_t` ) that was used for parsing
+        :param configuration: configuration( :class:`gccxml_configuration_t` ) that was used for parsing
         """
         raise NotImplementedError()
 

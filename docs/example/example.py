@@ -18,7 +18,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 #configure GCC-XML parser
-config = parser.config_t( gccxml_path=gccxml_09_path, compiler='msvc71' )
+config = parser.gccxml_configuration_t( gccxml_path=gccxml_09_path, compiler='msvc71' )
 
 #parsing source file
 decls = parser.parse( ['example.hpp'], config )

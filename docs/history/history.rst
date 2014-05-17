@@ -50,6 +50,8 @@ Version 1.6 (Not yet released)
 
 2. Changed the documentation from epydoc to sphinx doc
 
+3. Depreacate parser.config_t (replaced by parser.gccxml_configuration_t)
+
 Version 1.5.2
 -------------
 

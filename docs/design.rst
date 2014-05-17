@@ -183,7 +183,7 @@ allows you to setup cache.
 Parser configuration classes
 ----------------------------
 
-``config_t`` - a class, that accumulates all the settings needed to invoke `GCC-XML`_:
+``gccxml_configuration_t`` - a class, that accumulates all the settings needed to invoke `GCC-XML`_:
 
 
 ``file_configuration_t`` - a class, that contains some data and description how

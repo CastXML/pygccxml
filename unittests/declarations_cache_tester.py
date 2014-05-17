@@ -5,7 +5,7 @@
 
 import os, unittest, os.path
 import autoconfig
-from pygccxml.parser.config import config_t
+from pygccxml.parser.config import gccxml_configuration_t
 from pygccxml.parser import declarations_cache
 
 class decl_cache_tester(unittest.TestCase):
@@ -95,7 +95,7 @@ class decl_cache_tester(unittest.TestCase):
     def build_differing_cfg_list(self):
         """ Return a list of configurations that all differ. """
         cfg_list = []
-        def_cfg = config_t("gccxml_path",'.',['tmp'],['sym'],['unsym'],
+        def_cfg = gccxml_configuration_t("gccxml_path",'.',['tmp'],['sym'],['unsym'],
                                None,False,"")
         cfg_list.append(def_cfg)
 
@@ -111,21 +111,21 @@ class decl_cache_tester(unittest.TestCase):
         #inc_changed = def_cfg.clone()
         #inc_changed.include_paths = ["/var/tmp"]
         #self.assert_(configuration_signature(inc_changed) != def_sig)
-        inc_changed = config_t("gccxml_path",'.',['/var/tmp'],['sym'],['unsym'],
+        inc_changed = gccxml_configuration_t("gccxml_path",'.',['/var/tmp'],['sym'],['unsym'],
                                None,False,"")
         cfg_list.append(inc_changed)
 
         #def_changed = def_cfg.clone()
         #def_changed.define_symbols = ["symbol"]
         #self.assert_(configuration_signature(def_changed) != def_sig)
-        def_changed = config_t("gccxml_path",'.',['/var/tmp'],['new-sym'],['unsym'],
+        def_changed = gccxml_configuration_t("gccxml_path",'.',['/var/tmp'],['new-sym'],['unsym'],
                                None,False,"")
         cfg_list.append(def_changed)
 
         #undef_changed = def_cfg.clone()
         #undef_changed.undefine_symbols = ["symbol"]
         #self.assert_(configuration_signature(undef_changed) != def_sig)
-        undef_changed = config_t("gccxml_path",'.',['/var/tmp'],['sym'],['new-unsym'],
+        undef_changed = gccxml_configuration_t("gccxml_path",'.',['/var/tmp'],['sym'],['new-unsym'],
                                None,False,"")
         cfg_list.append(undef_changed)
 

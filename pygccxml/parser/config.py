@@ -195,8 +195,6 @@ class gccxml_configuration_t(parser_configuration_t):
                       % self.gccxml_path
                 raise RuntimeError( msg )
 
-config_t = gccxml_configuration_t #backward computability
-
 gccxml_configuration_example = \
 """
 [gccxml]

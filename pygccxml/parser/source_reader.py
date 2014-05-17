@@ -67,7 +67,7 @@ class source_reader_t:
     """
     def __init__( self, config, cache=None, decl_factory=None ):
         """
-        :param config: instance of :class:`config_t` class, that contains GCC-XML
+        :param config: instance of :class:`gccxml_configuration_t` class, that contains GCC-XML
                        configuration
 
         :param cache: reference to cache object, that will be updated after
@@ -91,7 +91,7 @@ class source_reader_t:
             self.__decl_factory = decl_factory_t()
 
     def __create_command_line(self, file, xmlfile):
-        assert isinstance( self.__config, config.config_t )
+        assert isinstance( self.__config, config.gccxml_configuration_t )
         #returns
         cmd = []
         #first is gccxml executable

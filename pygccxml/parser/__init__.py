@@ -6,7 +6,6 @@
 """Parser sub-package.
 """
 
-from .config import config_t
 from .config import gccxml_configuration_t
 from .config import load_gccxml_configuration
 from .config import gccxml_configuration_example
@@ -40,7 +39,7 @@ def parse( files
     :param files: The header files that should be parsed
     :type files: list of str
     :param config: Configuration object or None
-    :type config: :class:`parser.config_t`
+    :type config: :class:`parser.gccxml_configuration_t`
     :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
     :type compilation_mode: :class:`parser.COMPILATION_MODE`
     :param cache: Declaration cache (None=no cache)
@@ -48,14 +47,14 @@ def parse( files
     :rtype: list of :class:`declarations.declaration_t`
     """
     if not config:
-        config = config_t()
+        config = gccxml_configuration_t()
     parser = project_reader_t( config=config, cache=cache )
     answer = parser.read_files(files, compilation_mode)
     return answer
 
 def parse_string(content, config=None):
     if not config:
-        config = config_t()
+        config = gccxml_configuration_t()
     parser = project_reader_t(config )
     return parser.read_string(content)
 

@@ -115,7 +115,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param source_file: a C++ source file name.
         :type source_file: str
         :param configuration: configuration  object.
-        :type configuration: :class:`config_t`
+        :type configuration: :class:`gccxml_configuration_t`
         :param declarations: declarations contained in the `source_file`
         :type declarations: pickable object
         :param included_files: included files
@@ -162,7 +162,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param source_file: Header file name
         :type source_file: str
         :param configuration: Configuration object
-        :type configuration: :class:`parser.config_t`
+        :type configuration: :class:`parser.gccxml_configuration_t`
         :rtype: Cached declarations or None
         """
 
@@ -339,7 +339,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         undefine_symbols.
 
         :param config: Configuration object
-        :type config: :class:`parser.config_t`
+        :type config: :class:`parser.gccxml_configuration_t`
         :rtype: str
         """
         m = hashlib.md5()
