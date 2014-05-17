@@ -1,9 +1,10 @@
-======================
 Who is using pygccxml?
 ======================
 
 Users
 -----
+
+* The Insight Toolkit is using pygccxml (http://www.itk.org).
 
 * `PyBindGen`_ - is a Python module that is geared to generating C/C++ code
   that binds a C/C++ library for Python.
