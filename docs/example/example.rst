@@ -12,7 +12,7 @@ The example consists from few files:
 .. toctree::
    :maxdepth: 1
 
-   example.hpp.rest
-   example.hpp.xml.rest
-   example.py.rest
-   output.txt.rest
+   example.hpp.rst
+   example.hpp.xml.rst
+   example.py.rst
+   output.txt.rst

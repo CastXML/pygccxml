@@ -1,8 +1,6 @@
-=============================
 pygccxml.declarations package
 =============================
 
---------
 Overview
 --------
 
@@ -11,12 +9,11 @@ Overview
     :undoc-members:
     :show-inheritance:
 
---------
 Modules
---------
+-------
 
 algorithm
-----------------
+---------
 
 .. automodule:: pygccxml.declarations.algorithm
     :members:
@@ -24,7 +21,7 @@ algorithm
     :show-inheritance:
 
 algorithms_cache
--------------------------
+----------------
 
 .. automodule:: pygccxml.declarations.algorithms_cache
     :members:
@@ -32,7 +29,7 @@ algorithms_cache
     :show-inheritance:
 
 calldef
-----------------
+-------
 
 .. automodule:: pygccxml.declarations.calldef
     :members:
@@ -40,7 +37,7 @@ calldef
     :show-inheritance:
 
 call_invocation
-------------------------
+---------------
 
 .. automodule:: pygccxml.declarations.call_invocation
     :members:
@@ -48,7 +45,7 @@ call_invocation
     :show-inheritance:
 
 class_declaration
---------------------------
+-----------------
 
 .. automodule:: pygccxml.declarations.class_declaration
     :members:
@@ -56,7 +53,7 @@ class_declaration
     :show-inheritance:
 
 compilers
-------------------
+---------
 
 .. automodule:: pygccxml.declarations.compilers
     :members:
@@ -64,7 +61,7 @@ compilers
     :show-inheritance:
 
 container_traits
--------------------------
+----------------
 
 .. automodule:: pygccxml.declarations.container_traits
     :members:
@@ -72,7 +69,7 @@ container_traits
     :show-inheritance:
 
 cpptypes
------------------
+--------
 
 .. automodule:: pygccxml.declarations.cpptypes
     :members:
@@ -80,7 +77,7 @@ cpptypes
     :show-inheritance:
 
 declaration
---------------------
+-----------
 
 .. automodule:: pygccxml.declarations.declaration
     :members:
@@ -88,7 +85,7 @@ declaration
     :show-inheritance:
 
 decl_factory
----------------------
+------------
 
 .. automodule:: pygccxml.declarations.decl_factory
     :members:
@@ -96,7 +93,7 @@ decl_factory
     :show-inheritance:
 
 decl_printer
----------------------
+------------
 
 .. automodule:: pygccxml.declarations.decl_printer
     :members:
@@ -104,7 +101,7 @@ decl_printer
     :show-inheritance:
 
 decl_visitor
----------------------
+------------
 
 .. automodule:: pygccxml.declarations.decl_visitor
     :members:
@@ -112,7 +109,7 @@ decl_visitor
     :show-inheritance:
 
 dependencies
----------------------
+------------
 
 .. automodule:: pygccxml.declarations.dependencies
     :members:
@@ -120,7 +117,7 @@ dependencies
     :show-inheritance:
 
 enumeration
---------------------
+-----------
 
 .. automodule:: pygccxml.declarations.enumeration
     :members:
@@ -128,7 +125,7 @@ enumeration
     :show-inheritance:
 
 function_traits
-------------------------
+---------------
 
 .. automodule:: pygccxml.declarations.function_traits
     :members:
@@ -136,7 +133,7 @@ function_traits
     :show-inheritance:
 
 matcher
-----------------
+-------
 
 .. automodule:: pygccxml.declarations.matcher
     :members:
@@ -144,7 +141,7 @@ matcher
     :show-inheritance:
 
 matchers
------------------
+--------
 
 .. automodule:: pygccxml.declarations.matchers
     :members:
@@ -152,7 +149,7 @@ matchers
     :show-inheritance:
 
 mdecl_wrapper
-----------------------
+-------------
 
 .. automodule:: pygccxml.declarations.mdecl_wrapper
     :members:
@@ -160,7 +157,7 @@ mdecl_wrapper
     :show-inheritance:
 
 namespace
-------------------
+---------
 
 .. automodule:: pygccxml.declarations.namespace
     :members:
@@ -168,7 +165,7 @@ namespace
     :show-inheritance:
 
 scopedef
------------------
+--------
 
 .. automodule:: pygccxml.declarations.scopedef
     :members:
@@ -176,7 +173,7 @@ scopedef
     :show-inheritance:
 
 templates
-------------------
+---------
 
 .. automodule:: pygccxml.declarations.templates
     :members:
@@ -184,7 +181,7 @@ templates
     :show-inheritance:
 
 typedef
-----------------
+-------
 
 .. automodule:: pygccxml.declarations.typedef
     :members:
@@ -192,7 +189,7 @@ typedef
     :show-inheritance:
 
 type_traits
---------------------
+-----------
 
 .. automodule:: pygccxml.declarations.type_traits
     :members:
@@ -200,7 +197,7 @@ type_traits
     :show-inheritance:
 
 type_visitor
----------------------
+------------
 
 .. automodule:: pygccxml.declarations.type_visitor
     :members:
@@ -208,7 +205,7 @@ type_visitor
     :show-inheritance:
 
 variable
----------------
+--------
 
 .. automodule:: pygccxml.declarations.variable
     :members:

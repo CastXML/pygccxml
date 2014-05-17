@@ -1,8 +1,6 @@
-======================
 pygccxml.utils package
 ======================
 
---------
 Overview
 --------
 
@@ -11,12 +9,11 @@ Overview
     :undoc-members:
     :show-inheritance:
 
---------
 Modules
---------
+-------
 
 fs_utils
----------------
+--------
 
 .. automodule:: pygccxml.utils.fs_utils
     :members:

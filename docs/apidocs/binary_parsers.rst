@@ -1,8 +1,6 @@
-===========================
 pygccxml.binary_parsers API
 ===========================
 
---------
 Overview
 --------
 
@@ -11,12 +9,11 @@ Overview
     :undoc-members:
     :show-inheritance:
 
---------
 Modules
---------
+-------
 
 parsers
---------------
+-------
 
 .. automodule:: pygccxml.binary_parsers.parsers
     :members:

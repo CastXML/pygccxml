@@ -1,8 +1,6 @@
-=======================
 pygccxml.parser package
 =======================
 
---------
 Overview
 --------
 
@@ -11,12 +9,11 @@ Overview
     :undoc-members:
     :show-inheritance:
 
---------
 Modules
---------
+-------
 
 config
----------------
+------
 
 .. automodule:: pygccxml.parser.config
     :members:
@@ -24,7 +21,7 @@ config
     :show-inheritance:
 
 declarations_cache
-----------------------------
+------------------
 
 .. automodule:: pygccxml.parser.declarations_cache
     :members:
@@ -32,7 +29,7 @@ declarations_cache
     :show-inheritance:
 
 directory_cache
-------------------------
+---------------
 
 .. automodule:: pygccxml.parser.directory_cache
     :members:
@@ -40,7 +37,7 @@ directory_cache
     :show-inheritance:
 
 patcher
-----------------
+-------
 
 .. automodule:: pygccxml.parser.patcher
     :members:
@@ -48,7 +45,7 @@ patcher
     :show-inheritance:
 
 project_reader
----------------------
+--------------
 
 .. automodule:: pygccxml.parser.project_reader
     :members:
@@ -57,7 +54,7 @@ project_reader
 
 
 source_reader
-----------------------
+-------------
 
 .. automodule:: pygccxml.parser.source_reader
     :members:
