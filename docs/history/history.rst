@@ -1,14 +1,32 @@
-===================
 Development history
 ===================
 
+Introduction
 ------------
+
+The original author and maintainer for pygccxml was Roman Yakovenko (2004-2011).
+Holger Frydrych forked the project to work on python 3 support. Finally, Mark Moll
+forked the project a second time to carry on the work of porting the code
+to python 3 (keeping it compatible with python 2).
+In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
+by setting up a git repositery on github, hosted along with gccxml.
+
+About version numbers
+---------------------
+
+When the project moved to git, versions were tagged from 1.0.0 on. Note that
+there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the many forks
+and the slow down of the maintenance effort).
+
 Contributors
 ------------
 
 Thanks to all the people that have contributed patches, bug reports and suggestions:
 
-* My wife - Yulia
+* Roman Yakovenko (original author)
+* Roman Yakovenko's wife - Yulia
+* Mark Moll
+* Holger Frydrych
 * John Pallister
 * Matthias Baas
 * Allen Bierbaum
@@ -25,52 +43,91 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Alejandro Dubrovsky
 * Aron Xu
 
------------
-SVN Version
------------
+Version 1.6 (Not yet released)
+------------------------------
 
-1. Experimental back-ends based on ``.pdb`` and ``.bsc`` files were removed.
+1. Moved the repository from mercurial to git
 
-2. Ability to extract different information from binary files ( ``.pdb``, ``.so``,
-   ``.map`` ) and merge it with a declarations tree was added.
+2. Changed the documentation from epydoc to sphinx doc
 
-3. Ability to load `GCC-XML`_ configuration from ``.ini`` like file was added.
-   See :func:`pygccxml.parser.config.load_gccxml_configuration` for details.
+Version 1.5.2
+-------------
 
-4. From now on, :doc:`pygccxml <../pygccxml>` will use `Sphinx <http://sphinx.pocoo.org/>`_
-   for all documentation. The documentation format and content were updated.
+1. Make python 3.x compatible. Still works with python 2.6 and python 2.7.
 
-5. From now on, `pygccxml` will provide convenient setup for latest `GCC-XML`_
-   version (CVS). See :doc:`download <../download>` document.
+2. Add .dylib parser for Darwin
 
-6. Bug `[ 2431993 ] pygccxml parses const volatile variable args as just const <http://sourceforge.net/tracker/index.php?func=detail&aid=2431993&group_id=118209&atid=684318>`_
-   was fixed.
+3. Fix some unit tests
 
-7. Bug `[ 2779781 ] pygccxml reverses array dimensions <https://sourceforge.net/tracker/index.php?func=detail&aid=2779781&group_id=118209&atid=684318>`_
-   was fixed.
+4. workaround for problem with boost >=1.54
 
-8. "explicit" property was added to ``declarations.constructor_t`` class.
-   Many thanks to Christopher Bruns, for finding out how this property
-   works in `GCC-XML`_.
+5. Simpler way of checksumming files in a python 2 and 3 compatible way
 
-9. "List symbols" (`nm`) utility invocation was improved and now handles
+6. Prevent warnings to be treated as fatal errors in py++
+
+7. "has_inline" property was added to ``declarations.calldef_t`` class.
+
+8. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
+   instead of "sys.platform" for platform specific logic.
+
+9. "__int128_t" and "__uint128_t" types were introduced. Many thanks to Gustavo Carneiro
+    for providing the patch.
+
+Version 1.5.1
+-------------
+
+1. adding problematic use case, contributed by Zbigniew Mandziejewicz
+
+2. Adding "explicit" attribute to constructor_t class
+
+3. "List symbols" (`nm`) utility invocation was improved and now handles
    right relative paths and paths with spaces. Many thanks to Alejandro Dubrovsky
    for providing the patch.
 
-10. Small fix, which allows pygccxml to be usable on FreeBSD too: replace
-    `elif sys.platform == 'linux2' or sys.platform == 'darwin'` with `os.name == 'posix'`,
-    as suggested by `Jakub Wilk <http://groups.google.com/group/linux.debian.bugs.dist/browse_thread/thread/572d2286ca0b2cec?pli=1>`
+4. Fix for "get dependencies" functionality
 
-11. "__int128_t" and "__uint128_t" types were introduced. Many thanks to Gustavo Carneiro
-    for providing the patch.
+5. Allow the process to continue, even in case the binary parser can not find the relevant declaration
 
-12. Thanks to Aron Xu, for pointing out that it is better to use "os.name",
-    instead of "sys.platform" for platform specific logic.
+6. Fix bug related to merging free functions
 
-13. "has_inline" property was added to ``declarations.calldef_t`` class.
+7. Improve decl_printer - sort declarations before printing
 
+8. Added new tests and ported tests to x86_64 architecture
 
------------
+Version 1.5.0
+-------------
+
+1. Fix small bug in matcher - don't match namespaces by their location
+
+2. Documentation update and cleanup. (using sphinx-doc now).
+
+3. Fixing small bug on Windows, related to parsing configuration file
+
+4. Update setup.py
+
+5. fix 2779781 bug( pygccxml reverses array dimensions )
+
+Version 1.1.0
+-------------
+
+1. bsc and mspdb packages were deprecated
+
+2. Adding new functionality and improving initial environment handling
+
+3. Adding ability to dump exported classes
+
+4. Added more tests
+
+5. Add handling for "C" functions
+
+6. Fix bug "pygccxml parses const volatile variable args as just const"
+
+7. Rename bparser to binary_parsers
+
+8. Adding .so file parser
+
+9. Replace md5 with hashlib module (removes deprecation warnings)
+
 Version 1.0
 -----------
 
@@ -113,7 +170,6 @@ Version 1.0
 
 8. pygccxml unit tests functionality was improved. Many thanks to Gustavo Carneiro.
 
--------------
 Version 0.9.5
 -------------
 
@@ -151,11 +207,10 @@ Version 0.9.5
 
 12. All logging is now done to ``stderr`` instead of ``stdout``.
 
--------------
 Version 0.9.0
 -------------
 
-1. Performance was improved. :doc:`pygccxml <../pygccxml>` is now 30-50% faster. The improvement
+1. Performance was improved. pygccxml is now 30-50% faster. The improvement
    was achieved by using `cElementTree`_ package, ``iterparse`` functionality,
    instead of standard XML SAX API. If `cElementTree`_ package is not available,
    the built-in XML SAX package is used.
@@ -215,7 +270,6 @@ Version 0.9.0
 
 .. line separator
 
--------------
 Version 0.8.5
 -------------
 
@@ -223,7 +277,7 @@ Version 0.8.5
    types and declarations it depends on.
 
 2. ``signed char`` and ``char`` are two different types. This bug was fixed and
-   now :doc:`pygccxml <../pygccxml>` treats them right. Many thanks to Gaetan Lehmann for reporting
+   now pygccxml treats them right. Many thanks to Gaetan Lehmann for reporting
    the bug.
 
 3. Declarations, read from GCC-XML generated file, could be saved in cache.
@@ -250,7 +304,6 @@ Version 0.8.5
 
 7. Fixing bug related to array size and cache.
 
--------------
 Version 0.8.2
 -------------
 
@@ -260,7 +313,7 @@ Version 0.8.2
    small example that reproduced the error.
 
 2. Huge speed improvement has been achieved (x10). Allen Bierbaum suggested to
-   save and reuse results of different :doc:`pygccxml <../pygccxml>` algorithms:
+   save and reuse results of different pygccxml algorithms:
 
    * ``declarations.remove_alias``
    * ``declarations.full_name``
@@ -290,11 +343,10 @@ Version 0.8.2
 
 6. Documentation was improved.
 
--------------
 Version 0.8.1
 -------------
 
-1. :doc:`pygccxml <../pygccxml>` has been ported to MacOS X. Many thanks to Darren Garnier!
+1. pygccxml has been ported to MacOS X. Many thanks to Darren Garnier!
 
 2. New type traits have been added:
 
@@ -362,7 +414,7 @@ Version 0.8.1
      #instead of
      op = cls.operator( symbol='<' )
 
-5. :doc:`pygccxml <../pygccxml>` improved a lot functionality related to providing feedback to user:
+5. pygccxml improved a lot functionality related to providing feedback to user:
 
    * every package has its own logger
 
@@ -395,14 +447,13 @@ Version 0.8.1
 
     This will fail because it finds the attribute decls which is not a callable.
 
------------
 Version 0.8
 -----------
 
-1. :doc:`pygccxml <../pygccxml>` now has power "select" interface. Read more about this cool feature
+1. pygccxml now has power "select" interface. Read more about this cool feature
    in tutorials.
 
-2. Improved support for template instantiations. :doc:`pygccxml <../pygccxml>` now take into
+2. Improved support for template instantiations. pygccxml now take into
    account demangled name of declarations. Please refer to documentation for
    more explanantion.
 
@@ -422,7 +473,6 @@ Version 0.8
 
 8. Documentation has been updated/written/improved.
 
--------------
 Version 0.7.1
 -------------
 
@@ -464,8 +514,8 @@ Version 0.7.1
    easily extend functionality provided by built-in declarations.
 
 6. Sometimes, there is a need to find a declaration that match some criteria.
-   The was such functionality in :doc:`pygccxml <../pygccxml>`, but it was too limited. This
-   release fix the situation. :doc:`pygccxml <../pygccxml>` adds a set of classes that will help
+   The was such functionality in pygccxml, but it was too limited. This
+   release fix the situation. pygccxml adds a set of classes that will help
    you to deal with this problem.
 
 7. New cache - ``parser.directory_cache_t`` has been implemented.
@@ -498,13 +548,11 @@ Version 0.7.1
 12. Documentation. Allen Bierbaum and Matthias Baas contributed so much in this
     area. Almost every public function/class has now documentation string.
 
-13. Logging functionality has been added. :doc:`pygccxml <../pygccxml>` creates new logger
-    "pygccxml". Now it is possible to see what :doc:`pygccxml <../pygccxml>` is doing right now.
+13. Logging functionality has been added. pygccxml creates new logger
+    "pygccxml". Now it is possible to see what pygccxml is doing right now.
 
 14. I am sure I forgot something.
 
-
--------------
 Version 0.6.9
 -------------
 
@@ -527,13 +575,11 @@ Version 0.6.9
 
 5. Small bug fixes
 
--------------
 Version 0.6.8
 -------------
 
 1. Small bug has been fixed.
 
--------------
 Version 0.6.7
 -------------
 
@@ -582,8 +628,4 @@ Version 0.6.7
    time.
 
 8. There are some cases when `GCC-XML`_ reports *"restricted"*. In this case
-   :doc:`pygccxml <../pygccxml>` replaces *"restricted"* with *"volatile"*.
-
-
-.. _`SourceForge`: http://sourceforge.net/index.php
-.. _`GCC-XML`: http://www.gccxml.org
+   pygccxml replaces *"restricted"* with *"volatile"*.
