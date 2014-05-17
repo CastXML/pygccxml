@@ -1,10 +1,8 @@
-========
 pygccxml
 ========
 
 pygccxml is a specialized XML reader that reads the output from GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
 
--------
 Install
 -------
 
@@ -15,22 +13,17 @@ The package uses the Python distutils so you can do the usual procedure:
 For more information about using the distutils see the Python manual
 "Installing Python Modules".
 
--------------
 Documentation
 -------------
 
-For examples and tutorials see the pygccxml web site. An API reference
-is available in the directory docs/apidocs in the source archive.
+For examples and tutorials see the pygccxml web site.
 
-If you obtained the source code from the subversion repository you
-have to build the API reference yourself. This can be done using the
-setup script:
+You can build the documentation yourself. In order for this to work you need
+sphinx doc (http://sphinx-doc.org). This can be done using the following
+command in the docs folder:
 
-  python setup.py doc
+  make html
 
-In order for this to work you need epydoc (http://epydoc.sourceforge.net).
-
--------
 Testing
 -------
 
