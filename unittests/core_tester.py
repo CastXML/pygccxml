@@ -103,13 +103,13 @@ class core_t(parser_test_case.parser_test_case_t):
 
         self.failUnless(
             unnamed_enum.parent is ns,
-            "unnamed enum belong to namespace '%s' but this namespace " +
-            "is not it's parent." % ns.name)
+            ("unnamed enum belong to namespace '%s' but this namespace " +
+                "is not it's parent.") % ns.name)
 
         self.failUnless(
             enum.parent is ns,
-            "enum '%s' belong to namespace '%s' but this namespace" +
-            " is not it's parent." % (enum.name, ns.name))
+            ("enum '%s' belong to namespace '%s' but this namespace" +
+                " is not it's parent.") % (enum.name, ns.name))
 
     def _test_class_membership(self, class_inst, enum_name, access):
         # getting enum through get_members function
@@ -123,8 +123,9 @@ class core_t(parser_test_case.parser_test_case_t):
         # it shoud be same object
         self.failUnless(
             nested_enum1 is nested_enum2,
-            "enum accessed through access definition('%s') and " +
-            "through declarations('%s') are different enums or instances." %
+            ("enum accessed through access definition('%s') and " +
+                "through declarations('%s') are different enums " +
+                "or instances.") %
             (nested_enum1.name, nested_enum2.name))
 
         # check whether we meaning same class instance
@@ -221,8 +222,8 @@ class core_t(parser_test_case.parser_test_case_t):
                       for hierarchy_info in derived2.bases])
         self.failUnless(
             bases1 == bases2,
-            "derived class '%s' and derived class '%s' has references to " +
-            "different instance of base classes " %
+            ("derived class '%s' and derived class '%s' has references to " +
+                "different instance of base classes ") %
             (derived1.name, derived2.name))
 
     def test_class_join(self):
@@ -459,8 +460,8 @@ class core_t(parser_test_case.parser_test_case_t):
         do_nothings = ns.calldefs('do_nothing', recursive=False)
         self.failUnless(
             4 == len(do_nothings),
-            "expected number of overloaded 'do_nothing' functions is %d and " +
-            "existing(%d) is different" %
+            ("expected number of overloaded 'do_nothing' functions is %d " +
+                "and existing(%d) is different") %
             (4, len(do_nothings)))
         for index, do_nothing in enumerate(do_nothings):
             others = do_nothings[:index] + do_nothings[index + 1:]
