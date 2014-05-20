@@ -7,6 +7,7 @@ import unittest
 import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 class tester_t( parser_test_case.parser_test_case_t ):
     global_ns = None
@@ -21,7 +22,7 @@ class tester_t( parser_test_case.parser_test_case_t ):
             tester_t.global_ns.init_optimizer()
 
     def __cmp_traits( self, typedef, expected, partial_name, key_type=None):
-        if isinstance( typedef, str ):
+        if utils.is_str(typedef):
             typedef = self.global_ns.typedef( typedef )
         traits = declarations.find_container_traits( typedef )
         self.failUnless( traits, 'container traits for "%s" not found' % str( typedef ) )

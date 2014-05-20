@@ -12,6 +12,13 @@ import tempfile
 from .fs_utils import files_walker
 from .fs_utils import directories_walker
 
+def is_str(s):
+    """Python 2 and 3 compatible string checker."""
+    if sys.version_info >= (3, 0):
+        return isinstance(s, str)
+    else:
+        return isinstance(s, basestring)
+
 def _create_logger_( name ):
     """implementation details"""
     logger = logging.getLogger(name)

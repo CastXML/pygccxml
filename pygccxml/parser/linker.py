@@ -5,6 +5,7 @@
 
 import types
 from pygccxml.declarations import *
+from .. import utils
 
 class linker_t( decl_visitor_t, type_visitor_t, object ):
     def __init__( self, decls, types, access, membership, files ):
@@ -274,7 +275,7 @@ class linker_t( decl_visitor_t, type_visitor_t, object ):
         self.__link_compound_type()
 
     def visit_declarated( self ):
-        if isinstance( self.__inst.declaration, str ):
+        if utils.is_str(self.__inst.declaration):
             self.__inst.declaration = self.__decls[self.__inst.declaration]
 
     def visit_restrict( self ):

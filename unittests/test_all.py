@@ -60,6 +60,7 @@ import gccxml10183_tester
 import gccxml10184_tester
 import gccxml10185_tester
 import inline_specifier_tester
+import from_future_import_tester
 
 testers = [
     decl_string_tester
@@ -114,6 +115,7 @@ testers = [
     , gccxml10184_tester
     , gccxml10185_tester
     , inline_specifier_tester
+    , from_future_import_tester
 ]
 
 if 'posix' in os.name:

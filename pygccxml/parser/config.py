@@ -11,6 +11,7 @@ import os
 import sys
 import copy
 import types
+from .. import utils
 
 class parser_configuration_t(object):
     """
@@ -238,7 +239,7 @@ def load_gccxml_configuration( configuration, **defaults ):
 
     """
     parser = configuration
-    if isinstance( configuration, str ):
+    if utils.is_str(configuration):
         try:
             from configparser import SafeConfigParser
         except ImportError:

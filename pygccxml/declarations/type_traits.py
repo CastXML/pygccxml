@@ -29,7 +29,7 @@ from . import namespace
 from . import templates
 from . import enumeration
 from . import class_declaration
-from pygccxml import utils
+from .. import utils
 
 def __remove_alias(type_):
     """implementation details"""
@@ -1061,7 +1061,7 @@ def is_std_string( type_ ):
         '::std::basic_string<char,std::char_traits<char>,std::allocator<char> >'
         , '::std::basic_string<char, std::char_traits<char>, std::allocator<char> >'
         , '::std::string' ]
-    if isinstance( type_, str ):
+    if utils.is_str(type_):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1073,7 +1073,7 @@ def is_std_wstring( type_ ):
         '::std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >'
         , '::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
         , '::std::wstring' ]
-    if isinstance( type_, str ):
+    if utils.is_str(type_):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1085,7 +1085,7 @@ def is_std_ostream( type_ ):
         '::std::basic_ostream<char, std::char_traits<char> >'
         , '::std::basic_ostream<char,std::char_traits<char> >'
         , '::std::ostream' ]
-    if isinstance( type_, str ):
+    if utils.is_str(type_):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )
@@ -1098,7 +1098,7 @@ def is_std_wostream( type_ ):
         '::std::basic_ostream<wchar_t, std::char_traits<wchar_t> >'
         , '::std::basic_ostream<wchar_t,std::char_traits<wchar_t> >'
         , '::std::wostream' ]
-    if isinstance( type_, str ):
+    if utils.is_str(type_):
         return type_ in decl_strings
     else:
         type_ = remove_alias( type_ )

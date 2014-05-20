@@ -9,7 +9,7 @@ import types
 from . import source_reader
 from . import declarations_cache
 import pygccxml.declarations
-from pygccxml import utils
+from .. import utils
 
 class COMPILATION_MODE:
     ALL_AT_ONCE = 'all at once'
@@ -163,7 +163,7 @@ class project_reader_t:
         self.__dcache = None
         if isinstance( cache, declarations_cache.cache_base_t ):
             self.__dcache = cache
-        elif isinstance( cache, str ):
+        elif utils.is_str(cache):
             self.__dcache = declarations_cache.file_cache_t(cache)
         else:
             self.__dcache = declarations_cache.dummy_cache_t()
@@ -183,7 +183,7 @@ class project_reader_t:
         """
         fnames = []
         for f in files:
-            if isinstance( f, str ):
+            if utils.is_str(f):
                 fnames.append( f )
             elif isinstance( f, file_configuration_t ):
                 if f.content_type in ( file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE

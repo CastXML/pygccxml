@@ -15,6 +15,7 @@ from . import namespace
 from . import templates
 from . import type_traits
 from . import class_declaration
+from .. import utils
 
 std_namespaces = ( 'std', 'stdext', '__gnu_cxx' )
 
@@ -366,7 +367,7 @@ class container_traits_impl_t:
                std::vector< int >
         """
         name = type_or_string
-        if not isinstance( type_or_string, str ):
+        if not utils.is_str(type_or_string):
             name = self.class_declaration( type_or_string ).name
         if not self.remove_defaults_impl:
             return name
@@ -475,7 +476,7 @@ container_traits = (
 """tuple of all STD container traits classes"""
 
 def find_container_traits( cls_or_string ):
-    if isinstance( cls_or_string, str ):
+    if utils.is_str(cls_or_string):
         if not templates.is_instantiation( cls_or_string ):
             return None
         name = templates.name( cls_or_string )

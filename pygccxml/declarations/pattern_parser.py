@@ -6,6 +6,7 @@
 """implementation details"""
 
 import types
+from ..  import utils
 
 class parser_t( object ):
     """implementation details"""
@@ -23,12 +24,13 @@ class parser_t( object ):
 
     def has_pattern( self, decl_string ):
         """implementation details"""
+        assert utils.is_str(decl_string)
         last_part = decl_string.split( '::' )[-1]
         return -1 != decl_string.find( self.__begin ) and -1 != last_part.find( self.__end )
 
     def name( self, decl_string ):
         """implementation details"""
-        assert isinstance( decl_string, str )
+        assert utils.is_str(decl_string)
         if not self.has_pattern( decl_string ):
             return decl_string
         args_begin = decl_string.find( self.__begin )

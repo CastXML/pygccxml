@@ -10,7 +10,7 @@ import xml.sax
 import warnings
 import xml.sax.handler
 from pygccxml.declarations import *
-from pygccxml import utils
+from .. import utils
 
 ##convention
 #XML_NN - XML Node Name
@@ -225,7 +225,7 @@ class scanner_t( xml.sax.handler.ContentHandler ):
                 self.__types[ element_id ] = obj
                 self.__read_byte_size(obj, attrs)
                 self.__read_byte_align(obj, attrs)
-            elif isinstance( obj, str ):
+            elif utils.is_str(obj):
                 self.__files[ element_id ] = obj
             else:
                 self.logger.warning( 'Unknown object type has been found.'
