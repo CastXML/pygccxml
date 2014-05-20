@@ -13,6 +13,12 @@ The package uses the Python distutils so you can do the usual procedure:
 For more information about using the distutils see the Python manual
 "Installing Python Modules".
 
+Contact us
+----------
+
+You can contact us through the gccxml mailing list: http://www.gccxml.org/mailman/listinfo/gccxml .
+For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues .
+
 Documentation
 -------------
 
