@@ -7,12 +7,11 @@
 from __future__ import unicode_literals
 
 import unittest
-import sys
-sys.path.append("/home/mpopoff/repo/pygccxml")
+import parser_test_case
 from pygccxml import declarations
 from pygccxml import parser
 
-class tester_t( unittest.TestCase ):
+class tester_t( parser_test_case.parser_test_case_t ):
 
     """
     Some methods like namespace() verify if their argument is a string.
@@ -22,10 +21,11 @@ class tester_t( unittest.TestCase ):
     """
 
     def __init__(self, *args ):
-        unittest.TestCase.__init__( self, *args )
+        parser_test_case.parser_test_case_t.__init__( self, *args )
+        self.fname = "basic.hpp"
 
     def test_namespace_argument_string(self):
-        # Check with a string        
+        # Check with a string     
         self.global_ns.namespace("test")
     
     def test_namespace_argument_int(self):
@@ -38,8 +38,8 @@ class tester_t( unittest.TestCase ):
             pass
 
     def setUp(self):
-        config = parser.config.gccxml_configuration_t()
-        decls = parser.parse(["data/basic.hpp"], config)
+        reader = parser.source_reader_t(self.config)
+        decls = reader.read_file(self.fname)
         self.global_ns = declarations.get_global_namespace(decls)
 
 def create_suite():
