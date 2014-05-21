@@ -18,8 +18,7 @@ class tester_t(unittest.TestCase):
              '(public: __thiscall std::auto_ptr<class pof::number_t>' +
              '::auto_ptr<class pof::number_t>(class std::auto_ptr' +
              '<class pof::number_t> &))'),
-            ('',
-             "(const pof::number_t::`vftable')")]
+            ('',  "(const pof::number_t::`vftable')")]
 
         for expected, text in data:
             got = declarations.CALLING_CONVENTION_TYPES.extract(text)
