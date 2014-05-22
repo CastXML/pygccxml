@@ -11,11 +11,11 @@ import autoconfig
 import test_parser
 
 if __name__ == "__main__":
-    statistics_file = os.path.join( autoconfig.data_directory, 'profile.stat' )
+    statistics_file = os.path.join(autoconfig.data_directory, 'profile.stat')
     profile = hotshot.Profile(statistics_file)
-    profile.runcall( test_parser.run_suite )
+    profile.runcall(test_parser.run_suite)
     profile.close()
-    statistics = hotshot.stats.load( statistics_file )
+    statistics = hotshot.stats.load(statistics_file)
     statistics.strip_dirs()
-    statistics.sort_stats( 'time', 'calls' )
-    statistics.print_stats( 20 )
+    statistics.sort_stats('time', 'calls')
+    statistics.print_stats(20)

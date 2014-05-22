@@ -8,32 +8,36 @@ import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
 
-class tester_t( parser_test_case.parser_test_case_t ):
-    def __init__(self, *args ):
-        parser_test_case.parser_test_case_t.__init__( self, *args )
+
+class tester_t(parser_test_case.parser_test_case_t):
+
+    def __init__(self, *args):
+        parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = 'plain_c.c'
         self.global_ns = None
 
     def setUp(self):
         if not self.global_ns:
-            decls = parser.parse( [self.header], self.config )
-            self.global_ns = declarations.get_global_namespace( decls )
+            decls = parser.parse([self.header], self.config)
+            self.global_ns = declarations.get_global_namespace(decls)
             self.global_ns.init_optimizer()
 
-    def test( self ):
-        self.global_ns.free_fun( 'hello_sum' )
-        self.global_ns.free_fun( 'hello_print' )
-        f = self.global_ns.free_fun( 'do_smth' )
+    def test(self):
+        self.global_ns.free_fun('hello_sum')
+        self.global_ns.free_fun('hello_print')
+        f = self.global_ns.free_fun('do_smth')
         for arg in f.arguments:
-            self.failUnless( arg.type.decl_string )
+            self.failUnless(arg.type.decl_string)
+
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest( unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(tester_t))
     return suite
 
+
 def run_suite():
-    unittest.TextTestRunner(verbosity=2).run( create_suite() )
+    unittest.TextTestRunner(verbosity=2).run(create_suite())
 
 if __name__ == "__main__":
     run_suite()
