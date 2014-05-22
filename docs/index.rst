@@ -112,6 +112,7 @@ Documentation contents
    :maxdepth: 1
 
    download
+   documentation
    query_interface
    design
    upgrade_issues

@@ -22,13 +22,7 @@ For issues with pygccxml you can open an issue here: https://github.com/gccxml/p
 Documentation
 -------------
 
-For examples and tutorials see the pygccxml web site.
-
-You can build the documentation yourself. In order for this to work you need
-sphinx doc (http://sphinx-doc.org). This can be done using the following
-command in the docs folder:
-
-  make html
+For examples and tutorials see the documentation: http://gccxml.github.io/pygccxml/
 
 Testing
 -------
