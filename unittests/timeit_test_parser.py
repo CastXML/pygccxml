@@ -12,5 +12,5 @@ from test_parser import create_suite
 unittest.TextTestRunner(verbosity=2).run( create_suite() )
 """
 
-timer = Timer( stmt )
+timer = Timer(stmt)
 print(timer.timeit(3))

@@ -63,72 +63,73 @@ import inline_specifier_tester
 import from_future_import_tester
 
 testers = [
-    decl_string_tester
-    , declaration_files_tester
-    , declarations_comparison_tester
-    , declarations_tester
-    , file_cache_tester
-    , gccxml_runner_tester
-    , project_reader_correctness_tester
-    , source_reader_tester
-    , start_with_declarations_tester
-    , templates_tester
-    , type_traits_tester
-    , core_tester
-    , xmlfile_reader_tester
-    , text_reader_tester
-    , hierarchy_traveling
-    , patcher_tester
-    , call_invocation_tester
-    , bit_fields_tester
-    , complex_types_tester
-    , cached_source_file_tester
-    , variable_matcher_tester
-    , namespace_matcher_tester
-    , calldef_matcher_tester
-    , filters_tester
-    , cache_enums_tester
-    , decl_printer_tester
-    , typedefs_tester
-#    , demangled_tester # failing right now
-    , unnamed_enums_bug_tester
-    , vector_traits_tester
-    , string_traits_tester
-    , declarations_cache_tester
-    , has_binary_operator_traits_tester
-    , algorithms_cache_tester
-    , dependencies_tester
-    , free_operators_tester
-    , remove_template_defaults_tester
-    , find_container_traits_tester
-    , attributes_tester
-    , type_as_exception_bug_tester
-    , plain_c_tester
-    , function_traits_tester
-    , better_templates_matcher_tester
-    , declaration_matcher_tester
-#    , undname_creator_tester # failing right now
-    , calling_convention_tester
-    , const_volatile_arg_tester
-    , array_bug_tester
-    , gccxml10183_tester
-    , gccxml10184_tester
-    , gccxml10185_tester
-    , inline_specifier_tester
-    , from_future_import_tester
+    # , demangled_tester # failing right now
+    # , undname_creator_tester # failing right now
+    decl_string_tester,
+    declaration_files_tester,
+    declarations_comparison_tester,
+    declarations_tester, file_cache_tester,
+    gccxml_runner_tester,
+    project_reader_correctness_tester,
+    source_reader_tester,
+    start_with_declarations_tester,
+    templates_tester,
+    type_traits_tester,
+    core_tester,
+    xmlfile_reader_tester,
+    text_reader_tester,
+    hierarchy_traveling,
+    patcher_tester,
+    call_invocation_tester,
+    bit_fields_tester,
+    complex_types_tester,
+    cached_source_file_tester,
+    variable_matcher_tester,
+    namespace_matcher_tester,
+    calldef_matcher_tester,
+    filters_tester,
+    cache_enums_tester,
+    decl_printer_tester,
+    typedefs_tester,
+    unnamed_enums_bug_tester,
+    vector_traits_tester,
+    string_traits_tester,
+    declarations_cache_tester,
+    has_binary_operator_traits_tester,
+    algorithms_cache_tester,
+    dependencies_tester,
+    free_operators_tester,
+    remove_template_defaults_tester,
+    find_container_traits_tester,
+    attributes_tester,
+    type_as_exception_bug_tester,
+    plain_c_tester,
+    function_traits_tester,
+    better_templates_matcher_tester,
+    declaration_matcher_tester,
+    calling_convention_tester,
+    const_volatile_arg_tester,
+    array_bug_tester,
+    gccxml10183_tester,
+    gccxml10184_tester,
+    gccxml10185_tester,
+    inline_specifier_tester,
+    from_future_import_tester
 ]
 
 if 'posix' in os.name:
-    testers.append( copy_constructor_tester )
+    testers.append(copy_constructor_tester)
+
 
 def create_suite():
     main_suite = unittest.TestSuite()
     for tester in testers:
-        main_suite.addTest( tester.create_suite() )
+        main_suite.addTest(tester.create_suite())
     return main_suite
 
+
 def run_suite():
-    result = unittest.TextTestRunner(verbosity=2).run( create_suite() )
+    result = unittest.TextTestRunner(verbosity=2).run(create_suite())
     error_desc = 'EXCEPTION IN SAFE SELECT 9'
     all_errors = result.failures + result.errors
     for test_case, description in all_errors:
@@ -138,14 +139,14 @@ def run_suite():
 
 if __name__ == "__main__":
     sys.exit(run_suite())
-##~     import hotshot
-##~     import hotshot.stats
-##~     statistics_file = tempfile.mkstemp( suffix='.stat' )[1]
-##~     profile = hotshot.Profile(statistics_file)
-##~
-##~     profile.runcall( run_suite )
-##~     profile.close()
-##~     statistics = hotshot.stats.load( statistics_file )
-##~     statistics.strip_dirs()
-##~     statistics.sort_stats( 'time', 'calls' )
-##~     statistics.print_stats( 678 )
+#   import hotshot
+#   import hotshot.stats
+#   statistics_file = tempfile.mkstemp( suffix='.stat' )[1]
+#   profile = hotshot.Profile(statistics_file)
+#
+#   profile.runcall( run_suite )
+#   profile.close()
+#   statistics = hotshot.stats.load( statistics_file )
+#   statistics.strip_dirs()
+#   statistics.sort_stats( 'time', 'calls' )
+#   statistics.print_stats( 678 )
