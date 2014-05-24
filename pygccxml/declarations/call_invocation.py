@@ -6,8 +6,8 @@
 """
 free function invocation parser
 
-The parser is able to extract function name and list of arguments from a function
-invocation statement. For example, for the following code
+The parser is able to extract function name and list of arguments from a
+function invocation statement. For example, for the following code
 
 .. code-block:: c++
 
@@ -21,9 +21,10 @@ the parser will extract
 
 from . import pattern_parser
 
-__THE_PARSER = pattern_parser.parser_t( '(', ')', ',' )
+__THE_PARSER = pattern_parser.parser_t('(', ')', ',')
 
-def is_call_invocation( decl_string ):
+
+def is_call_invocation(decl_string):
     """
     returns True if `decl_string` is function invocation and False otherwise
 
@@ -33,9 +34,10 @@ def is_call_invocation( decl_string ):
     :rtype: bool
     """
     global __THE_PARSER
-    return __THE_PARSER.has_pattern( decl_string )
+    return __THE_PARSER.has_pattern(decl_string)
 
-def name( decl_string ):
+
+def name(decl_string):
     """
     returns name of function
 
@@ -43,9 +45,10 @@ def name( decl_string ):
     :rtype: str
     """
     global __THE_PARSER
-    return __THE_PARSER.name( decl_string )
+    return __THE_PARSER.name(decl_string)
 
-def args( decl_string ):
+
+def args(decl_string):
     """
     returns list of function arguments
 
@@ -53,10 +56,12 @@ def args( decl_string ):
     :rtype: [str]
     """
     global __THE_PARSER
-    return __THE_PARSER.args( decl_string )
+    return __THE_PARSER.args(decl_string)
 
 NOT_FOUND = __THE_PARSER.NOT_FOUND
-def find_args( text, start=None ):
+
+
+def find_args(text, start=None):
     """
     finds arguments within function invocation.
 
@@ -64,19 +69,22 @@ def find_args( text, start=None ):
     :rtype: [ arguments ] or :data:NOT_FOUND if arguments could not be found
     """
     global __THE_PARSER
-    return __THE_PARSER.find_args( text, start )
+    return __THE_PARSER.find_args(text, start)
 
-def split( decl_string ):
+
+def split(decl_string):
     """returns (name, [arguments] )"""
     global __THE_PARSER
-    return __THE_PARSER.split( decl_string )
+    return __THE_PARSER.split(decl_string)
 
-def split_recursive( decl_string ):
+
+def split_recursive(decl_string):
     """returns [(name, [arguments])]"""
     global __THE_PARSER
-    return __THE_PARSER.split_recursive( decl_string )
+    return __THE_PARSER.split_recursive(decl_string)
 
-def join( name, args, arg_separator=None ):
+
+def join(name, args, arg_separator=None):
     """returns name( argument_1, argument_2, ..., argument_n )"""
     global __THE_PARSER
-    return __THE_PARSER.join( name, args, arg_separator )
+    return __THE_PARSER.join(name, args, arg_separator)
