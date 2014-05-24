@@ -12,6 +12,7 @@ before_install:
   # Install gccxml
   - sudo apt-get update -qq
   - sudo apt-get install -qq gccxml
+  - pip install pep8
 
 script:
   # Install pygccxml
