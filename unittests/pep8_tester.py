@@ -1,7 +1,7 @@
 
-import unittest
+import os
 import pep8
-import sys
+import unittest
 
 
 class tester_t(unittest.TestCase):
@@ -17,8 +17,11 @@ class tester_t(unittest.TestCase):
 
         print("\r\n")
 
+        # Get the path to current directory
+        path = os.path.dirname(os.path.realpath(__file__))
+
         pep8style = pep8.StyleGuide()
-        result = pep8style.check_files(paths=".")
+        result = pep8style.check_files(paths=[path])
 
         if result.total_errors != 0:
             self.assertEqual(
