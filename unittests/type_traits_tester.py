@@ -370,13 +370,13 @@ class missing_decls_tester_t(unittest.TestCase):
 
     # def setUp(self):
         # if not tester_t.declarations:
-            # tester_t.declarations = parser.parse([self.header], self.config)
+        # tester_t.declarations = parser.parse([self.header], self.config)
         # self.declarations = tester_t.declarations
 
     # def test( self ):
         # x = declarations.find_declaration( self.declarations
-                                           # , type=declarations.typedef_t
-                                           # , name="s2s_multimap_type" )
+        # , type=declarations.typedef_t
+        # , name="s2s_multimap_type" )
         # print declarations.is_noncopyable( x)
         # declarations.print_declarations(
         #    [declarations.class_traits.get_declaration( x )] )

@@ -40,8 +40,8 @@ def test_on_windows_dot_h():
     clock_now = time.clock()
     print('with cache   : %f seconds' % (clock_now - clock_prev))
 
-#-########################################################################
-#- testing include_std.hpp
+#########################################################################
+# testing include_std.hpp
 
 
 def test_source_on_include_std_dot_hpp():
@@ -70,8 +70,8 @@ def test_source_on_include_std_dot_hpp():
     print('with cache   : %f seconds' % (clock_now - clock_prev))
 
 
-#-########################################################################
-#- testing include_std.hpp
+#########################################################################
+# testing include_std.hpp
 def test_project_on_include_std_dot_hpp():
     include_std_header = os.path.join(
         autoconfig.data_directory,
@@ -140,9 +140,9 @@ def parse_big_file():
 
 if __name__ == "__main__":
 
-    #~ test_on_windows_dot_h()
-    #~ test_source_on_include_std_dot_hpp()
-    #~ test_project_on_include_std_dot_hpp()
+    # test_on_windows_dot_h()
+    # test_source_on_include_std_dot_hpp()
+    # test_project_on_include_std_dot_hpp()
     print('running')
     prof = hotshot.Profile('parser.prof')
     prof.runcall(lambda: test_on_big_file('big2.xml', 1))
@@ -150,13 +150,13 @@ if __name__ == "__main__":
     stats.sort_stats('time', 'calls')
     stats.print_stats(30)
     print('running - done')
-    #~ print 'loading file'
-    #~ pdata = pstats.Stats('pygccxml.profile')
-    #~ print 'loading file - done'
-    #~ print 'striping dirs'
-    #~ pdata.strip_dirs()
-    #~ print 'striping dirs - done'
-    #~ print 'sorting stats'
-    #~ pdata.sort_stats('time').print_stats(476)
-    #~ print 'sorting stats - done'
+    # print 'loading file'
+    # pdata = pstats.Stats('pygccxml.profile')
+    # print 'loading file - done'
+    # print 'striping dirs'
+    # pdata.strip_dirs()
+    # print 'striping dirs - done'
+    # print 'sorting stats'
+    # pdata.sort_stats('time').print_stats(476)
+    # print 'sorting stats - done'
     # pdata.print_callers('find_all_declarations')
