@@ -79,8 +79,9 @@ class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
     def test(self):
         names = []
         enums = self.global_ns.enums()
-        key = list(enum.get_name2value_dict().keys())
-        list(map(lambda enum: names.extend(keys), enums))
+        list(map(
+            lambda enum: names.extend(list(enum.get_name2value_dict().keys())),
+            enums))
         self.failUnless(len(names) == 6)
         self.failUnless('x1' in names)
         self.failUnless('x2' in names)
