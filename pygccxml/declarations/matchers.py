@@ -497,7 +497,7 @@ class operator_matcher_t(calldef_matcher_t):
     def __call__(self, decl):
         if not super(operator_matcher_t, self).__call__(decl):
             return False
-        if self.symbol not is None:
+        if self.symbol is not None:
             if self.symbol != decl.symbol:
                 return False
         return True
@@ -506,7 +506,7 @@ class operator_matcher_t(calldef_matcher_t):
         msg = [super(operator_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if self.symbol not is None:
+        if self.symbol is not None:
             msg.append('(symbol==%s)' % str(self.symbol))
         if not msg:
             msg.append('any')
