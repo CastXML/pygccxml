@@ -7,70 +7,73 @@
 defines types visitor class interface
 """
 
+
 class type_visitor_t(object):
+
     """
     types visitor interface
 
     All functions within this class should be redefined in derived classes.
     """
+
     def __init__(self):
         object.__init__(self)
 
-    def visit_void( self ):
+    def visit_void(self):
         raise NotImplementedError()
 
-    def visit_char( self ):
+    def visit_char(self):
         raise NotImplementedError()
 
-    def visit_unsigned_char( self ):
+    def visit_unsigned_char(self):
         raise NotImplementedError()
 
-    def visit_signed_char( self ):
+    def visit_signed_char(self):
         raise NotImplementedError()
 
-    def visit_wchar( self ):
+    def visit_wchar(self):
         raise NotImplementedError()
 
-    def visit_short_int( self ):
+    def visit_short_int(self):
         raise NotImplementedError()
 
-    def visit_short_unsigned_int( self ):
+    def visit_short_unsigned_int(self):
         raise NotImplementedError()
 
-    def visit_bool( self ):
+    def visit_bool(self):
         raise NotImplementedError()
 
-    def visit_int( self ):
+    def visit_int(self):
         raise NotImplementedError()
 
-    def visit_unsigned_int( self ):
+    def visit_unsigned_int(self):
         raise NotImplementedError()
 
-    def visit_long_int( self ):
+    def visit_long_int(self):
         raise NotImplementedError()
 
-    def visit_long_unsigned_int( self ):
+    def visit_long_unsigned_int(self):
         raise NotImplementedError()
 
-    def visit_long_long_int( self ):
+    def visit_long_long_int(self):
         raise NotImplementedError()
 
-    def visit_long_long_unsigned_int( self ):
+    def visit_long_long_unsigned_int(self):
         raise NotImplementedError()
 
-    def visit_int128( self ):
+    def visit_int128(self):
         raise NotImplementedError()
 
-    def visit_uint128( self ):
+    def visit_uint128(self):
         raise NotImplementedError()
 
-    def visit_float( self ):
+    def visit_float(self):
         raise NotImplementedError()
 
-    def visit_double( self ):
+    def visit_double(self):
         raise NotImplementedError()
 
-    def visit_long_double( self ):
+    def visit_long_double(self):
         raise NotImplementedError()
 
     def visit_complex_long_double(self):
@@ -106,35 +109,35 @@ class type_visitor_t(object):
     def visit_jboolean(self):
         raise NotImplementedError()
 
-    def visit_volatile( self ):
+    def visit_volatile(self):
         raise NotImplementedError()
 
-    def visit_const( self ):
+    def visit_const(self):
         raise NotImplementedError()
 
-    def visit_pointer( self ):
+    def visit_pointer(self):
         raise NotImplementedError()
 
-    def visit_reference( self ):
+    def visit_reference(self):
         raise NotImplementedError()
 
-    def visit_array( self ):
+    def visit_array(self):
         raise NotImplementedError()
 
-    def visit_free_function_type( self ):
+    def visit_free_function_type(self):
         raise NotImplementedError()
 
-    def visit_member_function_type( self ):
+    def visit_member_function_type(self):
         raise NotImplementedError()
 
-    def visit_member_variable_type( self ):
+    def visit_member_variable_type(self):
         raise NotImplementedError()
 
-    def visit_declarated( self ):
+    def visit_declarated(self):
         raise NotImplementedError()
 
-    def visit_restrict( self ):
+    def visit_restrict(self):
         raise NotImplementedError()
 
-    def visit_ellipsis( self ):
+    def visit_ellipsis(self):
         raise NotImplementedError()
