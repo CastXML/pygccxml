@@ -576,13 +576,13 @@ def has_public_less(type):
 
 def is_unary_operator(oper):
     """returns True, if operator is unary operator, otherwise False"""
-    #~ definition:
-        #~ memeber in class
-          #~ ret-type operator symbol()
-          #~ ret-type operator [++ --](int)
-        #~ globally
-          #~ ret-type operator symbol( arg )
-          #~ ret-type operator [++ --](X&, int)
+    # definition:
+    # memeber in class
+    # ret-type operator symbol()
+    # ret-type operator [++ --](int)
+    # globally
+    # ret-type operator symbol( arg )
+    # ret-type operator [++ --](X&, int)
     symbols = ['!', '&', '~', '*', '+', '++', '-', '--']
     if not isinstance(oper, calldef.operator_t):
         return False
@@ -611,11 +611,11 @@ def is_unary_operator(oper):
 
 def is_binary_operator(oper):
     """returns True, if operator is binary operator, otherwise False"""
-    #~ definition:
-        #~ memeber in class
-          #~ ret-type operator symbol(arg)
-        #~ globally
-          #~ ret-type operator symbol( arg1, arg2 )
+    # definition:
+    # memeber in class
+    # ret-type operator symbol(arg)
+    # globally
+    # ret-type operator symbol( arg1, arg2 )
     symbols = [
         ',', '()', '[]', '!=', '%', '%=', '&', '&&', '&=', '*', '*=', '+',
         '+=', '-', '-=', '->', '->*', '/', '/=', '<', '<<', '<<=', '<=', '=',
@@ -703,7 +703,7 @@ class __is_convertible_t:
                            cpptypes.member_function_type_t,
                            cpptypes.member_variable_type_t)) \
            and is_same(source.base, target.base):
-                return True
+            return True
 
         if is_pointer(source) \
            and isinstance(target,
@@ -711,7 +711,7 @@ class __is_convertible_t:
                            cpptypes.member_function_type_t,
                            cpptypes.member_variable_type_t)) \
            and is_same(source.base, target):
-                return True
+            return True
 
         if is_pointer(target) \
            and is_reference(source) \
@@ -720,7 +720,7 @@ class __is_convertible_t:
                            cpptypes.member_function_type_t,
                            cpptypes.member_variable_type_t)) \
            and is_same(source.base, target.base):
-                return True
+            return True
 
         if is_pointer(target) \
            and isinstance(source,
@@ -728,7 +728,7 @@ class __is_convertible_t:
                            cpptypes.member_function_type_t,
                            cpptypes.member_variable_type_t)) \
            and is_same(target.base, source):
-                return True
+            return True
 
     def __test_const_x_ref__to__x(self, source, target):
         if not is_reference(source) \
@@ -968,7 +968,7 @@ def is_noncopyable(class_):
     class_ = class_traits.get_declaration(class_)
 
     true_header = "is_noncopyable(TRUE) - %s - " % class_.decl_string
-    #~ false_header = "is_noncopyable(false) - %s - " % class_.decl_string
+    # false_header = "is_noncopyable(false) - %s - " % class_.decl_string
 
     if class_.class_type == class_declaration.CLASS_TYPES.UNION:
         return False

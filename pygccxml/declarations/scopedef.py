@@ -117,14 +117,14 @@ class scopedef_t(declaration.declaration_t):
             return False
         return self._sorted_list(self.declarations[:]) \
             == other._sorted_list(other.declarations[:])
-        #self_decls = self._all_decls_not_recursive
+        # self_decls = self._all_decls_not_recursive
         # if not self._optimized:
-            #self_decls = self._sorted_list( self.declarations[:] )
-        #other_decls = other._all_decls_not_recursive[:]
+        # self_decls = self._sorted_list(self.declarations[:])
+        # other_decls = other._all_decls_not_recursive[:]
         # if not other._optimized:
-            #other_decls = other._sorted_list( other.declarations[:] )
+        # other_decls = other._sorted_list(other.declarations[:])
         # else:
-            # return  self_decls == other_decls
+        # return self_decls == other_decls
 
     def __hash__(self):
         return super.__hash__(self)
@@ -247,7 +247,7 @@ class scopedef_t(declaration.declaration_t):
         if isinstance(name, collections.Callable) and None is function:
             name = None
         if name:
-            if not 'operator' in name:
+            if 'operator' not in name:
                 name = add_operator(name)
             return name
         elif symbol:

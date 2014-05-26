@@ -205,8 +205,8 @@ class declaration_matcher_t(matcher_base_t):
             if self.__opt_is_tmpl_inst:
                 if '::' in self.__opt_tmpl_name:
                     self.__opt_is_full_name = True
-                    self.__decl_name_only = self.__opt_tmpl_name.split(
-                        '::')[-1]
+                    self.__decl_name_only = \
+                        self.__opt_tmpl_name.split('::')[-1]
                 else:
                     self.__opt_is_full_name = False
                     self.__decl_name_only = self.__opt_tmpl_name
@@ -223,26 +223,26 @@ class declaration_matcher_t(matcher_base_t):
 
     def __str__(self):
         msg = []
-        if not None is self.decl_type:
+        if self.decl_type is not None:
             msg.append('(decl type==%s)' % self.decl_type.__name__)
-        if not None is self.name:
+        if self.name is not None:
             msg.append('(name==%s)' % self.name)
-        if not None is self.header_dir:
+        if self.header_dir is not None:
             msg.append('(header dir==%s)' % self.header_dir)
-        if not None is self.header_file:
+        if self.header_file is not None:
             msg.append('(header file==%s)' % self.header_file)
         if not msg:
             msg.append('any')
         return ' and '.join(msg)
 
     def __call__(self, decl):
-        if not None is self.decl_type:
+        if self.decl_type is not None:
             if not isinstance(decl, self.decl_type):
                 return False
-        if not None is self.name:
+        if None self.name is not:
             if not self.check_name(decl):
                 return False
-        if not None is self.header_dir:
+        if self.header_dir is not None:
             if decl.location:
                 decl_dir = os.path.abspath(
                     os.path.dirname(decl.location.file_name))
@@ -251,7 +251,7 @@ class declaration_matcher_t(matcher_base_t):
                     return False
             else:
                 return False
-        if not None is self.header_file:
+        if self.header_file is not None:
             if decl.location:
                 decl_file = os.path.abspath(decl.location.file_name)
                 decl_file = utils.normalize_path(decl_file)
@@ -262,7 +262,7 @@ class declaration_matcher_t(matcher_base_t):
         return True
 
     def check_name(self, decl):
-        assert not None is self.name
+        assert self.name is not None
         if self.__opt_is_tmpl_inst:
             if not self.__opt_is_full_name:
                 if self.name != templates.normalize(decl.name) \
@@ -322,7 +322,7 @@ class variable_matcher_t(declaration_matcher_t):
     def __call__(self, decl):
         if not super(variable_matcher_t, self).__call__(decl):
             return False
-        if not None is self.type:
+        if self.type not is None:
             if isinstance(self.type, cpptypes.type_t):
                 if self.type != decl.type:
                     return False
@@ -335,7 +335,7 @@ class variable_matcher_t(declaration_matcher_t):
         msg = [super(variable_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if not None is self.type:
+        if self.type is not None:
             msg.append('(value type==%s)' % str(self.type))
         if not msg:
             msg.append('any')
@@ -415,7 +415,7 @@ class calldef_matcher_t(declaration_matcher_t):
     def __call__(self, decl):
         if not super(calldef_matcher_t, self).__call__(decl):
             return False
-        if not None is self.return_type \
+        if self.return_type is not None \
            and not self.__compare_types(self.return_type, decl.return_type):
             return False
         if self.arg_types:
@@ -446,7 +446,7 @@ class calldef_matcher_t(declaration_matcher_t):
         msg = [super(calldef_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if not None is self.return_type:
+        if self.return_type is not None:
             msg.append('(return type==%s)' % str(self.return_type))
         if self.arg_types:
             for i in range(len(self.arg_types)):
@@ -497,7 +497,7 @@ class operator_matcher_t(calldef_matcher_t):
     def __call__(self, decl):
         if not super(operator_matcher_t, self).__call__(decl):
             return False
-        if not None is self.symbol:
+        if self.symbol not is None:
             if self.symbol != decl.symbol:
                 return False
         return True
@@ -506,7 +506,7 @@ class operator_matcher_t(calldef_matcher_t):
         msg = [super(operator_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if not None is self.symbol:
+        if self.symbol not is None:
             msg.append('(symbol==%s)' % str(self.symbol))
         if not msg:
             msg.append('any')

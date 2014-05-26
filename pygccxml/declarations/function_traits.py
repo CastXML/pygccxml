@@ -20,15 +20,15 @@ def is_same_return_type(f1, f2):
     # return types of the functions are covariant if they satisfy the following
     # criteria:
 
-    #* both are pointers to classes or references to classes
-    #* the class in the return type of B::f is the same class as the class in
-    #  the return type of D::f or, is an unambiguous direct or indirect base
-    #  class of the class in the return type of D::f and is accessible in D
-    #* both pointers or references have the same cv-qualification and the class
-    #  type in the return type of D::f has the same cv-qualification as or less
-    #  cv-qualification than the class type in the return type of B::f.
+    # both are pointers to classes or references to classes
+    # the class in the return type of B::f is the same class as the class in
+    # the return type of D::f or, is an unambiguous direct or indirect base
+    # class of the class in the return type of D::f and is accessible in D
+    # both pointers or references have the same cv-qualification and the class
+    # type in the return type of D::f has the same cv-qualification as or less
+    # cv-qualification than the class type in the return type of B::f.
 
-    if not f1.__class__ is f2.__class__:
+    if f1.__class__ is not f2.__class__:
         # it should be assert
         return False  # 2 different calldef types
     if not isinstance(f1, calldef.member_calldef_t):
@@ -75,7 +75,7 @@ def is_same_function(f1, f2):
     """
     if f1 is f2:
         return True
-    if not f1.__class__ is f2.__class__:
+    if f1.__class__ is not f2.__class__:
         return False
     if isinstance(f1, calldef.member_calldef_t) and \
             f1.has_const != f2.has_const:
