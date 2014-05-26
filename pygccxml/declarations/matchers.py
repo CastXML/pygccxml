@@ -239,7 +239,7 @@ class declaration_matcher_t(matcher_base_t):
         if self.decl_type is not None:
             if not isinstance(decl, self.decl_type):
                 return False
-        if None self.name is not:
+        if self.name is not None:
             if not self.check_name(decl):
                 return False
         if self.header_dir is not None:
