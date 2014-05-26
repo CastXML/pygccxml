@@ -322,7 +322,7 @@ class variable_matcher_t(declaration_matcher_t):
     def __call__(self, decl):
         if not super(variable_matcher_t, self).__call__(decl):
             return False
-        if self.type not is None:
+        if self.type is not None:
             if isinstance(self.type, cpptypes.type_t):
                 if self.type != decl.type:
                     return False
