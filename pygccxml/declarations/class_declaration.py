@@ -609,9 +609,9 @@ class class_t(scopedef.scopedef_t):
                         message +
                         " - class that is not copyable" % self.decl_string)
                     noncopyable_vars.append(mvar)
-        logger.debug(
-            "__contains_noncopyable_mem_var - %s - false - doesn't contains " +
-            "noncopyable members" % self.decl_string)
+        logger.debug((
+            "__contains_noncopyable_mem_var - %s - false - doesn't " +
+            "contains noncopyable members") % self.decl_string)
         return noncopyable_vars
 
     @property
