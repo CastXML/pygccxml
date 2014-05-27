@@ -8,28 +8,34 @@
 import os
 from types import *
 
-##If you want include files that doesn't have extension then use filter like '*.'
+# If you want include files that doesn't have extension then use filter
+# like '*.'
 
-def _make_list( argument ):
+
+def _make_list(argument):
     if type(argument) in StringTypes:
         if argument:
             return [argument]
         else:
             return []
-    elif type(argument) is ListType:
+    elif isinstance(argument, ListType):
         return argument
     else:
-        raise TypeError( 'Argument "%s" must be or list of strings or string.' % argument )
+        raise TypeError(
+            'Argument "%s" must be or list of strings or string.' %
+            argument)
+
 
 class base_files_iterator:
-    def __init__(self, file_exts, is_include_exts = True):
-        self.__file_exts = _make_list( file_exts )
+
+    def __init__(self, file_exts, is_include_exts=True):
+        self.__file_exts = _make_list(file_exts)
         self.__is_include_exts = is_include_exts
 
     def _is_to_skip(self, file_path):
         if not self.__file_exts:
             return 0
-        file_ext = os.path.splitext( file_path )[1]
+        file_ext = os.path.splitext(file_path)[1]
         if not file_ext:
             file_ext = '.' + file_ext
         file_ext = '*' + file_ext
@@ -42,11 +48,11 @@ class base_files_iterator:
         files, directories = [], []
         directory_contents = os.listdir(directory_path)
         for object_name in directory_contents:
-            object_path = os.path.join(directory_path, object_name)
-            if os.path.isfile( object_path ) and not self._is_to_skip( object_path ):
-                files.append( object_path )
-            elif os.path.isdir( object_path ):
-                directories.append( object_path )
+            obj_path = os.path.join(directory_path, object_name)
+            if os.path.isfile(obj_path) and not self._is_to_skip(obj_path):
+                files.append(obj_path)
+            elif os.path.isdir(obj_path):
+                directories.append(obj_path)
             else:
                 pass
         return directories, files
@@ -60,20 +66,28 @@ class base_files_iterator:
     def restart(self):
         raise NotImplementedError
 
+
 class files_walker(base_files_iterator):
-    def __init__(self, directories, file_ext_filter = '', is_include_filter = True, is_recursive = True):
+
+    def __init__(
+            self,
+            directories,
+            file_ext_filter='',
+            is_include_filter=True,
+            is_recursive=True):
         base_files_iterator.__init__(self, file_ext_filter, is_include_filter)
-        self.__directories = _make_list( directories )
+        self.__directories = _make_list(directories)
         self.__is_recursive = is_recursive
         self.__file_generator = None
 
     def __walk(self):
         directories = self.__directories[:]
         while directories:
-            sub_directories, files = self._subdirectories_and_files( directories.pop(0) )
+            sub_directories, files = self._subdirectories_and_files(
+                directories.pop(0))
             if self.__is_recursive:
                 for directory in sub_directories:
-                    directories.append( directory )
+                    directories.append(directory)
             for file_os in files:
                 yield file_os
 
@@ -89,10 +103,11 @@ class files_walker(base_files_iterator):
 
 
 class directories_walker:
-    def __init__(self, directories, is_recursive = 1):
+
+    def __init__(self, directories, is_recursive=1):
         self.__directories = []
-        for root in _make_list( directories ):
-            self.__directories.extend( self.__sub_directories( root ) )
+        for root in _make_list(directories):
+            self.__directories.extend(self.__sub_directories(root))
         self.__is_recursive = is_recursive
         self.__directory_generator = None
 
@@ -101,8 +116,8 @@ class directories_walker:
         directory_contains = os.listdir(directory_path)
         for object_in_directory in directory_contains:
             full_path = os.path.join(directory_path, object_in_directory)
-            if os.path.isdir( full_path ):
-                sub_directories.append( full_path )
+            if os.path.isdir(full_path):
+                sub_directories.append(full_path)
         return sub_directories
 
     def __walk(self):
@@ -110,7 +125,7 @@ class directories_walker:
         for curr_directory in directories:
             yield curr_directory
             if self.__is_recursive:
-                for f in directories_walker( [curr_directory], True ):
+                for f in directories_walker([curr_directory], True):
                     yield f
 
     def __iter__(self):
@@ -126,13 +141,3 @@ class directories_walker:
 
 if '__main__' == __name__:
     pass
-    #lFileCount = 0
-    #for file_os in files_iterator( r'C:\Program Files\Microsoft Visual Studio\VC98\Include\stlport', ['*.h', '*.'], True, False):
-        #print file_os
-        #lFileCount += 1
-    #print lFileCount
-
-    #~ for directory in directories_iterator( '/home/roman/language-binding', False ):
-        #~ print directory
-    #~ for directory in directories_iterator( '/home/roman/language-binding', True ):
-        #~ print directory
