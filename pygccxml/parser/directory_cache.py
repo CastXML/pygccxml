@@ -12,18 +12,23 @@ directory cache implementation.
 This module contains the implementation of a cache that uses individual
 files, stored in a dedicated cache directory, to store the cached contents.
 
-The :class:`parser.directory_cache_t` class instance could be passed as the `cache`
-argument of the :func:`parser.parse` function.
+The :class:`parser.directory_cache_t` class instance could be passed as the
+`cache` argument of the :func:`parser.parse` function.
 """
 
-import os, os.path, gzip, hashlib
+import os
+import os.path
+import gzip
+import hashlib
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
 from . import declarations_cache
 
+
 class index_entry_t:
+
     """
     Entry of the index table in the directory cache index.
 
@@ -34,11 +39,12 @@ class index_entry_t:
     This class is a helper class for the directory_cache_t class.
     """
 
-    def __init__( self, filesigs, configsig ):
+    def __init__(self, filesigs, configsig):
         """
         :param filesigs: a list of tuples( `fileid`, `sig`)...
         :param configsig: the signature of the configuration object.
         """
+
         self.filesigs = filesigs
         self.configsig = configsig
 
@@ -49,7 +55,8 @@ class index_entry_t:
         self.filesigs, self.configsig = state
 
 
-class directory_cache_t ( declarations_cache.cache_base_t ):
+class directory_cache_t (declarations_cache.cache_base_t):
+
     """cache class that stores its data as multiple files inside a directory.
 
     The cache stores one index file called `index.dat` which is always
@@ -61,15 +68,18 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
     modified since the last run).
     """
 
-    def __init__( self, dir="cache", compression=False, md5_sigs=True ):
+    def __init__(self, dir="cache", compression=False, md5_sigs=True):
         """
         :param dir: cache directory path, it is created, if it does not exist
 
-        :param compression: if `True`, the cache files will be compressed using `gzip`
+        :param compression: if `True`, the cache files will be compressed
+                            using `gzip`
 
-        :param md5_sigs: `md5_sigs` determines whether file modifications is checked
-                         by computing a `md5` digest or by checking the modification date
+        :param md5_sigs: `md5_sigs` determines whether file modifications is
+                         checked by computing a `md5` digest or by checking
+                         the modification date
         """
+
         declarations_cache.cache_base_t.__init__(self)
 
         # Cache directory
@@ -96,7 +106,9 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         # Check if dir refers to an existing file...
         if os.path.isfile(self.__dir):
-            raise ValueError("Cannot use %s as cache directory. There is already a file with that name."%self.__dir)
+            raise ValueError((
+                "Cannot use %s as cache directory. There is already a file " +
+                "with that name.") % self.__dir)
 
         # Load the cache or create the cache directory...
         if os.path.isdir(self.__dir):
@@ -121,6 +133,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :param included_files: included files
         :type included_files: list of str
         """
+
         # Normlize all paths...
         source_file = os.path.normpath(source_file)
         included_files = [os.path.normpath(p) for p in included_files]
@@ -128,7 +141,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         # Create the list of dependent files. This is the included_files list
         # + the source file. Duplicate names are removed.
         dependent_files = {}
-        for name in [source_file]+included_files:
+        for name in [source_file] + included_files:
             dependent_files[name] = 1
         dependent_files = list(dependent_files.keys())
 
@@ -143,8 +156,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         # Create the sigs of all dependent files...
         filesigs = []
         for filename in dependent_files:
-            id_,sig = self.__filename_rep.acquire_filename(filename)
-            filesigs.append((id_,sig))
+            id_, sig = self.__filename_rep.acquire_filename(filename)
+            filesigs.append((id_, sig))
 
         configsig = self._create_config_signature(configuration)
         entry = index_entry_t(filesigs, configsig)
@@ -154,7 +167,6 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         # Write the declarations into the cache file...
         cachefilename = self._create_cache_filename(source_file)
         self._write_file(cachefilename, declarations)
-
 
     def cached_value(self, source_file, configuration):
         """Return the cached declarations or None.
@@ -169,8 +181,8 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         # Check if the cache contains an entry for source_file
         key = self._create_cache_key(source_file)
         entry = self.__index.get(key)
-        if entry==None:
-#            print "CACHE: %s: Not cached"%source_file
+        if entry is None:
+            # print "CACHE: %s: Not cached"%source_file
             return None
 
         # Check if the entry is still valid. It is not valid if:
@@ -185,27 +197,28 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
 
         # Check if the config is different...
         configsig = self._create_config_signature(configuration)
-        if configsig!=entry.configsig:
-#            print "CACHE: %s: Config mismatch"%source_file
+        if configsig != entry.configsig:
+            # print "CACHE: %s: Config mismatch"%source_file
             return None
 
         # Check if any of the dependent files has been modified...
         for id_, sig in entry.filesigs:
             if self.__filename_rep.is_file_modified(id_, sig):
-#                print "CACHE: %s: Entry not up to date"%source_file
+                # print "CACHE: %s: Entry not up to date"%source_file
                 return None
 
         # Load and return the cached declarations
         cachefilename = self._create_cache_filename(source_file)
         decls = self._read_file(cachefilename)
 
-#        print "CACHE: Using cached decls for",source_file
+        # print "CACHE: Using cached decls for",source_file
         return decls
 
     def _load(self):
         """Load the cache.
 
-        Loads the `index.dat` file, which contains the index table and the file name repository.
+        Loads the `index.dat` file, which contains the index table and the
+        file name repository.
 
         This method is called by the :meth:`__init__`
         """
@@ -215,9 +228,11 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
             data = self._read_file(indexfilename)
             self.__index = data[0]
             self.__filename_rep = data[1]
-            if self.__filename_rep._md5_sigs!=self.__md5_sigs:
-                print("CACHE: Warning: md5_sigs stored in the cache is set to %s."%self.__filename_rep._md5_sigs)
-                print("       Please remove the cache to change this setting.")
+            if self.__filename_rep._md5_sigs != self.__md5_sigs:
+                print((
+                    "CACHE: Warning: md5_sigs stored in the cache is set " +
+                    "to %s.") % self.__filename_rep._md5_sigs)
+                print("Please remove the cache to change this setting.")
                 self.__md5_sigs = self.__filename_rep._md5_sigs
         else:
             self.__index = {}
@@ -229,12 +244,17 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """
         save the cache index, in case it was modified.
 
-        Saves the index table and the file name repository in the file `index.dat`
+        Saves the index table and the file name repository in the file
+        `index.dat`
         """
+
         if self.__modified_flag:
             self.__filename_rep.update_id_counter()
             indexfilename = os.path.join(self.__dir, "index.dat")
-            self._write_file(indexfilename, (self.__index,self.__filename_rep))
+            self._write_file(
+                indexfilename,
+                (self.__index,
+                 self.__filename_rep))
             self.__modified_flag = False
 
     def _read_file(self, filename):
@@ -247,6 +267,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :type filename: str
         :rtype: object
         """
+
         if self.__compression:
             f = gzip.GzipFile(filename, "rb")
         else:
@@ -264,6 +285,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :type filename: str
         :param data: A Python object that will be pickled
         """
+
         if self.__compression:
             f = gzip.GzipFile(filename, "wb")
         else:
@@ -289,7 +311,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """
 
         entry = self.__index.get(key)
-        if entry==None:
+        if entry is None:
             return
 
         # Release the referenced files...
@@ -305,8 +327,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         try:
             os.remove(cachefilename)
         except OSError as e:
-            print("Could not remove cache file (%s)"%e)
-
+            print("Could not remove cache file (%s)" % e)
 
     def _create_cache_key(self, source_file):
         """
@@ -317,7 +338,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :rtype: str
         """
         path, name = os.path.split(source_file)
-        return name+str(hash(path))
+        return name + str(hash(path))
 
     def _create_cache_filename(self, source_file):
         """
@@ -327,7 +348,7 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         :type source_file: str
         :rtype: str
         """
-        res = self._create_cache_key(source_file)+".cache"
+        res = self._create_cache_key(source_file) + ".cache"
         return os.path.join(self.__dir, res)
 
     def _create_config_signature(self, config):
@@ -344,16 +365,19 @@ class directory_cache_t ( declarations_cache.cache_base_t ):
         """
         m = hashlib.md5()
         m.update(config.working_directory)
-        for p in config.include_paths: m.update(p)
-        for p in config.define_symbols: m.update(p)
-        for p in config.undefine_symbols: m.update(p)
-        for p in config.cflags: m.update(p)
+        for p in config.include_paths:
+            m.update(p)
+        for p in config.define_symbols:
+            m.update(p)
+        for p in config.undefine_symbols:
+            m.update(p)
+        for p in config.cflags:
+            m.update(p)
         return m.digest()
 
 
-
-
 class filename_entry_t:
+
     """This is a record stored in the filename_repository_t class.
 
     The class is an internal class used in the implementation of the
@@ -361,7 +385,7 @@ class filename_entry_t:
     the file name and the reference count.
     """
 
-    def __init__( self, filename ):
+    def __init__(self, filename):
         """Constructor.
 
         The reference count is initially set to 0.
@@ -389,15 +413,18 @@ class filename_entry_t:
 
     def inc_ref_count(self):
         """Increase the reference count by 1."""
+
         self.refcount += 1
 
     def dec_ref_count(self):
         """Decrease the reference count by 1 and return the new count."""
+
         self.refcount -= 1
         return self.refcount
 
 
 class filename_repository_t:
+
     """File name repository.
 
     This class stores file names and can check whether a file has been
@@ -409,7 +436,7 @@ class filename_repository_t:
     called so that the entry can be removed from the repository.
     """
 
-    def __init__( self, md5_sigs ):
+    def __init__(self, md5_sigs):
         """Constructor.
         """
 
@@ -434,9 +461,10 @@ class filename_repository_t:
     def acquire_filename(self, name):
         """Acquire a file name and return its id and its signature.
         """
+
         id_ = self.__id_lut.get(name)
         # Is this a new entry?
-        if id_==None:
+        if id_ is None:
             # then create one...
             id_ = self.__next_id
             self.__next_id += 1
@@ -453,21 +481,23 @@ class filename_repository_t:
     def release_filename(self, id_):
         """Release a file name.
         """
+
         entry = self.__entries.get(id_)
-        if entry==None:
-            raise ValueError("Invalid filename id (%d)"%id_)
+        if entry is None:
+            raise ValueError("Invalid filename id (%d)" % id_)
 
         # Decrease reference count and check if the entry has to be removed...
-        if entry.dec_ref_count()==0:
+        if entry.dec_ref_count() == 0:
             del self.__entries[id_]
             del self.__id_lut[entry.filename]
 
     def is_file_modified(self, id_, signature):
         """Check if the file referred to by `id_` has been modified.
         """
+
         entry = self.__entries.get(id_)
-        if entry==None:
-            raise ValueError("Invalid filename id_ (%d)"%id_)
+        if entry is None:
+            raise ValueError("Invalid filename id_ (%d)" % id_)
 
         # Is the signature already known?
         if entry.sig_valid:
@@ -479,19 +509,21 @@ class filename_repository_t:
             entry.signature = filesig
             entry.sig_valid = True
 
-        return filesig!=signature
+        return filesig != signature
 
     def update_id_counter(self):
         """Update the `id_` counter so that it doesn't grow forever.
         """
-        if len(self.__entries)==0:
+
+        if len(self.__entries) == 0:
             self.__next_id = 1
         else:
-            self.__next_id = max(self.__entries.keys())+1
+            self.__next_id = max(self.__entries.keys()) + 1
 
     def _get_signature(self, entry):
         """Return the signature of the file stored in entry.
         """
+
         if self._md5_sigs:
             # return md5 digest of the file content...
             if not os.path.exists(entry.filename):
@@ -499,7 +531,7 @@ class filename_repository_t:
             try:
                 f = open(entry.filename)
             except IOError as e:
-                print("Cannot determine md5 digest:",e)
+                print("Cannot determine md5 digest:", e)
                 return None
             data = f.read()
             f.close()
@@ -515,16 +547,15 @@ class filename_repository_t:
         """Dump contents for debugging/testing.
         """
 
-        print(70*"-")
+        print(70 * "-")
         print("ID lookup table:")
         for name in self.__id_lut:
             id_ = self.__id_lut[name]
-            print("  %s -> %d"%(name, id_))
+            print("  %s -> %d" % (name, id_))
 
-        print(70*"-")
-        print("%-4s %-60s %s"%("ID", "Filename", "Refcount"))
-        print(70*"-")
+        print(70 * "-")
+        print("%-4s %-60s %s" % ("ID", "Filename", "Refcount"))
+        print(70 * "-")
         for id_ in self.__entries:
             entry = self.__entries[id_]
-            print("%04d %-60s %d"%(id_, entry.filename, entry.refcount))
-
+            print("%04d %-60s %d" % (id_, entry.filename, entry.refcount))
