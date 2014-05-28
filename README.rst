@@ -29,9 +29,12 @@ Documentation
 
 For examples and tutorials see the documentation: http://gccxml.github.io/pygccxml/
 
-Testing
--------
+Testing and code coverage
+-------------------------
 
 pygccxml has more than 200 unit tests. They are run after each code commit to ensure
 that the code stays functional and stable. You can find the builds here:
 https://travis-ci.org/gccxml/pygccxml/builds
+
+Code coverage is also available. It is automatically updated after each commit and can be found here:
+https://coveralls.io/r/gccxml/pygccxml

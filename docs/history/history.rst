@@ -50,7 +50,34 @@ Version 1.6 (Not yet released)
 
 2. Changed the documentation from epydoc to sphinx doc
 
-3. Depreacate parser.config_t (replaced by parser.gccxml_configuration_t)
+3. Setup the documentation as gh-page and add script to update the documentation
+   Just call "make gh-pages" on the root folder to update the documentation
+   on the github server. (You need write access to the repository to do so).
+   The url for the documentation is now http://gccxml.github.io/pygccxml/
+
+4. Add Travis unit tests for Python 2.6, 2.7, 3.2, 3.3 and 3.4
+   The tests are run after each commit (see .travis.yml file in root folder)
+   https://travis-ci.org/gccxml/pygccxml
+
+5. Add automatic code coverage. The code coverage is run during each travis
+   run and the results are uploaded to https://coveralls.io/r/gccxml/pygccxml
+
+6. Fix copy_constructor unit test
+
+7. Deprecate parser.config_t (replaced by parser.gccxml_configuration_t)
+
+8. Fix for string comparison with future unicode literals
+   When using from __future__ import unicode_literals in python 2.7,
+   the call to the namespace() method would fail due to the isinstance/str
+   check.
+
+   A is_str() function was added to the utils module, allowing for a
+   python 2 and python 3 compatible string check.
+   A unit test for this case was added.
+
+9. All the code is now pep8 compliant and is tested for this in an unit test
+
+10. unused imports and variables were removed using the pyflakes tool
 
 Version 1.5.2
 -------------
