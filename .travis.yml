@@ -12,10 +12,18 @@ before_install:
   # Install gccxml
   - sudo apt-get update -qq
   - sudo apt-get install -qq gccxml
+  # Install pep8, needed by the unit tests
   - pip install pep8
+  # Install coverage tools
+  - pip install coverage
+  - pip install coveralls
 
 script:
   # Install pygccxml
   - python setup.py install
-  # Run the tests
-  - python unittests/test_all.py
+  # Run the tests with coverage
+  - coverage run unittests/test_all.py
+
+after_success:
+  # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
+  - coveralls
