@@ -24,15 +24,15 @@ from .declarations_cache import cache_base_t
 from .declarations_cache import file_cache_t
 from .declarations_cache import dummy_cache_t
 from .directory_cache import directory_cache_t
-#shortcut
+# shortcut
 CONTENT_TYPE = file_configuration_t.CONTENT_TYPE
 
 
-
-def parse( files
-           , config=None
-           , compilation_mode=COMPILATION_MODE.FILE_BY_FILE
-           , cache=None ):
+def parse(
+        files,
+        config=None,
+        compilation_mode=COMPILATION_MODE.FILE_BY_FILE,
+        cache=None):
     """
     Parse header files.
 
@@ -40,7 +40,8 @@ def parse( files
     :type files: list of str
     :param config: Configuration object or None
     :type config: :class:`parser.gccxml_configuration_t`
-    :param compilation_mode: Determines whether the files are parsed individually or as one single chunk
+    :param compilation_mode: Determines whether the files are parsed
+                             individually or as one single chunk
     :type compilation_mode: :class:`parser.COMPILATION_MODE`
     :param cache: Declaration cache (None=no cache)
     :type cache: :class:`parser.cache_base_t` or str
@@ -48,16 +49,18 @@ def parse( files
     """
     if not config:
         config = gccxml_configuration_t()
-    parser = project_reader_t( config=config, cache=cache )
+    parser = project_reader_t(config=config, cache=cache)
     answer = parser.read_files(files, compilation_mode)
     return answer
+
 
 def parse_string(content, config=None):
     if not config:
         config = gccxml_configuration_t()
-    parser = project_reader_t(config )
+    parser = project_reader_t(config)
     return parser.read_string(content)
 
-def parse_xml_file( content, config=None ):
-    parser = source_reader_t( config )
-    return parser.read_xml_file( content )
+
+def parse_xml_file(content, config=None):
+    parser = source_reader_t(config)
+    return parser.read_xml_file(content)
