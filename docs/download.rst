@@ -6,11 +6,11 @@ Download & Install
 pygccxml on SourceForge
 -------------------------
 
-:doc:`pygccxml <pygccxml>` project is hosted on SourceForge. Using SourceForge services you
+pygccxml project is hosted on SourceForge. Using SourceForge services you
 can:
 
 1) get access to source code
-2) get access to latest release version of :doc:`pygccxml <pygccxml>`
+2) get access to latest release version of pygccxml
 
 
 -----------------
@@ -52,11 +52,11 @@ There are few different ways to install GCC-XML on your system:
 pygccxml
 --------
 In command prompt or shell change current directory to be "pygccxml-X.Y.Z".
-"X.Y.Z" is version of :doc:`pygccxml <pygccxml>`. Type the following command:
+"X.Y.Z" is version of pygccxml. Type the following command:
 
 | ``python setup.py install``
 
-After this command complete, you should have installed :doc:`pygccxml <pygccxml>` package.
+After this command complete, you should have installed pygccxml package.
 
 ------------
 Dependencies

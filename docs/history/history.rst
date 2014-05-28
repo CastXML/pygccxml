@@ -182,8 +182,8 @@ Version 1.0
 
 3. New high-level API wrapper for ``.bsc`` (browse source code file) was added.
 
-4. The recomended `GCC-XML`_ version to use with this release is CVS revision 123.
-   This revision introduces small, but very important feature. `GCC-XML`_
+4. The recomended GCC_XML version to use with this release is CVS revision 123.
+   This revision introduces small, but very important feature. GCC_XML
    started to dump artificial declarations (constructor, destructor, operator=).
    ``pygccxml.declarations.type_traits`` functions were updated to use the new
    information.
@@ -453,7 +453,7 @@ Version 0.8.1
 
 6. Support to Java native types has been added.
 
-7. It is possible to pass an arbitrary string as a parameter to `GCC-XML`_.
+7. It is possible to pass an arbitrary string as a parameter to GCC_XML.
 
 8. Native java types has been added to fundamental types.
 
@@ -556,7 +556,7 @@ Version 0.7.1
    Thanks to Allen Bierbaum!
 
 9. New file configuration is available: "cached source file".
-   ``parser.project_reader_t`` class will check for existence of `GCC-XML`_
+   ``parser.project_reader_t`` class will check for existence of GCC_XML
    generated file. If it does not exist it will create one. If it do exist,
    then the parser will use that file.
 
@@ -567,9 +567,9 @@ Version 0.7.1
     * ``parser.create_source_fc`` - creates file configuration, that contains
       reference to regular source file
     * ``parser.create_gccxml_fc`` - creates file configuration, that contains
-      reference to `GCC-XML`_ generated file
+      reference to GCC_XML generated file
     * ``parser.create_cached_source_fc`` - creates file configuration, that
-      contains reference to 2 files: `GCC-XML`_ generated file and regular source
+      contains reference to 2 files: GCC_XML generated file and regular source
       file
 
 11. Small bug fixes.
@@ -598,7 +598,7 @@ Version 0.6.9
 3. Now it is possible to specify "undefined" directives using
    *parser.config_t* class.
 
-4. *patch* functionality has been introduced. `GCC-XML`_ generates wrong
+4. *patch* functionality has been introduced. GCC_XML generates wrong
    default values for function arguments. *patch* functionality tries to fix
    this.
 
@@ -645,16 +645,16 @@ Version 0.6.7
    * *member_calldef_t.access_type*
 
 5. New type has been introduced: *unknown_t*. There are use cases when
-   `GCC-XML`_ does not returns function return type.
+   GCC_XML does not returns function return type.
 
 6. New implementation of *make_flatten* algorithm using generators.
    By default old implementation will be used.
 
 7. *parser.file_configuration_t* interface has been changed. Now it is able
-   to keep: source file, text or `GCC-XML`_ generated file. If you are doing
-   something with code that is not changing you'd better use `GCC-XML`_
+   to keep: source file, text or GCC_XML generated file. If you are doing
+   something with code that is not changing you'd better use GCC_XML
    generated file as content of the *parser.file_configuration_t*. Save your
    time.
 
-8. There are some cases when `GCC-XML`_ reports *"restricted"*. In this case
+8. There are some cases when GCC_XML reports *"restricted"*. In this case
    pygccxml replaces *"restricted"* with *"volatile"*.

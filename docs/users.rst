@@ -22,11 +22,11 @@ pygccxml in blogs
 
 - http://cysquatch.net/blog/2007/09/01/c-code-metrics-with-pygccxml
 
-  :doc:`pygccxml <pygccxml>` is used to calculate the Weighted Methods per Class (WMC) metric.
+  pygccxml is used to calculate the Weighted Methods per Class (WMC) metric.
 
 - http://www.garagegames.com/blogs/4280/13907
 
-  :doc:`pygccxml <pygccxml>` is used to generate input files for `SIP`_ code generator.
+  pygccxml is used to generate input files for `SIP`_ code generator.
 
 .. _`SIP` : http://www.riverbankcomputing.com/software/sip/intro
 

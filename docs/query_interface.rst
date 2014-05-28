@@ -6,7 +6,7 @@ Declarations query API
 Introduction
 ------------
 You parsed the source files. Now you have to do some real work with the extracted
-information, right? :doc:`pygccxml <pygccxml>` provides very powerful and simple interface to
+information, right? pygccxml provides very powerful and simple interface to
 query about extracted declarations.
 
 Just an example. I want to select all member functions, which have 2 arguments.
@@ -166,11 +166,11 @@ by:
     ``RECURSIVE_DEFAULT`` variable. Its initial value is ``True``. So, if you
     don't pass ``recursive`` argument, the value of ``RECURSIVE_DEFAULT`` variable
     will be used. This "yet another level of indirection" allows you to configure
-    :doc:`pygccxml <pygccxml>` "select" functions in one place for all project.
+    pygccxml "select" functions in one place for all project.
 
   * ``allow_empty``
 
-    Python boolean object, it says :doc:`pygccxml <pygccxml>` what to do if query returns empty.
+    Python boolean object, it says pygccxml what to do if query returns empty.
 
     If ``allow_empty`` is ``False``, then exception
     ``RuntimeError( "Multi declaration query returned 0 declarations." )``
@@ -189,7 +189,7 @@ match query ``RuntimeError`` exception will be raised.
 
 Return value of ``member_functions`` is not Python list or set, but instance
 of ``mdecl_wrapper_t`` class. This class allows you to work on all selected
-objects at once. I will give an example from another project - :doc:`Py++ <../pyplusplus/pyplusplus>`.
+objects at once. I will give an example from another project - https://pypi.python.org/pypi/pyplusplus/.
 In order to help `Boost.Python`_ to manage objects life time, all functions
 should have `call policies`_. For example:
 
@@ -218,7 +218,7 @@ project:
   clone.call_policies = return_value_policy( manage_new_object )
 
 
-Another example, from :doc:`Py++ <../pyplusplus/pyplusplus>` project. Sometimes it is desirable to
+Another example, from https://pypi.python.org/pypi/pyplusplus/ project. Sometimes it is desirable to
 exclude declaration, from being exported to Python. The following code will exclude
 ``clone`` member function from being exported:
 
