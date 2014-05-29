@@ -27,9 +27,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             expected_values == enum.values,
             ("expected enum values ( '%s' ) and existings ( '%s' ) are " +
                 "different") %
-            (pprint.pformat(expected_values),
-             pprint.pformat(
-                enum.values)))
+            (pprint.pformat(expected_values), pprint.pformat(enum.values)))
 
     def test_namespace(self):
         pass  # tested in core_tester
