@@ -27,8 +27,9 @@ To update the documentation, run the following command in the root folder.
 
 You can find more details in the Makefile about this command. It will
 checkout to the gh-pages branch, build the documentation, update the
-html files in the documentation folder. Then it will commit the changes
-and push it automatically to origin/gh-pages.
+html files in the documentation folder. Then it will automatically commit the
+changes. You will then have time to review the changes and push them to
+origin/gh-pages.
 
 This script was setup and adapted from here:
 http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html
