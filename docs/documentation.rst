@@ -32,3 +32,14 @@ and push it automatically to origin/gh-pages.
 
 This script was setup and adapted from here:
 http://blog.nikhilism.com/2012/08/automatic-github-pages-generation-from.html
+
+Moving to a new version of sphinx
+---------------------------------
+
+If you update the docs with "make gh-pages", and the sphinx version you use
+is different than the previously used one, this will result in many changes
+in the files due to the version change. To prevent this, a version check
+was added in the sphinx Makefile in the root directory.
+
+When you are ready for a sphinx update, you need to update the needed version
+number in the Makefile and commit this change.
