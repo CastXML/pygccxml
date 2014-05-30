@@ -174,6 +174,12 @@ class declaration_t(object):
     def _get_name_impl(self):
         return self._name
 
+    def _on_rename(self):
+        """
+        Placeholder method, is redefined in child class.
+        """
+        pass
+
     @property
     def name(self):
         """Declaration name
@@ -186,6 +192,9 @@ class declaration_t(object):
         self._name = new_name
         self._partial_name = None
         self.cache.reset_name_based()
+        if previous_name:
+            # There was a reset of the name
+            self._on_rename()
 
     def _get_partial_name_impl(self):
         return self.name
