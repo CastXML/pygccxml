@@ -99,7 +99,7 @@ class argument_t(object):
                 'name', self.name), type=keywd.get(
                 'type', self.type), default_value=keywd.get(
                 'default_value', self.default_value), attributes=keywd.get(
-                    'attributes', self.attributes))
+                'attributes', self.attributes))
 
     def __str__(self):
         if self.ellipsis:

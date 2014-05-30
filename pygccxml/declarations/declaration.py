@@ -334,4 +334,3 @@ class declaration_t(object):
     @compiler.setter
     def compiler(self, compiler):
         self._compiler = compiler
-
