@@ -174,9 +174,6 @@ class declaration_t(object):
     def _get_name_impl(self):
         return self._name
 
-    def _on_rename(self):
-        pass
-
     @property
     def name(self):
         """Declaration name
@@ -189,8 +186,6 @@ class declaration_t(object):
         self._name = new_name
         self._partial_name = None
         self.cache.reset_name_based()
-        if previous_name:  # the was a rename and not initial "set"
-            self._on_rename()
 
     def _get_partial_name_impl(self):
         return self.name
