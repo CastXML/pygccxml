@@ -39,22 +39,23 @@ class location_t(object):
             return self.__class__.__name__ < other.__class__.__name__
         return (self.file_name, self.line) < (other.file_name, other.line)
 
-    def _get_file_name(self):
+    @property
+    def file_name(self):
+        """absolute source file name, type string"""
         return self._file_name
 
-    def _set_file_name(self, new_file_name):
+    @file_name.setter
+    def file_name(self, new_file_name):
         self._file_name = new_file_name
-    file_name = property(
-        _get_file_name,
-        _set_file_name,
-        doc="""absolute source file name, type string""")
 
-    def _get_line(self):
+    @property
+    def line(self):
+        """line number, type int"""
         return self._line
 
-    def _set_line(self, new_line):
+    @line.setter
+    def line(self, new_line):
         self._line = new_line
-    line = property(_get_line, _set_line, doc="""line number, type int""")
 
     def as_tuple(self):
         """return tuple(self.file_name, self.line)"""
@@ -173,24 +174,23 @@ class declaration_t(object):
     def _get_name_impl(self):
         return self._name
 
-    def _get_name(self):
-        return self._get_name_impl()
-
     def _on_rename(self):
         pass
 
-    def _set_name(self, new_name):
+    @property
+    def name(self):
+        """Declaration name
+           @type: str"""
+        return self._get_name_impl()
+
+    @name.setter
+    def name(self, new_name):
         previous_name = self._name
         self._name = new_name
         self._partial_name = None
         self.cache.reset_name_based()
         if previous_name:  # the was a rename and not initial "set"
             self._on_rename()
-
-    name = property(
-        _get_name,
-        _set_name, doc="""Declaration name
-            @type: str""")
 
     def _get_partial_name_impl(self):
         return self.name
@@ -204,20 +204,22 @@ class declaration_t(object):
             self._partial_name = self._get_partial_name_impl()
         return self._partial_name
 
-    def _get_parent(self):
+    @property
+    def parent(self):
+        """Reference to parent declaration
+           @type: declaration_t"""
         return self._parent
 
-    def _set_parent(self, new_parent):
+    @parent.setter
+    def parent(self, new_parent):
         if new_parent:
             assert(isinstance(new_parent, declaration_t))
         self._parent = new_parent
-    parent = property(
-        _get_parent,
-        _set_parent,
-        doc="""Reference to parent declaration
-            @type: declaration_t""")
 
-    def __get_top_parent(self):
+    @property
+    def top_parent(self):
+        """reference to top parent declaration
+           @type: declaration_t"""
         parent = self.parent
         me = self
         while True:
@@ -226,81 +228,71 @@ class declaration_t(object):
             else:
                 me = parent
                 parent = me.parent
-    top_parent = property(
-        __get_top_parent,
-        doc="""reference to top parent declaration
-            @type: declaration_t""")
 
-    def _get_location(self):
+    @property
+    def location(self):
+        """Location of the declaration within source file
+           @type: :class:`location_t`"""
         return self._location
 
-    def _set_location(self, new_location):
+    @location.setter
+    def location(self, new_location):
         self._location = new_location
-    location = property(
-        _get_location,
-        _set_location,
-        doc="""Location of the declaration within source file
-            @type: :class:`location_t`""")
 
-    def _get_is_artificial(self):
+    @property
+    def is_artificial(self):
+        """Describes whether declaration is compiler generated or not
+           @type: bool"""
         return self._is_artificial
 
-    def _set_is_artificial(self, new_artificial):
+    @is_artificial.setter
+    def is_artificial(self, new_artificial):
         self._is_artificial = new_artificial
-    is_artificial = property(
-        _get_is_artificial,
-        _set_is_artificial,
-        doc="""Describes whether declaration is compiler generated or not
-            @type: bool""")
 
     def get_mangled_name(self):
         return self._mangled
 
-    def _get_mangled(self):
+    @property
+    def mangled(self):
+        """GCCXML generated unique declaration name
+           @type: str"""
         return self.get_mangled_name()
 
-    def _set_mangled(self, mangled):
+    @mangled.setter
+    def mangled(self, mangled):
         self._mangled = mangled
-    mangled = property(
-        _get_mangled,
-        _set_mangled,
-        doc="""GCCXML generated unique declaration name
-            @type: str""")
 
-    def _get_demangled(self):
+    @property
+    def demangled(self):
+        """declaration name, reconstructed from GCCXML generated
+           unique name
+           @type: str"""
         return self._demangled
 
-    def _set_demangled(self, demangled):
+    @demangled.setter
+    def demangled(self, demangled):
         self._demangled = demangled
-    demangled = property(
-        _get_demangled,
-        _set_demangled,
-        doc="""declaration name, reconstructed from GCCXML generated
-            unique name
-            @type: str""")
 
-    def _get_decorated_name(self):
+    @property
+    def decorated_name(self):
+        """unique declaration name extracted from a binary file
+           ( .map, .dll, .so, etc )
+           @type: str"""
         return self._decorated_name
 
-    def _set_decorated_name(self, decorated_name):
+    @decorated_name.setter
+    def decorated_name(self, decorated_name):
         self._decorated_name = decorated_name
-    decorated_name = property(
-        _get_decorated_name,
-        _set_decorated_name,
-        doc="""unique declaration name extracted from a binary file
-            ( .map, .dll, .so, etc )
-            @type: str""")
 
-    def _get_attributes(self):
+    @property
+    def attributes(self):
+        """GCCXML attributes, set using __attribute__((gccxml("...")))
+           @type: str"""
         return self._attributes
 
-    def _set_attributes(self, attributes):
+    @attributes.setter
+    def attributes(self, attributes):
         self._attributes = attributes
-    attributes = property(
-        _get_attributes,
-        _set_attributes,
-        doc="""GCCXML attributes, set using __attribute__((gccxml("...")))
-            @type: str""")
 
     def create_decl_string(self, with_defaults=True):
         return algorithm.full_name(self, with_defaults)
@@ -329,13 +321,13 @@ class declaration_t(object):
         print(self)
         raise NotImplementedError()
 
-    def _get_compiler(self):
+    @property
+    def compiler(self):
+        """compiler name + version
+           @type: str"""
         return self._compiler
 
-    def _set_compiler(self, compiler):
+    @compiler.setter
+    def compiler(self, compiler):
         self._compiler = compiler
-    compiler = property(
-        _get_compiler,
-        _set_compiler,
-        doc="""compiler name + version
-            @type: str""")
+
