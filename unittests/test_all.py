@@ -62,6 +62,7 @@ import gccxml10185_tester
 import inline_specifier_tester
 import from_future_import_tester
 import pep8_tester
+import example_tester
 
 testers = [
     # , demangled_tester # failing right now
@@ -117,6 +118,7 @@ testers = [
     inline_specifier_tester,
     from_future_import_tester,
     pep8_tester
+    example_tester
 ]
 
 if 'posix' in os.name:

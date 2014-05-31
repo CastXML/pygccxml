@@ -25,7 +25,7 @@ config = parser.gccxml_configuration_t(
     gccxml_path=gccxml_09_path, compiler='gcc')
 
 # Parsing source file
-decls = parser.parse(['example.hpp'], config)
+decls = parser.parse([this_module_dir_path + '/example.hpp'], config)
 global_ns = declarations.get_global_namespace(decls)
 
 # Get object that describes unittests namespace
