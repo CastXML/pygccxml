@@ -6,14 +6,14 @@
 
 from distutils.core import setup
 
-setup( name = "pygccxml",
-       version = "v1.5.2",
-       description = "GCC-XML generated file reader",
-       author = "Roman Yakovenko",
-       author_email = "roman.yakovenko@gmail.com",
-       packages = [ 'pygccxml',
-                    'pygccxml.declarations',
-                    'pygccxml.parser',
-                    'pygccxml.binary_parsers',
-                    'pygccxml.utils' ]
-)
+setup(name="pygccxml",
+      version="v1.5.2",
+      description="GCC-XML generated file reader",
+      author="GCC-XML maintainers",
+      author_email="gccxml@gccxml.org",
+      packages=['pygccxml',
+                'pygccxml.declarations',
+                'pygccxml.parser',
+                'pygccxml.binary_parsers',
+                'pygccxml.utils']
+      )
