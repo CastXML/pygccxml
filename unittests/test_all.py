@@ -117,7 +117,7 @@ testers = [
     gccxml10185_tester,
     inline_specifier_tester,
     from_future_import_tester,
-    pep8_tester
+    pep8_tester,
     example_tester
 ]
 
