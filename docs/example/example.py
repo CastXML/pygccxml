@@ -28,13 +28,13 @@ config = parser.gccxml_configuration_t(
 decls = parser.parse(['example.hpp'], config)
 global_ns = declarations.get_global_namespace(decls)
 
-# Get object that describes unittests namespace
+# Get object that describes unittests namespace
 unittests = global_ns.namespace('unittests')
 
 print('"unittests" declarations: \n')
 declarations.print_declarations(unittests)
 
-# Print all base and derived class names
+# Print all base and derived class names
 for class_ in unittests.classes():
     print('class "%s" hierarchy information:' % class_.name)
     print('\tbase classes   : ', repr([
@@ -45,7 +45,7 @@ for class_ in unittests.classes():
 
 # Pygccxml has very powerfull query api:
 
-# Select multiple declarations
+# Select multiple declarations
 run_functions = unittests.member_functions('run')
 print('the namespace contains %d "run" member functions' % len(run_functions))
 print('they are: ')
