@@ -353,7 +353,12 @@ class calldef_t(declaration.declaration_t):
         demangled = demangled[len(parent_fname):]
         return demangled
 
-    def _get_demangled_name(self):
+    @property
+    def demangled_name(self):
+
+        """returns function demangled name. It can help you to deal with
+            function template instantiations"""
+
         from . import type_traits
 
         if not self.demangled:
@@ -408,11 +413,6 @@ class calldef_t(declaration.declaration_t):
         # if -1 == found:
         self._demangled_name = ''
         return self.name
-
-    demangled_name = property(
-        _get_demangled_name,
-        doc="""returns function demangled name. It can help you to deal with
-            "function template instantiations""")
 
     def i_depend_on_them(self, recursive=True):
         report_dependency = lambda * \

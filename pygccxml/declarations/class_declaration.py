@@ -94,41 +94,46 @@ class hierarchy_info_t(object):
             other.access,
             self.is_virtual)
 
-    def _get_related_class(self):
+    @property
+    def related_class(self):
+        "reference to base or derived :class:`class <class_t>`"
         return self._related_class
 
-    def _set_related_class(self, new_related_class):
+    @related_class.setter
+    def related_class(self, new_related_class):
         if new_related_class:
             assert(isinstance(new_related_class, class_t))
         self._related_class = new_related_class
-    related_class = property(
-        _get_related_class,
-        _set_related_class,
-        doc="reference to base or derived :class:`class <class_t>`")
 
-    def _get_access(self):
+    @property
+    def access(self):
         return self._access
 
-    def _set_access(self, new_access):
+    @access.setter
+    def access(self, new_access):
         assert(new_access in ACCESS_TYPES.ALL)
         self._access = new_access
-    access = property(_get_access, _set_access)
-    access_type = property(
-        _get_access,
-        _set_access,
-        doc="describes :class:`hierarchy type <ACCESS_TYPES>`")
+
+    # TODO: Why is there an access_type / access which are the same ?
+    @property
+    def access_type(self):
+        "describes :class:`hierarchy type <ACCESS_TYPES>`"
+        return self.access
+
+    @access_type.setter
+    def access_type(self, new_access_type):
+        self.access = new_access_type
 
     # TODO: check whether GCC XML support this and if so parser this
     # information
-    def _get_is_virtual(self):
+    @property
+    def is_virtual(self):
+        "indicates whether the inheritance is virtual or not"
         return self._is_virtual
 
-    def _set_is_virtual(self, new_is_virtual):
+    @is_virtual.setter
+    def is_virtual(self, new_is_virtual):
         self._is_virtual = new_is_virtual
-    is_virtual = property(
-        _get_is_virtual,
-        _set_is_virtual,
-        doc="indicates whether the inheritance is virtual or not")
 
 
 class class_declaration_t(declaration.declaration_t):
@@ -150,15 +155,14 @@ class class_declaration_t(declaration.declaration_t):
     def i_depend_on_them(self, recursive=True):
         return []
 
-    def _get_aliases(self):
+    @property
+    def aliases(self):
+        "List of :class:`aliases <typedef_t>` to this instance"
         return self._aliases
 
-    def _set_aliases(self, new_aliases):
+    @aliases.setter
+    def aliases(self, new_aliases):
         self._aliases = new_aliases
-    aliases = property(
-        _get_aliases,
-        _set_aliases,
-        doc="List of :class:`aliases <typedef_t>` to this instance")
 
     @property
     def container_traits(self):
@@ -284,27 +288,25 @@ class class_t(scopedef.scopedef_t):
     def __hash__(self):
         return hash(self.class_type)
 
-    def _get_class_type(self):
+    @property
+    def class_type(self):
+        "describes class :class:`type <CLASS_TYPES>`"
         return self._class_type
 
-    def _set_class_type(self, new_class_type):
+    @class_type.setter
+    def class_type(self, new_class_type):
         if new_class_type:
             assert(new_class_type in CLASS_TYPES.ALL)
         self._class_type = new_class_type
-    class_type = property(
-        _get_class_type,
-        _set_class_type,
-        doc="describes class :class:`type <CLASS_TYPES>`")
 
-    def _get_bases(self):
+    @property
+    def bases(self):
+        "list of :class:`base classes <hierarchy_info_t>`"
         return self._bases
 
-    def _set_bases(self, new_bases):
+    @bases.setter
+    def bases(self, new_bases):
         self._bases = new_bases
-    bases = property(
-        _get_bases,
-        _set_bases,
-        doc="list of :class:`base classes <hierarchy_info_t>`")
 
     @property
     def recursive_bases(self):
@@ -320,15 +322,14 @@ class class_t(scopedef.scopedef_t):
             self._recursive_bases = all_bases
         return self._recursive_bases
 
-    def _get_derived(self):
+    @property
+    def derived(self):
+        "list of :class:`derived classes <hierarchy_info_t>`"
         return self._derived
 
-    def _set_derived(self, new_derived):
+    @derived.setter
+    def derived(self, new_derived):
         self._derived = new_derived
-    derived = property(
-        _get_derived,
-        _set_derived,
-        doc="list of :class:`derived classes <hierarchy_info_t>`")
 
     @property
     def recursive_derived(self):
@@ -344,75 +345,68 @@ class class_t(scopedef.scopedef_t):
             self._recursive_derived = all_derived
         return self._recursive_derived
 
-    def _get_is_abstract(self):
+    @property
+    def is_abstract(self):
+        "describes whether class abstract or not"
         return self._is_abstract
 
-    def _set_is_abstract(self, is_abstract):
+    @is_abstract.setter
+    def is_abstract(self, is_abstract):
         self._is_abstract = is_abstract
-    is_abstract = property(
-        _get_is_abstract,
-        _set_is_abstract,
-        doc="describes whether class abstract or not")
 
-    def _get_public_members(self):
+    @property
+    def public_members(self):
+        "list of all public :class:`members <declarationt_>`"
         return self._public_members
 
-    def _set_public_members(self, new_public_members):
+    @public_members.setter
+    def public_members(self, new_public_members):
         self._public_members = new_public_members
-    public_members = property(
-        _get_public_members,
-        _set_public_members,
-        doc="list of all public :class:`members <declarationt_>`")
 
-    def _get_private_members(self):
+    @property
+    def private_members(self):
+        "list of all private :class:`members <declarationt_>`"
         return self._private_members
 
-    def _set_private_members(self, new_private_members):
+    @private_members.setter
+    def private_members(self, new_private_members):
         self._private_members = new_private_members
-    private_members = property(
-        _get_private_members,
-        _set_private_members,
-        doc="list of all private :class:`members <declarationt_>`")
 
-    def _get_protected_members(self):
+    @property
+    def protected_members(self):
+        "list of all protected :class:`members <declarationt_>`"
         return self._protected_members
 
-    def _set_protected_members(self, new_protected_members):
+    @protected_members.setter
+    def protected_members(self, new_protected_members):
         self._protected_members = new_protected_members
-    protected_members = property(
-        _get_protected_members,
-        _set_protected_members,
-        doc="list of all protected :class:`members <declarationt_>`")
 
-    def _get_aliases(self):
+    @property
+    def aliases(self):
+        "List of :class:`aliases <typedef_t>` to this instance"
         return self._aliases
 
-    def _set_aliases(self, new_aliases):
+    @aliases.setter
+    def aliases(self, new_aliases):
         self._aliases = new_aliases
-    aliases = property(
-        _get_aliases,
-        _set_aliases,
-        doc="List of :class:`aliases <typedef_t>` to this instance")
 
-    def _get_byte_size(self):
+    @property
+    def byte_size(self):
+        "Size of this class in bytes @type: int"
         return self._byte_size
 
-    def _set_byte_size(self, new_byte_size):
+    @byte_size.setter
+    def byte_size(self, new_byte_size):
         self._byte_size = new_byte_size
-    byte_size = property(
-        _get_byte_size,
-        _set_byte_size,
-        doc="Size of this class in bytes @type: int")
 
-    def _get_byte_align(self):
+    @property
+    def byte_align(self):
+        "Alignment of this class in bytes @type: int"
         return self._byte_align
 
-    def _set_byte_align(self, new_byte_align):
+    @byte_align.setter
+    def byte_align(self, new_byte_align):
         self._byte_align = new_byte_align
-    byte_align = property(
-        _get_byte_align,
-        _set_byte_align,
-        doc="Alignment of this class in bytes @type: int")
 
     def _get_declarations_impl(self):
         return self.get_members()
