@@ -55,10 +55,15 @@ class enumeration_t(declaration.declaration_t):
         """implementation details"""
         return [self.values]
 
-    def _get_values(self):
+    @property
+    def values(self):
+        """A list of tuples (valname(str), valnum(int)) that
+            contain the enumeration values.
+            @type: list"""
         return copy.copy(self._values)
 
-    def _set_values(self, values):
+    @values.setter
+    def values(self, values):
         self._values = []
         # None is treated like an empty list
         if (values is None):
@@ -81,11 +86,6 @@ class enumeration_t(declaration.declaration_t):
             else:
                 raise ValueError(
                     "'values' contains an invalid item: %s" % item)
-    values = property(_get_values,
-                      _set_values,
-                      doc="""A list of tuples (valname(str), valnum(int)) that
-                      contain the enumeration values.
-                      @type: list""")
 
     def append_value(self, valuename, valuenum=None):
         """Append another enumeration value to the `enum`.
@@ -134,22 +134,20 @@ class enumeration_t(declaration.declaration_t):
     def i_depend_on_them(self, recursive=True):
         return []
 
-    def _get_byte_size(self):
+    @property
+    def byte_size(self):
+        "Size of this class in bytes @type: int"
         return self._byte_size
 
-    def _set_byte_size(self, new_byte_size):
+    @byte_size.setter
+    def byte_size(self, new_byte_size):
         self._byte_size = new_byte_size
-    byte_size = property(
-        _get_byte_size,
-        _set_byte_size,
-        doc="Size of this class in bytes @type: int")
 
-    def _get_byte_align(self):
+    @property
+    def byte_align(self):
+        "Alignment of this class in bytes @type: int"
         return self._byte_align
 
-    def _set_byte_align(self, new_byte_align):
+    @byte_align.setter
+    def byte_align(self, new_byte_align):
         self._byte_align = new_byte_align
-    byte_align = property(
-        _get_byte_align,
-        _set_byte_align,
-        doc="Alignment of this class in bytes @type: int")

@@ -63,12 +63,13 @@ class dependency_info_t(object):
     def depend_on_it(self):
         return self._depend_on_it
 
-    def _get_access_type(self):
+    @property
+    def access_type(self):
         return self._access_type
 
-    def _set_access_type(self, access_type):
+    @access_type.setter
+    def access_type(self, access_type):
         self._access_type = access_type
-    access_type = property(_get_access_type, _set_access_type)
 
     def __str__(self):
         return 'declaration "%s" depends( %s ) on "%s" ' \

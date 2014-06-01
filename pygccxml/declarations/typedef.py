@@ -32,15 +32,14 @@ class typedef_t(declaration.declaration_t):
     def __hash__(self):
         return super.__hash__(self)
 
-    def _get_type(self):
+    @property
+    def type(self):
+        """reference to the original :class:`type <type_t>`"""
         return self._type
 
-    def _set_type(self, type):
+    @type.setter
+    def type(self, type):
         self._type = type
-    type = property(
-        _get_type,
-        _set_type,
-        doc="reference to the original :class:`type <type_t>`")
 
     def i_depend_on_them(self, recursive=True):
         return [dependencies.dependency_info_t(self, self.type)]

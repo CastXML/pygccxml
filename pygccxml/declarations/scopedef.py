@@ -91,10 +91,10 @@ class scopedef_t(declaration.declaration_t):
         self._all_decls = None
         self._all_decls_not_recursive = None
 
-    def _get_logger(self):
+    @property
+    def _logger(self):
+        """reference to :attr:`pygccxml.utils.loggers.queries_engine` logger"""
         return utils.loggers.queries_engine
-    dtext = "reference to :attr:`pygccxml.utils.loggers.queries_engine` logger"
-    _logger = property(_get_logger, doc=(dtext))
 
     def _get__cmp__scope_items(self):
         """implementation details"""
@@ -132,14 +132,13 @@ class scopedef_t(declaration.declaration_t):
     def _get_declarations_impl(self):
         raise NotImplementedError()
 
-    def _get_declarations(self):
+    @property
+    def declarations(self):
+        """list of children :class:`declarations <declaration_t>`"""
         if self._optimized:
             return self._all_decls_not_recursive
         else:
             return self._get_declarations_impl()
-    declarations = property(
-        _get_declarations,
-        doc="list of children :class:`declarations <declaration_t>`")
 
     def remove_declaration(self, decl):
         raise NotImplementedError()

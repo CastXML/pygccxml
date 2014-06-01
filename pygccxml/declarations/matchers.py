@@ -189,10 +189,12 @@ class declaration_matcher_t(matcher_base_t):
             if not os.path.isabs(self.header_file):
                 raise RuntimeError("Path to header file should be absolute!")
 
-    def _get_name(self):
+    @property
+    def name(self):
         return self.__name
 
-    def _set_name(self, name):
+    @name.setter
+    def name(self, name):
         self.__name = name
         if not self.__name:
             self.__opt_is_tmpl_inst = None
@@ -218,8 +220,6 @@ class declaration_matcher_t(matcher_base_t):
                 else:
                     self.__opt_is_full_name = False
                     self.__decl_name_only = self.__name
-
-    name = property(_get_name, _set_name)
 
     def __str__(self):
         msg = []
@@ -288,9 +288,9 @@ class declaration_matcher_t(matcher_base_t):
     def is_full_name(self):
         return self.__opt_is_full_name
 
-    def _get_decl_name_only(self):
+    @property
+    def decl_name_only(self):
         return self.__decl_name_only
-    decl_name_only = property(_get_decl_name_only)
 
 
 class variable_matcher_t(declaration_matcher_t):
