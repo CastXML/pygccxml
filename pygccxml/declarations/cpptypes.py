@@ -72,6 +72,7 @@ class type_t(object):
     def byte_size(self, new_byte_size):
         self._byte_size = new_byte_size
 
+    @property
     def byte_align(self):
         "Alignment of this type in bytes @type: int"
         return self._byte_align
