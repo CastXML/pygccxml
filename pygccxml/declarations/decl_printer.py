@@ -50,47 +50,53 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             verbose=self.__verbose,
             writer=self.writer)
 
-    def _get_recursive(self):
+    @property
+    def recursive(self):
         return self.__recursive
 
-    def _set_recursive(self, recursive):
+    @recursive.setter
+    def recursive(self, recursive):
         self.__recursive = recursive
-    recursive = property(_get_recursive, _set_recursive)
 
-    def _get_verbose(self):
+    @property
+    def verbose(self):
         return self.__verbose
 
-    def _set_verbose(self, verbose):
+    @verbose.setter
+    def verbose(self, verbose):
         self.__verbose = verbose
-    verbose = property(_get_verbose, _set_verbose)
 
-    def _get_level(self):
+    @property
+    def level(self):
         return self.__level
 
-    def _set_level(self, lvl):
-        self.__level = lvl
-    level = property(_get_level, _set_level)
+    @level.setter
+    def level(self, level):
+        self.__level = level
 
-    def _get_print_details(self):
+    @property
+    def print_details(self):
         return self.__print_details
 
-    def _set_print_details(self, details):
+    @print_details.setter
+    def print_details(self, details):
         self.__print_details = details
-    print_details = property(_get_print_details, _set_print_details)
 
-    def _get_writer(self):
+    @property
+    def writer(self):
         return self.__writer
 
-    def _set_writer(self, writer):
+    @writer.setter
+    def writer(self, writer):
         self.__writer = writer
-    writer = property(_get_writer, _set_writer)
 
-    def _get_inst(self):
+    @property
+    def instance(self):
         return self.__inst
 
-    def _set_inst(self, inst):
+    @instance.setter
+    def instance(self, inst):
         self.__inst = inst
-    instance = property(_get_inst, _set_inst)
 
     def is_builtin_decl(self, decl):
         if not decl.name.startswith('__builtin_'):

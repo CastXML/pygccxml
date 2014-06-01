@@ -63,25 +63,22 @@ class type_t(object):
         answer = self._clone_impl()
         return answer
 
-    def _get_byte_size(self):
+    @property
+    def byte_size(self):
+        "Size of this type in bytes @type: int"
         return self._byte_size
 
-    def _set_byte_size(self, new_byte_size):
+    @byte_size.setter
+    def byte_size(self, new_byte_size):
         self._byte_size = new_byte_size
-    byte_size = property(
-        _get_byte_size,
-        _set_byte_size,
-        doc="Size of this type in bytes @type: int")
 
-    def _get_byte_align(self):
+    def byte_align(self):
+        "Alignment of this type in bytes @type: int"
         return self._byte_align
 
-    def _set_byte_align(self, new_byte_align):
+    @byte_align.setter
+    def byte_align(self, new_byte_align):
         self._byte_align = new_byte_align
-    byte_align = property(
-        _get_byte_align,
-        _set_byte_align,
-        doc="Alignment of this type in bytes @type: int")
 
 
 # There are cases when GCC-XML reports something like this
@@ -492,16 +489,14 @@ class compound_t(type_t):
         type_t.__init__(self)
         self._base = base
 
-    def _get_base(self):
+    @property
+    def base(self):
+        "reference to internal/base class"
         return self._base
 
-    def _set_base(self, new_base):
+    @base.setter
+    def base(self, new_base):
         self._base = new_base
-
-    base = property(
-        _get_base,
-        _set_base,
-        doc="reference to internal/base class")
 
 
 class volatile_t(compound_t):
@@ -593,15 +588,16 @@ class array_t(compound_t):
         compound_t.__init__(self, base)
         self._size = size
 
-    def _get_size(self):
+    @property
+    def size(self):
+        "returns array size"
         return self._size
 
-    # sometimes there is a need to update the size of the array
-    def _set_size(self, size):
+    @size.setter
+    def size(self, size):
+        """sometimes there is a need to update the size of the array"""
         self.cache.reset()
         self._size = size
-    size = property(_get_size, _set_size,
-                    doc="returns array size")
 
     def build_decl_string(self, with_defaults=True):
         # return self.base.build_decl_string(with_defaults) + '[%d]' %
@@ -639,25 +635,23 @@ class calldef_type_t(object):
             arguments_types = []
         self._arguments_types = arguments_types
 
-    def _get_return_type(self):
+    @property
+    def return_type(self):
+        """reference to :class:`return type <type_t>`"""
         return self._return_type
 
-    def _set_return_type(self, new_return_type):
+    @return_type.setter
+    def return_type(self, new_return_type):
         self._return_type = new_return_type
-    return_type = property(
-        _get_return_type,
-        _set_return_type,
-        doc="reference to :class:`return type <type_t>`")
 
-    def _get_arguments_types(self):
+    @property
+    def arguments_types(self):
+        """list of argument :class:`types <type_t>`"""
         return self._arguments_types
 
-    def _set_arguments_types(self, new_arguments_types):
+    @arguments_types.setter
+    def arguments_types(self, new_arguments_types):
         self._arguments_types = new_arguments_types
-    arguments_types = property(
-        _get_arguments_types,
-        _set_arguments_types,
-        doc="list of argument :class:`types <type_t>`")
 
     @property
     def has_ellipsis(self):
@@ -720,10 +714,7 @@ class free_function_type_t(type_t, calldef_type_t):
         return free_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name': typedef_name,
             'return_type': self.return_type.build_decl_string(with_defaults),
-            'arguments': ','.join(
-                map(
-                    f,
-                    self.arguments_types))}
+            'arguments': ','.join(map(f, self.arguments_types))}
 
 
 class member_function_type_t(type_t, calldef_type_t):
@@ -746,25 +737,23 @@ class member_function_type_t(type_t, calldef_type_t):
         self._has_const = has_const
         self._class_inst = class_inst
 
-    def _get_has_const(self):
+    @property
+    def has_const(self):
+        """describes, whether function has const modifier"""
         return self._has_const
 
-    def _set_has_const(self, has_const):
+    @has_const.setter
+    def has_const(self, has_const):
         self._has_const = has_const
-    has_const = property(
-        _get_has_const,
-        _set_has_const,
-        doc="describes, whether function has const modifier")
 
-    def _get_class_inst(self):
+    @property
+    def class_inst(self):
+        """reference to parent :class:`class <declaration_t>`"""
         return self._class_inst
 
-    def _set_class_inst(self, class_inst):
+    @class_inst.setter
+    def class_inst(self, class_inst):
         self._class_inst = class_inst
-    class_inst = property(
-        _get_class_inst,
-        _set_class_inst,
-        doc="reference to parent :class:`class <declaration_t>`")
 
     # TODO: create real typedef
     def create_typedef(
@@ -854,15 +843,14 @@ class member_variable_type_t(compound_t):
         compound_t.__init__(self, class_inst)
         self._mv_type = variable_type
 
-    def _get_variable_type(self):
+    @property
+    def variable_type(self):
+        """describes member variable :class:`type <type_t>`"""
         return self._mv_type
 
-    def _set_variable_type(self, new_type):
+    @variable_type.setter
+    def variable_type(self, new_type):
         self._mv_type = new_type
-    variable_type = property(
-        _get_variable_type,
-        _set_variable_type,
-        doc="describes member variable :class:`type <type_t>`")
 
     def build_decl_string(self, with_defaults=True):
         return self.NAME_TEMPLATE % {
@@ -887,15 +875,14 @@ class declarated_t(type_t):
         type_t.__init__(self)
         self._declaration = declaration
 
-    def _get_declaration(self):
+    @property
+    def declaration(self):
+        "reference to :class:`declaration_t`"
         return self._declaration
 
-    def _set_declaration(self, new_declaration):
+    @declaration.setter
+    def declaration(self, new_declaration):
         self._declaration = new_declaration
-    declaration = property(
-        _get_declaration,
-        _set_declaration,
-        doc="reference to :class:`declaration_t`")
 
     def build_decl_string(self, with_defaults=True):
         if with_defaults:
@@ -943,17 +930,27 @@ class type_qualifiers_t(object):
         return self.has_static < other.has_static \
             and self.has_mutable < other.has_mutable
 
-    def _get_has_static(self):
+    @property
+    def has_static(self):
         return self._has_static
 
-    def _set_has_static(self, has_static):
+    @has_static.setter
+    def has_static(self, has_static):
         self._has_static = has_static
-    has_static = property(_get_has_static, _set_has_static)
-    has_extern = has_static  # synonim to static
 
-    def _get_has_mutable(self):
+    @property
+    def has_extern(self):
+        """synonym to static"""
+        return self.has_static
+
+    @has_extern.setter
+    def has_extern(self, has_extern):
+        self.has_static = has_extern
+
+    @property
+    def has_mutable(self):
         return self._has_mutable
 
-    def _set_has_mutable(self, has_mutable):
+    @has_mutable.setter
+    def has_mutable(self, has_mutable):
         self._has_mutable = has_mutable
-    has_mutable = property(_get_has_mutable, _set_has_mutable)
