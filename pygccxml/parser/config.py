@@ -63,14 +63,13 @@ class parser_configuration_t(object):
     def clone(self):
         raise NotImplementedError(self.__class__.__name__)
 
-    def __get_working_directory(self):
+    @property
+    def working_directory(self):
         return self.__working_directory
 
-    def __set_working_directory(self, working_dir):
+    @working_directory.setter
+    def working_directory(self, working_dir):
         self.__working_directory = working_dir
-    working_directory = property(
-        __get_working_directory,
-        __set_working_directory)
 
     @property
     def include_paths(self):
@@ -87,27 +86,24 @@ class parser_configuration_t(object):
         """list of "undefine" directives """
         return self.__undefine_symbols
 
-    def get_compiler(self):
+    @property
+    def compiler(self):
         """get compiler name to simulate"""
         return self.__compiler
 
-    def set_compiler(self, compiler):
+    @compiler.setter
+    def compiler(self, compiler):
         """set compiler name to simulate"""
         self.__compiler = compiler
-    compiler = property(
-        get_compiler,
-        set_compiler,
-        doc="compiler name to simulate")
 
-    def __get_cflags(self):
+    @property
+    def cflags(self):
+        "additional flags to pass to compiler"
         return self.__cflags
 
-    def __set_cflags(self, val):
+    @cflags.setter
+    def cflags(self, val):
         self.__cflags = val
-    cflags = property(
-        __get_cflags,
-        __set_cflags,
-        doc="additional flags to pass to compiler")
 
     def append_cflags(self, val):
         self.__cflags = self.__cflags + ' ' + val
@@ -172,15 +168,14 @@ class gccxml_configuration_t(parser_configuration_t):
     def clone(self):
         return copy.deepcopy(self)
 
-    def __get_gccxml_path(self):
+    @property
+    def gccxml_path(self):
+        "gccxml binary location"
         return self.__gccxml_path
 
-    def __set_gccxml_path(self, new_path):
+    @gccxml_path.setter
+    def gccxml_path(self, new_path):
         self.__gccxml_path = new_path
-    gccxml_path = property(
-        __get_gccxml_path,
-        __set_gccxml_path,
-        doc="gccxml binary location")
 
     @property
     def start_with_declarations(self):
@@ -188,17 +183,15 @@ class gccxml_configuration_t(parser_configuration_t):
         declaration tree"""
         return self.__start_with_declarations
 
-    def __get_ignore_gccxml_output(self):
+    @property
+    def ignore_gccxml_output(self):
+        """set this property to True, if you want pygccxml to ignore any
+            error warning that comes from gccxml"""
         return self.__ignore_gccxml_output
 
-    def __set_ignore_gccxml_output(self, val=True):
+    @ignore_gccxml_output.setter
+    def ignore_gccxml_output(self, val=True):
         self.__ignore_gccxml_output = val
-    ignore_gccxml_output = property(
-        __get_ignore_gccxml_output,
-        __set_ignore_gccxml_output,
-        doc=(
-            "set this property to True, if you want pygccxml to ignore any" +
-            "error\\warning that comes from gccxml"))
 
     def raise_on_wrong_settings(self):
         super(gccxml_configuration_t, self).raise_on_wrong_settings()
@@ -256,7 +249,7 @@ def load_gccxml_configuration(configuration, **defaults):
 
     :rtype: :class:`.gccxml_configuration_t`
 
-    Configuration file sceleton::
+    Configuration file skeleton::
 
        [gccxml]
        #path to gccxml executable file - optional, if not provided,

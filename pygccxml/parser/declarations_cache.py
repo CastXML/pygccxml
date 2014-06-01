@@ -106,12 +106,13 @@ class record_t(object):
         self.__declarations = declarations
         self.__was_hit = True  # Track if there was a cache hit
 
-    def _get_was_hit(self):
+    @property
+    def was_hit(self):
         return self.__was_hit
 
-    def _set_was_hit(self, was_hit):
+    @was_hit.setter
+    def was_hit(self, was_hit):
         self.__was_hit = was_hit
-    was_hit = property(_get_was_hit, _set_was_hit)
 
     def key(self):
         return (self.__source_signature, self.__config_signature)
@@ -122,25 +123,25 @@ class record_t(object):
             file_signature(source_file),
             configuration_signature(configuration))
 
-    def __source_signature(self):
+    @property
+    def source_signature(self):
         return self.__source_signature
-    source_signature = property(__source_signature)
 
-    def __config_signature(self):
+    @property
+    def config_signature(self):
         return self.__config_signature
-    config_signature = property(__config_signature)
 
-    def __included_files(self):
+    @property
+    def included_files(self):
         return self.__included_files
-    included_files = property(__included_files)
 
-    def __included_files_signature(self):
+    @property
+    def included_files_signature(self):
         return self.__included_files_signature
-    included_files_signature = property(__included_files_signature)
 
-    def __declarations(self):
+    @property
+    def declarations(self):
         return self.__declarations
-    declarations = property(__declarations)
 
 
 class file_cache_t(cache_base_t):

@@ -47,55 +47,51 @@ class variable_t(declaration.declaration_t):
     def __hash__(self):
         return super.__hash__(self)
 
-    def _get_type(self):
+    @property
+    def type(self):
+        """reference to the variable :class:`type <type_t>`"""
         return self._type
 
-    def _set_type(self, type):
+    @type.setter
+    def type(self, type):
         self._type = type
-    type = property(
-        _get_type,
-        _set_type,
-        doc="reference to the variable :class:`type <type_t>`")
 
-    def _get_type_qualifiers(self):
+    @property
+    def type_qualifiers(self):
+        """reference to the :class:`type_qualifiers_t` instance"""
         return self._type_qualifiers
 
-    def _set_type_qualifiers(self, type_qualifiers):
+    @type_qualifiers.setter
+    def type_qualifiers(self, type_qualifiers):
         self._type_qualifiers = type_qualifiers
-    type_qualifiers = property(
-        _get_type_qualifiers,
-        _set_type_qualifiers,
-        doc="reference to the :class:`type_qualifiers_t` instance")
 
-    def _get_value(self):
+    @property
+    def value(self):
+        """string, that contains the variable value"""
         return self._value
 
-    def _set_value(self, value):
+    @value.setter
+    def value(self, value):
         self._value = value
-    value = property(
-        _get_value,
-        _set_value,
-        doc="string, that contains the variable value")
 
-    def _get_bits(self):
+    @property
+    def bits(self):
+        """integer, that contains information about how many bit takes
+            bit field"""
         return self._bits
 
-    def _set_bits(self, bits):
+    @bits.setter
+    def bits(self, bits):
         self._bits = bits
-    bits = property(
-        _get_bits, _set_bits, doc=(
-            "integer, that contains information about how many bit takes " +
-            "bit field"))
 
-    def _get_byte_offset(self):
+    @property
+    def byte_offset(self):
+        """integer, offset of the field from the beginning of class."""
         return self._byte_offset
 
-    def _set_byte_offset(self, byte_offset):
+    @byte_offset.setter
+    def byte_offset(self, byte_offset):
         self._byte_offset = byte_offset
-    byte_offset = property(
-        _get_byte_offset,
-        _set_byte_offset,
-        doc="integer, offset of the field from the beginning of class.")
 
     @property
     def access_type(self):

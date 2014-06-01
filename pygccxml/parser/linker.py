@@ -28,15 +28,16 @@ class linker_t(decl_visitor_t, type_visitor_t, object):
                 self.__compiler = d.compiler
                 break
 
-    def _get_inst(self):
+    @property
+    def instance(self):
         return self.__inst
 
-    def _set_inst(self, inst):
+    @instance.setter
+    def instance(self, inst):
         self.__inst = inst
         # use inst, to reduce attribute access time
         if isinstance(inst, declaration_t) and inst.location:
             inst.location.file_name = self.__files[inst.location.file_name]
-    instance = property(_get_inst, _set_inst)
 
     def __link_type(self, type_id):
         if type_id is None:
