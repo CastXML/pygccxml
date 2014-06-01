@@ -133,16 +133,15 @@ class argument_t(object):
             and self.default_value < other.default_value \
             and self.type < other.type
 
-    def _get_name(self):
+    @property
+    def name(self):
+        """Argument name.
+            @type: str"""
         return self._name
 
-    def _set_name(self, name):
+    @name.setter
+    def name(self, name):
         self._name = name
-    name = property(
-        _get_name,
-        _set_name,
-        doc="""Argument name.
-            @type: str""")
 
     @property
     def ellipsis(self):
@@ -150,37 +149,34 @@ class argument_t(object):
         in function definition"""
         return isinstance(self.type, cpptypes.ellipsis_t)
 
-    def _get_default_value(self):
+    @property
+    def default_value(self):
+        """Argument's default value or None.
+            @type: str"""
         return self._default_value
 
-    def _set_default_value(self, default_value):
+    @default_value.setter
+    def default_value(self, default_value):
         self._default_value = default_value
-    default_value = property(
-        _get_default_value,
-        _set_default_value,
-        doc="""Argument's default value or None.
-            @type: str""")
 
-    def _get_type(self):
+    @property
+    def type(self):
+        """The argument :class:`type <type_t>`"""
         return self._type
 
-    def _set_type(self, type):
+    @type.setter
+    def type(self, type):
         self._type = type
-    type = property(
-        _get_type,
-        _set_type,
-        doc="""The argument :class:`type <type_t>`""")
 
-    def _get_attributes(self):
+    @property
+    def attributes(self):
+        """GCCXML attributes, set using __attribute__((gccxml("...")))
+            @type: str"""
         return self._attributes
 
-    def _set_attributes(self, attributes):
+    @attributes.setter
+    def attributes(self, attributes):
         self._attributes = attributes
-    attributes = property(
-        _get_attributes,
-        _set_attributes,
-        doc="""GCCXML attributes, set using __attribute__((gccxml("...")))
-            @type: str""")
 
 
 class calldef_t(declaration.declaration_t):
@@ -243,15 +239,15 @@ class calldef_t(declaration.declaration_t):
                 hash(self.return_type) ^
                 hash(self.demangled_name))
 
-    def _get_arguments(self):
+    @property
+    def arguments(self):
+        """The argument list.
+            @type: list of :class:`argument_t`"""
         return self._arguments
 
-    def _set_arguments(self, arguments):
+    @arguments.setter
+    def arguments(self, arguments):
         self._arguments = arguments
-    arguments = property(
-        _get_arguments,
-        _set_arguments, doc="""The argument list.
-            @type: list of :class:`argument_t`""")
 
     @property
     def has_ellipsis(self):
@@ -279,40 +275,37 @@ class calldef_t(declaration.declaration_t):
         value"""
         return self.arguments[len(self.required_args):]
 
-    def _get_does_throw(self):
+    @property
+    def does_throw(self):
+        """If False, than function does not throw any exception.
+            In this case, function was declared with empty throw
+            statement."""
         return self._does_throw
 
-    def _set_does_throw(self, does_throw):
+    @does_throw.setter
+    def does_throw(self, does_throw):
         self._does_throw = does_throw
-    does_throw = property(
-        _get_does_throw,
-        _set_does_throw,
-        doc="""If False, than function does not throw any exception.
-            In this case, function was declared with empty throw
-            statement.""")
 
-    def _get_exceptions(self):
+    @property
+    def exceptions(self):
+        """The list of exceptions.
+            @type: list of :class:`declaration_t`"""
         return self._exceptions
 
-    def _set_exceptions(self, exceptions):
+    @exceptions.setter
+    def exceptions(self, exceptions):
         self._exceptions = exceptions
-    exceptions = property(
-        _get_exceptions,
-        _set_exceptions,
-        doc="""The list of exceptions.
-            @type: list of :class:`declaration_t`""")
 
-    def _get_return_type(self):
+    @property
+    def return_type(self):
+        """The type of the return value of the "callable" or None
+            (constructors).
+            @type: :class:`type_t`"""
         return self._return_type
 
-    def _set_return_type(self, return_type):
+    @return_type.setter
+    def return_type(self, return_type):
         self._return_type = return_type
-    return_type = property(
-        _get_return_type,
-        _set_return_type,
-        doc="""The type of the return value of the "callable" or None
-            (constructors).
-            @type: :class:`type_t`""")
 
     @property
     def overloads(self):
@@ -331,27 +324,25 @@ class calldef_t(declaration.declaration_t):
             allow_empty=True,
             recursive=False)
 
-    def _get_has_extern(self):
+    @property
+    def has_extern(self):
+        """Was this callable declared as "extern"?
+            @type: bool"""
         return self._has_extern
 
-    def _set_has_extern(self, has_extern):
+    @has_extern.setter
+    def has_extern(self, has_extern):
         self._has_extern = has_extern
-    has_extern = property(
-        _get_has_extern,
-        _set_has_extern,
-        doc="""Was this callable declared as "extern"?
-            @type: bool""")
 
-    def _get_has_inline(self):
+    @property
+    def has_inline(self):
+        """Was this callable declared with "inline" specifier
+            @type: bool"""
         return self._has_inline
 
-    def _set_has_inline(self, has_inline):
+    @has_inline.setter
+    def has_inline(self, has_inline):
         self._has_inline = has_inline
-    has_inline = property(
-        _get_has_inline,
-        _set_has_inline,
-        doc="""Was this callable declared with "inline" specifier
-            @type: bool""")
 
     def __remove_parent_fname(self, demangled):
         """implementation details"""
@@ -443,7 +434,10 @@ class calldef_t(declaration.declaration_t):
         more-or-less successfull guess about calling convention"""
         return CALLING_CONVENTION_TYPES.UNKNOWN
 
-    def get_calling_convention(self):
+    @property
+    def calling_convention(self):
+        """function calling convention. See
+            :class:CALLING_CONVENTION_TYPES class for possible values"""
         if self._calling_convention is None:
             self._calling_convention = CALLING_CONVENTION_TYPES.extract(
                 self.attributes)
@@ -451,14 +445,9 @@ class calldef_t(declaration.declaration_t):
                 self._calling_convention = self.guess_calling_convention()
         return self._calling_convention
 
-    def set_calling_convention(self, cc):
+    @calling_convention.setter
+    def calling_convention(self, cc):
         self._calling_convention = cc
-
-    calling_convention = property(
-        get_calling_convention,
-        set_calling_convention,
-        doc="""function calling convention. See
-            :class:CALLING_CONVENTION_TYPES class for possible values""")
 
 
 # Second level in hierarchy of calldef
@@ -517,46 +506,42 @@ class member_calldef_t(calldef_t):
     def __hash__(self):
         return super.__hash__(self)
 
-    def get_virtuality(self):
+    @property
+    def virtuality(self):
+        """Describes the "virtuality" of the member (as defined by the
+            string constants in the class :class:VIRTUALITY_TYPES).
+            @type: str"""
         return self._virtuality
 
-    def set_virtuality(self, virtuality):
+    @virtuality.setter
+    def virtuality(self, virtuality):
         assert virtuality in VIRTUALITY_TYPES.ALL
         self._virtuality = virtuality
-    virtuality = property(
-        get_virtuality,
-        set_virtuality,
-        doc="""Describes the "virtuality" of the member (as defined by the
-            string constants in the class :class:VIRTUALITY_TYPES).
-            @type: str""")
 
-    def _get_access_type(self):
-        return self.parent.find_out_member_access_type(self)
-    access_type = property(
-        _get_access_type,
-        doc="""Return the access type of the member (as defined by the
+    @property
+    def access_type(self):
+        """Return the access type of the member (as defined by the
             string constants in the class :class:ACCESS_TYPES.
-            @type: str""")
+            @type: str"""
+        return self.parent.find_out_member_access_type(self)
 
-    def _get_has_const(self):
+    @property
+    def has_const(self):
+        """describes, whether "callable" has const modifier or not"""
         return self._has_const
 
-    def _set_has_const(self, has_const):
+    @has_const.setter
+    def has_const(self, has_const):
         self._has_const = has_const
-    has_const = property(
-        _get_has_const,
-        _set_has_const,
-        doc="""describes, whether "callable" has const modifier or not""")
 
-    def _get_has_static(self):
+    @property
+    def has_static(self):
+        """describes, whether "callable" has static modifier or not"""
         return self._has_static
 
-    def _set_has_static(self, has_static):
+    @has_static.setter
+    def has_static(self, has_static):
         self._has_static = has_static
-    has_static = property(
-        _get_has_static,
-        _set_has_static,
-        doc="""describes, whether "callable" has static modifier or not""")
 
     def function_type(self):
         """returns function type. See :class:`type_t` hierarchy"""
@@ -670,19 +655,18 @@ class constructor_t(member_calldef_t):
         member_calldef_t.__init__(self, *args, **keywords)
         self._explicit = True
 
-    def _get_explicit(self):
+    @property
+    def explicit(self):
+        """True, if constructor has "explicit" keyword, False otherwise
+            @type: bool"""
         return self._explicit
 
-    def _set_explicit(self, explicit):
+    @explicit.setter
+    def explicit(self, explicit):
         if explicit in [True, '1']:
             self._explicit = True
         else:
             self._explicit = False
-    explicit = property(
-        _get_explicit,
-        _set_explicit,
-        doc="""True, if constructor has "explicit" keyword, False otherwise
-            @type: bool""")
 
     def __str__(self):
         # Get the full name of the calldef...
