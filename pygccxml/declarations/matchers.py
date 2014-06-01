@@ -173,7 +173,8 @@ class declaration_matcher_t(matcher_base_t):
         self.__opt_is_full_name = None
         self.__decl_name_only = None
 
-        self._set_name(name)
+        # Set the name through the setter.
+        self.name = name
 
         self.header_dir = header_dir
         self.header_file = header_file
