@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msvc_build", "msvc_build.vcproj", "{FEC30A07-68D0-49A3-B7DE-431E5E3B9B6D}"
