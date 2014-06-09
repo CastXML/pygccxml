@@ -1,8 +1,25 @@
 
-// Copyright 2004-2008 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+/*=========================================================================
+ *
+ *  Copyright 2014 Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
+
+// Copyright 2004-2013 Roman Yakovenko.
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 //Almost all test cases have been taken
 //from boost.type_traits (http://www.boost.org) library.
@@ -18,7 +35,7 @@
     typedef BASE NAME##_t;                                    \
     typedef BASE const NAME##_const_t;                        \
     typedef BASE volatile NAME##_volatile_t;                  \
-    typedef BASE const volatile NAME##_const_volatile_t;      
+    typedef BASE const volatile NAME##_const_volatile_t;
 
 struct some_struct_t{
     void do_smth();
@@ -69,7 +86,7 @@ namespace detail{
         x( const x& );
         x& operator=(const x& );
     };
-    
+
     struct y_type{
         union {
             struct {
@@ -80,18 +97,18 @@ namespace detail{
 
         static const y_type zero;
     };
-    
+
     struct instantiate_tmpls{
         instantiate_tmpls()
         : v(), s(), ms()
         {}
-        
+
         std::vector< int > v;
         std::set< std::string > s;
         std::multimap< std::string, std::string > ms;
     };
-    
-    
+
+
     class a_t{
     public:
 
@@ -105,21 +122,21 @@ namespace detail{
     class b_t{
         ~b_t(){}
     public:
-       
+
         static char get_b(){ return 'b'; }
 
     };
 
     class c_t : public boost::noncopyable{
-    public:  
+    public:
         static char get_c(){ return 'c'; }
 
     };
 
-    class d_t{  
+    class d_t{
     private:
-        d_t( const d_t& );    
-    public:  
+        d_t( const d_t& );
+    public:
         d_t(){}
         ~d_t(){}
         static char get_d(){ return 'd'; }
@@ -130,30 +147,30 @@ namespace detail{
     public:
         dd_t(){}
         ~dd_t(){}
-        static char get_dd(){ return 'D'; }        
+        static char get_dd(){ return 'D'; }
     };
 
     struct e_t{
         virtual void do_smth() = 0;
     private:
-        c_t c;    
+        c_t c;
     };
 
     struct f_t{
         f_t() : i(0){}
         virtual void do_smth() = 0;
     private:
-        const int i;    
+        const int i;
     };
 
-    struct g_t{    
+    struct g_t{
         enum E{e};
         g_t() : e_(e){}
         virtual void do_smth() = 0;
     private:
-        const E e_;    
-    };    
-    
+        const E e_;
+    };
+
     struct const_item{ const int values[10]; };
 
     void test_const_item(const_item by_value);
@@ -164,7 +181,7 @@ namespace detail{
 
     enum semantic{ position, normal, binormal };
     enum element_type{ float_, color, short_ };
-    
+
     struct vertex{
         protected:
             unsigned short source;
@@ -173,32 +190,32 @@ namespace detail{
             element_type el_type;
         public:
             vertex( int x, int y, int z );
-        
+
             bool operator==( const vertex& ) const;
     };
-}    
+}
 
 namespace yes{
-    typedef detail::x x;    
+    typedef detail::x x;
     typedef detail::a_t a_t;
     typedef detail::b_t b_t;
     typedef detail::c_t c_t;
     typedef detail::d_t d_t;
     typedef detail::dd_t dd_t;
     typedef detail::f_t f_t;
-    typedef detail::g_t g_t;    
-    
-    typedef detail::const_container const_container_t;    
-    typedef detail::const_item const_item_t;    
+    typedef detail::g_t g_t;
+
+    typedef detail::const_container const_container_t;
+    typedef detail::const_item const_item_t;
 
 }
 namespace no{
     typedef std::string string_type;
-    typedef detail::y_type y_type;    
+    typedef detail::y_type y_type;
     typedef std::vector< int > vector_of_int_type;
     typedef std::set< std::string > string_set_type;
     typedef std::multimap< std::string, std::string > s2s_multimap_type;
-    typedef detail::vertex vertex_type;    
+    typedef detail::vertex vertex_type;
 }
 }
 
@@ -211,12 +228,12 @@ struct X{
     void do_smth( int ) const;
 };
 
-}    
-    
+}
+
 namespace yes{
     typedef void (*ff1)( int, int );
     typedef void ( details::X::*mf1)( int ) const;
-    
+
     TYPE_PERMUTATION( ff1, ff1_type );
     TYPE_PERMUTATION( mf1, mf1_type );
 }
@@ -228,7 +245,7 @@ namespace no{
 }
 
 namespace is_integral{
-namespace yes{   
+namespace yes{
 
     TYPE_PERMUTATION( bool, bool )
     TYPE_PERMUTATION( char, char )
@@ -257,8 +274,8 @@ namespace no{
 } }
 
 namespace is_floating_point{
-namespace yes{   
-    
+namespace yes{
+
     TYPE_PERMUTATION( float, float )
     TYPE_PERMUTATION( double, double )
     TYPE_PERMUTATION( long double, ldouble )
@@ -271,7 +288,7 @@ namespace no{
     typedef incomplete_type incomplete_type_alias;
     typedef void(*function_t)();
     typedef void (some_struct_t::*member_function_t)();
-    TYPE_PERMUTATION( void, void )   
+    TYPE_PERMUTATION( void, void )
     TYPE_PERMUTATION( bool, bool )
     TYPE_PERMUTATION( char, char )
     TYPE_PERMUTATION( unsigned char, uchar )
@@ -282,16 +299,16 @@ namespace no{
     TYPE_PERMUTATION( long, long )
     TYPE_PERMUTATION( unsigned long, ulong )
     TYPE_PERMUTATION( long long int, llint )
-    TYPE_PERMUTATION( long long unsigned int, ulli )   
+    TYPE_PERMUTATION( long long unsigned int, ulli )
 } }
 
 namespace is_fundamental{
-namespace yes{   
+namespace yes{
 
 #define FUNDAMENTAL_TYPE_PERMUTATION( BASE, NAME )            \
     typedef BASE NAME##_t;                                     \
     typedef BASE const NAME##_const_t;                         \
-    typedef BASE volatile NAME##_volatile_t;                   
+    typedef BASE volatile NAME##_volatile_t;
 
     TYPE_PERMUTATION( void, void )
     TYPE_PERMUTATION( bool, bool )
@@ -329,9 +346,9 @@ namespace yes{
     typedef int* const int_const_ptr_t;
     typedef int* volatile int_volatile_ptr_t;
     typedef void(*function_t)();
-    typedef void (some_struct_t::*member_function_t)();   
+    typedef void (some_struct_t::*member_function_t)();
 }
-    
+
 namespace no{
     typedef int int_t;
     typedef int& int_ref_t;
@@ -349,9 +366,9 @@ namespace before{
     typedef int* const x5;
     typedef int* volatile x6;
     typedef void(*x7)();
-    typedef void (some_struct_t::*x8)();   
+    typedef void (some_struct_t::*x8)();
 }
-    
+
 namespace after{
     typedef int x1;
     typedef const int x2;
@@ -360,7 +377,7 @@ namespace after{
     typedef int const x5;
     typedef int volatile x6;
     typedef void(*x7)();
-    typedef void (some_struct_t::*x8)();      
+    typedef void (some_struct_t::*x8)();
 } }
 
 
@@ -371,9 +388,9 @@ namespace yes{
     typedef const int& const_int_ref_t;
     typedef int const& int_const_ref_t;
     typedef some_struct_t& some_struct_ref_t;
-    typedef int*& int_ptr_ref_t;   
+    typedef int*& int_ptr_ref_t;
 }
-    
+
 namespace no{
     typedef int* int_ptr_t;
     typedef const int* const_int_ptr_t;
@@ -382,7 +399,7 @@ namespace no{
     typedef int* const int_const_ptr_t;
     typedef int* volatile int_volatile_ptr_t;
     typedef void(*function_t)();
-    typedef void (some_struct_t::*member_function_t)();   
+    typedef void (some_struct_t::*member_function_t)();
     typedef int int_t;
 } }
 
@@ -392,16 +409,16 @@ namespace before{
     typedef int& x1;
     typedef const int& x2;
     typedef some_struct_t& x3;
-    typedef int*& x4;   
-    typedef void (some_struct_t::*x5)();   
+    typedef int*& x4;
+    typedef void (some_struct_t::*x5)();
 }
-    
+
 namespace after{
     typedef int x1;
     typedef const int x2;
     typedef some_struct_t x3;
-    typedef int* x4;   
-    typedef void (some_struct_t::*x5)();   
+    typedef int* x4;
+    typedef void (some_struct_t::*x5)();
 } }
 
 namespace is_const{
@@ -412,7 +429,7 @@ namespace yes{
     typedef int* const int_const_t;
     //TODO typedef const int& const_int_ref_t;
 }
-    
+
 namespace no{
     typedef int* int_ptr_t;
     typedef const int* const_int_ptr_t;
@@ -420,7 +437,7 @@ namespace no{
     typedef some_struct_t* some_struct_ptr_t;
     typedef int* volatile int_volatile_ptr_t;
     typedef void(*function_t)();
-    typedef void (some_struct_t::*member_function_t)();   
+    typedef void (some_struct_t::*member_function_t)();
     typedef int int_t;
 } }
 
@@ -432,7 +449,7 @@ namespace before{
     typedef int* const x3;
     typedef int* volatile x4;
 }
-    
+
 namespace after{
     typedef void x1;
     typedef incomplete_type x2;
@@ -446,7 +463,7 @@ namespace yes{
     typedef void * volatile vvoid_ptr_t;
     typedef volatile int volatile_int_t;
 }
-    
+
 namespace no{
     typedef int* int_ptr_t;
     typedef const int* const_int_ptr_t;
@@ -454,7 +471,7 @@ namespace no{
     typedef some_struct_t* some_struct_ptr_t;
     typedef int* int_volatile_ptr_t;
     typedef void(*function_t)();
-    typedef void (some_struct_t::*member_function_t)();   
+    typedef void (some_struct_t::*member_function_t)();
     typedef int int_t;
 } }
 
@@ -465,7 +482,7 @@ namespace before{
     typedef volatile int x2;
     typedef int* x3;
 }
-    
+
 namespace after{
     typedef void * x1;
     typedef int x2;
@@ -479,31 +496,31 @@ namespace before{
     typedef void * volatile x10;
     typedef void * const volatile x11;
     typedef void * const x12;
-    
+
     typedef volatile int x20;
     typedef const volatile int x21;
     typedef const int x22;
-    
+
     typedef int* volatile x30;
     typedef int* const volatile x31;
     typedef int* const x32;
-    
+
     typedef void(*x40)();
 }
-    
+
 namespace after{
     typedef void * x10;
     typedef void * x11;
     typedef void * x12;
-    
+
     typedef int x20;
     typedef int x21;
     typedef int x22;
-    
+
     typedef int* x30;
     typedef int* x31;
     typedef int* x32;
-    
+
     typedef void(*x40)();
 } }
 
@@ -511,11 +528,11 @@ namespace after{
 namespace is_enum{
 
     enum color{ red, green, blue };
-    
-namespace yes{   
+
+namespace yes{
     typedef color COLOR;
 }
-    
+
 namespace no{
     typedef int* int_ptr_t;
     typedef const int* const_int_ptr_t;
@@ -523,37 +540,37 @@ namespace no{
     typedef some_struct_t* some_struct_ptr_t;
     typedef int* int_volatile_ptr_t;
     typedef void(*function_t)();
-    typedef void (some_struct_t::*member_function_t)();   
+    typedef void (some_struct_t::*member_function_t)();
     typedef int int_t;
 } }
 
 namespace has_trivial_constructor{
 
 namespace details{
-    
+
     struct const_item{ const int values[10]; };
 
     void test_const_item( const_item x = const_item() );
-    
+
     struct const_container{ const const_item items[10]; };
 
     void test_const_container( const_container x = const_container() );
 
 }
-    
+
 namespace yes{
     struct x{
         x(){}
     };
 }
-    
+
 namespace no{
 
     typedef details::const_item const_item;
     typedef details::const_container const_container;
-    
+
     class y{
-        private: 
+        private:
         y(){}
     };
 
@@ -561,10 +578,10 @@ namespace no{
     {
     private:
         static singleton_t *m_instance;
-    
+
         singleton_t () {}
         ~singleton_t () {}
-    
+
     public:
         static singleton_t* instance();
     };
@@ -575,13 +592,13 @@ namespace yes{
     struct x{
         x(){}
     };
-    
+
     struct z{int i;};
 }
-    
+
 namespace no{
     class y{
-        private: 
+        private:
         y(){}
     };
 } }
@@ -592,10 +609,10 @@ namespace yes{
         ~x(){}
     };
 }
-    
+
 namespace no{
     class y{
-        private: 
+        private:
         ~y(){}
     };
 } }
@@ -607,10 +624,10 @@ namespace yes{
     };
     typedef is_noncopyable::detail::vertex vertex_type;
 }
-    
+
 namespace no{
     class y{
-        private: 
+        private:
         y(const y&){}
     };
 } }
@@ -620,7 +637,7 @@ namespace yes{
     struct base{};
     struct derived : public base {};
 }
-    
+
 namespace no{
     struct unrelated1{};
     struct unrelated2{};
@@ -632,10 +649,10 @@ namespace yes{
         x(int){}
     };
 }
-    
+
 namespace no{
     class y{
-        private: 
+        private:
         y(){}
     };
 } }
@@ -655,7 +672,7 @@ dummy& operator+=( dummy& x, const dummy& ){
     return x;
 }
 
-} 
+}
 
 namespace is_array{
 
@@ -665,7 +682,7 @@ namespace yes{
     const volatile int yes3[2] = {0};
     int yes4[2][3];
 }
-    
+
 namespace no{
     typedef int no1;
     typedef int* no2;
@@ -674,39 +691,39 @@ namespace no{
     typedef int*const no5;
     typedef const int*volatile no6;
     typedef const volatile int*const no7;
-    typedef void( * no8)( const int[2] );    
+    typedef void( * no8)( const int[2] );
 } }
 
 namespace is_convertible{
 
 template <class T>
-struct convertible_from{     
+struct convertible_from{
     convertible_from(T);
 };
 
 template <class T>
-struct convertible_to{ 
+struct convertible_to{
     operator T ();
-    
+
 };
 
 struct base{};
-    
-struct other{};
-    
-struct derived : base {};
-    
-struct derived_protected : protected base {};    
 
-struct derived_private : private base {};        
+struct other{};
+
+struct derived : base {};
+
+struct derived_protected : protected base {};
+
+struct derived_private : private base {};
 
 struct base2{};
-    
+
 struct middle2 : virtual base2 {};
-    
+
 struct derived2 : middle2 {};
-    
-enum fruit{ apple };    
+
+enum fruit{ apple };
 
 template < typename source_type_, typename target_type_, int value_ >
 struct tester_t{
@@ -720,7 +737,7 @@ struct tester_source_t{
     typedef source_type_ source_type;
     typedef target_type_ target_type;
     enum expected{ value=value_ };
-    
+
 private:
     enum { sizeof_source = sizeof( source_type ) };
 };
@@ -730,7 +747,7 @@ struct tester_target_t{
     typedef source_type_ source_type;
     typedef target_type_ target_type;
     enum expected{ value=value_ };
-    
+
 private:
     enum { sizeof_target = sizeof( target_type ) };
 };
@@ -740,7 +757,7 @@ struct tester_both_t{
     typedef source_type_ source_type;
     typedef target_type_ target_type;
     enum expected{ value=value_ };
-    
+
 private:
     enum { sizeof_source = sizeof( source_type ) };
     enum { sizeof_target = sizeof( target_type ) };
@@ -822,17 +839,17 @@ struct x73 : public tester_t< int, void*, false >{};
 struct x74 : public tester_t< fruit, void*, false >{};
 struct x75 : public tester_t< other, int*, false >{};
 struct x76 : public tester_t< other*, int*, false >{};
-struct x77 : public tester_t< fruit, int, true >{};   
+struct x77 : public tester_t< fruit, int, true >{};
 struct x78 : public tester_t< fruit, double, true >{};
 struct x79 : public tester_t< fruit, char, true >{};
 struct x80 : public tester_t< fruit, wchar_t, true >{};
-struct x81 : public tester_t< derived, base, true >{};   
+struct x81 : public tester_t< derived, base, true >{};
 struct x82 : public tester_t< derived, derived, true >{};
 struct x83 : public tester_t< base, base, true >{};
 struct x84 : public tester_t< base, derived, false >{};
-struct x85 : public tester_t< other, base, false >{};  
+struct x85 : public tester_t< other, base, false >{};
 struct x86 : public tester_t< middle2, base2, true >{};
-struct x87 : public tester_t< derived2, base2, true >{};   
+struct x87 : public tester_t< derived2, base2, true >{};
 struct x88 : public tester_t< derived*, base*, true >{};
 struct x89 : public tester_t< base*, derived*, false >{};
 struct x90 : public tester_t< derived&, base&, true >{};
@@ -841,7 +858,7 @@ struct x92 : public tester_t< const derived*, const base*, true >{};
 struct x93 : public tester_t< const base*, const derived*, false >{};
 struct x94 : public tester_t< const derived&, const base&, true >{};
 struct x95 : public tester_t< const base&, const derived&, false >{};
-struct x96 : public tester_t< derived_private, base, false >{};   
+struct x96 : public tester_t< derived_private, base, false >{};
 struct x97 : public tester_t< derived_protected, base, true >{};
 struct x98 : public tester_t< derived_protected, derived_private, false >{};
 
@@ -853,7 +870,7 @@ struct x98 : public tester_t< derived_protected, derived_private, false >{};
 // : public tester_t< test_abc1&, int_constructible, false >{};
 // : public tester_t< int_constructible, test_abc1&, false >{};
 // : public tester_t< test_abc1&, test_abc2, false >{};
- 
+
 //~  : public tester_t< polymorphic_derived1,polymorphic_base, true >{};
 //~  : public tester_t< polymorphic_derived2,polymorphic_base, true >{};
 //~  : public tester_t< polymorphic_base,polymorphic_derived1, false >{};
@@ -864,8 +881,8 @@ struct x98 : public tester_t< derived_protected, derived_private, false >{};
 //~  : public tester_t< polymorphic_derived2,test_abc1, false >{};
 //~  : public tester_t< int,test_abc1, false >{};
 //~ #endif
-   
- 
+
+
 }
 
 

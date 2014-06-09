@@ -1,7 +1,24 @@
-// Copyright 2004-2008 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+/*=========================================================================
+ *
+ *  Copyright 2014 Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
+
+// Copyright 2004-2013 Roman Yakovenko.
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 #ifndef __indexing_suites2_to_be_exported_hpp__
 #define __indexing_suites2_to_be_exported_hpp__
@@ -17,18 +34,18 @@ typedef std::vector< std::string > strings_t;
 
 inline void do_nothing( const strings_t& ){}
 
-struct item_t{    
+struct item_t{
     item_t() : value( -1 ){}
     explicit item_t( int v) : value( v ){}
-        
-    bool operator==(item_t const& item) const { 
-        return value == item.value; 
+
+    bool operator==(item_t const& item) const {
+        return value == item.value;
     }
-    
-    bool operator!=(item_t const& item) const { 
-        return value != item.value; 
-    }    
-    
+
+    bool operator!=(item_t const& item) const {
+        return value != item.value;
+    }
+
     int value;
 };
 
@@ -42,7 +59,7 @@ inline items_ptr_t create_items_ptr(){
     items.push_back( new item_t(1) );
     items.push_back( new item_t(2) );
     items.push_back( new item_t(3) );
-    items.push_back( new item_t(4) );    
+    items.push_back( new item_t(4) );
     return items;
 }
 
