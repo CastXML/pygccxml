@@ -1,0 +1,18 @@
+
+pygccxml
+Copyright Insight Software Consortium
+
+This software is distributed under the Apache 2.0 License.
+
+See LICENSE file for details.
+
+-----------------------------------------------------------------------
+
+Historical Note:
+
+pygccxml was initially developed by Roman Yakovenko. Portions of pygccxml not
+modified since 2013 are distributed under terms of the Boost Software License,
+Version 1.0. See http://www.boost.org/LICENSE_1_0.txt
+
+Starting with its version 1.6.0 (2014), pygccxml is distributed under the
+Apache 2.0 License
