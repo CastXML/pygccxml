@@ -1,7 +1,7 @@
+// Copyright 2014 Insight Software Consortium.
 // Copyright 2004-2008 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 
 #ifndef __include_std_hpp__
@@ -16,7 +16,7 @@
 #include <iostream>
 
 namespace instantiate{
-    std::string str_a;    
+    std::string str_a;
     std::wstring str_w;
     std::set<int> set_of_int;
     std::list<int> list_of_int;

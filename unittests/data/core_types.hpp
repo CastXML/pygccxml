@@ -1,7 +1,7 @@
+// Copyright 2014 Insight Software Consortium.
 // Copyright 2004-2008 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 #ifndef __core_types_hpp__
 #define __core_types_hpp__
@@ -23,7 +23,7 @@ typedef signed short int typedef_signed_short_int;
 typedef short unsigned int typedef_short_unsigned_int;
 typedef bool typedef_bool;
 typedef int typedef_int;
-typedef signed int typedef_signed_int;    
+typedef signed int typedef_signed_int;
 typedef unsigned int typedef_unsigned_int;
 typedef long int typedef_long_int;
 typedef long unsigned int typedef_long_unsigned_int;

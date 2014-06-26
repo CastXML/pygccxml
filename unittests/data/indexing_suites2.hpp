@@ -1,7 +1,7 @@
+// Copyright 2014 Insight Software Consortium.
 // Copyright 2004-2008 Roman Yakovenko.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 #ifndef __indexing_suites2_to_be_exported_hpp__
 #define __indexing_suites2_to_be_exported_hpp__
@@ -17,18 +17,18 @@ typedef std::vector< std::string > strings_t;
 
 inline void do_nothing( const strings_t& ){}
 
-struct item_t{    
+struct item_t{
     item_t() : value( -1 ){}
     explicit item_t( int v) : value( v ){}
-        
-    bool operator==(item_t const& item) const { 
-        return value == item.value; 
+
+    bool operator==(item_t const& item) const {
+        return value == item.value;
     }
-    
-    bool operator!=(item_t const& item) const { 
-        return value != item.value; 
-    }    
-    
+
+    bool operator!=(item_t const& item) const {
+        return value != item.value;
+    }
+
     int value;
 };
 
@@ -42,7 +42,7 @@ inline items_ptr_t create_items_ptr(){
     items.push_back( new item_t(1) );
     items.push_back( new item_t(2) );
     items.push_back( new item_t(3) );
-    items.push_back( new item_t(4) );    
+    items.push_back( new item_t(4) );
     return items;
 }
 
