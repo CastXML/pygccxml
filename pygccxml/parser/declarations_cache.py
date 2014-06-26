@@ -1,4 +1,3 @@
-#! /usr/bin/python
 # Copyright 2014 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
