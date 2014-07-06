@@ -1,0 +1,4 @@
+[run]
+source = pygccxml,docs/example,unittests
+parallel = True
+append = .coverage

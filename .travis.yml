@@ -19,10 +19,15 @@ before_install:
   - pip install coveralls
 
 script:
+  # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
+  - touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
+  - echo "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
   # Install pygccxml
   - python setup.py install
   # Run the tests with coverage
-  - coverage run --source=pygccxml,docs/example,unittests unittests/test_all.py
+  - coverage run unittests/test_all.py
+  # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
+  - coverage combine
 
 after_success:
   # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
