@@ -21,7 +21,7 @@ before_install:
 script:
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
   - touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
-  - echo "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
+  - echo $"import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
   # Install pygccxml
   - python setup.py install
   # Run the tests with coverage
