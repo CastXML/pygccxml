@@ -43,16 +43,16 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Alejandro Dubrovsky
 * Aron Xu
 
-Version 1.6 (Not yet released)
-------------------------------
+Version 1.6
+-----------
 
 1. Moved the repository from mercurial to git
 
 2. Changed the documentation from epydoc to sphinx doc
 
 3. Setup the documentation as gh-page and add script to update the documentation
-   Just call "make gh-pages" on the root folder to update the documentation
-   on the github server. (You need write access to the repository to do so).
+   Just call "make gh-pages" on the root folder to create a commit with the
+   new documentation, which you may then push to the github repository.
    The url for the documentation is now http://gccxml.github.io/pygccxml/
 
 4. Add Travis unit tests for Python 2.6, 2.7, 3.2, 3.3 and 3.4
@@ -77,7 +77,13 @@ Version 1.6 (Not yet released)
 
 9. All the code is now pep8 compliant and is tested for this in an unit test
 
-10. unused imports and variables were removed using the pyflakes tool
+10. Most of unused imports and variables were removed using the pyflakes tool
+
+11. Use new style python decorators (@property) everywhere
+
+12. Add new unit test for the example.py file
+
+13. Update the licence headers to reflect the change in maintainers
 
 Version 1.5.2
 -------------
