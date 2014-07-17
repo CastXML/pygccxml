@@ -98,11 +98,9 @@ License
 Test environment
 ================
 
-`pygccxml` comes with comprehensive unit tests. They are executed on Windows XP
-and `Ubuntu`_ Linux operating systems. All in all, `pygccxml` has more than 230 tests.
-I am using Python 2.6 to run tests against.
-
-Support for Python 2.4 was dropped.
+`pygccxml` comes with comprehensive unit tests. They are executed on the `Ubuntu`_ Linux operating systems.
+See the `Travis`_ builds for more details. `pygccxml` is tested under python 2.6, 2.7, 3.2, 3.3 and 3.4.
+All in all, `pygccxml` has more than 230 tests.
 
 
 Documentation contents
@@ -129,6 +127,7 @@ Documentation contents
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`Boost Software License`: http://boost.org/more/license_info.html
 .. _`Ubuntu`: http://www.ubuntu.com/
+.. _`Travis`: https://travis-ci.org/gccxml/pygccxml/builds
 .. _`boost::type_traits` : http://www.boost.org/libs/type_traits/index.html
 
 
