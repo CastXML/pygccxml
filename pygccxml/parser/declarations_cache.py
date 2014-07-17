@@ -83,7 +83,7 @@ class cache_base_t(object):
         given configuration.
         :param source_file: path to the C++ source file being parsed.
         :param configuration: configuration(:class:`gccxml_configuration_t`)
-                              that was used for parsing
+        that was used for parsing
         """
 
         raise NotImplementedError()
