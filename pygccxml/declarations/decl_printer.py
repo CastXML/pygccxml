@@ -482,7 +482,7 @@ def print_declarations(
     print declarations tree rooted at each of the included nodes.
 
     :param decls: either a single :class:declaration_t object or list
-    of :class:declaration_t objects
+        of :class:declaration_t objects
     """
     prn = decl_printer_t(0, detailed, recursive, writer, verbose=verbose)
     if not isinstance(decls, list):
@@ -498,7 +498,7 @@ def dump_declarations(decls, fpath):
     dump declarations tree rooted at each of the included nodes to the file
 
     :param decls: either a single :class:declaration_t object or list
-    of :class:declaration_t objects
+        of :class:declaration_t objects
     :param fpath: file name
     """
     fobj = open(fpath, 'w+')

@@ -128,9 +128,8 @@ def make_flatten(decl_or_decls):
     converts tree representation of declarations to flatten one.
 
     :param decl_or_decls: reference to list of declaration's or single
-    declaration
+        declaration
     :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
-
     :rtype: [ all internal declarations ]
     """
     import pygccxml.declarations  # prevent cyclic import
@@ -206,7 +205,7 @@ class match_declaration_t:
 
     This class will help developer to match declaration by:
         - declaration type, for example :class:`class_t` or
-        :class:`operator_t`.
+            :class:`operator_t`.
         - declaration name
         - declaration full name
         - reference to parent declaration
@@ -343,10 +342,9 @@ def declaration_files(decl_or_decls):
     contains all file names of declarations.
 
     :param decl_or_decls: reference to list of declaration's or single
-    declaration
-    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
-
-    :rtype: set( declaration file names )
+        declaration
+    :type decl_or_decls: :class:`declaration_t` or [:class:`declaration_t`]
+    :rtype: set(declaration file names)
     """
     files = set()
     decls = make_flatten(decl_or_decls)
@@ -359,7 +357,7 @@ def declaration_files(decl_or_decls):
 class visit_function_has_not_been_found_t(RuntimeError):
 
     """
-    exception that is raised, from :func:`apply_visitor`, when a visitor could
+    Exception that is raised, from :func:`apply_visitor`, when a visitor could
     not be applied.
 
     """

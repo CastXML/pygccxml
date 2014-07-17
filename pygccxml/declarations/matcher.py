@@ -3,7 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""implements few "find" algorithms on declarations tree"""
+"""Implements few "find" algorithms on declarations tree"""
 
 import types
 from . import algorithm
@@ -11,12 +11,12 @@ from . import algorithm
 
 class matcher:
 
-    """class-namespace, contains implementation of few "find" algorithms and
+    """Class-namespace, contains implementation of few "find" algorithms and
     definition of related exception classes"""
 
     class declaration_not_found_t(RuntimeError):
 
-        """exception, that will be raised, if the declaration could not be
+        """Exception, that will be raised, if the declaration could not be
         found"""
 
         def __init__(self, matcher):
@@ -31,7 +31,7 @@ class matcher:
 
     class multiple_declarations_found_t(RuntimeError):
 
-        """exception, that will be raised, if more than one declaration was
+        """Exception, that will be raised, if more than one declaration was
         found"""
 
         def __init__(self, matcher):
@@ -47,15 +47,15 @@ class matcher:
     @staticmethod
     def find(decl_matcher, decls, recursive=True):
         """
-        returns a list of declarations that match `decl_matcher` defined
+        Returns a list of declarations that match `decl_matcher` defined
         criteria or None
 
         :param decl_matcher: Python callable object, that takes one argument -
-        reference to a declaration
+            reference to a declaration
         :param decls: the search scope, :class:declaration_t object or
-        :class:declaration_t objects list t
+            :class:declaration_t objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
-        on the internal declarations too
+            on the internal declarations too
         """
 
         where = []
@@ -70,17 +70,17 @@ class matcher:
     @staticmethod
     def find_single(decl_matcher, decls, recursive=True):
         """
-        returns a reference to the declaration, that match `decl_matcher`
+        Returns a reference to the declaration, that match `decl_matcher`
         defined criteria.
 
         if a unique declaration could not be found the method will return None.
 
         :param decl_matcher: Python callable object, that takes one argument -
-        reference to a declaration
+            reference to a declaration
         :param decls: the search scope, :class:declaration_t object or
-        :class:declaration_t objects list t
+            :class:declaration_t objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
-        on the internal declarations too
+            on the internal declarations too
         """
         answer = matcher.find(decl_matcher, decls, recursive)
         if len(answer) == 1:
@@ -89,18 +89,18 @@ class matcher:
     @staticmethod
     def get_single(decl_matcher, decls, recursive=True):
         """
-        returns a reference to declaration, that match `decl_matcher` defined
+        Returns a reference to declaration, that match `decl_matcher` defined
         criteria.
 
         If a unique declaration could not be found, an appropriate exception
         will be raised.
 
         :param decl_matcher: Python callable object, that takes one argument -
-        reference to a declaration
+            reference to a declaration
         :param decls: the search scope, :class:declaration_t object or
-        :class:declaration_t objects list t
+            :class:declaration_t objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
-        on the internal declarations too
+            on the internal declarations too
         """
         answer = matcher.find(decl_matcher, decls, recursive)
         if len(answer) == 1:

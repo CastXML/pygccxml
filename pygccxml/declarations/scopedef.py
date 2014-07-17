@@ -3,7 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""defines :class:`scopedef_t` class"""
+"""Defines :class:`scopedef_t` class"""
 
 import time
 from . import algorithm
@@ -33,7 +33,7 @@ class scopedef_t(declaration.declaration_t):
 
         2. `header_dir` - directory, to which belongs file, that the
             declaration was declared in.
-           `header_dir` should be absolute path.
+            `header_dir` should be absolute path.
 
         3. `header_file` - file that the declaration was declared in.
 
