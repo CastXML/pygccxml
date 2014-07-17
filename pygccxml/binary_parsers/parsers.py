@@ -17,13 +17,10 @@ extracted symbols are used for:
 
 import os
 import re
-import sys
 import platform
-import ctypes
 from . import undname
 import warnings
 import subprocess
-from .. import utils
 from .. import declarations
 
 # import exceptions

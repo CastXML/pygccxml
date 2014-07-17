@@ -5,8 +5,6 @@
 
 """defines few unrelated algorithms, that works on declarations"""
 
-import types
-
 
 def declaration_path(decl, with_defaults=True):
     """
