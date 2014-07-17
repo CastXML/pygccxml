@@ -4,7 +4,6 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import sys
 from . import linker
 from . import config
 from . import patcher

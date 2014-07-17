@@ -4,10 +4,8 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import types
 import pprint
 import xml.sax
-import warnings
 import xml.sax.handler
 from pygccxml.declarations import *
 from .. import utils

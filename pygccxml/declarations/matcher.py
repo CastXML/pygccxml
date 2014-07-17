@@ -5,7 +5,6 @@
 
 """Implements few "find" algorithms on declarations tree"""
 
-import types
 from . import algorithm
 
 

@@ -8,7 +8,6 @@ defines class, that describes C++ `enum`
 """
 
 import copy
-import types
 from . import compilers
 from . import declaration
 

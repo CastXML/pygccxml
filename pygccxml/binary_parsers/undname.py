@@ -17,7 +17,6 @@ On Linux:
 
 import os
 import re
-import sys
 import ctypes
 from .. import declarations
 

@@ -5,7 +5,6 @@
 
 """implementation details"""
 
-import types
 from .. import utils
 
 

@@ -7,7 +7,6 @@
 defines few algorithms, that deals with different properties of std containers
 """
 
-import types
 import string
 from . import calldef
 from . import cpptypes
