@@ -9,8 +9,6 @@ Users
 * `PyBindGen`_ - is a Python module that is geared to generating C/C++ code
   that binds a C/C++ library for Python.
 
-.. _`PyBindGen` : https://launchpad.net/pybindgen
-
 * your project name ... :-)
 
 pygccxml in blogs
@@ -28,8 +26,9 @@ pygccxml in blogs
 
   pygccxml is used to generate input files for `SIP`_ code generator.
 
-.. _`SIP` : http://www.riverbankcomputing.com/software/sip/intro
-
 - http://blogs.sun.com/thorsten/entry/more_on_source_code_grokking
 
   Short listing of C++ parsers and their description.
+
+.. _`PyBindGen` : https://launchpad.net/pybindgen
+.. _`SIP` : http://www.riverbankcomputing.com/software/sip/intro
