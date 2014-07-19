@@ -11,23 +11,32 @@ pygccxml is a specialized XML reader that reads the output from GCCXML. It provi
 Install
 -------
 
-The package uses the Python distutils so you can do the usual procedure:
+You can use pip to install pygccxml:
+
+  pip install pygccxml
+
+To install from source, you can use the usual procedure:
 
   python setup.py install
-
-For more information about using the distutils see the Python manual
-"Installing Python Modules".
 
 Contact us
 ----------
 
-You can contact us through the gccxml mailing list: http://www.gccxml.org/mailman/listinfo/gccxml .
-For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues .
+You can contact us through the gccxml mailing list: http://www.gccxml.org/mailman/listinfo/gccxml
+
+For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues
 
 Documentation
 -------------
 
 For examples and tutorials see the documentation: http://gccxml.github.io/pygccxml/
+
+Branches
+--------
+
+The stable version can be found on the master branch.
+
+The develop branch containes the latest improvements but can be unstable. Pull Requests should be done on the develop branch.
 
 Testing and code coverage
 -------------------------
