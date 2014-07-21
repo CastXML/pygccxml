@@ -985,13 +985,18 @@ def is_noncopyable(class_):
 
     for base_desc in class_.recursive_bases:
         assert isinstance(base_desc, class_declaration.hierarchy_info_t)
+
         if base_desc.related_class.decl_string in \
                 ('::boost::noncopyable', '::boost::noncopyable_::noncopyable'):
             logger.debug(true_header + "derives from boost::noncopyable")
             return True
+
         if not has_copy_constructor(base_desc.related_class):
+
             base_copy_ = base_desc.related_class.find_copy_constructor()
+
             if base_copy_:
+
                 if base_copy_.access_type == 'private':
                     logger.debug(
                         true_header +
@@ -1003,6 +1008,7 @@ def is_noncopyable(class_):
                         true_header +
                         "__is_noncopyable_single returned True")
                     return True
+
         if __is_noncopyable_single(base_desc.related_class):
             logger.debug(
                 true_header +
@@ -1010,7 +1016,7 @@ def is_noncopyable(class_):
             return True
 
     if not has_copy_constructor(class_):
-        logger.debug(true_header + "does not have trival copy constructor")
+        logger.debug(true_header + "does not have trivial copy constructor")
         return True
     elif not has_public_constructor(class_):
         logger.debug(true_header + "does not have a public constructor")
