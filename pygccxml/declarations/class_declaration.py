@@ -598,10 +598,10 @@ class class_t(scopedef.scopedef_t):
                         % self.decl_string)
                     noncopyable_vars.append(mvar)
                 if tt.is_class(no_const):
-                    logger.debug(message + " - class" % self.decl_string)
+                    logger.debug((message + " - class") % self.decl_string)
                     noncopyable_vars.append(mvar)
                 if tt.is_array(no_const):
-                    logger.debug(message + " - array" % self.decl_string)
+                    logger.debug((message + " - array") % self.decl_string)
                     noncopyable_vars.append(mvar)
 
             if tt.class_traits.is_my_case(type_):
