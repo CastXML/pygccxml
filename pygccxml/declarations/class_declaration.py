@@ -572,23 +572,30 @@ class class_t(scopedef.scopedef_t):
 
     def find_noncopyable_vars(self):
         """returns list of all `noncopyable` variables"""
+
         from . import type_traits as tt  # prevent cyclic dependencies
+
         logger = utils.loggers.cxx_parser
         mvars = self.vars(
             lambda v: not v.type_qualifiers.has_static,
             recursive=False,
             allow_empty=True)
         noncopyable_vars = []
+
+        message = (
+            "__contains_noncopyable_mem_var - %s - TRUE - " +
+            "containes const member variable")
+
         for mvar in mvars:
+
             type_ = tt.remove_reference(mvar.type)
+
             if tt.is_const(type_):
                 no_const = tt.remove_const(type_)
-                message = (
-                    "__contains_noncopyable_mem_var - %s - TRUE - " +
-                    "containes const member variable")
                 if tt.is_fundamental(no_const) or tt.is_enum(no_const):
-                    logger.debug(
-                        message + "- fundamental or enum" % self.decl_string)
+                    logger.debug((
+                        message + "- fundamental or enum")
+                        % self.decl_string)
                     noncopyable_vars.append(mvar)
                 if tt.is_class(no_const):
                     logger.debug(message + " - class" % self.decl_string)
@@ -596,16 +603,20 @@ class class_t(scopedef.scopedef_t):
                 if tt.is_array(no_const):
                     logger.debug(message + " - array" % self.decl_string)
                     noncopyable_vars.append(mvar)
+
             if tt.class_traits.is_my_case(type_):
+
                 cls = tt.class_traits.get_declaration(type_)
                 if tt.is_noncopyable(cls):
-                    logger.debug(
-                        message +
-                        " - class that is not copyable" % self.decl_string)
+                    logger.debug((
+                        message + " - class that is not copyable")
+                        % self.decl_string)
                     noncopyable_vars.append(mvar)
+
         logger.debug((
-            "__contains_noncopyable_mem_var - %s - false - doesn't " +
-            "contains noncopyable members") % self.decl_string)
+            "__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
+            "contain noncopyable members") % self.decl_string)
+
         return noncopyable_vars
 
     @property
