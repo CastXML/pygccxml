@@ -34,6 +34,7 @@ import filters_tester
 import cache_enums_tester
 import decl_printer_tester
 import typedefs_tester
+import non_copyable_classes_tester
 # import demangled_tester
 import unnamed_enums_bug_tester
 import vector_traits_tester
@@ -93,6 +94,7 @@ testers = [
     cache_enums_tester,
     decl_printer_tester,
     typedefs_tester,
+    non_copyable_classes_tester,
     unnamed_enums_bug_tester,
     vector_traits_tester,
     string_traits_tester,
