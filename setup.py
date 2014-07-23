@@ -7,7 +7,7 @@
 from distutils.core import setup
 
 setup(name="pygccxml",
-      version="v1.6.0",
+      version="v1.6.1",
       description="GCC-XML generated file reader",
       author="Insight Software Consortium.",
       author_email="gccxml@gccxml.org",

@@ -43,6 +43,13 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Alejandro Dubrovsky
 * Aron Xu
 
+Version 1.6.1
+-------------
+
+1. Fix a regression introduced by previous changes. Syntax errors were introduced
+   in the part were you can check if a class is copyable or not (see #13). These
+   have been fixed now.
+
 Version 1.6
 -----------
 
