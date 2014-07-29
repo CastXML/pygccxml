@@ -43,6 +43,15 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Alejandro Dubrovsky
 * Aron Xu
 
+Version 1.6.2
+-------------
+
+1. Use setuptools instead of distutils for the packaging
+
+2. Change rights of declarations_cache.py and templates_tester.py
+   from -rwxr-xr-x+ to -rw-r--r--+, so that all the files have the same
+   execution rights.
+
 Version 1.6.1
 -------------
 
