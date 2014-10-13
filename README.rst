@@ -29,7 +29,7 @@ For issues with pygccxml you can open an issue here: https://github.com/gccxml/p
 Documentation
 -------------
 
-For examples and tutorials see the documentation: http://gccxml.github.io/pygccxml/
+For examples and tutorials see the documentation: http://pygccxml.readthedocs.org
 
 Branches
 --------
