@@ -31,7 +31,8 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         Covers two cases for the moment
         1) non copyable class
-        2) non copyable class due to a non copyable const
+        2) non copyable const (fundamental type)
+        3) non copyable const (class type)
 
         """
 
@@ -40,6 +41,9 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         MainFoo2 = self.global_ns.class_('MainFoo2')
         self.assertTrue(declarations.is_noncopyable(MainFoo2))
+
+        MainFoo3 = self.global_ns.class_('MainFoo3')
+        self.assertTrue(declarations.is_noncopyable(MainFoo3))
 
 
 def create_suite():
