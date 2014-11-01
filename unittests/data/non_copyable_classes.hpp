@@ -72,6 +72,23 @@ class MainFoo3 : Foo3 {
     char b;
 };
 
+// -----------------------------------------------
+
+// Foo4 is a base class, with a non copiable const
+// The constant is an array
+class Foo4 {
+  private:
+    Foo4();
+  protected:
+    const int foo [5];
+};
+
+// Use the base class
+class MainFoo4 : Foo4 {
+  public:
+    char b;
+};
+
 }
 
 #endif//__non_copyable_classes_hpp__
