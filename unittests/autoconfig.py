@@ -7,9 +7,6 @@ import os
 import sys
 import platform
 
-# os.environ['PYCHECKER'] = '--limit=1000 -q --no-argsused'
-# import pychecker.checker
-
 this_module_dir_path = os.path.abspath(
     os.path.dirname(
         sys.modules[__name__].__file__))
