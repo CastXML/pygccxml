@@ -52,8 +52,8 @@ class decl_cache_tester(unittest.TestCase):
         ignore_changed = def_cfg.clone()
         ignore_changed.ignore_gccxml_output = True
         self.assert_(
-            declarations_cache.configuration_signature(ignore_changed)
-            == def_sig)
+            declarations_cache.configuration_signature(
+                ignore_changed) == def_sig)
 
     def test_cache_interface(self):
         cache_file = os.path.join(

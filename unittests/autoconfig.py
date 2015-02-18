@@ -27,9 +27,10 @@ sys.path.insert(0, os.path.join(os.curdir, '..'))
 # The tests are run on the parent pygccxml directory, not the one
 # in site-packages. Insert the directory's path.
 sys.path.insert(0, "../pygccxml")
-import pygccxml
-import pygccxml.declarations
-import pygccxml.parser
+
+import pygccxml  # nopep8
+import pygccxml.declarations  # nopep8
+import pygccxml.parser  # nopep8
 
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 

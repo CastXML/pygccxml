@@ -45,9 +45,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             "cached declarations and source declarations are different")
         self.touch()
         self.failUnless(
-            None == cache.cached_value(
-                self.header,
-                self.config),
+            cache.cached_value(self.header, self.config) is None,
             "cache didn't recognize that some files on disk has been changed")
 
     def test_from_file(self):

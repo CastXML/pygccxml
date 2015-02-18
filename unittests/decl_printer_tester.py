@@ -40,8 +40,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE)
 
     def test_printer(self):
-        writer = lambda decl: None
-        declarations.print_declarations(self.decls, writer=writer)
+        declarations.print_declarations(self.decls, writer=None)
         # declarations.print_declarations( self.decls )
 
     def test__str__(self):
