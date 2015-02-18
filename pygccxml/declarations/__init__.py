@@ -162,7 +162,7 @@ from .type_traits import remove_declarated
 from .type_traits import has_destructor
 from .type_traits import has_public_less
 from .type_traits import has_copy_constructor
-has_trivial_copy = has_copy_constructor  # backward comp mode will be removed
+
 from .type_traits import has_public_equal
 from .type_traits import has_public_assign
 from .type_traits import has_public_destructor
@@ -194,23 +194,6 @@ from .container_traits import find_container_traits
 
 from .function_traits import is_same_function
 
-all_container_traits = container_traits.container_traits
-"""tuple of all STD container traits classes"""
-
-sequential_container_traits = [
-    list_traits,
-    deque_traits,
-    queue_traits,
-    priority_queue_traits,
-    vector_traits,
-    stack_traits,
-    set_traits,
-    hash_set_traits,
-    multiset_traits,
-    hash_multiset_traits]
-"""list, that contains all STD container traits classes"""
-
-
 from . import templates
 from . import call_invocation
 
@@ -229,6 +212,32 @@ from .matchers import access_type_matcher_t
 from .matchers import operator_matcher_t
 from .matchers import custom_matcher_t
 from .matchers import virtuality_type_matcher_t
+
+from .matcher import matcher
+
+from .mdecl_wrapper import mdecl_wrapper_t
+
+from .decl_printer import decl_printer_t
+from .decl_printer import dump_declarations
+from .decl_printer import print_declarations
+
+from . import scopedef
+
+all_container_traits = container_traits.container_traits
+"""tuple of all STD container traits classes"""
+
+sequential_container_traits = [
+    list_traits,
+    deque_traits,
+    queue_traits,
+    priority_queue_traits,
+    vector_traits,
+    stack_traits,
+    set_traits,
+    hash_set_traits,
+    multiset_traits,
+    hash_multiset_traits]
+"""list, that contains all STD container traits classes"""
 
 # make matchers to look more like functors
 or_matcher = or_matcher_t
@@ -255,17 +264,6 @@ custom_matcher = custom_matcher_t
 """see :class:`custom_matcher_t` for documentation"""
 virtuality_type_matcher = virtuality_type_matcher_t
 """see :class:`virtuality_type_matcher_t` for documentation"""
-
-from .matcher import matcher
-
-from .mdecl_wrapper import mdecl_wrapper_t
-
-from .decl_printer import decl_printer_t
-from .decl_printer import dump_declarations
-from .decl_printer import print_declarations
-
-
-from . import scopedef
 
 scopedef.scopedef_t._impl_all_decl_types = [
     scopedef.scopedef_t,

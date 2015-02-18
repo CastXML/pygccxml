@@ -43,6 +43,12 @@ Thanks to all the people that have contributed patches, bug reports and suggesti
 * Alejandro Dubrovsky
 * Aron Xu
 
+Version 1.7.0 (Next version, not yet released)
+-------------
+
+1. ``declarations.has_trivial_copy`` was defintevely removed.
+   Please use ``declarations.has_copy_constructor``.
+
 Version 1.6.2
 -------------
 
