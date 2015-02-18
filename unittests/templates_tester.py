@@ -67,14 +67,14 @@ class tester_t(unittest.TestCase):
 
     def test_join_on_vector(self):
         self.failUnless(
-            "vector< int, std::allocator<int> >"
-            == declarations.templates.join(
+            "vector< int, std::allocator<int> >" ==
+            declarations.templates.join(
                 "vector", ("int", "std::allocator<int>")))
 
     def test_bug_is_tmpl_inst(self):
         self.failUnless(
-            False == declarations.templates.is_instantiation(
-                "::FX::QMemArray<unsigned char>::setRawData"))
+            declarations.templates.is_instantiation(
+                "::FX::QMemArray<unsigned char>::setRawData") is False)
 
     # disable broken test
     # def test_split_bug_fptr(self):

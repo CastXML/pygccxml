@@ -191,8 +191,9 @@ def __make_flatten_generator(decl_or_decls):
 
 def get_global_namespace(decls):
     import pygccxml.declarations
-    found = [decl for decl in make_flatten(decls) if decl.name == '::'
-             and isinstance(decl, pygccxml.declarations.namespace_t)]
+    found = [
+        decl for decl in make_flatten(decls) if decl.name == '::' and
+        isinstance(decl, pygccxml.declarations.namespace_t)]
     if len(found) == 1:
         return found[0]
     raise RuntimeError("Unable to find global namespace.")
@@ -227,13 +228,13 @@ class match_declaration_t:
         :rtype: bool
         """
         answer = True
-        if None != self.type:
+        if self.type is not None:
             answer &= isinstance(inst, self.type)
-        if None != self.name:
+        if self.name is not None:
             answer &= inst.name == self.name
-        if None != self.parent:
+        if self.parent is not None:
             answer &= self.parent is inst.parent
-        if None != self.fullname:
+        if self.fullname is not None:
             if inst.name:
                 answer &= self.fullname == full_name(inst)
             else:
