@@ -5,6 +5,12 @@
 
 """
 defines few algorithms, that deals with different properties of std containers
+
+real    0m0.234s
+user    0m0.198s
+sys 0m0.036s
+
+
 """
 
 import string
@@ -19,12 +25,10 @@ std_namespaces = ('std', 'stdext', '__gnu_cxx')
 
 class defaults_eraser:
 
-    @staticmethod
-    def normalize(type_str):
+    def normalize(self, type_str):
         return type_str.replace(' ', '')
 
-    @staticmethod
-    def replace_basic_string(cls_name):
+    def replace_basic_string(self, cls_name):
         strings = {
             'std::string': (
                 ('std::basic_string<char,std::char_traits<char>,' +
@@ -76,25 +80,23 @@ class defaults_eraser:
         @staticmethod
         def erase_recursive(cls_name):
             ri = defaults_eraser.recursive_impl
-            no_std = ri.decorated_call_prefix(
+            no_std = lambda cls_name: ri.decorated_call_prefix(
                 cls_name, 'std::', ri.erase_call)
-            no_stdext = ri.decorated_call_prefix(
+            no_stdext = lambda cls_name: ri.decorated_call_prefix(
                 cls_name, 'stdext::', no_std)
-            no_gnustd = ri.decorated_call_prefix(
+            no_gnustd = lambda cls_name: ri.decorated_call_prefix(
                 cls_name, '__gnu_cxx::', no_stdext)
-            no_const = ri.decorated_call_prefix(
+            no_const = lambda cls_name: ri.decorated_call_prefix(
                 cls_name, 'const ', no_gnustd)
-            no_end_const = ri.decorated_call_suffix(
+            no_end_const = lambda cls_name: ri.decorated_call_suffix(
                 cls_name, ' const', no_const)
             return no_end_const(cls_name)
 
-    @staticmethod
-    def erase_recursive(cls_name):
-        return defaults_eraser.recursive_impl.erase_recursive(cls_name)
+    def erase_recursive(self, cls_name):
+        return self.recursive_impl.erase_recursive(cls_name)
 
-    @staticmethod
-    def erase_allocator(cls_name, default_allocator='std::allocator'):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+    def erase_allocator(self, cls_name, default_allocator='std::allocator'):
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if 2 != len(c_args):
             return
@@ -105,54 +107,53 @@ class defaults_eraser:
             container=c_name,
             value_type=value_type,
             allocator=default_allocator)
-        if defaults_eraser.normalize(cls_name) == \
-                defaults_eraser.normalize(tmpl):
+        if self.normalize(cls_name) == \
+                self.normalize(tmpl):
             return templates.join(
-                c_name, [defaults_eraser.erase_recursive(value_type)])
+                c_name, [self.erase_recursive(value_type)])
 
-    @staticmethod
-    def erase_container(cls_name, default_container_name='std::deque'):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+    def erase_container(self, cls_name, default_container_name='std::deque'):
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if 2 != len(c_args):
             return
         value_type = c_args[0]
-        dc_no_defaults = defaults_eraser.erase_recursive(c_args[1])
-        if defaults_eraser.normalize(dc_no_defaults) \
-           != defaults_eraser.normalize(
+        dc_no_defaults = self.erase_recursive(c_args[1])
+        if self.normalize(dc_no_defaults) \
+           != self.normalize(
                 templates.join(default_container_name, [value_type])):
             return
         return templates.join(
-            c_name, [defaults_eraser.erase_recursive(value_type)])
+            c_name, [self.erase_recursive(value_type)])
 
-    @staticmethod
     def erase_container_compare(
+            self, 
             cls_name,
             default_container_name='std::vector',
             default_compare='std::less'):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if 3 != len(c_args):
             return
-        dc_no_defaults = defaults_eraser.erase_recursive(c_args[1])
-        if defaults_eraser.normalize(dc_no_defaults) \
-           != defaults_eraser.normalize(
+        dc_no_defaults = self.erase_recursive(c_args[1])
+        if self.normalize(dc_no_defaults) \
+           != self.normalize(
                 templates.join(default_container_name, [c_args[0]])):
             return
-        dcomp_no_defaults = defaults_eraser.erase_recursive(c_args[2])
-        if defaults_eraser.normalize(dcomp_no_defaults) \
-           != defaults_eraser.normalize(
+        dcomp_no_defaults = self.erase_recursive(c_args[2])
+        if self.normalize(dcomp_no_defaults) \
+           != self.normalize(
                 templates.join(default_compare, [c_args[0]])):
             return
-        value_type = defaults_eraser.erase_recursive(c_args[0])
+        value_type = self.erase_recursive(c_args[0])
         return templates.join(c_name, [value_type])
 
-    @staticmethod
     def erase_compare_allocator(
+            self,
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if 3 != len(c_args):
             return
@@ -165,17 +166,17 @@ class defaults_eraser:
             value_type=value_type,
             compare=default_compare,
             allocator=default_allocator)
-        if defaults_eraser.normalize(cls_name) == \
-                defaults_eraser.normalize(tmpl):
+        if self.normalize(cls_name) == \
+                self.normalize(tmpl):
             return templates.join(
-                c_name, [defaults_eraser.erase_recursive(value_type)])
+                c_name, [self.erase_recursive(value_type)])
 
-    @staticmethod
     def erase_map_compare_allocator(
+            self,
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if 4 != len(c_args):
             return
@@ -198,16 +199,15 @@ class defaults_eraser:
                 mapped_type=mapped_type,
                 compare=default_compare,
                 allocator=default_allocator)
-            if defaults_eraser.normalize(cls_name) == \
-                    defaults_eraser.normalize(tmpl):
+            if self.normalize(cls_name) == \
+                    self.normalize(tmpl):
                 return templates.join(
                     c_name,
-                    [defaults_eraser.erase_recursive(key_type),
-                        defaults_eraser.erase_recursive(mapped_type)])
+                    [self.erase_recursive(key_type),
+                        self.erase_recursive(mapped_type)])
 
-    @staticmethod
-    def erase_hash_allocator(cls_name):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+    def erase_hash_allocator(self, cls_name):
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) < 3:
             return
@@ -241,14 +241,13 @@ class defaults_eraser:
                 less=default_less,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
-            if defaults_eraser.normalize(cls_name) == \
-                    defaults_eraser.normalize(inst):
+            if self.normalize(cls_name) == \
+                    self.normalize(inst):
                 return templates.join(
-                    c_name, [defaults_eraser.erase_recursive(value_type)])
+                    c_name, [self.erase_recursive(value_type)])
 
-    @staticmethod
-    def erase_hashmap_compare_allocator(cls_name):
-        cls_name = defaults_eraser.replace_basic_string(cls_name)
+    def erase_hashmap_compare_allocator(self, cls_name):
+        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
 
         default_hash = None
@@ -298,27 +297,28 @@ class defaults_eraser:
                 less=default_less,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
-            if defaults_eraser.normalize(cls_name) == \
-                    defaults_eraser.normalize(inst):
+            if self.normalize(cls_name) == \
+                    self.normalize(inst):
                 return templates.join(
                     c_name,
-                    [defaults_eraser.erase_recursive(key_type),
-                        defaults_eraser.erase_recursive(mapped_type)])
+                    [self.erase_recursive(key_type),
+                        self.erase_recursive(mapped_type)])
 
 
-class container_traits_impl_t:
+class container_traits_impl_t():
 
     """
-    implements the functionality needed for convenient work with STD container
+    Implements the functionality needed for convenient work with STD container
     classes
 
     Implemented functionality:
       * find out whether a declaration is STD container or not
       * find out container value( mapped ) type
 
-    This class tries to be useful as much, as possible. For example, for class
-    declaration( and not definition ) it parsers the class name in order to
+    This class tries to be useful as much as possible. For example, for class
+    declaration (and not definition) it parses the class name in order to
     extract the information.
+
     """
 
     def __init__(
@@ -326,7 +326,7 @@ class container_traits_impl_t:
             container_name,
             element_type_index,
             element_type_typedef,
-            defaults_remover,
+            eraser,
             key_type_index=None,
             key_type_typedef=None):
         """
@@ -339,11 +339,13 @@ class container_traits_impl_t:
         :param key_type_typedef: class typedef to the key type
         """
         self._name = container_name
-        self.remove_defaults_impl = defaults_remover
         self.element_type_index = element_type_index
         self.element_type_typedef = element_type_typedef
         self.key_type_index = key_type_index
         self.key_type_typedef = key_type_typedef
+
+        # Get the method from defaults_eraser using it's name
+        self.remove_defaults_impl = getattr(defaults_eraser(), eraser)
 
     def name(self):
         return self._name
@@ -460,100 +462,99 @@ class container_traits_impl_t:
         else:
             return no_defaults
 
-create_traits = container_traits_impl_t
-list_traits = create_traits(
+list_traits = container_traits_impl_t(
     'list',
     0,
     'value_type',
-    defaults_eraser.erase_allocator)
+    'erase_allocator')
 
-deque_traits = create_traits(
+deque_traits = container_traits_impl_t(
     'deque',
     0,
     'value_type',
-    defaults_eraser.erase_allocator)
+    'erase_allocator')
 
-queue_traits = create_traits(
+queue_traits = container_traits_impl_t(
     'queue',
     0,
     'value_type',
-    defaults_eraser.erase_container)
+    'erase_container')
 
-priority_queue_traits = create_traits(
+priority_queue_traits = container_traits_impl_t(
     'priority_queue',
     0,
     'value_type',
-    defaults_eraser.erase_container_compare)
+    'erase_container_compare')
 
-vector_traits = create_traits(
+vector_traits = container_traits_impl_t(
     'vector',
     0,
     'value_type',
-    defaults_eraser.erase_allocator)
+    'erase_allocator')
 
-stack_traits = create_traits(
+stack_traits = container_traits_impl_t(
     'stack',
     0,
     'value_type',
-    defaults_eraser.erase_container)
+    'erase_container')
 
-map_traits = create_traits(
+map_traits = container_traits_impl_t(
     'map',
     1,
     'mapped_type',
-    defaults_eraser.erase_map_compare_allocator,
+    'erase_map_compare_allocator',
     key_type_index=0,
     key_type_typedef='key_type')
 
-multimap_traits = create_traits(
+multimap_traits = container_traits_impl_t(
     'multimap',
     1,
     'mapped_type',
-    defaults_eraser.erase_map_compare_allocator,
+    'erase_map_compare_allocator',
     key_type_index=0,
     key_type_typedef='key_type')
 
 
-hash_map_traits = create_traits(
+hash_map_traits = container_traits_impl_t(
     'hash_map',
     1,
     'mapped_type',
-    defaults_eraser.erase_hashmap_compare_allocator,
+    'erase_hashmap_compare_allocator',
     key_type_index=0,
     key_type_typedef='key_type')
 
 
-hash_multimap_traits = create_traits(
+hash_multimap_traits = container_traits_impl_t(
     'hash_multimap',
     1,
     'mapped_type',
-    defaults_eraser.erase_hashmap_compare_allocator,
+    'erase_hashmap_compare_allocator',
     key_type_index=0,
     key_type_typedef='key_type')
 
-set_traits = create_traits(
+set_traits = container_traits_impl_t(
     'set',
     0,
     'value_type',
-    defaults_eraser.erase_compare_allocator)
+    'erase_compare_allocator')
 
-multiset_traits = create_traits(
+multiset_traits = container_traits_impl_t(
     'multiset',
     0,
     'value_type',
-    defaults_eraser.erase_compare_allocator)
+    'erase_compare_allocator')
 
-hash_set_traits = create_traits(
+hash_set_traits = container_traits_impl_t(
     'hash_set',
     0,
     'value_type',
-    defaults_eraser.erase_hash_allocator)
+    'erase_hash_allocator')
 
-hash_multiset_traits = create_traits(
+hash_multiset_traits = container_traits_impl_t(
     'hash_multiset',
     0,
     'value_type',
-    defaults_eraser.erase_hash_allocator)
+    'erase_hash_allocator')
 
 container_traits = (
     list_traits,
