@@ -182,14 +182,13 @@ class undname_creator_t:
             else:
                 return ''
         else:
-            formater = lambda type_: self.__format_type_as_undecorated(
-                type_, True, hint)
             argsep = ','
             if hint == 'nm':
                 # ugly hack, later, I will replace ', ' with ',', so single
                 # space will still exist
                 argsep = ',  '
-            return argsep.join(map(formater, argtypes))
+            return argsep.join(map(self.__format_type_as_undecorated(
+                type_, True, hint), argtypes))
 
     def format_calldef(self, calldef, hint):
         calldef_type = calldef.function_type()
