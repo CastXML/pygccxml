@@ -17,8 +17,8 @@ gccxml_09_path = os.path.join(
 sys.path.append(os.path.join(this_module_dir_path, '..', '..'))
 
 
-from pygccxml import parser
-from pygccxml import declarations
+from pygccxml import parser  # nopep8
+from pygccxml import declarations  # nopep8
 
 # Configure GCC-XML parser
 config = parser.gccxml_configuration_t(

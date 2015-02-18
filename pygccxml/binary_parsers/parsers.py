@@ -120,17 +120,18 @@ class formated_mapping_parser_t(libparser_t):
         self.__formated_decls = {}
         self.undname_creator = undname.undname_creator_t()
 
-        formatter = lambda decl: self.undname_creator.format_decl(decl, hint)
-
         for f in self.global_ns.calldefs(allow_empty=True, recursive=True):
-            self.__formated_decls[formatter(f)] = f
+            self.__formated_decls[self.formatter(f, hint)] = f
 
         for v in self.global_ns.variables(allow_empty=True, recursive=True):
-            self.__formated_decls[formatter(v)] = v
+            self.__formated_decls[self.formatter(v, hint)] = v
 
     @property
     def formated_decls(self):
         return self.__formated_decls
+
+    def formatter(self, decl, hint):
+        return self.undname_creator.format_decl(decl, hint)
 
 
 class map_file_parser_t(formated_mapping_parser_t):
