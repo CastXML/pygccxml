@@ -47,53 +47,43 @@ class defaults_eraser:
                 new_name = new_name.replace(lname, short_name)
         return new_name
 
-    class recursive_impl:
+    def decorated_call_prefix(self, cls_name, text, doit):
+        has_text = cls_name.startswith(text)
+        if has_text:
+            cls_name = cls_name[len(text):]
+        answer = doit(cls_name)
+        if has_text:
+            answer = text + answer
+        return answer
 
-        @staticmethod
-        def decorated_call_prefix(cls_name, text, doit):
-            has_text = cls_name.startswith(text)
-            if has_text:
-                cls_name = cls_name[len(text):]
-            answer = doit(cls_name)
-            if has_text:
-                answer = text + answer
-            return answer
+    def decorated_call_suffix(self, cls_name, text, doit):
+        has_text = cls_name.endswith(text)
+        if has_text:
+            cls_name = cls_name[: len(text)]
+        answer = doit(cls_name)
+        if has_text:
+            answer = answer + text
+        return answer
 
-        @staticmethod
-        def decorated_call_suffix(cls_name, text, doit):
-            has_text = cls_name.endswith(text)
-            if has_text:
-                cls_name = cls_name[: len(text)]
-            answer = doit(cls_name)
-            if has_text:
-                answer = answer + text
-            return answer
-
-        @staticmethod
-        def erase_call(cls_name):
-            global find_container_traits
-            c_traits = find_container_traits(cls_name)
-            if not c_traits:
-                return cls_name
-            return c_traits.remove_defaults(cls_name)
-
-        @staticmethod
-        def erase_recursive(cls_name):
-            ri = defaults_eraser.recursive_impl
-            no_std = lambda cls_name: ri.decorated_call_prefix(
-                cls_name, 'std::', ri.erase_call)
-            no_stdext = lambda cls_name: ri.decorated_call_prefix(
-                cls_name, 'stdext::', no_std)
-            no_gnustd = lambda cls_name: ri.decorated_call_prefix(
-                cls_name, '__gnu_cxx::', no_stdext)
-            no_const = lambda cls_name: ri.decorated_call_prefix(
-                cls_name, 'const ', no_gnustd)
-            no_end_const = lambda cls_name: ri.decorated_call_suffix(
-                cls_name, ' const', no_const)
-            return no_end_const(cls_name)
+    def erase_call(self, cls_name):
+        global find_container_traits
+        c_traits = find_container_traits(cls_name)
+        if not c_traits:
+            return cls_name
+        return c_traits.remove_defaults(cls_name)
 
     def erase_recursive(self, cls_name):
-        return self.recursive_impl.erase_recursive(cls_name)
+        no_std = lambda cls_name: self.decorated_call_prefix(
+            cls_name, 'std::', self.erase_call)
+        no_stdext = lambda cls_name: self.decorated_call_prefix(
+            cls_name, 'stdext::', no_std)
+        no_gnustd = lambda cls_name: self.decorated_call_prefix(
+            cls_name, '__gnu_cxx::', no_stdext)
+        no_const = lambda cls_name: self.decorated_call_prefix(
+            cls_name, 'const ', no_gnustd)
+        no_end_const = lambda cls_name: self.decorated_call_suffix(
+            cls_name, ' const', no_const)
+        return no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
         cls_name = self.replace_basic_string(cls_name)
