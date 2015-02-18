@@ -13,7 +13,6 @@ This modules contains definition for next C++ declarations:
 """
 
 from . import scopedef
-from . import compilers
 from . import algorithm
 from . import declaration
 from . import dependencies
@@ -513,14 +512,13 @@ class class_t(scopedef.scopedef_t):
         return answer
 
     def i_depend_on_them(self, recursive=True):
-        report_dependency = lambda * \
-            args: dependencies.dependency_info_t(self, *args)
 
         answer = []
 
         for base in self.bases:
             answer.append(
-                report_dependency(
+                dependencies.dependency_info_t(
+                    self,
                     base.related_class,
                     base.access_type,
                     "base class"))
@@ -625,8 +623,8 @@ class class_t(scopedef.scopedef_t):
         from . import calldef
         return bool(
             self.calldefs(
-                lambda f: isinstance(f, calldef.member_function_t)
-                and f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL,
+                lambda f: isinstance(f, calldef.member_function_t) and
+                f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL,
                 recursive=False,
                 allow_empty=True))
 

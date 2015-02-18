@@ -150,9 +150,10 @@ class default_argument_patcher_t(object):
         if not isinstance(base_type, declarations.declarated_t):
             return False
         decl = base_type.declaration
-        return decl.name == name \
-            or (isinstance(decl, declarations.class_t)
-                and name in [typedef.name for typedef in decl.aliases])
+        return (
+            decl.name == name or
+            (isinstance(decl, declarations.class_t) and
+                name in [typedef.name for typedef in decl.aliases]))
 
     def __fix_constructor_call(self, func, arg):
         call_invocation = declarations.call_invocation

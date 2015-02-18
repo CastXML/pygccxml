@@ -7,7 +7,6 @@
 defines classes, that describe C++ types
 """
 
-from . import compilers
 from . import algorithms_cache
 
 
@@ -671,6 +670,9 @@ class free_function_type_t(type_t, calldef_type_t):
         type_t.__init__(self)
         calldef_type_t.__init__(self, return_type, arguments_types)
 
+    def f(self, x, with_defaults):
+        return x.build_decl_string(with_defaults)
+
     @staticmethod
     def create_decl_string(return_type, arguments_types, with_defaults=True):
         """
@@ -681,13 +683,11 @@ class free_function_type_t(type_t, calldef_type_t):
         :param arguments_types: list of argument :class:`type <type_t>`
         :rtype: :class:`free_function_type_t`
         """
-        f = lambda x: x.build_decl_string(with_defaults)
+
         return free_function_type_t.NAME_TEMPLATE % {
             'return_type': return_type.build_decl_string(with_defaults),
             'arguments': ','.join(
-                map(
-                    f,
-                    arguments_types))}
+                map(self.f, arguments_types))}
 
     def build_decl_string(self, with_defaults=True):
         return self.create_decl_string(

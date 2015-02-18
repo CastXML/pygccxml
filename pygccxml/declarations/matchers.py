@@ -537,7 +537,7 @@ class regex_matcher_t(matcher_base_t):
         matcher_base_t.__init__(self)
         self.regex = re.compile(regex)
         self.function = function
-        if None is self.function:
+        if self.function is None:
             self.function = lambda decl: decl.name
 
     def __call__(self, decl):

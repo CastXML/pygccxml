@@ -6,7 +6,7 @@
 """
 defines few algorithms, that deals with different C++ type properties
 
-Do you aware of `boost::type_traits <http://www.boost.org/doc/libs/1_37_0/
+Are you aware of `boost::type_traits <http://www.boost.org/doc/libs/1_37_0/
 libs/type_traits/doc/html/boost_typetraits/intro.html>`_
 library? pygccxml implements the same functionality.
 
@@ -14,7 +14,7 @@ This module contains a set of very specific traits functions\\classes, each of
 which encapsulate a single trait from the C++ type system. For example:
 * is a type a pointer or a reference type ?
 * does a type have a trivial constructor ?
-* does a type have a  const-qualifier ?
+* does a type have a const-qualifier ?
 
 """
 
@@ -24,7 +24,6 @@ from . import matchers
 from . import typedef
 from . import calldef
 from . import cpptypes
-from . import variable
 from . import algorithm
 from . import namespace
 from . import templates
@@ -112,8 +111,8 @@ def does_match_definition(given, main, secondary):
     if isinstance(types[0], main):
         return True
     elif 2 <= len(types) and \
-        ((isinstance(types[0], main) and isinstance(types[1], secondary))
-         or (isinstance(types[1], main) and isinstance(types[0], secondary))):
+        ((isinstance(types[0], main) and isinstance(types[1], secondary)) or
+            (isinstance(types[1], main) and isinstance(types[0], secondary))):
         return True
     elif 3 <= len(types):
         classes = set([tp.__class__ for tp in types[:3]])
@@ -521,7 +520,6 @@ def has_any_non_copyconstructor(type):
 
 def has_public_binary_operator(type_, operator_symbol):
     """returns True, if `type_` has public binary operator, otherwise False"""
-    not_artificial = lambda decl: not decl.is_artificial
     type_ = remove_alias(type_)
     type_ = remove_cv(type_)
     type_ = remove_declarated(type_)
@@ -533,8 +531,9 @@ def has_public_binary_operator(type_, operator_symbol):
         return True
 
     operators = type_.member_operators(
-        function=matchers.custom_matcher_t(not_artificial)
-        & matchers.access_type_matcher_t('public'),
+        function=matchers.custom_matcher_t(
+            lambda decl: not decl.is_artificial) &
+        matchers.access_type_matcher_t('public'),
         symbol=operator_symbol, allow_empty=True, recursive=False)
     if operators:
         return True
@@ -543,9 +542,8 @@ def has_public_binary_operator(type_, operator_symbol):
     t = cpptypes.const_t(t)
     t = cpptypes.reference_t(t)
     operators = type_.top_parent.operators(
-        function=not_artificial,
-        arg_types=[t,
-                   None],
+        function=lambda decl: not decl.is_artificial,
+        arg_types=[t, None],
         symbol=operator_symbol,
         allow_empty=True,
         recursive=True)
@@ -556,8 +554,9 @@ def has_public_binary_operator(type_, operator_symbol):
         if bi.access_type != class_declaration.ACCESS_TYPES.PUBLIC:
             continue
         operators = bi.related_class.member_operators(
-            function=matchers.custom_matcher_t(not_artificial)
-            & matchers.access_type_matcher_t('public'),
+            function=matchers.custom_matcher_t(
+                lambda decl: not decl.is_artificial) &
+            matchers.access_type_matcher_t('public'),
             symbol=operator_symbol, allow_empty=True, recursive=False)
         if operators:
             return True
@@ -805,6 +804,11 @@ class __is_convertible_t:
             return True  # X => const Y&
         return False
 
+    def _is_both_declarated(self, x, y):
+        return (
+            isinstance(x, cpptypes.declarated_t) and
+            isinstance(y, cpptypes.declarated_t))
+
     def __test_derived_to_based(self, source, target):
         derived = base_type(source)
         base = base_type(target)
@@ -812,56 +816,53 @@ class __is_convertible_t:
                 isinstance(derived, cpptypes.declarated_t) and
                 isinstance(derived.declaration, class_declaration.class_t)):
             return False
-        if not (isinstance(base, cpptypes.declarated_t)
-                and isinstance(base.declaration, class_declaration.class_t)):
+        if not (isinstance(base, cpptypes.declarated_t) and
+                isinstance(base.declaration, class_declaration.class_t)):
             return False
         base = base.declaration
         derived = derived.declaration
         if not is_base_and_derived(base, derived):
             return False
         for b in derived.recursive_bases:
-            if (b.related_class is base) and b.access_type != \
-                    class_declaration.ACCESS_TYPES.PRIVATE:
+            if ((b.related_class is base) and b.access_type !=
+                    class_declaration.ACCESS_TYPES.PRIVATE):
                 break
         else:
             return False
 
         base = target
         derived = source
-        is_both_declarated = \
-            lambda x, y: isinstance(x, cpptypes.declarated_t) \
-            and isinstance(y, cpptypes.declarated_t)
         # d => b
-        if is_both_declarated(base, derived):
+        if self._is_both_declarated(base, derived):
             return True
         # d* => b*
         if is_pointer(derived) and is_pointer(base) \
-           and is_both_declarated(base.base, derived.base):
+           and self._is_both_declarated(base.base, derived.base):
             return True
         # const d* => const b*
         if is_pointer(derived) and is_pointer(base) \
            and is_const(derived.base) and is_const(base.base) \
-           and is_both_declarated(base.base.base, derived.base.base):
+           and self._is_both_declarated(base.base.base, derived.base.base):
             return True
         # d* => const b*
         if is_pointer(derived) and is_pointer(base) \
            and is_const(derived.base)\
-           and is_both_declarated(base.base.base, derived.base):
+           and self._is_both_declarated(base.base.base, derived.base):
             return True
 
         # d& => b&
         if is_reference(derived) and is_reference(base) \
-           and is_both_declarated(base.base, derived.base):
+           and self._is_both_declarated(base.base, derived.base):
             return True
         # const d& => const b&
         if is_reference(derived) and is_reference(base) \
            and is_const(derived.base) and is_const(base.base) \
-           and is_both_declarated(base.base.base, derived.base.base):
+           and self._is_both_declarated(base.base.base, derived.base.base):
             return True
         # d& => const b&
         if is_reference(derived) and is_reference(base) \
            and is_const(derived.base) \
-           and is_both_declarated(base.base.base, derived.base):
+           and self._is_both_declarated(base.base.base, derived.base):
             return True
         return False
 

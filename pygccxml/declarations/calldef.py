@@ -19,7 +19,6 @@ This modules contains definition for next C++ declarations:
 import re
 from . import cpptypes
 from . import algorithm
-from . import templates
 from . import declaration
 # from . import type_traits # moved below to fix a cyclic dependency problem
 from . import dependencies
@@ -414,19 +413,18 @@ class calldef_t(declaration.declaration_t):
         self._demangled_name = ''
         return self.name
 
+    def _report(self, *args, **keywd):
+        return dependencies.dependency_info_t(self, *args, **keywd)
+
     def i_depend_on_them(self, recursive=True):
-        report_dependency = lambda * \
-            args, **keywd: dependencies.dependency_info_t(self, *args, **keywd)
         answer = []
         if self.return_type:
             answer.append(
-                report_dependency(
-                    self.return_type,
-                    hint="return type"))
+                self._report(self.return_type, hint="return type"))
         for arg in self.arguments:
-            answer.append(report_dependency(arg.type))
+            answer.append(self._report(arg.type))
         for exc in self.exceptions:
-            answer.append(report_dependency(exc, hint="exception"))
+            answer.append(self._report(exc, hint="exception"))
         return answer
 
     def guess_calling_convention(self):

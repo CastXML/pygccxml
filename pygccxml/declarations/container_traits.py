@@ -8,9 +8,7 @@ defines few algorithms, that deals with different properties of std containers
 """
 
 import string
-from . import calldef
 from . import cpptypes
-from . import namespace
 from . import templates
 from . import type_traits
 from . import class_declaration
@@ -78,15 +76,15 @@ class defaults_eraser:
         @staticmethod
         def erase_recursive(cls_name):
             ri = defaults_eraser.recursive_impl
-            no_std = lambda cls_name: ri.decorated_call_prefix(
+            no_std = ri.decorated_call_prefix(
                 cls_name, 'std::', ri.erase_call)
-            no_stdext = lambda cls_name: ri.decorated_call_prefix(
+            no_stdext = ri.decorated_call_prefix(
                 cls_name, 'stdext::', no_std)
-            no_gnustd = lambda cls_name: ri.decorated_call_prefix(
+            no_gnustd = ri.decorated_call_prefix(
                 cls_name, '__gnu_cxx::', no_stdext)
-            no_const = lambda cls_name: ri.decorated_call_prefix(
+            no_const = ri.decorated_call_prefix(
                 cls_name, 'const ', no_gnustd)
-            no_end_const = lambda cls_name: ri.decorated_call_suffix(
+            no_end_const = ri.decorated_call_suffix(
                 cls_name, ' const', no_const)
             return no_end_const(cls_name)
 
