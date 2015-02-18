@@ -127,7 +127,7 @@ class defaults_eraser:
             c_name, [self.erase_recursive(value_type)])
 
     def erase_container_compare(
-            self, 
+            self,
             cls_name,
             default_container_name='std::vector',
             default_compare='std::less'):
@@ -387,7 +387,7 @@ class container_traits_impl_t():
 
     def is_sequence(self, type_):
         # raise exception if type is not container
-        unused = self.class_declaration(type_)
+        self.class_declaration(type_)
         return self.key_type_index is None
 
     def is_mapping(self, type_):
