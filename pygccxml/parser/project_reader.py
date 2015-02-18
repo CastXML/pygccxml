@@ -5,7 +5,6 @@
 
 import os
 import time
-import types
 from . import source_reader
 from . import declarations_cache
 import pygccxml.declarations
@@ -471,27 +470,28 @@ class project_reader_t:
 
         nsref.declarations = decls
 
-    def _join_class_hierarchy(self, namespaces):
-        create_key = lambda decl: (
+    def _create_key(self, decl):
+        return (
             decl.location.as_tuple(),
             tuple(pygccxml.declarations.declaration_path(decl)))
+
+    def _join_class_hierarchy(self, namespaces):
         classes = [
             decl for decl in pygccxml.declarations.make_flatten(namespaces)
             if isinstance(decl, pygccxml.declarations.class_t)]
         leaved_classes = {}
         # selecting classes to leave
         for class_ in classes:
-            key = create_key(class_)
+            key = self._create_key(class_)
             if key not in leaved_classes:
                 leaved_classes[key] = class_
         # replacing base and derived classes with those that should be leave
         # also this loop will add missing derived classes to the base
         for class_ in classes:
-            leaved_class = leaved_classes[create_key(class_)]
+            leaved_class = leaved_classes[self._create_key(class_)]
             for base_info in class_.bases:
                 leaved_base = leaved_classes[
-                    create_key(
-                        base_info.related_class)]
+                    self._create_key(base_info.related_class)]
                 # treating base class hierarchy of leaved_class
                 leaved_base_info = pygccxml.declarations.hierarchy_info_t(
                     related_class=leaved_base, access=base_info.access)
@@ -515,7 +515,7 @@ class project_reader_t:
                         leaved_derived_for_base_info.related_class
             for derived_info in class_.derived:
                 leaved_derived = leaved_classes[
-                    create_key(
+                    self._create_key(
                         derived_info.related_class)]
                 # treating derived class hierarchy of leaved_class
                 leaved_derived_info = pygccxml.declarations.hierarchy_info_t(
@@ -531,7 +531,7 @@ class project_reader_t:
                     leaved_derived.bases.append(leaved_base_for_derived_info)
         # this loops remove instance we from parent.declarations
         for class_ in classes:
-            key = create_key(class_)
+            key = self._create_key(class_)
             if id(leaved_classes[key]) == id(class_):
                 continue
             else:
@@ -547,18 +547,20 @@ class project_reader_t:
                 del declarations[declarations_ids.index(id(class_))]
         return leaved_classes
 
+    def _create_key2(self, decl):
+        return (
+            decl.location.as_tuple(),
+            tuple(pygccxml.declarations.declaration_path(decl)))
+
+    def _create_mangled_key(self, decl):
+        return (decl.location.as_tuple(), decl.mangled)
+
     def _relink_declarated_types(self, leaved_classes, declarated_types):
-        create_key = lambda decl: (
-            decl.location.as_tuple(),
-            tuple(
-                pygccxml.declarations.declaration_path(decl)))
-        create_mangled_key = lambda decl: (
-            decl.location.as_tuple(),
-            decl.mangled)
 
         mangled_leaved_classes = {}
-        for cls in leaved_classes.values():
-            mangled_leaved_classes[create_mangled_key(cls)] = cls
+        for leaved_class in leaved_classes.values():
+            mangled_leaved_classes[
+                self._create_mangled_key(leaved_class)] = leaved_class
 
         for decl_wrapper_type in declarated_types:
             # it is possible, that cache contains reference to dropped class
@@ -567,7 +569,7 @@ class project_reader_t:
             if isinstance(
                     decl_wrapper_type.declaration,
                     pygccxml.declarations.class_t):
-                key = create_key(decl_wrapper_type.declaration)
+                key = self._create_key2(decl_wrapper_type.declaration)
                 if key in leaved_classes:
                     decl_wrapper_type.declaration = leaved_classes[key]
                 else:
@@ -592,7 +594,7 @@ class project_reader_t:
             elif isinstance(
                     decl_wrapper_type.declaration,
                     pygccxml.declarations.class_declaration_t):
-                key = create_mangled_key(decl_wrapper_type.declaration)
+                key = self._create_mangled_key(decl_wrapper_type.declaration)
                 if key in mangled_leaved_classes:
                     decl_wrapper_type.declaration = mangled_leaved_classes[key]
 

@@ -106,12 +106,11 @@ def normalize_path(some_path):
 
 
 def contains_parent_dir(fpath, dirs):
-    """Returns bool(filter(lambda dir: fpath.startswith(dir), dirs))
+    """Returns bool(filter(fpath.startswith(dirs), dirs))
     precondition: dirs and fpath should be normalize_path'ed before calling
     this function
     """
-    f = lambda dir_: fpath.startswith(dir_)
-    return bool(list(filter(f, dirs)))
+    return bool(list(filter(fpath.startswith(dirs), dirs)))
 
 
 def get_architecture():
