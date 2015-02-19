@@ -423,7 +423,7 @@ class calldef_matcher_t(declaration_matcher_t):
                 if len(self.arg_types) != len(decl.arguments):
                     return False
                 for type_or_str, arg in zip(self.arg_types, decl.arguments):
-                    if None == type_or_str:
+                    if type_or_str is None:
                         continue
                     else:
                         if not self.__compare_types(type_or_str, arg.type):

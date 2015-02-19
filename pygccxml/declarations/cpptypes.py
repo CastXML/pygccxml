@@ -7,7 +7,6 @@
 defines classes, that describe C++ types
 """
 
-from . import compilers
 from . import algorithms_cache
 
 
@@ -659,6 +658,9 @@ class calldef_type_t(object):
         return self.arguments_types and isinstance(
             self.arguments_types[-1], ellipsis_t)
 
+    def f(self, x, with_defaults):
+        return x.build_decl_string(with_defaults)
+
 
 class free_function_type_t(type_t, calldef_type_t):
 
@@ -671,8 +673,8 @@ class free_function_type_t(type_t, calldef_type_t):
         type_t.__init__(self)
         calldef_type_t.__init__(self, return_type, arguments_types)
 
-    @staticmethod
-    def create_decl_string(return_type, arguments_types, with_defaults=True):
+    def create_decl_string(
+            self, return_type, arguments_types, with_defaults=True):
         """
         returns free function type
 
@@ -681,13 +683,11 @@ class free_function_type_t(type_t, calldef_type_t):
         :param arguments_types: list of argument :class:`type <type_t>`
         :rtype: :class:`free_function_type_t`
         """
-        f = lambda x: x.build_decl_string(with_defaults)
+
         return free_function_type_t.NAME_TEMPLATE % {
             'return_type': return_type.build_decl_string(with_defaults),
             'arguments': ','.join(
-                map(
-                    f,
-                    arguments_types))}
+                [self.f(x, with_defaults) for x in arguments_types])}
 
     def build_decl_string(self, with_defaults=True):
         return self.create_decl_string(
@@ -710,12 +710,12 @@ class free_function_type_t(type_t, calldef_type_t):
 
         :param name: the desired name of typedef
         """
-        # unused argument simplifies user code
-        f = lambda x: x.build_decl_string(with_defaults)
+
         return free_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name': typedef_name,
             'return_type': self.return_type.build_decl_string(with_defaults),
-            'arguments': ','.join(map(f, self.arguments_types))}
+            'arguments': ','.join(
+                [self.f(x, with_defaults) for x in self.arguments_types])}
 
 
 class member_function_type_t(type_t, calldef_type_t):
@@ -775,15 +775,13 @@ class member_function_type_t(type_t, calldef_type_t):
                 class_alias = self.class_inst.decl_string
             else:
                 class_alias = self.class_inst.partial_decl_string
-        f = lambda x: x.build_decl_string(with_defaults)
+
         return member_function_type_t.TYPEDEF_NAME_TEMPLATE % {
             'typedef_name': typedef_name,
             'return_type': self.return_type.build_decl_string(with_defaults),
             'class': class_alias,
             'arguments': ','.join(
-                map(
-                    f,
-                    self.arguments_types)),
+                [self.f(x, with_defaults) for x in self.arguments_types]),
             'has_const': has_const_str}
 
     def create(self):
@@ -793,8 +791,8 @@ class member_function_type_t(type_t, calldef_type_t):
             self.arguments_types,
             self.has_const)
 
-    @staticmethod
     def create_decl_string(
+            self,
             return_type,
             class_decl_string,
             arguments_types,
@@ -807,14 +805,12 @@ class member_function_type_t(type_t, calldef_type_t):
         if return_type:
             return_type_decl_string = return_type.build_decl_string(
                 with_defaults)
-        f = lambda x: x.build_decl_string(with_defaults)
+
         return member_function_type_t.NAME_TEMPLATE % {
             'return_type': return_type_decl_string,
             'class': class_decl_string,
             'arguments': ','.join(
-                map(
-                    f,
-                    arguments_types)),
+                [self.f(x, with_defaults) for x in arguments_types]),
             'has_const': has_const_str}
 
     def build_decl_string(self, with_defaults=True):

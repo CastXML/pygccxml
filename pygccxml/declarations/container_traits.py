@@ -72,18 +72,28 @@ class defaults_eraser:
             return cls_name
         return c_traits.remove_defaults(cls_name)
 
-    def erase_recursive(self, cls_name):
-        no_std = lambda cls_name: self.decorated_call_prefix(
+    def no_std(self, cls_name):
+        return self.decorated_call_prefix(
             cls_name, 'std::', self.erase_call)
-        no_stdext = lambda cls_name: self.decorated_call_prefix(
-            cls_name, 'stdext::', no_std)
-        no_gnustd = lambda cls_name: self.decorated_call_prefix(
-            cls_name, '__gnu_cxx::', no_stdext)
-        no_const = lambda cls_name: self.decorated_call_prefix(
-            cls_name, 'const ', no_gnustd)
-        no_end_const = lambda cls_name: self.decorated_call_suffix(
-            cls_name, ' const', no_const)
-        return no_end_const(cls_name)
+
+    def no_stdext(self, cls_name):
+        return self.decorated_call_prefix(
+            cls_name, 'stdext::', self.no_std)
+
+    def no_gnustd(self, cls_name):
+        return self.decorated_call_prefix(
+            cls_name, '__gnu_cxx::', self.no_stdext)
+
+    def no_const(self, cls_name):
+        return self.decorated_call_prefix(
+            cls_name, 'const ', self.no_gnustd)
+
+    def no_end_const(self, cls_name):
+        return self.decorated_call_suffix(
+            cls_name, ' const', self.no_const)
+
+    def erase_recursive(self, cls_name):
+        return self.no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
         cls_name = self.replace_basic_string(cls_name)
