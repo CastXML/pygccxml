@@ -2,38 +2,35 @@
 Download & Install
 ==================
 
--------------------------
-pygccxml on SourceForge
--------------------------
+------------------
+pygccxml on Github
+------------------
 
-pygccxml project is hosted on SourceForge. Using SourceForge services you
-can:
+The pygccxml project is hosted on Github. Using Github you can:
 
-1) get access to source code
-2) get access to latest release version of pygccxml
-
-
------------------
-Subversion access
------------------
-
-http://sourceforge.net/svn/?group_id=118209
-
---------
-Download
---------
-
-https://sourceforge.net/project/showfiles.php?group_id=118209
+1) get access to the source code
+2) create pull requests
+3) report bugs or ask for new features
 
 ------------
 Installation
 ------------
 
+Note that you will need `GCC-XML`_ on your system, see section below.
+
+You can use pip to install pygccxml:
+
+  pip install pygccxml
+
+To install from source, you can use the usual procedure:
+
+  python setup.py install
+
 GCC-XML
 -------
-There are few different ways to install GCC-XML on your system:
+There are few different ways to install `GCC-XML`_ on your system:
 
-1. If you use Linux, than I am almost sure your system has "gccxml" package.
+1. If you use Linux, than I am almost sure your system provides the "gccxml" package.
    Consider to install it using "native"(rpm, deb, portage) packaging system.
 
 .. line separator
@@ -43,20 +40,4 @@ There are few different ways to install GCC-XML on your system:
    is supported for Windows, Linux and Mac platforms.
 
 .. _`instructions` : http://gccxml.org/HTML/Install.html
-
-pygccxml
---------
-In command prompt or shell change current directory to be "pygccxml-X.Y.Z".
-"X.Y.Z" is version of pygccxml. Type the following command:
-
-| ``python setup.py install``
-
-After this command complete, you should have installed pygccxml package.
-
-------------
-Dependencies
-------------
-
-* `GCC-XML`_
-
 .. _`GCC-XML`: http://www.gccxml.org
