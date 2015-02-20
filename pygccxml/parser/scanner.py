@@ -85,7 +85,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def __init__(self, gccxml_file, decl_factory, *args):
         xml.sax.handler.ContentHandler.__init__(self, *args)
-        self.logger = utils.loggers.gccxml
+        self.logger = utils.loggers.cxx_parser
         self.gccxml_file = gccxml_file
         # defining parsing tables
         self.__readers = {

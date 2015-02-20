@@ -42,8 +42,6 @@ class loggers:
     parsing
     """
 
-    gccxml = cxx_parser  # backward compatability
-
     pdb_reader = _create_logger_('pygccxml.pdb_reader')
     """
     Logger for MS .pdb file reader functionality

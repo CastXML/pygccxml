@@ -192,7 +192,7 @@ class project_reader_t:
         if not decl_factory:
             self.__decl_factory = pygccxml.declarations.decl_factory_t()
 
-        self.logger = utils.loggers.gccxml
+        self.logger = utils.loggers.cxx_parser
 
     @staticmethod
     def get_os_file_names(files):
