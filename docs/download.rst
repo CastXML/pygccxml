@@ -26,6 +26,7 @@ To install from source, you can use the usual procedure:
 
   python setup.py install
 
+-------
 GCC-XML
 -------
 There are few different ways to install `GCC-XML`_ on your system:
