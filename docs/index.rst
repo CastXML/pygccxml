@@ -19,14 +19,11 @@ Using `pygccxml` you can:
 * build code analyzer
 * ...
 
-Features
-========
-
 Query interface
 ---------------
 `pygccxml` provides simple and powerful API to query declarations tree.
 
-How many lines is needed to write the following query?
+How many lines are needed to write the following query?
 ::
 
   select all free functions from the project
@@ -40,36 +37,34 @@ Only single line of code is needed:
 
 .. code-block:: python
 
-  #global_ns is the reference to declarations, which describes global( :: ) namespace
-  global_ns.free_functions( "do_smth", return_type='void', arg_types=[None,'int'] )
+  # global_ns is the reference to declarations, which describes the global(::) namespace
+  # "None" means any type.
+  global_ns.free_functions("do_smth", return_type="void", arg_types=[None, "int"])
 
-``None`` means "any type". In my opinion, the code is pretty clear and readable.
-
-If you want to know more about provided API read :doc:`query interface <query_interface>`
-document or :doc:`API documentation <apidocs/api>`
+If you want to know more about provided API read the :doc:`query interface <query_interface>`
+document or the :doc:`API documentation <apidocs/api>`
 
 Type traits
 -----------
 `pygccxml` provides a lot of functionality to analyze C++ types and relationship
-between them. For more information please refer to :doc:`design <design>` document or API
-documentation. Just a few names of algorithms:
+between them. For more information please refer to the :doc:`design <design>` document or
+the :doc:`API documentation <apidocs/api>`. A few examples:
 
-* ``is_convertible( from, to )``
+* ``is_convertible(from, to)``
 
   returns ``True`` if there is a conversion from type ``from`` to type ``to``,
   otherwise ``False``
 
-* ``is_unary_operator( oper )``
+* ``is_unary_operator(oper)``
 
-  returns ``True`` if ``oper`` describes unary operator
+  returns ``True`` if ``oper`` describes an unary operator
 
 
 Declaration dependencies
 ------------------------
 You can query a declaration, about it dependencies - declarations it depends on.
-This is very powerful and useful feature. `Py++ <http://sourceforge.net/projects/pygccxml/files/pyplusplus/>`_,
-for example, uses this functionality to check that user creates Python bindings for all relevant
-declarations.
+This is a very powerful and useful feature. `Py++ <http://sourceforge.net/projects/pygccxml/files/pyplusplus/>`_, for example, uses this functionality to check that user creates Python
+bindings for all relevant declarations.
 
 Caching
 -------
@@ -86,8 +81,8 @@ more caching strategies, read the API documentation for more information.
 
 Binary files parser
 -------------------
-`pygccxml` contains functionality which allows to extract different information
-from binary files ( `.map`, `.dll`, `.so` ) and integrate it with the existing
+`pygccxml` contains a functionality which allows to extract different information
+from binary files (`.map`, `.dll`, `.so`) and integrate it with the existing
 declarations tree.
 
 License
