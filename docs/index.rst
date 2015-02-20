@@ -117,7 +117,8 @@ Documentation contents
    example/example
    users
    links
-   history/history
+   history
+   credits
    apidocs/api
 
 .. _`WSDL`: http://www.w3.org/TR/wsdl

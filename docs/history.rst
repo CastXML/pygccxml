@@ -1,5 +1,5 @@
-Development history
-===================
+Changes
+=======
 
 Introduction
 ------------
@@ -11,37 +11,12 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-About version numbers
----------------------
+Note about version numbers
+--------------------------
 
 When the project moved to git, versions were tagged from 1.0.0 on. Note that
 there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the many forks
 and the slow down of the maintenance effort).
-
-Contributors
-------------
-
-Thanks to all the people that have contributed patches, bug reports and suggestions:
-
-* Roman Yakovenko (original author)
-* Roman Yakovenko's wife - Yulia
-* Mark Moll
-* Holger Frydrych
-* John Pallister
-* Matthias Baas
-* Allen Bierbaum
-* Georgiy Dernovoy
-* Darren Garnier
-* Gottfried Ganssauge
-* Gaetan Lehmann
-* Martin Preisler
-* Miguel Lobo
-* Jeremy Sanders
-* Ben Schleimer
-* Gustavo Carneiro
-* Christopher Bruns
-* Alejandro Dubrovsky
-* Aron Xu
 
 Version 1.7.0 (Next version, not yet released)
 ----------------------------------------------
