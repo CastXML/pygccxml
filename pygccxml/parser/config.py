@@ -4,13 +4,12 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 """
-defines C++ parser configuration classes
+Defines C++ parser configuration classes.
+
 """
 
 import os
-import sys
 import copy
-import types
 from .. import utils
 
 
