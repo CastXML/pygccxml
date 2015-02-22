@@ -17,7 +17,7 @@ except:
 
 from . import declarations_cache
 from pygccxml import utils
-from pygccxml.declarations import *
+from pygccxml import declarations
 
 
 class gccxml_runtime_error_t(RuntimeError):
@@ -38,13 +38,14 @@ def bind_aliases(decls):
     """
 
     visited = set()
-    typedefs = [decl for decl in decls if isinstance(decl, typedef_t)]
+    typedefs = [
+        decl for decl in decls if isinstance(decl, declarations.typedef_t)]
     for decl in typedefs:
-        type_ = remove_alias(decl.type)
-        if not isinstance(type_, declarated_t):
+        type_ = declarations.remove_alias(decl.type)
+        if not isinstance(type_, declarations.declarated_t):
             continue
         cls_inst = type_.declaration
-        if not isinstance(cls_inst, class_types):
+        if not isinstance(cls_inst, declarations.class_types):
             continue
         if id(cls_inst) not in visited:
             visited.add(id(cls_inst))
@@ -96,7 +97,7 @@ class source_reader_t:
         self.__config.raise_on_wrong_settings()
         self.__decl_factory = decl_factory
         if not decl_factory:
-            self.__decl_factory = decl_factory_t()
+            self.__decl_factory = declarations.decl_factory_t()
 
     def __create_command_line(self, source_file, xmlfile):
         """
@@ -427,10 +428,10 @@ class source_reader_t:
         for type_ in list(types.values()):
             # I need this copy because internaly linker change types collection
             linker_.instance = type_
-            apply_visitor(linker_, type_)
+            declarations.apply_visitor(linker_, type_)
         for decl in decls.values():
             linker_.instance = decl
-            apply_visitor(linker_, decl)
+            declarations.apply_visitor(linker_, decl)
         bind_aliases(iter(decls.values()))
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
@@ -443,5 +444,5 @@ class source_reader_t:
             inst for inst in iter(
                 decls.values()) if isinstance(
                 inst,
-                namespace_t) and not inst.parent]
+                declarations.namespace_t) and not inst.parent]
         return (decls, list(files.values()))
