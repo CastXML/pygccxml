@@ -53,7 +53,7 @@ def bind_aliases(decls):
 class source_reader_t:
 
     """
-    This class reads C++ source code and returns declarations tree.
+    This class reads C++ source code and returns thedeclarations tree.
 
     This class is the only class that works with GCC-XML directly.
 
@@ -213,6 +213,7 @@ class source_reader_t:
         return cmd
 
     def create_xml_file(self, header, destination=None):
+
         """
         This function will return the file name of the file, created by GCC-XML
         for "header" file. If destination_file_path is not None, then this file
@@ -226,7 +227,9 @@ class source_reader_t:
         :type destination: str
 
         :rtype: path to GCC-XML generated file
+
         """
+
         gccxml_file = destination
         # If file specified, remove it to start else create new file name
         if gccxml_file:
@@ -336,20 +339,21 @@ class source_reader_t:
             pygccxml.utils.remove_file_no_raise(gccxml_file)
         return declarations
 
-    def read_xml_file(self, gccxml_created_file):
+    def read_xml_file(self, xml_file):
         """
-        Reads GCC-XML generated XML file.
+        Read generated XML file.
 
-        :param gccxml_created_file: path to GCC-XML generated file
-        :type gccxml_created_file: str
+        :param xml_file: path to xml file
+        :type xml_file: str
 
         :rtype: declarations tree
+
         """
 
         assert(self.__config is not None)
 
-        ffname = self.__file_full_name(gccxml_created_file)
-        self.logger.debug("Reading xml file: [%s]" % gccxml_created_file)
+        ffname = self.__file_full_name(xml_file)
+        self.logger.debug("Reading xml file: [%s]" % xml_file)
         declarations = self.__dcache.cached_value(ffname, self.__config)
         if not declarations:
             self.logger.debug("File has not been found in cache, parsing...")
@@ -363,9 +367,11 @@ class source_reader_t:
 
     def read_string(self, content):
         """
-        Reads Python string, that contains valid C++ code, and returns
-        declarations tree.
+        Reads a Python string that contains C++ code, and return
+        the declarations tree.
+
         """
+
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
         header_file_obj = open(header_file, 'w+')
         header_file_obj.write(content)
