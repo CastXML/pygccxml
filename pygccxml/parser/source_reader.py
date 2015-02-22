@@ -308,7 +308,7 @@ class source_reader_t:
                 self.logger.debug(
                     "File has not been found in cache, parsing...")
                 gccxml_file = self.create_xml_file(ffname)
-                declarations, files = self.__parse_gccxml_created_file(
+                declarations, files = self.__parse_xml_file(
                     gccxml_file)
                 self.__dcache.update(
                     ffname,
@@ -344,7 +344,7 @@ class source_reader_t:
         declarations = self.__dcache.cached_value(ffname, self.__config)
         if not declarations:
             self.logger.debug("File has not been found in cache, parsing...")
-            declarations, files = self.__parse_gccxml_created_file(ffname)
+            declarations, files = self.__parse_xml_file(ffname)
             self.__dcache.update(ffname, self.__config, declarations, [])
         else:
             self.logger.debug(
@@ -395,7 +395,7 @@ class source_reader_t:
         except Exception:
             return file_path
 
-    def __parse_gccxml_created_file(self, gccxml_file):
+    def __parse_xml_file(self, gccxml_file):
         scanner_ = scanner_t(gccxml_file, self.__decl_factory)
         scanner_.read()
         decls = scanner_.declarations()
