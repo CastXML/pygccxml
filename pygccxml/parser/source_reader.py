@@ -237,9 +237,9 @@ class source_reader_t:
         else:
             gccxml_file = pygccxml.utils.create_temp_file_name(suffix='.xml')
         try:
-            ffname = header
+            ffname = source_file
             if not os.path.isabs(ffname):
-                ffname = self.__file_full_name(header)
+                ffname = self.__file_full_name(source_file)
             command_line = self.__create_command_line(ffname, gccxml_file)
 
             process = subprocess.Popen(
