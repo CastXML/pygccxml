@@ -98,6 +98,71 @@ class source_reader_t:
             self.__decl_factory = decl_factory_t()
 
     def __create_command_line(self, file, xmlfile):
+        """
+        Build the command line used to build xml files.
+
+        Depending on the chosen caster a different command line
+        is built. The gccxml option may be removed once gccxml
+        support is dropped (this was the original c++ caster,
+        castxml should replace it soon).
+
+        """
+
+        if self.__config.caster == "gccxml":
+            return self.__create_command_line_gccxml(file, xmlfile)
+        elif self.__config.caster == "castxml":
+            return self.__create_command_line_castxml(file, xmlfile)
+
+    def __create_command_line_castxml(self, file, xmlfile):
+        assert isinstance(self.__config, config.gccxml_configuration_t)
+
+        cmd = []
+
+        # first is gccxml executable
+        if 'nt' == os.name:
+            cmd.append('"%s"' % os.path.normpath(self.__config.gccxml_path))
+        else:
+            cmd.append('%s' % os.path.normpath(self.__config.gccxml_path))
+
+        # Add all cflags passed
+        if self.__config.cflags != "":
+            cmd.append(" %s " % self.__config.cflags)
+
+        # Add additional includes directories
+        dirs = self.__search_directories
+        cmd.append(''.join([' -I%s' % search_dir for search_dir in dirs]))
+
+        # Clang option: -c Only run preprocess, compile, and assemble steps
+        cmd.append("-c")
+        # Platform specific options
+        if 'nt' != os.name:
+            cmd.append('--castxml-cc-gnu /usr/bin/c++')
+        # Tell castxml to output xml compatible files with gccxml
+        # so that we can parse them with pygccxml
+        cmd.append('--castxml-gccxml')
+
+        # Add all additional defined symbols
+        symbols = self.__config.define_symbols
+        cmd.append(''.join(
+            [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
+        un_symbols = self.__config.undefine_symbols
+        cmd.append(''.join(
+            [' -U"%s"' % undefined_symbol for undefined_symbol in un_symbols]))
+
+        # The destination file
+        cmd.append('-o %s' % xmlfile)
+        # The source file
+        cmd.append('%s' % file)
+        # Where to start the parsing
+        if self.__config.start_with_declarations:
+            cmd.append(
+                '--castxml-start="%s"' %
+                ','.join(self.__config.start_with_declarations))
+        cmd_line = ' '.join(cmd)
+        self.logger.info('castxml cmd: %s' % cmd_line)
+        return cmd_line
+
+    def __create_command_line_gccxml(self, file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
         # returns
         cmd = []

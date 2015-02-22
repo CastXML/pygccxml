@@ -37,7 +37,8 @@ class parser_configuration_t(object):
             define_symbols=None,
             undefine_symbols=None,
             cflags="",
-            compiler=None):
+            compiler=None,
+            caster="gccxml"):
         """Constructor.
         """
         object.__init__(self)
@@ -58,6 +59,8 @@ class parser_configuration_t(object):
         self.__cflags = cflags
 
         self.__compiler = compiler
+
+        self.__caster = caster
 
     def clone(self):
         raise NotImplementedError(self.__class__.__name__)
@@ -94,6 +97,16 @@ class parser_configuration_t(object):
     def compiler(self, compiler):
         """set compiler name to simulate"""
         self.__compiler = compiler
+
+    @property
+    def caster(self):
+        """get caster (gccxml or castxml)"""
+        return self.__caster
+
+    @caster.setter
+    def caster(self, caster):
+        """set caster (gccxml or castxml)"""
+        self.__caster = caster
 
     @property
     def cflags(self):
@@ -144,7 +157,8 @@ class gccxml_configuration_t(parser_configuration_t):
             start_with_declarations=None,
             ignore_gccxml_output=False,
             cflags="",
-            compiler=None):
+            compiler=None,
+            caster="gccxml"):
         """Constructor.
         """
         parser_configuration_t.__init__(
@@ -154,7 +168,8 @@ class gccxml_configuration_t(parser_configuration_t):
             define_symbols=define_symbols,
             undefine_symbols=undefine_symbols,
             cflags=cflags,
-            compiler=compiler)
+            compiler=compiler,
+            caster=caster)
 
         self.__gccxml_path = gccxml_path
 
@@ -234,6 +249,8 @@ include_paths=
 #You can explicitly set what compiler it should emulate.
 #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
 compiler=
+# gccxml or castxml
+caster=
 """
 
 
@@ -265,6 +282,8 @@ def load_gccxml_configuration(configuration, **defaults):
        #You can explicitly set what compiler it should emulate.
        #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
        compiler=
+       # gccxml or castxml
+       caster=
 
     """
     parser = configuration
@@ -300,6 +319,8 @@ def load_gccxml_configuration(configuration, **defaults):
                     gccxml_cfg.include_paths.append(p)
         elif name == 'compiler':
             gccxml_cfg.compiler = value
+        elif name == 'caster':
+            gccxml_cfg.caster = value
         else:
             print('\n%s entry was ignored' % name)
     return gccxml_cfg
