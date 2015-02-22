@@ -190,8 +190,6 @@ class source_reader_t:
         if self.__config.compiler:
             cmd.append(" --gccxml-compiler %s" % self.__config.compiler)
         cmd_line = ' '.join(cmd)
-        # if 'nt' == os.name:
-        #    cmd_line = '"%s"' % cmd_line
         self.logger.info('gccxml cmd: %s' % cmd_line)
         return cmd_line
 
