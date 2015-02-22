@@ -157,25 +157,6 @@ class source_reader_t:
         self.logger.info('castxml cmd: %s' % cmd_line)
         return cmd_line
 
-    def __add_symbols(self, cmd):
-
-        """
-        Add all additional defined and undefined symbols.
-
-        """
-
-        if len(self.__config.define_symbols) != 0:
-            symbols = self.__config.define_symbols
-            cmd.append(''.join(
-                [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
-        if len(self.__config.undefine_symbols) != 0:
-            un_symbols = self.__config.undefine_symbols
-            cmd.append(
-                ''.join([' -U"%s"' % undefined_symbol for
-                        undefined_symbol in un_symbols]))
-
-        return cmd
-
     def __create_command_line_gccxml(self, source_file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
         # returns
@@ -213,6 +194,25 @@ class source_reader_t:
         #    cmd_line = '"%s"' % cmd_line
         self.logger.info('gccxml cmd: %s' % cmd_line)
         return cmd_line
+
+    def __add_symbols(self, cmd):
+
+        """
+        Add all additional defined and undefined symbols.
+
+        """
+
+        if len(self.__config.define_symbols) != 0:
+            symbols = self.__config.define_symbols
+            cmd.append(''.join(
+                [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
+        if len(self.__config.undefine_symbols) != 0:
+            un_symbols = self.__config.undefine_symbols
+            cmd.append(
+                ''.join([' -U"%s"' % undefined_symbol for
+                        undefined_symbol in un_symbols]))
+
+        return cmd
 
     def create_xml_file(self, header, destination=None):
         """
