@@ -17,7 +17,6 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.content = "abra cadabra " + os.linesep
 
     def test_gccxml_on_input_with_errors(self):
-        # Define these two variables as empty, to make pyflakes happy
         self.failUnlessRaises(
             parser.gccxml_runtime_error_t,
             parser.parse_string,
