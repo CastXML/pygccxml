@@ -34,7 +34,9 @@ def bind_aliases(decls):
     :type all_classes: list of :class:`declarations.declaration_t` items
 
     :rtype: None
+
     """
+
     visited = set()
     typedefs = [decl for decl in decls if isinstance(decl, typedef_t)]
     for decl in typedefs:
@@ -51,7 +53,6 @@ def bind_aliases(decls):
 
 
 class source_reader_t:
-
     """
     This class reads C++ source code and returns thedeclarations tree.
 
@@ -99,7 +100,7 @@ class source_reader_t:
 
     def __create_command_line(self, source_file, xmlfile):
         """
-        Build the command line used to build xml files.
+        Generate the command line used to build xml files.
 
         Depending on the chosen caster a different command line
         is built. The gccxml option may be removed once gccxml
@@ -194,7 +195,6 @@ class source_reader_t:
         return cmd_line
 
     def __add_symbols(self, cmd):
-
         """
         Add all additional defined and undefined symbols.
 
@@ -212,21 +212,21 @@ class source_reader_t:
 
         return cmd
 
-    def create_xml_file(self, header, destination=None):
-
+    def create_xml_file(self, source_file, destination=None):
         """
-        This function will return the file name of the file, created by GCC-XML
-        for "header" file. If destination_file_path is not None, then this file
-        path will be used and returned.
+        This method will generate a xml file using an external tool.
 
-        :param header: path to source file, that should be parsed
-        :type header: str
+        The external tool can be either gccxml or castxml. The method will
+        reutrn the file path of the generated xml file.
 
-        :param destination: if given, will be used as target file/path for
-                            GCC-XML generated file.
+        :param source_file: path to the source file that should be parsed.
+        :type source_file: str
+
+        :param destination: if given, will be used as target file path for
+                            GCC-XML or CastXML.
         :type destination: str
 
-        :rtype: path to GCC-XML generated file
+        :rtype: path to xml file.
 
         """
 
