@@ -97,7 +97,7 @@ class source_reader_t:
         if not decl_factory:
             self.__decl_factory = decl_factory_t()
 
-    def __create_command_line(self, file, xmlfile):
+    def __create_command_line(self, source_file, xmlfile):
         """
         Build the command line used to build xml files.
 
@@ -109,11 +109,11 @@ class source_reader_t:
         """
 
         if self.__config.caster == "gccxml":
-            return self.__create_command_line_gccxml(file, xmlfile)
+            return self.__create_command_line_gccxml(source_file, xmlfile)
         elif self.__config.caster == "castxml":
-            return self.__create_command_line_castxml(file, xmlfile)
+            return self.__create_command_line_castxml(source_file, xmlfile)
 
-    def __create_command_line_castxml(self, file, xmlfile):
+    def __create_command_line_castxml(self, source_file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
 
         cmd = []
@@ -147,7 +147,7 @@ class source_reader_t:
         # The destination file
         cmd.append('-o %s' % xmlfile)
         # The source file
-        cmd.append('%s' % file)
+        cmd.append('%s' % source_file)
         # Where to start the parsing
         if self.__config.start_with_declarations:
             cmd.append(
@@ -176,7 +176,7 @@ class source_reader_t:
 
         return cmd
 
-    def __create_command_line_gccxml(self, file, xmlfile):
+    def __create_command_line_gccxml(self, source_file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
         # returns
         cmd = []
@@ -197,7 +197,7 @@ class source_reader_t:
         cmd = self.__add_symbols(cmd)
 
         # fourth source file
-        cmd.append('"%s"' % file)
+        cmd.append('"%s"' % source_file)
         # five destination file
         cmd.append('-fxml="%s"' % xmlfile)
         if self.__config.start_with_declarations:
