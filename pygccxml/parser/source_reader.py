@@ -141,13 +141,8 @@ class source_reader_t:
         # so that we can parse them with pygccxml
         cmd.append('--castxml-gccxml')
 
-        # Add all additional defined symbols
-        symbols = self.__config.define_symbols
-        cmd.append(''.join(
-            [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
-        un_symbols = self.__config.undefine_symbols
-        cmd.append(''.join(
-            [' -U"%s"' % undefined_symbol for undefined_symbol in un_symbols]))
+        # Add symbols
+        cmd = self.__add_symbols(cmd)
 
         # The destination file
         cmd.append('-o %s' % xmlfile)
@@ -161,6 +156,25 @@ class source_reader_t:
         cmd_line = ' '.join(cmd)
         self.logger.info('castxml cmd: %s' % cmd_line)
         return cmd_line
+
+    def __add_symbols(self, cmd):
+
+        """
+        Add all additional defined and undefined symbols.
+
+        """
+
+        if len(self.__config.define_symbols) != 0:
+            symbols = self.__config.define_symbols
+            cmd.append(''.join(
+                [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
+        if len(self.__config.undefine_symbols) != 0:
+            un_symbols = self.__config.undefine_symbols
+            cmd.append(
+                ''.join([' -U"%s"' % undefined_symbol for
+                        undefined_symbol in un_symbols]))
+
+        return cmd
 
     def __create_command_line_gccxml(self, file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
@@ -178,13 +192,10 @@ class source_reader_t:
         # second all additional includes directories
         dirs = self.__search_directories
         cmd.append(''.join([' -I"%s"' % search_dir for search_dir in dirs]))
-        # third all additional defined symbols
-        symbols = self.__config.define_symbols
-        cmd.append(''.join(
-            [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
-        un_symbols = self.__config.undefine_symbols
-        cmd.append(''.join(
-            [' -U"%s"' % undefined_symbol for undefined_symbol in un_symbols]))
+
+        # Add symbols
+        cmd = self.__add_symbols(cmd)
+
         # fourth source file
         cmd.append('"%s"' % file)
         # five destination file
