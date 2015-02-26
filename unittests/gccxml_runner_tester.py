@@ -18,7 +18,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_gccxml_on_input_with_errors(self):
         self.failUnlessRaises(
-            parser.gccxml_runtime_error_t,
+            RuntimeError,
             parser.parse_string,
             self.content,
             self.config)

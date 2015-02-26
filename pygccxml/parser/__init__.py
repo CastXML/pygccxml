@@ -19,7 +19,6 @@ from .project_reader import create_gccxml_fc
 from .project_reader import create_cached_source_fc
 
 from .source_reader import source_reader_t
-from .source_reader import gccxml_runtime_error_t
 from .declarations_cache import cache_base_t
 from .declarations_cache import file_cache_t
 from .declarations_cache import dummy_cache_t

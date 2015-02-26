@@ -20,12 +20,6 @@ from pygccxml import utils
 from pygccxml import declarations
 
 
-class gccxml_runtime_error_t(RuntimeError):
-
-    def __init__(self, msg):
-        RuntimeError.__init__(self, msg)
-
-
 def bind_aliases(decls):
     """
     This function binds between class and it's typedefs.
@@ -263,13 +257,13 @@ class source_reader_t:
             gccxml_msg = os.linesep.join([str(s) for s in gccxml_reports])
             if self.__config.ignore_gccxml_output:
                 if not os.path.isfile(gccxml_file):
-                    raise gccxml_runtime_error_t(
+                    raise RuntimeError(
                         "Error occured while running GCC-XML: %s status:%s" %
                         (gccxml_msg, exit_status))
             else:
                 if gccxml_msg or exit_status or not \
                         os.path.isfile(gccxml_file):
-                    raise gccxml_runtime_error_t(
+                    raise RuntimeError(
                         "Error occured while running GCC-XML: %s" %
                         gccxml_msg)
         except Exception as error:
