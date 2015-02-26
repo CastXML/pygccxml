@@ -43,7 +43,11 @@ class location_t(object):
 
     @property
     def file_name(self):
-        """absolute source file name, type string"""
+        """
+        Absolute source file name, type string.
+
+        """
+
         return self._file_name
 
     @file_name.setter
@@ -52,7 +56,11 @@ class location_t(object):
 
     @property
     def line(self):
-        """line number, type int"""
+        """
+        Line number, type int.
+
+        """
+
         return self._line
 
     @line.setter
@@ -60,7 +68,11 @@ class location_t(object):
         self._line = new_line
 
     def as_tuple(self):
-        """return tuple(self.file_name, self.line)"""
+        """
+        Return tuple(self.file_name, self.line)
+
+        """
+
         return (self.file_name, self.line)
 
 
