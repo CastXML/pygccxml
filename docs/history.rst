@@ -27,6 +27,9 @@ Version 1.7.0 (Next version, not yet released)
 2. Remove ``gccxml`` logger from logger class (was deprecated).
    Please use ``cxx_parser`` instead.
 
+3. Remove ``gccxml_runtime_error_t`` class and use RuntimeError
+   instead.
+
 Version 1.6.2
 -------------
 
