@@ -297,9 +297,9 @@ class source_reader_t:
         return gccxml_file
 
     def read_file(self, source_file):
-        return self.read_gccxml_file(source_file)
+        return self.read_cpp_source_file(source_file)
 
-    def read_gccxml_file(self, source_file):
+    def read_cpp_source_file(self, source_file):
         """
         Reads C++ source file and returns declarations tree
 
