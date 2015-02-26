@@ -4,19 +4,21 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 """
-defines :class:`pygccxml.declarations.declaration_t` class - all declarations
-base class
+Defines :class:`pygccxml.declarations.declaration_t` class - all declarations
+base class.
+
 """
 
 from . import algorithm
-from . import templates
 from . import algorithms_cache
 
 
 class location_t(object):
+    """
+    Provides information about the location of the declaration within the
+    source file.
 
-    """provides information about the location of the declaration within the
-    source file"""
+    """
 
     def __init__(self, file_name='', line=-1):
         self._file_name = file_name
@@ -63,8 +65,10 @@ class location_t(object):
 
 
 class declaration_t(object):
+    """
+    Base class for all classes that represent a C++ declaration.
 
-    """base class for all classes that represent a C++ declaration"""
+    """
 
     def __init__(
             self,
@@ -97,7 +101,9 @@ class declaration_t(object):
         A __str__ method for a declaration should always provide enough
         information so that it uniquely identifies the declaration and
         the user is able to find the declaration in his source code.
+
         """
+
         name = self.decl_string
         if name[:2] == "::":
             name = name[2:]
@@ -106,6 +112,7 @@ class declaration_t(object):
         if cls[-2:] == "_t":
             cls = cls[:-2]
         cls = cls.replace('_', ' ')
+
         return "%s [%s]" % (name, cls)
 
     @staticmethod
@@ -115,23 +122,32 @@ class declaration_t(object):
         return some_list
 
     def _get__cmp__items(self):
-        """implementation details"""
+        """
+        Implementation detail.
+
+        """
         # Every derived class should implement this method. This method should
         # return a list of items, that should be compared.
 
         print(
             '_get__cmp__items not implemented for class ',
             self.__class__.__name__)
+
         raise NotImplemented()
 
     def _get__cmp__data(self):
-        """implementation details"""
+        """
+        Implementation detail.
+
+        """
+
         data = [
             algorithm.declaration_path(
                 self.parent),
             self.name,
             self.location]
         data.extend(self._get__cmp__items())
+
         return data
 
     def __eq__(self, other):
@@ -142,7 +158,9 @@ class declaration_t(object):
         this case it will downgrade performance. self.mangled property is not
         compared, because it could be changed from one compilation time to an
         other.
+
         """
+
         if not isinstance(other, self.__class__):
             return False
         return self.name == other.name \
@@ -156,7 +174,11 @@ class declaration_t(object):
                 hash(self.location))
 
     def __ne__(self, other):
-        """return not self.__eq__( other )"""
+        """
+        Return not self.__eq__( other ).
+
+        """
+
         return not self.__eq__(other)
 
     def __lt__(self, other):
@@ -166,7 +188,9 @@ class declaration_t(object):
            if not isinstance( other, self.__class__ ):
                return self.__class__.__name__ < other.__class__.__name__
            return self._get__cmp__data() < other._get__cmp__data()
+
         """
+
         if not isinstance(other, self.__class__):
             return self.__class__.__name__ < other.__class__.__name__
         return self._get__cmp__data() < other._get__cmp__data()
@@ -177,13 +201,19 @@ class declaration_t(object):
     def _on_rename(self):
         """
         Placeholder method, is redefined in child class.
+
         """
+
         pass
 
     @property
     def name(self):
-        """Declaration name
-           @type: str"""
+        """
+        Declaration name
+           @type: str
+
+        """
+
         return self._get_name_impl()
 
     @name.setter
@@ -201,17 +231,28 @@ class declaration_t(object):
 
     @property
     def partial_name(self):
-        """declaration name, without template default arguments
+        """
+        Declaration name, without template default arguments.
+
         Right now std containers is the only classes that support this
-        functionality"""
+        functionality.
+
+        """
+
         if None is self._partial_name:
             self._partial_name = self._get_partial_name_impl()
+
         return self._partial_name
 
     @property
     def parent(self):
-        """Reference to parent declaration
-           @type: declaration_t"""
+        """
+        Reference to parent declaration.
+
+           @type: declaration_t
+
+        """
+
         return self._parent
 
     @parent.setter
@@ -222,8 +263,13 @@ class declaration_t(object):
 
     @property
     def top_parent(self):
-        """reference to top parent declaration
-           @type: declaration_t"""
+        """
+        Reference to top parent declaration.
+
+           @type: declaration_t
+
+        """
+
         parent = self.parent
         me = self
         while True:
@@ -235,8 +281,13 @@ class declaration_t(object):
 
     @property
     def location(self):
-        """Location of the declaration within source file
-           @type: :class:`location_t`"""
+        """
+        Location of the declaration within source file
+
+           @type: :class:`location_t`
+
+        """
+
         return self._location
 
     @location.setter
@@ -245,8 +296,13 @@ class declaration_t(object):
 
     @property
     def is_artificial(self):
-        """Describes whether declaration is compiler generated or not
-           @type: bool"""
+        """
+        Describes whether declaration is compiler generated or not
+
+           @type: bool
+
+        """
+
         return self._is_artificial
 
     @is_artificial.setter
@@ -258,8 +314,13 @@ class declaration_t(object):
 
     @property
     def mangled(self):
-        """GCCXML generated unique declaration name
-           @type: str"""
+        """
+        GCCXML generated unique declaration name
+
+           @type: str
+
+        """
+
         return self.get_mangled_name()
 
     @mangled.setter
@@ -268,9 +329,12 @@ class declaration_t(object):
 
     @property
     def demangled(self):
-        """declaration name, reconstructed from GCCXML generated
-           unique name
-           @type: str"""
+        """
+        Declaration name, reconstructed from GCCXML generated unique name.
+
+           @type: str
+
+        """
         return self._demangled
 
     @demangled.setter
@@ -279,9 +343,14 @@ class declaration_t(object):
 
     @property
     def decorated_name(self):
-        """unique declaration name extracted from a binary file
-           ( .map, .dll, .so, etc )
-           @type: str"""
+        """
+        Unique declaration name extracted from a binary file
+        ( .map, .dll, .so, etc ).
+
+           @type: str
+
+        """
+
         return self._decorated_name
 
     @decorated_name.setter
@@ -290,8 +359,13 @@ class declaration_t(object):
 
     @property
     def attributes(self):
-        """GCCXML attributes, set using __attribute__((gccxml("...")))
-           @type: str"""
+        """
+        GCCXML attributes, set using __attribute__((gccxml("...")))
+
+           @type: str
+
+        """
+
         return self._attributes
 
     @attributes.setter
@@ -303,32 +377,51 @@ class declaration_t(object):
 
     @property
     def decl_string(self):
-        """declaration full name"""
+        """
+        Declaration full name.
+
+        """
+
         return self.create_decl_string()
 
     @property
     def partial_decl_string(self):
-        """declaration full name"""
+        """
+        Declaration full name.
+
+        """
+
         return self.create_decl_string(with_defaults=False)
 
     @property
     def cache(self):
-        """implementation details
-
-        reference to instance of :class:`algorithms_cache_t` class.
         """
+        Implementation detail.
+
+        Reference to instance of :class:`algorithms_cache_t` class.
+
+        """
+
         return self._cache
 
     def i_depend_on_them(self, recursive=True):
-        """return list of all types and declarations the declaration depends
-        on"""
+        """
+        Return list of all types and declarations the declaration depends on
+
+        """
+
         print(self)
         raise NotImplementedError()
 
     @property
     def compiler(self):
-        """compiler name + version
-           @type: str"""
+        """
+        Compiler name + version.
+
+           @type: str
+
+        """
+
         return self._compiler
 
     @compiler.setter
