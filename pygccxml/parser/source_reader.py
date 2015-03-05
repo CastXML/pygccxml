@@ -130,6 +130,8 @@ class source_reader_t:
 
         # Clang option: -c Only run preprocess, compile, and assemble steps
         cmd.append("-c")
+        # Clang option: make sure clang knows we want to parse c++
+        cmd.append("-x c++")
         # Platform specific options
         if 'nt' != os.name:
             cmd.append('--castxml-cc-gnu /usr/bin/c++')
