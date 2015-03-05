@@ -33,10 +33,19 @@ class linker_t(decl_visitor_t, type_visitor_t, object):
 
     @instance.setter
     def instance(self, inst):
+        """
+        Called by __parse_xml_file in source_reader.
+
+        """
+
         self.__inst = inst
+
         # use inst, to reduce attribute access time
         if isinstance(inst, declaration_t) and inst.location:
-            inst.location.file_name = self.__files[inst.location.file_name]
+            if inst.location.file_name == '':
+                inst.location.file_name = ''
+            else:
+                inst.location.file_name = self.__files[inst.location.file_name]
 
     def __link_type(self, type_id):
         if type_id is None:

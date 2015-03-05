@@ -334,6 +334,7 @@ class source_reader_t:
             raise error
         if gccxml_file:
             pygccxml.utils.remove_file_no_raise(gccxml_file)
+
         return declarations
 
     def read_xml_file(self, xml_file):
@@ -408,7 +409,8 @@ class source_reader_t:
             return file_path
 
     def __parse_xml_file(self, gccxml_file):
-        scanner_ = scanner_t(gccxml_file, self.__decl_factory)
+        scanner_ = scanner_t(
+            gccxml_file, self.__decl_factory, self.__config)
         scanner_.read()
         decls = scanner_.declarations()
         types = scanner_.types()
