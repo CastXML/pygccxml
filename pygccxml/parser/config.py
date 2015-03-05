@@ -38,9 +38,9 @@ class parser_configuration_t(object):
             undefine_symbols=None,
             cflags="",
             compiler=None,
-            caster="gccxml"):
-        """Constructor.
-        """
+            caster="gccxml",
+            keepxml=False):
+
         object.__init__(self)
         self.__working_directory = working_directory
 
@@ -61,6 +61,8 @@ class parser_configuration_t(object):
         self.__compiler = compiler
 
         self.__caster = caster
+
+        self.__keepxml = keepxml
 
     def clone(self):
         raise NotImplementedError(self.__class__.__name__)
@@ -107,6 +109,16 @@ class parser_configuration_t(object):
     def caster(self, caster):
         """set caster (gccxml or castxml)"""
         self.__caster = caster
+
+    @property
+    def keepxml(self):
+        """Are xml files kept after errors."""
+        return self.__keepxml
+
+    @keepxml.setter
+    def keepxml(self, keepxml):
+        """Set if xml files kept after errors."""
+        self.__keepxml = keepxml
 
     @property
     def cflags(self):
@@ -158,9 +170,9 @@ class gccxml_configuration_t(parser_configuration_t):
             ignore_gccxml_output=False,
             cflags="",
             compiler=None,
-            caster="gccxml"):
-        """Constructor.
-        """
+            caster="gccxml",
+            keepxml=False):
+
         parser_configuration_t.__init__(
             self,
             working_directory=working_directory,
@@ -169,7 +181,8 @@ class gccxml_configuration_t(parser_configuration_t):
             undefine_symbols=undefine_symbols,
             cflags=cflags,
             compiler=compiler,
-            caster=caster)
+            caster=caster,
+            keepxml=keepxml)
 
         self.__gccxml_path = gccxml_path
 
@@ -251,6 +264,8 @@ include_paths=
 compiler=
 # gccxml or castxml
 caster=
+# Do we keep xml files or not after errors
+keepxml=
 """
 
 
@@ -284,8 +299,11 @@ def load_gccxml_configuration(configuration, **defaults):
        compiler=
        # gccxml or castxml
        caster=
+       # Do we keep xml files or not after errors
+       keepxml=
 
     """
+
     parser = configuration
     if utils.is_str(configuration):
         try:
@@ -320,6 +338,8 @@ def load_gccxml_configuration(configuration, **defaults):
         elif name == 'compiler':
             gccxml_cfg.compiler = value
         elif name == 'caster':
+            gccxml_cfg.caster = value
+        elif name == 'keepxml':
             gccxml_cfg.caster = value
         else:
             print('\n%s entry was ignored' % name)

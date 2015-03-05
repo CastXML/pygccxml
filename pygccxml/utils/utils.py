@@ -72,9 +72,16 @@ class loggers:
     """Contains all logger classes, defined by the class"""
 
 
-def remove_file_no_raise(file_name):
-    """Removes file from disk, if exception is raised, it silently
-    ignores it"""
+def remove_file_no_raise(file_name, config):
+    """
+    Removes file from disk if exception is raised.
+
+    """
+
+    # The removal can be disabled by the config for debugging purposes.
+    if config.keepxml:
+        return True
+
     try:
         if os.path.exists(file_name):
             os.remove(file_name)

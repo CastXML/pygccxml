@@ -35,7 +35,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
             self.failUnless(mtime1 == mtime2)
         finally:
-            utils.remove_file_no_raise(fconfig.cached_source_file)
+            utils.remove_file_no_raise(fconfig.cached_source_file, self.config)
 
 
 def create_suite():

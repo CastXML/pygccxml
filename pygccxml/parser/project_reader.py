@@ -389,11 +389,11 @@ class project_reader_t:
             xml_file = open(xml_file_path, 'r')
             xml = xml_file.read()
             xml_file.close()
-            utils.remove_file_no_raise(xml_file_path)
+            utils.remove_file_no_raise(xml_file_path, self.__config)
             return xml
         finally:
             if xml_file_path and delete_xml_file:
-                utils.remove_file_no_raise(xml_file_path)
+                utils.remove_file_no_raise(xml_file_path, self.__config)
 
     def _join_top_namespaces(self, main_ns_list, other_ns_list):
         answer = main_ns_list[:]

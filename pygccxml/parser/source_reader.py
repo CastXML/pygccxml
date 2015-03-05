@@ -230,7 +230,7 @@ class source_reader_t:
         gccxml_file = destination
         # If file specified, remove it to start else create new file name
         if gccxml_file:
-            pygccxml.utils.remove_file_no_raise(gccxml_file)
+            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
         else:
             gccxml_file = pygccxml.utils.create_temp_file_name(suffix='.xml')
         try:
@@ -271,7 +271,7 @@ class source_reader_t:
                         self.__config.caster.upper() + ": %s" %
                         gccxml_msg)
         except Exception as error:
-            pygccxml.utils.remove_file_no_raise(gccxml_file)
+            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
             raise error
         return gccxml_file
 
@@ -295,7 +295,7 @@ class source_reader_t:
             header_file_obj.close()
             gccxml_file = self.create_xml_file(header_file, destination)
         finally:
-            pygccxml.utils.remove_file_no_raise(header_file)
+            pygccxml.utils.remove_file_no_raise(header_file, self.__config)
         return gccxml_file
 
     def read_file(self, source_file):
@@ -332,10 +332,10 @@ class source_reader_t:
                         "from cache."))
         except Exception as error:
             if gccxml_file:
-                pygccxml.utils.remove_file_no_raise(gccxml_file)
+                pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
             raise error
         if gccxml_file:
-            pygccxml.utils.remove_file_no_raise(gccxml_file)
+            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
 
         return declarations
 
@@ -380,9 +380,9 @@ class source_reader_t:
         try:
             declarations = self.read_file(header_file)
         except Exception as error:
-            pygccxml.utils.remove_file_no_raise(header_file)
+            pygccxml.utils.remove_file_no_raise(header_file, self.__config)
             raise error
-        pygccxml.utils.remove_file_no_raise(header_file)
+        pygccxml.utils.remove_file_no_raise(header_file, self.__config)
         return declarations
 
     def __file_full_name(self, file):

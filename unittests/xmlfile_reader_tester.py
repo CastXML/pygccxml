@@ -52,7 +52,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                     "There is a difference between declarations in file %s." %
                     self.__fname)
         finally:
-            pass  # utils.remove_file_no_raise( xmlfile )
+            pass  # utils.remove_file_no_raise( xmlfile, self.config )
 
 
 def create_suite():
