@@ -340,7 +340,7 @@ def load_gccxml_configuration(configuration, **defaults):
         elif name == 'caster':
             gccxml_cfg.caster = value
         elif name == 'keepxml':
-            gccxml_cfg.caster = value
+            gccxml_cfg.keepxml = value
         else:
             print('\n%s entry was ignored' % name)
     return gccxml_cfg
