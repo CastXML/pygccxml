@@ -64,6 +64,7 @@ import inline_specifier_tester
 import from_future_import_tester
 import pep8_tester
 import example_tester
+import test_utils
 
 testers = [
     # , demangled_tester # failing right now
@@ -120,7 +121,8 @@ testers = [
     inline_specifier_tester,
     from_future_import_tester,
     pep8_tester,
-    example_tester
+    example_tester,
+    test_utils
 ]
 
 if 'posix' in os.name:
