@@ -3,8 +3,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""Defines logger classes and few convenience methods, not related to the
-declarations tree"""
+"""
+Logger classes and a few convenience methods.
+
+"""
 
 import os
 import sys
@@ -13,7 +15,11 @@ import tempfile
 
 
 def is_str(s):
-    """Python 2 and 3 compatible string checker."""
+    """
+    Python 2 and 3 compatible string checker.
+
+    """
+
     if sys.version_info >= (3, 0):
         return isinstance(s, str)
     else:
@@ -21,7 +27,11 @@ def is_str(s):
 
 
 def _create_logger_(name):
-    """Implementation detail, creates a logger."""
+    """
+    Implementation detail, creates a logger.
+
+    """
+
     logger = logging.getLogger(name)
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter('%(levelname)s %(message)s'))
@@ -31,45 +41,60 @@ def _create_logger_(name):
 
 
 class loggers:
+    """
+    Class-namespace, defines a few loggers classes, used in the project.
 
-    """Class-namespace, defines few loggers classes, used in the project"""
+    """
 
     cxx_parser = _create_logger_('pygccxml.cxx_parser')
-    """Logger for C++ parser functionality
+    """
+    Logger for C++ parser functionality
 
     If you set this logger level to DEBUG, you will be able to see the exact
     command line, used to invoke GCC-XML  and errors that occures during XML
     parsing
+
     """
 
     pdb_reader = _create_logger_('pygccxml.pdb_reader')
     """
     Logger for MS .pdb file reader functionality
+
     """
 
     queries_engine = _create_logger_('pygccxml.queries_engine')
-    """Logger for query engine functionality.
+    """
+    Logger for query engine functionality.
 
     If you set this logger level to DEBUG, you will be able to see what queries
     you do against declarations tree, measure performance and may be even to
     improve it.
     Query engine reports queries and whether they are optimized or not.
+
     """
 
     declarations_cache = _create_logger_('pygccxml.declarations_cache')
-    """Logger for declarations tree cache functionality
+    """
+    Logger for declarations tree cache functionality
 
     If you set this logger level to DEBUG, you will be able to see what is
     exactly happens, when you read the declarations from cache file. You will
     be able to decide, whether it worse for you to use this or that cache
     strategy.
+
     """
 
     root = logging.getLogger('pygccxml')
-    """Root logger exists for your convenience only"""
+    """
+    Root logger exists for your convenience only.
+
+    """
 
     all = [root, cxx_parser, queries_engine, declarations_cache, pdb_reader]
-    """Contains all logger classes, defined by the class"""
+    """
+    Contains all logger classes, defined by the class.
+
+    """
 
 
 def remove_file_no_raise(file_name, config):
@@ -92,11 +117,14 @@ def remove_file_no_raise(file_name, config):
 
 
 def create_temp_file_name(suffix, prefix=None, dir=None):
-    """Small convenience function that creates temporary files.
+    """
+    Small convenience function that creates temporary files.
 
     This function is a wrapper around the Python built-in
-    function tempfile.mkstemp
+    function tempfile.mkstemp.
+
     """
+
     if not prefix:
         prefix = tempfile.gettempprefix()
     fd, name = tempfile.mkstemp(suffix=suffix, prefix=prefix, dir=dir)
@@ -106,7 +134,11 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
 
 
 def normalize_path(some_path):
-    """Return os.path.normpath(os.path.normcase(some_path))"""
+    """
+    Return os.path.normpath(os.path.normcase(some_path))
+
+    """
+
     return os.path.normpath(os.path.normcase(some_path))
 
 
@@ -118,6 +150,9 @@ def contains_parent_dir(fpath, dirs):
     this function.
 
     """
+
+    # Note: this function is used nowhere in pygccxml but is used
+    # at least by pypluplus; so it should stay here.
 
     return bool([x for x in dirs if _f(fpath, x)])
 
@@ -132,10 +167,13 @@ def _f(fpath, dir_):
 
 
 def get_architecture():
-    """Returns computer architecture: 32 or 64.
+    """
+    Returns computer architecture: 32 or 64.
 
     The guess is based on maxint.
+
     """
+
     if sys.maxsize == 2147483647:
         return 32
     elif sys.maxsize == 9223372036854775807:
@@ -144,13 +182,16 @@ def get_architecture():
         raise RuntimeError("Unknown architecture")
 
 
-# The following code is cut-and-paste from this post:
-# http://groups.google.com/group/comp.lang.python/browse_thread/
-# thread/5b71896c06bd0f76/
-# Thanks to Michele Simionato, for it
 class cached(property):
+    """
+    Convert a method into a cached attribute.
 
-    """Convert a method into a cached attribute"""
+    """
+
+    # The following code is cut-and-paste from this post:
+    # http://groups.google.com/group/comp.lang.python/browse_thread/
+    # thread/5b71896c06bd0f76/
+    # Thanks to Michele Simionato
 
     def __init__(self, method):
         private = '_' + method.__name__
@@ -177,7 +218,6 @@ class cached(property):
 
 
 class enum(object):
-
     """
     Usage example:
 
@@ -212,9 +252,11 @@ class enum(object):
 
 
 class native_compiler:
+    """
+    Provides information about the compiler which was used to build the
+    Python executable
 
-    """Provides information about the compiler, which was used to build the
-    Python executable"""
+    """
 
     @staticmethod
     def get_version():
