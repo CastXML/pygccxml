@@ -5,7 +5,6 @@
 
 """defines class, that describes C++ namespace declaration"""
 
-from . import declaration
 from . import scopedef
 from . import algorithm
 
