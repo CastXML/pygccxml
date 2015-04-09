@@ -387,7 +387,7 @@ class class_traits_tester_t(unittest.TestCase):
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
 
-    def test(self):
+    def test_get_declaration(self):
         code = """
             namespace A{
             struct B{
