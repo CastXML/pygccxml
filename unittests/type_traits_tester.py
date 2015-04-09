@@ -408,7 +408,7 @@ class class_traits_tester_t(unittest.TestCase):
             typedef D<easy> Deasy;
 
             inline void instantiate(){
-                sizeof(easy);
+                int val = sizeof(easy);
             }
 
             }
