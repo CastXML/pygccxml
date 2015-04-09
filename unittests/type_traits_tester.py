@@ -419,7 +419,6 @@ class class_traits_tester_t(unittest.TestCase):
             autoconfig.cxx_parsers_cfg.gccxml)
         global_ns = declarations.get_global_namespace(global_ns)
         easy = global_ns.typedef('easy')
-        # this works very well
         declarations.class_traits.get_declaration(easy)
         deasy = global_ns.typedef('Deasy')
         d_a = declarations.class_traits.get_declaration(deasy)
