@@ -3,6 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import sys
 import unittest
 import parser_test_case
 
@@ -40,8 +41,16 @@ class tester_t(parser_test_case.parser_test_case_t):
             compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE)
 
     def test_printer(self):
+
+        # Redirect sys.stdout to a class with a writer doing nothing
+        # This greatly reduces the size of the test output and makes
+        # test log files readable.
+        class DontPrint(object):
+            def write(*args):
+                pass
+        sys.stdout = DontPrint()
+
         declarations.print_declarations(self.decls, writer=None)
-        # declarations.print_declarations( self.decls )
 
     def test__str__(self):
         decls = declarations.make_flatten(self.decls)
