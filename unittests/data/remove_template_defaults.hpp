@@ -77,7 +77,10 @@ namespace maps{
     typedef std::map< std::wstring, double > m_wstr2d;
     typedef std::map< const std::vector< int >, m_wstr2d > m_v_i2m_wstr2d;
 
-    inline std::map<std::string, int> f2(){}
+    inline std::map<std::string, int> f2() {
+        std::map<std::string, int> list;
+        return list;
+    }
 
 }
 
