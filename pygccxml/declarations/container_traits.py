@@ -355,22 +355,22 @@ class container_traits_impl_t():
         type_ = type_traits.remove_alias(type_)
         type_ = type_traits.remove_cv(type_)
 
-        cls = None
+        cls_declaration = None
         if isinstance(type_, cpptypes.declarated_t):
-            cls = type_traits.remove_alias(type_.declaration)
+            cls_declaration = type_traits.remove_alias(type_.declaration)
         elif isinstance(type_, class_declaration.class_t):
-            cls = type_
+            cls_declaration = type_
         elif isinstance(type_, class_declaration.class_declaration_t):
-            cls = type_
+            cls_declaration = type_
         else:
             return
 
-        if not cls.name.startswith(self.name() + '<'):
+        if not cls_declaration.name.startswith(self.name() + '<'):
             return
 
         for ns in std_namespaces:
-            if type_traits.impl_details.is_defined_in_xxx(ns, cls):
-                return cls
+            if type_traits.impl_details.is_defined_in_xxx(ns, cls_declaration):
+                return cls_declaration
 
     def is_my_case(self, type_):
         """checks, whether type is STD container or not"""
@@ -378,12 +378,12 @@ class container_traits_impl_t():
 
     def class_declaration(self, type_):
         """returns reference to the class declaration"""
-        cls = self.get_container_or_none(type_)
-        if not cls:
+        cls_declaration = self.get_container_or_none(type_)
+        if not cls_declaration:
             raise TypeError(
                 'Type "%s" is not instantiation of std::%s' %
                 (type_.decl_string, self.name()))
-        return cls
+        return cls_declaration
 
     def is_sequence(self, type_):
         # raise exception if type is not container
@@ -399,22 +399,21 @@ class container_traits_impl_t():
             xxx_index,
             xxx_typedef,
             cache_property_name):
-        cls = self.class_declaration(type_)
-        result = getattr(cls.cache, cache_property_name)
+        cls_declaration = self.class_declaration(type_)
+        result = getattr(cls_declaration.cache, cache_property_name)
         if not result:
-            if isinstance(cls, class_declaration.class_t):
-                xxx_type = cls.typedef(xxx_typedef, recursive=False).type
+            if isinstance(cls_declaration, class_declaration.class_t):
+                xxx_type = cls_declaration.typedef(xxx_typedef, recursive=False).type
                 result = type_traits.remove_declarated(xxx_type)
             else:
-                xxx_type_str = templates.args(cls.name)[xxx_index]
+                xxx_type_str = templates.args(cls_declaration.name)[xxx_index]
                 result = type_traits.impl_details.find_value_type(
-                    cls.top_parent,
-                    xxx_type_str)
+                    cls_declaration.top_parent, xxx_type_str)
                 if None is result:
                     raise RuntimeError(
                         "Unable to find out %s '%s' key\\value type." %
-                        (self.name(), cls.decl_string))
-            setattr(cls.cache, cache_property_name, result)
+                        (self.name(), cls_declaration.decl_string))
+            setattr(cls_declaration.cache, cache_property_name, result)
         return result
 
     def element_type(self, type_):
