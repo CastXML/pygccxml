@@ -403,7 +403,8 @@ class container_traits_impl_t():
         result = getattr(cls_declaration.cache, cache_property_name)
         if not result:
             if isinstance(cls_declaration, class_declaration.class_t):
-                xxx_type = cls_declaration.typedef(xxx_typedef, recursive=False).type
+                xxx_type = cls_declaration.typedef(
+                    xxx_typedef, recursive=False).type
                 result = type_traits.remove_declarated(xxx_type)
             else:
                 xxx_type_str = templates.args(cls_declaration.name)[xxx_index]
