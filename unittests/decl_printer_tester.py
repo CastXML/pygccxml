@@ -45,8 +45,13 @@ class tester_t(parser_test_case.parser_test_case_t):
         # Redirect sys.stdout to a class with a writer doing nothing
         # This greatly reduces the size of the test output and makes
         # test log files readable.
+        # Note: flush needs to be defined; because if not this will
+        # result in an AttributeError on call.
         class DontPrint(object):
             def write(*args):
+                pass
+
+            def flush(*args):
                 pass
         sys.stdout = DontPrint()
 
