@@ -6,7 +6,18 @@
 #ifndef __remove_template_defaults_hpp__
 #define __remove_template_defaults_hpp__
 
-#if defined( __GNUC__ )
+#if defined( __llvm__ )
+    // This is for CastXML
+    // When parsing with clang//llvm use the new std C++11
+    // unordered_maps and unordered_sets
+    #include <unordered_map>
+    #include <unordered_set>
+    #define HASH_XXX_NS std
+    #define HASH_XXX_UMAP unordered_map
+    #define HASH_XXX_USET unordered_set
+    #define HASH_XXX_UMMAP unordered_multimap
+    #define HASH_XXX_UMMSET unordered_multiset
+#elif defined( __GNUC__ )
     #include <ext/hash_set>
     #include <ext/hash_map>
     #define HASH_XXX_NS __gnu_cxx
@@ -19,6 +30,15 @@
 		#define HASH_XXX_NS stdext
 	#endif//GCCXML
 #endif
+
+#if !defined( __llvm__ )
+    // This is for GCCXML (when using old compilers)
+    #define HASH_XXX_UMAP hash_map
+    #define HASH_XXX_USET hash_set
+    #define HASH_XXX_UMMAP hash_multimap
+    #define HASH_XXX_UMMSET hash_multiset
+#endif
+
 #include <string>
 #include <vector>
 #include <deque>
@@ -91,25 +111,25 @@ namespace multimaps{
 }
 
 namespace hash_sets{
-    typedef HASH_XXX_NS::hash_set< std::vector< int > > hs_v_int;
-    typedef HASH_XXX_NS::hash_set< std::string > hs_string;
+    typedef HASH_XXX_NS::HASH_XXX_USET< std::vector< int > > hs_v_int;
+    typedef HASH_XXX_NS::HASH_XXX_USET< std::string > hs_string;
 
 }
 
 namespace hash_multisets{
-    typedef HASH_XXX_NS::hash_multiset< std::vector< int > > mhs_v_int;
-    typedef HASH_XXX_NS::hash_multiset< std::string > mhs_string;
+    typedef HASH_XXX_NS::HASH_XXX_UMMSET< std::vector< int > > mhs_v_int;
+    typedef HASH_XXX_NS::HASH_XXX_UMMSET< std::string > mhs_string;
 }
 
 namespace hash_maps{
-    typedef HASH_XXX_NS::hash_map< int, double > hm_i2d;
-    typedef HASH_XXX_NS::hash_map< std::wstring, double > hm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMAP< int, double > hm_i2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMAP< std::wstring, double > hm_wstr2d;
 }
 
 namespace hash_multimaps{
-    typedef HASH_XXX_NS::hash_multimap< int, double > hmm_i2d;
-    typedef HASH_XXX_NS::hash_multimap< std::wstring const, double > hmm_wstr2d;
-    typedef HASH_XXX_NS::hash_multimap< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< int, double > hmm_i2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< std::wstring const, double > hmm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
 }
 
 inline void f1( type< sets::s_v_int > ){
