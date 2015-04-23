@@ -24,11 +24,11 @@
 #else
     #include <hash_set>
     #include <hash_map>
-	#if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
-		#define HASH_XXX_NS std
-	#else
-		#define HASH_XXX_NS stdext
-	#endif//GCCXML
+    #if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
+        #define HASH_XXX_NS std
+    #else
+        #define HASH_XXX_NS stdext
+    #endif//GCCXML
 #endif
 
 #if !defined( __llvm__ )
