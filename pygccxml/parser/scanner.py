@@ -83,10 +83,10 @@ XML_NN_VARIABLE = "Variable"
 
 class scanner_t(xml.sax.handler.ContentHandler):
 
-    def __init__(self, gccxml_file, decl_factory, config, *args):
+    def __init__(self, xml_file, decl_factory, config, *args):
         xml.sax.handler.ContentHandler.__init__(self, *args)
         self.logger = utils.loggers.cxx_parser
-        self.gccxml_file = gccxml_file
+        self.xml_file = xml_file
         self.config = config
         # defining parsing tables
         self.__readers = {
@@ -156,7 +156,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.__mangled_suffix_len = len(self.__mangled_suffix)
 
     def read(self):
-        xml.sax.parse(self.gccxml_file, self)
+        xml.sax.parse(self.xml_file, self)
 
     def endDocument(self):
         # updating membership

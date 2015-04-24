@@ -410,9 +410,8 @@ class source_reader_t:
         except Exception:
             return file_path
 
-    def __parse_xml_file(self, gccxml_file):
-        scanner_ = scanner_t(
-            gccxml_file, self.__decl_factory, self.__config)
+    def __parse_xml_file(self, xml_file):
+        scanner_ = scanner_t(xml_file, self.__decl_factory, self.__config)
         scanner_.read()
         decls = scanner_.declarations()
         types = scanner_.types()
