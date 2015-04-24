@@ -19,35 +19,35 @@ namespace yes{
         typedef int value_type;
         typedef std::vector< int > container;
 
-        container do_nothing(){};
+        container do_nothing(){ return container(0); };
     };
 
     struct _2_{
         typedef _0_ value_type;
         typedef std::vector< _0_ > container;
 
-        container do_nothing(){};
+        container do_nothing(){ return container(0); };
     };
 
     struct _3_{
         typedef std::string value_type;
         typedef std::vector< std::string > container;
 
-        container do_nothing(){};
+        container do_nothing(){ return container(0); };
     };
 
     struct _4_{
         typedef std::vector<int> value_type;
         typedef std::vector< std::vector<int> > container;
 
-        container do_nothing(){};
+        container do_nothing(){ return container(0); };
     };
 
     struct _5_{
         typedef int value_type;
         typedef const std::vector< int > container;
 
-        container do_nothing(){};
+        container do_nothing(){ return container(0); };
     };
 
 }
