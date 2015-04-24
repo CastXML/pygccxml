@@ -227,17 +227,17 @@ class source_reader_t:
 
         """
 
-        gccxml_file = destination
+        xml_file = destination
         # If file specified, remove it to start else create new file name
-        if gccxml_file:
-            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
+        if xml_file:
+            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
         else:
-            gccxml_file = pygccxml.utils.create_temp_file_name(suffix='.xml')
+            xml_file = pygccxml.utils.create_temp_file_name(suffix='.xml')
         try:
             ffname = source_file
             if not os.path.isabs(ffname):
                 ffname = self.__file_full_name(source_file)
-            command_line = self.__create_command_line(ffname, gccxml_file)
+            command_line = self.__create_command_line(ffname, xml_file)
 
             process = subprocess.Popen(
                 args=command_line,
@@ -258,22 +258,22 @@ class source_reader_t:
             exit_status = process.returncode
             gccxml_msg = os.linesep.join([str(s) for s in gccxml_reports])
             if self.__config.ignore_gccxml_output:
-                if not os.path.isfile(gccxml_file):
+                if not os.path.isfile(xml_file):
                     raise RuntimeError(
                         "Error occured while running " +
                         self.__config.caster.upper() + ": %s status:%s" %
                         (gccxml_msg, exit_status))
             else:
                 if gccxml_msg or exit_status or not \
-                        os.path.isfile(gccxml_file):
+                        os.path.isfile(xml_file):
                     raise RuntimeError(
                         "Error occured while running " +
                         self.__config.caster.upper() + ": %s" %
                         gccxml_msg)
         except Exception as error:
-            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
+            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
             raise error
-        return gccxml_file
+        return xml_file
 
     def create_xml_file_from_string(self, content, destination=None):
         """
@@ -288,15 +288,15 @@ class source_reader_t:
         :rtype: returns file name of GCC-XML generated file
         """
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        gccxml_file = None
+        xml_file = None
         try:
             header_file_obj = open(header_file, 'w+')
             header_file_obj.write(content)
             header_file_obj.close()
-            gccxml_file = self.create_xml_file(header_file, destination)
+            xml_file = self.create_xml_file(header_file, destination)
         finally:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
-        return gccxml_file
+        return xml_file
 
     def read_file(self, source_file):
         return self.read_cpp_source_file(source_file)
@@ -310,7 +310,7 @@ class source_reader_t:
         """
 
         declarations = None
-        gccxml_file = ''
+        xml_file = ''
         try:
             ffname = self.__file_full_name(source_file)
             self.logger.debug("Reading source file: [%s]." % ffname)
@@ -318,9 +318,9 @@ class source_reader_t:
             if not declarations:
                 self.logger.debug(
                     "File has not been found in cache, parsing...")
-                gccxml_file = self.create_xml_file(ffname)
+                xml_file = self.create_xml_file(ffname)
                 declarations, files = self.__parse_xml_file(
-                    gccxml_file)
+                    xml_file)
                 self.__dcache.update(
                     ffname,
                     self.__config,
@@ -331,11 +331,11 @@ class source_reader_t:
                     ("File has not been changed, reading declarations " +
                         "from cache."))
         except Exception as error:
-            if gccxml_file:
-                pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
+            if xml_file:
+                pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
             raise error
-        if gccxml_file:
-            pygccxml.utils.remove_file_no_raise(gccxml_file, self.__config)
+        if xml_file:
+            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
 
         return declarations
 
