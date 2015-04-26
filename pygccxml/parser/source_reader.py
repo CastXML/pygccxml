@@ -308,6 +308,7 @@ class source_reader_t:
 
         :param source_file: path to C++ source file
         :type source_file: str
+
         """
 
         declarations = None
@@ -320,13 +321,9 @@ class source_reader_t:
                 self.logger.debug(
                     "File has not been found in cache, parsing...")
                 xml_file = self.create_xml_file(ffname)
-                declarations, files = self.__parse_xml_file(
-                    xml_file)
+                declarations, files = self.__parse_xml_file(xml_file)
                 self.__dcache.update(
-                    ffname,
-                    self.__config,
-                    declarations,
-                    files)
+                    ffname, self.__config, declarations, files)
             else:
                 self.logger.debug(
                     ("File has not been changed, reading declarations " +
