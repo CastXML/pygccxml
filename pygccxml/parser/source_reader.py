@@ -215,7 +215,7 @@ class source_reader_t:
         This method will generate a xml file using an external tool.
 
         The external tool can be either gccxml or castxml. The method will
-        reutrn the file path of the generated xml file.
+        return the file path of the generated xml file.
 
         :param source_file: path to the source file that should be parsed.
         :type source_file: str
