@@ -4,12 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 """
-defines few algorithms, that deals with different properties of std containers
-
-real    0m0.234s
-user    0m0.198s
-sys 0m0.036s
-
+Define a few algorithms that deal with different properties of std containers.
 
 """
 
@@ -351,7 +346,11 @@ class container_traits_impl_t():
         return self._name
 
     def get_container_or_none(self, type_):
-        """returns reference to the class declaration or None"""
+        """
+        Returns reference to the class declaration or None.
+
+        """
+
         type_ = type_traits.remove_alias(type_)
         type_ = type_traits.remove_cv(type_)
 
@@ -373,11 +372,19 @@ class container_traits_impl_t():
                 return cls_declaration
 
     def is_my_case(self, type_):
-        """checks, whether type is STD container or not"""
+        """
+        Checks, whether type is STD container or not.
+
+        """
+
         return bool(self.get_container_or_none(type_))
 
     def class_declaration(self, type_):
-        """returns reference to the class declaration"""
+        """
+        Returns reference to the class declaration.
+
+        """
+
         cls_declaration = self.get_container_or_none(type_)
         if not cls_declaration:
             raise TypeError(
@@ -439,18 +446,20 @@ class container_traits_impl_t():
 
     def remove_defaults(self, type_or_string):
         """
-        removes template defaults from a template class instantiation
+        Removes template defaults from a templated class instantiation.
 
         For example:
             .. code-block:: c++
 
                std::vector< int, std::allocator< int > >
 
-        will become
+        will become:
             .. code-block:: c++
 
                std::vector< int >
+
         """
+
         name = type_or_string
         if not utils.is_str(type_or_string):
             name = self.class_declaration(type_or_string).name
