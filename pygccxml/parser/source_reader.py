@@ -153,7 +153,7 @@ class source_reader_t:
                 '--castxml-start="%s"' %
                 ','.join(self.__config.start_with_declarations))
         cmd_line = ' '.join(cmd)
-        self.logger.info('castxml cmd: %s' % cmd_line)
+        self.logger.debug('castxml cmd: %s' % cmd_line)
         return cmd_line
 
     def __create_command_line_gccxml(self, source_file, xmlfile):
@@ -189,7 +189,7 @@ class source_reader_t:
         if self.__config.compiler:
             cmd.append(" --gccxml-compiler %s" % self.__config.compiler)
         cmd_line = ' '.join(cmd)
-        self.logger.info('gccxml cmd: %s' % cmd_line)
+        self.logger.debug('gccxml cmd: %s' % cmd_line)
         return cmd_line
 
     def __add_symbols(self, cmd):
