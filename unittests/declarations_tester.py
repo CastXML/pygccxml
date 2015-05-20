@@ -99,13 +99,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
 
         return_default_args = ns.free_function('return_default_args')
         self.failUnless(
-            return_default_args.arguments[0].name in [
-                'arg',
-                'arg0'])
+            return_default_args.arguments[0].name in ['arg', 'arg0'])
         self.failUnless(
-            return_default_args.arguments[1].name in [
-                'arg1',
-                'flag'])
+            return_default_args.arguments[1].name in ['arg1', 'flag'])
         self._test_calldef_args(
             return_default_args,
             [declarations.argument_t(
