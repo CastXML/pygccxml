@@ -85,7 +85,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # qualifier, which is wrong; Keep the test like this for gccxml as
         # gccxml will be dropped one day. With castxml check if function has
         # no extern qualifier.
-        if 'GCCXML' in no_return_no_args.compiler:
+        if 'GCC-XML' in no_return_no_args.compiler:
             self.failUnless(
                 no_return_no_args.has_extern,
                 "function 'no_return_no_args' should have an extern qualifier")
