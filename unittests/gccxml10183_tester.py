@@ -25,9 +25,14 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        global_ns.decl('A<int>')
-        f = global_ns.free_fun('f')
-        self.failUnless(f.demangled == 'void f<int>(A<int> const&)')
+
+        # TODO: demangled attribute does not existe for castxml
+        # and will not be added. Remove this test once gccxml
+        # support is dropped.
+        if 'GCCXML' in global_ns.compiler:
+            global_ns.decl('A<int>')
+            f = global_ns.free_fun('f')
+            self.failUnless(f.demangled == 'void f<int>(A<int> const&)')
 
 
 def create_suite():
