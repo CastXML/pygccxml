@@ -150,7 +150,7 @@ class source_reader_t:
         # Where to start the parsing
         if self.__config.start_with_declarations:
             cmd.append(
-                '--castxml-start="%s"' %
+                '--castxml-start "%s"' %
                 ','.join(self.__config.start_with_declarations))
         cmd_line = ' '.join(cmd)
         self.logger.debug('castxml cmd: %s' % cmd_line)
