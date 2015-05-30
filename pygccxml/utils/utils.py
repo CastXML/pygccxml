@@ -10,8 +10,10 @@ Logger classes and a few convenience methods.
 
 import os
 import sys
+import platform
 import logging
 import tempfile
+import subprocess
 
 
 def is_str(s):
@@ -24,6 +26,43 @@ def is_str(s):
         return isinstance(s, str)
     else:
         return isinstance(s, basestring)
+
+
+def find_cpp_parser(name=None):
+    """
+    Try to find a c++ parser. Returns path and name.
+
+    :param name: name of the c++ parser: castxml or gccxml
+    :type name: str
+
+    If no name is given the function first looks for gccxml,
+    then for castxml. If no c++ parser is found the function
+    raises an exception.
+
+    """
+
+    if(platform.system() == "Windows"):
+        command = "where"
+    else:
+        command = "which"
+
+    path = ""
+    if(name is None):
+        name = "gccxml"
+        p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
+        path = p.stdout.read()
+        if(path == ""):
+            name = "castxml"
+            p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
+            path = p.stdout.read()
+    else:
+        p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
+        path = p.stdout.read()
+    if(path == ""):
+        raise(Exception(
+            "No c++ parser found. Please install castxml or gccxml."))
+    else:
+        return path.rstrip(), name
 
 
 def _create_logger_(name):
