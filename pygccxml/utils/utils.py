@@ -50,14 +50,14 @@ def find_cpp_parser(name=None):
     if(name is None):
         name = "gccxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
-        path = p.stdout.read()
+        path = p.stdout.read().decode("utf-8")
         if(path == ""):
             name = "castxml"
             p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
-            path = p.stdout.read()
+            path = p.stdout.read().decode("utf-8")
     else:
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
-        path = p.stdout.read()
+        path = p.stdout.read().decode("utf-8")
     if(path == ""):
         raise(Exception(
             "No c++ parser found. Please install castxml or gccxml."))
