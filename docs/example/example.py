@@ -9,20 +9,20 @@ import sys
 # Find out the file location within the sources tree
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
-# Find out gccxml location
-gccxml_09_path = os.path.join(
-    this_module_dir_path, '..', '..', '..',
-    'gccxml_bin', 'v09', sys.platform, 'bin')
 # Add pygccxml package to Python path
 sys.path.append(os.path.join(this_module_dir_path, '..', '..'))
 
 
 from pygccxml import parser  # nopep8
 from pygccxml import declarations  # nopep8
+from pygccxml import utils  # nopep8
 
-# Configure GCC-XML parser
+# Find out the c++ parser (gccxml or castxml)
+parser_path, parser_name = utils.find_cpp_parser()
+
+# Configure the c++ parser
 config = parser.gccxml_configuration_t(
-    gccxml_path=gccxml_09_path, compiler='gcc')
+    gccxml_path=parser_path, caster=parser_name, compiler="gcc")
 
 # Parsing source file
 decls = parser.parse([this_module_dir_path + '/example.hpp'], config)
