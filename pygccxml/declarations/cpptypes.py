@@ -477,8 +477,17 @@ defines a mapping between fundamental type name and its synonym to the instance
 of class that describes the type
 """
 
+
+def _f(x, with_defaults):
+    """
+    A small helper function.
+
+    """
+
+    return x.build_decl_string(with_defaults)
+
 ##########################################################################
-# Compaund types:
+# Compound types:
 
 
 class compound_t(type_t):
@@ -658,9 +667,6 @@ class calldef_type_t(object):
         return self.arguments_types and isinstance(
             self.arguments_types[-1], ellipsis_t)
 
-    def f(self, x, with_defaults):
-        return x.build_decl_string(with_defaults)
-
 
 class free_function_type_t(type_t, calldef_type_t):
 
@@ -673,21 +679,23 @@ class free_function_type_t(type_t, calldef_type_t):
         type_t.__init__(self)
         calldef_type_t.__init__(self, return_type, arguments_types)
 
+    @staticmethod
     def create_decl_string(
-            self, return_type, arguments_types, with_defaults=True):
+            return_type, arguments_types, with_defaults=True):
         """
-        returns free function type
+        Returns free function type
 
         :param return_type: function return type
         :type return_type: :class:`type_t`
         :param arguments_types: list of argument :class:`type <type_t>`
         :rtype: :class:`free_function_type_t`
+
         """
 
         return free_function_type_t.NAME_TEMPLATE % {
             'return_type': return_type.build_decl_string(with_defaults),
             'arguments': ','.join(
-                [self.f(x, with_defaults) for x in arguments_types])}
+                [_f(x, with_defaults) for x in arguments_types])}
 
     def build_decl_string(self, with_defaults=True):
         return self.create_decl_string(
@@ -715,7 +723,7 @@ class free_function_type_t(type_t, calldef_type_t):
             'typedef_name': typedef_name,
             'return_type': self.return_type.build_decl_string(with_defaults),
             'arguments': ','.join(
-                [self.f(x, with_defaults) for x in self.arguments_types])}
+                [_f(x, with_defaults) for x in self.arguments_types])}
 
 
 class member_function_type_t(type_t, calldef_type_t):
@@ -781,7 +789,7 @@ class member_function_type_t(type_t, calldef_type_t):
             'return_type': self.return_type.build_decl_string(with_defaults),
             'class': class_alias,
             'arguments': ','.join(
-                [self.f(x, with_defaults) for x in self.arguments_types]),
+                [_f(x, with_defaults) for x in self.arguments_types]),
             'has_const': has_const_str}
 
     def create(self):
@@ -791,8 +799,8 @@ class member_function_type_t(type_t, calldef_type_t):
             self.arguments_types,
             self.has_const)
 
+    @staticmethod
     def create_decl_string(
-            self,
             return_type,
             class_decl_string,
             arguments_types,
@@ -810,7 +818,7 @@ class member_function_type_t(type_t, calldef_type_t):
             'return_type': return_type_decl_string,
             'class': class_decl_string,
             'arguments': ','.join(
-                [self.f(x, with_defaults) for x in arguments_types]),
+                [_f(x, with_defaults) for x in arguments_types]),
             'has_const': has_const_str}
 
     def build_decl_string(self, with_defaults=True):
