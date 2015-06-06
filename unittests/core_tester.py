@@ -157,12 +157,36 @@ class core_t(parser_test_case.parser_test_case_t):
             'ENestedPrivate',
             declarations.ACCESS_TYPES.PRIVATE)
 
-    def test_mangled(self):
-        std = self.global_ns.namespace('std')
-        self.failUnless(std, 'std namespace has not been found')
+    def test_mangled_name_namespace(self):
+        std = self.global_ns.namespace("std")
+        self.failUnless(std, "std namespace has not been found")
+        # GCCXML had mangled names for everything. With CastXML
+        # there are only mangled names for functions and variables.
+        if "GCC" in std.compiler:
+            self.failUnless(
+                std.mangled,
+                "Mangled name of std namespace should be different from None")
+        elif "CastXML" in std.compiler:
+            # Call the getter by using lambda, else assertRaises does not
+            # work as expected.
+            self.assertRaises(Exception, lambda: std.mangled)
+
+    def test_mangled_name_functions(self):
+        # This works with gccxml and castxml
+        ns = self.global_ns.namespace("overloads")
+        do_nothing = ns.calldefs("do_nothing", recursive=False)
         self.failUnless(
-            std.mangled,
-            'mangled name of std namespace should be different from None')
+            do_nothing.mangled,
+            "Mangled name of do_nothing function should be different +"
+            "from None")
+
+    def test_mangled_name_variable(self):
+        # This works with gccxml and castxml
+        var_inst = self.global_ns.variable('array255')
+        self.failUnless(
+            var_inst.mangled,
+            "Mangled name of array255 variable should be different +"
+            "from None")
 
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
