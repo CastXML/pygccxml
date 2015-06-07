@@ -13,6 +13,8 @@ import sys
 from . import calldef
 from . import algorithm
 from . import decl_visitor
+from . import variable_t
+from . import calldef_t
 
 
 class decl_printer_t(decl_visitor.decl_visitor_t):
@@ -146,39 +148,53 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     artificial.ljust(
                         self.JUSTIFY) +
                     os.linesep)
-            if self.verbose and self.__inst.attributes:
-                attributes = 'attributes: %s' % (self.__inst.attributes)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    attributes +
-                    os.linesep)
-            if self.verbose and self.__inst.demangled:
-                demangled = 'demangled: %s' % (self.__inst.demangled)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    demangled +
-                    os.linesep)
-            if self.verbose and self.__inst.mangled:
-                mangled = 'mangled: %s' % (self.__inst.mangled)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    mangled +
-                    os.linesep)
-            if self.verbose and self.__inst.decorated_name:
-                decorated_name = 'decorated name: %s' % (
-                    self.__inst.decorated_name)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    decorated_name +
-                    os.linesep)
+                if self.__inst.attributes:
+                    attributes = 'attributes: %s' % (self.__inst.attributes)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        attributes +
+                        os.linesep)
+                if self.__inst.demangled:
+                    demangled = 'demangled: %s' % (self.__inst.demangled)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        demangled +
+                        os.linesep)
+
+                # Mangled name is only available for functions and variables
+                # when using castxml.
+                print_mangled = False
+                if "GCC" in self.__inst.compiler:
+                    if self.__inst.mangled:
+                        print_mangled = True
+                elif "CastXML" in self.__inst.compiler:
+                    if isinstance(self.__inst, variable_t) or \
+                            isinstance(self.__inst, calldef_t):
+                        if self.__inst.mangled:
+                            print_mangled = True
+
+                if print_mangled:
+                    mangled = 'mangled: %s' % (self.__inst.mangled)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        mangled +
+                        os.linesep)
+
+                if self.__inst.decorated_name:
+                    decorated_name = 'decorated name: %s' % (
+                        self.__inst.decorated_name)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        decorated_name +
+                        os.linesep)
 
     def print_calldef_info(self, decl=None):
         if None is decl:
