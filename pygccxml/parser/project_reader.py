@@ -456,7 +456,10 @@ class project_reader_t:
             for name, same_name_classes in ddhash[class_t].items():
                 if not name:
                     continue
-                class_names.add(same_name_classes[0].mangled)
+                if "GCC" in same_name_classes[0].compiler:
+                    class_names.add(same_name_classes[0].mangled)
+                elif "CastXML" in same_name_classes[0].compiler:
+                    class_names.add(same_name_classes[0].name)
 
             class_declarations = ddhash[class_declaration_t]
             for name, same_name_class_declarations in \
@@ -464,9 +467,14 @@ class project_reader_t:
                 if not name:
                     continue
                 for class_declaration in same_name_class_declarations:
-                    if class_declaration.mangled and \
-                            class_declaration.mangled in class_names:
-                        decls.remove(class_declaration)
+                    if "GCC" in class_declaration.compiler:
+                        if class_declaration.mangled and \
+                                class_declaration.mangled in class_names:
+                                decls.remove(class_declaration)
+                    elif "CastXML" in class_declaration.compiler:
+                        if class_declaration.name and \
+                                class_declaration.name in class_names:
+                                decls.remove(class_declaration)
 
         nsref.declarations = decls
 
@@ -540,9 +548,9 @@ class project_reader_t:
                     declarations = class_.parent.declarations
                 else:
                     # yes, we are talking about global class that doesn't
-                    declarations = namespaces
                     # belong to any namespace. Usually is compiler generated
                     # top level classes
+                    declarations = namespaces
                 declarations_ids = [id(decl) for decl in declarations]
                 del declarations[declarations_ids.index(id(class_))]
         return leaved_classes
@@ -552,15 +560,20 @@ class project_reader_t:
             decl.location.as_tuple(),
             tuple(pygccxml.declarations.declaration_path(decl)))
 
-    def _create_mangled_key(self, decl):
-        return (decl.location.as_tuple(), decl.mangled)
+    def _create_name_key(self, decl):
+        # Not all declarations have a mangled name with castxml
+        # we can only rely on the name
+        if "GCC" in decl.compiler:
+            return (decl.location.as_tuple(), decl.mangled)
+        elif "CastXML" in decl.compiler:
+            return (decl.location.as_tuple(), decl.name)
 
     def _relink_declarated_types(self, leaved_classes, declarated_types):
 
         mangled_leaved_classes = {}
         for leaved_class in leaved_classes.values():
             mangled_leaved_classes[
-                self._create_mangled_key(leaved_class)] = leaved_class
+                self._create_name_key(leaved_class)] = leaved_class
 
         for decl_wrapper_type in declarated_types:
             # it is possible, that cache contains reference to dropped class
@@ -594,7 +607,7 @@ class project_reader_t:
             elif isinstance(
                     decl_wrapper_type.declaration,
                     pygccxml.declarations.class_declaration_t):
-                key = self._create_mangled_key(decl_wrapper_type.declaration)
+                key = self._create_name_key(decl_wrapper_type.declaration)
                 if key in mangled_leaved_classes:
                     decl_wrapper_type.declaration = mangled_leaved_classes[key]
 
