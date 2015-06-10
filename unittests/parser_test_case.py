@@ -21,16 +21,15 @@ class parser_test_case_t(unittest.TestCase):
         else:
             pass
 
-    def _test_type_composition(self, type, expected_compound, expected_base):
+    def _test_type_composition(self, type_, expected_compound, expected_base):
         self.failUnless(
-            isinstance(type, expected_compound),
+            isinstance(type_, expected_compound),
             "the compound type('%s') should be '%s'" %
-            (type.decl_string, expected_compound.__name__))
+            (type_.decl_string, expected_compound.__name__))
         self.failUnless(
-            isinstance(type.base, expected_base),
+            isinstance(type_.base, expected_base),
             "base type('%s') should be '%s'" %
-            (type.decl_string,
-             expected_base.__name__))
+            (type_.decl_string, expected_base.__name__))
 
     def _test_calldef_return_type(self, calldef, expected_type):
         self.failUnless(
