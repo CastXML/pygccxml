@@ -267,7 +267,7 @@ class linker_t(decl_visitor_t, type_visitor_t, object):
         self.__link_compound_type()
 
     def visit_pointer(self):
-        if '0.9' in self.__compiler and \
+        if ('0.9' in self.__compiler or 'CastXML' in self.__compiler) and \
                 isinstance(self.__inst.base, member_variable_type_t):
             original_inst = self.__inst
             self.__inst = self.__inst.base

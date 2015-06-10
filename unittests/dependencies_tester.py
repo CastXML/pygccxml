@@ -44,7 +44,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
-        if '0.9' in cls.compiler:
+        if '0.9' in cls.compiler or 'CastXML' in cls.compiler:
             # GCCXML R122 adds compiler generated constructors/destructors
             # and operator= to the class, if it has
             dependencies = [

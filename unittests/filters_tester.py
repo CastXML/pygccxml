@@ -38,7 +38,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         criteria = declarations.access_type_matcher_t(
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
-        if '0.9' in public_members[0].compiler:
+        if '0.9' in public_members[0].compiler or \
+                'CastXML' in public_members[0].compiler:
             public_members = [d for d in public_members if not d.is_artificial]
             self.failUnless(17 == len(public_members))
         else:
@@ -54,7 +55,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             criteria1 | criteria2,
             self.global_ns)
 
-        if '0.9' in found[0].compiler:
+        if '0.9' in found[0].compiler or 'CastXML' in found[0].compiler:
             found = [d for d in found if not d.is_artificial]
             self.failUnless(15 <= len(found) <= 21)
         else:

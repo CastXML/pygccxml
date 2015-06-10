@@ -407,7 +407,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_offset_type(self, attrs):
         base = attrs[XML_AN_BASE_TYPE]
         type_ = attrs[XML_AN_TYPE]
-        if '0.9' in self.__compiler:
+        if '0.9' in self.__compiler or 'CastXML' in self.__compiler:
             return declarations.pointer_t(
                 declarations.member_variable_type_t(
                     class_inst=base,
