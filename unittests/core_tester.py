@@ -167,6 +167,7 @@ class core_t(parser_test_case.parser_test_case_t):
                 std.mangled,
                 "Mangled name of std namespace should be different from None")
         elif "CastXML" in std.compiler:
+            # Check if an assertion is correctly raised when using castxml.
             # Call the getter by using lambda, else assertRaises does not
             # work as expected.
             self.assertRaises(Exception, lambda: std.mangled)
@@ -187,6 +188,20 @@ class core_t(parser_test_case.parser_test_case_t):
             var_inst.mangled,
             "Mangled name of array255 variable should be different +"
             "from None")
+
+    def test_demangled_name_variable(self):
+        # This works with gccxml only. Check if an assertion is correctly
+        # raised when using castxml.
+        var_inst = self.global_ns.variable('array255')
+        if "GCC" in var_inst.compiler:
+            self.failUnless(
+                var_inst.demangled,
+                "Demangled name of array255 variable should be different +"
+                "from None")
+        elif "CastXML" in var_inst.compiler:
+            # Call the getter by using lambda, else assertRaises does not
+            # work as expected.
+            self.assertRaises(Exception, lambda: var_inst.demangled)
 
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
