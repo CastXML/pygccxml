@@ -263,9 +263,15 @@ class calldef_t(declaration.declaration_t):
                 other._sorted_list(other.exceptions)
 
     def __hash__(self):
-        return (super.__hash__(self) ^
-                hash(self.return_type) ^
-                hash(self.demangled_name))
+        if "GCC" in self.compiler:
+            return (super.__hash__(self) ^
+                    hash(self.return_type) ^
+                    hash(self.demangled_name))
+        elif "CastXML" in self.compiler:
+            # No demangled name with castxml. Use the normal name.
+            return (super.__hash__(self) ^
+                    hash(self.return_type) ^
+                    hash(self.name))
 
     @property
     def arguments(self):
