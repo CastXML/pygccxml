@@ -207,33 +207,60 @@ class calldef_t(declaration.declaration_t):
         self._mangled = mangled
 
     def _get__cmp__call_items(self):
-        """implementation details"""
+        """
+        Implementation detail.
+
+        """
+
         raise NotImplementedError()
 
     def _get__cmp__items(self):
-        """implementation details"""
-        items = [
-            self.arguments,
-            self.return_type,
-            self.has_extern,
-            self.does_throw,
-            self._sorted_list(
-                self.exceptions),
-            self.demangled_name,
-            self.has_inline]
+        """
+        Implementation detail.
+
+        """
+
+        if "GCC" in self.compiler:
+            items = [
+                self.arguments,
+                self.return_type,
+                self.has_extern,
+                self.does_throw,
+                self._sorted_list(self.exceptions),
+                self.demangled_name,
+                self.has_inline]
+        elif "CastXML" in self.compiler:
+            # No demangled name
+            items = [
+                self.arguments,
+                self.return_type,
+                self.has_extern,
+                self.does_throw,
+                self._sorted_list(self.exceptions),
+                self.has_inline]
         items.extend(self._get__cmp__call_items())
         return items
 
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__(self, other):
             return False
-        return self.return_type == other.return_type \
-            and self.arguments == other.arguments \
-            and self.has_extern == other.has_extern \
-            and self.does_throw == other.does_throw \
-            and self._sorted_list(self.exceptions) == \
-            other._sorted_list(other.exceptions) \
-            and self.demangled_name == other.demangled_name
+
+        if "GCC" in self.compiler:
+            return self.return_type == other.return_type \
+                and self.arguments == other.arguments \
+                and self.has_extern == other.has_extern \
+                and self.does_throw == other.does_throw \
+                and self._sorted_list(self.exceptions) == \
+                other._sorted_list(other.exceptions) \
+                and self.demangled_name == other.demangled_name
+        elif "CastXML" in self.compiler:
+            # Do not check for demangled name
+            return self.return_type == other.return_type \
+                and self.arguments == other.arguments \
+                and self.has_extern == other.has_extern \
+                and self.does_throw == other.does_throw \
+                and self._sorted_list(self.exceptions) == \
+                other._sorted_list(other.exceptions)
 
     def __hash__(self):
         return (super.__hash__(self) ^
@@ -359,6 +386,9 @@ class calldef_t(declaration.declaration_t):
 
         """returns function demangled name. It can help you to deal with
             function template instantiations"""
+
+        if "CastXML" in self.compiler:
+            raise Exception("Demangled name is not available with CastXML.")
 
         from . import type_traits
 
