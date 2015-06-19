@@ -358,7 +358,10 @@ class declaration_t(object):
            @type: str
 
         """
-        return self._demangled
+        if "GCC" in self.compiler:
+            return self._demangled
+        elif "CastXML" in self.compiler:
+            raise Exception("Demangled name is not available with CastXML.")
 
     @demangled.setter
     def demangled(self, demangled):
