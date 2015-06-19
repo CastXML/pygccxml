@@ -156,7 +156,9 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                         self.INDENT_SIZE +
                         attributes +
                         os.linesep)
-                if self.__inst.demangled:
+                if "GCC" in self.__inst.compiler and self.__inst.demangled:
+                    # Working only with gccxml.
+                    # No demangled attribute with castxml
                     demangled = 'demangled: %s' % (self.__inst.demangled)
                     self.writer(
                         ' ' *
