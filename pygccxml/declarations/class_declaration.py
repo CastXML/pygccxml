@@ -181,6 +181,7 @@ class class_t(scopedef.scopedef_t):
 
     """describes class definition"""
 
+    # Can be set from outside
     USE_DEMANGLED_AS_NAME = True
 
     def __init__(
@@ -206,12 +207,23 @@ class class_t(scopedef.scopedef_t):
         self._container_traits_set = False
         self._recursive_bases = None
         self._recursive_derived = None
+        self._use_demangled_as_name = False
+
+    @property
+    def use_demangled_as_name(self):
+        if "GCC" in self.compiler:
+            return class_t.USE_DEMANGLED_AS_NAME
+        elif "CastXML" in self.compiler:
+            return False
+
+    @use_demangled_as_name.setter
+    def use_demangled_as_name(self, use_demangled_as_name):
+        self._use_demangled_as_name = use_demangled_as_name
 
     def _get_name_impl(self):
         if not self._name:  # class with empty name
             return self._name
-        elif class_t.USE_DEMANGLED_AS_NAME and self.demangled and \
-                'GCC' in self.compiler:
+        elif self.use_demangled_as_name and self.demangled:
 
             if not self.cache.demangled_name:
                 fname = algorithm.full_name(self.parent)
