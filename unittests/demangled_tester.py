@@ -38,6 +38,11 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         demangled = self.global_ns.namespace('demangled')
+
+        if "CastXML" in demangled.compiler:
+            # Do not test demangled name for CastXML
+            return True
+
         if 32 == self.architecture:
             if '0.9' in demangled.compiler:
                 if 0:  # platform.machine() == 'x86_64':
