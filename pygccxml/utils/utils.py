@@ -41,7 +41,7 @@ def find_cpp_parser(name=None):
 
     """
 
-    if(platform.system() == "Windows"):
+    if platform.system() == "Windows":
         command = "where"
     else:
         command = "which"
