@@ -345,7 +345,7 @@ def load_gccxml_configuration(configuration, **defaults):
             from ConfigParser import SafeConfigParser
         parser = SafeConfigParser()
         parser.read(configuration)
-    gccxml_cfg = gccxml_configuration_t()
+    cfg = gccxml_configuration_t()
 
     values = defaults
     if not values:
@@ -360,25 +360,25 @@ def load_gccxml_configuration(configuration, **defaults):
         if isinstance(value, str):
             value = value.strip()
         if name == 'gccxml_path':
-            gccxml_cfg.gccxml_path = value
+            cfg.gccxml_path = value
         elif name == 'working_directory':
-            gccxml_cfg.working_directory = value
+            cfg.working_directory = value
         elif name == 'include_paths':
             for p in value.split(';'):
                 p = p.strip()
                 if p:
-                    gccxml_cfg.include_paths.append(p)
+                    cfg.include_paths.append(p)
         elif name == 'compiler':
-            gccxml_cfg.compiler = value
+            cfg.compiler = value
         elif name == 'caster':
-            gccxml_cfg.caster = value
+            cfg.caster = value
         elif name == 'keepxml':
-            gccxml_cfg.keepxml = value
+            cfg.keepxml = value
         elif name == 'compiler_path':
-            gccxml_cfg.compiler_path = value
+            cfg.compiler_path = value
         else:
             print('\n%s entry was ignored' % name)
-    return gccxml_cfg
+    return cfg
 
 
 if __name__ == '__main__':
