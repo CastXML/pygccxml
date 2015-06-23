@@ -10,6 +10,8 @@ Defines C++ parser configuration classes.
 
 import os
 import copy
+import platform
+import subprocess
 from .. import utils
 
 
@@ -39,7 +41,8 @@ class parser_configuration_t(object):
             cflags="",
             compiler=None,
             caster="gccxml",
-            keepxml=False):
+            keepxml=False,
+            compiler_path=None):
 
         object.__init__(self)
         self.__working_directory = working_directory
@@ -63,6 +66,20 @@ class parser_configuration_t(object):
         self.__caster = caster
 
         self.__keepxml = keepxml
+
+        if caster == 'castxml' and compiler_path is None:
+            # Try to guess a path for the compiler
+            # Only needed with castxml on Mac or Linux
+            if platform.system() != 'Windows':
+                # On windows there is no need for the compiler path
+                p = subprocess.Popen(
+                    ['which', 'clang'], stdout=subprocess.PIPE)
+                self.compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                # No clang found; use gcc
+                if self.compiler_path == '':
+                    self.compiler_path = '/usr/bin/c++'
+        else:
+            self.compiler_path = compiler_path
 
     def clone(self):
         raise NotImplementedError(self.__class__.__name__)
@@ -121,6 +138,16 @@ class parser_configuration_t(object):
         self.__keepxml = keepxml
 
     @property
+    def compiler_path(self):
+        """Get the path for the compiler."""
+        return self.__compiler_path
+
+    @compiler_path.setter
+    def compiler_path(self, compiler_path):
+        """Set the path for the compiler."""
+        self.__compiler_path = compiler_path
+
+    @property
     def cflags(self):
         "additional flags to pass to compiler"
         return self.__cflags
@@ -171,7 +198,8 @@ class gccxml_configuration_t(parser_configuration_t):
             cflags="",
             compiler=None,
             caster="gccxml",
-            keepxml=False):
+            keepxml=False,
+            compiler_path=None):
 
         parser_configuration_t.__init__(
             self,
@@ -182,7 +210,8 @@ class gccxml_configuration_t(parser_configuration_t):
             cflags=cflags,
             compiler=compiler,
             caster=caster,
-            keepxml=keepxml)
+            keepxml=keepxml,
+            compiler_path=compiler_path)
 
         self.__gccxml_path = gccxml_path
 
@@ -266,6 +295,8 @@ compiler=
 caster=
 # Do we keep xml files or not after errors
 keepxml=
+# Set the path to the compiler
+compiler_path=
 """
 
 
@@ -301,6 +332,8 @@ def load_gccxml_configuration(configuration, **defaults):
        caster=
        # Do we keep xml files or not after errors
        keepxml=
+       # Set the path to the compiler
+       compiler_path=
 
     """
 
@@ -341,6 +374,8 @@ def load_gccxml_configuration(configuration, **defaults):
             gccxml_cfg.caster = value
         elif name == 'keepxml':
             gccxml_cfg.keepxml = value
+        elif name == 'compiler_path':
+            gccxml_cfg.compiler_path = value
         else:
             print('\n%s entry was ignored' % name)
     return gccxml_cfg

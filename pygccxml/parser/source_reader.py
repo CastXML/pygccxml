@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
+import platform
 from . import linker
 from . import config
 from . import patcher
@@ -116,7 +117,7 @@ class source_reader_t:
         cmd = []
 
         # first is gccxml executable
-        if 'nt' == os.name:
+        if platform.system() == 'Windows':
             cmd.append('"%s"' % os.path.normpath(self.__config.gccxml_path))
         else:
             cmd.append('%s' % os.path.normpath(self.__config.gccxml_path))
@@ -134,8 +135,12 @@ class source_reader_t:
         # Clang option: make sure clang knows we want to parse c++
         cmd.append("-x c++")
         # Platform specific options
-        if 'nt' != os.name:
-            cmd.append('--castxml-cc-gnu /usr/bin/c++')
+        if platform.system() == 'Windows':
+            cmd.append('--castxml-cc-msvc cl')
+            if 'msvc9' == self.__config.compiler:
+                cmd.append('-D"_HAS_TR1=0"')
+        else:
+            cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
         # Tell castxml to output xml compatible files with gccxml
         # so that we can parse them with pygccxml
         cmd.append('--castxml-gccxml')
