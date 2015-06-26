@@ -237,7 +237,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 'and attrs "%s".')
             msg = msg + os.linesep + 'Error: %s.' % str(error)
             self.logger.error(msg % (name, pprint.pformat(list(attrs.keys()))))
-            raise error
+            raise
 
     def endElement(self, name):
         if name in self.deep_declarations:

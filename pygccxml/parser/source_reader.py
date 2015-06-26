@@ -276,9 +276,9 @@ class source_reader_t:
                         "Error occured while running " +
                         self.__config.caster.upper() + ": %s" %
                         gccxml_msg)
-        except Exception as error:
+        except Exception:
             pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
-            raise error
+            raise
         return xml_file
 
     def create_xml_file_from_string(self, content, destination=None):
@@ -333,10 +333,10 @@ class source_reader_t:
                 self.logger.debug(
                     ("File has not been changed, reading declarations " +
                         "from cache."))
-        except Exception as error:
+        except Exception:
             if xml_file:
                 pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
-            raise error
+            raise
         if xml_file:
             pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
 
@@ -382,9 +382,9 @@ class source_reader_t:
         declarations = None
         try:
             declarations = self.read_file(header_file)
-        except Exception as error:
+        except Exception:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
-            raise error
+            raise
         pygccxml.utils.remove_file_no_raise(header_file, self.__config)
         return declarations
 
