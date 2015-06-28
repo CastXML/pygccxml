@@ -67,7 +67,8 @@ class parser_configuration_t(object):
 
         self.__keepxml = keepxml
 
-        self.compiler_path = compiler_path
+        # If no compiler path was set and we are using castxml, set the path
+        self.__compiler_path = create_compiler_path(caster, compiler_path)
 
     def clone(self):
         raise NotImplementedError(self.__class__.__name__)
@@ -370,19 +371,33 @@ def load_gccxml_configuration(configuration, **defaults):
             print('\n%s entry was ignored' % name)
 
     # If no compiler path was set and we are using castxml, set the path
-    if cfg.caster == 'castxml' and cfg.compiler_path is None:
-        # Try to guess a path for the compiler
-        # Only needed with castxml on Mac or Linux
+    # Here we overwrite the default configuration done in the cfg because
+    # the caster was set through the setter after the creation of a new
+    # emppty configuration object.
+    cfg.compiler_path = create_compiler_path(cfg.caster, cfg.compiler_path)
+
+    return cfg
+
+
+def create_compiler_path(caster, compiler_path):
+    """
+    Try to guess a path for the compiler.
+
+    Only needed with castxml on Mac or Linux.
+
+    """
+
+    if caster == 'castxml' and compiler_path is None:
         if platform.system() != 'Windows':
             # On windows there is no need for the compiler path
             p = subprocess.Popen(
-                ['which', 'clang'], stdout=subprocess.PIPE)
-            cfg.compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                ['which', 'clang++'], stdout=subprocess.PIPE)
+            compiler_path = p.stdout.read().decode("utf-8").rstrip()
             # No clang found; use gcc
-            if cfg.compiler_path == '':
-                cfg.compiler_path = '/usr/bin/c++'
+            if compiler_path == '':
+                compiler_path = '/usr/bin/c++'
 
-    return cfg
+    return compiler_path
 
 
 if __name__ == '__main__':
