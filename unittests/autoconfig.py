@@ -5,10 +5,10 @@
 
 import os
 import sys
+import logging
 
 this_module_dir_path = os.path.abspath(
-    os.path.dirname(
-        sys.modules[__name__].__file__))
+    os.path.dirname(sys.modules[__name__].__file__))
 
 data_directory = os.path.join(this_module_dir_path, 'data')
 build_directory = os.path.join(this_module_dir_path, 'temp')
@@ -22,6 +22,10 @@ import pygccxml  # nopep8
 import pygccxml.declarations  # nopep8
 import pygccxml.parser  # nopep8
 import pygccxml.utils  # nopep8
+
+# Set logging level
+logger = pygccxml.utils.loggers.cxx_parser
+logger.setLevel(logging.INFO)
 
 # Find out the c++ parser (gccxml or castxml)
 parser_path, parser_name = pygccxml.utils.find_cpp_parser()
