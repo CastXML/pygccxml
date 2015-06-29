@@ -35,27 +35,20 @@ class defaults_eraser:
                 ('std::basic_string<wchar_t,std::char_traits<wchar_t>,'
                     'std::allocator<wchar_t> >'),
                 ('std::basic_string<wchar_t, std::char_traits<wchar_t>, '
-                    'std::allocator<wchar_t> >')),
-            # The two next definition are for castxml and clang.
-            # See variable_matcher_tester test, when using
-            # std::vector< std::string >
-            # Note: The std::allocator part will be replaced
-            # later in the erase_allocator method.
-            'std::string, std::allocator<std::string >': (
-                ('std::basic_string<char>,'
-                    'std::allocator<std::basic_string<char> >'),
-                ('std::basic_string<char>, '
-                    'std::allocator<std::basic_string<char> >')),
-            'std::wstring, std::allocator<std::wstring >': (
-                ('std::basic_string<wchar_t>,'
-                    'std::allocator<std::basic_string<wchar_t> >'),
-                ('std::basic_string<wchar_t>, '
-                    'std::allocator<std::basic_string<wchar_t> >'))}
+                    'std::allocator<wchar_t> >'))}
 
         new_name = cls_name
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
+
+        # Needed for castxml and clang
+        # This is tested in remove_template_defaults_tester
+        # and variable_matcher_tester
+        new_name = new_name.replace(
+            "std::basic_string<char>", "std::string")
+        new_name = new_name.replace(
+            "std::basic_string<wchar_t>", "std::wstring")
 
         return new_name
 
