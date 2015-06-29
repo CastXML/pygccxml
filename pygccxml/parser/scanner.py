@@ -428,8 +428,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
             argument.type = attrs[XML_AN_TYPE]
             argument.default_value = attrs.get(XML_AN_DEFAULT, None)
             self.__read_attributes(argument, attrs)
-            if argument.default_value == '<gccxml-cast-expr>':
-                argument.default_value = None
+            if 'CastXML' not in self.__compiler:
+                # GCCXML only
+                if argument.default_value == '<gccxml-cast-expr>':
+                    argument.default_value = None
             self.__inst.arguments.append(argument)
 
     def __read_ellipsis(self, attrs):
