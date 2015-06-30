@@ -125,65 +125,73 @@ class tester_t(parser_test_case.parser_test_case_t):
         hs_v_int = self.global_ns.typedef('hs_v_int')
         if 'CastXML' in hs_v_int.compiler:
             hs_traits = declarations.unordered_set_traits
+            name = 'unordered_set'
         else:
             hs_traits = declarations.hash_set_traits
+            name = 'hash_set'
         self.failUnless(
-            'hash_set< std::vector< int > >' ==
+            (name + '< std::vector< int > >') ==
             hs_traits.remove_defaults(hs_v_int),
             hs_traits.remove_defaults(hs_v_int))
         hs_string = self.global_ns.typedef('hs_string')
         self.failUnless(
-            'hash_set< std::string >' == hs_traits.remove_defaults(hs_string))
+            (name + '< std::string >') == hs_traits.remove_defaults(hs_string))
 
     def test_hash_multiset(self):
         mhs_v_int = self.global_ns.typedef('mhs_v_int')
         if 'CastXML' in mhs_v_int.compiler:
             mhs_traits = declarations.unordered_multiset_traits
+            name = 'unordered_multiset'
         else:
             mhs_traits = declarations.hash_multiset_traits
+            name = 'hash_multiset'
         self.failUnless(
-            'hash_multiset< std::vector< int > >' ==
+            (name + '< std::vector< int > >') ==
             mhs_traits.remove_defaults(mhs_v_int))
         mhs_string = self.global_ns.typedef('mhs_string')
         self.failUnless(
-            'hash_multiset< std::string >' ==
+            (name + '< std::string >') ==
             mhs_traits.remove_defaults(mhs_string))
 
     def test_hash_map(self):
         hm_i2d = self.global_ns.typedef('hm_i2d')
         if 'CastXML' in hm_i2d.compiler:
             hm_traits = declarations.unordered_map_traits
+            name = 'unordered_map'
         else:
             hm_traits = declarations.hash_map_traits
+            name = 'hash_map'
         self.failUnless(
-            'hash_map< int, double >' == hm_traits.remove_defaults(hm_i2d))
+            (name + '< int, double >') == hm_traits.remove_defaults(hm_i2d))
         hm_wstr2d = self.global_ns.typedef('hm_wstr2d')
         self.failUnless(
-            'hash_map< std::wstring, double >' ==
+            (name + '< std::wstring, double >') ==
             hm_traits.remove_defaults(hm_wstr2d))
 
     def test_hash_multimap(self):
         hmm_i2d = self.global_ns.typedef('hmm_i2d')
         if 'CastXML' in hmm_i2d.compiler:
             hmm_traits = declarations.unordered_multimap_traits
+            name = 'unordered_multimap'
         else:
             hmm_traits = declarations.hash_multimap_traits
+            name = 'hash_multimap'
         self.failUnless(
-            'hash_multimap< int, double >' ==
+            (name + '< int, double >') ==
             hmm_traits.remove_defaults(hmm_i2d))
         hmm_wstr2d = self.global_ns.typedef('hmm_wstr2d')
         self.failUnless(
-            'hash_multimap< const std::wstring, double >' ==
+            (name + '< const std::wstring, double >') ==
             hmm_traits.remove_defaults(hmm_wstr2d))
         hmm_v_i2mm_wstr2d = self.global_ns.typedef('hmm_v_i2mm_wstr2d')
 
         possible_values = (
-            'hash_multimap< const std::vector< int >, ' +
-            'const __gnu_cxx::hash_multimap< const std::wstring, double > >',
-            'hash_multimap< const std::vector< int >, ' +
-            'const std::hash_multimap< const std::wstring, double > >',
-            'hash_multimap< const std::vector< int >, ' +
-            'const stdext::hash_multimap< const std::wstring, double > >')
+            name + '< const std::vector< int >, ' +
+            'const __gnu_cxx::' + name + '< const std::wstring, double > >',
+            name + '< const std::vector< int >, ' +
+            'const std::' + name + '< const std::wstring, double > >',
+            name + '< const std::vector< int >, ' +
+            'const stdext::' + name + '< const std::wstring, double > >')
 
         self.failUnless(hmm_traits.remove_defaults(hmm_v_i2mm_wstr2d)
                         in possible_values)
