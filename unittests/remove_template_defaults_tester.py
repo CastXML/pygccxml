@@ -123,7 +123,10 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_set(self):
         hs_v_int = self.global_ns.typedef('hs_v_int')
-        hs_traits = declarations.hash_set_traits
+        if 'CastXML' in hs_v_int.compiler:
+            hs_traits = declarations.unordered_set_traits
+        else:
+            hs_traits = declarations.hash_set_traits
         self.failUnless(
             'hash_set< std::vector< int > >' ==
             hs_traits.remove_defaults(hs_v_int),
@@ -134,7 +137,10 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_multiset(self):
         mhs_v_int = self.global_ns.typedef('mhs_v_int')
-        mhs_traits = declarations.hash_multiset_traits
+        if 'CastXML' in mhs_v_int.compiler:
+            mhs_traits = declarations.unordered_multiset_traits
+        else:
+            mhs_traits = declarations.hash_multiset_traits
         self.failUnless(
             'hash_multiset< std::vector< int > >' ==
             mhs_traits.remove_defaults(mhs_v_int))
@@ -145,7 +151,10 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_map(self):
         hm_i2d = self.global_ns.typedef('hm_i2d')
-        hm_traits = declarations.hash_map_traits
+        if 'CastXML' in hm_i2d.compiler:
+            hm_traits = declarations.unordered_map_traits
+        else:
+            hm_traits = declarations.hash_map_traits
         self.failUnless(
             'hash_map< int, double >' == hm_traits.remove_defaults(hm_i2d))
         hm_wstr2d = self.global_ns.typedef('hm_wstr2d')
@@ -155,7 +164,10 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_multimap(self):
         hmm_i2d = self.global_ns.typedef('hmm_i2d')
-        hmm_traits = declarations.hash_multimap_traits
+        if 'CastXML' in hmm_i2d.compiler:
+            hmm_traits = declarations.unordered_multimap_traits
+        else:
+            hmm_traits = declarations.hash_multimap_traits
         self.failUnless(
             'hash_multimap< int, double >' ==
             hmm_traits.remove_defaults(hmm_i2d))
