@@ -192,6 +192,11 @@ from .container_traits import multiset_traits
 from .container_traits import hash_multiset_traits
 from .container_traits import find_container_traits
 
+from .container_traits import unordered_map_traits
+from .container_traits import unordered_multimap_traits
+from .container_traits import unordered_set_traits
+from .container_traits import unordered_multiset_traits
+
 from .function_traits import is_same_function
 
 from . import templates

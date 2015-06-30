@@ -575,6 +575,35 @@ hash_multiset_traits = container_traits_impl_t(
     'value_type',
     'erase_hash_allocator')
 
+# c++11 equivalents for clang
+unordered_map_traits = container_traits_impl_t(
+    'unordered_map',
+    1,
+    'mapped_type',
+    'erase_hashmap_compare_allocator',
+    key_type_index=0,
+    key_type_typedef='key_type')
+
+unordered_multimap_traits = container_traits_impl_t(
+    'unordered_multimap',
+    1,
+    'mapped_type',
+    'erase_hashmap_compare_allocator',
+    key_type_index=0,
+    key_type_typedef='key_type')
+
+unordered_set_traits = container_traits_impl_t(
+    'unordered_set',
+    1,
+    'value_type',
+    'erase_hash_allocator')
+
+unordered_multiset_traits = container_traits_impl_t(
+    'unordered_multiset',
+    1,
+    'value_type',
+    'erase_hash_allocator')
+
 container_traits = (
     list_traits,
     deque_traits,
@@ -589,7 +618,11 @@ container_traits = (
     set_traits,
     hash_set_traits,
     multiset_traits,
-    hash_multiset_traits)
+    hash_multiset_traits,
+    unordered_map_traits,
+    unordered_multimap_traits,
+    unordered_set_traits,
+    unordered_multiset_traits)
 """tuple of all STD container traits classes"""
 
 
