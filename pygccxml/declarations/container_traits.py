@@ -18,7 +18,10 @@ from .. import utils
 std_namespaces = ('std', 'stdext', '__gnu_cxx')
 
 
-class defaults_eraser:
+class defaults_eraser(object):
+
+    def __init__(self, unordered_maps_and_sets):
+        self.unordered_maps_and_sets = unordered_maps_and_sets
 
     def normalize(self, type_str):
         return type_str.replace(' ', '')
@@ -302,8 +305,8 @@ class defaults_eraser:
                 less=default_less,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
-            if self.normalize(cls_name) == \
-                    self.normalize(inst):
+
+            if self.normalize(cls_name) == self.normalize(inst):
                 return templates.join(
                     c_name,
                     [self.erase_recursive(key_type),
@@ -333,7 +336,8 @@ class container_traits_impl_t():
             element_type_typedef,
             eraser,
             key_type_index=None,
-            key_type_typedef=None):
+            key_type_typedef=None,
+            unordered_maps_and_sets=False):
         """
         :param container_name: std container name
         :param element_type_index: position of value\\mapped type within
@@ -348,9 +352,10 @@ class container_traits_impl_t():
         self.element_type_typedef = element_type_typedef
         self.key_type_index = key_type_index
         self.key_type_typedef = key_type_typedef
+        self.unordered_maps_and_sets = unordered_maps_and_sets
 
         # Get the method from defaults_eraser using it's name
-        self.remove_defaults_impl = getattr(defaults_eraser(), eraser)
+        self.remove_defaults_impl = getattr(defaults_eraser(unordered_maps_and_sets), eraser)
 
     def name(self):
         return self._name
@@ -582,7 +587,8 @@ unordered_map_traits = container_traits_impl_t(
     'mapped_type',
     'erase_hashmap_compare_allocator',
     key_type_index=0,
-    key_type_typedef='key_type')
+    key_type_typedef='key_type',
+    unordered_maps_and_sets=True)
 
 unordered_multimap_traits = container_traits_impl_t(
     'unordered_multimap',
@@ -590,19 +596,22 @@ unordered_multimap_traits = container_traits_impl_t(
     'mapped_type',
     'erase_hashmap_compare_allocator',
     key_type_index=0,
-    key_type_typedef='key_type')
+    key_type_typedef='key_type',
+    unordered_maps_and_sets=True)
 
 unordered_set_traits = container_traits_impl_t(
     'unordered_set',
     1,
     'value_type',
-    'erase_hash_allocator')
+    'erase_hash_allocator',
+    unordered_maps_and_sets=True)
 
 unordered_multiset_traits = container_traits_impl_t(
     'unordered_multiset',
     1,
     'value_type',
-    'erase_hash_allocator')
+    'erase_hash_allocator',
+    unordered_maps_and_sets=True)
 
 container_traits = (
     list_traits,
