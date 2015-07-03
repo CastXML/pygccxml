@@ -259,7 +259,10 @@ class defaults_eraser(object):
         c_name, c_args = templates.split(cls_name)
 
         default_hash = None
-        default_less = 'std::less'
+        if self.unordered_maps_and_sets:
+            default_less_or_hash = 'std::hash'
+        else:
+            default_less_or_hash = 'std::less'
         default_allocator = 'std::allocator'
         default_equal_to = 'std::equal_to'
 
@@ -285,14 +288,29 @@ class defaults_eraser(object):
                     "$mapped_type> > >")
         elif 5 == len(c_args):
             default_hash = 'hash'
-            tmpl = string.Template(
-                "$container< $key_type, $mapped_type, $hash<$key_type >, " +
-                "$equal_to<$key_type>, $allocator< $mapped_type> >")
-            if key_type.startswith('const ') or key_type.endswith(' const'):
+            if self.unordered_maps_and_sets:
                 tmpl = string.Template(
-                    "$container< $key_type, $mapped_type, " +
-                    "$hash<$key_type >, $equal_to<$key_type>, " +
-                    "$allocator< $mapped_type > >")
+                    "$container<$key_type, $mapped_type, " +
+                    "$hash<$key_type>, " +
+                    "$equal_to<$key_type>, " +
+                    "$allocator<std::pair<const$key_type, " +
+                    "$mapped_type> > >")
+            else:
+                tmpl = string.Template(
+                    "$container< $key_type, $mapped_type, "
+                    "$hash<$key_type >, " +
+                    "$equal_to<$key_type>, "
+                    "$allocator< $mapped_type> >")
+                if key_type.startswith('const ') or \
+                        key_type.endswith(' const'):
+                    # TODO: this template is the same than above.
+                    # Make sure why this was needed and if this is
+                    # tested. There may be a const missing somewhere.
+                    tmpl = string.Template(
+                        "$container< $key_type, $mapped_type, " +
+                        "$hash<$key_type >, " +
+                        "$equal_to<$key_type>, " +
+                        "$allocator< $mapped_type > >")
         else:
             return
 
@@ -302,7 +320,7 @@ class defaults_eraser(object):
                 key_type=key_type,
                 mapped_type=mapped_type,
                 hash=ns + '::' + default_hash,
-                less=default_less,
+                less=default_less_or_hash,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
 
