@@ -295,6 +295,14 @@ class defaults_eraser(object):
                     "$equal_to<$key_type>, " +
                     "$allocator<std::pair<const$key_type, " +
                     "$mapped_type> > >")
+                if key_type.startswith('const ') or \
+                        key_type.endswith(' const'):
+                    tmpl = string.Template(
+                        "$container<$key_type, $mapped_type, " +
+                        "$hash<$key_type >, " +
+                        "$equal_to<$key_type >, " +
+                        "$allocator<std::pair<$key_type, " +
+                        "$mapped_type> > >")
             else:
                 tmpl = string.Template(
                     "$container< $key_type, $mapped_type, "
