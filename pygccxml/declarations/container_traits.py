@@ -381,7 +381,8 @@ class container_traits_impl_t():
         self.unordered_maps_and_sets = unordered_maps_and_sets
 
         # Get the method from defaults_eraser using it's name
-        self.remove_defaults_impl = getattr(defaults_eraser(unordered_maps_and_sets), eraser)
+        self.remove_defaults_impl = getattr(
+            defaults_eraser(unordered_maps_and_sets), eraser)
 
     def name(self):
         return self._name
