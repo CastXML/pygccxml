@@ -357,8 +357,12 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        self.failUnless(len(ci.declarations) == 3)
-        # copy constructor, destructor, variable
+        if 'CastXML' in ci.compiler:
+            # Constructor, copy constructor, destructor, variable
+            self.failUnless(len(ci.declarations) == 4)
+        else:
+            # Copy constructor, destructor, variable
+            self.failUnless(len(ci.declarations) == 3)
 
 # class tester_diff_t( parser_test_case.parser_test_case_t ):
     # COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
