@@ -203,9 +203,9 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
         for arg in decl.arguments:
             args.append(arg.type.decl_string + ' ' + arg.name)
         indent = ' ' * (self.level + 1) * self.INDENT_SIZE
-        self.writer(indent + "is extern: " + str(decl.has_extern) + os.linesep)
-        self.writer(indent + "return type: " + str(retval) + os.linesep)
-        self.writer(indent + "arguments type: " + ', '.join(args) + os.linesep)
+        self.writer(indent + "is extern: " + str(decl.has_extern))
+        self.writer(indent + "return type: " + str(retval))
+        self.writer(indent + "arguments type: " + ', '.join(args))
         self.writer(
             indent +
             "calling convention: __%s__" %
