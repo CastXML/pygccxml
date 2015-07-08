@@ -17,7 +17,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'type_traits.hpp'
+        self.header = 'type_traits_' + self.config.caster + '.hpp'
         self.declarations = None
 
     def setUp(self):
