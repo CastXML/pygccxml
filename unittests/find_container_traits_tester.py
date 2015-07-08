@@ -91,24 +91,54 @@ class tester_t(parser_test_case.parser_test_case_t):
             declarations.multimap_traits,
             "multimap< int, double >",
             'int')
-        self.__cmp_traits(
-            'hs_v_int',
-            declarations.hash_set_traits,
-            "hash_set< std::vector< int > >")
-        self.__cmp_traits(
-            'mhs_v_int',
-            declarations.hash_multiset_traits,
-            "hash_multiset< std::vector< int > >")
-        self.__cmp_traits(
-            'hm_i2d',
-            declarations.hash_map_traits,
-            "hash_map< int, double >",
-            'int')
-        self.__cmp_traits(
-            'hmm_i2d',
-            declarations.hash_multimap_traits,
-            "hash_multimap< int, double >",
-            'int')
+
+        if self.config.caster == 'castxml':
+            self.__cmp_traits(
+                'hs_v_int',
+                declarations.unordered_set_traits,
+                "unordered_set< std::vector< int > >")
+        else:
+            self.__cmp_traits(
+                'hs_v_int',
+                declarations.hash_set_traits,
+                "hash_set< std::vector< int > >")
+
+        if self.config.caster == 'castxml':
+            self.__cmp_traits(
+                'mhs_v_int',
+                declarations.unordered_multiset_traits,
+                "unordered_multiset< std::vector< int > >")
+        else:
+            self.__cmp_traits(
+                'mhs_v_int',
+                declarations.hash_multiset_traits,
+                "hash_multiset< std::vector< int > >")
+
+        if self.config.caster == 'castxml':
+            self.__cmp_traits(
+                'hm_i2d',
+                declarations.unordered_map_traits,
+                "unordered_map< int, double >",
+                'int')
+        else:
+            self.__cmp_traits(
+                'hm_i2d',
+                declarations.hash_map_traits,
+                "hash_map< int, double >",
+                'int')
+
+        if self.config.caster == 'castxml':
+            self.__cmp_traits(
+                'hmm_i2d',
+                declarations.unordered_multimap_traits,
+                "unordered_multimap< int, double >",
+                'int')
+        else:
+            self.__cmp_traits(
+                'hmm_i2d',
+                declarations.hash_multimap_traits,
+                "hash_multimap< int, double >",
+                'int')
 
     def test_multimap(self):
         m = self.global_ns.class_(
