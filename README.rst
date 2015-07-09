@@ -5,6 +5,8 @@ pygccxml
 	:target: https://coveralls.io/r/gccxml/pygccxml?branch=develop
 .. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=develop
     :target: https://travis-ci.org/gccxml/pygccxml
+.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin/develop:HEAD/badge.svg
+    :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fdevelop&tab=basics
 
 pygccxml is a specialized XML reader that reads the output from GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
 
