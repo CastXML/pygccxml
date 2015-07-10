@@ -24,7 +24,7 @@ To install from source, you can use the usual procedure:
 Contact us
 ----------
 
-You can contact us through the gccxml mailing list: http://www.gccxml.org/mailman/listinfo/gccxml
+You can contact us through the CastXML mailing list: http://public.kitware.com/mailman/listinfo/castxml
 
 For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues
 
