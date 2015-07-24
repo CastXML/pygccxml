@@ -603,7 +603,7 @@ class project_reader_t:
                         "    1. There are different preprocessor " +
                         "definitions applied on same file during compilation"))
                     msg.append("    2. Bug in pygccxml.")
-                    self.logger.error(os.linesep.join(msg))
+                    raise Exception(os.linesep.join(msg))
             elif isinstance(
                     decl_wrapper_type.declaration,
                     pygccxml.declarations.class_declaration_t):
