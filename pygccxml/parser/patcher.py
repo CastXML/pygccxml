@@ -139,7 +139,7 @@ class default_argument_patcher_t(object):
         return call_invocation.join(dv[:found1[0]], args2)
 
     def __is_constructor_call(self, func, arg):
-        # if '0.9' in func.compiler:
+        # if '0.9' in utils.xml_generator:
         #    return False
         call_invocation = declarations.call_invocation
         dv = arg.default_value

@@ -456,9 +456,9 @@ class project_reader_t:
             for name, same_name_classes in ddhash[class_t].items():
                 if not name:
                     continue
-                if "GCC" in same_name_classes[0].compiler:
+                if "GCC" in utils.xml_generator:
                     class_names.add(same_name_classes[0].mangled)
-                elif "CastXML" in same_name_classes[0].compiler:
+                elif "CastXML" in utils.xml_generator:
                     class_names.add(same_name_classes[0].name)
 
             class_declarations = ddhash[class_declaration_t]
@@ -467,11 +467,11 @@ class project_reader_t:
                 if not name:
                     continue
                 for class_declaration in same_name_class_declarations:
-                    if "GCC" in class_declaration.compiler:
+                    if "GCC" in utils.xml_generator:
                         if class_declaration.mangled and \
                                 class_declaration.mangled in class_names:
                                 decls.remove(class_declaration)
-                    elif "CastXML" in class_declaration.compiler:
+                    elif "CastXML" in utils.xml_generator:
                         if class_declaration.name and \
                                 class_declaration.name in class_names:
                                 decls.remove(class_declaration)
@@ -563,9 +563,9 @@ class project_reader_t:
     def _create_name_key(self, decl):
         # Not all declarations have a mangled name with castxml
         # we can only rely on the name
-        if "GCC" in decl.compiler:
+        if "GCC" in utils.xml_generator:
             return (decl.location.as_tuple(), decl.mangled)
-        elif "CastXML" in decl.compiler:
+        elif "CastXML" in utils.xml_generator:
             return (decl.location.as_tuple(), decl.name)
 
     def _relink_declarated_types(self, leaved_classes, declarated_types):

@@ -9,6 +9,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -357,7 +358,7 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        if 'CastXML' in ci.compiler:
+        if 'CastXML' in utils.xml_generator:
             # Constructor, copy constructor, destructor, variable
             self.failUnless(len(ci.declarations) == 4)
         else:

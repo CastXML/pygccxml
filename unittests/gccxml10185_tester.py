@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 code = \
     """
@@ -40,10 +41,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        if 'GCCXML' in global_ns.compiler:
+        if 'GCCXML' in utils.xml_generator:
             a = global_ns.class_('A<const char [N]>')
             a.mem_fun('size')
-        elif 'CastXML' in global_ns.compiler:
+        elif 'CastXML' in utils.xml_generator:
             self.assertRaises(
                 global_ns.declaration_not_found_t,
                 lambda: global_ns.class_('A<const char [N]>'))

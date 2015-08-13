@@ -39,7 +39,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test(self):
         demangled = self.global_ns.namespace('demangled')
 
-        if "CastXML" in demangled.compiler:
+        if "CastXML" in utils.xml_generator:
             # Do not test demangled name for CastXML
             return True
 

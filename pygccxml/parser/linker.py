@@ -21,12 +21,6 @@ class linker_t(decl_visitor_t, type_visitor_t, object):
         self.__files = files
         self.__inst = None
 
-        self.__compiler = None
-        if self.__decls:
-            for d in self.__decls.values():
-                self.__compiler = d.compiler
-                break
-
     @property
     def instance(self):
         return self.__inst
@@ -267,8 +261,8 @@ class linker_t(decl_visitor_t, type_visitor_t, object):
         self.__link_compound_type()
 
     def visit_pointer(self):
-        if ('0.9' in self.__compiler or 'CastXML' in self.__compiler) and \
-                isinstance(self.__inst.base, member_variable_type_t):
+        if ('0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator) \
+                and isinstance(self.__inst.base, member_variable_type_t):
             original_inst = self.__inst
             self.__inst = self.__inst.base
             self.visit_member_variable_type()

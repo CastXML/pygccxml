@@ -162,11 +162,11 @@ class core_t(parser_test_case.parser_test_case_t):
         self.failUnless(std, "std namespace has not been found")
         # GCCXML had mangled names for everything. With CastXML
         # there are only mangled names for functions and variables.
-        if "GCC" in std.compiler:
+        if "GCC" in utils.xml_generator:
             self.failUnless(
                 std.mangled,
                 "Mangled name of std namespace should be different from None")
-        elif "CastXML" in std.compiler:
+        elif "CastXML" in utils.xml_generator:
             # Check if an assertion is correctly raised when using castxml.
             # Call the getter by using lambda, else assertRaises does not
             # work as expected.
@@ -193,12 +193,12 @@ class core_t(parser_test_case.parser_test_case_t):
         # This works with gccxml only. Check if an assertion is correctly
         # raised when using castxml.
         var_inst = self.global_ns.variable('array255')
-        if "GCC" in var_inst.compiler:
+        if "GCC" in utils.xml_generator:
             self.failUnless(
                 var_inst.demangled,
                 "Demangled name of array255 variable should be different +"
                 "from None")
-        elif "CastXML" in var_inst.compiler:
+        elif "CastXML" in utils.xml_generator:
             # Call the getter by using lambda, else assertRaises does not
             # work as expected.
             self.assertRaises(Exception, lambda: var_inst.demangled)
@@ -532,8 +532,7 @@ class core_t(parser_test_case.parser_test_case_t):
             "class 'implementation' should not be abstract")
 
     def test_versioning(self):
-        for d in self.global_ns.decls():
-            self.failUnless(d.compiler)
+        self.failUnless(utils.xml_generator)
 
     def test_byte_size(self):
         mptrs = self.global_ns.class_('members_pointers_t')

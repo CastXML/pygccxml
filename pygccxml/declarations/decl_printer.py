@@ -15,6 +15,7 @@ from . import algorithm
 from . import decl_visitor
 from . import variable_t
 from . import calldef_t
+from .. import utils
 
 
 class decl_printer_t(decl_visitor.decl_visitor_t):
@@ -153,7 +154,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                         curr_level *
                         self.INDENT_SIZE +
                         attributes)
-                if "GCC" in self.__inst.compiler and self.__inst.demangled:
+                if "GCC" in utils.xml_generator and self.__inst.demangled:
                     # Working only with gccxml.
                     # No demangled attribute with castxml
                     demangled = 'demangled: %s' % (self.__inst.demangled)
@@ -166,10 +167,10 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 # Mangled name is only available for functions and variables
                 # when using castxml.
                 print_mangled = False
-                if "GCC" in self.__inst.compiler:
+                if "GCC" in utils.xml_generator:
                     if self.__inst.mangled:
                         print_mangled = True
-                elif "CastXML" in self.__inst.compiler:
+                elif "CastXML" in utils.xml_generator:
                     if isinstance(self.__inst, variable_t) or \
                             isinstance(self.__inst, calldef_t):
                         if self.__inst.mangled:

@@ -23,6 +23,7 @@ from . import declaration
 # from . import type_traits # moved below to fix a cyclic dependency problem
 from . import dependencies
 from . import call_invocation
+from .. import utils
 
 
 class VIRTUALITY_TYPES:
@@ -220,7 +221,7 @@ class calldef_t(declaration.declaration_t):
 
         """
 
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             items = [
                 self.arguments,
                 self.return_type,
@@ -229,7 +230,7 @@ class calldef_t(declaration.declaration_t):
                 self._sorted_list(self.exceptions),
                 self.demangled_name,
                 self.has_inline]
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             # No demangled name
             items = [
                 self.arguments,
@@ -245,7 +246,7 @@ class calldef_t(declaration.declaration_t):
         if not declaration.declaration_t.__eq__(self, other):
             return False
 
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             return self.return_type == other.return_type \
                 and self.arguments == other.arguments \
                 and self.has_extern == other.has_extern \
@@ -253,7 +254,7 @@ class calldef_t(declaration.declaration_t):
                 and self._sorted_list(self.exceptions) == \
                 other._sorted_list(other.exceptions) \
                 and self.demangled_name == other.demangled_name
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             # Do not check for demangled name
             return self.return_type == other.return_type \
                 and self.arguments == other.arguments \
@@ -263,11 +264,11 @@ class calldef_t(declaration.declaration_t):
                 other._sorted_list(other.exceptions)
 
     def __hash__(self):
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             return (super.__hash__(self) ^
                     hash(self.return_type) ^
                     hash(self.demangled_name))
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             # No demangled name with castxml. Use the normal name.
             return (super.__hash__(self) ^
                     hash(self.return_type) ^
@@ -393,7 +394,7 @@ class calldef_t(declaration.declaration_t):
         """returns function demangled name. It can help you to deal with
             function template instantiations"""
 
-        if "CastXML" in self.compiler:
+        if "CastXML" in utils.xml_generator:
             raise Exception("Demangled name is not available with CastXML.")
 
         from . import type_traits

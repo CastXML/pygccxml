@@ -150,7 +150,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.__inst = None
         # mapping from id to members
         self.__members = {}
-        self.__compiler = None
 
         self.__mangled_suffix = ' *INTERNAL* '
         self.__mangled_suffix_len = len(self.__mangled_suffix)
@@ -209,7 +208,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
             self.__read_access(attrs)
             element_id = attrs.get(XML_AN_ID, None)
             if isinstance(obj, declarations.declaration_t):
-                obj.compiler = self.__compiler
+                # XML generator. Kept for retrocompatibily
+                obj.compiler = utils.xml_generator
+
                 self.__update_membership(attrs)
                 self.__declarations[element_id] = obj
                 if not isinstance(obj, declarations.namespace_t):
@@ -407,7 +408,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_offset_type(self, attrs):
         base = attrs[XML_AN_BASE_TYPE]
         type_ = attrs[XML_AN_TYPE]
-        if '0.9' in self.__compiler or 'CastXML' in self.__compiler:
+        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
             return declarations.pointer_t(
                 declarations.member_variable_type_t(
                     class_inst=base,
@@ -428,7 +429,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             argument.type = attrs[XML_AN_TYPE]
             argument.default_value = attrs.get(XML_AN_DEFAULT, None)
             self.__read_attributes(argument, attrs)
-            if 'CastXML' not in self.__compiler:
+            if 'CastXML' not in utils.xml_generator:
                 # GCCXML only
                 if argument.default_value == '<gccxml-cast-expr>':
                     argument.default_value = None
@@ -592,19 +593,19 @@ class scanner_t(xml.sax.handler.ContentHandler):
         version = float(version_str)
         if version is None:
             logger.debug('GCCXML version - 0.6')
-            self.__compiler = declarations.compilers.GCC_XML_06
+            utils.xml_generator = declarations.compilers.GCC_XML_06
         elif version <= 1.114:
             logger.debug('GCCXML version - 0.7')
-            self.__compiler = declarations.compilers.GCC_XML_07
+            utils.xml_generator = declarations.compilers.GCC_XML_07
         elif 1.115 <= version <= 1.126:
             logger.debug('GCCXML version - 0.9 BUGGY ( %s )', version_str)
-            self.__compiler = declarations.compilers.GCC_XML_09_BUGGY
+            utils.xml_generator = declarations.compilers.GCC_XML_09_BUGGY
         elif 1.126 <= version <= 1.135:
             logger.debug('GCCXML version - 0.9 ( %s )', version_str)
-            self.__compiler = declarations.compilers.GCC_XML_09
+            utils.xml_generator = declarations.compilers.GCC_XML_09
         else:
             # CastXML starts with revision 1.136, but still writes the GCCXML
             # tag and the 0.9 version number in the XML files for backward
             # compatibility.
             logger.debug('CASTXML version - None ( %s )', version_str)
-            self.__compiler = declarations.compilers.CASTXML_None
+            utils.xml_generator = declarations.compilers.CASTXML_None

@@ -9,8 +9,10 @@ base class.
 
 """
 
+import warnings
 from . import algorithm
 from . import algorithms_cache
+from .. import utils
 
 
 class location_t(object):
@@ -98,6 +100,7 @@ class declaration_t(object):
         self._attributes = attributes
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
+        # Kept for retrocompatibility. Use utils.xml_generator instead
         self._compiler = None
         self._partial_name = None
         self._decorated_name = None
@@ -338,9 +341,9 @@ class declaration_t(object):
 
         """
 
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             return self.get_mangled_name()
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             raise Exception(
                 "Mangled name is not available with CastXML for all " +
                 "declarations: you can get the mangled name only " +
@@ -358,9 +361,9 @@ class declaration_t(object):
            @type: str
 
         """
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             return self._demangled
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             raise Exception("Demangled name is not available with CastXML.")
 
     @demangled.setter
@@ -447,7 +450,9 @@ class declaration_t(object):
            @type: str
 
         """
-
+        warnings.warn(
+            "The compiler attribute is deprecated. \n" +
+            "Please use utils.xml_generator instead.")
         return self._compiler
 
     @compiler.setter

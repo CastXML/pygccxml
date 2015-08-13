@@ -31,7 +31,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_numeric_patcher(self):
         fix_numeric = self.global_ns.free_fun('fix_numeric')
         if 32 == self.architecture:
-            if '0.9' in fix_numeric.compiler:
+            if '0.9' in utils.xml_generator:
                 if platform.machine() == 'x86_64':
                     self.failUnless(
                         fix_numeric.arguments[0].default_value == "-1u",
@@ -58,7 +58,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun('fix_function_call')
-        if '0.9' in fix_function_call.compiler:
+        if '0.9' in utils.xml_generator:
             val = "function_call::calc(1, 2, 3)"
             self.failUnless(
                 fix_function_call.arguments[0].default_value == val)
@@ -75,7 +75,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_fun('typedef__func')
-        if '0.9' in typedef__func.compiler:
+        if '0.9' in utils.xml_generator:
             val = "typedef_::original_name()"
             self.failUnless(
                 typedef__func.arguments[0].default_value == val)
@@ -86,7 +86,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun('clone_tree')
             default_values = []
-            if '0.9' in clone_tree.compiler:
+            if '0.9' in utils.xml_generator:
                 default_values = []
             else:
                 default_values = [

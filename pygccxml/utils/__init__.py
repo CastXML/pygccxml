@@ -16,3 +16,6 @@ from .utils import create_temp_file_name
 from .utils import remove_file_no_raise
 from .utils import normalize_path
 from .utils import find_cpp_parser
+
+# Version of xml generator which was used.
+xml_generator = None

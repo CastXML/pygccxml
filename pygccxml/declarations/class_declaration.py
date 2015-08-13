@@ -211,9 +211,9 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def use_demangled_as_name(self):
-        if "GCC" in self.compiler:
+        if "GCC" in utils.xml_generator:
             return class_t.USE_DEMANGLED_AS_NAME
-        elif "CastXML" in self.compiler:
+        elif "CastXML" in utils.xml_generator:
             return False
 
     @use_demangled_as_name.setter

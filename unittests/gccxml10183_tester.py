@@ -7,6 +7,7 @@ import unittest
 import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 code = \
     """
@@ -29,7 +30,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         # TODO: demangled attribute does not existe for castxml
         # and will not be added. Remove this test once gccxml
         # support is dropped.
-        if 'GCCXML' in global_ns.compiler:
+        if 'GCCXML' in utils.xml_generator:
             global_ns.decl('A<int>')
             f = global_ns.free_fun('f')
             self.failUnless(f.demangled == 'void f<int>(A<int> const&)')

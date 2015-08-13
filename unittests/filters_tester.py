@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -38,8 +39,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         criteria = declarations.access_type_matcher_t(
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
-        if '0.9' in public_members[0].compiler or \
-                'CastXML' in public_members[0].compiler:
+        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
             public_members = [d for d in public_members if not d.is_artificial]
             self.failUnless(17 == len(public_members))
         else:
@@ -55,7 +55,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             criteria1 | criteria2,
             self.global_ns)
 
-        if '0.9' in found[0].compiler or 'CastXML' in found[0].compiler:
+        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
             found = [d for d in found if not d.is_artificial]
             self.failUnless(15 <= len(found) <= 21)
         else:

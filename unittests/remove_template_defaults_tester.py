@@ -7,6 +7,7 @@ import unittest
 import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -123,7 +124,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_set(self):
         hs_v_int = self.global_ns.typedef('hs_v_int')
-        if 'CastXML' in hs_v_int.compiler:
+        if 'CastXML' in utils.xml_generator:
             hs_traits = declarations.unordered_set_traits
             name = 'unordered_set'
         else:
@@ -139,7 +140,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_multiset(self):
         mhs_v_int = self.global_ns.typedef('mhs_v_int')
-        if 'CastXML' in mhs_v_int.compiler:
+        if 'CastXML' in utils.xml_generator:
             mhs_traits = declarations.unordered_multiset_traits
             name = 'unordered_multiset'
         else:
@@ -155,7 +156,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_map(self):
         hm_i2d = self.global_ns.typedef('hm_i2d')
-        if 'CastXML' in hm_i2d.compiler:
+        if 'CastXML' in utils.xml_generator:
             hm_traits = declarations.unordered_map_traits
             name = 'unordered_map'
         else:
@@ -170,7 +171,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_hash_multimap(self):
         hmm_i2d = self.global_ns.typedef('hmm_i2d')
-        if 'CastXML' in hmm_i2d.compiler:
+        if 'CastXML' in utils.xml_generator:
             hmm_traits = declarations.unordered_multimap_traits
             name = 'unordered_multimap'
         else:

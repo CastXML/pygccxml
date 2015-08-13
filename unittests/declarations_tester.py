@@ -10,6 +10,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class declarations_t(parser_test_case.parser_test_case_t):
@@ -40,7 +41,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         initialized = self.global_ns.variable(name='initialized')
 
         expected_value = None
-        if '0.9' in initialized.compiler:
+        if '0.9' in utils.xml_generator:
             expected_value = '10122004ul'
         else:
             expected_value = '10122004'
@@ -63,7 +64,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             not static_var.type_qualifiers.has_mutable,
             "static_var must not have mutable type qualifier")
 
-        if 'PDB' in self.global_ns.compiler:
+        if 'PDB' in utils.xml_generator:
             return  # TODO find out work around
 
         m_mutable = initialized = self.global_ns.variable(name='m_mutable')
@@ -85,7 +86,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # qualifier, which is wrong; Keep the test like this for gccxml as
         # gccxml will be dropped one day. With castxml check if function has
         # no extern qualifier.
-        if 'GCC-XML' in no_return_no_args.compiler:
+        if 'GCC-XML' in utils.xml_generator:
             self.failUnless(
                 no_return_no_args.has_extern,
                 "function 'no_return_no_args' should have an extern qualifier")
