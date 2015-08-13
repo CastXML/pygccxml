@@ -30,6 +30,12 @@ Version 1.7.0 (Next version, not yet released)
 3. Remove ``gccxml_runtime_error_t`` class and use RuntimeError
    instead.
 
+4. Deprecate compiler attribute and replace it with global utils.xml_generator variable.
+   The compiler attribute was misleading; and should not be confused with the name and
+   version of the xml_generator.
+   This change also fixes some internal problems with the algorithms cache and makes
+   the code easier to read.
+
 Version 1.6.2
 -------------
 
