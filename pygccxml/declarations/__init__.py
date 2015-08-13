@@ -5,7 +5,9 @@
 
 """contains classes that describe different C++ declarations"""
 
-from . import compilers
+# Keep compilers for backward compatibility
+from . import xml_generators as compilers
+from . import xml_generators
 
 from .dependencies import dependency_info_t
 from .declaration import location_t
