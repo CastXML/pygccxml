@@ -452,7 +452,7 @@ class declaration_t(object):
         """
         warnings.warn(
             "The compiler attribute is deprecated. \n" +
-            "Please use utils.xml_generator instead.")
+            "Please use utils.xml_generator instead.", DeprecationWarning)
         return self._compiler
 
     @compiler.setter
