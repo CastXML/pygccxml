@@ -22,7 +22,7 @@ parser_path, parser_name = utils.find_cpp_parser()
 
 # Configure the c++ parser
 config = parser.gccxml_configuration_t(
-    gccxml_path=parser_path, caster=parser_name, compiler="gcc")
+    gccxml_path=parser_path, xml_generator=parser_name, compiler="gcc")
 
 # Parsing source file
 decls = parser.parse([this_module_dir_path + '/example.hpp'], config)

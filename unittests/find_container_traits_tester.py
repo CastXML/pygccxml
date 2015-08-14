@@ -92,7 +92,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             "multimap< int, double >",
             'int')
 
-        if self.config.caster == 'castxml':
+        if "CastXML" in utils.xml_generator:
             self.__cmp_traits(
                 'hs_v_int',
                 declarations.unordered_set_traits,
@@ -103,7 +103,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                 declarations.hash_set_traits,
                 "hash_set< std::vector< int > >")
 
-        if self.config.caster == 'castxml':
+        if "CastXML" in utils.xml_generator:
             self.__cmp_traits(
                 'mhs_v_int',
                 declarations.unordered_multiset_traits,
@@ -114,7 +114,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                 declarations.hash_multiset_traits,
                 "hash_multiset< std::vector< int > >")
 
-        if self.config.caster == 'castxml':
+        if "CastXML" in utils.xml_generator:
             self.__cmp_traits(
                 'hm_i2d',
                 declarations.unordered_map_traits,
@@ -127,7 +127,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                 "hash_map< int, double >",
                 'int')
 
-        if self.config.caster == 'castxml':
+        if "CastXML" in utils.xml_generator:
             self.__cmp_traits(
                 'hmm_i2d',
                 declarations.unordered_multimap_traits,

@@ -95,21 +95,21 @@ class source_reader_t:
         if not decl_factory:
             self.__decl_factory = declarations.decl_factory_t()
 
-    def __create_command_line(self, source_file, xmlfile):
+    def __create_command_line(self, source_file, xml_file):
         """
         Generate the command line used to build xml files.
 
-        Depending on the chosen caster a different command line
+        Depending on the chosen xml_generator a different command line
         is built. The gccxml option may be removed once gccxml
-        support is dropped (this was the original c++ caster,
-        castxml should replace it soon).
+        support is dropped (this was the original c++ xml_generator,
+        castxml is replacing it now).
 
         """
 
-        if self.__config.caster == "gccxml":
-            return self.__create_command_line_gccxml(source_file, xmlfile)
-        elif self.__config.caster == "castxml":
-            return self.__create_command_line_castxml(source_file, xmlfile)
+        if self.__config.xml_generator == "gccxml":
+            return self.__create_command_line_gccxml(source_file, xml_file)
+        elif self.__config.xml_generator == "castxml":
+            return self.__create_command_line_castxml(source_file, xml_file)
 
     def __create_command_line_castxml(self, source_file, xmlfile):
         assert isinstance(self.__config, config.gccxml_configuration_t)
@@ -267,14 +267,15 @@ class source_reader_t:
                 if not os.path.isfile(xml_file):
                     raise RuntimeError(
                         "Error occured while running " +
-                        self.__config.caster.upper() + ": %s status:%s" %
+                        self.__config.xml_generator.upper() +
+                        ": %s status:%s" %
                         (gccxml_msg, exit_status))
             else:
                 if gccxml_msg or exit_status or not \
                         os.path.isfile(xml_file):
                     raise RuntimeError(
                         "Error occured while running " +
-                        self.__config.caster.upper() + ": %s" %
+                        self.__config.xml_generator.upper() + ": %s" %
                         gccxml_msg)
         except Exception:
             pygccxml.utils.remove_file_no_raise(xml_file, self.__config)

@@ -39,7 +39,7 @@ class cxx_parsers_cfg:
         gccxml_path=parser_path,
         working_directory=data_directory,
         compiler=pygccxml.utils.native_compiler.get_gccxml_compiler(),
-        caster=parser_name)
+        xml_generator=parser_name)
 
     if parser_name == 'gccxml':
         gccxml.define_symbols.append('__GCCXML_09__')
