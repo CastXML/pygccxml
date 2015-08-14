@@ -18,6 +18,9 @@ before_install:
   - pip install coverage
   - pip install coveralls
 
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install unittest2; fi
+
 script:
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
   - touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"

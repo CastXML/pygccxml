@@ -4,7 +4,11 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import unittest
+import sys
+if sys.version_info == (2, 6):
+    import unittest2 as unittest
+else:
+    import unittest
 import autoconfig
 import parser_test_case
 
