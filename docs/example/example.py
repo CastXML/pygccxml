@@ -17,12 +17,12 @@ from pygccxml import parser  # nopep8
 from pygccxml import declarations  # nopep8
 from pygccxml import utils  # nopep8
 
-# Find out the c++ parser (gccxml or castxml)
-parser_path, parser_name = utils.find_cpp_parser()
+# Find out the xml generator (gccxml or castxml)
+generator_path, generator_name = utils.find_cpp_parser()
 
-# Configure the c++ parser
+# Configure the xml generator
 config = parser.gccxml_configuration_t(
-    gccxml_path=parser_path, xml_generator=parser_name, compiler="gcc")
+    gccxml_path=generator_path, xml_generator=generator_name, compiler="gcc")
 
 # Parsing source file
 decls = parser.parse([this_module_dir_path + '/example.hpp'], config)

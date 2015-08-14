@@ -28,7 +28,7 @@ logger = pygccxml.utils.loggers.cxx_parser
 logger.setLevel(logging.INFO)
 
 # Find out the c++ parser (gccxml or castxml)
-parser_path, parser_name = pygccxml.utils.find_cpp_parser()
+generator_path, generator_name = pygccxml.utils.find_cpp_parser()
 
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
@@ -36,12 +36,12 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 class cxx_parsers_cfg:
     gccxml = pygccxml.parser.load_gccxml_configuration(
         'gccxml.cfg',
-        gccxml_path=parser_path,
+        gccxml_path=generator_path,
         working_directory=data_directory,
         compiler=pygccxml.utils.native_compiler.get_gccxml_compiler(),
-        xml_generator=parser_name)
+        xml_generator=generator_name)
 
-    if parser_name == 'gccxml':
+    if generator_name == 'gccxml':
         gccxml.define_symbols.append('__GCCXML_09__')
 
     if 'nt' == os.name:
@@ -53,4 +53,4 @@ class cxx_parsers_cfg:
 
 print(
     '%s configured to simulate compiler %s' %
-    (parser_name.title(), cxx_parsers_cfg.gccxml.compiler))
+    (generator_name.title(), cxx_parsers_cfg.gccxml.compiler))
