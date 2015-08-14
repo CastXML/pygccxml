@@ -34,7 +34,7 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 
 class cxx_parsers_cfg:
-    gccxml = pygccxml.parser.load_gccxml_configuration(
+    gccxml = pygccxml.parser.load_xml_generator_configuration(
         'gccxml.cfg',
         gccxml_path=generator_path,
         working_directory=data_directory,

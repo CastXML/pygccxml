@@ -168,12 +168,13 @@ class parser_configuration_t(object):
             self.__ensure_dir_exists(idir, 'include directory')
 
 
-class gccxml_configuration_t(parser_configuration_t):
-
-    """Configuration object to collect parameters for invoking gccxml.
+class xml_generator_configuration_t(parser_configuration_t):
+    """
+    Configuration object to collect parameters for invoking gccxml or castxml.
 
     This class serves as a container for the parameters that can be used
-    to customize the call to gccxml.
+    to customize the call to gccxml or castxml.
+
     """
 
     def __init__(
@@ -240,7 +241,7 @@ class gccxml_configuration_t(parser_configuration_t):
         self.__ignore_gccxml_output = val
 
     def raise_on_wrong_settings(self):
-        super(gccxml_configuration_t, self).raise_on_wrong_settings()
+        super(xml_generator_configuration_t, self).raise_on_wrong_settings()
         if os.path.isfile(self.gccxml_path):
             return
         if os.name == 'nt':
@@ -290,7 +291,7 @@ compiler_path=
 """
 
 
-def load_gccxml_configuration(configuration, **defaults):
+def load_xml_generator_configuration(configuration, **defaults):
     """
     loads GCC-XML configuration from an `.ini` file or any other file class
     :class:`ConfigParser.SafeConfigParser` is able to parse.
@@ -299,7 +300,7 @@ def load_gccxml_configuration(configuration, **defaults):
                           string(configuration file path) or instance
                           of :class:`ConfigParser.SafeConfigParser` class
 
-    :rtype: :class:`.gccxml_configuration_t`
+    :rtype: :class:`.xml_generator_configuration_t`
 
     Configuration file skeleton::
 
@@ -337,7 +338,7 @@ def load_gccxml_configuration(configuration, **defaults):
         parser.read(configuration)
 
     # Create a new empty configuration
-    cfg = gccxml_configuration_t()
+    cfg = xml_generator_configuration_t()
 
     values = defaults
     if not values:
@@ -401,6 +402,9 @@ def create_compiler_path(xml_generator, compiler_path):
 
     return compiler_path
 
+# Keep these for backward compatibility
+gccxml_configuration_t = xml_generator_configuration_t
+load_gccxml_configuration = load_xml_generator_configuration
 
 if __name__ == '__main__':
-    print(load_gccxml_configuration('gccxml.cfg').__dict__)
+    print(load_xml_generator_configuration('gccxml.cfg').__dict__)

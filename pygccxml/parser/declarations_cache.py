@@ -31,7 +31,7 @@ def file_signature(filename):
 
 
 def configuration_signature(config):
-    """ Return a signature for a configuration (gccxml_configuration_t)
+    """ Return a signature for a configuration (xml_generator_configuration_t)
         object.  This can then be used as a key in the cache.
         This method must take into account anything about
         a configuration that could cause the declarations generated
@@ -39,10 +39,10 @@ def configuration_signature(config):
     """
 
     sig = hashlib.md5()
-    if isinstance(config, cxx_parsers_cfg.gccxml_configuration_t):
+    if isinstance(config, cxx_parsers_cfg.xml_generator_configuration_t):
         sig.update(str(config.gccxml_path).encode())
     sig.update(str(config.working_directory).encode('utf-8'))
-    if isinstance(config, cxx_parsers_cfg.gccxml_configuration_t):
+    if isinstance(config, cxx_parsers_cfg.xml_generator_configuration_t):
         sig.update(str(config.cflags).encode('utf-8'))
     for p in config.include_paths:
         sig.update(str(p).encode('utf-8'))
@@ -70,7 +70,7 @@ class cache_base_t(object):
 
         :param source_file: path to the C++ source file being parsed
         :param configuration: configuration used in
-               parsing :class:`gccxml_configuration_t`
+               parsing :class:`xml_generator_configuration_t`
         :param declarations: declaration tree found when parsing
         :param included_files: files included by parsing.
         """
@@ -82,7 +82,8 @@ class cache_base_t(object):
         Return declarations, we have cached, for the source_file and the
         given configuration.
         :param source_file: path to the C++ source file being parsed.
-        :param configuration: configuration(:class:`gccxml_configuration_t`)
+        :param configuration:
+            configuration(:class:`xml_generator_configuration_t`)
         that was used for parsing
         """
 

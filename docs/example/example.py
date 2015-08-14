@@ -21,7 +21,7 @@ from pygccxml import utils  # nopep8
 generator_path, generator_name = utils.find_cpp_parser()
 
 # Configure the xml generator
-config = parser.gccxml_configuration_t(
+config = parser.xml_generator_configuration_t(
     gccxml_path=generator_path, xml_generator=generator_name, compiler="gcc")
 
 # Parsing source file

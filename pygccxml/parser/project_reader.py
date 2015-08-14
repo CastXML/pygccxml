@@ -170,7 +170,7 @@ class project_reader_t:
     def __init__(self, config, cache=None, decl_factory=None):
         """
         :param config: GCCXML configuration
-        :type config: :class:gccxml_configuration_t
+        :type config: :class:xml_generator_configuration_t
 
         :param cache: declaration cache, by default a cache functionality will
                       not be used

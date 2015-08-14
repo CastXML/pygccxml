@@ -22,7 +22,7 @@ def test_on_windows_dot_h():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_file(windows_header)
@@ -33,7 +33,7 @@ def test_on_windows_dot_h():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_file(windows_header)
@@ -51,7 +51,7 @@ def test_source_on_include_std_dot_hpp():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_file(include_std_header)
@@ -62,7 +62,7 @@ def test_source_on_include_std_dot_hpp():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_file(include_std_header)
@@ -79,7 +79,7 @@ def test_project_on_include_std_dot_hpp():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.project_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_files([include_std_header])
@@ -90,7 +90,7 @@ def test_project_on_include_std_dot_hpp():
     clock_prev = time.clock()
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.project_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path),
         dcache)
     reader.read_files([include_std_header])
@@ -103,7 +103,7 @@ def profile_project():
         autoconfig.data_directory,
         'include_std.hpp')
     reader = parser.project_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path))
     reader.read_files([include_std_header])
 
@@ -112,7 +112,7 @@ def profile_project2():
     he = r"2003\Vc7\PlatformSDK\Include\windows.h"
     include_std_header = r"D:\Program Files\Microsoft Visual Studio .NET " + he
     reader = parser.project_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path))
     reader.read_files([include_std_header])
 
@@ -121,7 +121,7 @@ def test_on_big_file(file_name, count):
     file_name = os.path.join(autoconfig.data_directory, file_name)
     for i in range(count):
         reader = parser.project_reader_t(
-            parser.gccxml_configuration_t(
+            parser.xml_generator_configuration_t(
                 gccxml_path=autoconfig.gccxml_path))
         decls = reader.read_files([parser.create_gccxml_fc(file_name)])
         global_ns = declarations.get_global_namespace(decls)
@@ -131,7 +131,7 @@ def test_on_big_file(file_name, count):
 def parse_big_file():
     path = os.path.join(autoconfig.data_directory, 'big.xml')
     reader = parser.project_reader_t(
-        parser.gccxml_configuration_t(
+        parser.xml_generator_configuration_t(
             gccxml_path=autoconfig.gccxml_path))
     reader.read_files([parser.create_gccxml_fc(path)])
     reader.read_files([parser.create_gccxml_fc(path)])

@@ -70,8 +70,8 @@ class source_reader_t:
 
     def __init__(self, config, cache=None, decl_factory=None):
         """
-        :param config: instance of :class:`gccxml_configuration_t` class, that
-                       contains GCC-XML configuration
+        :param config: instance of :class:`xml_generator_configuration_t`
+            class, that contains GCC-XML or CastXML configuration
 
         :param cache: reference to cache object, that will be updated after
                       file has been parsed.
@@ -112,7 +112,7 @@ class source_reader_t:
             return self.__create_command_line_castxml(source_file, xml_file)
 
     def __create_command_line_castxml(self, source_file, xmlfile):
-        assert isinstance(self.__config, config.gccxml_configuration_t)
+        assert isinstance(self.__config, config.xml_generator_configuration_t)
 
         cmd = []
 
@@ -162,7 +162,7 @@ class source_reader_t:
         return cmd_line
 
     def __create_command_line_gccxml(self, source_file, xmlfile):
-        assert isinstance(self.__config, config.gccxml_configuration_t)
+        assert isinstance(self.__config, config.xml_generator_configuration_t)
         # returns
         cmd = []
         # first is gccxml executable
