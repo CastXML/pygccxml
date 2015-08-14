@@ -4,7 +4,10 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 import autoconfig
 
 
