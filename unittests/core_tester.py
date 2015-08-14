@@ -4,10 +4,9 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import sys
-if sys.version_info == (2, 6):
+try:
     import unittest2 as unittest
-else:
+except ImportError:
     import unittest
 import autoconfig
 import parser_test_case
