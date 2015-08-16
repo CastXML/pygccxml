@@ -36,6 +36,12 @@ Version 1.7.0 (Next version, not yet released)
    This change also fixes some internal problems with the algorithms cache and makes
    the code easier to read.
 
+5. Disabled relinking of "rebind<std::__tree_node<std::basic_string<char>, void *> >"
+   This made the find_container_traits_tester unit tests fail with CastXML.
+   This class defintion is present in clangs AST tree, but I don't know why it is
+   usefull. If somebody knows what this is and if it is needed, please tell us.
+
+
 Version 1.6.2
 -------------
 

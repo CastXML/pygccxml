@@ -586,9 +586,14 @@ class project_reader_t:
                 if key in leaved_classes:
                     decl_wrapper_type.declaration = leaved_classes[key]
                 else:
-                    if decl_wrapper_type.declaration._name.startswith(
-                            '__vmi_class_type_info_pseudo'):
+
+                    name = decl_wrapper_type.declaration._name
+                    if name.startswith("__vmi_class_type_info_pseudo"):
                         continue
+                    if name == "rebind<std::__tree_node" + \
+                            "<std::basic_string<char>, void *> >":
+                        continue
+
                     msg = []
                     msg.append(
                         "Unable to find out actual class definition: '%s'." %
