@@ -24,8 +24,7 @@ import pygccxml.parser  # nopep8
 import pygccxml.utils  # nopep8
 
 # Set logging level
-logger = pygccxml.utils.loggers.cxx_parser
-logger.setLevel(logging.INFO)
+pygccxml.utils.loggers.set_level(logging.INFO)
 
 # Find out the c++ parser (gccxml or castxml)
 generator_path, generator_name = pygccxml.utils.find_cpp_parser()

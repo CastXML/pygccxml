@@ -79,7 +79,7 @@ def _create_logger_(name):
     return logger
 
 
-class loggers:
+class loggers(object):
     """
     Class-namespace, defines a few loggers classes, used in the project.
 
@@ -129,11 +129,22 @@ class loggers:
 
     """
 
-    all = [root, cxx_parser, queries_engine, declarations_cache, pdb_reader]
+    all_loggers = [
+        root, cxx_parser, queries_engine, declarations_cache, pdb_reader]
     """
     Contains all logger classes, defined by the class.
 
     """
+
+    @staticmethod
+    def set_level(level):
+        """
+        Set the same logging level for all the loggers at once.
+
+        """
+
+        for logger in loggers.all_loggers:
+            logger.setLevel(level)
 
 
 def remove_file_no_raise(file_name, config):
