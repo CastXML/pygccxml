@@ -593,19 +593,19 @@ class scanner_t(xml.sax.handler.ContentHandler):
         version = float(version_str)
         if version is None:
             logger.debug('GCCXML version - 0.6')
-            utils.xml_generator = declarations.compilers.GCC_XML_06
+            utils.xml_generator = declarations.xml_generators.GCC_XML_06
         elif version <= 1.114:
             logger.debug('GCCXML version - 0.7')
-            utils.xml_generator = declarations.compilers.GCC_XML_07
+            utils.xml_generator = declarations.xml_generators.GCC_XML_07
         elif 1.115 <= version <= 1.126:
             logger.debug('GCCXML version - 0.9 BUGGY ( %s )', version_str)
-            utils.xml_generator = declarations.compilers.GCC_XML_09_BUGGY
+            utils.xml_generator = declarations.xml_generators.GCC_XML_09_BUGGY
         elif 1.126 <= version <= 1.135:
             logger.debug('GCCXML version - 0.9 ( %s )', version_str)
-            utils.xml_generator = declarations.compilers.GCC_XML_09
+            utils.xml_generator = declarations.xml_generators.GCC_XML_09
         else:
             # CastXML starts with revision 1.136, but still writes the GCCXML
             # tag and the 0.9 version number in the XML files for backward
             # compatibility.
             logger.debug('CASTXML version - None ( %s )', version_str)
-            utils.xml_generator = declarations.compilers.CASTXML_None
+            utils.xml_generator = declarations.xml_generators.CASTXML_None
