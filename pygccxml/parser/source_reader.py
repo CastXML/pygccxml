@@ -134,13 +134,25 @@ class source_reader_t:
         cmd.append("-c")
         # Clang option: make sure clang knows we want to parse c++
         cmd.append("-x c++")
+
         # Platform specific options
         if platform.system() == 'Windows':
-            cmd.append('--castxml-cc-msvc cl')
-            if 'msvc9' == self.__config.compiler:
-                cmd.append('-D"_HAS_TR1=0"')
+
+            if "mingw" in self.__config.compiler_path.lower():
+                # Look at the compiler path. This is a bad way
+                # to find out if we are using mingw; but it
+                # should probably work in most of the cases
+                cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
+            else:
+                # We are using msvc
+                cmd.append('--castxml-cc-msvc cl')
+                if 'msvc9' == self.__config.compiler:
+                    cmd.append('-D"_HAS_TR1=0"')
         else:
+
+            # On mac or linux, use gcc or clang (the flag is the same)
             cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
+
         # Tell castxml to output xml compatible files with gccxml
         # so that we can parse them with pygccxml
         cmd.append('--castxml-gccxml')
