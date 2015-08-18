@@ -1218,58 +1218,78 @@ class auto_ptr_traits:
                 type_.decl_string)
         return internal_type_traits.get_by_name(type_, "element_type")
 
+string_equivalences = [
+    ('::std::basic_string<char,std::char_traits<char>,' +
+        'std::allocator<char> >'),
+    ('::std::basic_string<char, std::char_traits<char>, ' +
+        'std::allocator<char> >'),
+    '::std::basic_string<char>', '::std::string']
+
+wstring_equivalences = [
+    ('::std::basic_string<wchar_t,std::char_traits<wchar_t>,' +
+        'std::allocator<wchar_t> >'),
+    ('::std::basic_string<wchar_t, std::char_traits<wchar_t>, ' +
+        'std::allocator<wchar_t> >'),
+    '::std::basic_string<wchar_t>', '::std::wstring']
+
+ostream_equivalences = [
+    '::std::basic_ostream<char, std::char_traits<char> >',
+    '::std::basic_ostream<char,std::char_traits<char> >',
+    '::std::basic_ostream<char>', '::std::ostream']
+
+wostream_equivalences = [
+    '::std::basic_ostream<wchar_t, std::char_traits<wchar_t> >',
+    '::std::basic_ostream<wchar_t,std::char_traits<wchar_t> >',
+    '::std::basic_ostream<wchar_t>', '::std::wostream']
+
 
 def is_std_string(type_):
-    """returns True, if type represents C++ `std::string`, False otherwise"""
-    decl_strings = [
-        ('::std::basic_string<char,std::char_traits<char>,' +
-            'std::allocator<char> >'),
-        ('::std::basic_string<char, std::char_traits<char>, ' +
-            'std::allocator<char> >'),
-        '::std::string']
+    """
+    Returns True, if type represents C++ `std::string`, False otherwise.
+
+    """
+
     if utils.is_str(type_):
-        return type_ in decl_strings
+        return type_ in string_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in decl_strings
+        return remove_cv(type_).decl_string in string_equivalences
 
 
 def is_std_wstring(type_):
-    """returns True, if type represents C++ `std::wstring`, False otherwise"""
-    decl_strings = [
-        ('::std::basic_string<wchar_t,std::char_traits<wchar_t>,' +
-            'std::allocator<wchar_t> >'),
-        ('::std::basic_string<wchar_t, std::char_traits<wchar_t>, ' +
-            'std::allocator<wchar_t> >'),
-        '::std::wstring']
+    """
+    Returns True, if type represents C++ `std::wstring`, False otherwise.
+
+    """
+
     if utils.is_str(type_):
-        return type_ in decl_strings
+        return type_ in wstring_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in decl_strings
+        return remove_cv(type_).decl_string in wstring_equivalences
 
 
 def is_std_ostream(type_):
-    """returns True, if type represents C++ std::string, False otherwise"""
-    decl_strings = [
-        '::std::basic_ostream<char, std::char_traits<char> >',
-        '::std::basic_ostream<char,std::char_traits<char> >',
-        '::std::ostream']
+    """
+    Returns True, if type represents C++ std::ostream, False otherwise.
+
+    """
+
     if utils.is_str(type_):
-        return type_ in decl_strings
+        return type_ in ostream_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in decl_strings
+        return remove_cv(type_).decl_string in ostream_equivalences
 
 
 def is_std_wostream(type_):
-    """returns True, if type represents C++ std::string, False otherwise"""
-    decl_strings = [
-        '::std::basic_ostream<wchar_t, std::char_traits<wchar_t> >',
-        '::std::basic_ostream<wchar_t,std::char_traits<wchar_t> >',
-        '::std::wostream']
+    """
+    Returns True, if type represents C++ std::wostream, False otherwise.
+
+    """
+
     if utils.is_str(type_):
-        return type_ in decl_strings
+        return type_ in wostream_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in decl_strings
+        return remove_cv(type_).decl_string in wostream_equivalences

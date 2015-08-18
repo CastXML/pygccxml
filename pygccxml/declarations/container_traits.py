@@ -28,30 +28,24 @@ class defaults_eraser(object):
 
     def replace_basic_string(self, cls_name):
 
+        # Take the lists of all possible string variations
+        # and clean them up by replacing ::std by std.
+        str_eq = [
+            v.replace("::std", "std") for v in
+            type_traits.string_equivalences]
+        wstr_eq = [
+            v.replace("::std", "std") for v in
+            type_traits.wstring_equivalences]
+
+        # Replace all the variations of strings by the smallest one.
         strings = {
-            'std::string': (
-                ('std::basic_string<char,std::char_traits<char>,'
-                    'std::allocator<char> >'),
-                ('std::basic_string<char, std::char_traits<char>, '
-                    'std::allocator<char> >')),
-            'std::wstring': (
-                ('std::basic_string<wchar_t,std::char_traits<wchar_t>,'
-                    'std::allocator<wchar_t> >'),
-                ('std::basic_string<wchar_t, std::char_traits<wchar_t>, '
-                    'std::allocator<wchar_t> >'))}
+            "std::string": [v for v in str_eq if not v == "std::string"],
+            "std::wstring": [v for v in wstr_eq if not v == "std::wstring"]}
 
         new_name = cls_name
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
-
-        # Needed for castxml and clang
-        # This is tested in remove_template_defaults_tester
-        # and variable_matcher_tester
-        new_name = new_name.replace(
-            "std::basic_string<char>", "std::string")
-        new_name = new_name.replace(
-            "std::basic_string<wchar_t>", "std::wstring")
 
         return new_name
 
