@@ -41,6 +41,9 @@ Version 1.7.0 (Next version, not yet released)
    This class defintion is present in clangs AST tree, but I don't know why it is
    usefull. If somebody knows what this is and if it is needed, please tell us.
 
+6. Instead of using the ``__attribute((gccxml("string")))`` c++ syntax (see version 0.9.5),
+   the ``__attribute__`` ((annotate ("out"))) can now be used to annotate code.
+
 
 Version 1.6.2
 -------------
