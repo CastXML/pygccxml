@@ -21,18 +21,22 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def test_enum_patcher(self):
-        fix_enum = self.global_ns.free_fun('fix_enum')
-        self.failUnless(
-            fix_enum.arguments[0].default_value == '::ns1::ns2::apple')
+        fix_enum = self.global_ns.free_fun("fix_enum")
+        default_val = fix_enum.arguments[0].default_value
+        if "CastXML" in utils.xml_generator:
+            # Most clean output, no need to patch
+            self.failUnless(default_val == "ns1::ns2::apple")
+        else:
+            self.failUnless(default_val == "::ns1::ns2::apple")
 
         # double_call = declarations.find_declaration(
         # decls, type=declarations.free_function_t, name='double_call' )
 
     def test_numeric_patcher(self):
-        fix_numeric = self.global_ns.free_fun('fix_numeric')
+        fix_numeric = self.global_ns.free_fun("fix_numeric")
         if 32 == self.architecture:
-            if '0.9' in utils.xml_generator:
-                if platform.machine() == 'x86_64':
+            if "0.9" in utils.xml_generator:
+                if platform.machine() == "x86_64":
                     self.failUnless(
                         fix_numeric.arguments[0].default_value == "-1u",
                         fix_numeric.arguments[0].default_value)
@@ -47,59 +51,71 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                     fix_numeric.arguments[0].default_value == val,
                     fix_numeric.arguments[0].default_value)
         else:
-            self.failUnless(
-                fix_numeric.arguments[0].default_value == "0ffffffff",
-                fix_numeric.arguments[0].default_value)
+            if "CastXML" in utils.xml_generator:
+                # Most clean output, no need to patch
+                self.failUnless(
+                    fix_numeric.arguments[0].default_value == "(ull)-1",
+                    fix_numeric.arguments[0].default_value)
+            else:
+                self.failUnless(
+                    fix_numeric.arguments[0].default_value == "0ffffffff",
+                    fix_numeric.arguments[0].default_value)
 
     def test_unnamed_enum_patcher(self):
-        fix_unnamed = self.global_ns.free_fun('fix_unnamed')
+        fix_unnamed = self.global_ns.free_fun("fix_unnamed")
         self.failUnless(
             fix_unnamed.arguments[0].default_value == "int(::fx::unnamed)")
 
     def test_function_call_patcher(self):
-        fix_function_call = self.global_ns.free_fun('fix_function_call')
-        if '0.9' in utils.xml_generator:
+        fix_function_call = self.global_ns.free_fun("fix_function_call")
+        default_val = fix_function_call.arguments[0].default_value
+        if "CastXML" in utils.xml_generator:
+            # Most clean output, no need to patch
+            val = "calc(1, 2, 3)"
+            self.failUnless(default_val == val)
+        elif "0.9" in utils.xml_generator:
             val = "function_call::calc(1, 2, 3)"
-            self.failUnless(
-                fix_function_call.arguments[0].default_value == val)
+            self.failUnless(default_val == val)
         else:
             val = "function_call::calc( 1, 2, 3 )"
-            self.failUnless(
-                fix_function_call.arguments[0].default_value == val)
+            self.failUnless(default_val == val)
 
     def test_fundamental_patcher(self):
-        fcall = self.global_ns.free_fun('fix_fundamental')
+        fcall = self.global_ns.free_fun("fix_fundamental")
         val = "(unsigned int)(::fundamental::eggs)"
         self.failUnless(
             fcall.arguments[0].default_value == val)
 
     def test_constructor_patcher(self):
-        typedef__func = self.global_ns.free_fun('typedef__func')
-        if '0.9' in utils.xml_generator:
+        typedef__func = self.global_ns.free_fun("typedef__func")
+        default_val = typedef__func.arguments[0].default_value
+        if "0.9" in utils.xml_generator:
             val = "typedef_::original_name()"
-            self.failUnless(
-                typedef__func.arguments[0].default_value == val)
+            self.failUnless(default_val == val)
+        elif "CastXML" in utils.xml_generator:
+            # Most clean output, no need to patch
+            val = "typedef_::alias()"
+            self.failUnless(default_val == val)
         else:
             val = "::typedef_::alias( )"
-            self.failUnless(
-                typedef__func.arguments[0].default_value == val)
+            self.failUnless(default_val == val)
         if 32 == self.architecture:
-            clone_tree = self.global_ns.free_fun('clone_tree')
+            clone_tree = self.global_ns.free_fun("clone_tree")
             default_values = []
-            if '0.9' in utils.xml_generator:
+            if "0.9" in utils.xml_generator:
                 default_values = []
             else:
                 default_values = [
-                    ('vector<std::basic_string<char, std::char_traits<char>,' +
-                        ' std::allocator<char> >,std::allocator' +
-                        '<std::basic_string<char, std::char_traits<char>, ' +
-                        'std::allocator<char> > > >()'),
-                    ('vector<std::basic_string<char, std::char_traits<char>,' +
-                        'std::allocator<char> >,std::allocator' +
-                        '<std::basic_string<char, std::char_traits<char>, ' +
-                        'std::allocator<char> > > >((&allocator' +
-                        '<std::basic_string<char, std::char_traits<char>, ' +
-                        'std::allocator<char> > >()))')]
+                    ("vector<std::basic_string<char, std::char_traits<char>," +
+                        " std::allocator<char> >,std::allocator" +
+                        "<std::basic_string<char, std::char_traits<char>, " +
+                        "std::allocator<char> > > >()"),
+                    ("vector<std::basic_string<char, std::char_traits<char>," +
+                        "std::allocator<char> >,std::allocator" +
+                        "<std::basic_string<char, std::char_traits<char>, " +
+                        "std::allocator<char> > > >((&allocator" +
+                        "<std::basic_string<char, std::char_traits<char>, " +
+                        "std::allocator<char> > >()))")]
                 self.failUnless(
                     clone_tree.arguments[0].default_value in default_values)
 
@@ -114,7 +130,7 @@ class tester_32_t(tester_impl_t):
         if not tester_32_t.global_ns:
             reader = parser.source_reader_t(self.config)
             tester_32_t.global_ns = reader.read_file(
-                'patcher.hpp')[0].top_parent
+                "patcher.hpp")[0].top_parent
         self.global_ns = tester_32_t.global_ns
 
 
@@ -131,10 +147,14 @@ class tester_64_t(tester_impl_t):
 
         if not tester_64_t.global_ns:
             reader = parser.source_reader_t(self.config)
-            tester_64_t.global_ns = reader.read_xml_file(
-                os.path.join(
-                    autoconfig.data_directory,
-                    'patcher_tester_64bit.xml'))[0].top_parent
+            if "castxml" not in self.config.xml_generator:
+                tester_64_t.global_ns = reader.read_xml_file(
+                    os.path.join(
+                        autoconfig.data_directory,
+                        "patcher_tester_64bit.xml"))[0].top_parent
+            else:
+                tester_64_t.global_ns = reader.read_file(
+                    "patcher.hpp")[0].top_parent
         self.global_ns = tester_64_t.global_ns
 
     def tearDown(self):
@@ -143,7 +163,8 @@ class tester_64_t(tester_impl_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_32_t))
+    if "castxml" not in autoconfig.cxx_parsers_cfg.gccxml.xml_generator:
+        suite.addTest(unittest.makeSuite(tester_32_t))
     suite.addTest(unittest.makeSuite(tester_64_t))
     return suite
 
