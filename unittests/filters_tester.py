@@ -39,7 +39,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         criteria = declarations.access_type_matcher_t(
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
-        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
+        if "CastXML" in utils.xml_generator:
+            public_members = [d for d in public_members if not d.is_artificial]
+            self.failUnless(21 == len(public_members))
+        if "0.9" in utils.xml_generator:
             public_members = [d for d in public_members if not d.is_artificial]
             self.failUnless(17 == len(public_members))
         else:
@@ -47,7 +50,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_or_matcher(self):
         criteria1 = declarations.regex_matcher_t(
-            'oper.*',
+            "oper.*",
             lambda decl: decl.name)
         criteria2 = declarations.access_type_matcher_t(
             declarations.ACCESS_TYPES.PUBLIC)
@@ -55,7 +58,10 @@ class tester_t(parser_test_case.parser_test_case_t):
             criteria1 | criteria2,
             self.global_ns)
 
-        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
+        if "CastXML" in utils.xml_generator:
+            found = [d for d in found if not d.is_artificial]
+            self.failUnless(len(found) != 35)
+        elif "0.9" in utils.xml_generator:
             found = [d for d in found if not d.is_artificial]
             self.failUnless(15 <= len(found) <= 21)
         else:
