@@ -154,7 +154,7 @@ def remove_file_no_raise(file_name, config):
     """
 
     # The removal can be disabled by the config for debugging purposes.
-    if config.keepxml:
+    if config.keep_xml:
         return True
 
     try:

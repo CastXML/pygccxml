@@ -41,7 +41,7 @@ class parser_configuration_t(object):
             cflags="",
             compiler=None,
             xml_generator="gccxml",
-            keepxml=False,
+            keep_xml=False,
             compiler_path=None):
 
         object.__init__(self)
@@ -65,7 +65,7 @@ class parser_configuration_t(object):
 
         self.__xml_generator = xml_generator
 
-        self.__keepxml = keepxml
+        self.__keep_xml = keep_xml
 
         # If no compiler path was set and we are using castxml, set the path
         self.__compiler_path = create_compiler_path(
@@ -118,14 +118,14 @@ class parser_configuration_t(object):
         self.__xml_generator = xml_generator
 
     @property
-    def keepxml(self):
+    def keep_xml(self):
         """Are xml files kept after errors."""
-        return self.__keepxml
+        return self.__keep_xml
 
-    @keepxml.setter
-    def keepxml(self, keepxml):
+    @keep_xml.setter
+    def keep_xml(self, keep_xml):
         """Set if xml files kept after errors."""
-        self.__keepxml = keepxml
+        self.__keep_xml = keep_xml
 
     @property
     def compiler_path(self):
@@ -189,7 +189,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             cflags="",
             compiler=None,
             xml_generator="gccxml",
-            keepxml=False,
+            keep_xml=False,
             compiler_path=None):
 
         parser_configuration_t.__init__(
@@ -201,7 +201,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             cflags=cflags,
             compiler=compiler,
             xml_generator=xml_generator,
-            keepxml=keepxml,
+            keep_xml=keep_xml,
             compiler_path=compiler_path)
 
         self.__gccxml_path = gccxml_path
@@ -285,7 +285,7 @@ compiler=
 # gccxml or castxml
 xml_generator=
 # Do we keep xml files or not after errors
-keepxml=
+keep_xml=
 # Set the path to the compiler
 compiler_path=
 """
@@ -322,7 +322,7 @@ def load_xml_generator_configuration(configuration, **defaults):
        # gccxml or castxml
        xml_generator=
        # Do we keep xml files or not after errors
-       keepxml=
+       keep_xml=
        # Set the path to the compiler
        compiler_path=
 
@@ -365,8 +365,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             cfg.compiler = value
         elif name == 'xml_generator':
             cfg.xml_generator = value
-        elif name == 'keepxml':
-            cfg.keepxml = value
+        elif name == 'keep_xml':
+            cfg.keep_xml = value
         elif name == 'compiler_path':
             cfg.compiler_path = value
         else:
