@@ -329,7 +329,6 @@ class source_reader_t:
 
         """
 
-        declarations = None
         xml_file = ''
         try:
             ffname = self.__file_full_name(source_file)
