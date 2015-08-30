@@ -68,21 +68,29 @@ class source_reader_t:
         generated ids with references to declarations or type class instances.
     """
 
-    def __init__(self, config, cache=None, decl_factory=None):
+    def __init__(self, config, cache=None, decl_factory=None, join_decls=True):
         """
-        :param config: instance of :class:`xml_generator_configuration_t`
-            class, that contains GCC-XML or CastXML configuration
+        :param config: Instance of :class:`xml_generator_configuration_t`
+                       class, that contains GCC-XML or CastXML configuration.
 
-        :param cache: reference to cache object, that will be updated after
+        :param cache: Reference to cache object, that will be updated after a
                       file has been parsed.
-        :type cache: instance of :class:`cache_base_t` class
+        :type cache: Instance of :class:`cache_base_t` class
 
-        :param decl_factory: declarations factory, if not given default
+        :param decl_factory: Declarations factory, if not given default
                              declarations factory( :class:`decl_factory_t` )
-                             will be used
+                             will be used.
+
+        :param join_decls: Skip the joining of the declarations for the file.
+                           This can then be done once, in the case where
+                           there are multiple files, for example in the
+                           project_reader. Is True per default.
+        :type boolean
+
         """
 
         self.logger = utils.loggers.cxx_parser
+        self.__join_decls = join_decls
         self.__search_directories = []
         self.__config = config
         self.__search_directories.append(config.working_directory)
@@ -447,6 +455,13 @@ class source_reader_t:
             linker_.instance = decl
             declarations.apply_visitor(linker_, decl)
         bind_aliases(iter(decls.values()))
+
+        # Join declarations
+        if self.__join_decls:
+            for ns in iter(decls.values()):
+                if isinstance(ns, pygccxml.declarations.namespace_t):
+                    self._join_declarations(ns)
+
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
         # template< typename X>
@@ -460,3 +475,78 @@ class source_reader_t:
                 inst,
                 declarations.namespace_t) and not inst.parent]
         return (decls, list(files.values()))
+
+    def _join_declarations(self, declref):
+        self._join_namespaces(declref)
+        for ns in declref.declarations:
+            if isinstance(ns, pygccxml.declarations.namespace_t):
+                self._join_declarations(ns)
+
+    def _join_namespaces(self, nsref):
+        assert isinstance(nsref, pygccxml.declarations.namespace_t)
+        # decl.__class__ :  { decl.name : [decls] } double declaration hash
+        ddhash = {}
+        decls = []
+
+        for decl in nsref.declarations:
+            if decl.__class__ not in ddhash:
+                ddhash[decl.__class__] = {decl._name: [decl]}
+                decls.append(decl)
+            else:
+                joined_decls = ddhash[decl.__class__]
+                if decl._name not in joined_decls:
+                    decls.append(decl)
+                    joined_decls[decl._name] = [decl]
+                else:
+                    if isinstance(decl, pygccxml.declarations.calldef_t):
+                        if decl not in joined_decls[decl._name]:
+                            # functions has overloading
+                            decls.append(decl)
+                            joined_decls[decl._name].append(decl)
+                    elif isinstance(decl, pygccxml.declarations.enumeration_t):
+                        # unnamed enums
+                        if not decl.name and decl not in \
+                                joined_decls[decl._name]:
+                            decls.append(decl)
+                            joined_decls[decl._name].append(decl)
+                    elif isinstance(decl, pygccxml.declarations.class_t):
+                        # unnamed classes
+                        if not decl.name and decl not in \
+                                joined_decls[decl._name]:
+                            decls.append(decl)
+                            joined_decls[decl._name].append(decl)
+                    else:
+                        assert 1 == len(joined_decls[decl._name])
+                        if isinstance(decl, pygccxml.declarations.namespace_t):
+                            joined_decls[decl._name][0].take_parenting(decl)
+
+        class_t = pygccxml.declarations.class_t
+        class_declaration_t = pygccxml.declarations.class_declaration_t
+        if class_t in ddhash and class_declaration_t in ddhash:
+            # if there is a class and its forward declaration - get rid of the
+            # second one.
+            class_names = set()
+            for name, same_name_classes in ddhash[class_t].items():
+                if not name:
+                    continue
+                if "GCC" in utils.xml_generator:
+                    class_names.add(same_name_classes[0].mangled)
+                elif "CastXML" in utils.xml_generator:
+                    class_names.add(same_name_classes[0].name)
+
+            class_declarations = ddhash[class_declaration_t]
+            for name, same_name_class_declarations in \
+                    class_declarations.items():
+                if not name:
+                    continue
+                for class_declaration in same_name_class_declarations:
+                    if "GCC" in utils.xml_generator:
+                        if class_declaration.mangled and \
+                                class_declaration.mangled in class_names:
+                                decls.remove(class_declaration)
+                    elif "CastXML" in utils.xml_generator:
+                        if class_declaration.name and \
+                                class_declaration.name in class_names:
+                                decls.remove(class_declaration)
+
+        nsref.declarations = decls
