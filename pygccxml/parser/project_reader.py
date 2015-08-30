@@ -312,7 +312,7 @@ class project_reader_t:
         self.logger.debug("Joining declarations ...")
         for ns in answer:
             if isinstance(ns, pygccxml.declarations.namespace_t):
-                reader._join_declarations(ns)
+                reader.join_declarations(ns)
         leaved_classes = self._join_class_hierarchy(answer)
         types = self.__declarated_types(answer)
         self.logger.debug("Relinking declared types ...")

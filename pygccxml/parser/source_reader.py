@@ -460,7 +460,7 @@ class source_reader_t:
         if self.__join_decls:
             for ns in iter(decls.values()):
                 if isinstance(ns, pygccxml.declarations.namespace_t):
-                    self._join_declarations(ns)
+                    self.join_declarations(ns)
 
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
@@ -476,11 +476,11 @@ class source_reader_t:
                 declarations.namespace_t) and not inst.parent]
         return (decls, list(files.values()))
 
-    def _join_declarations(self, declref):
+    def join_declarations(self, declref):
         self._join_namespaces(declref)
         for ns in declref.declarations:
             if isinstance(ns, pygccxml.declarations.namespace_t):
-                self._join_declarations(ns)
+                self.join_declarations(ns)
 
     def _join_namespaces(self, nsref):
         assert isinstance(nsref, pygccxml.declarations.namespace_t)
