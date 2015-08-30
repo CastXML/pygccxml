@@ -396,7 +396,8 @@ class project_reader_t:
             if xml_file_path and delete_xml_file:
                 utils.remove_file_no_raise(xml_file_path, self.__config)
 
-    def _join_top_namespaces(self, main_ns_list, other_ns_list):
+    @staticmethod
+    def _join_top_namespaces(main_ns_list, other_ns_list):
         answer = main_ns_list[:]
         for other_ns in other_ns_list:
             main_ns = pygccxml.declarations.find_declaration(
@@ -410,7 +411,8 @@ class project_reader_t:
                 answer.append(other_ns)
         return answer
 
-    def _create_key(self, decl):
+    @staticmethod
+    def _create_key(decl):
         return (
             decl.location.as_tuple(),
             tuple(pygccxml.declarations.declaration_path(decl)))

@@ -482,9 +482,9 @@ class source_reader_t:
             if isinstance(ns, pygccxml.declarations.namespace_t):
                 self.join_declarations(ns)
 
-    def _join_namespaces(self, nsref):
+    @staticmethod
+    def _join_namespaces(nsref):
         assert isinstance(nsref, pygccxml.declarations.namespace_t)
-        # decl.__class__ :  { decl.name : [decls] } double declaration hash
         ddhash = {}
         decls = []
 
