@@ -3,11 +3,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""Python GCC-XML front end.
+"""Python CastXML or GCC-XML front end.
 
 This package provides functionality to extract and inspect
 declarations from C/C++ header files. This is accomplished
-by invoking the external tool `gccxml <http://www.gccxml.org/>`_
+by invoking an external tool like CastXML or GCC-XML,
 which parses a header file and dumps the declarations as a
 XML file. This XML file is then read by pygccxml and the contents
 are made available as appropriate Python objects.
@@ -21,7 +21,7 @@ object of a type derived from the :class:`declaration_t` class. An inner node
 is always either a namespace :class:`declarations.namespace_t` or a class
 :class:`declarations.class_t`, which are both derived from
 :class:`declarations.scopedef_t` class. Everything else (free functions,
-member functions, enumerations, variables, etc.) is always a leaf. You will
+member functions, enumerations, variables, etc.) are always a leaf. You will
 find all those declaration classes in the :mod:declarations sub-package.
 
 """
