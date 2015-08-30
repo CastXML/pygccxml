@@ -4,7 +4,8 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 """
-defines class that will keep results of different calculations.
+Defines classes that will keep results of different calculations.
+
 """
 
 from .. import utils

@@ -3,7 +3,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""contains classes that describe different C++ declarations"""
+"""
+Contains classes that describe different C++ declarations
+
+"""
 
 # Keep compilers for backward compatibility
 from . import xml_generators as compilers
