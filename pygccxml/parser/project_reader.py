@@ -253,9 +253,7 @@ class project_reader_t:
         config = self.__config.clone()
         self.logger.debug("Reading project files: file by file")
         for prj_file in files:
-            reader = None
-            header = None
-            content_type = None
+
             if isinstance(prj_file, file_configuration_t):
                 del config.start_with_declarations[:]
                 config.start_with_declarations.extend(
@@ -267,12 +265,13 @@ class project_reader_t:
                 header = prj_file
                 content_type = \
                     file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE
+
             reader = source_reader.source_reader_t(
                 config,
                 self.__dcache,
                 self.__decl_factory,
                 join_decls=False)
-            decls = None
+
             if content_type == \
                     file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE:
                 self.logger.info('Parsing source file "%s" ... ' % header)
