@@ -40,7 +40,7 @@ def configuration_signature(config):
 
     sig = hashlib.md5()
     if isinstance(config, cxx_parsers_cfg.xml_generator_configuration_t):
-        sig.update(str(config.gccxml_path).encode())
+        sig.update(str(config.xml_generator_path).encode())
     sig.update(str(config.working_directory).encode('utf-8'))
     if isinstance(config, cxx_parsers_cfg.xml_generator_configuration_t):
         sig.update(str(config.cflags).encode('utf-8'))

@@ -111,12 +111,13 @@ class decl_cache_tester(unittest.TestCase):
         """ Return a list of configurations that all differ. """
         cfg_list = []
         def_cfg = xml_generator_configuration_t(
-            "gccxml_path", '.', ['tmp'], ['sym'], ['unsym'], None, False, "")
+            "xml_generator_path",
+            '.', ['tmp'], ['sym'], ['unsym'], None, False, "")
         cfg_list.append(def_cfg)
 
         # Test changes that should cause sig changes
         gccxml_changed = def_cfg.clone()
-        gccxml_changed.gccxml_path = "other_path"
+        gccxml_changed.xml_generator_path = "other_path"
         cfg_list.append(gccxml_changed)
 
         wd_changed = def_cfg.clone()
@@ -127,7 +128,7 @@ class decl_cache_tester(unittest.TestCase):
         # inc_changed.include_paths = ["/var/tmp"]
         # self.assert_(configuration_signature(inc_changed) != def_sig)
         inc_changed = xml_generator_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['sym'], ['unsym'],
+            "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['unsym'],
             None, False, "")
         cfg_list.append(inc_changed)
 
@@ -135,7 +136,7 @@ class decl_cache_tester(unittest.TestCase):
         # def_changed.define_symbols = ["symbol"]
         # self.assert_(configuration_signature(def_changed) != def_sig)
         def_changed = xml_generator_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['new-sym'], ['unsym'],
+            "xml_generator_path", '.', ['/var/tmp'], ['new-sym'], ['unsym'],
             None, False, "")
         cfg_list.append(def_changed)
 
@@ -143,7 +144,7 @@ class decl_cache_tester(unittest.TestCase):
         # undef_changed.undefine_symbols = ["symbol"]
         # self.assert_(configuration_signature(undef_changed) != def_sig)
         undef_changed = xml_generator_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['sym'], ['new-unsym'],
+            "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['new-unsym'],
             None, False, "")
         cfg_list.append(undef_changed)
 

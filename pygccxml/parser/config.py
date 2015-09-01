@@ -12,6 +12,7 @@ import os
 import copy
 import platform
 import subprocess
+import warnings
 from .. import utils
 
 
@@ -180,6 +181,7 @@ class xml_generator_configuration_t(parser_configuration_t):
     def __init__(
             self,
             gccxml_path='',
+            xml_generator_path='',
             working_directory='.',
             include_paths=None,
             define_symbols=None,
@@ -204,7 +206,9 @@ class xml_generator_configuration_t(parser_configuration_t):
             keep_xml=keep_xml,
             compiler_path=compiler_path)
 
-        self.__gccxml_path = gccxml_path
+        if gccxml_path != '':
+            self.__gccxml_path = gccxml_path
+        self.__xml_generator_path = xml_generator_path
 
         if not start_with_declarations:
             start_with_declarations = []
@@ -217,12 +221,35 @@ class xml_generator_configuration_t(parser_configuration_t):
 
     @property
     def gccxml_path(self):
-        "gccxml binary location"
+        """
+        Gccxml binary location
+
+        """
+
+        warnings.warn(
+            "gccxml_path is deprecated. \n" +
+            "Please use xml_generator_path instead.", DeprecationWarning)
         return self.__gccxml_path
 
     @gccxml_path.setter
     def gccxml_path(self, new_path):
+        warnings.warn(
+            "gccxml_path is deprecated. \n" +
+            "Please use xml_generator_path instead.", DeprecationWarning)
         self.__gccxml_path = new_path
+
+    @property
+    def xml_generator_path(self):
+        """
+        XML generator binary location
+
+        """
+
+        return self.__xml_generator_path
+
+    @xml_generator_path.setter
+    def xml_generator_path(self, new_path):
+        self.__xml_generator_path = new_path
 
     @property
     def start_with_declarations(self):
@@ -242,7 +269,7 @@ class xml_generator_configuration_t(parser_configuration_t):
 
     def raise_on_wrong_settings(self):
         super(xml_generator_configuration_t, self).raise_on_wrong_settings()
-        if os.path.isfile(self.gccxml_path):
+        if os.path.isfile(self.xml_generator_path):
             return
         if os.name == 'nt':
             gccxml_name = 'gccxml' + '.exe'
@@ -251,20 +278,21 @@ class xml_generator_configuration_t(parser_configuration_t):
             gccxml_name = 'gccxml'
             environment_var_delimiter = ':'
         else:
-            raise RuntimeError('unable to find out location of gccxml')
-        may_be_gccxml = os.path.join(self.gccxml_path, gccxml_name)
+            raise RuntimeError(
+                'unable to find out location of the xml generator')
+        may_be_gccxml = os.path.join(self.xml_generator_path, gccxml_name)
         if os.path.isfile(may_be_gccxml):
-            self.gccxml_path = may_be_gccxml
+            self.xml_generator_path = may_be_gccxml
         else:
             for path in os.environ['PATH'].split(environment_var_delimiter):
-                gccxml_path = os.path.join(path, gccxml_name)
-                if os.path.isfile(gccxml_path):
-                    self.gccxml_path = gccxml_path
+                xml_generator_path = os.path.join(path, gccxml_name)
+                if os.path.isfile(xml_generator_path):
+                    self.xml_generator_path = xml_generator_path
                     break
             else:
                 msg = (
-                    'gccxml_path("%s") should exists or to be a valid ' +
-                    'file name.') % self.gccxml_path
+                    'xml_generator_path("%s") should exists or to be a ' +
+                    'valid file name.') % self.xml_generator_path
                 raise RuntimeError(msg)
 
 gccxml_configuration_example = \
@@ -272,7 +300,8 @@ gccxml_configuration_example = \
 [gccxml]
 #path to gccxml executable file - optional, if not provided, os.environ['PATH']
 #variable is used to find it
-gccxml_path=
+gccxml_path=(deprecated)
+xml_generator_path=
 #gccxml working directory - optional, could be set to your source code
 directory
 working_directory=
@@ -293,7 +322,8 @@ compiler_path=
 
 def load_xml_generator_configuration(configuration, **defaults):
     """
-    loads GCC-XML configuration from an `.ini` file or any other file class
+    loads CastXML or GCC-XML configuration from an `.ini` file or any other
+    file class
     :class:`ConfigParser.SafeConfigParser` is able to parse.
 
     :param configuration: configuration could be
@@ -305,10 +335,11 @@ def load_xml_generator_configuration(configuration, **defaults):
     Configuration file skeleton::
 
        [gccxml]
-       #path to gccxml executable file - optional, if not provided,
+       #path to gccxml or castxml executable file - optional, if not provided,
        os.environ['PATH']
        #variable is used to find it
-       gccxml_path=
+       gccxml_path=(deprecated)
+       xml_generator_path=
        #gccxml working directory - optional, could be set to your source
        code directory
        working_directory=
@@ -354,6 +385,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             value = value.strip()
         if name == 'gccxml_path':
             cfg.gccxml_path = value
+        if name == 'xml_generator_path':
+            cfg.xml_generator_path = value
         elif name == 'working_directory':
             cfg.working_directory = value
         elif name == 'include_paths':
@@ -407,4 +440,4 @@ gccxml_configuration_t = xml_generator_configuration_t
 load_gccxml_configuration = load_xml_generator_configuration
 
 if __name__ == '__main__':
-    print(load_xml_generator_configuration('gccxml.cfg').__dict__)
+    print(load_xml_generator_configuration('xml_generator.cfg').__dict__)

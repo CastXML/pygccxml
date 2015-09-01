@@ -126,9 +126,11 @@ class source_reader_t:
 
         # first is gccxml executable
         if platform.system() == 'Windows':
-            cmd.append('"%s"' % os.path.normpath(self.__config.gccxml_path))
+            cmd.append('"%s"' % os.path.normpath(
+                self.__config.xml_generator_path))
         else:
-            cmd.append('%s' % os.path.normpath(self.__config.gccxml_path))
+            cmd.append('%s' % os.path.normpath(
+                self.__config.xml_generator_path))
 
         # Add all cflags passed
         if self.__config.cflags != "":
@@ -187,9 +189,11 @@ class source_reader_t:
         cmd = []
         # first is gccxml executable
         if 'nt' == os.name:
-            cmd.append('"%s"' % os.path.normpath(self.__config.gccxml_path))
+            cmd.append('"%s"' % os.path.normpath(
+                self.__config.xml_generator_path))
         else:
-            cmd.append('%s' % os.path.normpath(self.__config.gccxml_path))
+            cmd.append('%s' % os.path.normpath(
+                self.__config.xml_generator_path))
 
         # Add all cflags passed
         if self.__config.cflags != "":

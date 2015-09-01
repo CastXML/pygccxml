@@ -22,7 +22,9 @@ generator_path, generator_name = utils.find_cpp_parser()
 
 # Configure the xml generator
 config = parser.xml_generator_configuration_t(
-    gccxml_path=generator_path, xml_generator=generator_name, compiler="gcc")
+    xml_generator_path=generator_path,
+    xml_generator=generator_name,
+    compiler="gcc")
 
 # Parsing source file
 decls = parser.parse([this_module_dir_path + '/example.hpp'], config)
