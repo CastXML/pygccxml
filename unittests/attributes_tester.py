@@ -16,9 +16,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-
-        self.compiler = utils.guess_compiler(self.config.compiler_path)
-        self.header = "attributes_" + self.compiler + ".hpp"
+        self.header = "attributes_" + self.config.xml_generator + ".hpp"
 
     def setUp(self):
         if not tester_t.global_ns:
@@ -28,7 +26,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
 
-        if self.compiler == "clang":
+        if utils.guess_compiler(self.config.compiler_path) == "clang":
             prefix = "annotate"
         else:
             prefix = "gccxml"
