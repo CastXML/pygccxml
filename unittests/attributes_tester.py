@@ -26,7 +26,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
 
-        if "CastXML" in utils.xml_generator:
+        if utils.guess_compiler(self.config.compiler_path) == "clang":
             prefix = "annotate"
         else:
             prefix = "gccxml"
