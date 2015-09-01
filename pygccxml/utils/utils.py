@@ -65,26 +65,6 @@ def find_cpp_parser(name=None):
         return path.rstrip(), name
 
 
-def guess_compiler(compiler_path):
-    """
-    Try to guess which compiler we are using.
-
-    """
-
-    if platform.system() == "Windows":
-        # To do: implement this for mscv and mingw
-        return None
-    else:
-        p = subprocess.Popen([compiler_path, "-v"], stderr=subprocess.PIPE)
-        out = p.stderr.read().decode("utf-8")
-        if "clang" in out:
-            compiler = "clang"
-        else:
-            compiler = "gcc"
-
-    return compiler
-
-
 def _create_logger_(name):
     """
     Implementation detail, creates a logger.
