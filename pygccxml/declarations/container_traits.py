@@ -421,6 +421,9 @@ class container_traits_impl_t():
 
         """
 
+        utils.loggers.queries_engine.debug(
+            "Container traits: searching class declaration for %s" % type_)
+
         cls_declaration = self.get_container_or_none(type_)
         if not cls_declaration:
             raise TypeError(
