@@ -7,36 +7,55 @@
 #define __remove_template_defaults_hpp__
 
 #if defined( __llvm__ )
-    // This is for CastXML
-    // When parsing with clang//llvm use the new std C++11
+
+    // This is mostly for CastXML with never compilers
+
+    // When parsing with clang//llvm use the new c++11 (c++0x even ?)
     // unordered_maps and unordered_sets
-    #include <unordered_map>
-    #include <unordered_set>
-    #define HASH_XXX_NS std
+
+    // First, include a library that does nothing ...
+    // This will force the preprocessor to load _LIBCPP_VERSION
+    #include <ciso646>
+
+    #if defined( _LIBCPP_VERSION )
+        // libc++ (mostly OS X)
+        #include <unordered_map>
+        #include <unordered_set>
+        #define HASH_XXX_NS std
+    #else
+        // libstd++ (mostly Linux)
+        #include <tr1/unordered_map>
+        #include <tr1/unordered_set>
+        #define HASH_XXX_NS std::tr1
+    #endif
     #define HASH_XXX_UMAP unordered_map
     #define HASH_XXX_USET unordered_set
     #define HASH_XXX_UMMAP unordered_multimap
     #define HASH_XXX_UMMSET unordered_multiset
-#elif defined( __GNUC__ )
-    #include <ext/hash_set>
-    #include <ext/hash_map>
-    #define HASH_XXX_NS __gnu_cxx
-#else
-    #include <hash_set>
-    #include <hash_map>
-    #if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
-        #define HASH_XXX_NS std
-    #else
-        #define HASH_XXX_NS stdext
-    #endif//GCCXML
-#endif
 
-#if !defined( __llvm__ )
-    // This is for GCCXML (when using old compilers)
+#else
+
+    // This is mostly for GCCXML (when using old compilers)
+
+    #if defined( __GNUC__ )
+        #include <ext/hash_set>
+        #include <ext/hash_map>
+        #define HASH_XXX_NS __gnu_cxx
+    #else
+        #include <hash_set>
+        #include <hash_map>
+        #if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
+            #define HASH_XXX_NS std
+        #else
+            #define HASH_XXX_NS stdext
+        #endif
+    #endif
+
     #define HASH_XXX_UMAP hash_map
     #define HASH_XXX_USET hash_set
     #define HASH_XXX_UMMAP hash_multimap
     #define HASH_XXX_UMMSET hash_multiset
+
 #endif
 
 #include <string>
