@@ -278,8 +278,8 @@ class declaration_t(object):
         if new_parent.name == "tr1":
             # When asking for the parent, consider that tr1 == std
             # and silently replace tr1 by std.
-            assert(new_parent.parent.name == "std")
-            new_parent = new_parent.parent
+            if new_parent.parent.name == "std":
+                new_parent = new_parent.parent
 
         self._parent = new_parent
 
