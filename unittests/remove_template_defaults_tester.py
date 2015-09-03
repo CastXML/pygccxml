@@ -184,7 +184,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.failUnless(
             (name + '< const std::wstring, double >') ==
             hmm_traits.remove_defaults(hmm_wstr2d))
+
         hmm_v_i2mm_wstr2d = self.global_ns.typedef('hmm_v_i2mm_wstr2d')
+
+        hmm_traits_value = hmm_traits.remove_defaults(hmm_v_i2mm_wstr2d)
 
         possible_values = (
             name + '< const std::vector< int >, ' +
@@ -194,8 +197,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             name + '< const std::vector< int >, ' +
             'const stdext::' + name + '< const std::wstring, double > >')
 
-        self.failUnless(hmm_traits.remove_defaults(hmm_v_i2mm_wstr2d)
-                        in possible_values)
+        self.failUnless(hmm_traits_value in possible_values, hmm_traits_value)
 
 
 def create_suite():
