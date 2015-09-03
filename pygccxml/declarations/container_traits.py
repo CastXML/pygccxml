@@ -239,7 +239,7 @@ class defaults_eraser(object):
             inst = tmpl.substitute(
                 container=c_name,
                 value_type=value_type,
-                hash=ns + '::' + default_hash,
+                hash=ns + '::' + utils.get_tr1(cls_name) + default_hash,
                 less=default_less,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
@@ -321,7 +321,7 @@ class defaults_eraser(object):
                 container=c_name,
                 key_type=key_type,
                 mapped_type=mapped_type,
-                hash=ns + '::' + default_hash,
+                hash=ns + '::' + utils.get_tr1(cls_name) + default_hash,
                 less=default_less_or_hash,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
@@ -390,6 +390,9 @@ class container_traits_impl_t():
         type_ = type_traits.remove_alias(type_)
         type_ = type_traits.remove_cv(type_)
 
+        utils.loggers.queries_engine.debug(
+            "Container traits: cleaned up search %s" % type_)
+
         cls_declaration = None
         if isinstance(type_, cpptypes.declarated_t):
             cls_declaration = type_traits.remove_alias(type_.declaration)
@@ -398,14 +401,23 @@ class container_traits_impl_t():
         elif isinstance(type_, class_declaration.class_declaration_t):
             cls_declaration = type_
         else:
+            utils.loggers.queries_engine.debug(
+                "Container traits: returning None, type not known")
             return
 
         if not cls_declaration.name.startswith(self.name() + '<'):
+            utils.loggers.queries_engine.debug(
+                "Container traits: returning None, " +
+                "declaration starts with " + self.name() + '<')
             return
 
         for ns in std_namespaces:
             if type_traits.impl_details.is_defined_in_xxx(ns, cls_declaration):
                 return cls_declaration
+
+        # This should not happen
+        utils.loggers.queries_engine.debug(
+            "Container traits: get_container_or_none() will return None")
 
     def is_my_case(self, type_):
         """
