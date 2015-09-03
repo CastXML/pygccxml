@@ -326,3 +326,21 @@ class native_compiler:
             if n.endswith('0'):
                 n = n[:-1]
             return compiler[0] + n.replace('.', '')
+
+
+def get_tr1(name):
+    """
+    When using libstd++, there is a tr1 namespace.
+
+    Note that tr1 was also replaced by std in declarations.py,
+    for the parent attribute.
+
+    Return either an empty string or tr1::, useful for
+    appending to search patterns.
+
+    """
+
+    tr1 = ""
+    if "tr1" in name:
+        tr1 = "tr1::"
+    return tr1
