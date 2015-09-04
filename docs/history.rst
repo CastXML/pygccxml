@@ -11,13 +11,6 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Note about version numbers
---------------------------
-
-When the project moved to git, versions were tagged from 1.0.0 on. Note that
-there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the many forks
-and the slow down of the maintenance effort).
-
 Version 1.7.0 (Next version, not yet released)
 ----------------------------------------------
 
@@ -159,6 +152,13 @@ Version 1.5.0
 4. Update setup.py
 
 5. fix 2779781 bug( pygccxml reverses array dimensions )
+
+Note about version numbers before 1.5.0
+---------------------------------------
+
+When the project moved from svn to git, versions were tagged from 1.0.0 on.
+Note that there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the
+many forks and the slow down of the maintenance effort).
 
 Version 1.1.0
 -------------
