@@ -29,6 +29,12 @@ class tester_t(parser_test_case.parser_test_case_t):
         header.close()
 
     def test_update(self):
+
+        # Save the content of the header file for later
+        old_header = open(self.header, "r")
+        content = old_header.read()
+        old_header.close()
+
         declarations = parser.parse([self.header], self.config)
         cache = parser.file_cache_t(self.cache_file)
         cache.update(
@@ -45,6 +51,13 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.failUnless(
             cache.cached_value(self.header, self.config) is None,
             "cache didn't recognize that some files on disk has been changed")
+
+        # We wrote a //touch in the header file. Just replace the file with the
+        # original content. The touched file would be sometimes commited by error
+        # as it was modified.
+        new_header = open(self.header, "w")
+        new_header.write(content)
+        new_header.close()
 
     def test_from_file(self):
         declarations = parser.parse([self.header], self.config)
