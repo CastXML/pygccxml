@@ -53,8 +53,8 @@ class tester_t(parser_test_case.parser_test_case_t):
             "cache didn't recognize that some files on disk has been changed")
 
         # We wrote a //touch in the header file. Just replace the file with the
-        # original content. The touched file would be sometimes commited by error
-        # as it was modified.
+        # original content. The touched file would be sometimes commited by
+        # error as it was modified.
         new_header = open(self.header, "w")
         new_header.write(content)
         new_header.close()
