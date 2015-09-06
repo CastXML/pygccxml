@@ -6,6 +6,7 @@
 """Defines :class:`scopedef_t` class"""
 
 import time
+import warnings
 from . import algorithm
 from . import templates
 from . import declaration
@@ -519,7 +520,22 @@ class scopedef_t(declaration.declaration_t):
                 header_file=header_file,
                 recursive=recursive)
         )
-    var = variable  # small alias
+
+    def var(self,
+            name=None,
+            function=None,
+            type=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None):
+
+        warnings.warn(
+            "The var() method is deprecated. \n" +
+            "Please use the variable() method instead.",
+            DeprecationWarning)
+
+        return self.variable(
+            name, function, type, header_dir, header_file, recursive)
 
     def variables(
             self,
@@ -544,7 +560,25 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive,
                 allow_empty=allow_empty)
         )
-    vars = variables  # small alias
+
+    def vars(
+            self,
+            name=None,
+            function=None,
+            type=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None,
+            allow_empty=None):
+
+        warnings.warn(
+            "The vars() method is deprecated. \n" +
+            "Please use the variables() method instead.",
+            DeprecationWarning)
+
+        return self.variables(
+            name, function, type, header_dir,
+            header_file, recursive, allow_empty)
 
     def calldef(
             self,
