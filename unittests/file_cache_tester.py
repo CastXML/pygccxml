@@ -23,8 +23,6 @@ class tester_t(parser_test_case.parser_test_case_t):
             os.remove(self.cache_file)
 
     def touch(self):
-        # os.utime( self.header, ( os.stat( self.header )[ stat.ST_ATIME ],
-        # int( time.time() ) ) )
         # Need to change file.
         header = open(self.header, "a")
         header.write("//touch")
