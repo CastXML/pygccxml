@@ -12,6 +12,7 @@ import string
 from . import cpptypes
 from . import templates
 from . import type_traits
+from . import namespace
 from . import class_declaration
 from .. import utils
 
@@ -411,7 +412,8 @@ class container_traits_impl_t():
                 "declaration starts with " + self.name() + '<')
             return
 
-        if type_.declaration.parent.name == "tr1":
+        is_ns = isinstance(type_.declaration.parent, namespace.namespace_t)
+        if is_ns and type_.declaration.parent.name == "tr1":
             # When using libstd++, some container traits are defined in
             # std::tr1:: . See remove_template_defaults_tester.py.
             # In this case the is_defined_in_xxx test needs to be done
