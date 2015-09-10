@@ -412,15 +412,15 @@ class container_traits_impl_t():
                 "declaration starts with " + self.name() + '<')
             return
 
-        is_ns = isinstance(type_.declaration.parent, namespace.namespace_t)
-        if is_ns and type_.declaration.parent.name == "tr1":
-            # When using libstd++, some container traits are defined in
-            # std::tr1:: . See remove_template_defaults_tester.py.
-            # In this case the is_defined_in_xxx test needs to be done
-            # on the parent
-            decl = cls_declaration.parent
-        else:
-            decl = cls_declaration
+        decl = cls_declaration
+        if isinstance(type_, cpptypes.declarated_t):
+            is_ns = isinstance(type_.declaration.parent, namespace.namespace_t)
+            if is_ns and type_.declaration.parent.name == "tr1":
+                # When using libstd++, some container traits are defined in
+                # std::tr1:: . See remove_template_defaults_tester.py.
+                # In this case the is_defined_in_xxx test needs to be done
+                # on the parent
+                decl = cls_declaration.parent
 
         for ns in std_namespaces:
             if type_traits.impl_details.is_defined_in_xxx(ns, decl):
