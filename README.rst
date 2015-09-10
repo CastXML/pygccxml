@@ -10,7 +10,7 @@ pygccxml
 .. image:: https://readthedocs.org/projects/pygccxml/badge/?version=develop
     :target: https://readthedocs.org/projects/pygccxml/?badge=develop
     :alt: Documentation status
-.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin/develop:HEAD/badge.svg
+.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin:develop:HEAD/badge.svg
     :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fdevelop&tab=basics
     :alt: Code quality status
 
