@@ -15,8 +15,12 @@ before_install:
   - sudo apt-get install -qq gccxml
   # Install pep8, needed by the unit tests
   - pip install pep8
-  # Install coverage tools
-  - pip install coverage
+  # Install coverage tools (On 3.2 the new coverage is broken, use an old one)
+  # https://github.com/menegazzo/travispy/issues/20
+  - if [ $TRAVIS_PYTHON_VERSION == 3.2 ];
+    then pip install coverage<4; else
+    pip install coverage;
+    fi
   - pip install coveralls
 
 install:
@@ -31,7 +35,7 @@ script:
   # Run the tests with coverage
   - coverage run unittests/test_all.py
   # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
-  # - coverage combine
+  - coverage combine
 
 after_success:
   # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
