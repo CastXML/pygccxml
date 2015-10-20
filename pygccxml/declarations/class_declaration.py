@@ -586,7 +586,7 @@ class class_t(scopedef.scopedef_t):
         from . import type_traits as tt  # prevent cyclic dependencies
 
         logger = utils.loggers.cxx_parser
-        mvars = self.vars(
+        mvars = self.variables(
             lambda v: not v.type_qualifiers.has_static,
             recursive=False,
             allow_empty=True)
