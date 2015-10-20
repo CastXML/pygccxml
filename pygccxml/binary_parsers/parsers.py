@@ -318,7 +318,7 @@ class so_file_parser_t(formated_mapping_parser_t):
                 f.calling_convention = CCTS.CDECL
                 return decorated, f
             except self.global_ns.declaration_not_found_t:
-                v = self.global_ns.vars(
+                v = self.global_ns.variables(
                     decorated,
                     allow_empty=True,
                     recursive=False)
@@ -407,7 +407,7 @@ class dylib_file_parser_t(formated_mapping_parser_t):
                 f.calling_convention = CCTS.CDECL
                 return decorated, f
             except self.global_ns.declaration_not_found_t:
-                v = self.global_ns.vars(
+                v = self.global_ns.variables(
                     decorated,
                     allow_empty=True,
                     recursive=False)
