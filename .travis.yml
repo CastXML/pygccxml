@@ -31,7 +31,7 @@ script:
   # Run the tests with coverage
   - coverage run unittests/test_all.py
   # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
-  - coverage combine
+  # - coverage combine
 
 after_success:
   # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
