@@ -77,7 +77,7 @@ class defaults_eraser(object):
 
     def no_std(self, cls_name):
         return self.decorated_call_prefix(
-            cls_name, 'std::', self.erase_call)
+            cls_name, 'std::' + utils.get_tr1(cls_name), self.erase_call)
 
     def no_stdext(self, cls_name):
         return self.decorated_call_prefix(
@@ -403,32 +403,42 @@ class container_traits_impl_t():
             cls_declaration = type_
         else:
             utils.loggers.queries_engine.debug(
-                "Container traits: returning None, type not known")
+                "Container traits: returning None, type not known\n")
             return
 
         if not cls_declaration.name.startswith(self.name() + '<'):
             utils.loggers.queries_engine.debug(
                 "Container traits: returning None, " +
-                "declaration starts with " + self.name() + '<')
+                "declaration starts with " + self.name() + '<\n')
             return
 
+        # When using libstd++, some container traits are defined in
+        # std::tr1::. See remove_template_defaults_tester.py.
+        # In this case the is_defined_in_xxx test needs to be done
+        # on the parent
         decl = cls_declaration
-        if isinstance(type_, cpptypes.declarated_t):
+        if isinstance(type_, class_declaration.class_declaration_t):
+            is_ns = isinstance(type_.parent, namespace.namespace_t)
+            if is_ns and type_.parent.name == "tr1":
+                decl = cls_declaration.parent
+        elif isinstance(type_, cpptypes.declarated_t):
             is_ns = isinstance(type_.declaration.parent, namespace.namespace_t)
             if is_ns and type_.declaration.parent.name == "tr1":
-                # When using libstd++, some container traits are defined in
-                # std::tr1:: . See remove_template_defaults_tester.py.
-                # In this case the is_defined_in_xxx test needs to be done
-                # on the parent
                 decl = cls_declaration.parent
 
         for ns in std_namespaces:
             if type_traits.impl_details.is_defined_in_xxx(ns, decl):
+                utils.loggers.queries_engine.debug(
+                    "Container traits: get_container_or_none() will return " +
+                    cls_declaration.name)
+                # The is_defined_in_xxx check is done on decl, but we return
+                # the original declation so that the rest of the algorithm
+                # is able to work with it.
                 return cls_declaration
 
         # This should not happen
         utils.loggers.queries_engine.debug(
-            "Container traits: get_container_or_none() will return None")
+            "Container traits: get_container_or_none() will return None\n")
 
     def is_my_case(self, type_):
         """
@@ -689,6 +699,8 @@ def find_container_traits(cls_or_string):
         name = templates.name(cls_or_string)
         if name.startswith('std::'):
             name = name[len('std::'):]
+        if name.startswith('std::tr1::'):
+            name = name[len('std::tr1::'):]
         for cls_traits in container_traits:
             if cls_traits.name() == name:
                 return cls_traits

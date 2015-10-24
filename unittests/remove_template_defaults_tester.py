@@ -193,7 +193,8 @@ class tester_t(parser_test_case.parser_test_case_t):
             name + '< const std::vector< int >, ' +
             'const __gnu_cxx::' + name + '< const std::wstring, double > >',
             name + '< const std::vector< int >, ' +
-            'const std::' + name + '< const std::wstring, double > >',
+            'const std::' + utils.get_tr1(hmm_traits_value) + name +
+            '< const std::wstring, double > >',
             name + '< const std::vector< int >, ' +
             'const stdext::' + name + '< const std::wstring, double > >')
 
