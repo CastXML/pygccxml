@@ -15,7 +15,7 @@ from .utils import loggers
 from .utils import create_temp_file_name
 from .utils import remove_file_no_raise
 from .utils import normalize_path
-from .utils import find_cpp_parser
+from .utils import find_xml_generator
 from .utils import get_tr1
 
 # Version of xml generator which was used.

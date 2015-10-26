@@ -7,7 +7,7 @@ from pygccxml import declarations
 from pygccxml import parser
 
 # Find out the c++ parser
-generator_path, generator_name = utils.find_cpp_parser()
+generator_path, generator_name = utils.find_xml_generator()
 
 # Configure the xml generator
 xml_generator_config = parser.xml_generator_configuration_t(

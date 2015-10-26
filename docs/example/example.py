@@ -18,7 +18,7 @@ from pygccxml import declarations  # nopep8
 from pygccxml import utils  # nopep8
 
 # Find out the xml generator (gccxml or castxml)
-generator_path, generator_name = utils.find_cpp_parser()
+generator_path, generator_name = utils.find_xml_generator()
 
 # Configure the xml generator
 config = parser.xml_generator_configuration_t(

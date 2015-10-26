@@ -28,7 +28,7 @@ def is_str(s):
         return isinstance(s, basestring)
 
 
-def find_cpp_parser(name=None):
+def find_xml_generator(name=None):
     """
     Try to find a c++ parser. Returns path and name.
 
