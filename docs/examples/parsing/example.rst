@@ -5,7 +5,7 @@ Parsing a c++ file
 This example shows how to setup pygccxml to parse a c++ file, and how
 to access the declaration tree.
 
-Let's consider the following c++ file (example.cpp):
+Let's consider the following c++ file (example.hpp):
 
 .. literalinclude:: example.hpp
    :language: c++
