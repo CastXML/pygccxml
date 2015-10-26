@@ -334,7 +334,7 @@ class defaults_eraser(object):
                         self.erase_recursive(mapped_type)])
 
 
-class container_traits_impl_t():
+class container_traits_impl_t(object):
 
     """
     Implements the functionality needed for convenient work with STD container
