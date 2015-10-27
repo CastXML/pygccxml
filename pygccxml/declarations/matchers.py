@@ -449,13 +449,11 @@ class calldef_matcher_t(declaration_matcher_t):
         if self.return_type is not None:
             msg.append('(return type==%s)' % str(self.return_type))
         if self.arg_types:
-            for i in range(len(self.arg_types)):
-                if self.arg_types[i] is None:
+            for i, arg_type in enumerate(self.arg_types):
+                if arg_type is None:
                     msg.append('(arg %d type==any)' % i)
                 else:
-                    msg.append(
-                        '(arg %d type==%s)' %
-                        (i, str(self.arg_types[i])))
+                    msg.append('(arg %d type==%s)' % (i, str(arg_type)))
         if not msg:
             msg.append('any')
         return ' and '.join(msg)
