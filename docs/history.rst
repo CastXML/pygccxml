@@ -11,8 +11,8 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Version 1.7.0 (Next version, not yet released)
-----------------------------------------------
+Version 1.7.0
+-------------
 
 1. Added support for CastXML (https://github.com/CastXML/CastXML)
 
@@ -38,25 +38,37 @@ Version 1.7.0 (Next version, not yet released)
         xml_generator=generator_name,
         )
 
-4. [CastXML] The compiler path can now be passed down to castxml.
+  ``gccxml_configuration_t`` is an alias of ``xml_generator_configuration_t``.
+
+  ``load_gccxml_configuration`` is an alias of ``load_xml_generator_configuration``.
+
+  Both can still be used but will be deprecated.
+
+4. [CastXML] The compiler path can be passed to castxml.
+
    This is done by using the ``compiler_path`` attribute in the configuration.
-   Note that this may be important because the resulting xml file may be
-   slightly different depending on the compiler used.
+   Note that this may be important because the resulting xml file is slightly different
+   depending on the used compiler.
 
-5. [CastXML] Add support for some fields which have no location (see #19)
+5. [CastXML] Add support for some fields which have no location.
 
-6. [CastXML] Mangled names are only available for functions and variables
-    with CastXML. Getting the mangled attribute on a ``declaration`` will fail.
+   These fields are: ``gp_offset``, ``fp_offset``, ``overflow_arg_area``, ``reg_save_area``
+
+6. [CastXML] Mangled names are only available for functions and variables with CastXML.
+
+  Getting the mangled attribute on a ``declaration`` will fail.
 
 7. [CastXML] Demangled names are not available.
-    Getting the demangled name will fail.
+
+  Getting a demangled name will fail.
 
 8. [CastXML] Add new container traits:
-    ``unordered maps``, ``unordered sets``, ``multimaps``, ``multisets``
 
-9. [CastXML] Instead of using the ``__attribute((gccxml("string")))`` c++ syntax
-   (see version 0.9.5), the ``__attribute__`` ((annotate ("out"))) can now be used
-   to annotate code with CastXML.
+  ``unordered maps``, ``unordered sets``, ``multimaps``, ``multisets``
+
+9. [CastXML] Annotations:
+
+  Instead of using the ``__attribute((gccxml("string")))`` c++ syntax (see version 0.9.5), the ``__attribute__`` ((annotate ("out"))) can now be used to annotate code with CastXML.
 
 10. [CastXML] Disabled relinking of:
 
@@ -64,34 +76,39 @@ Version 1.7.0 (Next version, not yet released)
 
       rebind<std::__tree_node<std::basic_string<char>, void *> >
 
-   This made the ``find_container_traits_tester`` unit tests fail with ``CastXML``.
-   This class defintion is present in clangs AST tree, but I don't know why it is
-   usefull. Please tell us if you need so we can re-enable that featur in pygccxml.
+ This made the ``find_container_traits_tester`` unit tests fail with ``CastXML``.
+ This class defintion is present in clangs AST tree, but I don't know why it is
+ usefull. Please tell us if you need it so we can re-enable that featur in pygccxml.
 
-11. Deprecated the ``compiler`` attribute and replaced it with global ``utils.xml_generator`` variable.
+11. Deprecated the ``compiler`` attribute and replaced it with a global ``utils.xml_generator`` variable.
 
-   The ``compiler`` attribute was misleading; it was sometimes confused with
-   the name and version of the xml generator.
-   This change also fixes some internal problems with the algorithms cache.
+ The ``compiler`` attribute was misleading; it was sometimes confused with the name and version of the xml generator.
 
+ This change also fixes some internal problems with the algorithms cache.
 
 12. ``declarations.has_trivial_copy`` was defintevely removed.
-    Please use ``declarations.has_copy_constructor``.
-    This was deprecated since version 0.9.5.
+
+  Please use ``declarations.has_copy_constructor``.
+
+  This was deprecated since version 0.9.5.
 
 13. Remove ``gccxml`` logger from logger class (was deprecated).
-    Please use ``cxx_parser`` instead.
 
-14. Removed ``gccxml_runtime_error_t`` class. This one was probably only used internally.
-    Please use RuntimeError instead.
+  Please use ``cxx_parser`` instead.
 
-15. [Misc] Add option to keep or not xml files after errors, useful for debugging purposes.
+14. Removed ``gccxml_runtime_error_t`` class. This was only used internally.
 
-16. [Misc] Documentation was moved to readthedocs.org (https://readthedocs.org/projects/pygccxml/)
+  Please use a normal ``RuntimeError`` instead.
 
-17. [Misc] Add quantifiedcode check
+15. [Misc] Documentation was moved to readthedocs.org
 
-    https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3
+  https://readthedocs.org/projects/pygccxml/
+
+16. [Misc] Add quantifiedcode check
+
+  https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3
+
+17. [Misc] Add option to keep xml files after errors, which is useful for debugging purposes.
 
 18. [Misc] Fix new pep8 warnings, clean up and simplify some code and comments
 
