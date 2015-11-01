@@ -81,10 +81,10 @@ class cache_base_t(object):
         """
         Return declarations, we have cached, for the source_file and the
         given configuration.
+
         :param source_file: path to the C++ source file being parsed.
-        :param configuration:
-            configuration(:class:`xml_generator_configuration_t`)
-        that was used for parsing
+        :param configuration: configuration that was used for parsing.
+
         """
 
         raise NotImplementedError()
