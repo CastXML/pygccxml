@@ -1,5 +1,5 @@
-Development history
-===================
+Changes
+=======
 
 Introduction
 ------------
@@ -11,37 +11,119 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-About version numbers
----------------------
+Version 1.7.0
+-------------
 
-When the project moved to git, versions were tagged from 1.0.0 on. Note that
-there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the many forks
-and the slow down of the maintenance effort).
+1. Added support for CastXML (https://github.com/CastXML/CastXML)
 
-Contributors
-------------
+   GCCXML is deprecated and does no more work with modern compilers.
+   CastXML should be used instead.
 
-Thanks to all the people that have contributed patches, bug reports and suggestions:
+   ``pygccxml 1.7.0`` is still compatible with GCCXML and no changes are needed for people working with GCCXML.
 
-* Roman Yakovenko (original author)
-* Roman Yakovenko's wife - Yulia
-* Mark Moll
-* Holger Frydrych
-* John Pallister
-* Matthias Baas
-* Allen Bierbaum
-* Georgiy Dernovoy
-* Darren Garnier
-* Gottfried Ganssauge
-* Gaetan Lehmann
-* Martin Preisler
-* Miguel Lobo
-* Jeremy Sanders
-* Ben Schleimer
-* Gustavo Carneiro
-* Christopher Bruns
-* Alejandro Dubrovsky
-* Aron Xu
+2. [CastXML] A new function was introduced to help find which XML generator you are using.
+
+   If the generator (GCCXML or CastXML) is in your path, it will be detected.
+
+    .. code-block:: python
+
+      generator_path, generator_name = pygccxml.utils.find_xml_generator()
+
+3. [CastXML] When using the configuration, you will need to tell pygccxml which xml generator you are using.
+
+    .. code-block:: python
+
+      xml_generator_config = parser.xml_generator_configuration_t(
+        xml_generator_path=generator_path,
+        xml_generator=generator_name,
+        )
+
+  ``gccxml_configuration_t`` is an alias of ``xml_generator_configuration_t``.
+
+  ``load_gccxml_configuration`` is an alias of ``load_xml_generator_configuration``.
+
+  Both can still be used but will be deprecated.
+
+4. [CastXML] The compiler path can be passed to castxml.
+
+   This is done by using the ``compiler_path`` attribute in the configuration.
+   Note that this may be important because the resulting xml file is slightly different
+   depending on the compiler.
+
+5. [CastXML] Added support for some fields which have no location.
+
+   These fields are: ``gp_offset``, ``fp_offset``, ``overflow_arg_area``, ``reg_save_area``
+
+6. [CastXML] Mangled names are only available for functions and variables with CastXML.
+
+  Getting the mangled attribute on a ``declaration`` will fail.
+
+7. [CastXML] Demangled names are not available.
+
+  Getting a demangled name will fail.
+
+8. [CastXML] Add new container traits:
+
+  ``unordered maps``, ``unordered sets``, ``multimaps``, ``multisets``
+
+9. [CastXML] Annotations:
+
+  Instead of using the ``__attribute((gccxml("string")))`` c++ syntax (see version 0.9.5), the ``__attribute__ ((annotate ("out")))`` can now be used to annotate code with CastXML.
+
+10. [CastXML] Disabled relinking of:
+
+    .. code-block:: python
+
+      rebind<std::__tree_node<std::basic_string<char>, void *> >
+
+ This made the ``find_container_traits_tester`` unit tests fail with ``CastXML``.
+ This class defintion is present in the clang AST tree, but I don't know why it is
+ usefull. Please tell me if you need it so we can re-enable that featur in pygccxml.
+
+11. [Misc] Deprecated the ``compiler`` attribute and replaced it with a global ``utils.xml_generator`` variable.
+
+ The ``compiler`` attribute was misleading; it was sometimes confused with the name and version of the xml generator.
+
+ This change also fixes some internal problems with the algorithms cache.
+
+12. [Misc] ``declarations.has_trivial_copy`` was defintevely removed.
+
+  Please use ``declarations.has_copy_constructor``.
+
+  This was deprecated since version 0.9.5.
+
+13. [Misc] Remove ``gccxml`` logger from logger class (was deprecated).
+
+  Please use ``cxx_parser`` instead.
+
+14. [Misc] Removed ``gccxml_runtime_error_t`` class. This was only used internally.
+
+  Please use a normal ``RuntimeError`` instead.
+
+15. [Misc] Documentation was moved to readthedocs.org
+
+  https://readthedocs.org/projects/pygccxml/
+
+16. [Misc] Add quantifiedcode check
+
+  https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3
+
+17. [Misc] Add option to keep xml files after errors, which is useful for debugging purposes.
+
+18. [Misc] Fix new pep8 warnings, clean up and simplify some code and comments
+
+19. [Misc] The compiler version debugging message is now hidden (closes #12)
+
+20. [Misc] Print less line separations in ``decl_printer``; this makes the output more compact.
+
+21. [Tests] Add new test for the ``contains_parent_dir`` function.
+
+22. [Tests] Add test for non copyable class with const class
+
+23. [Tests] Add test case for non copyable class due to const array
+
+24. [Doc] Small documentation update, moved people list to credits page, added new examples.
+
 
 Version 1.6.2
 -------------
@@ -157,6 +239,13 @@ Version 1.5.0
 4. Update setup.py
 
 5. fix 2779781 bug( pygccxml reverses array dimensions )
+
+Note about version numbers before 1.5.0
+---------------------------------------
+
+When the project moved from svn to git, versions were tagged from 1.0.0 on.
+Note that there was no 1.2, 1.3 nor 1.4 version (this is maybe due to the
+many forks and the slow down of the maintenance effort).
 
 Version 1.1.0
 -------------

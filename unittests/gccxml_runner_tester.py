@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -17,9 +17,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.content = "abra cadabra " + os.linesep
 
     def test_gccxml_on_input_with_errors(self):
-        # Define these two variables as empty, to make pyflakes happy
         self.failUnlessRaises(
-            parser.gccxml_runtime_error_t,
+            RuntimeError,
             parser.parse_string,
             self.content,
             self.config)

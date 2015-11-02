@@ -1,4 +1,4 @@
-// Copyright 2014 Insight Software Consortium.
+// Copyright 2014-2015 Insight Software Consortium.
 // Copyright 2004-2008 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -6,19 +6,58 @@
 #ifndef __remove_template_defaults_hpp__
 #define __remove_template_defaults_hpp__
 
-#if defined( __GNUC__ )
-    #include <ext/hash_set>
-    #include <ext/hash_map>
-    #define HASH_XXX_NS __gnu_cxx
+#if defined( __llvm__ )
+
+    // This is mostly for CastXML with never compilers
+
+    // When parsing with clang//llvm use the new c++11 (c++0x even ?)
+    // unordered_maps and unordered_sets
+
+    // First, include a library that does nothing ...
+    // This will force the preprocessor to load _LIBCPP_VERSION
+    #include <ciso646>
+
+    #if defined( _LIBCPP_VERSION )
+        // libc++ (mostly OS X)
+        #include <unordered_map>
+        #include <unordered_set>
+        #define HASH_XXX_NS std
+    #else
+        // libstd++ (mostly Linux)
+        #include <tr1/unordered_map>
+        #include <tr1/unordered_set>
+        #define HASH_XXX_NS std::tr1
+    #endif
+    #define HASH_XXX_UMAP unordered_map
+    #define HASH_XXX_USET unordered_set
+    #define HASH_XXX_UMMAP unordered_multimap
+    #define HASH_XXX_UMMSET unordered_multiset
+
 #else
-    #include <hash_set>
-    #include <hash_map>
-	#if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
-		#define HASH_XXX_NS std
-	#else
-		#define HASH_XXX_NS stdext
-	#endif//GCCXML
+
+    // This is mostly for GCCXML (when using old compilers)
+
+    #if defined( __GNUC__ )
+        #include <ext/hash_set>
+        #include <ext/hash_map>
+        #define HASH_XXX_NS __gnu_cxx
+    #else
+        #include <hash_set>
+        #include <hash_map>
+        #if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
+            #define HASH_XXX_NS std
+        #else
+            #define HASH_XXX_NS stdext
+        #endif
+    #endif
+
+    #define HASH_XXX_UMAP hash_map
+    #define HASH_XXX_USET hash_set
+    #define HASH_XXX_UMMAP hash_multimap
+    #define HASH_XXX_UMMSET hash_multiset
+
 #endif
+
 #include <string>
 #include <vector>
 #include <deque>
@@ -77,7 +116,10 @@ namespace maps{
     typedef std::map< std::wstring, double > m_wstr2d;
     typedef std::map< const std::vector< int >, m_wstr2d > m_v_i2m_wstr2d;
 
-    inline std::map<std::string, int> f2(){}
+    inline std::map<std::string, int> f2() {
+        std::map<std::string, int> list;
+        return list;
+    }
 
 }
 
@@ -88,25 +130,25 @@ namespace multimaps{
 }
 
 namespace hash_sets{
-    typedef HASH_XXX_NS::hash_set< std::vector< int > > hs_v_int;
-    typedef HASH_XXX_NS::hash_set< std::string > hs_string;
+    typedef HASH_XXX_NS::HASH_XXX_USET< std::vector< int > > hs_v_int;
+    typedef HASH_XXX_NS::HASH_XXX_USET< std::string > hs_string;
 
 }
 
 namespace hash_multisets{
-    typedef HASH_XXX_NS::hash_multiset< std::vector< int > > mhs_v_int;
-    typedef HASH_XXX_NS::hash_multiset< std::string > mhs_string;
+    typedef HASH_XXX_NS::HASH_XXX_UMMSET< std::vector< int > > mhs_v_int;
+    typedef HASH_XXX_NS::HASH_XXX_UMMSET< std::string > mhs_string;
 }
 
 namespace hash_maps{
-    typedef HASH_XXX_NS::hash_map< int, double > hm_i2d;
-    typedef HASH_XXX_NS::hash_map< std::wstring, double > hm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMAP< int, double > hm_i2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMAP< std::wstring, double > hm_wstr2d;
 }
 
 namespace hash_multimaps{
-    typedef HASH_XXX_NS::hash_multimap< int, double > hmm_i2d;
-    typedef HASH_XXX_NS::hash_multimap< std::wstring const, double > hmm_wstr2d;
-    typedef HASH_XXX_NS::hash_multimap< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< int, double > hmm_i2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< std::wstring const, double > hmm_wstr2d;
+    typedef HASH_XXX_NS::HASH_XXX_UMMAP< std::vector< int > const, hmm_wstr2d const > hmm_v_i2mm_wstr2d;
 }
 
 inline void f1( type< sets::s_v_int > ){

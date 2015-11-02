@@ -1,10 +1,10 @@
-// Copyright 2014 Insight Software Consortium.
+// Copyright 2014-2015 Insight Software Consortium.
 // Copyright 2004-2008 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
-#ifndef __atributes_hpp__
-#define __atributes_hpp__
+#ifndef __attributes_hpp__
+#define __attributes_hpp__
 
 #ifdef __GCCXML__
 
@@ -24,5 +24,5 @@ _sealed_ struct numeric_t{
 
 #endif//__GCCXML__
 
-#endif//__atributes_hpp__
+#endif//__attributes_hpp__
 

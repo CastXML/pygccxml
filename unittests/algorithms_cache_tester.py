@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -7,6 +7,7 @@ import unittest
 import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
@@ -25,8 +26,10 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
     def test_name_based(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
 
-        cls_demangled_name = cls.name
-        self.failUnless(cls.cache.demangled_name == cls_demangled_name)
+        if "CastXML" in utils.xml_generator:
+            self.assertRaises(Exception, lambda: cls.cache.demangled_name)
+        elif "GCCXML" in utils.xml_generator:
+            self.failUnless(cls.cache.demangled_name == cls.name)
 
         cls_full_name = declarations.full_name(cls)
         self.failUnless(cls.cache.full_name == cls_full_name)
@@ -45,11 +48,13 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         # now we change class name, all internal decls cache should be cleared
         cls.name = "new_name"
         self.failUnless(not cls.cache.full_name)
-        self.failUnless(not cls.cache.demangled_name)
+        if "GCCXML" in utils.xml_generator:
+            self.failUnless(not cls.cache.demangled_name)
         self.failUnless(not cls.cache.declaration_path)
 
         self.failUnless(not enum.cache.full_name)
-        self.failUnless(not enum.cache.demangled_name)
+        if "GCCXML" in utils.xml_generator:
+            self.failUnless(not enum.cache.demangled_name)
         self.failUnless(not enum.cache.declaration_path)
 
     def test_access_type(self):

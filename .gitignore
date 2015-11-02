@@ -1,3 +1,6 @@
 *.pyc
 *~
 docs/_build
+unittests/temp
+unittests/data/pygccxml.cache
+.idea

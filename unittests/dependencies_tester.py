@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -44,7 +45,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
-        if '0.9' in cls.compiler:
+        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
             # GCCXML R122 adds compiler generated constructors/destructors
             # and operator= to the class, if it has
             dependencies = [

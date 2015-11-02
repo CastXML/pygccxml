@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -61,9 +61,11 @@ import gccxml10183_tester
 import gccxml10184_tester
 import gccxml10185_tester
 import inline_specifier_tester
+import test_create_decl_string
 import from_future_import_tester
 import pep8_tester
 import example_tester
+import test_utils
 
 testers = [
     # , demangled_tester # failing right now
@@ -118,9 +120,11 @@ testers = [
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
+    test_create_decl_string,
     from_future_import_tester,
     pep8_tester,
-    example_tester
+    example_tester,
+    test_utils
 ]
 
 if 'posix' in os.name:
@@ -145,14 +149,3 @@ def run_suite():
 
 if __name__ == "__main__":
     sys.exit(run_suite())
-#   import hotshot
-#   import hotshot.stats
-#   statistics_file = tempfile.mkstemp( suffix='.stat' )[1]
-#   profile = hotshot.Profile(statistics_file)
-#
-#   profile.runcall( run_suite )
-#   profile.close()
-#   statistics = hotshot.stats.load( statistics_file )
-#   statistics.strip_dirs()
-#   statistics.sort_stats( 'time', 'calls' )
-#   statistics.print_stats( 678 )

@@ -6,19 +6,10 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = docs/_build
-GH_PAGES_SOURCES = docs pygccxml Makefile
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
 $(error The '$(SPHINXBUILD)' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the '$(SPHINXBUILD)' executable. Alternatively you can add the directory with the executable to your PATH. If you don't have Sphinx installed, grab it from http://sphinx-doc.org/)
-endif
-
-# Check if the spinx version is the right one. Sphinx does not allow to check for
-# minor sphinx revisions in conf.py, so we have to do this check here.
-# This is needed because it the doc is uploaded to the git pages, we don't want
-# to merge in changes due to a sphinx version change.
-ifeq ($(shell $(SPHINXBUILD) --version | grep -q "1.2.2" >/dev/null 2>&1; echo $$?), 1)
-$(error You need sphinx 1.2.2 to build the documentation !)
 endif
 
 # Internal variables.
@@ -184,16 +175,3 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
-
-gh-pages:
-	git checkout gh-pages
-	rm -rf docs/*
-	rm -rf documentation/*
-	git checkout master $(GH_PAGES_SOURCES)
-	git reset HEAD
-	make html
-	mv -fv docs/_build/html/* documentation
-	rm -rf $(GH_PAGES_SOURCES)
-	rm -rf documentation/_sources
-	git add -A
-	git commit -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`"

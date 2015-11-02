@@ -1,10 +1,13 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 import autoconfig
 import parser_test_case
 
@@ -157,12 +160,62 @@ class core_t(parser_test_case.parser_test_case_t):
             'ENestedPrivate',
             declarations.ACCESS_TYPES.PRIVATE)
 
-    def test_mangled(self):
-        std = self.global_ns.namespace('std')
-        self.failUnless(std, 'std namespace has not been found')
+    def test_compiler_retrocompatibility(self):
+        # For retrocompatibility, test if the compiler
+        # attribute still works. This can be removed
+        # once compiler is dropped.
+        std = self.global_ns.namespace("std")
+        self.assertEqual(utils.xml_generator, std.compiler)
+        if "GCC" in utils.xml_generator:
+            self.assertIn("GCC", std.compiler)
+        elif "CastXML" in utils.xml_generator:
+            self.assertIn("CastXML", std.compiler)
+
+    def test_mangled_name_namespace(self):
+        std = self.global_ns.namespace("std")
+        self.failUnless(std, "std namespace has not been found")
+        # GCCXML had mangled names for everything. With CastXML
+        # there are only mangled names for functions and variables.
+        if "GCC" in utils.xml_generator:
+            self.failUnless(
+                std.mangled,
+                "Mangled name of std namespace should be different from None")
+        elif "CastXML" in utils.xml_generator:
+            # Check if an assertion is correctly raised when using castxml.
+            # Call the getter by using lambda, else assertRaises does not
+            # work as expected.
+            self.assertRaises(Exception, lambda: std.mangled)
+
+    def test_mangled_name_functions(self):
+        # This works with gccxml and castxml
+        ns = self.global_ns.namespace("overloads")
+        do_nothing = ns.calldefs("do_nothing", recursive=False)
         self.failUnless(
-            std.mangled,
-            'mangled name of std namespace should be different from None')
+            do_nothing.mangled,
+            "Mangled name of do_nothing function should be different +"
+            "from None")
+
+    def test_mangled_name_variable(self):
+        # This works with gccxml and castxml
+        var_inst = self.global_ns.variable('array255')
+        self.failUnless(
+            var_inst.mangled,
+            "Mangled name of array255 variable should be different +"
+            "from None")
+
+    def test_demangled_name_variable(self):
+        # This works with gccxml only. Check if an assertion is correctly
+        # raised when using castxml.
+        var_inst = self.global_ns.variable('array255')
+        if "GCC" in utils.xml_generator:
+            self.failUnless(
+                var_inst.demangled,
+                "Demangled name of array255 variable should be different +"
+                "from None")
+        elif "CastXML" in utils.xml_generator:
+            # Call the getter by using lambda, else assertRaises does not
+            # work as expected.
+            self.assertRaises(Exception, lambda: var_inst.demangled)
 
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
@@ -493,8 +546,7 @@ class core_t(parser_test_case.parser_test_case_t):
             "class 'implementation' should not be abstract")
 
     def test_versioning(self):
-        for d in self.global_ns.decls():
-            self.failUnless(d.compiler)
+        self.failUnless(utils.xml_generator)
 
     def test_byte_size(self):
         mptrs = self.global_ns.class_('members_pointers_t')

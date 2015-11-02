@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -7,7 +7,7 @@ import os
 import unittest
 import os.path
 import autoconfig
-from pygccxml.parser.config import gccxml_configuration_t
+from pygccxml.parser.config import xml_generator_configuration_t
 from pygccxml.parser import declarations_cache
 
 
@@ -52,8 +52,8 @@ class decl_cache_tester(unittest.TestCase):
         ignore_changed = def_cfg.clone()
         ignore_changed.ignore_gccxml_output = True
         self.assert_(
-            declarations_cache.configuration_signature(ignore_changed)
-            == def_sig)
+            declarations_cache.configuration_signature(
+                ignore_changed) == def_sig)
 
     def test_cache_interface(self):
         cache_file = os.path.join(
@@ -110,13 +110,14 @@ class decl_cache_tester(unittest.TestCase):
     def build_differing_cfg_list(self):
         """ Return a list of configurations that all differ. """
         cfg_list = []
-        def_cfg = gccxml_configuration_t(
-            "gccxml_path", '.', ['tmp'], ['sym'], ['unsym'], None, False, "")
+        def_cfg = xml_generator_configuration_t(
+            "xml_generator_path",
+            '.', ['tmp'], ['sym'], ['unsym'], None, False, "")
         cfg_list.append(def_cfg)
 
         # Test changes that should cause sig changes
         gccxml_changed = def_cfg.clone()
-        gccxml_changed.gccxml_path = "other_path"
+        gccxml_changed.xml_generator_path = "other_path"
         cfg_list.append(gccxml_changed)
 
         wd_changed = def_cfg.clone()
@@ -126,24 +127,24 @@ class decl_cache_tester(unittest.TestCase):
         # inc_changed = def_cfg.clone()
         # inc_changed.include_paths = ["/var/tmp"]
         # self.assert_(configuration_signature(inc_changed) != def_sig)
-        inc_changed = gccxml_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['sym'], ['unsym'],
+        inc_changed = xml_generator_configuration_t(
+            "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['unsym'],
             None, False, "")
         cfg_list.append(inc_changed)
 
         # def_changed = def_cfg.clone()
         # def_changed.define_symbols = ["symbol"]
         # self.assert_(configuration_signature(def_changed) != def_sig)
-        def_changed = gccxml_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['new-sym'], ['unsym'],
+        def_changed = xml_generator_configuration_t(
+            "xml_generator_path", '.', ['/var/tmp'], ['new-sym'], ['unsym'],
             None, False, "")
         cfg_list.append(def_changed)
 
         # undef_changed = def_cfg.clone()
         # undef_changed.undefine_symbols = ["symbol"]
         # self.assert_(configuration_signature(undef_changed) != def_sig)
-        undef_changed = gccxml_configuration_t(
-            "gccxml_path", '.', ['/var/tmp'], ['sym'], ['new-unsym'],
+        undef_changed = xml_generator_configuration_t(
+            "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['new-unsym'],
             None, False, "")
         cfg_list.append(undef_changed)
 

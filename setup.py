@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -7,7 +7,7 @@
 from setuptools import setup
 
 setup(name="pygccxml",
-      version="v1.6.2",
+      version="v1.7.0",
       author="Roman Yakovenko",
       author_email="roman yakovenko at gmail com",
       maintainer="Michka Popoff and the Insight Software Consortium",

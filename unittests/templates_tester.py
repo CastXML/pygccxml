@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -67,14 +67,14 @@ class tester_t(unittest.TestCase):
 
     def test_join_on_vector(self):
         self.failUnless(
-            "vector< int, std::allocator<int> >"
-            == declarations.templates.join(
+            "vector< int, std::allocator<int> >" ==
+            declarations.templates.join(
                 "vector", ("int", "std::allocator<int>")))
 
     def test_bug_is_tmpl_inst(self):
         self.failUnless(
-            False == declarations.templates.is_instantiation(
-                "::FX::QMemArray<unsigned char>::setRawData"))
+            declarations.templates.is_instantiation(
+                "::FX::QMemArray<unsigned char>::setRawData") is False)
 
     # disable broken test
     # def test_split_bug_fptr(self):

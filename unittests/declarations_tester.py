@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -10,6 +10,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class declarations_t(parser_test_case.parser_test_case_t):
@@ -40,7 +41,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         initialized = self.global_ns.variable(name='initialized')
 
         expected_value = None
-        if '0.9' in initialized.compiler:
+        if '0.9' in utils.xml_generator:
             expected_value = '10122004ul'
         else:
             expected_value = '10122004'
@@ -63,7 +64,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             not static_var.type_qualifiers.has_mutable,
             "static_var must not have mutable type qualifier")
 
-        if 'PDB' in self.global_ns.compiler:
+        if 'PDB' in utils.xml_generator:
             return  # TODO find out work around
 
         m_mutable = initialized = self.global_ns.variable(name='m_mutable')
@@ -78,10 +79,28 @@ class declarations_t(parser_test_case.parser_test_case_t):
         ns = self.global_ns.namespace('calldef')
 
         no_return_no_args = ns.free_function('no_return_no_args')
+
         self._test_calldef_return_type(no_return_no_args, declarations.void_t)
+
+        # TODO: gccxml reported no_return_no_args as having an extern
+        # qualifier, which is wrong; Keep the test like this for gccxml as
+        # gccxml will be dropped one day. With castxml check if function has
+        # no extern qualifier.
+        if 'GCC-XML' in utils.xml_generator:
+            self.failUnless(
+                no_return_no_args.has_extern,
+                "function 'no_return_no_args' should have an extern qualifier")
+        else:
+            self.failUnless(
+                not no_return_no_args.has_extern,
+                "function 'no_return_no_args' should have an extern qualifier")
+
+        # Static_call is explicetely defined as extern, this works with gccxml
+        # and castxml.
+        static_call = ns.free_function('static_call')
         self.failUnless(
-            no_return_no_args.has_extern,
-            "function 'no_return_no_args' should have extern qualifier")
+            static_call,
+            "function 'no_return_no_args' should have an extern qualifier")
 
         return_no_args = ns.free_function('return_no_args')
         self._test_calldef_return_type(return_no_args, declarations.int_t)
@@ -99,13 +118,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
 
         return_default_args = ns.free_function('return_default_args')
         self.failUnless(
-            return_default_args.arguments[0].name in [
-                'arg',
-                'arg0'])
+            return_default_args.arguments[0].name in ['arg', 'arg0'])
         self.failUnless(
-            return_default_args.arguments[1].name in [
-                'arg1',
-                'flag'])
+            return_default_args.arguments[1].name in ['arg1', 'flag'])
         self._test_calldef_args(
             return_default_args,
             [declarations.argument_t(

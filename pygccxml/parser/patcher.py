@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -139,7 +139,7 @@ class default_argument_patcher_t(object):
         return call_invocation.join(dv[:found1[0]], args2)
 
     def __is_constructor_call(self, func, arg):
-        # if '0.9' in func.compiler:
+        # if '0.9' in utils.xml_generator:
         #    return False
         call_invocation = declarations.call_invocation
         dv = arg.default_value
@@ -150,9 +150,10 @@ class default_argument_patcher_t(object):
         if not isinstance(base_type, declarations.declarated_t):
             return False
         decl = base_type.declaration
-        return decl.name == name \
-            or (isinstance(decl, declarations.class_t)
-                and name in [typedef.name for typedef in decl.aliases])
+        return (
+            decl.name == name or
+            (isinstance(decl, declarations.class_t) and
+                name in [typedef.name for typedef in decl.aliases]))
 
     def __fix_constructor_call(self, func, arg):
         call_invocation = declarations.call_invocation

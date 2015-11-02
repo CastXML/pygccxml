@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko, 2006 Allen Bierbaum, Matthias Baas
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -13,6 +13,9 @@ import sys
 from . import calldef
 from . import algorithm
 from . import decl_visitor
+from . import variable_t
+from . import calldef_t
+from .. import utils
 
 
 class decl_printer_t(decl_visitor.decl_visitor_t):
@@ -134,8 +137,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     ' ' *
                     curr_level *
                     self.INDENT_SIZE +
-                    location +
-                    os.linesep)
+                    location)
             if self.verbose:
                 artificial = 'artificial: ' + \
                     "'%s'" % str(self.__inst.is_artificial)
@@ -144,41 +146,52 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     curr_level *
                     self.INDENT_SIZE +
                     artificial.ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
-            if self.verbose and self.__inst.attributes:
-                attributes = 'attributes: %s' % (self.__inst.attributes)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    attributes +
-                    os.linesep)
-            if self.verbose and self.__inst.demangled:
-                demangled = 'demangled: %s' % (self.__inst.demangled)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    demangled +
-                    os.linesep)
-            if self.verbose and self.__inst.mangled:
-                mangled = 'mangled: %s' % (self.__inst.mangled)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    mangled +
-                    os.linesep)
-            if self.verbose and self.__inst.decorated_name:
-                decorated_name = 'decorated name: %s' % (
-                    self.__inst.decorated_name)
-                self.writer(
-                    ' ' *
-                    curr_level *
-                    self.INDENT_SIZE +
-                    decorated_name +
-                    os.linesep)
+                        self.JUSTIFY))
+                if self.__inst.attributes:
+                    attributes = 'attributes: %s' % (self.__inst.attributes)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        attributes)
+                if "GCC" in utils.xml_generator and self.__inst.demangled:
+                    # Working only with gccxml.
+                    # No demangled attribute with castxml
+                    demangled = 'demangled: %s' % (self.__inst.demangled)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        demangled)
+
+                # Mangled name is only available for functions and variables
+                # when using castxml.
+                print_mangled = False
+                if "GCC" in utils.xml_generator:
+                    if self.__inst.mangled:
+                        print_mangled = True
+                elif "CastXML" in utils.xml_generator:
+                    if isinstance(self.__inst, variable_t) or \
+                            isinstance(self.__inst, calldef_t):
+                        if self.__inst.mangled:
+                            print_mangled = True
+
+                if print_mangled:
+                    mangled = 'mangled: %s' % (self.__inst.mangled)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        mangled)
+
+                if self.__inst.decorated_name:
+                    decorated_name = 'decorated name: %s' % (
+                        self.__inst.decorated_name)
+                    self.writer(
+                        ' ' *
+                        curr_level *
+                        self.INDENT_SIZE +
+                        decorated_name)
 
     def print_calldef_info(self, decl=None):
         if None is decl:
@@ -191,9 +204,9 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
         for arg in decl.arguments:
             args.append(arg.type.decl_string + ' ' + arg.name)
         indent = ' ' * (self.level + 1) * self.INDENT_SIZE
-        self.writer(indent + "is extern: " + str(decl.has_extern) + os.linesep)
-        self.writer(indent + "return type: " + str(retval) + os.linesep)
-        self.writer(indent + "arguments type: " + ', '.join(args) + os.linesep)
+        self.writer(indent + "is extern: " + str(decl.has_extern))
+        self.writer(indent + "return type: " + str(retval))
+        self.writer(indent + "arguments type: " + ', '.join(args))
         self.writer(
             indent +
             "calling convention: __%s__" %
@@ -264,8 +277,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             curr_level *
             self.INDENT_SIZE +
             class_type.ljust(
-                self.JUSTIFY) +
-            os.linesep)
+                self.JUSTIFY))
         if self.__print_details:
             byte_size = 'size: %d' % (self.__inst.byte_size)
             self.writer(
@@ -273,8 +285,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 curr_level *
                 self.INDENT_SIZE +
                 byte_size.ljust(
-                    self.JUSTIFY) +
-                os.linesep)
+                    self.JUSTIFY))
             try:
                 byte_align = 'align: %d' % (self.__inst.byte_align)
                 self.writer(
@@ -282,16 +293,14 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     curr_level *
                     self.INDENT_SIZE +
                     byte_align.ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
+                        self.JUSTIFY))
             except NotImplementedError:
                 self.writer(
                     ' ' *
                     curr_level *
                     self.INDENT_SIZE +
                     "align: not implemented".ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
+                        self.JUSTIFY))
 
         if self.__inst.aliases:
             aliases = sorted([typedef.name for typedef in self.__inst.aliases])
@@ -416,15 +425,13 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             curr_level *
             self.INDENT_SIZE +
             'type: %s' %
-            self.__inst.type.decl_string +
-            os.linesep)
+            self.__inst.type.decl_string)
         self.writer(
             ' ' *
             curr_level *
             self.INDENT_SIZE +
             'value: %s' %
-            self.__inst.value +
-            os.linesep)
+            self.__inst.value)
         if self.__print_details:
             if self.__inst.bits:
                 bits = 'bits: %d' % (self.__inst.bits)
@@ -433,8 +440,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     curr_level *
                     self.INDENT_SIZE +
                     bits.ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
+                        self.JUSTIFY))
 
             byte_size = 'size: %d' % (self.__inst.type.byte_size)
             self.writer(
@@ -442,8 +448,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 curr_level *
                 self.INDENT_SIZE +
                 byte_size.ljust(
-                    self.JUSTIFY) +
-                os.linesep)
+                    self.JUSTIFY))
             try:
                 byte_align = 'align: %d' % (self.__inst.type.byte_align)
                 self.writer(
@@ -451,23 +456,20 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     curr_level *
                     self.INDENT_SIZE +
                     byte_align.ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
+                        self.JUSTIFY))
             except NotImplementedError:
                 self.writer(
                     ' ' *
                     curr_level *
                     self.INDENT_SIZE +
                     "align: not implemented".ljust(
-                        self.JUSTIFY) +
-                    os.linesep)
+                        self.JUSTIFY))
             byte_offset = 'offset: %d' % (self.__inst.byte_offset)
             self.writer(
                 ' ' *
                 curr_level *
                 self.INDENT_SIZE +
                 byte_offset +
-                os.linesep +
                 os.linesep)
 
 

@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -9,6 +9,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -17,7 +18,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'type_traits.hpp'
+        self.header = 'type_traits_' + self.config.xml_generator + '.hpp'
         self.declarations = None
 
     def setUp(self):
@@ -357,8 +358,12 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        self.failUnless(len(ci.declarations) == 3)
-        # copy constructor, destructor, variable
+        if 'CastXML' in utils.xml_generator:
+            # Constructor, copy constructor, destructor, variable
+            self.failUnless(len(ci.declarations) == 4)
+        else:
+            # Copy constructor, destructor, variable
+            self.failUnless(len(ci.declarations) == 3)
 
 # class tester_diff_t( parser_test_case.parser_test_case_t ):
     # COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
@@ -387,7 +392,7 @@ class class_traits_tester_t(unittest.TestCase):
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
 
-    def test(self):
+    def test_get_declaration(self):
         code = """
             namespace A{
             struct B{
@@ -408,7 +413,7 @@ class class_traits_tester_t(unittest.TestCase):
             typedef D<easy> Deasy;
 
             inline void instantiate(){
-                sizeof(easy);
+                int val = sizeof(easy);
             }
 
             }
@@ -419,7 +424,6 @@ class class_traits_tester_t(unittest.TestCase):
             autoconfig.cxx_parsers_cfg.gccxml)
         global_ns = declarations.get_global_namespace(global_ns)
         easy = global_ns.typedef('easy')
-        # this works very well
         declarations.class_traits.get_declaration(easy)
         deasy = global_ns.typedef('Deasy')
         d_a = declarations.class_traits.get_declaration(deasy)

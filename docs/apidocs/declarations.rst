@@ -52,10 +52,10 @@ class_declaration
     :undoc-members:
     :show-inheritance:
 
-compilers
----------
+xml_generators
+--------------
 
-.. automodule:: pygccxml.declarations.compilers
+.. automodule:: pygccxml.declarations.xml_generators
     :members:
     :undoc-members:
     :show-inheritance:

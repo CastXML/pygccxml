@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -35,7 +35,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
             self.failUnless(mtime1 == mtime2)
         finally:
-            utils.remove_file_no_raise(fconfig.cached_source_file)
+            utils.remove_file_no_raise(fconfig.cached_source_file, self.config)
 
 
 def create_suite():

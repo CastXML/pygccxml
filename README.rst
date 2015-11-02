@@ -1,12 +1,20 @@
 pygccxml
 ========
 
-.. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=master
+.. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=develop
     :target: https://travis-ci.org/gccxml/pygccxml
-.. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.png?branch=master
-    :target: https://coveralls.io/r/gccxml/pygccxml?branch=master
+    :alt: Unit tests status
+.. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=develop
+    :target: https://coveralls.io/r/gccxml/pygccxml?branch=develop
+    :alt: Code coverage status
+.. image:: https://readthedocs.org/projects/pygccxml/badge/?version=develop
+    :target: https://readthedocs.org/projects/pygccxml/?badge=develop
+    :alt: Documentation status
+.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin:develop:HEAD/badge.svg
+    :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fdevelop&tab=basics
+    :alt: Code quality status
 
-pygccxml is a specialized XML reader that reads the output from GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
+pygccxml is a specialized XML reader that reads the output from CastXML or GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
 
 Install
 -------
@@ -22,7 +30,7 @@ To install from source, you can use the usual procedure:
 Contact us
 ----------
 
-You can contact us through the gccxml mailing list: http://www.gccxml.org/mailman/listinfo/gccxml
+You can contact us through the CastXML mailing list: http://public.kitware.com/mailman/listinfo/castxml
 
 For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues
 

@@ -1,4 +1,4 @@
-# Copyright 2014 Insight Software Consortium.
+# Copyright 2014-2015 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -19,11 +19,11 @@ This modules contains definition for next C++ declarations:
 import re
 from . import cpptypes
 from . import algorithm
-from . import templates
 from . import declaration
 # from . import type_traits # moved below to fix a cyclic dependency problem
 from . import dependencies
 from . import call_invocation
+from .. import utils
 
 
 class VIRTUALITY_TYPES:
@@ -190,7 +190,8 @@ class calldef_t(declaration.declaration_t):
             exceptions=None,
             return_type=None,
             has_extern=False,
-            does_throw=True):
+            does_throw=True,
+            mangled=None):
         declaration.declaration_t.__init__(self, name)
         if not arguments:
             arguments = []
@@ -204,40 +205,74 @@ class calldef_t(declaration.declaration_t):
         self._demangled_name = None
         self._calling_convention = None
         self._has_inline = None
+        self._mangled = mangled
 
     def _get__cmp__call_items(self):
-        """implementation details"""
+        """
+        Implementation detail.
+
+        """
+
         raise NotImplementedError()
 
     def _get__cmp__items(self):
-        """implementation details"""
-        items = [
-            self.arguments,
-            self.return_type,
-            self.has_extern,
-            self.does_throw,
-            self._sorted_list(
-                self.exceptions),
-            self.demangled_name,
-            self.has_inline]
+        """
+        Implementation detail.
+
+        """
+
+        if "GCC" in utils.xml_generator:
+            items = [
+                self.arguments,
+                self.return_type,
+                self.has_extern,
+                self.does_throw,
+                self._sorted_list(self.exceptions),
+                self.demangled_name,
+                self.has_inline]
+        elif "CastXML" in utils.xml_generator:
+            # No demangled name
+            items = [
+                self.arguments,
+                self.return_type,
+                self.has_extern,
+                self.does_throw,
+                self._sorted_list(self.exceptions),
+                self.has_inline]
         items.extend(self._get__cmp__call_items())
         return items
 
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__(self, other):
             return False
-        return self.return_type == other.return_type \
-            and self.arguments == other.arguments \
-            and self.has_extern == other.has_extern \
-            and self.does_throw == other.does_throw \
-            and self._sorted_list(self.exceptions) == \
-            other._sorted_list(other.exceptions) \
-            and self.demangled_name == other.demangled_name
+
+        if "GCC" in utils.xml_generator:
+            return self.return_type == other.return_type \
+                and self.arguments == other.arguments \
+                and self.has_extern == other.has_extern \
+                and self.does_throw == other.does_throw \
+                and self._sorted_list(self.exceptions) == \
+                other._sorted_list(other.exceptions) \
+                and self.demangled_name == other.demangled_name
+        elif "CastXML" in utils.xml_generator:
+            # Do not check for demangled name
+            return self.return_type == other.return_type \
+                and self.arguments == other.arguments \
+                and self.has_extern == other.has_extern \
+                and self.does_throw == other.does_throw \
+                and self._sorted_list(self.exceptions) == \
+                other._sorted_list(other.exceptions)
 
     def __hash__(self):
-        return (super.__hash__(self) ^
-                hash(self.return_type) ^
-                hash(self.demangled_name))
+        if "GCC" in utils.xml_generator:
+            return (super.__hash__(self) ^
+                    hash(self.return_type) ^
+                    hash(self.demangled_name))
+        elif "CastXML" in utils.xml_generator:
+            # No demangled name with castxml. Use the normal name.
+            return (super.__hash__(self) ^
+                    hash(self.return_type) ^
+                    hash(self.name))
 
     @property
     def arguments(self):
@@ -359,6 +394,9 @@ class calldef_t(declaration.declaration_t):
         """returns function demangled name. It can help you to deal with
             function template instantiations"""
 
+        if "CastXML" in utils.xml_generator:
+            raise Exception("Demangled name is not available with CastXML.")
+
         from . import type_traits
 
         if not self.demangled:
@@ -414,19 +452,18 @@ class calldef_t(declaration.declaration_t):
         self._demangled_name = ''
         return self.name
 
+    def _report(self, *args, **keywd):
+        return dependencies.dependency_info_t(self, *args, **keywd)
+
     def i_depend_on_them(self, recursive=True):
-        report_dependency = lambda * \
-            args, **keywd: dependencies.dependency_info_t(self, *args, **keywd)
         answer = []
         if self.return_type:
             answer.append(
-                report_dependency(
-                    self.return_type,
-                    hint="return type"))
+                self._report(self.return_type, hint="return type"))
         for arg in self.arguments:
-            answer.append(report_dependency(arg.type))
+            answer.append(self._report(arg.type))
         for exc in self.exceptions:
-            answer.append(report_dependency(exc, hint="exception"))
+            answer.append(self._report(exc, hint="exception"))
         return answer
 
     def guess_calling_convention(self):
@@ -448,6 +485,22 @@ class calldef_t(declaration.declaration_t):
     @calling_convention.setter
     def calling_convention(self, cc):
         self._calling_convention = cc
+
+    @property
+    def mangled(self):
+        """
+        Unique declaration name generated by the compiler.
+
+        :return: the mangled name
+        :rtype: str
+
+        """
+
+        return self.get_mangled_name()
+
+    @mangled.setter
+    def mangled(self, mangled):
+        self._mangled = mangled
 
 
 # Second level in hierarchy of calldef
