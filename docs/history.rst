@@ -29,7 +29,7 @@ Version 1.7.0
 
       generator_path, generator_name = pygccxml.utils.find_xml_generator()
 
-3. [CastXML] When using the configuration, you will need to tell pygccxml which xml genrator you are using.
+3. [CastXML] When using the configuration, you will need to tell pygccxml which xml generator you are using.
 
     .. code-block:: python
 
@@ -48,9 +48,9 @@ Version 1.7.0
 
    This is done by using the ``compiler_path`` attribute in the configuration.
    Note that this may be important because the resulting xml file is slightly different
-   depending on the used compiler.
+   depending on the compiler.
 
-5. [CastXML] Add support for some fields which have no location.
+5. [CastXML] Added support for some fields which have no location.
 
    These fields are: ``gp_offset``, ``fp_offset``, ``overflow_arg_area``, ``reg_save_area``
 
@@ -68,7 +68,7 @@ Version 1.7.0
 
 9. [CastXML] Annotations:
 
-  Instead of using the ``__attribute((gccxml("string")))`` c++ syntax (see version 0.9.5), the ``__attribute__`` ((annotate ("out"))) can now be used to annotate code with CastXML.
+  Instead of using the ``__attribute((gccxml("string")))`` c++ syntax (see version 0.9.5), the ``__attribute__ ((annotate ("out")))`` can now be used to annotate code with CastXML.
 
 10. [CastXML] Disabled relinking of:
 
@@ -77,26 +77,26 @@ Version 1.7.0
       rebind<std::__tree_node<std::basic_string<char>, void *> >
 
  This made the ``find_container_traits_tester`` unit tests fail with ``CastXML``.
- This class defintion is present in clangs AST tree, but I don't know why it is
- usefull. Please tell us if you need it so we can re-enable that featur in pygccxml.
+ This class defintion is present in the clang AST tree, but I don't know why it is
+ usefull. Please tell me if you need it so we can re-enable that featur in pygccxml.
 
-11. Deprecated the ``compiler`` attribute and replaced it with a global ``utils.xml_generator`` variable.
+11. [Misc] Deprecated the ``compiler`` attribute and replaced it with a global ``utils.xml_generator`` variable.
 
  The ``compiler`` attribute was misleading; it was sometimes confused with the name and version of the xml generator.
 
  This change also fixes some internal problems with the algorithms cache.
 
-12. ``declarations.has_trivial_copy`` was defintevely removed.
+12. [Misc] ``declarations.has_trivial_copy`` was defintevely removed.
 
   Please use ``declarations.has_copy_constructor``.
 
   This was deprecated since version 0.9.5.
 
-13. Remove ``gccxml`` logger from logger class (was deprecated).
+13. [Misc] Remove ``gccxml`` logger from logger class (was deprecated).
 
   Please use ``cxx_parser`` instead.
 
-14. Removed ``gccxml_runtime_error_t`` class. This was only used internally.
+14. [Misc] Removed ``gccxml_runtime_error_t`` class. This was only used internally.
 
   Please use a normal ``RuntimeError`` instead.
 
@@ -114,7 +114,7 @@ Version 1.7.0
 
 19. [Misc] The compiler version debugging message is now hidden (closes #12)
 
-20. [Misc] Print less line separations in decl_printer; this makes the output more compact.
+20. [Misc] Print less line separations in ``decl_printer``; this makes the output more compact.
 
 21. [Tests] Add new test for the ``contains_parent_dir`` function.
 
