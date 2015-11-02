@@ -7,7 +7,7 @@
 from setuptools import setup
 
 setup(name="pygccxml",
-      version="v1.6.2",
+      version="v1.7.0",
       author="Roman Yakovenko",
       author_email="roman yakovenko at gmail com",
       maintainer="Michka Popoff and the Insight Software Consortium",
