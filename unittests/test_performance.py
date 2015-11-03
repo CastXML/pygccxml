@@ -128,16 +128,6 @@ def test_on_big_file(file_name, count):
         global_ns.init_optimizer()
 
 
-def parse_big_file():
-    path = os.path.join(autoconfig.data_directory, 'big.xml')
-    reader = parser.project_reader_t(
-        parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.generator_path))
-    reader.read_files([parser.create_gccxml_fc(path)])
-    reader.read_files([parser.create_gccxml_fc(path)])
-    reader.read_files([parser.create_gccxml_fc(path)])
-
-
 if __name__ == "__main__":
 
     # test_on_windows_dot_h()
