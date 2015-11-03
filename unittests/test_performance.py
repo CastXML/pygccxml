@@ -135,7 +135,7 @@ if __name__ == "__main__":
     # test_project_on_include_std_dot_hpp()
     print('running')
     prof = hotshot.Profile('parser.prof')
-    prof.runcall(lambda: test_on_big_file('big2.xml', 1))
+    prof.runcall(lambda: test_on_big_file('itkImage.xml', 1))
     stats = hotshot.stats.load("parser.prof")
     stats.sort_stats('time', 'calls')
     stats.print_stats(30)
