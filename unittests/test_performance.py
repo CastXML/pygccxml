@@ -9,7 +9,7 @@ import hotshot
 import hotshot.stats
 import autoconfig
 from pygccxml import parser
-from pyggcxml import declarations
+from pygccxml import declarations
 
 dcache_file_name = os.path.join(autoconfig.data_directory, 'pygccxml.cache')
 if os.path.exists(dcache_file_name):
@@ -23,7 +23,7 @@ def test_on_windows_dot_h():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_file(windows_header)
     dcache.flush()
@@ -34,7 +34,7 @@ def test_on_windows_dot_h():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_file(windows_header)
     clock_now = time.clock()
@@ -52,7 +52,7 @@ def test_source_on_include_std_dot_hpp():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_file(include_std_header)
     dcache.flush()
@@ -63,7 +63,7 @@ def test_source_on_include_std_dot_hpp():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.source_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_file(include_std_header)
     clock_now = time.clock()
@@ -80,7 +80,7 @@ def test_project_on_include_std_dot_hpp():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.project_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_files([include_std_header])
     dcache.flush()
@@ -91,7 +91,7 @@ def test_project_on_include_std_dot_hpp():
     dcache = parser.file_cache_t(dcache_file_name)
     reader = parser.project_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path),
+            xml_generator_path=autoconfig.generator_path),
         dcache)
     reader.read_files([include_std_header])
     clock_now = time.clock()
@@ -104,7 +104,7 @@ def profile_project():
         'include_std.hpp')
     reader = parser.project_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path))
+            xml_generator_path=autoconfig.generator_path))
     reader.read_files([include_std_header])
 
 
@@ -113,7 +113,7 @@ def profile_project2():
     include_std_header = r"D:\Program Files\Microsoft Visual Studio .NET " + he
     reader = parser.project_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path))
+            xml_generator_path=autoconfig.generator_path))
     reader.read_files([include_std_header])
 
 
@@ -122,7 +122,7 @@ def test_on_big_file(file_name, count):
     for i in range(count):
         reader = parser.project_reader_t(
             parser.xml_generator_configuration_t(
-                xml_generator_path=autoconfig.xml_generator_path))
+                xml_generator_path=autoconfig.generator_path))
         decls = reader.read_files([parser.create_gccxml_fc(file_name)])
         global_ns = declarations.get_global_namespace(decls)
         global_ns.init_optimizer()
@@ -132,7 +132,7 @@ def parse_big_file():
     path = os.path.join(autoconfig.data_directory, 'big.xml')
     reader = parser.project_reader_t(
         parser.xml_generator_configuration_t(
-            xml_generator_path=autoconfig.xml_generator_path))
+            xml_generator_path=autoconfig.generator_path))
     reader.read_files([parser.create_gccxml_fc(path)])
     reader.read_files([parser.create_gccxml_fc(path)])
     reader.read_files([parser.create_gccxml_fc(path)])
