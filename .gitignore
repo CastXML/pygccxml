@@ -7,3 +7,4 @@ unittests/data/pygccxml.cache
 dist
 build
 pygccxml.egg-info
+*.prof
