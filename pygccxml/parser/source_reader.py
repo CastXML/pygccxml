@@ -400,16 +400,16 @@ class source_reader_t:
         """
 
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        header_file_obj = open(header_file, 'w+')
-        header_file_obj.write(content)
-        header_file_obj.close()
-        declarations = None
+        with open(header_file, "wb+") as f:
+            f.write(content)
+
         try:
             declarations = self.read_file(header_file)
         except Exception:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
             raise
         pygccxml.utils.remove_file_no_raise(header_file, self.__config)
+
         return declarations
 
     def __file_full_name(self, file):

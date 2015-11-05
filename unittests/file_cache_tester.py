@@ -24,16 +24,14 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def touch(self):
         # Need to change file.
-        header = open(self.header, "a")
-        header.write("//touch")
-        header.close()
+        with open(self.header, "ab+") as header:
+            header.write("//touch")
 
     def test_update(self):
 
         # Save the content of the header file for later
-        old_header = open(self.header, "r")
-        content = old_header.read()
-        old_header.close()
+        with open(self.header, "rb") as old_header:
+            content = old_header.read()
 
         declarations = parser.parse([self.header], self.config)
         cache = parser.file_cache_t(self.cache_file)
@@ -55,9 +53,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         # We wrote a //touch in the header file. Just replace the file with the
         # original content. The touched file would be sometimes commited by
         # error as it was modified.
-        new_header = open(self.header, "w")
-        new_header.write(content)
-        new_header.close()
+        with open(self.header, "wb") as new_header:
+            new_header.write(content)
 
     def test_from_file(self):
         declarations = parser.parse([self.header], self.config)

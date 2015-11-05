@@ -477,8 +477,7 @@ def print_declarations(
         decls,
         detailed=True,
         recursive=True,
-        writer=lambda x: sys.stdout.write(
-            x + os.linesep),
+        writer=lambda x: sys.stdout.write(x + os.linesep),
         verbose=True):
     """
     print declarations tree rooted at each of the included nodes.
@@ -495,14 +494,15 @@ def print_declarations(
         algorithm.apply_visitor(prn, d)
 
 
-def dump_declarations(decls, fpath):
+def dump_declarations(declarations, file_path):
     """
-    dump declarations tree rooted at each of the included nodes to the file
+    Dump declarations tree rooted at each of the included nodes to the file
 
-    :param decls: either a single :class:declaration_t object or list
+    :param declarations: either a single :class:declaration_t object or a list
         of :class:declaration_t objects
-    :param fpath: file name
+    :param file_path: path to a file
+
     """
-    fobj = open(fpath, 'w+')
-    print_declarations(decls, writer=fobj.write)
-    fobj.close()
+
+    with open(file_path, "wb+") as f:
+        print_declarations(declarations, writer=f.write)
