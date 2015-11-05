@@ -400,7 +400,7 @@ class source_reader_t:
         """
 
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        with open(header_file, "wb+") as f:
+        with open(header_file, "w+") as f:
             f.write(content)
 
         try:
