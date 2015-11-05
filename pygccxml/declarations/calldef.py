@@ -354,8 +354,7 @@ class calldef_t(declaration.declaration_t):
         # finding all functions with the same name
         return self.parent.calldefs(
             name=self.name,
-            function=lambda decl: not (
-                decl is self),
+            function=lambda decl: decl is not self,
             allow_empty=True,
             recursive=False)
 

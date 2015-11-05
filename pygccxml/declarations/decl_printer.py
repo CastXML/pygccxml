@@ -339,7 +339,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                             self.INDENT_SIZE +
                             access.ljust(self.JUSTIFY) +
                             os.linesep)
-                if not (None is class_.is_virtual):
+                if class_.is_virtual is not None:
                     is_virtual = 'virtual inheritance: ' + \
                         "'%s'" % str(class_.is_virtual)
                     self.writer(' ' *
