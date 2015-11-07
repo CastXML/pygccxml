@@ -2,28 +2,31 @@
 Design overview
 ===============
 
-------------------------
-The view from 10000 fits
-------------------------
-
 pygccxml has 4 packages:
 
-* :mod:`declarations <pygccxml.declarations>` package defines classes that describe
-  C++ declarations and types
+* :mod:`declarations <pygccxml.declarations>`
 
-* :mod:`parser <pygccxml.parser>` package defines classes that parse `GCC-XML`_
-  generated files. Also it defines few classes that will help you to eliminate
-  unnecessary parsing of C++ source files.
+  This package defines classes that describe C++ declarations and types.
 
-* :mod:`binary_parsers <pygccxml.binary_parsers>` package extracts some
-  information from binary files ( `.so`, `.dll`, `.map` ) and merges it with
-  the declarations tree.
+* :mod:`parser <pygccxml.parser>`
 
-* ``utils`` package defines few functions, I found useful in the whole project.
+  This package defines classes that parse `GCC-XML`_
+  or `CastXML`_ generated files. It also defines a few classes that will help
+  you unnecessary parsing of C++ source files.
 
--------------------------
+* :mod:`binary_parsers <pygccxml.binary_parsers>`
+
+  This package extracts information from binary files (`.so`, `.dll`, `.map`)
+  and merges it with the declarations tree.
+
+* :mod:`utils <pygccxml.utils>`
+
+  This package defines a few functions useful for the whole project,
+  but which are mainly used internally by pygccxml.
+
+------------------------
 ``declarations`` package
--------------------------
+------------------------
 
 Please take a look on the `UML diagram`_. This `UML diagram`_ describes almost all
 classes defined in the package and their relationship. ``declarations`` package
@@ -275,6 +278,13 @@ This is not the only bug, which could be fixed, there are few of them. pygccxml
 introduces few classes, which knows how to deal with specific bug. More over, those
 bugs are fixed, only if I am 101% sure, that this is the right thing to do.
 
+-----------------
+``utils`` package
+-----------------
+
+ Use internally by pygccxml.
+ Some methods/classes may be still usefull: loggers, find_xml_generator
+
 -------
 Summary
 -------
@@ -287,6 +297,7 @@ information please read API documentation.
 .. _`SourceForge`: http://sourceforge.net/index.php
 .. _`Python`: http://www.python.org
 .. _`GCC-XML`: http://www.gccxml.org
+.. _`CastXML`: https://github.com/CastXML/CastXML
 .. _`UML diagram` : declarations_uml.png
 .. _`parser package UML diagram` : parser_uml.png
 .. _`ReleaseForge` : http://releaseforge.sourceforge.net
