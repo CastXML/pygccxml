@@ -8,15 +8,16 @@ import sys
 import time
 import hotshot
 import hotshot.stats
-from pygccxml import parser
-from pygccxml import declarations
 
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
 
-sys.path.insert(1, os.path.join(this_module_dir_path, '../'))
+sys.path.insert(1, os.path.join(this_module_dir_path, '../../'))
+sys.path.insert(2, os.path.join(this_module_dir_path, '../'))
 
-import autoconfig # nopep8
+import autoconfig  # nopep8
+from pygccxml import parser  # nopep8
+from pygccxml import declarations  # nopep8
 
 dcache_file_name = os.path.join(autoconfig.data_directory, 'pygccxml.cache')
 if os.path.exists(dcache_file_name):
