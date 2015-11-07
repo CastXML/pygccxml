@@ -13,7 +13,7 @@ from . import xml_generators as compilers
 from . import xml_generators
 
 from .dependencies import dependency_info_t
-from .declaration import location_t
+from .location import location_t
 from .declaration import declaration_t
 from .scopedef import scopedef_t
 from .enumeration import enumeration_t
