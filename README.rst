@@ -44,7 +44,7 @@ Branches
 
 The stable version can be found on the master branch.
 
-The develop branch containes the latest improvements but can be unstable. Pull Requests should be done on the develop branch.
+The develop branch contains the latest improvements but can be unstable. Pull Requests should be done on the develop branch.
 
 Testing and code coverage
 -------------------------

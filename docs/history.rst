@@ -124,6 +124,8 @@ Version 1.7.0
 
 24. [Doc] Small documentation update, moved people list to credits page, added new examples.
 
+25. [Misc] Add Travis unit tests for Python 3.5
+
 
 Version 1.6.2
 -------------
