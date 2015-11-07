@@ -475,7 +475,7 @@ class class_t(scopedef.scopedef_t):
         :param decl: declaration to be removed
         :type decl: :class:`declaration_t`
         """
-        container = None
+
         access_type = self.find_out_member_access_type(decl)
         if access_type == ACCESS_TYPES.PUBLIC:
             container = self.public_members
@@ -497,7 +497,6 @@ class class_t(scopedef.scopedef_t):
         """
         assert member.parent is self
         if not member.cache.access_type:
-            access_type = None
             if member in self.public_members:
                 access_type = ACCESS_TYPES.PUBLIC
             elif member in self.protected_members:

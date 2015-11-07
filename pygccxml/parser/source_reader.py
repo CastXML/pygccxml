@@ -319,7 +319,7 @@ class source_reader_t:
         :rtype: returns file name of GCC-XML generated file
         """
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        xml_file = None
+
         try:
             header_file_obj = open(header_file, 'w+')
             header_file_obj.write(content)

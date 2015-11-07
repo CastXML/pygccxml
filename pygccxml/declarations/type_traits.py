@@ -493,7 +493,6 @@ def is_base_and_derived(based, derived):
     assert isinstance(based, class_declaration.class_t)
     assert isinstance(derived, (class_declaration.class_t, tuple))
 
-    all_derived = None
     if isinstance(derived, class_declaration.class_t):
         all_derived = ([derived])
     else:  # tuple

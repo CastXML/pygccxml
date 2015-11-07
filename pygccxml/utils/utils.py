@@ -46,7 +46,6 @@ def find_xml_generator(name=None):
     else:
         command = "which"
 
-    path = ""
     if name is None:
         name = "gccxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)

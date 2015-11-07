@@ -477,7 +477,6 @@ class project_reader_t:
             if id(leaved_classes[key]) == id(class_):
                 continue
             else:
-                declarations = None
                 if class_.parent:
                     declarations = class_.parent.declarations
                 else:
