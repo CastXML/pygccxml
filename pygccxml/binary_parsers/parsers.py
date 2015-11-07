@@ -430,7 +430,7 @@ def merge_information(global_ns, fname, runs_under_unittest=False):
     """high level function - select the appropriate binary file parser and
     integrates the information from the file to the declarations tree. """
     ext = os.path.splitext(fname)[1]
-    parser = None
+
     if '.dll' == ext:
         parser = dll_file_parser_t(global_ns, fname)
     elif '.map' == ext:

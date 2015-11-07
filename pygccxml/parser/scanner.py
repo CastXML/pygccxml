@@ -515,7 +515,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
     __read_field = __read_variable  # just a synonim
 
     def __read_class_impl(self, class_type, attrs):
-        decl = None
         name = attrs.get(XML_AN_NAME, '')
         if '$' in name or '.' in name:
             name = ''

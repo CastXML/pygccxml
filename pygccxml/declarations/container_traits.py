@@ -215,12 +215,10 @@ class defaults_eraser(object):
         if len(c_args) < 3:
             return
 
-        default_hash = None
         default_less = 'std::less'
         default_equal_to = 'std::equal_to'
         default_allocator = 'std::allocator'
 
-        tmpl = None
         if 3 == len(c_args):
             default_hash = 'hash_compare'
             tmpl = (
@@ -253,7 +251,6 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
 
-        default_hash = None
         if self.unordered_maps_and_sets:
             default_less_or_hash = 'std::hash'
         else:
@@ -261,9 +258,6 @@ class defaults_eraser(object):
         default_allocator = 'std::allocator'
         default_equal_to = 'std::equal_to'
 
-        tmpl = None
-        key_type = None
-        mapped_type = None
         if 2 < len(c_args):
             key_type = c_args[0]
             mapped_type = c_args[1]
@@ -394,7 +388,6 @@ class container_traits_impl_t(object):
         utils.loggers.queries_engine.debug(
             "Container traits: cleaned up search %s" % type_)
 
-        cls_declaration = None
         if isinstance(type_, cpptypes.declarated_t):
             cls_declaration = type_traits.remove_alias(type_.declaration)
         elif isinstance(type_, class_declaration.class_t):

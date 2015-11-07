@@ -540,7 +540,7 @@ class filename_repository_t:
             # return file modification date...
             try:
                 return os.path.getmtime(entry.filename)
-            except OSError as e:
+            except OSError:
                 return None
 
     def _dump(self):

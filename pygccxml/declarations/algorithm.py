@@ -286,7 +286,6 @@ def find_all_declarations(
 
     """
 
-    decls = []
     if recursive:
         decls = make_flatten(declarations)
     else:

@@ -253,7 +253,7 @@ class undname_creator_t:
         could be mapped later to the blobs.
         The valid options are: "msvc" and "nm".
         """
-        name = None
+
         if hint is None:
             if 'nt' == os.name:
                 hint = 'msvc'

@@ -129,7 +129,7 @@ class parser_t(object):
         if None is arg_separator:
             arg_separator = ', '
         args = [_f for _f in args if _f]
-        args_str = ''
+
         if not args:
             args_str = ' '
         elif 1 == len(args):
