@@ -8,3 +8,4 @@ dist
 build
 pygccxml.egg-info
 *.prof
+.coverage
