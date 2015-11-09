@@ -64,7 +64,7 @@ class enumeration_t(declaration.declaration_t):
     def values(self, values):
         self._values = []
         # None is treated like an empty list
-        if (values is None):
+        if values is None:
             return
         # Check that we have indeed a list...
         if not isinstance(values, list):

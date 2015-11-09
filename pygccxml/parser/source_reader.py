@@ -478,7 +478,7 @@ class source_reader_t:
                 decls.values()) if isinstance(
                 inst,
                 declarations.namespace_t) and not inst.parent]
-        return (decls, list(files.values()))
+        return decls, list(files.values())
 
     def join_declarations(self, declref):
         self._join_namespaces(declref)

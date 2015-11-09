@@ -49,7 +49,7 @@ class index_entry_t:
         self.configsig = configsig
 
     def __getstate__(self):
-        return (self.filesigs, self.configsig)
+        return self.filesigs, self.configsig
 
     def __setstate__(self, state):
         self.filesigs, self.configsig = state
@@ -404,7 +404,7 @@ class filename_entry_t:
 
     def __getstate__(self):
         # Only pickle filename and refcount
-        return (self.filename, self.refcount)
+        return self.filename, self.refcount
 
     def __setstate__(self, state):
         self.filename, self.refcount = state

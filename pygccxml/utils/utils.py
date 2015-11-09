@@ -313,7 +313,7 @@ class native_compiler:
             return None  # not implemented yet
         else:
             from distutils import msvccompiler
-            return ('msvc', str(msvccompiler.get_build_version()))
+            return 'msvc', str(msvccompiler.get_build_version())
 
     @staticmethod
     def get_gccxml_compiler():

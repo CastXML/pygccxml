@@ -102,7 +102,7 @@ class parser_t(object):
             if -1 == found:
                 return self.NOT_FOUND
             elif text[found] == self.__end:
-                return (first_occurance, found)
+                return first_occurance, found
             else:
                 previous_found = found + 1  # skip found sep
 
