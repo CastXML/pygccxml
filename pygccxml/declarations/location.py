@@ -64,4 +64,4 @@ class location_t(object):
 
         """
 
-        return (self.file_name, self.line)
+        return self.file_name, self.line

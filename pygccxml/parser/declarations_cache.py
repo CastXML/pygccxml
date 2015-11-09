@@ -115,7 +115,7 @@ class record_t(object):
         self.__was_hit = was_hit
 
     def key(self):
-        return (self.__source_signature, self.__config_signature)
+        return self.__source_signature, self.__config_signature
 
     @staticmethod
     def create_key(source_file, configuration):
