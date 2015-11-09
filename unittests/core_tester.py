@@ -558,7 +558,7 @@ class core_t(parser_test_case.parser_test_case_t):
 
     def test_byte_offset(self):
         mptrs = self.global_ns.class_('members_pointers_t')
-        self.failUnless(mptrs.var('xxx').byte_offset != 0)
+        self.failUnless(mptrs.variable('xxx').byte_offset != 0)
 
 
 class core_gccxml_t(core_t):
