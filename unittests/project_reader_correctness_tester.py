@@ -41,10 +41,9 @@ class tester_t(parser_test_case.parser_test_case_t):
             s = src_decls[0]
             p = prj_decls[0]
             bdir = autoconfig.build_directory
-            with open(os.path.join(bdir, file_name + '.sr.txt'), 'wb+') as sr:
+            with open(os.path.join(bdir, file_name + '.sr.txt'), 'w+') as sr:
                 with open(
-                        os.path.join(bdir, file_name + '.pr.txt'),
-                        'wb+') as pr:
+                        os.path.join(bdir, file_name + '.pr.txt'), 'w+') as pr:
 
                     declarations.print_declarations(
                         s, writer=lambda l: sr.write(l + os.linesep))

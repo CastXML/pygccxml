@@ -504,5 +504,5 @@ def dump_declarations(declarations, file_path):
 
     """
 
-    with open(file_path, "wb+") as f:
+    with open(file_path, "w+") as f:
         print_declarations(declarations, writer=f.write)

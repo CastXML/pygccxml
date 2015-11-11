@@ -53,7 +53,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         # We wrote a //touch in the header file. Just replace the file with the
         # original content. The touched file would be sometimes commited by
         # error as it was modified.
-        with open(self.header, "wb") as new_header:
+        with open(self.header, "w") as new_header:
             new_header.write(content)
 
     def test_from_file(self):
