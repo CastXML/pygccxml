@@ -24,13 +24,13 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def touch(self):
         # Need to change file.
-        with open(self.header, "ab+") as header:
+        with open(self.header, "a+") as header:
             header.write("//touch")
 
     def test_update(self):
 
         # Save the content of the header file for later
-        with open(self.header, "rb") as old_header:
+        with open(self.header, "r") as old_header:
             content = old_header.read()
 
         declarations = parser.parse([self.header], self.config)
