@@ -22,7 +22,7 @@ def file_signature(filename):
     # Extend here to use md5 hash for signature
     # - This change allows duplicate auto-generated files to be recognized
 
-    sig = hashlib.md5()
+    sig = hashlib.sha1()
     with open(filename, "rb") as f:
         buf = f.read()
         sig.update(buf)
@@ -38,7 +38,7 @@ def configuration_signature(config):
         to be different between runs.
     """
 
-    sig = hashlib.md5()
+    sig = hashlib.sha1()
     if isinstance(config, cxx_parsers_cfg.xml_generator_configuration_t):
         sig.update(str(config.xml_generator_path).encode())
     sig.update(str(config.working_directory).encode('utf-8'))
