@@ -15,13 +15,17 @@ from . import config as cxx_parsers_cfg
 
 
 def file_signature(filename):
+    """
+    Return a signature for a file.
+
+    """
+
     if not os.path.isfile(filename):
         return None
     if not os.path.exists(filename):
         return None
-    # Extend here to use md5 hash for signature
-    # - This change allows duplicate auto-generated files to be recognized
 
+    # Duplicate auto-generated files can be recognized with the sha1 hash.
     sig = hashlib.sha1()
     with open(filename, "rb") as f:
         buf = f.read()
@@ -31,11 +35,15 @@ def file_signature(filename):
 
 
 def configuration_signature(config):
-    """ Return a signature for a configuration (xml_generator_configuration_t)
-        object.  This can then be used as a key in the cache.
-        This method must take into account anything about
-        a configuration that could cause the declarations generated
-        to be different between runs.
+    """
+    Return a signature for a configuration (xml_generator_configuration_t)
+    object.
+
+    This can then be used as a key in the cache.
+    This method must take into account anything about
+    a configuration that could cause the declarations generated
+    to be different between runs.
+
     """
 
     sig = hashlib.sha1()
@@ -241,7 +249,9 @@ class file_cache_t(cache_base_t):
         """
         Attempt to lookup the cached declarations for the given file and
         configuration.
-        If not found or signature check fails, returns None.
+
+        Returns None if declaration not found or signature check fails.
+
         """
 
         key = record_t.create_key(source_file, configuration)
@@ -249,17 +259,13 @@ class file_cache_t(cache_base_t):
             return None
         record = self.__cache[key]
         if self.__is_valid_signature(record):
-            record.was_hit = True                  # Record cache hit
+            record.was_hit = True  # Record cache hit
             return record.declarations
         else:  # some file has been changed
             del self.__cache[key]
             return None
 
     def __is_valid_signature(self, record):
-        # This is now part of key
-        # if self.__signature( record.source_file ) != \
-        #         record.source_file_signature:
-        #     return False
         for index, included_file in enumerate(record.included_files):
             if file_signature(included_file) != \
                     record.included_files_signature[index]:
@@ -268,6 +274,11 @@ class file_cache_t(cache_base_t):
 
 
 class dummy_cache_t(cache_base_t):
+
+    """
+    By default no caching is enabled in pygccxml. This is an empty cache object.
+
+    """
 
     def __init__(self):
         cache_base_t.__init__(self)
