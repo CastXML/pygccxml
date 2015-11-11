@@ -86,7 +86,7 @@ class tester2_t(parser_test_case.parser_test_case_t):
             os.path.join(
                 autoconfig.build_directory, 'separate_compilation.pr.txt'))
 
-        self.failUnless(
+        self.assertTrue(
             src_decls == prj_decls,
             "There is a difference between declarations")
 

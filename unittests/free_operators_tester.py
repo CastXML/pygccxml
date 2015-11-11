@@ -27,9 +27,9 @@ class tester_t(parser_test_case.parser_test_case_t):
         rational = fo.class_('rational')
         for oper in fo.free_operators():
             if number.name in str(oper):
-                self.failUnless(number in oper.class_types)
+                self.assertTrue(number in oper.class_types)
             if rational.name in str(oper):
-                self.failUnless(rational in oper.class_types)
+                self.assertTrue(rational in oper.class_types)
 
 
 def create_suite():

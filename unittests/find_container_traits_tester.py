@@ -27,39 +27,39 @@ class tester_t(parser_test_case.parser_test_case_t):
         if utils.is_str(typedef):
             typedef = self.global_ns.typedef(typedef)
         traits = declarations.find_container_traits(typedef)
-        self.failUnless(
+        self.assertTrue(
             traits,
             'container traits for "%s" not found' %
             str(typedef))
-        self.failUnless(
+        self.assertTrue(
             traits is expected,
             'container "%s", expected %s_traits, got %s_traits' %
             (str(typedef),
              expected.name(),
              traits.name()))
         cls = declarations.remove_declarated(typedef)
-        self.failUnless(cls.container_traits is expected)
-        self.failUnless(cls.partial_name == partial_name)
+        self.assertTrue(cls.container_traits is expected)
+        self.assertTrue(cls.partial_name == partial_name)
         cls = traits.class_declaration(cls)
 
-        self.failUnless(traits.element_type(typedef))
-        self.failUnless(
+        self.assertTrue(traits.element_type(typedef))
+        self.assertTrue(
             cls.cache.container_element_type,
             "For some reason cache was not updated")
 
         if key_type:
-            self.failUnless(traits.is_mapping(typedef))
+            self.assertTrue(traits.is_mapping(typedef))
             real_key_type = traits.key_type(typedef)
-            self.failUnless(
+            self.assertTrue(
                 real_key_type.decl_string == key_type,
                 'Error extracting key type.  Expected type "%s", got "%s"' %
                 (key_type,
                  real_key_type.decl_string))
-            self.failUnless(
+            self.assertTrue(
                 cls.cache.container_key_type,
                 "For some reason cache was not updated")
         else:
-            self.failUnless(traits.is_sequence(typedef))
+            self.assertTrue(traits.is_sequence(typedef))
 
     def test_find_traits(self):
         self.__cmp_traits('v_int', declarations.vector_traits, "vector< int >")
@@ -144,12 +144,12 @@ class tester_t(parser_test_case.parser_test_case_t):
         m = self.global_ns.class_(
             lambda decl: decl.name.startswith('multimap'))
         declarations.find_container_traits(m)
-        self.failUnless(m.partial_name == 'multimap< int, int >')
+        self.assertTrue(m.partial_name == 'multimap< int, int >')
 
     def test_recursive_partial_name(self):
         f1 = self.global_ns.free_fun('f1')
         t1 = declarations.class_traits.get_declaration(f1.arguments[0].type)
-        self.failUnless(
+        self.assertTrue(
             'type< std::set< std::vector< int > > >' == t1.partial_name)
 
     def test_remove_defaults_partial_name_namespace(self):
@@ -181,9 +181,9 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_infinite_loop(self):
         rt = self.global_ns.free_fun('test_infinite_loop').return_type
         map_traits = declarations.find_container_traits(rt)
-        self.failUnless(map_traits is declarations.map_traits)
+        self.assertTrue(map_traits is declarations.map_traits)
         elem = map_traits.element_type(rt)
-        self.failUnless(elem.decl_string == 'int')
+        self.assertTrue(elem.decl_string == 'int')
 
 
 def create_suite():

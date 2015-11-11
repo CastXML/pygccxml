@@ -48,13 +48,13 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         for x in self.global_ns.typedefs('SettingsMultiMap'):
-            self.failUnless(not declarations.is_noncopyable(x))
+            self.assertTrue(not declarations.is_noncopyable(x))
 
         for x in self.global_ns.typedefs('SettingsIterator'):
-            self.failUnless(not declarations.is_noncopyable(x))
+            self.assertTrue(not declarations.is_noncopyable(x))
 
         for x in self.global_ns.typedefs('SectionIterator'):
-            self.failUnless(not declarations.is_noncopyable(x))
+            self.assertTrue(not declarations.is_noncopyable(x))
 
 
 def create_suite():

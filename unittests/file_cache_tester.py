@@ -40,13 +40,13 @@ class tester_t(parser_test_case.parser_test_case_t):
             configuration=self.config,
             declarations=declarations,
             included_files=[])
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),
             "cached declarations and source declarations are different")
         self.touch()
-        self.failUnless(
+        self.assertTrue(
             cache.cached_value(self.header, self.config) is None,
             "cache didn't recognize that some files on disk has been changed")
 
@@ -64,14 +64,14 @@ class tester_t(parser_test_case.parser_test_case_t):
             configuration=self.config,
             declarations=declarations,
             included_files=[])
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),
             "cached declarations and source declarations are different")
         cache.flush()
         cache = parser.file_cache_t(self.cache_file)
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),

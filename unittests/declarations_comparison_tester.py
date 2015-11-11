@@ -34,7 +34,7 @@ class tester_t(parser_test_case.parser_test_case_t):
                         "properly in case of %s, %s, index %d") %
                     (parsed_decl.__class__.__name__,
                         copied_decl.__class__.__name__, index))
-        self.failUnless(not failuers, 'Failures: ' + '\n\t'.join(failuers))
+        self.assertTrue(not failuers, 'Failures: ' + '\n\t'.join(failuers))
 
     def test_comparison_from_reverse(self):
         parsed = parser.parse([self.header], self.config)
@@ -46,7 +46,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         x.sort()
         y = copied[4:6]
         y.sort()
-        self.failUnless(
+        self.assertTrue(
             parsed == copied,
             "__lt__ and/or __qe__ does not working properly")
 
@@ -60,12 +60,12 @@ class tester_t(parser_test_case.parser_test_case_t):
         right2left = [ns_global, ns_std]
         left2right.sort()
         right2left.sort()
-        self.failUnless(left2right == right2left, "bug: find me")
+        self.assertTrue(left2right == right2left, "bug: find me")
 
     def test_same_declarations_different_intances(self):
         parsed = parser.parse([self.header], self.config)
         copied = copy.deepcopy(parsed)
-        self.failUnless(
+        self.assertTrue(
             parsed == copied,
             "__lt__ and/or __qe__ does not working properly")
 

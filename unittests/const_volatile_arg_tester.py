@@ -27,10 +27,10 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test(self):
         f = self.global_ns.free_fun('pygccxml_bug')
         t = f.arguments[0].type
-        self.failUnless(isinstance(t, declarations.pointer_t))
-        self.failUnless(isinstance(t.base, declarations.volatile_t))
-        self.failUnless(isinstance(t.base.base, declarations.const_t))
-        self.failUnless(declarations.is_integral(t.base.base.base))
+        self.assertTrue(isinstance(t, declarations.pointer_t))
+        self.assertTrue(isinstance(t.base, declarations.volatile_t))
+        self.assertTrue(isinstance(t.base.base, declarations.const_t))
+        self.assertTrue(declarations.is_integral(t.base.base.base))
 
 
 def create_suite():

@@ -25,7 +25,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         # bf_x = self.global_ns.variable( 'x' )
-        # self.failUnless( bf_x.bits == 1 )
+        # self.assertTrue( bf_x.bits == 1 )
         pass
 
 

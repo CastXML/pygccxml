@@ -29,42 +29,42 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         if "CastXML" in utils.xml_generator:
             self.assertRaises(Exception, lambda: cls.cache.demangled_name)
         elif "GCCXML" in utils.xml_generator:
-            self.failUnless(cls.cache.demangled_name == cls.name)
+            self.assertTrue(cls.cache.demangled_name == cls.name)
 
         cls_full_name = declarations.full_name(cls)
-        self.failUnless(cls.cache.full_name == cls_full_name)
+        self.assertTrue(cls.cache.full_name == cls_full_name)
 
         cls_declaration_path = declarations.declaration_path(cls)
-        self.failUnless(cls.cache.declaration_path == cls_declaration_path)
+        self.assertTrue(cls.cache.declaration_path == cls_declaration_path)
 
         enum = cls.enum('ENestedPublic')
 
         enum_full_name = declarations.full_name(enum)
-        self.failUnless(enum.cache.full_name == enum_full_name)
+        self.assertTrue(enum.cache.full_name == enum_full_name)
 
         enum_declaration_path = declarations.declaration_path(enum)
-        self.failUnless(enum.cache.declaration_path == enum_declaration_path)
+        self.assertTrue(enum.cache.declaration_path == enum_declaration_path)
 
         # now we change class name, all internal decls cache should be cleared
         cls.name = "new_name"
-        self.failUnless(not cls.cache.full_name)
+        self.assertTrue(not cls.cache.full_name)
         if "GCCXML" in utils.xml_generator:
-            self.failUnless(not cls.cache.demangled_name)
-        self.failUnless(not cls.cache.declaration_path)
+            self.assertTrue(not cls.cache.demangled_name)
+        self.assertTrue(not cls.cache.declaration_path)
 
-        self.failUnless(not enum.cache.full_name)
+        self.assertTrue(not enum.cache.full_name)
         if "GCCXML" in utils.xml_generator:
-            self.failUnless(not enum.cache.demangled_name)
-        self.failUnless(not enum.cache.declaration_path)
+            self.assertTrue(not enum.cache.demangled_name)
+        self.assertTrue(not enum.cache.declaration_path)
 
     def test_access_type(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
         enum = cls.enum('ENestedPublic')
-        self.failUnless(enum.cache.access_type == 'public')
+        self.assertTrue(enum.cache.access_type == 'public')
         enum.cache.reset_access_type()
-        self.failUnless(not enum.cache.access_type)
-        self.failUnless('public' == cls.find_out_member_access_type(enum))
-        self.failUnless(enum.cache.access_type == 'public')
+        self.assertTrue(not enum.cache.access_type)
+        self.assertTrue('public' == cls.find_out_member_access_type(enum))
+        self.assertTrue(enum.cache.access_type == 'public')
 
 
 def create_suite():

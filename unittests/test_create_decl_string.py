@@ -33,7 +33,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         decl = declarations.free_function_type_t.create_decl_string(
             myfunc.return_type, myfunc.argument_types)
 
-        self.failUnless(decl != "('int (*)( int,int )', 'int (*)( int,int )')")
+        self.assertTrue(decl != "('int (*)( int,int )', 'int (*)( int,int )')")
 
         box = self.global_ns.class_("Box")
         myinternfunc = box.member_function("myinternfunc")
@@ -43,7 +43,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             myinternfunc.argument_types,
             myinternfunc.has_const)
 
-        self.failUnless(decl != "short int ( ::Box::* )(  ) ")
+        self.assertTrue(decl != "short int ( ::Box::* )(  ) ")
 
 
 def create_suite():

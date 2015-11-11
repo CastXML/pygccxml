@@ -27,13 +27,13 @@ class tester_t(parser_test_case.parser_test_case_t):
             prj_reader.read_files(
                 [fconfig],
                 compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE)
-            self.failUnless(os.path.exists(fconfig.cached_source_file))
+            self.assertTrue(os.path.exists(fconfig.cached_source_file))
             mtime1 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
             prj_reader.read_files(
                 [fconfig],
                 compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE)
             mtime2 = os.stat(fconfig.cached_source_file)[stat.ST_MTIME]
-            self.failUnless(mtime1 == mtime2)
+            self.assertTrue(mtime1 == mtime2)
         finally:
             utils.remove_file_no_raise(fconfig.cached_source_file, self.config)
 

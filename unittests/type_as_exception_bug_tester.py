@@ -26,12 +26,12 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test(self):
         buggy = self.global_ns.mem_fun('buggy')
         ExpressionError = self.global_ns.class_('ExpressionError')
-        self.failUnless(len(buggy.exceptions) == 1)
+        self.assertTrue(len(buggy.exceptions) == 1)
         err = buggy.exceptions[0]
-        self.failUnless(declarations.is_reference(err))
+        self.assertTrue(declarations.is_reference(err))
         err = declarations.remove_declarated(
             declarations.remove_reference(err))
-        self.failUnless(err is ExpressionError)
+        self.assertTrue(err is ExpressionError)
 
 
 def create_suite():

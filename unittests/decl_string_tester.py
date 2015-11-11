@@ -38,7 +38,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             self.template %
             member_inline_call.decl_string,
             self.config)
-        self.failUnless(
+        self.assertTrue(
             decls,
             "Created decl_string for member function contains mistake")
 
@@ -48,7 +48,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             self.template %
             return_default_args.decl_string,
             self.config)
-        self.failUnless(
+        self.assertTrue(
             decls,
             "Created decl_string for global function contains mistake")
 
@@ -57,13 +57,13 @@ class tester_t(parser_test_case.parser_test_case_t):
         for f in ns.mem_funs():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
-            self.failUnless(
+            self.assertTrue(
                 decls,
                 "Created decl_string for member function contains mistake")
         for f in ns.free_funs():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
-            self.failUnless(
+            self.assertTrue(
                 decls,
                 "Created decl_string for member function contains mistake")
 
