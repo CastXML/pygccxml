@@ -28,7 +28,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_yes(self):
         yes_ns = self.global_ns.namespace('yes')
         for typedef in yes_ns.typedefs():
-            self.failUnless(
+            self.assertTrue(
                 declarations.has_public_equal(typedef),
                 "Class '%s' should have public operator==" %
                 typedef.decl_string)
@@ -36,7 +36,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_no(self):
         no_ns = self.global_ns.namespace('no')
         for typedef in no_ns.typedefs():
-            self.failUnless(
+            self.assertTrue(
                 not declarations.has_public_equal(typedef),
                 "Class '%s' should not have public operator==" %
                 typedef.decl_string)

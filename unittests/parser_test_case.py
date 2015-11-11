@@ -25,17 +25,17 @@ class parser_test_case_t(unittest.TestCase):
             pass
 
     def _test_type_composition(self, type_, expected_compound, expected_base):
-        self.failUnless(
+        self.assertTrue(
             isinstance(type_, expected_compound),
             "the compound type('%s') should be '%s'" %
             (type_.decl_string, expected_compound.__name__))
-        self.failUnless(
+        self.assertTrue(
             isinstance(type_.base, expected_base),
             "base type('%s') should be '%s'" %
             (type_.decl_string, expected_base.__name__))
 
     def _test_calldef_return_type(self, calldef, expected_type):
-        self.failUnless(
+        self.assertTrue(
             isinstance(calldef.return_type, expected_type),
             ("the function's '%s' expected return type is '%s' and in " +
                 "reality it is different('%s')") %
@@ -43,7 +43,7 @@ class parser_test_case_t(unittest.TestCase):
              calldef.return_type.__class__.__name__))
 
     def _test_calldef_args(self, calldef, expected_args):
-        self.failUnless(
+        self.assertTrue(
             len(calldef.arguments) == len(expected_args),
             ("the function's '%s' expected number of arguments is '%d' and " +
                 "in reality it is different('%d')") %
@@ -51,7 +51,7 @@ class parser_test_case_t(unittest.TestCase):
 
         for i, expected_arg in enumerate(expected_args):
             arg = calldef.arguments[i]
-            self.failUnless(
+            self.assertTrue(
                 arg == expected_arg,
                 ("the function's '%s' expected %d's argument is '%s' and in " +
                     "reality it is different('%s')") %
@@ -63,13 +63,13 @@ class parser_test_case_t(unittest.TestCase):
         exception_decls = []
         for name in exceptions:
             exception_decl = self.global_ns.class_(name)
-            self.failUnless(
+            self.assertTrue(
                 exception_decl,
                 "unable to find exception class '%s'" %
                 name)
             exception_decls.append(exception_decl)
         exception_decls.sort()
-        self.failUnless(
+        self.assertTrue(
             len(calldef.exceptions) == len(exception_decls),
             ("the function's '%s' expected number of exceptions is '%d' and " +
                 "in reality it is different('%d')") %
@@ -77,7 +77,7 @@ class parser_test_case_t(unittest.TestCase):
              len(exception_decls),
              len(calldef.exceptions)))
         exceptions_indeed = sorted(calldef.exceptions[:])
-        self.failUnless(
+        self.assertTrue(
             exception_decls == exceptions_indeed,
             ("the function's '%s' expected exceptions are '%s' and in " +
                 "reality it is different('%s')") %

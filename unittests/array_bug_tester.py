@@ -21,7 +21,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').type
-        self.failUnless(
+        self.assertTrue(
             'int[2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
@@ -31,7 +31,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').type
-        self.failUnless(
+        self.assertTrue(
             'int *[2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
@@ -41,7 +41,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').type
-        self.failUnless(
+        self.assertTrue(
             'int[2]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
@@ -51,7 +51,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').type
-        self.failUnless(
+        self.assertTrue(
             '::xyz[2][3]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 

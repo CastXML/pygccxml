@@ -22,7 +22,7 @@ class tester_t(unittest.TestCase):
 
         for expected, text in data:
             got = declarations.CALLING_CONVENTION_TYPES.extract(text)
-            self.failUnless(
+            self.assertTrue(
                 got == expected, "Expected calling convention: %s, got %s" %
                 (expected, got))
 

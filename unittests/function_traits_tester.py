@@ -31,7 +31,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         df = d.mem_fun('f')
         bf = b.mem_fun('f')
 
-        self.failUnless(
+        self.assertTrue(
             id(df) != id(bf) and declarations.is_same_function(df, bf))
 
 

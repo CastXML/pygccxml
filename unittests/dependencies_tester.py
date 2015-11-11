@@ -30,15 +30,15 @@ class tester_t(parser_test_case.parser_test_case_t):
         ns_vars = self.global_ns.namespace('::declarations::variables')
         static_var = ns_vars.variable('static_var')
         dependencies = static_var.i_depend_on_them()
-        self.failUnless(len(dependencies) == 1)
-        self.failUnless(dependencies[0].declaration is static_var)
-        self.failUnless(dependencies[0].depend_on_it.decl_string == 'int')
+        self.assertTrue(len(dependencies) == 1)
+        self.assertTrue(dependencies[0].declaration is static_var)
+        self.assertTrue(dependencies[0].depend_on_it.decl_string == 'int')
 
         m_mutable = ns_vars.variable('m_mutable')
         dependencies = m_mutable.i_depend_on_them()
-        self.failUnless(len(dependencies) == 1)
-        self.failUnless(dependencies[0].declaration is m_mutable)
-        self.failUnless(dependencies[0].depend_on_it.decl_string == 'int')
+        self.assertTrue(len(dependencies) == 1)
+        self.assertTrue(dependencies[0].declaration is m_mutable)
+        self.assertTrue(dependencies[0].depend_on_it.decl_string == 'int')
 
     def test_class(self):
         ns_vars = self.global_ns.namespace('::declarations::variables')
@@ -50,18 +50,18 @@ class tester_t(parser_test_case.parser_test_case_t):
             # and operator= to the class, if it has
             dependencies = [
                 d for d in dependencies if not d.declaration.is_artificial]
-            self.failUnless(len(dependencies) == 1)
+            self.assertTrue(len(dependencies) == 1)
         else:
             # compiler generated copy constructor
-            self.failUnless(len(dependencies) == 2)
+            self.assertTrue(len(dependencies) == 2)
 
         m_mutable = ns_vars.variable('m_mutable')
         dependencies = [
             dependency for dependency in dependencies if
             dependency.declaration is m_mutable]
-        self.failUnless(len(dependencies) == 1)
-        self.failUnless(dependencies[0].depend_on_it.decl_string == 'int')
-        self.failUnless(dependencies[0].access_type == 'public')
+        self.assertTrue(len(dependencies) == 1)
+        self.assertTrue(dependencies[0].depend_on_it.decl_string == 'int')
+        self.assertTrue(dependencies[0].access_type == 'public')
 
         ns_dh = self.global_ns.namespace('::core::diamand_hierarchy')
         fd_cls = ns_dh.class_('final_derived_t')
@@ -70,28 +70,28 @@ class tester_t(parser_test_case.parser_test_case_t):
         dependencies = [
             dependency for dependency in dependencies if
             dependency.depend_on_it is derived1_cls]
-        self.failUnless(len(dependencies) == 1)
-        self.failUnless(dependencies[0].depend_on_it is derived1_cls)
-        self.failUnless(dependencies[0].access_type == 'public')
+        self.assertTrue(len(dependencies) == 1)
+        self.assertTrue(dependencies[0].depend_on_it is derived1_cls)
+        self.assertTrue(dependencies[0].access_type == 'public')
 
     def test_calldefs(self):
         ns = self.global_ns.namespace('::declarations::calldef')
         return_default_args = ns.calldef('return_default_args')
         dependencies = return_default_args.i_depend_on_them()
-        self.failUnless(len(dependencies) == 3)
+        self.assertTrue(len(dependencies) == 3)
         used_types = [
             dependency.depend_on_it.decl_string for dependency in dependencies]
-        self.failUnless(used_types == ['int', 'int', 'bool'])
+        self.assertTrue(used_types == ['int', 'int', 'bool'])
 
         some_exception = ns.class_('some_exception_t')
         other_exception = ns.class_('other_exception_t')
         calldef_with_throw = ns.calldef('calldef_with_throw')
         dependencies = calldef_with_throw.i_depend_on_them()
-        self.failUnless(len(dependencies) == 3)
+        self.assertTrue(len(dependencies) == 3)
         dependencies = [
             dependency for dependency in dependencies if
             dependency.depend_on_it in (some_exception, other_exception)]
-        self.failUnless(len(dependencies) == 2)
+        self.assertTrue(len(dependencies) == 2)
 
     def test_coverage(self):
         self.global_ns.i_depend_on_them()

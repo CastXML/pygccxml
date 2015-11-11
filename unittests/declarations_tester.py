@@ -24,7 +24,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         expected_values = list(
             zip(['e%d' % index for index in range(10)],
                 [index for index in range(10)]))
-        self.failUnless(
+        self.assertTrue(
             expected_values == enum.values,
             ("expected enum values ( '%s' ) and existings ( '%s' ) are " +
                 "different") %
@@ -46,7 +46,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         else:
             expected_value = '10122004'
 
-        self.failUnless(
+        self.assertTrue(
             initialized.value == expected_value,
             ("there is a difference between expected value( %s ) and real " +
                 "value(%s) of 'initialized' variable") %
@@ -57,10 +57,10 @@ class declarations_t(parser_test_case.parser_test_case_t):
             declarations.long_unsigned_int_t)
 
         static_var = initialized = self.global_ns.variable(name='static_var')
-        self.failUnless(
+        self.assertTrue(
             static_var.type_qualifiers.has_static,
             "static_var must have static type qualifier")
-        self.failUnless(
+        self.assertTrue(
             not static_var.type_qualifiers.has_mutable,
             "static_var must not have mutable type qualifier")
 
@@ -68,11 +68,11 @@ class declarations_t(parser_test_case.parser_test_case_t):
             return  # TODO find out work around
 
         m_mutable = initialized = self.global_ns.variable(name='m_mutable')
-        self.failUnless(
+        self.assertTrue(
             not m_mutable.type_qualifiers.has_static,
             "m_mutable must not have static type qualifier")
         # TODO: "There is bug in GCCXML: doesn't write mutable qualifier."
-        # self.failUnless( m_mutable.type_qualifiers.has_mutable
+        # self.assertTrue( m_mutable.type_qualifiers.has_mutable
         #                 , "static_var must have mutable type qualifier" )
 
     def test_calldef_free_functions(self):
@@ -87,18 +87,18 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # gccxml will be dropped one day. With castxml check if function has
         # no extern qualifier.
         if 'GCC-XML' in utils.xml_generator:
-            self.failUnless(
+            self.assertTrue(
                 no_return_no_args.has_extern,
                 "function 'no_return_no_args' should have an extern qualifier")
         else:
-            self.failUnless(
+            self.assertTrue(
                 not no_return_no_args.has_extern,
                 "function 'no_return_no_args' should have an extern qualifier")
 
         # Static_call is explicetely defined as extern, this works with gccxml
         # and castxml.
         static_call = ns.free_function('static_call')
-        self.failUnless(
+        self.assertTrue(
             static_call,
             "function 'no_return_no_args' should have an extern qualifier")
 
@@ -106,10 +106,10 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self._test_calldef_return_type(return_no_args, declarations.int_t)
         # from now there is no need to check return type.
         no_return_1_arg = ns.free_function(name='no_return_1_arg')
-        self.failUnless(
+        self.assertTrue(
             no_return_1_arg,
             "unable to find 'no_return_1_arg' function")
-        self.failUnless(no_return_1_arg.arguments[0].name in ['arg', 'arg0'])
+        self.assertTrue(no_return_1_arg.arguments[0].name in ['arg', 'arg0'])
         self._test_calldef_args(
             no_return_1_arg,
             [declarations.argument_t(
@@ -117,9 +117,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
                 type=declarations.int_t())])
 
         return_default_args = ns.free_function('return_default_args')
-        self.failUnless(
+        self.assertTrue(
             return_default_args.arguments[0].name in ['arg', 'arg0'])
-        self.failUnless(
+        self.assertTrue(
             return_default_args.arguments[1].name in ['arg1', 'flag'])
         self._test_calldef_args(
             return_default_args,
@@ -134,7 +134,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self._test_calldef_exceptions(return_default_args, [])
 
         calldef_with_throw = ns.free_function('calldef_with_throw')
-        self.failUnless(
+        self.assertTrue(
             calldef_with_throw,
             "unable to find 'calldef_with_throw' function")
         self._test_calldef_exceptions(
@@ -154,31 +154,31 @@ class declarations_t(parser_test_case.parser_test_case_t):
 
         member_const_call = struct_calldefs.member_function(
             'member_const_call')
-        self.failUnless(
+        self.assertTrue(
             member_const_call.has_const,
             "function 'member_const_call' should have const qualifier")
-        self.failUnless(
+        self.assertTrue(
             member_const_call.virtuality ==
             declarations.VIRTUALITY_TYPES.NOT_VIRTUAL,
             "function 'member_const_call' should be non virtual function")
 
         member_virtual_call = struct_calldefs.member_function(
             name='member_virtual_call')
-        self.failUnless(
+        self.assertTrue(
             member_virtual_call.virtuality ==
             declarations.VIRTUALITY_TYPES.VIRTUAL,
             "function 'member_virtual_call' should be virtual function")
 
         member_pure_virtual_call = struct_calldefs.member_function(
             'member_pure_virtual_call')
-        self.failUnless(
+        self.assertTrue(
             member_pure_virtual_call.virtuality ==
             declarations.VIRTUALITY_TYPES.PURE_VIRTUAL,
             ("function 'member_pure_virtual_call' should be pure virtual " +
                 "function"))
 
         static_call = struct_calldefs.member_function('static_call')
-        self.failUnless(
+        self.assertTrue(
             static_call.has_static,
             "function 'static_call' should have static qualifier")
         # from now we there is no need to check static qualifier
@@ -198,13 +198,13 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # 3. default
         # 4. copy constructor
         constructor_found = struct_calldefs.constructors('calldefs_t')
-        self.failUnless(
+        self.assertTrue(
             len(constructor_found) == 5,
             ("struct 'calldefs_t' has 5 constructors, pygccxml parser " +
                 "reports only about %d.") %
             len(constructor_found))
         error_text = "copy constructor has not been found"
-        self.failUnless(1 == len(
+        self.assertTrue(1 == len(
             [constructor for constructor in constructor_found if
                 constructor.is_copy_constructor]), error_text)
         # there is nothing to check about constructors - I know the
@@ -212,7 +212,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # In this case it doesn't different from any other function
 
         c = struct_calldefs.constructor('calldefs_t', arg_types=['char'])
-        self.failUnless(
+        self.assertTrue(
             c.explicit,
             ("calldef_t constructor defined with 'explicit' keyword, " +
                 "for some reason the value is False "))
@@ -220,7 +220,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         arg_type = declarations.declarated_t(
             self.global_ns.class_('some_exception_t'))
         c = struct_calldefs.constructor('calldefs_t', arg_types=[arg_type])
-        self.failUnless(
+        self.assertTrue(
             c.explicit is False,
             ("calldef_t constructor defined without 'explicit' keyword, " +
                 "for some reason the value is True "))
@@ -229,17 +229,17 @@ class declarations_t(parser_test_case.parser_test_case_t):
         calldefs_operators = ['=', '==']
         calldefs_cast_operators = ['char *', 'double']
         struct_calldefs = self.global_ns.class_('calldefs_t')
-        self.failUnless(struct_calldefs, "unable to find struct 'calldefs_t'")
+        self.assertTrue(struct_calldefs, "unable to find struct 'calldefs_t'")
         for decl in struct_calldefs.declarations:
             if not isinstance(decl, declarations.operator_t):
                 continue
             if not isinstance(decl, declarations.casting_operator_t):
-                self.failUnless(
+                self.assertTrue(
                     decl.symbol in calldefs_operators,
                     "unable to find operator symbol for operator '%s'" %
                     decl.decl_string)
             else:
-                self.failUnless(
+                self.assertTrue(
                     decl.return_type.decl_string in calldefs_cast_operators,
                     "unable to find operator symbol for operator '%s'" %
                     decl.decl_string)
@@ -247,9 +247,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
     def test_ellipsis(self):
         ns = self.global_ns.ns('ellipsis_tester')
         do_smth = ns.mem_fun('do_smth')
-        self.failUnless(do_smth.has_ellipsis)
+        self.assertTrue(do_smth.has_ellipsis)
         do_smth_else = ns.free_fun('do_smth_else')
-        self.failUnless(do_smth_else.has_ellipsis)
+        self.assertTrue(do_smth_else.has_ellipsis)
 
 
 class gccxml_declarations_t(declarations_t):

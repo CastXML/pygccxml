@@ -37,7 +37,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         result = set()
         for fn in files:
             result.add(os.path.split(fn)[1])
-        self.failUnless(set(self.__files).issubset(result))
+        self.assertTrue(set(self.__files).issubset(result))
 
 
 def create_suite():

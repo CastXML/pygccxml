@@ -25,14 +25,14 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         inlined_funcs = self.global_ns.calldefs('inlined')
-        self.failUnless(len(inlined_funcs))
+        self.assertTrue(len(inlined_funcs))
         for f in inlined_funcs:
-            self.failUnless(f.has_inline)
+            self.assertTrue(f.has_inline)
 
         not_inlined_funcs = self.global_ns.calldefs('not_inlined')
-        self.failUnless(len(not_inlined_funcs))
+        self.assertTrue(len(not_inlined_funcs))
         for f in not_inlined_funcs:
-            self.failUnless(f.has_inline is False)
+            self.assertTrue(f.has_inline is False)
 
     def test2(self):
         pass

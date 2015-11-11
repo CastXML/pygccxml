@@ -48,28 +48,28 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                 if 0:  # platform.machine() == 'x86_64':
                     cls = demangled.class_(
                         'item_t<25214903917ul, 11ul, 2147483648ul>')
-                    self.failUnless(
+                    self.assertTrue(
                         cls._name == 'item_t<25214903917ul,11ul,2147483648ul>',
                         cls._name)
                 else:
                     cls = demangled.class_(
                         'item_t<3740067437ul, 11ul, 2147483648ul>')
-                    self.failUnless(
+                    self.assertTrue(
                         cls._name == 'item_t<3740067437ul,11ul,2147483648ul>')
             else:
                 cls = demangled.class_('item_t<3740067437l, 11l, 2147483648l>')
-                self.failUnless(
+                self.assertTrue(
                     cls._name == 'item_t<0x0deece66d,11,0x080000000>')
         else:
             cls = demangled.class_("item_t<25214903917l, 11l, 2147483648l>")
-            self.failUnless(cls._name == 'item_t<25214903917,11,2147483648>')
+            self.assertTrue(cls._name == 'item_t<25214903917,11,2147483648>')
 
     def test_free_function(self):
         f = self.global_ns.free_functions('set_a', allow_empty=True)
         if not f:
             return
         f = f[0]
-        self.failUnless(f.mangled)
+        self.assertTrue(f.mangled)
 
 
 class tester_32_t(tester_impl_t):

@@ -26,13 +26,13 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         bf_x = self.global_ns.variable('x')
-        self.failUnless(bf_x.bits == 1)
+        self.assertTrue(bf_x.bits == 1)
 
         bf_y = self.global_ns.variable('y')
-        self.failUnless(bf_y.bits == 7)
+        self.assertTrue(bf_y.bits == 7)
 
         mv_z = self.global_ns.variable('z')
-        self.failUnless(mv_z.bits is None)
+        self.assertTrue(mv_z.bits is None)
 
     def test2(self):
         pass

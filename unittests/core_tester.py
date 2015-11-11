@@ -36,7 +36,7 @@ class core_t(parser_test_case.parser_test_case_t):
 
     def test_top_parent(self):
         enum = self.global_ns.enum('::ns::ns32::E33')
-        self.failUnless(self.global_ns is enum.top_parent)
+        self.assertTrue(self.global_ns is enum.top_parent)
 
     # tests namespaces join functionality. described in gccxml.py
     def test_nss_join(self):
@@ -66,7 +66,7 @@ class core_t(parser_test_case.parser_test_case_t):
         ns12 = self.global_ns.namespace(nss[1])
         ns22 = self.global_ns.namespace(nss[2])
         ns32 = self.global_ns.namespace(nss[3])
-        self.failUnless(
+        self.assertTrue(
             ns and (
                 ns is ns12.parent is ns22.parent is ns32.parent),
             'There are 2 or more instances of ns namespace.')
@@ -74,14 +74,14 @@ class core_t(parser_test_case.parser_test_case_t):
         E11 = self.global_ns.enum(enums[0])
         E21 = self.global_ns.enum(enums[1])
         E31 = self.global_ns.enum(enums[2])
-        self.failUnless(
+        self.assertTrue(
             E11.parent is E21.parent is E31.parent,
             'There are 2 or more instances of global namespace.')
 
         nsE12 = self.global_ns.enum(enums[3])
         nsE23 = self.global_ns.enum(enums[4])
         nsE33 = self.global_ns.enum(enums[5])
-        self.failUnless(
+        self.assertTrue(
             ns and (
                 ns is nsE12.parent is nsE23.parent is nsE33.parent),
             'There are 2 or more instances of ns namespace.')
@@ -92,24 +92,24 @@ class core_t(parser_test_case.parser_test_case_t):
                 autoconfig.data_directory,
                 d.location.file_name),
             recursive=False)
-        self.failUnless(
+        self.assertTrue(
             unnamed_enum in ns.declarations,
             "namespace '%s' does not contains unnamed enum." %
             ns.name)
 
         enum = ns.enum(enum_name, recursive=False)
 
-        self.failUnless(
+        self.assertTrue(
             enum in ns.declarations,
             "namespace '%s' does not contains enum '%s'" %
             (ns.name, enum.name))
 
-        self.failUnless(
+        self.assertTrue(
             unnamed_enum.parent is ns,
             ("unnamed enum belong to namespace '%s' but this namespace " +
                 "is not it's parent.") % ns.name)
 
-        self.failUnless(
+        self.assertTrue(
             enum.parent is ns,
             ("enum '%s' belong to namespace '%s' but this namespace" +
                 " is not it's parent.") % (enum.name, ns.name))
@@ -124,7 +124,7 @@ class core_t(parser_test_case.parser_test_case_t):
         nested_enum2 = class_inst.enum(enum_name)
 
         # it shoud be same object
-        self.failUnless(
+        self.assertTrue(
             nested_enum1 is nested_enum2,
             ("enum accessed through access definition('%s') and " +
                 "through declarations('%s') are different enums " +
@@ -132,7 +132,7 @@ class core_t(parser_test_case.parser_test_case_t):
             (nested_enum1.name, nested_enum2.name))
 
         # check whether we meaning same class instance
-        self.failUnless(
+        self.assertTrue(
             class_inst is nested_enum1.parent is nested_enum2.parent,
             'There are 2 or more instances of ns namespace.')
 
@@ -173,11 +173,11 @@ class core_t(parser_test_case.parser_test_case_t):
 
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
-        self.failUnless(std, "std namespace has not been found")
+        self.assertTrue(std, "std namespace has not been found")
         # GCCXML had mangled names for everything. With CastXML
         # there are only mangled names for functions and variables.
         if "GCC" in utils.xml_generator:
-            self.failUnless(
+            self.assertTrue(
                 std.mangled,
                 "Mangled name of std namespace should be different from None")
         elif "CastXML" in utils.xml_generator:
@@ -190,7 +190,7 @@ class core_t(parser_test_case.parser_test_case_t):
         # This works with gccxml and castxml
         ns = self.global_ns.namespace("overloads")
         do_nothing = ns.calldefs("do_nothing", recursive=False)
-        self.failUnless(
+        self.assertTrue(
             do_nothing.mangled,
             "Mangled name of do_nothing function should be different +"
             "from None")
@@ -198,7 +198,7 @@ class core_t(parser_test_case.parser_test_case_t):
     def test_mangled_name_variable(self):
         # This works with gccxml and castxml
         var_inst = self.global_ns.variable('array255')
-        self.failUnless(
+        self.assertTrue(
             var_inst.mangled,
             "Mangled name of array255 variable should be different +"
             "from None")
@@ -208,7 +208,7 @@ class core_t(parser_test_case.parser_test_case_t):
         # raised when using castxml.
         var_inst = self.global_ns.variable('array255')
         if "GCC" in utils.xml_generator:
-            self.failUnless(
+            self.assertTrue(
                 var_inst.demangled,
                 "Demangled name of array255 variable should be different +"
                 "from None")
@@ -220,7 +220,7 @@ class core_t(parser_test_case.parser_test_case_t):
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
         dhi_not_v = declarations.hierarchy_info_t(derived, access, False)
-        self.failUnless(
+        self.assertTrue(
             dhi_v in base.derived or dhi_not_v in base.derived,
             "base class '%s' doesn't has derived class '%s'" %
             (base.name, derived.name))
@@ -228,7 +228,7 @@ class core_t(parser_test_case.parser_test_case_t):
         bhi_v = declarations.hierarchy_info_t(base, access, True)
         bhi_not_v = declarations.hierarchy_info_t(base, access, False)
 
-        self.failUnless(
+        self.assertTrue(
             bhi_v in derived.bases or bhi_not_v in derived.bases,
             "derive class '%s' doesn't has base class '%s'" %
             (derived.name, base.name))
@@ -273,7 +273,7 @@ class core_t(parser_test_case.parser_test_case_t):
                       for hierarchy_info in derived1.bases])
         bases2 = set([id(hierarchy_info.related_class)
                       for hierarchy_info in derived2.bases])
-        self.failUnless(
+        self.assertTrue(
             bases1 == bases2,
             ("derived class '%s' and derived class '%s' has references to " +
                 "different instance of base classes ") %
@@ -321,7 +321,7 @@ class core_t(parser_test_case.parser_test_case_t):
             typedef = self.global_ns.decl(
                 decl_type=declarations.typedef_t,
                 name=typedef_name)
-            self.failUnless(
+            self.assertTrue(
                 typedef,
                 "unable to find typedef to build-in type '%s'" %
                 fundamental_type_name)
@@ -390,14 +390,14 @@ class core_t(parser_test_case.parser_test_case_t):
         typedef_inst = self.global_ns.decl(
             decl_type=declarations.typedef_t,
             name='typedef_EFavoriteDrinks')
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 typedef_inst.type,
                 declarations.declarated_t),
             " typedef to enum should be 'declarated_t' instead of '%s'" %
             typedef_inst.type.__class__.__name__)
         enum_declaration = self.global_ns.enum('EFavoriteDrinks')
-        self.failUnless(
+        self.assertTrue(
             typedef_inst.type.declaration is enum_declaration,
             "instance of declaration_t has reference to '%s' instead of '%s'" %
             (typedef_inst.type.declaration.name,
@@ -412,26 +412,26 @@ class core_t(parser_test_case.parser_test_case_t):
             declarations.pointer_t,
             declarations.free_function_type_t)
         function_type = function_ptr.type.base
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 function_type.return_type,
                 declarations.int_t),
             "return function type of typedef 'function_ptr' should be " +
             "'%s' instead of '%s' " %
             ('int_t', function_type.return_type.__class__.__name__))
-        self.failUnless(
+        self.assertTrue(
             len(function_type.arguments_types) == 2,
             "number of arguments of function of typedef 'function_ptr' " +
             "should be 2 instead of '%d' " %
             len(function_type.arguments_types))
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 function_type.arguments_types[0],
                 declarations.int_t),
             "first argument of function of typedef 'function_ptr' should be " +
             "'%s' instead of '%s' " %
             ('int_t', function_type.arguments_types[0].__class__.__name__))
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 function_type.arguments_types[1],
                 declarations.double_t),
@@ -451,26 +451,26 @@ class core_t(parser_test_case.parser_test_case_t):
         function_type = function_ptr.type.base
 
         members_pointers = self.global_ns.class_('members_pointers_t')
-        self.failUnless(
+        self.assertTrue(
             function_type.class_inst.declaration is members_pointers,
             "member function type class should be '%s' instead of '%s'" %
             (members_pointers.decl_string,
              function_type.class_inst.decl_string))
 
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 function_type.return_type,
                 declarations.int_t),
             "return function type of typedef 'member_function_ptr_t' should " +
             "be '%s' instead of '%s' " %
             ('int_t', function_type.return_type.__class__.__name__))
-        self.failUnless(
+        self.assertTrue(
             len(
                 function_type.arguments_types) == 1,
             "number of arguments of function of typedef " +
             "'member_function_ptr_t' should be 1 instead of '%d' " % len(
                 function_type.arguments_types))
-        self.failUnless(
+        self.assertTrue(
             isinstance(
                 function_type.arguments_types[0],
                 declarations.double_t),
@@ -478,7 +478,7 @@ class core_t(parser_test_case.parser_test_case_t):
             "should be '%s' instead of '%s' " %
             ('double_t', function_type.arguments_types[0].__class__.__name__))
 
-        self.failUnless(
+        self.assertTrue(
             function_type.has_const,
             " 'member_function_ptr_t' should be const function.")
 
@@ -492,7 +492,7 @@ class core_t(parser_test_case.parser_test_case_t):
             declarations.member_variable_type_t)
 
         members_pointers = self.global_ns.class_('members_pointers_t')
-        self.failUnless(
+        self.assertTrue(
             members_pointers,
             "unable to find class('%s')" %
             'members_pointers_t')
@@ -501,7 +501,7 @@ class core_t(parser_test_case.parser_test_case_t):
             declarations.member_variable_type_t,
             declarations.declarated_t)
         mv_type = mv.type.base
-        self.failUnless(
+        self.assertTrue(
             mv_type.base.declaration is members_pointers,
             "member function type class should be '%s' instead of '%s'" %
             (members_pointers.decl_string,
@@ -511,7 +511,7 @@ class core_t(parser_test_case.parser_test_case_t):
         ns = self.global_ns.namespace('overloads')
 
         do_nothings = ns.calldefs('do_nothing', recursive=False)
-        self.failUnless(
+        self.assertTrue(
             4 == len(do_nothings),
             ("expected number of overloaded 'do_nothing' functions is %d " +
                 "and existing(%d) is different") %
@@ -526,39 +526,39 @@ class core_t(parser_test_case.parser_test_case_t):
                 for x in others:
                     print(str(x))
 
-            self.failUnless(set(do_nothing.overloads) == set(
+            self.assertTrue(set(do_nothing.overloads) == set(
                 others), "there is a difference between expected function " +
                 "overloads and existing ones.")
 
     def test_abstract_classes(self):
         ns = self.global_ns.namespace('abstract_classes')
         abstract_i = ns.class_('abstract_i')
-        self.failUnless(
+        self.assertTrue(
             abstract_i.is_abstract,
             "class 'abstract_i' should be abstract")
         derived_abstract_i = ns.class_('derived_abstract_i')
-        self.failUnless(
+        self.assertTrue(
             derived_abstract_i.is_abstract,
             "class 'derived_abstract_i' should be abstract")
         implementation = ns.class_('implementation')
-        self.failUnless(
+        self.assertTrue(
             not implementation.is_abstract,
             "class 'implementation' should not be abstract")
 
     def test_versioning(self):
-        self.failUnless(utils.xml_generator)
+        self.assertTrue(utils.xml_generator)
 
     def test_byte_size(self):
         mptrs = self.global_ns.class_('members_pointers_t')
-        self.failUnless(mptrs.byte_size != 0)
+        self.assertTrue(mptrs.byte_size != 0)
 
     def test_byte_align(self):
         mptrs = self.global_ns.class_('members_pointers_t')
-        self.failUnless(mptrs.byte_align != 0)
+        self.assertTrue(mptrs.byte_align != 0)
 
     def test_byte_offset(self):
         mptrs = self.global_ns.class_('members_pointers_t')
-        self.failUnless(mptrs.variable('xxx').byte_offset != 0)
+        self.assertTrue(mptrs.variable('xxx').byte_offset != 0)
 
 
 class core_gccxml_t(core_t):

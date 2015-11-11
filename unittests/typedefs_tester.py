@@ -30,9 +30,9 @@ class tester_src_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         item_cls = self.global_ns.class_(name='item_t')
-        self.failUnless(item_cls, "unable to find class 'item_t'")
-        self.failUnless(len(item_cls.aliases) == 1)
-        self.failUnless(item_cls.aliases[0].name == 'Item')
+        self.assertTrue(item_cls, "unable to find class 'item_t'")
+        self.assertTrue(len(item_cls.aliases) == 1)
+        self.assertTrue(item_cls.aliases[0].name == 'Item')
 
 
 class tester_prj_t(parser_test_case.parser_test_case_t):
@@ -56,11 +56,11 @@ class tester_prj_t(parser_test_case.parser_test_case_t):
             self.declarations,
             type=declarations.class_t,
             name='item_t')
-        self.failUnless(item_cls, "unable to find class 'item_t'")
-        self.failUnless(len(item_cls.aliases) == 3)
+        self.assertTrue(item_cls, "unable to find class 'item_t'")
+        self.assertTrue(len(item_cls.aliases) == 3)
         expected_aliases = set(['Item', 'Item1', 'Item2'])
         real_aliases = set([typedef.name for typedef in item_cls.aliases])
-        self.failUnless(real_aliases == expected_aliases)
+        self.assertTrue(real_aliases == expected_aliases)
 
 
 def create_suite():

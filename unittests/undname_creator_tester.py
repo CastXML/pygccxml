@@ -122,12 +122,12 @@ class tester_t(parser_test_case.parser_test_case_t):
         symbols, parser = binary_parsers.merge_information(
             self.global_ns, fname, runs_under_unittest=True)
         # this doesn't work reliably
-        # self.failUnless(
+        # self.assertTrue(
         #    len(symbols) == expected_symbols,
         # "The expected symbols number(%d),
         # is different from the actual one(%d)"
         # % ( expected_symbols, len(symbols) ) )
-        self.failUnless('identity' in symbols)
+        self.assertTrue('identity' in symbols)
 
         msg = []
         blob_names = set()
@@ -179,7 +179,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         msymbols, mparser = binary_parsers.merge_information(
             self.global_ns, self.map_file, runs_under_unittest=True)
 
-        self.failUnless(
+        self.assertTrue(
             len(dparser.loaded_symbols) == len(mparser.loaded_symbols))
 
         was_error = False
@@ -189,12 +189,12 @@ class tester_t(parser_test_case.parser_test_case_t):
                 print(
                     '\n%s could not be found in .map file' %
                     binary_parsers.undecorate_blob(blob))
-                # self.failUnless( blob in msymbols,
+                # self.assertTrue( blob in msymbols,
                 # binary_parsers.undecorate_blob( blob ) )
             else:
                 mdecl = msymbols[blob]
-                self.failUnless(mdecl is decl)
-        self.failUnless(was_error is False)
+                self.assertTrue(mdecl is decl)
+        self.assertTrue(was_error is False)
 
     def test_so_file(self):
         if 'posix' in os.name:

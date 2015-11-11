@@ -38,12 +38,12 @@ class tester_t(parser_test_case.parser_test_case_t):
         # always on ubuntu (clang and gcc). Just skip this test for the
         # moment.
 
-        # self.failUnless(None is numeric.attributes)
+        # self.assertTrue(None is numeric.attributes)
 
         do_nothing = numeric.mem_fun('do_nothing')
-        self.failUnless((prefix + "(no throw)") == do_nothing.attributes)
+        self.assertTrue((prefix + "(no throw)") == do_nothing.attributes)
         arg = do_nothing.arguments[0]
-        self.failUnless((prefix + "(out)") == arg.attributes)
+        self.assertTrue((prefix + "(out)") == arg.attributes)
 
 
 def create_suite():

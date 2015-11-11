@@ -26,11 +26,11 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def validate_yes(self, ns, controller):
         for typedef in ns.typedefs():
-            self.failUnless(controller(typedef.type))
+            self.assertTrue(controller(typedef.type))
 
     def validate_no(self, ns, controller):
         for typedef in ns.typedefs():
-            self.failUnless(not controller(typedef.type))
+            self.assertTrue(not controller(typedef.type))
 
     def test_string(self):
         string_traits = self.global_ns.namespace('string_traits')

@@ -28,8 +28,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        self.failUnless(global_ns.variable('a').bits == 1)
-        self.failUnless(global_ns.variable('unused').bits == 31)
+        self.assertTrue(global_ns.variable('a').bits == 1)
+        self.assertTrue(global_ns.variable('unused').bits == 31)
 
 
 def create_suite():

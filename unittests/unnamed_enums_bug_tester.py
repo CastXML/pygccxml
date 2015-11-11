@@ -29,11 +29,11 @@ class source_reader_tester_t(parser_test_case.parser_test_case_t):
         enums = self.global_ns.enums()
         for enum in enums:
             names.extend(list(enum.get_name2value_dict().keys()))
-        self.failUnless(len(names) == 4)
-        self.failUnless('x1' in names)
-        self.failUnless('x2' in names)
-        self.failUnless('y1' in names)
-        self.failUnless('y2' in names)
+        self.assertTrue(len(names) == 4)
+        self.assertTrue('x1' in names)
+        self.assertTrue('x2' in names)
+        self.assertTrue('y1' in names)
+        self.assertTrue('y2' in names)
 
 
 class project_reader_1_tester_t(parser_test_case.parser_test_case_t):
@@ -53,11 +53,11 @@ class project_reader_1_tester_t(parser_test_case.parser_test_case_t):
         names = []
         for enum in self.global_ns.enums():
             names.extend(list(enum.get_name2value_dict().keys()))
-        self.failUnless(len(names) == 4)
-        self.failUnless('x1' in names)
-        self.failUnless('x2' in names)
-        self.failUnless('y1' in names)
-        self.failUnless('y2' in names)
+        self.assertTrue(len(names) == 4)
+        self.assertTrue('x1' in names)
+        self.assertTrue('x2' in names)
+        self.assertTrue('y1' in names)
+        self.assertTrue('y2' in names)
 
 
 class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
@@ -82,13 +82,13 @@ class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
         list(map(
             lambda enum: names.extend(list(enum.get_name2value_dict().keys())),
             enums))
-        self.failUnless(len(names) == 6)
-        self.failUnless('x1' in names)
-        self.failUnless('x2' in names)
-        self.failUnless('y1' in names)
-        self.failUnless('y2' in names)
-        self.failUnless('z1' in names)
-        self.failUnless('z2' in names)
+        self.assertTrue(len(names) == 6)
+        self.assertTrue('x1' in names)
+        self.assertTrue('x2' in names)
+        self.assertTrue('y1' in names)
+        self.assertTrue('y2' in names)
+        self.assertTrue('z1' in names)
+        self.assertTrue('z2' in names)
 
 
 def create_suite():
