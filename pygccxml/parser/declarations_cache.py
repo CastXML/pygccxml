@@ -276,7 +276,9 @@ class file_cache_t(cache_base_t):
 class dummy_cache_t(cache_base_t):
 
     """
-    By default no caching is enabled in pygccxml. This is an empty cache object.
+    This is an empty cache object.
+
+    By default no caching is enabled in pygccxml.
 
     """
 
