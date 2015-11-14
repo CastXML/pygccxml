@@ -300,7 +300,7 @@ class enum(object):
                 (enum_numeric_value, cls.__name__))
 
 
-class native_compiler:
+class native_compiler(object):
     """
     Provides information about the compiler which was used to build the
     Python executable

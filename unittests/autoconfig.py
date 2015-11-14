@@ -32,7 +32,7 @@ generator_path, generator_name = pygccxml.utils.find_xml_generator()
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 
-class cxx_parsers_cfg:
+class cxx_parsers_cfg(object):
     gccxml = pygccxml.parser.load_xml_generator_configuration(
         'xml_generator.cfg',
         xml_generator_path=generator_path,

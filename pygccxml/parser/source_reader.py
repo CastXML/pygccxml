@@ -48,7 +48,7 @@ def bind_aliases(decls):
         cls_inst.aliases.append(decl)
 
 
-class source_reader_t:
+class source_reader_t(object):
     """
     This class reads C++ source code and returns the declarations tree.
 

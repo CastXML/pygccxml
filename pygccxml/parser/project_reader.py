@@ -11,7 +11,7 @@ import pygccxml.declarations
 from .. import utils
 
 
-class COMPILATION_MODE:
+class COMPILATION_MODE(object):
     ALL_AT_ONCE = 'all at once'
     FILE_BY_FILE = 'file by file'
 
@@ -53,7 +53,7 @@ class file_configuration_t(object):
 
     """
 
-    class CONTENT_TYPE:
+    class CONTENT_TYPE(object):
         STANDARD_SOURCE_FILE = 'standard source file'
         CACHED_SOURCE_FILE = 'cached source file'
         GCCXML_GENERATED_FILE = 'gccxml generated file'
@@ -163,7 +163,7 @@ def create_cached_source_fc(header, cached_source_file):
         content_type=file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE)
 
 
-class project_reader_t:
+class project_reader_t(object):
 
     """parses header files and returns the contained declarations"""
 

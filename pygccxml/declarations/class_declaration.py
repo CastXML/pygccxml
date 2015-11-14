@@ -19,7 +19,7 @@ from . import dependencies
 from pygccxml import utils
 
 
-class ACCESS_TYPES:
+class ACCESS_TYPES(object):
 
     """class that defines "access" constants"""
     PUBLIC = "public"
@@ -28,7 +28,7 @@ class ACCESS_TYPES:
     ALL = [PUBLIC, PRIVATE, PROTECTED]
 
 
-class CLASS_TYPES:
+class CLASS_TYPES(object):
 
     """class that defines "class" type constants"""
     CLASS = "class"
