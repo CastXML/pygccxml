@@ -27,7 +27,7 @@ except ImportError:
 from . import declarations_cache
 
 
-class index_entry_t:
+class index_entry_t(object):
 
     """
     Entry of the index table in the directory cache index.
@@ -376,7 +376,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
         return m.digest()
 
 
-class filename_entry_t:
+class filename_entry_t(object):
 
     """This is a record stored in the filename_repository_t class.
 
@@ -423,7 +423,7 @@ class filename_entry_t:
         return self.refcount
 
 
-class filename_repository_t:
+class filename_repository_t(object):
 
     """File name repository.
 

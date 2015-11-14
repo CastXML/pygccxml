@@ -365,7 +365,7 @@ def is_fundamental(type):
             (cpptypes.volatile_t, cpptypes.const_t))
 
 
-class declaration_xxx_traits:
+class declaration_xxx_traits(object):
 
     """this class implements the functionality needed for convenient work with
     declaration classes
@@ -634,7 +634,7 @@ def is_binary_operator(oper):
             return False
 
 
-class __is_convertible_t:
+class __is_convertible_t(object):
 
     """implementation details"""
 
@@ -1056,7 +1056,7 @@ def is_defined_in_xxx(xxx, cls):
     return None is global_ns.parent
 
 
-class impl_details:
+class impl_details(object):
 
     """implementation details"""
     @staticmethod
@@ -1133,7 +1133,7 @@ class impl_details:
             return None
 
 
-class internal_type_traits:
+class internal_type_traits(object):
 
     """small convenience class, which provides access to internal types"""
     # TODO: add exists function
@@ -1158,7 +1158,7 @@ class internal_type_traits:
                 % (name, type_.decl_string))
 
 
-class smart_pointer_traits:
+class smart_pointer_traits(object):
 
     """implements functionality, needed for convenient work with
     smart pointers"""
@@ -1188,7 +1188,7 @@ class smart_pointer_traits:
         return internal_type_traits.get_by_name(type_, "value_type")
 
 
-class auto_ptr_traits:
+class auto_ptr_traits(object):
 
     """implements functionality, needed for convenient work with
     `std::auto_ptr` pointers"""

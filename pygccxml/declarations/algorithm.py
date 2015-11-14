@@ -213,7 +213,7 @@ def get_global_namespace(decls):
     raise RuntimeError("Unable to find global namespace.")
 
 
-class match_declaration_t:
+class match_declaration_t(object):
     """
     Helper class for different search algorithms.
 
