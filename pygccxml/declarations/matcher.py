@@ -102,7 +102,7 @@ class matcher:
         answer = matcher.find(decl_matcher, decls, recursive)
         if len(answer) == 1:
             return answer[0]
-        elif len(answer) == 0:
+        elif not answer:
             raise matcher.declaration_not_found_t(decl_matcher)
         else:
             raise matcher.multiple_declarations_found_t(decl_matcher)

@@ -227,11 +227,12 @@ class source_reader_t(object):
 
         """
 
-        if len(self.__config.define_symbols) != 0:
+        if self.__config.define_symbols:
             symbols = self.__config.define_symbols
             cmd.append(''.join(
                 [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
-        if len(self.__config.undefine_symbols) != 0:
+
+        if self.__config.undefine_symbols:
             un_symbols = self.__config.undefine_symbols
             cmd.append(
                 ''.join([' -U"%s"' % undefined_symbol for
