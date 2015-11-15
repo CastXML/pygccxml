@@ -8,7 +8,7 @@
 from . import algorithm
 
 
-class matcher:
+class matcher(object):
 
     """Class-namespace, contains implementation of a few "find" algorithms
     and definition of the related exception classes"""
