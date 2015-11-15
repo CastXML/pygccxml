@@ -101,7 +101,7 @@ class enumeration_t(declaration.declaration_t):
         """
         # No number given? Then use the previous one + 1
         if valuenum is None:
-            if len(self._values) == 0:
+            if not self._values:
                 valuenum = 0
             else:
                 valuenum = self._values[-1][1] + 1

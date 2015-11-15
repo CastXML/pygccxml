@@ -515,7 +515,7 @@ class filename_repository_t(object):
         """Update the `id_` counter so that it doesn't grow forever.
         """
 
-        if len(self.__entries) == 0:
+        if not self.__entries:
             self.__next_id = 1
         else:
             self.__next_id = max(self.__entries.keys()) + 1
