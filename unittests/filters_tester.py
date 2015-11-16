@@ -39,14 +39,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         criteria = declarations.access_type_matcher_t(
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
-        if "CastXML" in utils.xml_generator:
-            public_members = [d for d in public_members if not d.is_artificial]
-            self.assertTrue(21 == len(public_members))
-        if "0.9" in utils.xml_generator:
-            public_members = [d for d in public_members if not d.is_artificial]
-            self.assertTrue(17 == len(public_members))
-        else:
-            self.assertTrue(21 == len(public_members))
+        public_members = [d for d in public_members if not d.is_artificial]
+        self.assertTrue(17 == len(public_members))
 
     def test_or_matcher(self):
         criteria1 = declarations.regex_matcher_t(

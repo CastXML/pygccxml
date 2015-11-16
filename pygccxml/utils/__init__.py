@@ -20,3 +20,7 @@ from .utils import get_tr1
 
 # Version of xml generator which was used.
 xml_generator = None
+
+# With CastXML and clang some __va_list_tag declarations are present in the
+# tree. This options allows to remove them when parsing the xml file.
+remove__va_list_tag = True
