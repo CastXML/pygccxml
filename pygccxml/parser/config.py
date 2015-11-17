@@ -43,7 +43,8 @@ class parser_configuration_t(object):
             compiler=None,
             xml_generator="gccxml",
             keep_xml=False,
-            compiler_path=None):
+            compiler_path=None,
+            flags=None):
 
         object.__init__(self)
         self.__working_directory = working_directory
@@ -67,6 +68,10 @@ class parser_configuration_t(object):
         self.__xml_generator = xml_generator
 
         self.__keep_xml = keep_xml
+
+        if flags is None:
+            flags = []
+        self.__flags = flags
 
         # If no compiler path was set and we are using castxml, set the path
         self.__compiler_path = create_compiler_path(
@@ -127,6 +132,18 @@ class parser_configuration_t(object):
     def keep_xml(self, keep_xml):
         """Set if xml files kept after errors."""
         self.__keep_xml = keep_xml
+
+    @property
+    def flags(self):
+        """Optional flags for pygccxml."""
+        return self.__flags
+
+    @flags.setter
+    def flags(self, flags):
+        """Optional flags for pygccxml."""
+        if flags is None:
+            flags = []
+        self.__flags = flags
 
     @property
     def compiler_path(self):
@@ -192,7 +209,8 @@ class xml_generator_configuration_t(parser_configuration_t):
             compiler=None,
             xml_generator="gccxml",
             keep_xml=False,
-            compiler_path=None):
+            compiler_path=None,
+            flags=None):
 
         parser_configuration_t.__init__(
             self,
@@ -204,7 +222,8 @@ class xml_generator_configuration_t(parser_configuration_t):
             compiler=compiler,
             xml_generator=xml_generator,
             keep_xml=keep_xml,
-            compiler_path=compiler_path)
+            compiler_path=compiler_path,
+            flags=flags)
 
         if gccxml_path != '':
             self.__gccxml_path = gccxml_path
@@ -400,6 +419,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             cfg.xml_generator = value
         elif name == 'keep_xml':
             cfg.keep_xml = value
+        elif name == 'flags':
+            cfg.flags = value
         elif name == 'compiler_path':
             cfg.compiler_path = value
         else:

@@ -31,7 +31,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         if "GCCXML" in self.config.xml_generator:
             return True
 
-        utils.remove__va_list_tag = False
+        self.config.flags = ["f1"]
         src_reader = parser.source_reader_t(self.config)
         decls = declarations.make_flatten(src_reader.read_string(self.__code))
 
@@ -62,7 +62,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         if "GCCXML" in self.config.xml_generator:
             return True
 
-        utils.remove__va_list_tag = True
+        self.config.flags = []
         src_reader = parser.source_reader_t(self.config)
         decls = declarations.make_flatten(src_reader.read_string(self.__code))
 

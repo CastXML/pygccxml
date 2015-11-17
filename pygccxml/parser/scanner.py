@@ -205,7 +205,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # With CastXML and clang some __va_list_tag declarations are
             # present in the tree: we do not want to have these in the tree.
             # This option is set to True by default
-            remove_va_list_tag = utils.remove__va_list_tag
+            remove_va_list_tag = "f1" not in self.config.flags
 
             if isinstance(obj, declarations.declaration_t):
 
