@@ -27,6 +27,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.__code = os.linesep.join(['struct a{};'])
 
     def test_keep_va_list_tag(self):
+
+        if "GCCXML" in self.config.xml_generator:
+            return True
+
         utils.remove__va_list_tag = False
         src_reader = parser.source_reader_t(self.config)
         decls = declarations.make_flatten(src_reader.read_string(self.__code))
@@ -54,6 +58,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.assertTrue(len(variables) == 4)
 
     def test_remove_va_list_tag(self):
+
+        if "GCCXML" in self.config.xml_generator:
+            return True
+
         utils.remove__va_list_tag = True
         src_reader = parser.source_reader_t(self.config)
         decls = declarations.make_flatten(src_reader.read_string(self.__code))
