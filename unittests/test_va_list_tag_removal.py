@@ -28,7 +28,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_keep_va_list_tag(self):
 
-        if "GCCXML" in self.config.xml_generator:
+        if "gccxml" in self.config.xml_generator:
             return True
 
         self.config.flags = ["f1"]
@@ -59,7 +59,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_remove_va_list_tag(self):
 
-        if "GCCXML" in self.config.xml_generator:
+        if "gccxml" in self.config.xml_generator:
             return True
 
         self.config.flags = []
