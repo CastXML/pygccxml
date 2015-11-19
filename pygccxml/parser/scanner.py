@@ -188,12 +188,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def members(self):
         return self.__members
 
-    def startElementNS(self, name, qname, attrs):
-        return self.startElement(name[1], attrs)
-
-    def endElementNS(self, name, qname):
-        return self.endElement(name[1])
-
     def startElement(self, name, attrs):
 
         try:
@@ -207,7 +201,17 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 self.__inst = obj
             self.__read_access(attrs)
             element_id = attrs.get(XML_AN_ID, None)
+
+            # With CastXML and clang some __va_list_tag declarations are
+            # present in the tree: we do not want to have these in the tree.
+            # This option is set to True by default
+            remove_va_list_tag = "f1" not in self.config.flags
+
             if isinstance(obj, declarations.declaration_t):
+
+                if remove_va_list_tag and "__va_list_tag" in str(obj.name):
+                    return
+
                 # XML generator. Kept for retrocompatibily
                 obj.compiler = utils.xml_generator
 
@@ -223,11 +227,18 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 self.__read_attributes(obj, attrs)
 
             elif isinstance(obj, declarations.type_t):
+
                 self.__types[element_id] = obj
                 self.__read_byte_size(obj, attrs)
                 self.__read_byte_align(obj, attrs)
+
             elif utils.is_str(obj):
+
+                if remove_va_list_tag and "__va_list_tag" in obj:
+                    return
+
                 self.__files[element_id] = obj
+
             else:
                 self.logger.warning(
                     'Unknown object type has been found.' +
@@ -515,7 +526,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
     __read_field = __read_variable  # just a synonim
 
     def __read_class_impl(self, class_type, attrs):
-        decl = None
         name = attrs.get(XML_AN_NAME, '')
         if '$' in name or '.' in name:
             name = ''

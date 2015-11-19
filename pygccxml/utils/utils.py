@@ -46,7 +46,6 @@ def find_xml_generator(name=None):
     else:
         command = "which"
 
-    path = ""
     if name is None:
         name = "gccxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
@@ -301,7 +300,7 @@ class enum(object):
                 (enum_numeric_value, cls.__name__))
 
 
-class native_compiler:
+class native_compiler(object):
     """
     Provides information about the compiler which was used to build the
     Python executable
@@ -314,7 +313,7 @@ class native_compiler:
             return None  # not implemented yet
         else:
             from distutils import msvccompiler
-            return ('msvc', str(msvccompiler.get_build_version()))
+            return 'msvc', str(msvccompiler.get_build_version())
 
     @staticmethod
     def get_gccxml_compiler():

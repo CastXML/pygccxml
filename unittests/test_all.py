@@ -66,6 +66,7 @@ import from_future_import_tester
 import pep8_tester
 import example_tester
 import test_utils
+import test_va_list_tag_removal
 
 testers = [
     # , demangled_tester # failing right now
@@ -124,7 +125,8 @@ testers = [
     from_future_import_tester,
     pep8_tester,
     example_tester,
-    test_utils
+    test_utils,
+    test_va_list_tag_removal
 ]
 
 if 'posix' in os.name:

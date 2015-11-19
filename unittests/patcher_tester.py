@@ -25,9 +25,9 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         default_val = fix_enum.arguments[0].default_value
         if "CastXML" in utils.xml_generator:
             # Most clean output, no need to patch
-            self.failUnless(default_val == "ns1::ns2::apple")
+            self.assertTrue(default_val == "ns1::ns2::apple")
         else:
-            self.failUnless(default_val == "::ns1::ns2::apple")
+            self.assertTrue(default_val == "::ns1::ns2::apple")
 
         # double_call = declarations.find_declaration(
         # decls, type=declarations.free_function_t, name='double_call' )
@@ -37,33 +37,33 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         if 32 == self.architecture:
             if "0.9" in utils.xml_generator:
                 if platform.machine() == "x86_64":
-                    self.failUnless(
+                    self.assertTrue(
                         fix_numeric.arguments[0].default_value == "-1u",
                         fix_numeric.arguments[0].default_value)
                 else:
                     val = "0xffffffffffffffffu"
-                    self.failUnless(
+                    self.assertTrue(
                         fix_numeric.arguments[0].default_value == val,
                         fix_numeric.arguments[0].default_value)
             else:
                 val = "0xffffffffffffffff"
-                self.failUnless(
+                self.assertTrue(
                     fix_numeric.arguments[0].default_value == val,
                     fix_numeric.arguments[0].default_value)
         else:
             if "CastXML" in utils.xml_generator:
                 # Most clean output, no need to patch
-                self.failUnless(
+                self.assertTrue(
                     fix_numeric.arguments[0].default_value == "(ull)-1",
                     fix_numeric.arguments[0].default_value)
             else:
-                self.failUnless(
+                self.assertTrue(
                     fix_numeric.arguments[0].default_value == "0ffffffff",
                     fix_numeric.arguments[0].default_value)
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun("fix_unnamed")
-        self.failUnless(
+        self.assertTrue(
             fix_unnamed.arguments[0].default_value == "int(::fx::unnamed)")
 
     def test_function_call_patcher(self):
@@ -72,18 +72,18 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         if "CastXML" in utils.xml_generator:
             # Most clean output, no need to patch
             val = "calc(1, 2, 3)"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
         elif "0.9" in utils.xml_generator:
             val = "function_call::calc(1, 2, 3)"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
         else:
             val = "function_call::calc( 1, 2, 3 )"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun("fix_fundamental")
         val = "(unsigned int)(::fundamental::eggs)"
-        self.failUnless(
+        self.assertTrue(
             fcall.arguments[0].default_value == val)
 
     def test_constructor_patcher(self):
@@ -91,14 +91,14 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         default_val = typedef__func.arguments[0].default_value
         if "0.9" in utils.xml_generator:
             val = "typedef_::original_name()"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
         elif "CastXML" in utils.xml_generator:
             # Most clean output, no need to patch
             val = "typedef_::alias()"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
         else:
             val = "::typedef_::alias( )"
-            self.failUnless(default_val == val)
+            self.assertTrue(default_val == val)
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun("clone_tree")
             default_values = []
@@ -116,7 +116,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                         "std::allocator<char> > > >((&allocator" +
                         "<std::basic_string<char, std::char_traits<char>, " +
                         "std::allocator<char> > >()))")]
-                self.failUnless(
+                self.assertTrue(
                     clone_tree.arguments[0].default_value in default_values)
 
 

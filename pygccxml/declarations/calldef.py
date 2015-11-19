@@ -26,7 +26,7 @@ from . import call_invocation
 from .. import utils
 
 
-class VIRTUALITY_TYPES:
+class VIRTUALITY_TYPES(object):
 
     """class that defines "virtuality" constants"""
     NOT_VIRTUAL = 'not virtual'
@@ -37,7 +37,7 @@ class VIRTUALITY_TYPES:
 FUNCTION_VIRTUALITY_TYPES = VIRTUALITY_TYPES
 
 
-class CALLING_CONVENTION_TYPES:
+class CALLING_CONVENTION_TYPES(object):
 
     """class that defines "calling convention" constants"""
     UNKNOWN = ''
@@ -354,8 +354,7 @@ class calldef_t(declaration.declaration_t):
         # finding all functions with the same name
         return self.parent.calldefs(
             name=self.name,
-            function=lambda decl: not (
-                decl is self),
+            function=lambda decl: decl is not self,
             allow_empty=True,
             recursive=False)
 

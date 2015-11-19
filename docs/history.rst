@@ -11,6 +11,24 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
+Version 1.7.1
+-------------
+
+1. Remove the __va_list_tag declaration from the tree when parsing with CastXML
+
+   The __va_list_tag declarations are internal declarations, which are often
+   not needed. They are for example polluting the declarations tree when running
+   pyplusplus.
+
+   This is optional but on by default. To still load the __va_list_tag declarations
+   in the tree, a config flag can be set like this: ``config.flags = ["f1"]``,
+   or by passing the ``flags=["f1"]`` argument the config setup.
+
+2. Some code cleanup
+
+3. Build new package for pypi. The ``1.7.0`` upload has gone wrong ...
+
+
 Version 1.7.0
 -------------
 
@@ -123,6 +141,8 @@ Version 1.7.0
 23. [Tests] Add test case for non copyable class due to const array
 
 24. [Doc] Small documentation update, moved people list to credits page, added new examples.
+
+25. [Misc] Add Travis unit tests for Python 3.5
 
 
 Version 1.6.2

@@ -24,16 +24,14 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def touch(self):
         # Need to change file.
-        header = open(self.header, "a")
-        header.write("//touch")
-        header.close()
+        with open(self.header, "a+") as header:
+            header.write("//touch")
 
     def test_update(self):
 
         # Save the content of the header file for later
-        old_header = open(self.header, "r")
-        content = old_header.read()
-        old_header.close()
+        with open(self.header, "r") as old_header:
+            content = old_header.read()
 
         declarations = parser.parse([self.header], self.config)
         cache = parser.file_cache_t(self.cache_file)
@@ -42,22 +40,21 @@ class tester_t(parser_test_case.parser_test_case_t):
             configuration=self.config,
             declarations=declarations,
             included_files=[])
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),
             "cached declarations and source declarations are different")
         self.touch()
-        self.failUnless(
+        self.assertTrue(
             cache.cached_value(self.header, self.config) is None,
             "cache didn't recognize that some files on disk has been changed")
 
         # We wrote a //touch in the header file. Just replace the file with the
         # original content. The touched file would be sometimes commited by
         # error as it was modified.
-        new_header = open(self.header, "w")
-        new_header.write(content)
-        new_header.close()
+        with open(self.header, "w") as new_header:
+            new_header.write(content)
 
     def test_from_file(self):
         declarations = parser.parse([self.header], self.config)
@@ -67,14 +64,14 @@ class tester_t(parser_test_case.parser_test_case_t):
             configuration=self.config,
             declarations=declarations,
             included_files=[])
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),
             "cached declarations and source declarations are different")
         cache.flush()
         cache = parser.file_cache_t(self.cache_file)
-        self.failUnless(
+        self.assertTrue(
             declarations == cache.cached_value(
                 self.header,
                 self.config),

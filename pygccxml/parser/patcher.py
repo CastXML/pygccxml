@@ -22,9 +22,7 @@ class default_argument_patcher_t(object):
                 arg.default_value = fixer(decl, arg)
 
     def __find_fixer(self, func, arg):
-        if not arg.default_value:
-            return False
-        elif self.__is_unqualified_enum(func, arg):
+        if self.__is_unqualified_enum(func, arg):
             return self.__fix_unqualified_enum
         elif self.__is_double_call(func, arg):
             return self.__fix_double_call

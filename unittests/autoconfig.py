@@ -13,10 +13,10 @@ this_module_dir_path = os.path.abspath(
 data_directory = os.path.join(this_module_dir_path, 'data')
 build_directory = os.path.join(this_module_dir_path, 'temp')
 
-sys.path.insert(0, os.path.join(os.curdir, '..'))
+sys.path.insert(1, os.path.join(os.curdir, '..'))
 # The tests are run on the parent pygccxml directory, not the one
 # in site-packages. Insert the directory's path.
-sys.path.insert(0, "../pygccxml")
+sys.path.insert(1, "../pygccxml")
 
 import pygccxml  # nopep8
 import pygccxml.declarations  # nopep8
@@ -32,7 +32,7 @@ generator_path, generator_name = pygccxml.utils.find_xml_generator()
 pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 
-class cxx_parsers_cfg:
+class cxx_parsers_cfg(object):
     gccxml = pygccxml.parser.load_xml_generator_configuration(
         'xml_generator.cfg',
         xml_generator_path=generator_path,

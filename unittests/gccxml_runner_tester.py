@@ -17,7 +17,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.content = "abra cadabra " + os.linesep
 
     def test_gccxml_on_input_with_errors(self):
-        self.failUnlessRaises(
+        self.assertRaises(
             RuntimeError,
             parser.parse_string,
             self.content,

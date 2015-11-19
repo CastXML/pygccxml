@@ -27,7 +27,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         var_i = declarations.find_declaration(
             decls, type=declarations.variable_t, name='i')
-        self.failUnless(var_i, "Variable i has not been found.")
+        self.assertTrue(var_i, "Variable i has not been found.")
 
 
 def create_suite():

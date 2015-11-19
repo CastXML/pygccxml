@@ -21,7 +21,7 @@ import ctypes
 from .. import declarations
 
 
-class UNDECORATE_NAME_OPTIONS:
+class UNDECORATE_NAME_OPTIONS(object):
 
     """defines few constants for `UnDecorateSymbolName` function"""
 
@@ -76,7 +76,7 @@ class UNDECORATE_NAME_OPTIONS:
         | UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_ECSU
 
 
-class undname_creator_t:
+class undname_creator_t(object):
 
     """implementation details - should not be used directly
 
@@ -253,7 +253,7 @@ class undname_creator_t:
         could be mapped later to the blobs.
         The valid options are: "msvc" and "nm".
         """
-        name = None
+
         if hint is None:
             if 'nt' == os.name:
                 hint = 'msvc'

@@ -40,18 +40,16 @@ class tester_t(parser_test_case.parser_test_case_t):
         if src_decls != prj_decls:
             s = src_decls[0]
             p = prj_decls[0]
-            sr = open(
-                os.path.join(
-                    autoconfig.build_directory, file_name + '.sr.txt'), 'w+')
-            pr = open(
-                os.path.join(
-                    autoconfig.build_directory, file_name + '.pr.txt'), 'w+')
-            declarations.print_declarations(
-                s, writer=lambda l: sr.write(l + os.linesep))
-            declarations.print_declarations(
-                p, writer=lambda l: pr.write(l + os.linesep))
-            sr.close()
-            pr.close()
+            bdir = autoconfig.build_directory
+            with open(os.path.join(bdir, file_name + '.sr.txt'), 'w+') as sr:
+                with open(
+                        os.path.join(bdir, file_name + '.pr.txt'), 'w+') as pr:
+
+                    declarations.print_declarations(
+                        s, writer=lambda l: sr.write(l + os.linesep))
+                    declarations.print_declarations(
+                        p, writer=lambda l: pr.write(l + os.linesep))
+
             self.fail(
                 "There is a difference between declarations in file %s." %
                 file_name)
@@ -88,7 +86,7 @@ class tester2_t(parser_test_case.parser_test_case_t):
             os.path.join(
                 autoconfig.build_directory, 'separate_compilation.pr.txt'))
 
-        self.failUnless(
+        self.assertTrue(
             src_decls == prj_decls,
             "There is a difference between declarations")
 

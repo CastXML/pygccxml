@@ -13,16 +13,16 @@ class tester_t(unittest.TestCase):
         unittest.TestCase.__init__(self, *args)
 
     def __test_split_impl(self, decl_string, name, args):
-        self.failUnless(
+        self.assertTrue(
             (name, args) == declarations.call_invocation.split(decl_string))
 
     def __test_split_recursive_impl(self, decl_string, control_seq):
-        self.failUnless(
+        self.assertTrue(
             control_seq ==
             declarations.call_invocation.split_recursive(decl_string))
 
     def __test_is_call_invocation_impl(self, decl_string):
-        self.failUnless(
+        self.assertTrue(
             declarations.call_invocation.is_call_invocation(decl_string))
 
     def test_split_on_vector(self):
@@ -64,7 +64,7 @@ class tester_t(unittest.TestCase):
                 " std::vector(int, std::allocator(int) ) ) )"])
 
     def test_join_on_vector(self):
-        self.failUnless(
+        self.assertTrue(
             "vector( int, std::allocator(int) )" ==
             declarations.call_invocation.join(
                 "vector", ("int", "std::allocator(int)")))
@@ -72,14 +72,14 @@ class tester_t(unittest.TestCase):
     def test_find_args(self):
         temp = 'x()()'
         found = declarations.call_invocation.find_args(temp)
-        self.failUnless((1, 2) == found)
+        self.assertTrue((1, 2) == found)
         found = declarations.call_invocation.find_args(temp, found[1] + 1)
-        self.failUnless((3, 4) == found)
+        self.assertTrue((3, 4) == found)
         temp = 'x(int,int)(1,2)'
         found = declarations.call_invocation.find_args(temp)
-        self.failUnless((1, 9) == found)
+        self.assertTrue((1, 9) == found)
         found = declarations.call_invocation.find_args(temp, found[1] + 1)
-        self.failUnless((10, 14) == found)
+        self.assertTrue((10, 14) == found)
 
     def test_bug_unmatched_brace(self):
         src = 'AlternativeName((&string("")), (&string("")), (&string("")))'

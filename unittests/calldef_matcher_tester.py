@@ -27,7 +27,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             return_type='int',
             arg_types=[None, declarations.bool_t()])
         rda = declarations.matcher.get_single(criteria, self.declarations)
-        self.failUnless(rda, "return_default_args function was not found.")
+        self.assertTrue(rda, "return_default_args function was not found.")
 
 
 def create_suite():

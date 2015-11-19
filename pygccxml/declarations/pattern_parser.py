@@ -102,7 +102,7 @@ class parser_t(object):
             if -1 == found:
                 return self.NOT_FOUND
             elif text[found] == self.__end:
-                return (first_occurance, found)
+                return first_occurance, found
             else:
                 previous_found = found + 1  # skip found sep
 
@@ -129,7 +129,7 @@ class parser_t(object):
         if None is arg_separator:
             arg_separator = ', '
         args = [_f for _f in args if _f]
-        args_str = ''
+
         if not args:
             args_str = ' '
         elif 1 == len(args):

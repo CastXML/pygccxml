@@ -4,3 +4,8 @@ docs/_build
 unittests/temp
 unittests/data/pygccxml.cache
 .idea
+dist
+build
+pygccxml.egg-info
+*.prof
+.coverage

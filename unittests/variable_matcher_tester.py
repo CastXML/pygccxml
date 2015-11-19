@@ -32,7 +32,7 @@ class tester_1_t(parser_test_case.parser_test_case_t):
         comp_str = (
             '(decl type==variable_t) and (name==x) and ' +
             '(value type==unsigned int)')
-        self.failUnless(str(criteria) == comp_str)
+        self.assertTrue(str(criteria) == comp_str)
 
         criteria = declarations.variable_matcher_t(
             name='::bit_fields::fields_t::x',
@@ -42,9 +42,9 @@ class tester_1_t(parser_test_case.parser_test_case_t):
             header_file=x.location.file_name)
 
         x = declarations.matcher.get_single(criteria, self.declarations)
-        self.failUnless(x, "Variable was not found.")
+        self.assertTrue(x, "Variable was not found.")
 
-        self.failUnless('public' == x.access_type)
+        self.assertTrue('public' == x.access_type)
 
 
 class tester_2_t(parser_test_case.parser_test_case_t):

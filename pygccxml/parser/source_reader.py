@@ -48,7 +48,7 @@ def bind_aliases(decls):
         cls_inst.aliases.append(decl)
 
 
-class source_reader_t:
+class source_reader_t(object):
     """
     This class reads C++ source code and returns the declarations tree.
 
@@ -227,11 +227,12 @@ class source_reader_t:
 
         """
 
-        if len(self.__config.define_symbols) != 0:
+        if self.__config.define_symbols:
             symbols = self.__config.define_symbols
             cmd.append(''.join(
                 [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
-        if len(self.__config.undefine_symbols) != 0:
+
+        if self.__config.undefine_symbols:
             un_symbols = self.__config.undefine_symbols
             cmd.append(
                 ''.join([' -U"%s"' % undefined_symbol for
@@ -319,7 +320,7 @@ class source_reader_t:
         :rtype: returns file name of GCC-XML generated file
         """
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        xml_file = None
+
         try:
             header_file_obj = open(header_file, 'w+')
             header_file_obj.write(content)
@@ -400,16 +401,16 @@ class source_reader_t:
         """
 
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
-        header_file_obj = open(header_file, 'w+')
-        header_file_obj.write(content)
-        header_file_obj.close()
-        declarations = None
+        with open(header_file, "w+") as f:
+            f.write(content)
+
         try:
             declarations = self.read_file(header_file)
         except Exception:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
             raise
         pygccxml.utils.remove_file_no_raise(header_file, self.__config)
+
         return declarations
 
     def __file_full_name(self, file):
@@ -478,7 +479,7 @@ class source_reader_t:
                 decls.values()) if isinstance(
                 inst,
                 declarations.namespace_t) and not inst.parent]
-        return (decls, list(files.values()))
+        return decls, list(files.values())
 
     def join_declarations(self, declref):
         self._join_namespaces(declref)

@@ -21,13 +21,13 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __check_result(self, decls):
         E11 = declarations.find_declaration(decls, fullname='::E11')
-        self.failUnless(E11, "unable to find 'E11' enum")
+        self.assertTrue(E11, "unable to find 'E11' enum")
         ns12 = declarations.find_declaration(decls, fullname='::ns::ns12')
-        self.failUnless(ns12, "unable to find 'ns12' namespace")
+        self.assertTrue(ns12, "unable to find 'ns12' namespace")
         E13 = declarations.find_declaration(ns12.declarations, name='E13')
-        self.failUnless(E13, "unable to find 'E13' enum")
+        self.assertTrue(E13, "unable to find 'E13' enum")
         E14 = declarations.find_declaration(decls, name='E14')
-        self.failUnless(
+        self.assertTrue(
             not E14,
             "enum 'E14' should not be found in declarations")
 

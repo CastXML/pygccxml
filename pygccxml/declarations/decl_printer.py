@@ -148,7 +148,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     artificial.ljust(
                         self.JUSTIFY))
                 if self.__inst.attributes:
-                    attributes = 'attributes: %s' % (self.__inst.attributes)
+                    attributes = 'attributes: %s' % self.__inst.attributes
                     self.writer(
                         ' ' *
                         curr_level *
@@ -157,7 +157,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 if "GCC" in utils.xml_generator and self.__inst.demangled:
                     # Working only with gccxml.
                     # No demangled attribute with castxml
-                    demangled = 'demangled: %s' % (self.__inst.demangled)
+                    demangled = 'demangled: %s' % self.__inst.demangled
                     self.writer(
                         ' ' *
                         curr_level *
@@ -177,7 +177,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                             print_mangled = True
 
                 if print_mangled:
-                    mangled = 'mangled: %s' % (self.__inst.mangled)
+                    mangled = 'mangled: %s' % self.__inst.mangled
                     self.writer(
                         ' ' *
                         curr_level *
@@ -279,7 +279,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             class_type.ljust(
                 self.JUSTIFY))
         if self.__print_details:
-            byte_size = 'size: %d' % (self.__inst.byte_size)
+            byte_size = 'size: %d' % self.__inst.byte_size
             self.writer(
                 ' ' *
                 curr_level *
@@ -287,7 +287,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 byte_size.ljust(
                     self.JUSTIFY))
             try:
-                byte_align = 'align: %d' % (self.__inst.byte_align)
+                byte_align = 'align: %d' % self.__inst.byte_align
                 self.writer(
                     ' ' *
                     curr_level *
@@ -339,7 +339,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                             self.INDENT_SIZE +
                             access.ljust(self.JUSTIFY) +
                             os.linesep)
-                if not (None is class_.is_virtual):
+                if class_.is_virtual is not None:
                     is_virtual = 'virtual inheritance: ' + \
                         "'%s'" % str(class_.is_virtual)
                     self.writer(' ' *
@@ -434,7 +434,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             self.__inst.value)
         if self.__print_details:
             if self.__inst.bits:
-                bits = 'bits: %d' % (self.__inst.bits)
+                bits = 'bits: %d' % self.__inst.bits
                 self.writer(
                     ' ' *
                     curr_level *
@@ -442,7 +442,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     bits.ljust(
                         self.JUSTIFY))
 
-            byte_size = 'size: %d' % (self.__inst.type.byte_size)
+            byte_size = 'size: %d' % self.__inst.type.byte_size
             self.writer(
                 ' ' *
                 curr_level *
@@ -450,7 +450,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 byte_size.ljust(
                     self.JUSTIFY))
             try:
-                byte_align = 'align: %d' % (self.__inst.type.byte_align)
+                byte_align = 'align: %d' % self.__inst.type.byte_align
                 self.writer(
                     ' ' *
                     curr_level *
@@ -464,7 +464,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     self.INDENT_SIZE +
                     "align: not implemented".ljust(
                         self.JUSTIFY))
-            byte_offset = 'offset: %d' % (self.__inst.byte_offset)
+            byte_offset = 'offset: %d' % self.__inst.byte_offset
             self.writer(
                 ' ' *
                 curr_level *
@@ -477,8 +477,7 @@ def print_declarations(
         decls,
         detailed=True,
         recursive=True,
-        writer=lambda x: sys.stdout.write(
-            x + os.linesep),
+        writer=lambda x: sys.stdout.write(x + os.linesep),
         verbose=True):
     """
     print declarations tree rooted at each of the included nodes.
@@ -495,14 +494,15 @@ def print_declarations(
         algorithm.apply_visitor(prn, d)
 
 
-def dump_declarations(decls, fpath):
+def dump_declarations(declarations, file_path):
     """
-    dump declarations tree rooted at each of the included nodes to the file
+    Dump declarations tree rooted at each of the included nodes to the file
 
-    :param decls: either a single :class:declaration_t object or list
+    :param declarations: either a single :class:declaration_t object or a list
         of :class:declaration_t objects
-    :param fpath: file name
+    :param file_path: path to a file
+
     """
-    fobj = open(fpath, 'w+')
-    print_declarations(decls, writer=fobj.write)
-    fobj.close()
+
+    with open(file_path, "w+") as f:
+        print_declarations(declarations, writer=f.write)

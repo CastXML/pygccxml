@@ -24,13 +24,13 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test(self):
         criteria = declarations.namespace_matcher_t(name='bit_fields')
         declarations.matcher.get_single(criteria, self.declarations)
-        self.failUnless(
+        self.assertTrue(
             str(criteria) == '(decl type==namespace_t) and (name==bit_fields)')
 
     def test_allow_empty(self):
         global_ns = declarations.get_global_namespace(self.declarations)
         global_ns.init_optimizer()
-        self.failUnless(
+        self.assertTrue(
             0 == len(global_ns.namespaces('does not exist', allow_empty=True)))
 
 

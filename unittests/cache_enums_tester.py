@@ -40,7 +40,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
         color1 = declarations.matcher.get_single(enum_matcher, decls1)
         color2 = declarations.matcher.get_single(enum_matcher, decls2)
-        self.failUnless(color1.values == color2.values)
+        self.assertTrue(color1.values == color2.values)
 
 # there is no progress with this parser
 # class synopsis_tester_t( tester_impl_t ):

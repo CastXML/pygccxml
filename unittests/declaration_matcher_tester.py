@@ -36,10 +36,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         ns1 = gns.namespace('ns')
 
         gns.class_('nested_cls')
-        self.failUnlessRaises(Exception, lambda: gns.class_('ns::nested_cls'))
+        self.assertRaises(Exception, lambda: gns.class_('ns::nested_cls'))
         gns.class_('::ns::nested_cls')
 
-        self.failUnlessRaises(Exception, lambda: ns1.class_('::nested_cls'))
+        self.assertRaises(Exception, lambda: ns1.class_('::nested_cls'))
         ns1.class_('nested_cls')
         ns1.class_('::ns::nested_cls')
 

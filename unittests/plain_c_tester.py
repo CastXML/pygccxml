@@ -27,7 +27,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.global_ns.free_fun('hello_print')
         f = self.global_ns.free_fun('do_smth')
         for arg in f.arguments:
-            self.failUnless(arg.type.decl_string)
+            self.assertTrue(arg.type.decl_string)
 
 
 def create_suite():
