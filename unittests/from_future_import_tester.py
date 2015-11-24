@@ -30,12 +30,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_namespace_argument_int(self):
         # Check with an int, should raise an error
-        try:
-            # This should fail
-            self.global_ns.namespace(1)
-            self.fail("No error message triggered")
-        except AssertionError:
-            pass
+        self.assertRaises(AssertionError, lambda: self.global_ns.namespace(1))
 
     def setUp(self):
         reader = parser.source_reader_t(self.config)
