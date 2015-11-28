@@ -61,7 +61,6 @@ Documentation contents
    query_interface
    design
    upgrade_issues
-   example/example
    users
    links
    history
