@@ -2,6 +2,7 @@
 import os
 import pep8
 import unittest
+import fnmatch
 
 
 class tester_t(unittest.TestCase):
@@ -46,9 +47,16 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../docs/example/"
+        path = path + "/../docs/examples/"
 
-        self.run_check(path)
+        # Find all the examples files
+        file_paths = []
+        for root, dirnames, filenames in os.walk(path):
+            for file_path in fnmatch.filter(filenames, '*.py'):
+                file_paths.append(os.path.join(root, file_path))
+
+        for path in file_paths:
+            self.run_check(path)
 
     def test_pep8_conformance_setup(self):
         """Pep8 conformance test (setup)
