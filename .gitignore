@@ -10,3 +10,4 @@ build
 pygccxml.egg-info
 *.prof
 .coverage
+docs/examples/caching/example.hpp.xml
