@@ -736,22 +736,37 @@ class constructor_t(member_calldef_t):
 
     @property
     def is_copy_constructor(self):
-        """returns True if described declaration is copy constructor,
-        otherwise False"""
+        """
+        Returns True if described declaration is copy constructor,
+        otherwise False
+
+        """
+
         from . import type_traits
+
         args = self.arguments
-        if 1 != len(args):
+
+        # A copy constructor has only one argument
+        if len(args) != 1:
             return False
+
+        # We have only one argument, get it
         arg = args[0]
+
+        # The argument needs to be passed by reference in a copy constructor
         if not type_traits.is_reference(arg.type):
             return False
+
+        # The argument needs to be const for a copy constructor
         if not type_traits.is_const(arg.type.base):
             return False
-        unaliased = type_traits.remove_alias(arg.type.base)
-        # unaliased now refers to const_t instance
-        if not isinstance(unaliased.base, cpptypes.declarated_t):
+
+        un_aliased = type_traits.remove_alias(arg.type.base)
+        # un_aliased now refers to const_t instance
+        if not isinstance(un_aliased.base, cpptypes.declarated_t):
             return False
-        return id(unaliased.base.declaration) == id(self.parent)
+
+        return id(un_aliased.base.declaration) == id(self.parent)
 
     @property
     def is_trivial_constructor(self):
