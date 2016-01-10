@@ -12,7 +12,7 @@ declaration
 from . import cpptypes
 
 
-class impl_details:
+class impl_details(object):
 
     @staticmethod
     def dig_declarations(depend_on_it):
