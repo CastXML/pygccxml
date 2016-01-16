@@ -161,7 +161,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         # updating membership
         members_mapping = {}
         for gccxml_id, members in self.__members.items():
-            decl = self.__declarations.get(gccxml_id, None)
+            decl = self.__declarations.get(gccxml_id)
             if not decl or not isinstance(decl, declarations.scopedef_t):
                 continue
             members_mapping[id(decl)] = members
@@ -200,7 +200,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             if name in self.deep_declarations:
                 self.__inst = obj
             self.__read_access(attrs)
-            element_id = attrs.get(XML_AN_ID, None)
+            element_id = attrs.get(XML_AN_ID)
 
             # With CastXML and clang some __va_list_tag declarations are
             # present in the tree: we do not want to have these in the tree.
@@ -273,7 +273,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 line=int(attrs[XML_AN_LINE]))
 
     def __update_membership(self, attrs):
-        parent = attrs.get(XML_AN_CONTEXT, None)
+        parent = attrs.get(XML_AN_CONTEXT)
         if not parent:
             return
         if parent not in self.__members:
@@ -290,7 +290,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         decl.is_artificial = attrs.get(XML_AN_ARTIFICIAL, False)
 
     def __read_mangled(self, decl, attrs):
-        mangled = attrs.get(XML_AN_MANGLED, None)
+        mangled = attrs.get(XML_AN_MANGLED)
         # the following patch is defined here for performance reasons
         if isinstance(mangled, bytes) and \
                 mangled.endswith(self.__mangled_suffix):
@@ -298,10 +298,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
         decl.mangled = mangled
 
     def __read_demangled(self, decl, attrs):
-        decl.demangled = attrs.get(XML_AN_DEMANGLED, None)
+        decl.demangled = attrs.get(XML_AN_DEMANGLED)
 
     def __read_attributes(self, decl, attrs):
-        decl.attributes = attrs.get(XML_AN_ATTRIBUTES, None)
+        decl.attributes = attrs.get(XML_AN_ATTRIBUTES)
 
     def __read_access(self, attrs):
         self.__access[
@@ -438,7 +438,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 'arg%d' % len(
                     self.__inst.arguments))
             argument.type = attrs[XML_AN_TYPE]
-            argument.default_value = attrs.get(XML_AN_DEFAULT, None)
+            argument.default_value = attrs.get(XML_AN_DEFAULT)
             self.__read_attributes(argument, attrs)
             if 'CastXML' not in utils.xml_generator:
                 # GCCXML only
@@ -455,13 +455,13 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def __read_calldef(self, calldef, attrs, is_declaration):
         # destructor for example doesn't have return type
-        calldef.return_type = attrs.get(XML_AN_RETURNS, None)
+        calldef.return_type = attrs.get(XML_AN_RETURNS)
         if is_declaration:
             self.__calldefs.append(calldef)
             calldef.name = attrs.get(XML_AN_NAME, '')
             calldef.has_extern = attrs.get(XML_AN_EXTERN, False)
             calldef.has_inline = bool(attrs.get(XML_AN_INLINE, "") == "1")
-            throw_stmt = attrs.get(XML_AN_THROW, None)
+            throw_stmt = attrs.get(XML_AN_THROW)
             if None is throw_stmt:
                 calldef.does_throw = True
                 calldef.exceptions = []
@@ -507,7 +507,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         type_qualifiers = declarations.type_qualifiers_t()
         type_qualifiers.has_mutable = attrs.get(XML_AN_MUTABLE, False)
         type_qualifiers.has_static = attrs.get(XML_AN_EXTERN, False)
-        bits = attrs.get(XML_AN_BITS, None)
+        bits = attrs.get(XML_AN_BITS)
         if bits:
             bits = int(bits)
         decl = self.__decl_factory.create_variable(
@@ -517,8 +517,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             type=attrs[XML_AN_TYPE],
             type_qualifiers=type_qualifiers,
             value=attrs.get(
-                XML_AN_INIT,
-                None),
+                XML_AN_INIT),
             bits=bits)
         self.__read_byte_offset(decl, attrs)
         return decl
