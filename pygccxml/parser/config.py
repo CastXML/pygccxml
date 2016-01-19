@@ -343,11 +343,11 @@ def load_xml_generator_configuration(configuration, **defaults):
     """
     loads CastXML or GCC-XML configuration from an `.ini` file or any other
     file class
-    :class:`ConfigParser.SafeConfigParser` is able to parse.
+    :class:`configparser.ConfigParser` is able to parse.
 
     :param configuration: configuration could be
                           string(configuration file path) or instance
-                          of :class:`ConfigParser.SafeConfigParser` class
+                          of :class:`configparser.ConfigParser` class
 
     :rtype: :class:`.xml_generator_configuration_t`
 
@@ -381,10 +381,10 @@ def load_xml_generator_configuration(configuration, **defaults):
     parser = configuration
     if utils.is_str(configuration):
         try:
-            from configparser import SafeConfigParser
+            from configparser import ConfigParser
         except ImportError:
-            from ConfigParser import SafeConfigParser
-        parser = SafeConfigParser()
+            from ConfigParser import SafeConfigParser as ConfigParser
+        parser = ConfigParser()
         parser.read(configuration)
 
     # Create a new empty configuration
@@ -419,6 +419,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             cfg.xml_generator = value
         elif name == 'keep_xml':
             cfg.keep_xml = value
+        elif name == 'cflags':
+            cfg.cflags = value
         elif name == 'flags':
             cfg.flags = value
         elif name == 'compiler_path':
