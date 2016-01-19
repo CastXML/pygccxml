@@ -30,7 +30,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         tclass = self.global_ns.class_("test")
         for decl in tclass.declarations:
             if isinstance(decl, declarations.calldef.constructor_t):
-                #print(decl.arguments[0].name, decl.arguments[0].type)
+                # print(decl.arguments[0].name, decl.arguments[0].type)
                 print(decl.is_copy_constructor)
 
 
