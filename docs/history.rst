@@ -14,9 +14,13 @@ by setting up a git repositery on github, hosted along with gccxml.
 Version 1.7.2 (unreleased)
 --------------------------
 
-1. Fix exception in is_copy_constructor() when the constructor's argument was
-   a typedef. is_copy_constructor() will now return False instead of failing.
+1. Fix exception in is_copy_constructor when the constructor's argument was
+   a typedef. is_copy_constructor will now return False instead of failing.
    See issue #27.
+
+2. SafeConfigParser is throws a deprecation warning in python 3.2 and newer.
+   Use ConfigParser instead. Add support for cflags property in config files.
+   Thanks to Mark Moll for the patch.
 
 Version 1.7.1
 -------------
