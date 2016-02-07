@@ -29,7 +29,7 @@ global_namespace = declarations.get_global_namespace(decls)
 ns = global_namespace.namespace("ns")
 
 # The variables() method will return a list of variables.
-# We know that he c variable is the third one in the list:
+# We know that the c variable is the third one in the list:
 c = ns.variables()[2]
 print("My name is: " + c.name)
 print("My type is: " + str(c.type))
