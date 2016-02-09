@@ -53,7 +53,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             "Created decl_string for global function contains mistake")
 
     def test_all_mem_and_free_funs(self):
-        ns = self.global_ns.ns('::declarations::calldef')
+        ns = self.global_ns.namespace('::declarations::calldef')
         for f in ns.mem_funs():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)

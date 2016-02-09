@@ -105,7 +105,18 @@ class namespace_t(scopedef.scopedef_t):
                 function=function,
                 recursive=recursive)
         )
-    ns = namespace
+
+    def ns(self, name=None, function=None, recursive=None):
+        """
+        Deprecated method. Use the namespace() method instead.
+
+        """
+        warnings.warn(
+            "The ns() method is deprecated. \n" +
+            "Please use the namespace() method instead.",
+            DeprecationWarning)
+
+        return self.namespace(name, function, recursive)
 
     def namespaces(
             self,
