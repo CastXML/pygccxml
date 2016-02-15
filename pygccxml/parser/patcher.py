@@ -60,14 +60,16 @@ class default_argument_patcher_t(object):
         try:
             int(arg.default_value)
             return False
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             return True
 
     def __fix_invalid_integral(self, func, arg):
         try:
             int(arg.default_value)
             return arg.default_value
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             pass
 
         try:
@@ -83,7 +85,8 @@ class default_argument_patcher_t(object):
             if found_hex and not default_value.startswith('0x'):
                 int('0x' + default_value, 16)
                 return '0x' + default_value
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             pass
 
         # may be we deal with enum
