@@ -11,15 +11,22 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Version 1.7.2 (unreleased)
---------------------------
+Version 1.7.2
+-------------
 
 1. Fix exception in is_copy_constructor when the constructor's argument was
    a typedef. is_copy_constructor will now return False instead of failing.
    See issue #27.
 
-2. SafeConfigParser is throws a deprecation warning in python 3.2 and newer.
-   Use ConfigParser instead. Add support for cflags property in config files.
+2. Fix bug with utils.xml_generator being unset when reading cached file.
+   This could for example happen when reading a cached file from a second
+   python interpreter (e.g. in a subprocess or by calling pygccxml
+   multiple times from a script). See issue #27.
+
+3. SafeConfigParser is throwing a deprecation warning in python 3.2 and newer.
+   Use ConfigParser instead. Thanks to Mark Moll for the patch.
+
+4. Add support for cflags property in config files.
    Thanks to Mark Moll for the patch.
 
 Version 1.7.1
