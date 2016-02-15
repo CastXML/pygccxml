@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
+import warnings
 try:
     import unittest2 as unittest
 except ImportError:
@@ -161,15 +162,25 @@ class core_t(parser_test_case.parser_test_case_t):
             declarations.ACCESS_TYPES.PRIVATE)
 
     def test_compiler_retrocompatibility(self):
-        # For retrocompatibility, test if the compiler
-        # attribute still works. This can be removed
-        # once compiler is dropped.
+        """
+        For retro-compatibility, test if the compiler attribute still works.
+
+        This can be removed once the compiler attribute is dropped.
+
+        """
+
+        # Do not clutter the tests with warnings
+        warnings.simplefilter("ignore", DeprecationWarning)
+
         std = self.global_ns.namespace("std")
         self.assertEqual(utils.xml_generator, std.compiler)
         if "GCC" in utils.xml_generator:
             self.assertIn("GCC", std.compiler)
         elif "CastXML" in utils.xml_generator:
             self.assertIn("CastXML", std.compiler)
+
+        # Reset this warning to always
+        warnings.simplefilter("always", DeprecationWarning)
 
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
