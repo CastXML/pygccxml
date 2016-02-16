@@ -60,7 +60,9 @@ class tester_t(parser_test_case.parser_test_case_t):
                     decl.name.startswith('test_'):
                 continue
 
-            self.failIf(controller(decl), er % (decl.decl_string, ns_name))
+            self.assertFalse(
+                controller(decl),
+                er % (decl.decl_string, ns_name))
 
     def __test_type_transformation(self, ns_name, transformer):
         ns_control = declarations.find_declaration(
@@ -215,7 +217,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             declarations.is_same(
                 declarations.int_t,
                 declarations.int_t))
-        self.failIf(
+        self.assertFalse(
             declarations.is_same(
                 declarations.int_t,
                 declarations.float_t))
