@@ -180,7 +180,7 @@ class core_t(parser_test_case.parser_test_case_t):
             self.assertIn("CastXML", std.compiler)
 
         # Reset this warning to always
-        warnings.simplefilter("always", DeprecationWarning)
+        warnings.simplefilter("error", DeprecationWarning)
 
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")

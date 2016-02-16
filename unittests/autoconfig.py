@@ -6,6 +6,7 @@
 import os
 import sys
 import logging
+import warnings
 
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
@@ -22,6 +23,11 @@ import pygccxml  # nopep8
 import pygccxml.declarations  # nopep8
 import pygccxml.parser  # nopep8
 import pygccxml.utils  # nopep8
+
+# We want to make sure we throw an error for ALL the warnings during the
+# tests. This will allow us to be notified by the build bots, so that the
+# warnings can be fixed.
+warnings.simplefilter("error", Warning)
 
 # Set logging level
 pygccxml.utils.loggers.set_level(logging.INFO)
