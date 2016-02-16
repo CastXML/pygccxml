@@ -160,11 +160,11 @@ class tester_t(parser_test_case.parser_test_case_t):
         # traits.remove_defaults(type_info)
         decl_string = cls.partial_decl_string
         key_type_string = traits.key_type(type_info).partial_decl_string
-        self.assert_(
+        self.assertTrue(
             decl_string.startswith('::std::'),
             "declaration string %r doesn't start with 'std::'" %
             decl_string)
-        self.assert_(
+        self.assertTrue(
             key_type_string.startswith('::std::'),
             "key type string %r doesn't start with 'std::'" %
             key_type_string)

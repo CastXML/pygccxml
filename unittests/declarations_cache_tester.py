@@ -27,8 +27,8 @@ class decl_cache_tester(unittest.TestCase):
         sig1 = declarations_cache.file_signature(file1)
         sig1_dup = declarations_cache.file_signature(file1_dup)
         sig2 = declarations_cache.file_signature(file2)
-        self.assert_(sig1 == sig1_dup)
-        self.assert_(sig1 != sig2)
+        self.assertTrue(sig1 == sig1_dup)
+        self.assertTrue(sig1 != sig2)
 
     def test_config_signature(self):
         diff_cfg_list = self.build_differing_cfg_list()
@@ -37,21 +37,22 @@ class decl_cache_tester(unittest.TestCase):
 
         # Test changes that should cause sig changes
         for cfg in diff_cfg_list[1:]:
-            self.assert_(
+            self.assertTrue(
                 declarations_cache.configuration_signature(cfg) != def_sig)
 
         # Test changes that should not cause sig changes
         no_changes = def_cfg.clone()
-        self.assert_(
+        self.assertTrue(
             declarations_cache.configuration_signature(no_changes) == def_sig)
 
         # start_decls_changed = def_cfg.clone()
         # start_decls_changed.start_with_declarations = "test object"
-        # self.assert_(configuration_signature(start_decls_changed) == def_sig)
+        # self.assertTrue(
+        #   configuration_signature(start_decls_changed) == def_sig)
 
         ignore_changed = def_cfg.clone()
         ignore_changed.ignore_gccxml_output = True
-        self.assert_(
+        self.assertTrue(
             declarations_cache.configuration_signature(
                 ignore_changed) == def_sig)
 
@@ -71,41 +72,41 @@ class decl_cache_tester(unittest.TestCase):
             os.remove(cache_file)
 
         cache = declarations_cache.file_cache_t(cache_file)
-        self.assert_(len(cache._file_cache_t__cache) == 0)
+        self.assertTrue(len(cache._file_cache_t__cache) == 0)
 
         # test creating new entries for differing files
         cache.update(file1, def_cfg, 1, [])
-        self.assert_(len(cache._file_cache_t__cache) == 1)
+        self.assertTrue(len(cache._file_cache_t__cache) == 1)
         cache.update(file1_dup, def_cfg, 2, [])
-        self.assert_(len(cache._file_cache_t__cache) == 1)
+        self.assertTrue(len(cache._file_cache_t__cache) == 1)
         cache.update(file2, def_cfg, 3, [])
-        self.assert_(len(cache._file_cache_t__cache) == 2)
+        self.assertTrue(len(cache._file_cache_t__cache) == 2)
 
-        self.assert_(cache.cached_value(file1, def_cfg) == 2)
-        self.assert_(cache.cached_value(file2, def_cfg) == 3)
+        self.assertTrue(cache.cached_value(file1, def_cfg) == 2)
+        self.assertTrue(cache.cached_value(file2, def_cfg) == 3)
 
         # Test reading again
         cache.flush()
         cache = declarations_cache.file_cache_t(cache_file)
-        self.assert_(len(cache._file_cache_t__cache) == 2)
-        self.assert_(cache.cached_value(file1, def_cfg) == 2)
-        self.assert_(cache.cached_value(file2, def_cfg) == 3)
+        self.assertTrue(len(cache._file_cache_t__cache) == 2)
+        self.assertTrue(cache.cached_value(file1, def_cfg) == 2)
+        self.assertTrue(cache.cached_value(file2, def_cfg) == 3)
 
         # Test flushing doesn't happen if we don't touch the cache
         cache = declarations_cache.file_cache_t(cache_file)
-        self.assert_(
+        self.assertTrue(
             cache.cached_value(
                 file1, def_cfg) == 2)  # Read from cache
         cache.flush()    # should not actually flush
         cache = declarations_cache.file_cache_t(cache_file)
-        self.assert_(len(cache._file_cache_t__cache) == 2)
+        self.assertTrue(len(cache._file_cache_t__cache) == 2)
 
         # Test flush culling
         cache = declarations_cache.file_cache_t(cache_file)
         cache.update(file1_dup, def_cfg, 4, [])    # Modify cache
         cache.flush()    # should cull off one entry
         cache = declarations_cache.file_cache_t(cache_file)
-        self.assert_(len(cache._file_cache_t__cache) == 1)
+        self.assertTrue(len(cache._file_cache_t__cache) == 1)
 
     def build_differing_cfg_list(self):
         """ Return a list of configurations that all differ. """
@@ -126,7 +127,7 @@ class decl_cache_tester(unittest.TestCase):
 
         # inc_changed = def_cfg.clone()
         # inc_changed.include_paths = ["/var/tmp"]
-        # self.assert_(configuration_signature(inc_changed) != def_sig)
+        # self.assertTrue(configuration_signature(inc_changed) != def_sig)
         inc_changed = xml_generator_configuration_t(
             "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['unsym'],
             None, False, "")
@@ -134,7 +135,7 @@ class decl_cache_tester(unittest.TestCase):
 
         # def_changed = def_cfg.clone()
         # def_changed.define_symbols = ["symbol"]
-        # self.assert_(configuration_signature(def_changed) != def_sig)
+        # self.assertTrue(configuration_signature(def_changed) != def_sig)
         def_changed = xml_generator_configuration_t(
             "xml_generator_path", '.', ['/var/tmp'], ['new-sym'], ['unsym'],
             None, False, "")
@@ -142,7 +143,7 @@ class decl_cache_tester(unittest.TestCase):
 
         # undef_changed = def_cfg.clone()
         # undef_changed.undefine_symbols = ["symbol"]
-        # self.assert_(configuration_signature(undef_changed) != def_sig)
+        # self.assertTrue(configuration_signature(undef_changed) != def_sig)
         undef_changed = xml_generator_configuration_t(
             "xml_generator_path", '.', ['/var/tmp'], ['sym'], ['new-unsym'],
             None, False, "")
