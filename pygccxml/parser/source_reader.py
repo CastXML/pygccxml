@@ -13,7 +13,7 @@ import pygccxml.utils
 
 try:  # select the faster xml parser
     from .etree_scanner import etree_scanner_t as scanner_t
-except:
+except ImportError:
     from .scanner import scanner_t
 
 from . import declarations_cache
