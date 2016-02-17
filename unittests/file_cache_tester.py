@@ -4,8 +4,10 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
+import sys
 import unittest
 import autoconfig
+import subprocess
 import parser_test_case
 from pygccxml import parser
 
@@ -77,6 +79,16 @@ class tester_t(parser_test_case.parser_test_case_t):
                 self.config),
             ("cached declarations and source declarations are different, " +
                 "after pickling"))
+
+    def test_reopen_cache(self):
+        """
+        Test opening cache files in a subprocess (with a clean environment).
+
+        """
+        p = subprocess.Popen(
+            [sys.executable, "unittests/reopen_cache_tester.py"],
+            stdout=subprocess.PIPE)
+        print(p.stdout.read())
 
 
 def create_suite():
