@@ -63,6 +63,7 @@ Documentation contents
    upgrade_issues
    users
    links
+   releasing
    history
    credits
    apidocs/api
