@@ -7,6 +7,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -28,10 +29,36 @@ class tester_t(parser_test_case.parser_test_case_t):
         """
 
         tclass = self.global_ns.class_("test")
+        ctors = []
         for decl in tclass.declarations:
             if isinstance(decl, declarations.calldef.constructor_t):
-                # print(decl.arguments[0].name, decl.arguments[0].type)
-                print(decl.is_copy_constructor)
+                ctors.append(decl)
+
+        # test::test(test const & t0) [copy constructor]
+        self.assertTrue(ctors[0].is_copy_constructor)
+        # test::test(float const & t0) [constructor]
+        self.assertFalse(ctors[1].is_copy_constructor)
+        # test::test(myvar t0) [constructor]
+        self.assertFalse(ctors[2].is_copy_constructor)
+
+        t2class = self.global_ns.class_("test2")
+        ctors = []
+        for decl in t2class.declarations:
+            if isinstance(decl, declarations.calldef.constructor_t):
+                ctors.append(decl)
+
+        # GCCXML and CastXML return the constructors in a different order.
+        # I hope this index inversion will cover the two cases. If different
+        # compilers give other orders, we will need to find a nicer solution.
+        if "CastXML" in utils.xml_generator:
+            positions = [0, 1]
+        elif "GCC" in utils.xml_generator:
+            positions = [1, 0]
+
+        # test2::test2() [constructor]
+        self.assertFalse(ctors[positions[0]].is_copy_constructor)
+        # test2::test2(test2 const & arg0) [copy constructor]
+        self.assertTrue(ctors[positions[1]].is_copy_constructor)
 
 
 def create_suite():
