@@ -108,9 +108,6 @@ class libparser_t(object):
 CCTS = declarations.CALLING_CONVENTION_TYPES
 
 
-CCTS = declarations.CALLING_CONVENTION_TYPES
-
-
 class formated_mapping_parser_t(libparser_t):
 
     """convenience class, which formats existing declarations"""
