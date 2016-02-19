@@ -73,7 +73,6 @@ class tester_t(parser_test_case.parser_test_case_t):
             self.assertTrue(len(control_derived) == len(all_derived))
             all_derived_names = [hi.related_class.name for hi in all_derived]
             self.assertTrue(set(all_derived_names) == control_derived)
-        pass
 
 
 def create_suite():
