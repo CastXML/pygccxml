@@ -7,9 +7,6 @@ import subprocess
 
 class tester_t(unittest.TestCase):
 
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
-
     def test_example(self):
         """Runs the example in the docs directory"""
 

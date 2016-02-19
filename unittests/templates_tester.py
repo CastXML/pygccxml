@@ -10,9 +10,6 @@ from pygccxml import declarations
 
 class tester_t(unittest.TestCase):
 
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
-
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(
             (name, args) == declarations.templates.split(decl_string))

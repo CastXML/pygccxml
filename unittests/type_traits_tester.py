@@ -352,9 +352,6 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 class missing_decls_tester_t(unittest.TestCase):
 
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
-
     def test(self):
         config = autoconfig.cxx_parsers_cfg.gccxml
         code = "struct const_item{ const int values[10]; };"
@@ -390,9 +387,6 @@ class missing_decls_tester_t(unittest.TestCase):
 
 
 class class_traits_tester_t(unittest.TestCase):
-
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
 
     def test_get_declaration(self):
         code = """

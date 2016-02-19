@@ -9,9 +9,6 @@ from pygccxml import declarations
 
 class tester_t(unittest.TestCase):
 
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
-
     def test_extract(self):
         data = [
             ('thiscall',

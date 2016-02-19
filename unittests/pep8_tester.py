@@ -7,9 +7,6 @@ import fnmatch
 
 class tester_t(unittest.TestCase):
 
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
-
     def test_pep8_conformance_unitests(self):
         """Pep8 conformance test (unitests)
 
