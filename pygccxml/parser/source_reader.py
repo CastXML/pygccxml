@@ -161,10 +161,36 @@ class source_reader_t(object):
         else:
 
             # On mac or linux, use gcc or clang (the flag is the same)
-            if '-std=c++11' in self.__config.cflags:
-                cmd.append('--castxml-cc-gnu ' + '"(" ' + self.__config.compiler_path + ' -std=c++11 ")"')
+            cmd.append('--castxml-cc-gnu ')
+
+            # Check for -std=xx flags passed to the compiler.
+            # A regex could be used but this is a moving target.
+            # See c++1z for example. It is preferable to have a defined
+            # list of what is allowed. http://clang.llvm.org/cxx_status.html
+            #
+            # Version 98 and 03 are only there in the case somebody is using
+            # these flags; this is the equivalent to not passing these flags.
+            standards = [
+                "-std=c++98",
+                "-std=c++03",
+                "-std=c++11",
+                "-std=c++14",
+                "-std=c++1z"]
+
+            std_flag = ""
+            for standard in standards:
+                if standard in self.__config.cflags:
+                    std_flag = " " + standard + " "
+
+            # A -std= flag was passed, but is not in the list
+            if "-std=" in self.__config.cflags and std_flag == "":
+                raise(RuntimeError("Unknown -std=c++xx flag used !"))
+
+            if std_flag != "":
+                cmd.append(
+                    '"(" ' + self.__config.compiler_path + std_flag + '")"')
             else:
-                cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
+                cmd.append(self.__config.compiler_path)
 
         # Tell castxml to output xml compatible files with gccxml
         # so that we can parse them with pygccxml
