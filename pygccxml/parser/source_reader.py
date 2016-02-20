@@ -161,7 +161,10 @@ class source_reader_t(object):
         else:
 
             # On mac or linux, use gcc or clang (the flag is the same)
-            cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
+            if '-std=c++11' in self.__config.cflags:
+                cmd.append('--castxml-cc-gnu ' + '"(" ' + self.__config.compiler_path + ' -std=c++11 ")"')
+            else:
+                cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
 
         # Tell castxml to output xml compatible files with gccxml
         # so that we can parse them with pygccxml
