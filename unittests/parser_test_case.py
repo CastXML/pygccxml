@@ -4,10 +4,8 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import sys
+import unittest
 import autoconfig
 
 
@@ -84,3 +82,10 @@ class parser_test_case_t(unittest.TestCase):
             (calldef.name,
              pprint.pformat([delc.name for delc in exception_decls]),
              pprint.pformat([delc.name for delc in exceptions_indeed])))
+
+if sys.version_info < (2, 7, 0):
+    # Python2.6 does not have the following methods in the unittest module
+    parser_test_case_t.assertIn = \
+        lambda parser, a1, a2, *args: parser.assertTrue(a1 in a2, args)
+    parser_test_case_t.assertNotIn = \
+        lambda parser, a1, a2, *args: parser.assertFalse(a1 in a2, args)
