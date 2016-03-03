@@ -284,19 +284,46 @@ def remove_reference(type):
 def is_const(type):
     """returns True, if type represents C++ const type, False otherwise"""
     nake_type = remove_alias(type)
-    return isinstance(nake_type, cpptypes.const_t)
+    if isinstance(nake_type, cpptypes.const_t):
+        return True
+    elif isinstance(nake_type, cpptypes.volatile_t):
+        return is_const(nake_type.base)
+    elif isinstance(nake_type, cpptypes.array_t):
+        return is_const(nake_type.base)
+    return False
 
 
-def remove_const(type):
+def remove_const(type_):
     """removes const from the type definition
 
     If type is not const type, it will be returned as is
     """
 
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if not is_const(nake_type):
-        return type
+        return type_
     else:
+        # Handling for const and volatile qualified types. There is a
+        # difference in behavior between GCCXML and CastXML for cv-qual arrays.
+        # GCCXML produces the following nesting of types:
+        #       ->  volatile_t(const_t(array_t))
+        # while CastXML produces the following nesting:
+        #       ->  array_t(volatile_t(const_t))
+        # For both cases, we must unwrap the types, remove const_t, and add
+        # back the outer layers
+        if isinstance(nake_type, cpptypes.array_t):
+            is_v = is_volatile(nake_type)
+            if is_v:
+                result_type = nake_type.base.base.base
+            else:
+                result_type = nake_type.base.base
+            if is_v:
+                result_type = cpptypes.volatile_t(result_type)
+            return cpptypes.array_t(result_type, nake_type.size)
+
+        elif isinstance(nake_type, cpptypes.volatile_t):
+            return cpptypes.volatile_t(nake_type.base.base)
+
         return nake_type.base
 
 
@@ -322,7 +349,13 @@ def is_same(type1, type2):
 def is_volatile(type):
     """returns True, if type represents C++ volatile type, False otherwise"""
     nake_type = remove_alias(type)
-    return isinstance(nake_type, cpptypes.volatile_t)
+    if isinstance(nake_type, cpptypes.volatile_t):
+        return True
+    elif isinstance(nake_type, cpptypes.const_t):
+        return is_volatile(nake_type.base)
+    elif isinstance(nake_type, cpptypes.array_t):
+        return is_volatile(nake_type.base)
+    return False
 
 
 def remove_volatile(type):
@@ -334,6 +367,16 @@ def remove_volatile(type):
     if not is_volatile(nake_type):
         return type
     else:
+        if isinstance(nake_type, cpptypes.array_t):
+            is_c = is_const(nake_type)
+            if is_c:
+                base_type = nake_type.base.base.base
+            else:
+                base_type = nake_type.base.base
+            result_type = base_type
+            if is_c:
+                result_type = cpptypes.const_t(result_type)
+            return cpptypes.array_t(result_type, nake_type.size)
         return nake_type.base
 
 
@@ -344,12 +387,12 @@ def remove_cv(type):
     if not is_const(nake_type) and not is_volatile(nake_type):
         return type
     result = nake_type
-    if is_const(nake_type):
-        result = nake_type.base
-    if is_volatile(result):
-        result = result.base
     if is_const(result):
-        result = result.base
+        result = remove_const(result)
+    if is_volatile(result):
+        result = remove_volatile(result)
+    if is_const(result):
+        result = remove_const(result)
     return result
 
 
