@@ -533,7 +533,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.__read_byte_offset(decl, attrs)
         return decl
 
-    __read_field = __read_variable  # just a synonim
+    __read_field = __read_variable  # just a synonym
 
     def __read_class_impl(self, class_type, attrs):
         name = attrs.get(XML_AN_NAME, '')
