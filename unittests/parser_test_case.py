@@ -89,3 +89,11 @@ if sys.version_info < (2, 7, 0):
         lambda parser, a1, a2, *args: parser.assertTrue(a1 in a2, args)
     parser_test_case_t.assertNotIn = \
         lambda parser, a1, a2, *args: parser.assertFalse(a1 in a2, args)
+    parser_test_case_t.assertIs = \
+        lambda parser, a1, a2, *args: parser.assertTrue(a1 is a2, args)
+    parser_test_case_t.assertIsNot = \
+        lambda parser, a1, a2, *args: parser.assertFalse(a1 is a2, args)
+    parser_test_case_t.assertIsNone = \
+        lambda parser, a1, *args: parser.assertTrue(a1 is None, args)
+    parser_test_case_t.assertIsNotNone = \
+        lambda parser, a1, *args: parser.assertFalse(a1 is None, args)
