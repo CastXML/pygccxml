@@ -1174,8 +1174,8 @@ class smart_pointer_traits(object):
                           (class_declaration.class_declaration_t,
                            class_declaration.class_t)):
             return False
-        if not (impl_details.is_defined_in_xxx('boost', type_) or \
-            impl_details.is_defined_in_xxx('std', type_)):
+        if not (impl_details.is_defined_in_xxx('boost', type_) or
+                impl_details.is_defined_in_xxx('std', type_)):
             return False
         return type_.decl_string.startswith('::boost::shared_ptr<') or \
             type_.decl_string.startswith('::std::shared_ptr<')
