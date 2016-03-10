@@ -188,8 +188,8 @@ class undname_creator_t(object):
                 # space will still exist
                 argsep = ',  '
             return argsep.join(
-                map(lambda type_: \
-                    self.__format_type_as_undecorated(type_, True, hint), argtypes))
+                map(lambda type_: self.__format_type_as_undecorated(
+                    type_, True, hint), argtypes))
 
     def format_calldef(self, calldef, hint):
         calldef_type = calldef.function_type()
