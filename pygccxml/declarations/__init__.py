@@ -18,6 +18,7 @@ from .declaration import declaration_t
 from .scopedef import scopedef_t
 from .enumeration import enumeration_t
 from .namespace import namespace_t
+from .typedef import typedef_t
 
 from .class_declaration import class_t
 from .class_declaration import CLASS_TYPES

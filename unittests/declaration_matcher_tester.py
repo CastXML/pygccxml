@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -31,6 +32,19 @@ class tester_t(parser_test_case.parser_test_case_t):
         gns.class_('cls')
         gns.class_('::cls')
 
+    def test_typedefs(self):
+        gns = self.global_ns
+        gns.class_('cls2')
+        if self.config.xml_generator == "castxml":
+            gns.typedef('cls2')
+        gns.class_('::cls2')
+
+        gns.class_('cls3')
+        if self.config.xml_generator == "castxml":
+            gns.typedef('cls3')
+        cls3 = gns.class_('::cls3')
+        cls3.variable('i')
+
     def test_ns1(self):
         gns = self.global_ns
         ns1 = gns.namespace('ns')
@@ -42,6 +56,14 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.assertRaises(Exception, lambda: ns1.class_('::nested_cls'))
         ns1.class_('nested_cls')
         ns1.class_('::ns::nested_cls')
+
+        gns.class_('nested_cls2')
+        self.assertRaises(Exception, lambda: gns.class_('ns::nested_cls2'))
+        gns.class_('::ns::nested_cls2')
+
+        gns.class_('nested_cls3')
+        self.assertRaises(Exception, lambda: gns.class_('ns::nested_cls3'))
+        gns.class_('::ns::nested_cls3')
 
 
 def create_suite():

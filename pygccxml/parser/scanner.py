@@ -221,6 +221,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
                     self.__read_location(obj, attrs)
                 if isinstance(obj, declarations.class_t):
                     self.__read_bases(obj, attrs)
+                if isinstance(obj, declarations.typedef_t):
+                    self.__update_unnamed_class(obj, attrs)
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled(obj, attrs)
                 self.__read_demangled(obj, attrs)
@@ -628,3 +630,36 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # compatibility.
             logger.debug('CASTXML version - None ( %s )', version_str)
             utils.xml_generator = declarations.xml_generators.CASTXML_None
+
+    def __update_unnamed_class(self, decl, attrs):
+        """
+        Called for typedef declarations. If CastXML is being used, then type
+        definitions with an unnamed class/struct are split across two nodes in
+        the XML tree. For example,
+
+            typedef struct {} cls;
+
+        produces
+
+            <Struct id="_7" name="" context="_1" .../>
+            <Typedef id="_8" name="cls" type="_7" context="_1" .../>
+
+        So we'll walk the list of read declarations and try to update an
+        unnamed class/struct with matching attributes
+        """
+        if 'CastXML' not in utils.xml_generator:
+            return
+
+        parent = attrs.get(XML_AN_CONTEXT)
+        if not parent:
+            return
+        if parent not in self.__members:
+            return
+        type_ = attrs.get(XML_AN_TYPE)
+        if not type_ or type_ not in self.__declarations:
+            return
+
+        referent = self.__declarations[type_]
+        if referent.name or not isinstance(referent, declarations.class_t):
+            return
+        referent.name = decl.name
