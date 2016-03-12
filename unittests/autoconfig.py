@@ -8,6 +8,9 @@ import sys
 import logging
 import warnings
 
+# Prevents copy.deepcopy RecursionError in some tests (Travis build)
+sys.setrecursionlimit(10000)
+
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
 
