@@ -1,25 +1,85 @@
 language:
   - python
 
-python:
-  - "2.6"
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
+matrix:
+  include:
+    - os: linux
+      python: 2.6
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 2.7
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 3.2
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 3.3
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 3.4
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 3.5
+      env: XML_GENERATOR="gccxml"
+    - os: linux
+      python: 2.7
+      env: XML_GENERATOR="castxml"
+    - os: linux
+      python: 3.5
+      env: XML_GENERATOR="castxml"
+    - os: osx
+      osx_image: xcode7.2
+      language: generic
+      env:
+        - XML_GENERATOR="castxml"
+        - TRAVIS_PYTHON_VERSION="2"
+    - os: osx
+      osx_image: xcode7.2
+      language: generic
+      env:
+        - XML_GENERATOR="castxml"
+        - TRAVIS_PYTHON_VERSION="3"
+
 
 before_install:
-  # Install gccxml
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq gccxml
+ # OS X
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_retry brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]]; then brew install python; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then brew install python3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then sudo ln -sf /usr/local/bin/pip3 /usr/local/bin/pip; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python; fi
+
+  # Download castxml binaries
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      if [ ! -e ${HOME}/castxml ]; then
+        curl https://midas3.kitware.com/midas/download/item/318762/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
+      fi;
+    fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
+      if [ ! -e ${HOME}/castxml ]; then
+        wget -O - https://midas3.kitware.com/midas/download/item/318227/castxml-linux.tar.gz | tar zxf - -C ${HOME};
+      fi;
+    fi
+
+  # Add the castxml binary to the path
+  - if [[ $XML_GENERATOR == "castxml" ]]; then
+      export PATH=$PATH:~/castxml/bin/;
+    fi
+
+  # Setup gccxml for the gccxml builds on linux
+  - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get update -qq; fi
+  - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get install -qq gccxml; fi
+
   # Install pep8, needed by the unit tests
   - pip install pep8
+
   # Install coverage tools (On 3.2 the new coverage is broken, use an old one)
   # https://github.com/menegazzo/travispy/issues/20
-  - if [ $TRAVIS_PYTHON_VERSION == 3.2 ];
-    then pip install 'coverage<4.0'; else
-    pip install coverage;
+  - if [ $TRAVIS_PYTHON_VERSION == 3.2 ]; then
+      pip install 'coverage<4.0';
+    else
+      pip install coverage;
     fi
   - pip install coveralls
 
@@ -27,11 +87,23 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install unittest2; fi
 
 script:
+  - echo $TRAVIS_OS_NAME
+
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
-  - touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
-  - printf "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]]; then touch "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then touch "/usr/local/lib/python3.5/site-packages/sitecustomize.py"; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+    then printf "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]];
+    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]];
+    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.5/site-packages/sitecustomize.py"; fi
+
   # Install pygccxml
   - python setup.py install
+
   # Run the tests with coverage
   - coverage run unittests/test_all.py
   # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
