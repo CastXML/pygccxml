@@ -44,14 +44,18 @@ class default_argument_patcher_t(object):
         if not declarations.is_enum(type_):
             return False
         enum_type = declarations.enum_declaration(type_)
-        return enum_type.has_value_name(arg.default_value)
+        # GCCXML does not qualify an enum value in the default argument
+        # but CastXML does. Split the default value and use only the
+        # enum value for fixing it.
+        return enum_type.has_value_name(
+            arg.default_value.split('::')[-1])
 
     def __fix_unqualified_enum(self, func, arg):
         type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
         enum_type = declarations.enum_declaration(type_)
         return self.__join_names(
             enum_type.parent.decl_string,
-            arg.default_value)
+            arg.default_value.split('::')[-1])
 
     def __is_invalid_integral(self, func, arg):
         type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
