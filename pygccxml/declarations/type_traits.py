@@ -365,8 +365,15 @@ def is_fundamental(type):
             (cpptypes.volatile_t, cpptypes.const_t))
 
 
-class declaration_xxx_traits(object):
+def is_union(type_):
+    """returns True if type represents a C++ union"""
+    if not is_class(type_):
+        return False
+    decl = class_traits.get_declaration(type_)
+    return decl.class_type == class_declaration.CLASS_TYPES.UNION
 
+
+class declaration_xxx_traits(object):
     """this class implements the functionality needed for convenient work with
     declaration classes
 

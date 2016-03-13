@@ -25,7 +25,7 @@ struct S1{
 			unsigned int raw;
 		} flags;
 
-		union FileAttribs{
+		union /*FileAttribs*/{
 			struct{
 				unsigned int isReadOnly : 1;
 				unsigned int isHidden : 1;
@@ -45,6 +45,16 @@ struct S1{
 			unsigned int raw;
 		} fileattribs;		// in GetFileAttributes() format
 	} header;
+
+	struct S3{
+		union
+		{
+			char anon_mem_c;
+			int anon_mem_i;
+		};
+		long s3_mem;
+		S2 s2;
+	};
 };
 
 } // namespace
