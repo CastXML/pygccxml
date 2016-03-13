@@ -25,7 +25,7 @@ struct S1{
 			unsigned int raw;
 		} flags;
 
-		union /*FileAttribs*/{
+		union {
 			struct{
 				unsigned int isReadOnly : 1;
 				unsigned int isHidden : 1;

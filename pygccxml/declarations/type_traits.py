@@ -972,25 +972,25 @@ def __is_noncopyable_single(class_):
 def is_noncopyable(class_):
     """returns True, if class is noncopyable, False otherwise"""
     logger = utils.loggers.cxx_parser
-    class_ = class_traits.get_declaration(class_)
+    class_decl = class_traits.get_declaration(class_)
 
     true_header = "is_noncopyable(TRUE) - %s - " % class_.decl_string
     # false_header = "is_noncopyable(false) - %s - " % class_.decl_string
 
-    if class_.class_type == class_declaration.CLASS_TYPES.UNION:
+    if is_union(class_):
         return False
 
-    if class_.is_abstract:
+    if class_decl.is_abstract:
         logger.debug(true_header + "abstract client")
         return True
 
     # if class has public, user defined copy constructor, than this class is
     # copyable
-    copy_ = class_.find_copy_constructor()
+    copy_ = class_decl.find_copy_constructor()
     if copy_ and copy_.access_type == 'public' and not copy_.is_artificial:
         return False
 
-    for base_desc in class_.recursive_bases:
+    for base_desc in class_decl.recursive_bases:
         assert isinstance(base_desc, class_declaration.hierarchy_info_t)
 
         if base_desc.related_class.decl_string in \
@@ -1022,17 +1022,17 @@ def is_noncopyable(class_):
                 "__is_noncopyable_single returned True")
             return True
 
-    if not has_copy_constructor(class_):
+    if not has_copy_constructor(class_decl):
         logger.debug(true_header + "does not have trivial copy constructor")
         return True
-    elif not has_public_constructor(class_):
+    elif not has_public_constructor(class_decl):
         logger.debug(true_header + "does not have a public constructor")
         return True
-    elif has_destructor(class_) and not has_public_destructor(class_):
+    elif has_destructor(class_decl) and not has_public_destructor(class_decl):
         logger.debug(true_header + "has private destructor")
         return True
     else:
-        return __is_noncopyable_single(class_)
+        return __is_noncopyable_single(class_decl)
 
 
 def is_defined_in_xxx(xxx, cls):

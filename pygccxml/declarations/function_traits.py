@@ -56,11 +56,12 @@ def is_same_return_type(f1, f2):
         return False
     if not type_traits.is_class(rt1) or not type_traits.is_class(rt2):
         return type_traits.is_same(rt1, rt2)
+
+    if type_traits.is_union(rt1) or type_traits.is_union(rt2):
+        return type_traits.is_same(rt1, rt2)
+
     c1 = type_traits.class_traits.get_declaration(rt1)
     c2 = type_traits.class_traits.get_declaration(rt2)
-    if c1.class_type == class_declaration.CLASS_TYPES.UNION \
-       or c2.class_type == class_declaration.CLASS_TYPES.UNION:
-        return type_traits.is_same(rt1, rt2)
     return type_traits.is_same(c1, c2) \
         or type_traits.is_base_and_derived(c1, c2) \
         or type_traits.is_base_and_derived(c2, c1)
