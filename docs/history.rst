@@ -14,22 +14,24 @@ by setting up a git repositery on github, hosted along with gccxml.
 Version 1.7.3 (not yet released)
 --------------------------------
 
-1. C++xx flags are now correctly passed to castxml. Allowed flags are:
+1. C++xx flags are now correctly passed to CastXML. Allowed flags are:
    "-std=c++98", "-std=c++03", "-std=c++11", "-std=c++14", "-std=c++1z"
    Thanks to Mark Moll for the fix.
 
-2. type_traits.smart_pointer_traits will now classify std::shared_ptr as a
+2. Addition of a is_union() method in the type_traits module.
+
+3. type_traits.smart_pointer_traits will now classify std::shared_ptr as a
    smart pointer (only boost::shared_ptr was recognised before)
 
-3. Fix a regression in undname_creator_t.format_argtypes
+4. Fix a regression in undname_creator_t.format_argtypes
 
-4. Remove unittest2 dependency for testing with python 2.6
+5. Remove unittest2 dependency for testing with python 2.6
 
-5. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
+6. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
 
-6. Cosmetic fix for generator name printed to stdout when launching unit tests
+7. Cosmetic fix for generator name printed to stdout when launching unit tests
 
-7. Fix simple typo in example.py comment
+8. Fix simple typo in example.py comment
 
 Thanks to the following people for their contribution to this release:
 Mark Moll, Ashish Sadanandan, Mark Oates
