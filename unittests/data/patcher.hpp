@@ -62,6 +62,20 @@ namespace osg{
 
 }
 
+namespace ns1{
+
+static int const DEFAULT_1 = 0;
+struct st1{
+    static long const DEFAULT_2 = 10;
+    void fun1( int arg1=DEFAULT_1, long=DEFAULT_2 );
+};
+
+}
+
+static int const DEFAULT_1 = 20;
+int fun2( int arg1=DEFAULT_1, int arg2=ns1::DEFAULT_1, long arg3=::ns1::st1::DEFAULT_2 );
+
+
 /*struct default_arg_t{};*/
 /*default_arg_t create_default_argument();*/
 /*void double_call( default_arg_t x=create_default_argument() );*/

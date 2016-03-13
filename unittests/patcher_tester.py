@@ -70,6 +70,60 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                 self.assertEqual(
                     fix_numeric.arguments[0].default_value, "0ffffffff")
 
+    def test_unqualified_integral_patcher(self):
+        if 32 != self.architecture and "CastXML" not in utils.xml_generator:
+            # For this check to be removed, patcher_tester_64bit.xml
+            # will need to be updated for GCCXML
+            return
+
+        ns1 = self.global_ns.namespace("ns1")
+        st1 = ns1.class_("st1")
+        fun1 = st1.member_function("fun1")
+        if "CastXML" in utils.xml_generator:
+            if utils.xml_output_version >= 1.137:
+                val1 = "ns1::DEFAULT_1"
+                val2 = "ns1::st1::DEFAULT_2"
+            else:
+                val1 = "::ns1::DEFAULT_1"
+                val2 = "::ns1::st1::DEFAULT_2"
+            self.assertEqual(
+                fun1.arguments[0].default_value, val1)
+            self.assertEqual(
+                fun1.arguments[1].default_value, val2)
+        else:
+            self.assertEqual(
+                fun1.arguments[0].default_value,
+                "ns1::DEFAULT_1")
+            self.assertEqual(
+                fun1.arguments[1].default_value,
+                "ns1::st1::DEFAULT_2")
+
+        fun2 = self.global_ns.free_fun("fun2")
+        self.assertEqual(
+            fun2.arguments[0].default_value,
+            "::DEFAULT_1")
+        if "CastXML" in utils.xml_generator:
+            if utils.xml_output_version >= 1.137:
+                val1 = "ns1::DEFAULT_1"
+                val2 = "ns1::st1::DEFAULT_2"
+            else:
+                # Before XML output version 1.137, the following two
+                # were unpatched and were identical to the text in
+                # matcher.hpp
+                val1 = "ns1::DEFAULT_1"
+                val2 = "::ns1::st1::DEFAULT_2"
+            self.assertEqual(
+                fun2.arguments[1].default_value, val1)
+            self.assertEqual(
+                fun2.arguments[2].default_value, val2)
+        else:
+            self.assertEqual(
+                fun2.arguments[1].default_value,
+                "ns1::DEFAULT_1")
+            self.assertEqual(
+                fun2.arguments[2].default_value,
+                "ns1::st1::DEFAULT_2")
+
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun("fix_unnamed")
         if ("CastXML" in utils.xml_generator and
