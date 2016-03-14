@@ -7,10 +7,16 @@
 #define __classes_hpp__
 
 struct cls{};
+typedef struct {} cls2;
+typedef class {
+   int i;
+} cls3;
 
 namespace ns{
 
     struct nested_cls{};
+    typedef class {} nested_cls2;
+    typedef struct nested_cls3 {} nested_cls3;
 
 }
 
