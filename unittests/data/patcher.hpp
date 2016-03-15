@@ -12,10 +12,18 @@
 namespace ns1{ namespace ns2{
 
 enum fruit{ apple, orange };
+void fix_enum2( fruit arg=apple );
 
 } }
 
 void fix_enum( ns1::ns2::fruit arg=ns1::ns2::apple );
+
+namespace ns3{
+
+using namespace ns1::ns2;
+void fix_enum3( fruit arg=orange );
+
+}
 
 typedef unsigned long long ull;
 void fix_numeric( ull arg=(ull)-1 );
