@@ -25,13 +25,17 @@ Version 1.7.3 (not yet released)
 
 4. Fix a regression in undname_creator_t.format_argtypes
 
-5. Remove unittest2 dependency for testing with python 2.6
+5. Add better support for "typedef (class|struct) {} foo;" syntax when using
+   CastXML. GCCXML did not recognize the typedef here. Fetching these
+   declarations can now be done with: .typedef("foo") or .class_("foo").
 
-6. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
+6. Remove unittest2 dependency for testing with python 2.6
 
-7. Cosmetic fix for generator name printed to stdout when launching unit tests
+7. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
 
-8. Fix simple typo in example.py comment
+8. Cosmetic fix for generator name printed to stdout when launching unit tests
+
+9. Fix simple typo in example.py comment
 
 Thanks to the following people for their contribution to this release:
 Mark Moll, Ashish Sadanandan, Mark Oates
