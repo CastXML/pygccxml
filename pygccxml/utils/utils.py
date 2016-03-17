@@ -35,8 +35,8 @@ def find_xml_generator(name=None):
     :param name: name of the c++ parser: castxml or gccxml
     :type name: str
 
-    If no name is given the function first looks for gccxml,
-    then for castxml. If no c++ parser is found the function
+    If no name is given the function first looks for castxml,
+    then for gccxml. If no c++ parser is found the function
     raises an exception.
 
     """
@@ -47,11 +47,11 @@ def find_xml_generator(name=None):
         command = "which"
 
     if name is None:
-        name = "gccxml"
+        name = "castxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
         if path == "":
-            name = "castxml"
+            name = "gccxml"
             p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
             path = p.stdout.read().decode("utf-8")
     else:
