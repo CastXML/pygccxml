@@ -204,12 +204,17 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
             # With CastXML and clang some __va_list_tag declarations are
             # present in the tree: we do not want to have these in the tree.
-            # This option is set to True by default
-            remove_va_list_tag = "f1" not in self.config.flags
+            # With llvm 3.9 there is a __NSConstantString(_tag) in the tree
+            # We hide these declarations by default
+            rm1 = "f1" not in self.config.flags
+            names = [
+                "__va_list_tag",
+                "__NSConstantString_tag",
+                "__NSConstantString"]
 
             if isinstance(obj, declarations.declaration_t):
 
-                if remove_va_list_tag and "__va_list_tag" in str(obj.name):
+                if rm1 and str(obj.name) in names:
                     return
 
                 # XML generator. Kept for retrocompatibily
@@ -235,9 +240,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 self.__read_byte_align(obj, attrs)
 
             elif utils.is_str(obj):
-
-                if remove_va_list_tag and "__va_list_tag" in obj:
-                    return
 
                 self.__files[element_id] = obj
 

@@ -25,6 +25,10 @@ class tester_t(parser_test_case.parser_test_case_t):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.__code = os.linesep.join(['struct a{};'])
+        self.known_typedefs = [
+            "__int128_t", "__uint128_t", "__builtin_va_list"]
+        self.known_typedefs_llvm39 = \
+            self.known_typedefs + ["__builtin_ms_va_list"]
 
     def test_keep_va_list_tag(self):
 
@@ -50,8 +54,20 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.assertTrue("a" in [class_.name for class_ in classes])
         self.assertTrue(len(classes) == 2)
 
-        self.assertTrue(tag in [ty.name for ty in typedefs])
         self.assertTrue(len(typedefs) == 4)
+        if tag not in [ty.name for ty in typedefs]:
+            # This is for llvm 3.9. The class __va_list_tag struct is still
+            # there but the typedef is gone
+            for t in self.known_typedefs_llvm39:
+                self.assertTrue(t in [ty.name for ty in typedefs])
+            self.assertTrue(
+                "__NSConstantString_tag" in
+                [class_.name for class_ in classes])
+            self.assertTrue(
+                "__NSConstantString" in [ty.name for ty in typedefs])
+        else:
+            for t in self.known_typedefs:
+                self.assertTrue(t in [ty.name for ty in typedefs])
 
         self.assertTrue(
             tag in [var.decl_string.split("::")[1] for var in variables])
@@ -82,7 +98,19 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.assertTrue(len(classes) == 1)
 
         self.assertFalse(tag in [ty.name for ty in typedefs])
-        self.assertTrue(len(typedefs) == 3)
+        self.assertTrue(len(typedefs) == 3 or len(typedefs) == 4)
+        if len(typedefs) == 4:
+            # This is for llvm 3.9
+            for t in self.known_typedefs_llvm39:
+                self.assertTrue(t in [ty.name for ty in typedefs])
+            self.assertFalse(
+                "__NSConstantString_tag"
+                in [class_.name for class_ in classes])
+            self.assertFalse(
+                "__NSConstantString" in [ty.name for ty in typedefs])
+        else:
+            for t in self.known_typedefs:
+                self.assertTrue(t in [ty.name for ty in typedefs])
 
         self.assertFalse(
             tag in [var.decl_string.split("::")[1] for var in variables])
