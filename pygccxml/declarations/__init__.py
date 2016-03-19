@@ -27,8 +27,6 @@ from .class_declaration import hierarchy_info_t
 from .class_declaration import class_declaration_t
 from .class_declaration import class_types
 
-from .typedef import typedef_t
-
 from .cpptypes import type_t
 from .cpptypes import dummy_type_t
 from .cpptypes import unknown_t
