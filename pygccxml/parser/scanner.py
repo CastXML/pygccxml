@@ -632,6 +632,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # compatibility.
             logger.debug('CASTXML version - None ( %s )', version_str)
             utils.xml_generator = declarations.xml_generators.CASTXML_None
+        utils.xml_output_version = version
 
     def __update_unnamed_class(self, decl, attrs):
         """
