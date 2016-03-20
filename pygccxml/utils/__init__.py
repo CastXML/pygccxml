@@ -20,3 +20,4 @@ from .utils import get_tr1
 
 # Version of xml generator which was used.
 xml_generator = None
+xml_output_version = None
