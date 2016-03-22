@@ -60,34 +60,47 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                     fix_numeric.arguments[0].default_value, val)
         else:
             if "CastXML" in utils.xml_generator:
+                if utils.xml_output_version >= 1.137:
+                    val = "(unsigned long long)-1"
+                else:
+                    val = "(ull)-1"
                 self.assertEqual(
-                    fix_numeric.arguments[0].default_value, "(ull)-1")
+                    fix_numeric.arguments[0].default_value, val)
             else:
                 self.assertEqual(
                     fix_numeric.arguments[0].default_value, "0ffffffff")
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun("fix_unnamed")
+        if ("CastXML" in utils.xml_generator and
+                utils.xml_output_version >= 1.137):
+            val = "fx::unnamed"
+        else:
+            val = "int(::fx::unnamed)"
         self.assertEqual(
-            fix_unnamed.arguments[0].default_value, "int(::fx::unnamed)")
+            fix_unnamed.arguments[0].default_value, val)
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun("fix_function_call")
         default_val = fix_function_call.arguments[0].default_value
         if "CastXML" in utils.xml_generator:
-            # Most clean output, no need to patch
-            val = "calc(1, 2, 3)"
-            self.assertEqual(default_val, val)
+            if utils.xml_output_version >= 1.137:
+                val = "function_call::calc(1, 2, 3)"
+            else:
+                val = "calc(1, 2, 3)"
         elif "0.9" in utils.xml_generator:
             val = "function_call::calc(1, 2, 3)"
-            self.assertEqual(default_val, val)
         else:
             val = "function_call::calc( 1, 2, 3 )"
-            self.assertEqual(default_val, val)
+        self.assertEqual(default_val, val)
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun("fix_fundamental")
-        val = "(unsigned int)(::fundamental::eggs)"
+        if ("CastXML" in utils.xml_generator and
+                utils.xml_output_version >= 1.137):
+            val = "fundamental::spam::eggs"
+        else:
+            val = "(unsigned int)(::fundamental::eggs)"
         self.assertEqual(
             fcall.arguments[0].default_value, val)
 
