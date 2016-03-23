@@ -3,6 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import re
 from pygccxml import utils
 from pygccxml import declarations
 
@@ -109,6 +110,27 @@ class default_argument_patcher_t(object):
                                        arg.default_value))
             else:
                 parent = parent.parent
+
+        # check if we have an unqualified integral constant
+        # only do patching in cases where we have a bare variable name
+        c_var = re.compile("[a-z_][a-z0-9_]*", re.IGNORECASE)
+        m = c_var.match(arg.default_value)
+        if m:
+            parent = func.parent
+            while parent:
+                try:
+                    found = parent.variable(arg.default_value,
+                                            recursive=False)
+                except declarations.matcher.declaration_not_found_t:
+                    # ignore exceptions if a match is not found
+                    found = None
+                if found:
+                    if declarations.is_fundamental(arg.type):
+                        return "%s" % self.__join_names(
+                                        found.parent.decl_string,
+                                        arg.default_value)
+                parent = parent.parent
+
         return arg.default_value
 
     def __find_enum(self, scope, default_value):
