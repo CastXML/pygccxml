@@ -119,16 +119,14 @@ class default_argument_patcher_t(object):
             parent = func.parent
             while parent:
                 try:
-                    found = parent.variable(arg.default_value,
-                                            recursive=False)
+                    found = parent.variable(
+                        arg.default_value, recursive=False)
                 except declarations.matcher.declaration_not_found_t:
                     # ignore exceptions if a match is not found
                     found = None
-                if found:
-                    if declarations.is_fundamental(arg.type):
-                        return "%s" % self.__join_names(
-                                        found.parent.decl_string,
-                                        arg.default_value)
+                if found and declarations.is_fundamental(arg.type):
+                    return "%s" % self.__join_names(
+                        found.parent.decl_string, arg.default_value)
                 parent = parent.parent
 
         return arg.default_value
