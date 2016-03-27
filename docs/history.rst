@@ -39,13 +39,15 @@ Version 1.7.3 (not yet released)
    latest version of CastXML is recommended. This makes sure default arguments
    for function parameters are correctly defined, so that py++ can process them.
 
-8. Remove unittest2 dependency for testing with python 2.6
+8. Fixes for exeption when using castxml + gcc5 + std=c++11 + maps.
 
-9. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
+9. Remove unittest2 dependency for testing with python 2.6
 
-10. Cosmetic fix for generator name printed to stdout when launching unit tests
+10. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
 
-11. Fix simple typo in example.py comment
+11. Cosmetic fix for generator name printed to stdout when launching unit tests
+
+12. Fix simple typo in example.py comment
 
 Thanks to the following people for their contribution to this release:
 Mark Moll, Ashish Sadanandan, Mark Oates
