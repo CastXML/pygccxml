@@ -522,7 +522,8 @@ class project_reader_t(object):
 
                     name = decl_wrapper_type.declaration._name
                     if name == "":
-                        # Happens with gcc5, castxml + std=c++11 (see issue #45)
+                        # Happens with gcc5, castxml + std=c++11
+                        # See issue #45
                         continue
                     if name.startswith("__vmi_class_type_info_pseudo"):
                         continue
