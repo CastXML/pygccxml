@@ -27,6 +27,24 @@ matrix:
     - os: linux
       python: 3.5
       env: XML_GENERATOR="castxml"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env: XML_GENERATOR="castxml"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+       - XML_GENERATOR="castxml"
+       - COMPILER=g++-5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
     - os: osx
       osx_image: xcode7.2
       language: generic
