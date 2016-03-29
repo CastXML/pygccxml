@@ -91,7 +91,7 @@ before_install:
 
   # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
-    cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py;
+      cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py && cd ..;
     fi
 
   # Install pep8, needed by the unit tests
