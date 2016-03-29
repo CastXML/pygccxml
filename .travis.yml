@@ -27,6 +27,37 @@ matrix:
     - os: linux
       python: 3.5
       env: XML_GENERATOR="castxml"
+    - os: linux
+      python: 3.5
+      env:
+       - XML_GENERATOR="castxml"
+       - COMPILER=g++-5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+          # This will be gcc 5.2.1
+            - g++-5
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env: XML_GENERATOR="castxml"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+       - XML_GENERATOR="castxml"
+       - COMPILER=g++-5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            # This will be gcc 5.3.0
+            - g++-5
     - os: osx
       osx_image: xcode7.2
       language: generic
@@ -70,6 +101,11 @@ before_install:
   # Setup gccxml for the gccxml builds on linux
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get update -qq; fi
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get install -qq gccxml; fi
+
+  # Patch the compiler path on the fly for gcc5 testing
+  - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
+      cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py && cd ..;
+    fi
 
   # Install pep8, needed by the unit tests
   - pip install pep8
