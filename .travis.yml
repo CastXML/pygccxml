@@ -89,6 +89,11 @@ before_install:
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get update -qq; fi
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get install -qq gccxml; fi
 
+  # Patch the compiler path on the fly for gcc5 testing
+  - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
+    cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py;
+    fi
+
   # Install pep8, needed by the unit tests
   - pip install pep8
 

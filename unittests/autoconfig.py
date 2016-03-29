@@ -46,7 +46,7 @@ class cxx_parsers_cfg(object):
         'xml_generator.cfg',
         xml_generator_path=generator_path,
         working_directory=data_directory,
-        compiler=pygccxml.utils.native_compiler.get_gccxml_compiler(),
+        compiler=None,
         xml_generator=generator_name)
 
     if generator_name == 'gccxml':
