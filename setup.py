@@ -7,11 +7,11 @@
 from setuptools import setup
 
 setup(name="pygccxml",
-      version="v1.7.2",
+      version="v1.7.3",
       author="Roman Yakovenko",
       author_email="roman yakovenko at gmail com",
       maintainer="Michka Popoff and the Insight Software Consortium",
-      maintainer_email="gccxml@gccxml.org",
+      maintainer_email="castxml@public.kitware.com",
       description="Python package for easy C++ declarations navigation.",
       url="https://github.com/gccxml/pygccxml",
       download_url="https://github.com/gccxml/pygccxml/archive/master.zip",
