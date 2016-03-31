@@ -18,6 +18,7 @@ from .declaration import declaration_t
 from .scopedef import scopedef_t
 from .enumeration import enumeration_t
 from .namespace import namespace_t
+from .typedef import typedef_t
 
 from .class_declaration import class_t
 from .class_declaration import CLASS_TYPES
@@ -25,8 +26,6 @@ from .class_declaration import ACCESS_TYPES
 from .class_declaration import hierarchy_info_t
 from .class_declaration import class_declaration_t
 from .class_declaration import class_types
-
-from .typedef import typedef_t
 
 from .cpptypes import type_t
 from .cpptypes import dummy_type_t

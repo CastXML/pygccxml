@@ -68,6 +68,9 @@ import example_tester
 import test_utils
 import test_va_list_tag_removal
 import test_copy_constructor
+import test_cpp_standards
+import unnamed_classes_tester
+import test_map_gcc5
 
 testers = [
     # , demangled_tester # failing right now
@@ -128,7 +131,10 @@ testers = [
     example_tester,
     test_utils,
     test_va_list_tag_removal,
-    test_copy_constructor
+    test_copy_constructor,
+    test_cpp_standards,
+    unnamed_classes_tester,
+    test_map_gcc5
 ]
 
 if 'posix' in os.name:

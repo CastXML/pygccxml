@@ -7,6 +7,9 @@ import os
 import sys
 import logging
 
+# Prevents copy.deepcopy RecursionError in some tests (Travis build)
+sys.setrecursionlimit(10000)
+
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
 
@@ -49,6 +52,11 @@ class cxx_parsers_cfg(object):
             gccxml.compiler.upper())
         if 'msvc9' == gccxml.compiler:
             gccxml.define_symbols.append('_HAS_TR1=0')
+
+if cxx_parsers_cfg.gccxml.xml_generator:
+    generator_name = cxx_parsers_cfg.gccxml.xml_generator
+if cxx_parsers_cfg.gccxml.xml_generator_path:
+    generator_path = cxx_parsers_cfg.gccxml.xml_generator_path
 
 print(
     '%s configured to simulate compiler %s' %

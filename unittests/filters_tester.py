@@ -40,7 +40,17 @@ class tester_t(parser_test_case.parser_test_case_t):
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
         public_members = [d for d in public_members if not d.is_artificial]
-        self.assertTrue(17 == len(public_members))
+        if "CastXML" in utils.xml_generator:
+            nbr = len(public_members)
+            self.assertTrue(17 == nbr or 21 == nbr)
+            if nbr == 21:
+                # We are using llvm 3.9, see bug #32. Make sure the 4 names
+                # are still there
+                ll = ["isa", "flags", "str", "length"]
+                for l in ll:
+                    self.assertTrue(l in [mbr.name for mbr in public_members])
+        else:
+            self.assertTrue(17 == len(public_members))
 
     def test_or_matcher(self):
         criteria1 = declarations.regex_matcher_t(

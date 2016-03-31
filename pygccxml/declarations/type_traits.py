@@ -365,8 +365,15 @@ def is_fundamental(type):
             (cpptypes.volatile_t, cpptypes.const_t))
 
 
-class declaration_xxx_traits(object):
+def is_union(type_):
+    """returns True if type represents a C++ union"""
+    if not is_class(type_):
+        return False
+    decl = class_traits.get_declaration(type_)
+    return decl.class_type == class_declaration.CLASS_TYPES.UNION
 
+
+class declaration_xxx_traits(object):
     """this class implements the functionality needed for convenient work with
     declaration classes
 
@@ -1166,7 +1173,7 @@ class smart_pointer_traits(object):
     @staticmethod
     def is_smart_pointer(type_):
         """returns True, if type represents instantiation of
-        `boost::shared_ptr`, False otherwise"""
+        `boost::shared_ptr` or `std::shared_ptr`, False otherwise"""
         type_ = remove_alias(type_)
         type_ = remove_cv(type_)
         type_ = remove_declarated(type_)
@@ -1174,16 +1181,20 @@ class smart_pointer_traits(object):
                           (class_declaration.class_declaration_t,
                            class_declaration.class_t)):
             return False
-        if not impl_details.is_defined_in_xxx('boost', type_):
+        if not (impl_details.is_defined_in_xxx('boost', type_) or
+                impl_details.is_defined_in_xxx('std', type_)):
             return False
-        return type_.decl_string.startswith('::boost::shared_ptr<')
+        return type_.decl_string.startswith('::boost::shared_ptr<') or \
+            type_.decl_string.startswith('::std::shared_ptr<')
 
     @staticmethod
     def value_type(type_):
-        """returns reference to `boost::shared_ptr` value type"""
+        """returns reference to `boost::shared_ptr` \
+        or `std::shared_ptr` value type"""
         if not smart_pointer_traits.is_smart_pointer(type_):
             raise TypeError(
-                'Type "%s" is not instantiation of boost::shared_ptr' %
+                'Type "%s" is not an instantiation of \
+                boost::shared_ptr or std::shared_ptr' %
                 type_.decl_string)
         return internal_type_traits.get_by_name(type_, "value_type")
 

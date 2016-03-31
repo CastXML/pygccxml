@@ -521,6 +521,10 @@ class project_reader_t(object):
                 else:
 
                     name = decl_wrapper_type.declaration._name
+                    if name == "":
+                        # Happens with gcc5, castxml + std=c++11
+                        # See issue #45
+                        continue
                     if name.startswith("__vmi_class_type_info_pseudo"):
                         continue
                     if name == "rebind<std::__tree_node" + \

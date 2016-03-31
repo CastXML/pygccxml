@@ -23,82 +23,154 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_enum_patcher(self):
         fix_enum = self.global_ns.free_fun("fix_enum")
         default_val = fix_enum.arguments[0].default_value
-        if "CastXML" in utils.xml_generator:
-            # Most clean output, no need to patch
-            self.assertTrue(default_val == "ns1::ns2::apple")
-        else:
-            self.assertTrue(default_val == "::ns1::ns2::apple")
+        self.assertEqual(default_val, "::ns1::ns2::apple")
+
+        if 32 == self.architecture or "CastXML" in utils.xml_generator:
+            fix_enum2 = self.global_ns.free_fun("fix_enum2")
+            default_val = fix_enum2.arguments[0].default_value
+            self.assertEqual(default_val, "::ns1::ns2::apple")
+
+            ns1 = self.global_ns.namespace("ns1")
+            ns2 = ns1.namespace("ns2")
+            fix_enum2 = ns2.free_fun("fix_enum2")
+            default_val = fix_enum2.arguments[0].default_value
+            self.assertEqual(default_val, "::ns1::ns2::apple")
+
+            fix_enum3 = self.global_ns.free_fun("fix_enum3")
+            default_val = fix_enum3.arguments[0].default_value
+            self.assertEqual(default_val, "::ns1::ns2::orange")
 
         # double_call = declarations.find_declaration(
         # decls, type=declarations.free_function_t, name='double_call' )
 
     def test_numeric_patcher(self):
-        fix_numeric = self.global_ns.free_fun("fix_numeric")
+        fix_numeric = self.global_ns.free_function("fix_numeric")
         if 32 == self.architecture:
             if "0.9" in utils.xml_generator:
                 if platform.machine() == "x86_64":
-                    self.assertTrue(
-                        fix_numeric.arguments[0].default_value == "-1u",
-                        fix_numeric.arguments[0].default_value)
+                    self.assertEqual(
+                        fix_numeric.arguments[0].default_value, "-1u")
                 else:
                     val = "0xffffffffffffffffu"
-                    self.assertTrue(
-                        fix_numeric.arguments[0].default_value == val,
-                        fix_numeric.arguments[0].default_value)
+                    self.assertEqual(
+                        fix_numeric.arguments[0].default_value, val)
             else:
                 val = "0xffffffffffffffff"
-                self.assertTrue(
-                    fix_numeric.arguments[0].default_value == val,
-                    fix_numeric.arguments[0].default_value)
+                self.assertEqual(
+                    fix_numeric.arguments[0].default_value, val)
         else:
             if "CastXML" in utils.xml_generator:
-                # Most clean output, no need to patch
-                self.assertTrue(
-                    fix_numeric.arguments[0].default_value == "(ull)-1",
-                    fix_numeric.arguments[0].default_value)
+                if utils.xml_output_version >= 1.137:
+                    val = "(unsigned long long)-1"
+                else:
+                    val = "(ull)-1"
+                self.assertEqual(
+                    fix_numeric.arguments[0].default_value, val)
             else:
-                self.assertTrue(
-                    fix_numeric.arguments[0].default_value == "0ffffffff",
-                    fix_numeric.arguments[0].default_value)
+                self.assertEqual(
+                    fix_numeric.arguments[0].default_value, "0ffffffff")
+
+    def test_unqualified_integral_patcher(self):
+        if 32 != self.architecture and "CastXML" not in utils.xml_generator:
+            # For this check to be removed, patcher_tester_64bit.xml
+            # will need to be updated for GCCXML
+            return
+
+        ns1 = self.global_ns.namespace("ns1")
+        st1 = ns1.class_("st1")
+        fun1 = st1.member_function("fun1")
+        if "CastXML" in utils.xml_generator:
+            if utils.xml_output_version >= 1.137:
+                val1 = "ns1::DEFAULT_1"
+                val2 = "ns1::st1::DEFAULT_2"
+            else:
+                val1 = "::ns1::DEFAULT_1"
+                val2 = "::ns1::st1::DEFAULT_2"
+            self.assertEqual(
+                fun1.arguments[0].default_value, val1)
+            self.assertEqual(
+                fun1.arguments[1].default_value, val2)
+        else:
+            self.assertEqual(
+                fun1.arguments[0].default_value,
+                "ns1::DEFAULT_1")
+            self.assertEqual(
+                fun1.arguments[1].default_value,
+                "ns1::st1::DEFAULT_2")
+
+        fun2 = self.global_ns.free_fun("fun2")
+        self.assertEqual(
+            fun2.arguments[0].default_value,
+            "::DEFAULT_1")
+        if "CastXML" in utils.xml_generator:
+            if utils.xml_output_version >= 1.137:
+                val1 = "ns1::DEFAULT_1"
+                val2 = "ns1::st1::DEFAULT_2"
+            else:
+                # Before XML output version 1.137, the following two
+                # were unpatched and were identical to the text in
+                # matcher.hpp
+                val1 = "ns1::DEFAULT_1"
+                val2 = "::ns1::st1::DEFAULT_2"
+            self.assertEqual(
+                fun2.arguments[1].default_value, val1)
+            self.assertEqual(
+                fun2.arguments[2].default_value, val2)
+        else:
+            self.assertEqual(
+                fun2.arguments[1].default_value,
+                "ns1::DEFAULT_1")
+            self.assertEqual(
+                fun2.arguments[2].default_value,
+                "ns1::st1::DEFAULT_2")
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun("fix_unnamed")
-        self.assertTrue(
-            fix_unnamed.arguments[0].default_value == "int(::fx::unnamed)")
+        if ("CastXML" in utils.xml_generator and
+                utils.xml_output_version >= 1.137):
+            val = "fx::unnamed"
+        else:
+            val = "int(::fx::unnamed)"
+        self.assertEqual(
+            fix_unnamed.arguments[0].default_value, val)
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun("fix_function_call")
         default_val = fix_function_call.arguments[0].default_value
         if "CastXML" in utils.xml_generator:
-            # Most clean output, no need to patch
-            val = "calc(1, 2, 3)"
-            self.assertTrue(default_val == val)
+            if utils.xml_output_version >= 1.137:
+                val = "function_call::calc(1, 2, 3)"
+            else:
+                val = "calc(1, 2, 3)"
         elif "0.9" in utils.xml_generator:
             val = "function_call::calc(1, 2, 3)"
-            self.assertTrue(default_val == val)
         else:
             val = "function_call::calc( 1, 2, 3 )"
-            self.assertTrue(default_val == val)
+        self.assertEqual(default_val, val)
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun("fix_fundamental")
-        val = "(unsigned int)(::fundamental::eggs)"
-        self.assertTrue(
-            fcall.arguments[0].default_value == val)
+        if ("CastXML" in utils.xml_generator and
+                utils.xml_output_version >= 1.137):
+            val = "fundamental::spam::eggs"
+        else:
+            val = "(unsigned int)(::fundamental::eggs)"
+        self.assertEqual(
+            fcall.arguments[0].default_value, val)
 
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_fun("typedef__func")
         default_val = typedef__func.arguments[0].default_value
         if "0.9" in utils.xml_generator:
             val = "typedef_::original_name()"
-            self.assertTrue(default_val == val)
+            self.assertEqual(default_val, val)
         elif "CastXML" in utils.xml_generator:
             # Most clean output, no need to patch
             val = "typedef_::alias()"
-            self.assertTrue(default_val == val)
+            self.assertEqual(default_val, val)
         else:
             val = "::typedef_::alias( )"
-            self.assertTrue(default_val == val)
+            self.assertEqual(default_val, val)
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun("clone_tree")
             default_values = []
@@ -116,7 +188,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                         "std::allocator<char> > > >((&allocator" +
                         "<std::basic_string<char, std::char_traits<char>, " +
                         "std::allocator<char> > >()))")]
-                self.assertTrue(
+                self.assertIn(
                     clone_tree.arguments[0].default_value in default_values)
 
 

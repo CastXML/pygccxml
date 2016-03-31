@@ -8,7 +8,7 @@
 
 #if defined( __llvm__ )
 
-    // This is mostly for CastXML with never compilers
+    // This is mostly for CastXML with newer compilers
 
     // When parsing with clang//llvm use the new c++11 (c++0x even ?)
     // unordered_maps and unordered_sets
@@ -38,9 +38,31 @@
     // This is mostly for GCCXML (when using old compilers)
 
     #if defined( __GNUC__ )
-        #include <ext/hash_set>
-        #include <ext/hash_map>
-        #define HASH_XXX_NS __gnu_cxx
+        #if ((__GNUC__ > 4) || \
+             (__GNUC__ == 4 && __GNUC_MINOR__ > 4) || \
+             (__GNUC__ == 4 && __GNUC_MINOR__ == 4 && __GNUC_PATCHLEVEL__ == 7)) && \
+            defined(__castxml__)
+
+            // Use TR1 containers for gcc >= 4.4.7 + castxml
+            // (this might work on older versions of gcc too, needs testing)
+            #include <tr1/unordered_map>
+            #include <tr1/unordered_set>
+            #define HASH_XXX_NS std::tr1
+
+            #define HASH_XXX_UMAP unordered_map
+            #define HASH_XXX_USET unordered_set
+            #define HASH_XXX_UMMAP unordered_multimap
+            #define HASH_XXX_UMMSET unordered_multiset
+        #else
+            #include <ext/hash_set>
+            #include <ext/hash_map>
+            #define HASH_XXX_NS __gnu_cxx
+
+            #define HASH_XXX_UMAP hash_map
+            #define HASH_XXX_USET hash_set
+            #define HASH_XXX_UMMAP hash_multimap
+            #define HASH_XXX_UMMSET hash_multiset
+        #endif
     #else
         #include <hash_set>
         #include <hash_map>
@@ -49,12 +71,12 @@
         #else
             #define HASH_XXX_NS stdext
         #endif
-    #endif
 
-    #define HASH_XXX_UMAP hash_map
-    #define HASH_XXX_USET hash_set
-    #define HASH_XXX_UMMAP hash_multimap
-    #define HASH_XXX_UMMSET hash_multiset
+        #define HASH_XXX_UMAP hash_map
+        #define HASH_XXX_USET hash_set
+        #define HASH_XXX_UMMAP hash_multimap
+        #define HASH_XXX_UMMSET hash_multiset
+    #endif
 
 #endif
 

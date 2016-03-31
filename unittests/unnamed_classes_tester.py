@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml.declarations import type_traits
 
 
 class tester_t(parser_test_case.parser_test_case_t):
@@ -23,10 +24,64 @@ class tester_t(parser_test_case.parser_test_case_t):
             self.global_ns = declarations.get_global_namespace(decls)
             self.global_ns.init_optimizer()
 
-    def test(self):
-        # bf_x = self.global_ns.variable( 'x' )
-        # self.assertTrue( bf_x.bits == 1 )
-        pass
+    def validate_bitfields(self, parent, bitfields):
+        for key in bitfields:
+            var = parent.variable(key)
+            self.assertEqual(var.bits, bitfields[key])
+
+    def do_union_test(self, union_name, bitfields):
+        s2 = self.global_ns.class_('S2')
+        self.assertFalse(type_traits.is_union(s2))
+        self.assertEqual(s2.parent.name, 'S1')
+        self.assertFalse(type_traits.is_union(s2.parent))
+
+        union = s2.variable(union_name)
+        self.assertTrue(type_traits.is_union(union.type))
+
+        union_type = type_traits.remove_declarated(union.type)
+        self.validate_bitfields(union_type, bitfields)
+        self.assertIsNotNone(union_type.variable('raw'))
+
+    def test_union_Flags(self):
+        flags_bitfields = {
+            'hasItemIdList': 1,
+            'pointsToFileOrDir': 1,
+            'hasDescription': 1,
+            'hasRelativePath': 1,
+            'hasWorkingDir': 1,
+            'hasCmdLineArgs': 1,
+            'hasCustomIcon': 1,
+            'useWorkingDir': 1,
+            'unused': 24,
+        }
+        self.do_union_test('flags', flags_bitfields)
+
+    def test_unnamed_unions(self):
+        fileattribs_bitfields = {
+            'isReadOnly': 1,
+            'isHidden': 1,
+            'isSystem': 1,
+            'isVolumeLabel': 1,
+            'isDir': 1,
+            'isModified': 1,
+            'isEncrypted': 1,
+            'isNormal': 1,
+            'isTemporary': 1,
+            'isSparse': 1,
+            'hasReparsePoint': 1,
+            'isCompressed': 1,
+            'isOffline': 1,
+            'unused': 19,
+        }
+        self.do_union_test('fileattribs', fileattribs_bitfields)
+
+    def test_anonymous_unions(self):
+        s3 = self.global_ns.class_('S3')
+        self.assertEqual(s3.parent.name, 'S1')
+
+        s3_vars = ['anon_mem_c', 'anon_mem_i', 's3_mem', 's2']
+        for var in s3_vars:
+            self.assertFalse(type_traits.is_union(s3.variable(var).type))
 
 
 def create_suite():

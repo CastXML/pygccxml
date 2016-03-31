@@ -12,10 +12,18 @@
 namespace ns1{ namespace ns2{
 
 enum fruit{ apple, orange };
+void fix_enum2( fruit arg=apple );
 
 } }
 
 void fix_enum( ns1::ns2::fruit arg=ns1::ns2::apple );
+
+namespace ns3{
+
+using namespace ns1::ns2;
+void fix_enum3( fruit arg=orange );
+
+}
 
 typedef unsigned long long ull;
 void fix_numeric( ull arg=(ull)-1 );
@@ -53,6 +61,20 @@ namespace osg{
     node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );
 
 }
+
+namespace ns1{
+
+static int const DEFAULT_1 = 0;
+struct st1{
+    static long const DEFAULT_2 = 10;
+    void fun1( int arg1=DEFAULT_1, long=DEFAULT_2 );
+};
+
+}
+
+static int const DEFAULT_1 = 20;
+int fun2( int arg1=DEFAULT_1, int arg2=ns1::DEFAULT_1, long arg3=::ns1::st1::DEFAULT_2 );
+
 
 /*struct default_arg_t{};*/
 /*default_arg_t create_default_argument();*/

@@ -25,6 +25,13 @@ class tester_t(parser_test_case.parser_test_case_t):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.__code = os.linesep.join(['struct a{};'])
+        self.known_typedefs = [
+            "__int128_t", "__uint128_t", "__builtin_va_list"]
+        self.known_typedefs_llvm39 = \
+            self.known_typedefs + ["__builtin_ms_va_list"]
+        self.known_classes = ["a", "__va_list_tag"]
+        self.known_classes_llvm39 = \
+            self.known_classes + ["__NSConstantString_tag"]
 
     def test_keep_va_list_tag(self):
 
@@ -48,14 +55,35 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         self.assertTrue(tag in [class_.name for class_ in classes])
         self.assertTrue("a" in [class_.name for class_ in classes])
-        self.assertTrue(len(classes) == 2)
+        if len(classes) == 2:
+            for c in self.known_classes:
+                self.assertTrue(c in [cl.name for cl in classes])
+        elif len(classes) == 3:
+            for c in self.known_classes_llvm39:
+                # This is for llvm 3.9
+                self.assertTrue(c in [cl.name for cl in classes])
 
-        self.assertTrue(tag in [ty.name for ty in typedefs])
-        self.assertTrue(len(typedefs) == 4)
+        self.assertTrue(len(typedefs) == 4 or len(typedefs) == 5)
+        if len(typedefs) == 5:
+            # This is for llvm 3.9. The class __va_list_tag struct is still
+            # there but the typedef is gone
+            for t in self.known_typedefs_llvm39:
+                self.assertTrue(t in [ty.name for ty in typedefs])
+            self.assertTrue(
+                "__NSConstantString_tag" in
+                [class_.name for class_ in classes])
+            self.assertTrue(
+                "__NSConstantString" in [ty.name for ty in typedefs])
+        else:
+            for t in self.known_typedefs:
+                self.assertTrue(t in [ty.name for ty in typedefs])
 
         self.assertTrue(
             tag in [var.decl_string.split("::")[1] for var in variables])
-        self.assertTrue(len(variables) == 4)
+
+        # 4 variables in __va_list_tag, and 4 more in __NSConstantString_tag
+        # for llvm 3.9
+        self.assertTrue(len(variables) == 4 or len(variables) == 8)
 
     def test_remove_va_list_tag(self):
 
@@ -82,7 +110,19 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.assertTrue(len(classes) == 1)
 
         self.assertFalse(tag in [ty.name for ty in typedefs])
-        self.assertTrue(len(typedefs) == 3)
+        self.assertTrue(len(typedefs) == 3 or len(typedefs) == 4)
+        if len(typedefs) == 4:
+            # This is for llvm 3.9
+            for t in self.known_typedefs_llvm39:
+                self.assertTrue(t in [ty.name for ty in typedefs])
+            self.assertFalse(
+                "__NSConstantString_tag"
+                in [class_.name for class_ in classes])
+            self.assertFalse(
+                "__NSConstantString" in [ty.name for ty in typedefs])
+        else:
+            for t in self.known_typedefs:
+                self.assertTrue(t in [ty.name for ty in typedefs])
 
         self.assertFalse(
             tag in [var.decl_string.split("::")[1] for var in variables])
