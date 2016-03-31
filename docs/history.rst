@@ -11,22 +11,22 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Version 1.7.3 (not yet released)
---------------------------------
+Version 1.7.3
+-------------
 
-1. C++xx flags are now correctly passed to CastXML. Allowed flags are:
+1. Addition of an is_union() method in the type_traits module.
+
+2. type_traits.smart_pointer_traits will now classify std::shared_ptr as a
+   smart pointer (only boost::shared_ptr was recognized before)
+
+3. Fix a regression in undname_creator_t.format_argtypes
+
+4. C++xx flags are now correctly passed to CastXML. Allowed flags are:
    "-std=c++98", "-std=c++03", "-std=c++11", "-std=c++14", "-std=c++1z"
    Thanks to Mark Moll for the fix.
 
-2. Addition of a is_union() method in the type_traits module.
-
-3. type_traits.smart_pointer_traits will now classify std::shared_ptr as a
-   smart pointer (only boost::shared_ptr was recognised before)
-
-4. Fix a regression in undname_creator_t.format_argtypes
-
 5. Add better support for "typedef (class|struct) {} foo;" syntax when using
-   CastXML. GCCXML did not recognize the typedef here. Fetching these
+   CastXML. GCCXML did not recognize the typedef. Fetching these
    declarations can now be done with: .typedef("foo") or .class_("foo").
 
 6. Add support for the future llvm 3.9. As in release v1.7.1, new structs and
@@ -39,9 +39,9 @@ Version 1.7.3 (not yet released)
    latest version of CastXML is recommended. This makes sure default arguments
    for function parameters are correctly defined, so that py++ can process them.
 
-8. Fixes for exeption when using castxml + gcc5 + std=c++11 + maps.
+8. Fix for exception when using castxml + gcc5 + std=c++11 and maps.
 
-9. Remove unittest2 dependency for testing with python 2.6
+9. Removed unittest2 dependency for testing with python 2.6
 
 10. Testing: test with std::tr1 unordered containers for gcc >= 4.4.7 and castxml
 
