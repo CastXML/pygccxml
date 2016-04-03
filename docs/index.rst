@@ -12,16 +12,10 @@ Using `pygccxml` you can:
 * Build code analyzers
 * ...
 
-Installing
-==========
+Installation
+============
 
-You can use pip to install pygccxml::
-
-  pip install pygccxml
-
-To install from source, you can use the usual procedure::
-
-  python setup.py install
+Installation instructions can be found here: :doc:`Installation <install>`
 
 Examples
 ========
@@ -55,7 +49,7 @@ Documentation contents
 .. toctree::
    :maxdepth: 1
 
-   download
+   install
    examples
    documentation
    query_interface
