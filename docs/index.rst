@@ -59,7 +59,6 @@ Documentation contents
    links
    releasing
    history
-   credits
    apidocs/api
 
 .. _`Boost Software License`: http://boost.org/more/license_info.html
