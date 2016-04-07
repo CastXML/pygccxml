@@ -1,6 +1,19 @@
 Changes
 =======
 
+Version 1.8.0 (not yet released)
+--------------------------------
+
+* find_xml_generator will now look for castxml first
+
+* Deprecate the ns() method. The namespace() method can be used instead.
+
+* General code style overhaul (with the help of quantifiedcode.com)
+
+* Added a bunch of new examples
+
+* Documentation update and cleanup
+
 Version 1.7.3
 -------------
 
