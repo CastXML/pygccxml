@@ -597,7 +597,7 @@ class class_t(scopedef.scopedef_t):
 
         for mvar in mvars:
 
-            type_ = tt.remove_reference(mvar.type)
+            type_ = tt.remove_reference(mvar.decl_type)
 
             if tt.is_const(type_):
                 no_const = tt.remove_const(type_)

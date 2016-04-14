@@ -158,10 +158,10 @@ class linker_t(
         self.__link_members()
 
     def visit_typedef(self):
-        self.__inst.type = self.__link_type(self.__inst.type)
+        self.__inst.decl_type = self.__link_type(self.__inst.decl_type)
 
     def visit_variable(self):
-        self.__inst.type = self.__link_type(self.__inst.type)
+        self.__inst.decl_type = self.__link_type(self.__inst.decl_type)
 
     def visit_void(self):
         pass

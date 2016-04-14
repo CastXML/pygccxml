@@ -324,10 +324,10 @@ class variable_matcher_t(declaration_matcher_t):
             return False
         if self.type is not None:
             if isinstance(self.type, cpptypes.type_t):
-                if self.type != decl.type:
+                if self.type != decl.decl_type:
                     return False
             else:
-                if self.type != decl.type.decl_string:
+                if self.type != decl.decl_type.decl_string:
                     return False
         return True
 

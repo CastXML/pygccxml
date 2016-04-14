@@ -7,6 +7,7 @@
 defines class that describes C++ global and member variable declaration
 """
 
+import warnings
 from . import declaration
 from . import dependencies
 from . import class_declaration
@@ -35,13 +36,13 @@ class variable_t(declaration.declaration_t):
 
     def _get__cmp__items(self):
         """implementation details"""
-        return [self.type, self.type_qualifiers, self.value]
+        return [self.decl_type, self.type_qualifiers, self.value]
 
     def __eq__(self, other):
         """implementation details"""
         if not declaration.declaration_t.__eq__(self, other):
             return False
-        return self.type == other.type \
+        return self.decl_type == other.decl_type \
             and self.type_qualifiers == other.type_qualifiers \
             and self.value == other.value \
             and self.bits == other.bits
@@ -52,11 +53,26 @@ class variable_t(declaration.declaration_t):
     @property
     def type(self):
         """reference to the variable :class:`type <type_t>`"""
+        warnings.warn(
+            "variable_t.type is deprecated.\n" +
+            "Please use variable_t.decl_type instead.", DeprecationWarning)
         return self._type
 
     @type.setter
-    def type(self, type):
-        self._type = type
+    def type(self, _type):
+        warnings.warn(
+            "variable_t.type is deprecated.\n" +
+            "Please use variable_t.decl_type instead.", DeprecationWarning)
+        self._type = _type
+
+    @property
+    def decl_type(self):
+        """reference to the variable :class:`decl_type <type_t>`"""
+        return self._type
+
+    @decl_type.setter
+    def decl_type(self, decl_type):
+        self._type = decl_type
 
     @property
     def type_qualifiers(self):
@@ -120,7 +136,7 @@ class variable_t(declaration.declaration_t):
         self._mangled = mangled
 
     def i_depend_on_them(self, recursive=True):
-        return [dependencies.dependency_info_t(self, self.type)]
+        return [dependencies.dependency_info_t(self, self.decl_type)]
 
     def get_mangled_name(self):
         if not self._mangled and not self._demangled \

@@ -52,7 +52,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
                 "value(%s) of 'initialized' variable") %
             (expected_value, initialized.value))
         self._test_type_composition(
-            initialized.type,
+            initialized.decl_type,
             declarations.const_t,
             declarations.long_unsigned_int_t)
 

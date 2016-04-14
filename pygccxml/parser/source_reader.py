@@ -36,7 +36,7 @@ def bind_aliases(decls):
     typedefs = [
         decl for decl in decls if isinstance(decl, declarations.typedef_t)]
     for decl in typedefs:
-        type_ = declarations.remove_alias(decl.type)
+        type_ = declarations.remove_alias(decl.decl_type)
         if not isinstance(type_, declarations.declarated_t):
             continue
         cls_inst = type_.declaration

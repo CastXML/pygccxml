@@ -582,5 +582,5 @@ class project_reader_t(object):
                     decl,
                     (pygccxml.declarations.typedef_t,
                         pygccxml.declarations.variable_t)):
-                types.extend(get_from_type(decl.type))
+                types.extend(get_from_type(decl.decl_type))
         return types

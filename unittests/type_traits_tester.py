@@ -46,8 +46,8 @@ class tester_t(parser_test_case.parser_test_case_t):
         for decl in ns_yes.declarations:
             if isinstance(decl, declarations.variable_t):
                 self.assertTrue(
-                    controller(decl.type),
-                    er % (decl.type.decl_string, ns_name))
+                    controller(decl.decl_type),
+                    er % (decl.decl_type.decl_string, ns_name))
             elif isinstance(decl, declarations.calldef_t) and \
                     decl.name.startswith('test_'):
                 continue

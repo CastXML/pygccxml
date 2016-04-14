@@ -336,7 +336,7 @@ class core_t(parser_test_case.parser_test_case_t):
                 typedef,
                 "unable to find typedef to build-in type '%s'" %
                 fundamental_type_name)
-            if typedef.type.decl_string != fundamental_type.decl_string:
+            if typedef.decl_type.decl_string != fundamental_type.decl_string:
                 errors.append(
                     "there is a difference between typedef base type " +
                     "name('%s') and expected one('%s')" %
@@ -348,7 +348,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_const_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.const_t,
             declarations.int_t)
 
@@ -356,7 +356,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_pointer_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.pointer_t,
             declarations.int_t)
 
@@ -364,7 +364,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_reference_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.reference_t,
             declarations.int_t)
 
@@ -372,15 +372,15 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_const_unsigned_int_const_pointer')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.const_t,
             declarations.pointer_t)
         self._test_type_composition(
-            typedef_inst.type.base,
+            typedef_inst.decl_type.base,
             declarations.pointer_t,
             declarations.const_t)
         self._test_type_composition(
-            typedef_inst.type.base.base,
+            typedef_inst.decl_type.base.base,
             declarations.const_t,
             declarations.unsigned_int_t)
 
@@ -388,13 +388,13 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_volatile_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.volatile_t,
             declarations.int_t)
 
         var_inst = self.global_ns.variable('array255')
         self._test_type_composition(
-            var_inst.type,
+            var_inst.decl_type,
             declarations.array_t,
             declarations.int_t)
 
@@ -403,15 +403,15 @@ class core_t(parser_test_case.parser_test_case_t):
             name='typedef_EFavoriteDrinks')
         self.assertTrue(
             isinstance(
-                typedef_inst.type,
+                typedef_inst.decl_type,
                 declarations.declarated_t),
             " typedef to enum should be 'declarated_t' instead of '%s'" %
-            typedef_inst.type.__class__.__name__)
+            typedef_inst.decl_type.__class__.__name__)
         enum_declaration = self.global_ns.enum('EFavoriteDrinks')
         self.assertTrue(
-            typedef_inst.type.declaration is enum_declaration,
+            typedef_inst.decl_type.declaration is enum_declaration,
             "instance of declaration_t has reference to '%s' instead of '%s'" %
-            (typedef_inst.type.declaration.name,
+            (typedef_inst.decl_type.declaration.name,
              enum_declaration.name))
 
     def test_free_function_type(self):
@@ -419,10 +419,10 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='function_ptr')
         self._test_type_composition(
-            function_ptr.type,
+            function_ptr.decl_type,
             declarations.pointer_t,
             declarations.free_function_type_t)
-        function_type = function_ptr.type.base
+        function_type = function_ptr.decl_type.base
         self.assertTrue(
             isinstance(
                 function_type.return_type,
@@ -455,11 +455,11 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='member_function_ptr_t')
         self._test_type_composition(
-            function_ptr.type,
+            function_ptr.decl_type,
             declarations.pointer_t,
             declarations.member_function_type_t)
 
-        function_type = function_ptr.type.base
+        function_type = function_ptr.decl_type.base
 
         members_pointers = self.global_ns.class_('members_pointers_t')
         self.assertTrue(
@@ -498,7 +498,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='member_variable_ptr_t')
         self._test_type_composition(
-            mv.type,
+            mv.decl_type,
             declarations.pointer_t,
             declarations.member_variable_type_t)
 
@@ -508,10 +508,10 @@ class core_t(parser_test_case.parser_test_case_t):
             "unable to find class('%s')" %
             'members_pointers_t')
         self._test_type_composition(
-            mv.type.base,
+            mv.decl_type.base,
             declarations.member_variable_type_t,
             declarations.declarated_t)
-        mv_type = mv.type.base
+        mv_type = mv.decl_type.base
         self.assertTrue(
             mv_type.base.declaration is members_pointers,
             "member function type class should be '%s' instead of '%s'" %

@@ -414,7 +414,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             curr_level *
             self.INDENT_SIZE +
             'alias to: ' +
-            self.__inst.type.decl_string +
+            self.__inst.decl_type.decl_string +
             os.linesep)
 
     def visit_variable(self):
@@ -425,7 +425,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             curr_level *
             self.INDENT_SIZE +
             'type: %s' %
-            self.__inst.type.decl_string)
+            self.__inst.decl_type.decl_string)
         self.writer(
             ' ' *
             curr_level *
@@ -442,7 +442,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                     bits.ljust(
                         self.JUSTIFY))
 
-            byte_size = 'size: %d' % self.__inst.type.byte_size
+            byte_size = 'size: %d' % self.__inst.decl_type.byte_size
             self.writer(
                 ' ' *
                 curr_level *
@@ -450,7 +450,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 byte_size.ljust(
                     self.JUSTIFY))
             try:
-                byte_align = 'align: %d' % self.__inst.type.byte_align
+                byte_align = 'align: %d' % self.__inst.decl_type.byte_align
                 self.writer(
                     ' ' *
                     curr_level *

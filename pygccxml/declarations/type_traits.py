@@ -38,7 +38,7 @@ def __remove_alias(type_):
         return __remove_alias(type_.type)
     if isinstance(type_, cpptypes.declarated_t) and \
             isinstance(type_.declaration, typedef.typedef_t):
-        return __remove_alias(type_.declaration.type)
+        return __remove_alias(type_.declaration.decl_type)
     if isinstance(type_, cpptypes.compound_t):
         type_.base = __remove_alias(type_.base)
         return type_
@@ -51,7 +51,7 @@ def remove_alias(type_):
     if isinstance(type_, cpptypes.type_t):
         type_ref = type_
     elif isinstance(type_, typedef.typedef_t):
-        type_ref = type_.type
+        type_ref = type_.decl_type
     else:
         pass  # not a valid input, just return it
     if not type_ref:
@@ -80,10 +80,10 @@ def decompose_type(tp):
     if isinstance(tp, cpptypes.compound_t):
         return [tp] + decompose_type(tp.base)
     elif isinstance(tp, typedef.typedef_t):
-        return decompose_type(tp.type)
+        return decompose_type(tp.decl_type)
     elif isinstance(tp, cpptypes.declarated_t) and \
             isinstance(tp.declaration, typedef.typedef_t):
-        return decompose_type(tp.declaration.type)
+        return decompose_type(tp.declaration.decl_type)
     else:
         return [tp]
 
