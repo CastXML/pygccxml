@@ -146,16 +146,16 @@ class map_file_parser_t(formated_mapping_parser_t):
     def load_symbols(self):
         """returns dictionary
         { decorated symbol : original declaration name }"""
-        f = open(self.binary_file)
-        lines = []
-        was_exports = False
-        for line in f:
-            if was_exports:
-                lines.append(line)
-            elif 'Exports' == line.strip():
-                was_exports = True
-            else:
-                pass
+        with open(self.binary_file) as f:
+            lines = []
+            was_exports = False
+            for line in f:
+                if was_exports:
+                    lines.append(line)
+                elif 'Exports' == line.strip():
+                    was_exports = True
+                else:
+                    pass
 
         index = 0
         result = []

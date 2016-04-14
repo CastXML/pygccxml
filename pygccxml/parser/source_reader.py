@@ -351,9 +351,8 @@ class source_reader_t(object):
         header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
 
         try:
-            header_file_obj = open(header_file, 'w+')
-            header_file_obj.write(content)
-            header_file_obj.close()
+            with open(header_file, "w+") as header:
+                header.write(content)
             xml_file = self.create_xml_file(header_file, destination)
         finally:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
