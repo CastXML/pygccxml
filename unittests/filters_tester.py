@@ -42,7 +42,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         public_members = [d for d in public_members if not d.is_artificial]
         if "CastXML" in utils.xml_generator:
             nbr = len(public_members)
-            self.assertTrue(17 == nbr or 21 == nbr)
+            self.assertTrue(nbr in [17, 21])
             if nbr == 21:
                 # We are using llvm 3.9, see bug #32. Make sure the 4 names
                 # are still there
