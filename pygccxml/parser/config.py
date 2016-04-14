@@ -41,7 +41,7 @@ class parser_configuration_t(object):
             undefine_symbols=None,
             cflags="",
             compiler=None,
-            xml_generator="gccxml",
+            xml_generator="castxml",
             keep_xml=False,
             compiler_path=None,
             flags=None):
@@ -207,7 +207,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             ignore_gccxml_output=False,
             cflags="",
             compiler=None,
-            xml_generator="gccxml",
+            xml_generator="castxml",
             keep_xml=False,
             compiler_path=None,
             flags=None):
