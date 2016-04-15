@@ -379,20 +379,3 @@ class declaration_t(object):
 
         print(self)
         raise NotImplementedError()
-
-    @property
-    def compiler(self):
-        """
-        Compiler name + version.
-
-           @type: str
-
-        """
-        warnings.warn(
-            "The compiler attribute is deprecated. \n" +
-            "Please use utils.xml_generator instead.", DeprecationWarning)
-        return self._compiler
-
-    @compiler.setter
-    def compiler(self, compiler):
-        self._compiler = compiler
