@@ -14,6 +14,9 @@ Version 1.8.0 (not yet released)
 
 * Documentation update and cleanup
 
+* Remove compiler attribute in declarations.py and gccxml_path from config.py
+  These were deprecated in pygccxml v1.7.0, and definitively removed for v1.8.0
+
 Version 1.7.3
 -------------
 
