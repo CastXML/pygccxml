@@ -239,25 +239,6 @@ class xml_generator_configuration_t(parser_configuration_t):
         return copy.deepcopy(self)
 
     @property
-    def gccxml_path(self):
-        """
-        Gccxml binary location
-
-        """
-
-        warnings.warn(
-            "gccxml_path is deprecated. \n" +
-            "Please use xml_generator_path instead.", DeprecationWarning)
-        return self.__gccxml_path
-
-    @gccxml_path.setter
-    def gccxml_path(self, new_path):
-        warnings.warn(
-            "gccxml_path is deprecated. \n" +
-            "Please use xml_generator_path instead.", DeprecationWarning)
-        self.__gccxml_path = new_path
-
-    @property
     def xml_generator_path(self):
         """
         XML generator binary location
