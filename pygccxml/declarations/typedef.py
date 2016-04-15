@@ -35,7 +35,11 @@ class typedef_t(declaration.declaration_t):
 
     @property
     def type(self):
-        """reference to the original :class:`type <type_t>`"""
+        """
+        Deprecated since v1.8.0. Will be removed in v1.9.0
+
+        """
+
         warnings.warn(
             "typedef_t.type is deprecated.\n" +
             "Please use typedef_t.decl_type instead.", DeprecationWarning)
@@ -43,6 +47,11 @@ class typedef_t(declaration.declaration_t):
 
     @type.setter
     def type(self, _type):
+        """
+        Deprecated since v1.8.0. Will be removed in v1.9.0
+
+        """
+
         warnings.warn(
             "typedef_t.type is deprecated.\n" +
             "Please use typedef_t.decl_type instead.", DeprecationWarning)
