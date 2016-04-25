@@ -17,6 +17,9 @@ Version 1.7.4 (not yet released)
 1. Since this release, pyggcxml's version numbers do not contain the ``v``
    prefix anymore. This was breaking distribution on PyPI (pypi.python.org).
 
+2. Close subprocess stdout stream once value has been read.
+   Fixes some warnings under python3.
+
 Version 1.7.3
 -------------
 

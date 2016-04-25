@@ -452,6 +452,7 @@ def create_compiler_path(xml_generator, compiler_path):
             p = subprocess.Popen(
                 ['which', 'clang++'], stdout=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.stdout.close()
             # No clang found; use gcc
             if compiler_path == '':
                 compiler_path = '/usr/bin/c++'
