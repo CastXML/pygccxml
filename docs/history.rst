@@ -14,6 +14,9 @@ by setting up a git repositery on github, hosted along with gccxml.
 Version 1.7.4 (not yet released)
 --------------------------------
 
+1. Since this release, pyggcxml's version numbers do not contain the ``v``
+   prefix anymore. This was breaking distribution on PyPI (pypi.python.org).
+
 Version 1.7.3
 -------------
 
