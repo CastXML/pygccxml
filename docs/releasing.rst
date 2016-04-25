@@ -5,7 +5,7 @@ To build a new release, the following files should be modified:
 
 Modify the version numbers in:
 
-``setup.py``
+``setup.py`` (version and download_url)
 
 ``pygccxml/__init__.py``
 
