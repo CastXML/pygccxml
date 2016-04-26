@@ -11,11 +11,7 @@ from . import patcher
 import subprocess
 import pygccxml.utils
 
-try:  # select the faster xml parser
-    from .etree_scanner import etree_scanner_t as scanner_t
-except ImportError:
-    from .scanner import scanner_t
-
+from .etree_scanner import ietree_scanner_t as scanner_t
 from . import declarations_cache
 from pygccxml import utils
 from pygccxml import declarations
