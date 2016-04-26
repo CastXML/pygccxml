@@ -370,14 +370,14 @@ class source_reader_t(object):
         try:
             ffname = self.__file_full_name(source_file)
             self.logger.debug("Reading source file: [%s]." % ffname)
-            declarations = self.__dcache.cached_value(ffname, self.__config)
-            if not declarations:
+            decls = self.__dcache.cached_value(ffname, self.__config)
+            if not decls:
                 self.logger.debug(
                     "File has not been found in cache, parsing...")
                 xml_file = self.create_xml_file(ffname)
-                declarations, files = self.__parse_xml_file(xml_file)
+                decls, files = self.__parse_xml_file(xml_file)
                 self.__dcache.update(
-                    ffname, self.__config, declarations, files)
+                    ffname, self.__config, decls, files)
             else:
                 self.logger.debug(
                     ("File has not been changed, reading declarations " +
@@ -389,7 +389,7 @@ class source_reader_t(object):
         if xml_file:
             pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
 
-        return declarations
+        return decls
 
     def read_xml_file(self, xml_file):
         """
@@ -406,16 +406,16 @@ class source_reader_t(object):
 
         ffname = self.__file_full_name(xml_file)
         self.logger.debug("Reading xml file: [%s]" % xml_file)
-        declarations = self.__dcache.cached_value(ffname, self.__config)
-        if not declarations:
+        decls = self.__dcache.cached_value(ffname, self.__config)
+        if not decls:
             self.logger.debug("File has not been found in cache, parsing...")
-            declarations, files = self.__parse_xml_file(ffname)
-            self.__dcache.update(ffname, self.__config, declarations, [])
+            decls, files = self.__parse_xml_file(ffname)
+            self.__dcache.update(ffname, self.__config, decls, [])
         else:
             self.logger.debug(
                 "File has not been changed, reading declarations from cache.")
 
-        return declarations
+        return decls
 
     def read_string(self, content):
         """
@@ -429,13 +429,13 @@ class source_reader_t(object):
             f.write(content)
 
         try:
-            declarations = self.read_file(header_file)
+            decls = self.read_file(header_file)
         except Exception:
             pygccxml.utils.remove_file_no_raise(header_file, self.__config)
             raise
         pygccxml.utils.remove_file_no_raise(header_file, self.__config)
 
-        return declarations
+        return decls
 
     def __file_full_name(self, file):
         if os.path.isfile(file):
