@@ -3,10 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""
-Logger classes and a few convenience methods.
-
-"""
+"""Logger classes and a few convenience methods."""
 
 import os
 import sys
@@ -16,16 +13,15 @@ import tempfile
 import subprocess
 
 
-def is_str(s):
+def is_str(string):
     """
     Python 2 and 3 compatible string checker.
 
     """
-
     if sys.version_info >= (3, 0):
-        return isinstance(s, str)
+        return isinstance(string, str)
     else:
-        return isinstance(s, basestring)
+        return isinstance(string, basestring)
 
 
 def find_xml_generator(name=None):
@@ -40,7 +36,6 @@ def find_xml_generator(name=None):
     raises an exception.
 
     """
-
     if platform.system() == "Windows":
         command = "where"
     else:
@@ -65,11 +60,7 @@ def find_xml_generator(name=None):
 
 
 def _create_logger_(name):
-    """
-    Implementation detail, creates a logger.
-
-    """
-
+    """Implementation detail, creates a logger."""
     logger = logging.getLogger(name)
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter('%(levelname)s %(message)s'))
@@ -79,10 +70,7 @@ def _create_logger_(name):
 
 
 class loggers(object):
-    """
-    Class-namespace, defines a few loggers classes, used in the project.
-
-    """
+    """Class-namespace, defines a few loggers classes, used in the project."""
 
     cxx_parser = _create_logger_('pygccxml.cxx_parser')
     """
@@ -137,21 +125,13 @@ class loggers(object):
 
     @staticmethod
     def set_level(level):
-        """
-        Set the same logging level for all the loggers at once.
-
-        """
-
+        """Set the same logging level for all the loggers at once."""
         for logger in loggers.all_loggers:
             logger.setLevel(level)
 
 
 def remove_file_no_raise(file_name, config):
-    """
-    Removes file from disk if exception is raised.
-
-    """
-
+    """Removes file from disk if exception is raised."""
     # The removal can be disabled by the config for debugging purposes.
     if config.keep_xml:
         return True
@@ -173,7 +153,6 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
     function tempfile.mkstemp.
 
     """
-
     if not prefix:
         prefix = tempfile.gettempprefix()
     fd, name = tempfile.mkstemp(suffix=suffix, prefix=prefix, dir=dir)
@@ -183,11 +162,7 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
 
 
 def normalize_path(some_path):
-    """
-    Return os.path.normpath(os.path.normcase(some_path))
-
-    """
-
+    """Return os.path.normpath(os.path.normcase(some_path))."""
     return os.path.normpath(os.path.normcase(some_path))
 
 
@@ -199,7 +174,6 @@ def contains_parent_dir(fpath, dirs):
     this function.
 
     """
-
     # Note: this function is used nowhere in pygccxml but is used
     # at least by pypluplus; so it should stay here.
 
@@ -207,11 +181,7 @@ def contains_parent_dir(fpath, dirs):
 
 
 def _f(fpath, dir_):
-    """
-    Helper function for contains_parent_dir function.
-
-    """
-
+    """Helper function for contains_parent_dir function."""
     return fpath.startswith(dir_)
 
 
@@ -222,7 +192,6 @@ def get_architecture():
     The guess is based on maxint.
 
     """
-
     if sys.maxsize == 2147483647:
         return 32
     elif sys.maxsize == 9223372036854775807:
@@ -232,10 +201,7 @@ def get_architecture():
 
 
 class cached(property):
-    """
-    Convert a method into a cached attribute.
-
-    """
+    """Convert a method into a cached attribute."""
 
     # The following code is cut-and-paste from this post:
     # http://groups.google.com/group/comp.lang.python/browse_thread/
@@ -301,11 +267,7 @@ class enum(object):
 
 
 class native_compiler(object):
-    """
-    Provides information about the compiler which was used to build the
-    Python executable
-
-    """
+    """Get the compiler used to build the Python executable."""
 
     @staticmethod
     def get_version():
@@ -338,7 +300,6 @@ def get_tr1(name):
     appending to search patterns.
 
     """
-
     tr1 = ""
     if "tr1" in name:
         tr1 = "tr1::"
