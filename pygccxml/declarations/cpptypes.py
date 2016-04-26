@@ -57,13 +57,13 @@ class type_t(object):
         raise NotImplementedError()
 
     def clone(self):
-        "returns new instance of the type"
+        """returns new instance of the type"""
         answer = self._clone_impl()
         return answer
 
     @property
     def byte_size(self):
-        "Size of this type in bytes @type: int"
+        """Size of this type in bytes @type: int"""
         return self._byte_size
 
     @byte_size.setter
@@ -72,7 +72,7 @@ class type_t(object):
 
     @property
     def byte_align(self):
-        "Alignment of this type in bytes @type: int"
+        """Alignment of this type in bytes @type: int"""
         return self._byte_align
 
     @byte_align.setter
@@ -105,8 +105,11 @@ class dummy_type_t(type_t):
 
 
 class unknown_t(type_t):
+    """
+    type, that represents all C++ types,
+    that could not be parsed  by GCC-XML
 
-    "type, that represents all C++ types, that could not be parsed  by GCC-XML"
+    """
 
     def __init__(self):
         type_t.__init__(self)
@@ -499,7 +502,7 @@ class compound_t(type_t):
 
     @property
     def base(self):
-        "reference to internal/base class"
+        """reference to internal/base class"""
         return self._base
 
     @base.setter
@@ -598,7 +601,7 @@ class array_t(compound_t):
 
     @property
     def size(self):
-        "returns array size"
+        """returns array size"""
         return self._size
 
     @size.setter
@@ -881,7 +884,7 @@ class declarated_t(type_t):
 
     @property
     def declaration(self):
-        "reference to :class:`declaration_t`"
+        """reference to :class:`declaration_t`"""
         return self._declaration
 
     @declaration.setter
@@ -899,12 +902,12 @@ class declarated_t(type_t):
 
     @property
     def byte_size(self):
-        "Size of this type in bytes @type: int"
+        """Size of this type in bytes @type: int"""
         return self._declaration.byte_size
 
     @property
     def byte_align(self):
-        "alignment of this type in bytes @type: int"
+        """alignment of this type in bytes @type: int"""
         return self._declaration.byte_align
 
 

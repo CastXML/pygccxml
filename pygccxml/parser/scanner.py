@@ -324,19 +324,19 @@ class scanner_t(xml.sax.handler.ContentHandler):
             declarations.ACCESS_TYPES.PUBLIC)
 
     def __read_byte_size(self, decl, attrs):
-        "Using duck typing to set the size instead of in constructor"
+        """Using duck typing to set the size instead of in constructor"""
         size = attrs.get(XML_AN_SIZE, 0)
         # Make sure the size is in bytes instead of bits
         decl.byte_size = int(size) / 8
 
     def __read_byte_offset(self, decl, attrs):
-        "Using duck typing to set the offset instead of in constructor"
+        """Using duck typing to set the offset instead of in constructor"""
         offset = attrs.get(XML_AN_OFFSET, 0)
         # Make sure the size is in bytes instead of bits
         decl.byte_offset = int(offset) / 8
 
     def __read_byte_align(self, decl, attrs):
-        "Using duck typing to set the alignment"
+        """Using duck typing to set the alignment"""
         align = attrs.get(XML_AN_ALIGN, 0)
         # Make sure the size is in bytes instead of bits
         decl.byte_align = int(align) / 8

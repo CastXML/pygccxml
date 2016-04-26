@@ -685,7 +685,7 @@ class operator_t(object):
 
     @property
     def symbol(self):
-        "operator's symbol. For example: operator+, symbol is equal to '+'"
+        """operator's symbol. For example: operator+, symbol is equal to '+'"""
         return self.name[operator_t.OPERATOR_WORD_LEN:].strip()
 
 # Third level in hierarchy of calldef

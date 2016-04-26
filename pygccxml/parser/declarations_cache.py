@@ -200,7 +200,7 @@ class file_cache_t(cache_base_t):
 
     @staticmethod
     def __load(file_name):
-        " Load pickled cache from file and return the object. "
+        """ Load pickled cache from file and return the object. """
 
         if os.path.exists(file_name) and not os.path.isfile(file_name):
             raise RuntimeError(

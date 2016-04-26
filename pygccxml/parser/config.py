@@ -157,7 +157,7 @@ class parser_configuration_t(object):
 
     @property
     def cflags(self):
-        "additional flags to pass to compiler"
+        """additional flags to pass to compiler"""
         return self.__cflags
 
     @cflags.setter

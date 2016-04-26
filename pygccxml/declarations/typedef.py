@@ -71,10 +71,10 @@ class typedef_t(declaration.declaration_t):
 
     @property
     def byte_size(self):
-        "Size of this type in bytes @type: int"
+        """Size of this type in bytes @type: int"""
         return self._type.byte_size
 
     @property
     def byte_align(self):
-        "alignment of this type in bytes @type: int"
+        """alignment of this type in bytes @type: int"""
         return self._type.byte_align

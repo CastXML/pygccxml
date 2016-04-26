@@ -95,7 +95,7 @@ class hierarchy_info_t(object):
 
     @property
     def related_class(self):
-        "reference to base or derived :class:`class <class_t>`"
+        """reference to base or derived :class:`class <class_t>`"""
         return self._related_class
 
     @related_class.setter
@@ -116,7 +116,7 @@ class hierarchy_info_t(object):
     # TODO: Why is there an access_type / access which are the same ?
     @property
     def access_type(self):
-        "describes :class:`hierarchy type <ACCESS_TYPES>`"
+        """describes :class:`hierarchy type <ACCESS_TYPES>`"""
         return self.access
 
     @access_type.setter
@@ -127,7 +127,7 @@ class hierarchy_info_t(object):
     # information
     @property
     def is_virtual(self):
-        "indicates whether the inheritance is virtual or not"
+        """indicates whether the inheritance is virtual or not"""
         return self._is_virtual
 
     @is_virtual.setter
@@ -156,7 +156,7 @@ class class_declaration_t(declaration.declaration_t):
 
     @property
     def aliases(self):
-        "List of :class:`aliases <typedef_t>` to this instance"
+        """List of :class:`aliases <typedef_t>` to this instance"""
         return self._aliases
 
     @aliases.setter
@@ -301,7 +301,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def class_type(self):
-        "describes class :class:`type <CLASS_TYPES>`"
+        """describes class :class:`type <CLASS_TYPES>`"""
         return self._class_type
 
     @class_type.setter
@@ -312,7 +312,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def bases(self):
-        "list of :class:`base classes <hierarchy_info_t>`"
+        """list of :class:`base classes <hierarchy_info_t>`"""
         return self._bases
 
     @bases.setter
@@ -335,7 +335,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def derived(self):
-        "list of :class:`derived classes <hierarchy_info_t>`"
+        """list of :class:`derived classes <hierarchy_info_t>`"""
         return self._derived
 
     @derived.setter
@@ -358,7 +358,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def is_abstract(self):
-        "describes whether class abstract or not"
+        """describes whether class abstract or not"""
         return self._is_abstract
 
     @is_abstract.setter
@@ -367,7 +367,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def public_members(self):
-        "list of all public :class:`members <declarationt_>`"
+        """list of all public :class:`members <declarationt_>`"""
         return self._public_members
 
     @public_members.setter
@@ -376,7 +376,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def private_members(self):
-        "list of all private :class:`members <declarationt_>`"
+        """list of all private :class:`members <declarationt_>`"""
         return self._private_members
 
     @private_members.setter
@@ -385,7 +385,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def protected_members(self):
-        "list of all protected :class:`members <declarationt_>`"
+        """list of all protected :class:`members <declarationt_>`"""
         return self._protected_members
 
     @protected_members.setter
@@ -394,7 +394,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def aliases(self):
-        "List of :class:`aliases <typedef_t>` to this instance"
+        """List of :class:`aliases <typedef_t>` to this instance"""
         return self._aliases
 
     @aliases.setter
@@ -403,7 +403,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def byte_size(self):
-        "Size of this class in bytes @type: int"
+        """Size of this class in bytes @type: int"""
         return self._byte_size
 
     @byte_size.setter
@@ -412,7 +412,7 @@ class class_t(scopedef.scopedef_t):
 
     @property
     def byte_align(self):
-        "Alignment of this class in bytes @type: int"
+        """Alignment of this class in bytes @type: int"""
         return self._byte_align
 
     @byte_align.setter
