@@ -455,16 +455,11 @@ class source_reader_t(object):
             file_path = file_path.replace(r'\/', os.path.sep)
         if os.path.isabs(file_path):
             return file_path
-        try:
-            abs_file_path = os.path.realpath(
-                os.path.join(
-                    self.__config.working_directory,
-                    file_path))
-            if os.path.exists(abs_file_path):
-                return os.path.normpath(abs_file_path)
-            return file_path
-        except Exception:
-            return file_path
+        abs_file_path = os.path.realpath(
+            os.path.join(self.__config.working_directory, file_path))
+        if os.path.exists(abs_file_path):
+            return os.path.normpath(abs_file_path)
+        return file_path
 
     def __parse_xml_file(self, xml_file):
         scanner_ = scanner_t(xml_file, self.__decl_factory, self.__config)
