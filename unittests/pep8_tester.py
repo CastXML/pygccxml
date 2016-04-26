@@ -30,7 +30,7 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../pygccxml/"
+        path += "/../pygccxml/"
 
         self.run_check(path)
 
@@ -44,7 +44,7 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../docs/examples/"
+        path += "/../docs/examples/"
 
         # Find all the examples files
         file_paths = []
@@ -65,7 +65,7 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../setup.py"
+        path += "/../setup.py"
 
         self.run_check(path)
 
