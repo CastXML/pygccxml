@@ -18,7 +18,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'type_traits_' + self.config.xml_generator + '.hpp'
+        self.header = 'type_traits.hpp'
         self.declarations = None
 
     def setUp(self):
@@ -60,6 +60,13 @@ class tester_t(parser_test_case.parser_test_case_t):
                     decl.name.startswith('test_'):
                 continue
 
+            if ("CastXML" in utils.xml_generator and
+                    utils.xml_output_version < 1.138 and
+                    decl.name in ['const_item', 'const_container']):
+                # Skip this test to workaround CastXML bug.
+                # See https://github.com/CastXML/CastXML/issues/55
+                continue
+
             self.assertFalse(
                 controller(decl),
                 er % (decl.decl_string, ns_name))
@@ -94,8 +101,11 @@ class tester_t(parser_test_case.parser_test_case_t):
                 declarations.is_same(
                     transformed,
                     tafter),
-                ("there is a difference between expected type and result. " +
-                 "typedef name: %s") % tbefore.decl_string)
+                ("there is a difference between expected type({0}) " +
+                 "and result({1}). typedef name: {2}").format(
+                    declarations.remove_declarated(tafter).decl_string,
+                    declarations.remove_declarated(transformed).decl_string,
+                    tbefore.decl_string))
 
     def test_is_enum(self):
         self.__test_type_category('is_enum', declarations.is_enum)
@@ -357,12 +367,13 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        if 'CastXML' in utils.xml_generator:
-            # Constructor, copy constructor, destructor, variable
-            self.assertTrue(len(ci.declarations) == 4)
-        else:
+        if ("CastXML" not in utils.xml_generator or
+                utils.xml_output_version >= 1.138):
+            # Prior to version 1.138, CastXML would incorrect create a default
+            # constructor definition.
+            # See https://github.com/CastXML/CastXML/issues/55
             # Copy constructor, destructor, variable
-            self.assertTrue(len(ci.declarations) == 3)
+            self.assertEqual(len(ci.declarations), 3)
 
 # class tester_diff_t( parser_test_case.parser_test_case_t ):
     # COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
