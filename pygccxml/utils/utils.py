@@ -45,13 +45,16 @@ def find_xml_generator(name=None):
         name = "castxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
+        p.stdout.close()
         if path == "":
             name = "gccxml"
             p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
             path = p.stdout.read().decode("utf-8")
+            p.stdout.close()
     else:
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
+        p.stdout.close()
     if path == "":
         raise(Exception(
             "No c++ parser found. Please install castxml or gccxml."))

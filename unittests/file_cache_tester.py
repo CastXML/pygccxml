@@ -89,6 +89,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             [sys.executable, "unittests/reopen_cache_tester.py"],
             stdout=subprocess.PIPE)
         print(p.stdout.read())
+        p.stdout.close()
 
 
 def create_suite():
