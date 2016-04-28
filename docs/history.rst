@@ -11,8 +11,8 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Version 1.7.4 (not yet released)
---------------------------------
+Version 1.7.4
+-------------
 
 1. CV-qualified arrays were not being handled correctly by type traits
    manipulations functions. For instance, 'int const[N]' would not be
