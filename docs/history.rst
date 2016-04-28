@@ -26,6 +26,8 @@ Version 1.7.4 (not yet released)
 3. Since this release, pyggcxml's version numbers do not contain the ``v``
    prefix anymore. This was breaking distribution on PyPI (pypi.python.org).
 
+4. The documentation is now at http://pygccxml.readthedocs.io/
+
 Thanks to the following people for their contribution to this release:
 Ashish Sadanandan
 
