@@ -19,6 +19,7 @@
     typedef BASE volatile NAME##_volatile_t;                  \
     typedef BASE const volatile NAME##_const_volatile_t;
 
+
 struct some_struct_t{
     void do_smth();
     int member;
@@ -47,9 +48,7 @@ struct incomplete_type;
 
 namespace is_void{
 namespace yes{
-    typedef void void_t;
-    typedef void const void_cont_t;
-    typedef void volatile void_volatile_t;
+    TYPE_PERMUTATION( void, void )
 }
 namespace no{
     typedef void* void_ptr_t;
@@ -186,7 +185,6 @@ namespace yes{
     typedef detail::dd_t dd_t;
     typedef detail::f_t f_t;
     typedef detail::g_t g_t;
-
     typedef detail::const_container const_container_t;
     typedef detail::const_item const_item_t;
 
@@ -286,11 +284,6 @@ namespace no{
 
 namespace is_fundamental{
 namespace yes{
-
-#define FUNDAMENTAL_TYPE_PERMUTATION( BASE, NAME )            \
-    typedef BASE NAME##_t;                                     \
-    typedef BASE const NAME##_const_t;                         \
-    typedef BASE volatile NAME##_volatile_t;
 
     TYPE_PERMUTATION( void, void )
     TYPE_PERMUTATION( bool, bool )
@@ -409,7 +402,8 @@ namespace yes{
     typedef const void const_void_t;
     typedef const incomplete_type const_incomplete_type_t;
     typedef int* const int_const_t;
-    //TODO typedef const int& const_int_ref_t;
+    typedef int* volatile const int_volatile_const_t;
+    typedef int* const volatile int_const_volatile_t;
 }
 
 namespace no{
@@ -421,15 +415,24 @@ namespace no{
     typedef void(*function_t)();
     typedef void (some_struct_t::*member_function_t)();
     typedef int int_t;
+    typedef const int& const_int_ref_t;
 } }
 
 namespace remove_const{
 namespace before{
-
     typedef const void x1;
     typedef const incomplete_type x2;
     typedef int* const x3;
     typedef int* volatile x4;
+    typedef void const * x5;
+    typedef int volatile const x6;
+    typedef int const volatile x7;
+
+    typedef char arr_42[42];
+    typedef char const arr_c_42[42];
+    typedef char volatile arr_v_42[42];
+    typedef char const volatile arr_cv_42[42];
+    typedef char volatile const arr_vc_42[42];
 }
 
 namespace after{
@@ -437,6 +440,15 @@ namespace after{
     typedef incomplete_type x2;
     typedef int* x3;
     typedef int* volatile x4;
+    typedef void const * x5;
+    typedef int volatile x6;
+    typedef int volatile x7;
+
+    typedef char arr_42[42];
+    typedef char arr_c_42[42];
+    typedef char volatile arr_v_42[42];
+    typedef char volatile arr_cv_42[42];
+    typedef char volatile arr_vc_42[42];
 } }
 
 namespace is_volatile{
@@ -444,9 +456,12 @@ namespace yes{
 
     typedef void * volatile vvoid_ptr_t;
     typedef volatile int volatile_int_t;
+    typedef int* volatile const int_volatile_const_t;
+    typedef int* const volatile int_const_volatile_t;
 }
 
 namespace no{
+    typedef void volatile * void_ptr_to_v_t;
     typedef int* int_ptr_t;
     typedef const int* const_int_ptr_t;
     typedef int* volatile_int_ptr_t;
@@ -463,12 +478,30 @@ namespace before{
     typedef void * volatile x1;
     typedef volatile int x2;
     typedef int* x3;
+    typedef void volatile * x4;
+    typedef int volatile const x5;
+    typedef int const volatile x6;
+
+    typedef char arr_42[42];
+    typedef char const arr_c_42[42];
+    typedef char volatile arr_v_42[42];
+    typedef char const volatile arr_cv_42[42];
+    typedef char volatile const arr_vc_42[42];
 }
 
 namespace after{
     typedef void * x1;
     typedef int x2;
     typedef int* x3;
+    typedef void volatile * x4;
+    typedef int const x5;
+    typedef int const x6;
+
+    typedef char arr_42[42];
+    typedef char const arr_c_42[42];
+    typedef char arr_v_42[42];
+    typedef char const arr_cv_42[42];
+    typedef char const arr_vc_42[42];
 } }
 
 
@@ -488,6 +521,12 @@ namespace before{
     typedef int* const x32;
 
     typedef void(*x40)();
+
+    typedef char arr_42[42];
+    typedef char const arr_c_42[42];
+    typedef char volatile arr_v_42[42];
+    typedef char const volatile arr_cv_42[42];
+    typedef char volatile const arr_vc_42[42];
 }
 
 namespace after{
@@ -504,6 +543,12 @@ namespace after{
     typedef int* x32;
 
     typedef void(*x40)();
+
+    typedef char arr_42[42];
+    typedef char arr_c_42[42];
+    typedef char arr_v_42[42];
+    typedef char arr_cv_42[42];
+    typedef char arr_vc_42[42];
 } }
 
 
@@ -548,9 +593,6 @@ namespace yes{
 
 namespace no{
 
-    typedef details::const_item const_item;
-    typedef details::const_container const_container;
-
     class y{
         private:
         y(){}
@@ -567,6 +609,9 @@ namespace no{
     public:
         static singleton_t* instance();
     };
+
+    typedef details::const_item const_item;
+    typedef details::const_container const_container;
 } }
 
 namespace has_public_constructor{
@@ -663,6 +708,7 @@ namespace yes{
     const int yes2[2] = {0};
     const volatile int yes3[2] = {0};
     int yes4[2][3];
+    int const yes5[2] = {0};
 }
 
 namespace no{

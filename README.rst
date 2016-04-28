@@ -7,8 +7,8 @@ pygccxml
 .. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=master
     :target: https://coveralls.io/r/gccxml/pygccxml?branch=master
     :alt: Code coverage status
-.. image:: https://readthedocs.org/projects/pygccxml/badge/?version=master
-    :target: https://readthedocs.org/projects/pygccxml/?badge=master
+.. image:: https://readthedocs.io/projects/pygccxml/badge/?version=master
+    :target: https://readthedocs.io/projects/pygccxml/?badge=master
     :alt: Documentation status
 .. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin:master:HEAD/badge.svg
     :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fmaster&tab=basics
@@ -37,7 +37,7 @@ For issues with pygccxml you can open an issue here: https://github.com/gccxml/p
 Documentation
 -------------
 
-For examples and tutorials see the documentation: http://pygccxml.readthedocs.org
+For examples and tutorials see the documentation: http://pygccxml.readthedocs.io
 
 Branches
 --------

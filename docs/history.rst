@@ -11,6 +11,26 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
+Version 1.7.4
+-------------
+
+1. CV-qualified arrays were not being handled correctly by type traits
+   manipulations functions. For instance, 'int const[N]' would not be
+   detected as 'const'. Similar problems existed for volatile qualified
+   arrays too. See #35 for more details. A newer version of CastXML is
+   recommended (xml output version >= 1.138)
+
+2. Close subprocess stdout stream once value has been read.
+   Fixes some warnings under python3.
+
+3. Since this release, pyggcxml's version numbers do not contain the ``v``
+   prefix anymore. This was breaking distribution on PyPI (pypi.python.org).
+
+4. The documentation is now at http://pygccxml.readthedocs.io/
+
+Thanks to the following people for their contribution to this release:
+Ashish Sadanandan
+
 Version 1.7.3
 -------------
 

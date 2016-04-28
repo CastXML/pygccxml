@@ -7,14 +7,14 @@
 from setuptools import setup
 
 setup(name="pygccxml",
-      version="v1.7.3",
+      version="1.7.4",
       author="Roman Yakovenko",
       author_email="roman yakovenko at gmail com",
       maintainer="Michka Popoff and the Insight Software Consortium",
       maintainer_email="castxml@public.kitware.com",
       description="Python package for easy C++ declarations navigation.",
       url="https://github.com/gccxml/pygccxml",
-      download_url="https://github.com/gccxml/pygccxml/archive/master.zip",
+      download_url="https://github.com/gccxml/pygccxml/archive/1.7.4.tar.gz",
       license="Boost",
       keywords="C++, declaration parser, CastXML, gccxml",
       packages=["pygccxml",
