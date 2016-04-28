@@ -280,6 +280,10 @@ class native_compiler(object):
 
         Deprecated since 1.8.0. Will be removed in 1.9.0.
 
+        Returns:
+            tuple:
+             * name of compiler (str): mscv
+             * compiler version (str): msvccompiler.get_build_version()
         """
         warnings.warn(
             "native_compiler.get_version is deprecated.\n",
@@ -296,6 +300,8 @@ class native_compiler(object):
 
         Deprecated since 1.8.0. Will be removed in 1.9.0.
 
+        Returns:
+            str: mscvXX, where XX is a version number. Works only on windows.
         """
         warnings.warn(
             "native_compiler.get_gccxml_compiler is deprecated.\n",
@@ -311,15 +317,16 @@ class native_compiler(object):
 
 
 def get_tr1(name):
-    """
-    When using libstd++, there is a tr1 namespace.
-
-    Note that tr1 was also replaced by std in declarations.py,
-    for the parent attribute.
+    """In libstd++ the tr1 namespace needs special care.
 
     Return either an empty string or tr1::, useful for
     appending to search patterns.
 
+    Args:
+        name (str): the name of the declaration
+
+    Returns:
+        str: an empty string or "tr1::"
     """
     tr1 = ""
     if "tr1" in name:
