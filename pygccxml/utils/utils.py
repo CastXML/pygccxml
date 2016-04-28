@@ -11,6 +11,7 @@ import platform
 import logging
 import tempfile
 import subprocess
+import warnings
 
 
 def is_str(string):
@@ -274,6 +275,15 @@ class native_compiler(object):
 
     @staticmethod
     def get_version():
+        """
+        Get the version of the compiler used to build the Python executable.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        """
+        warnings.warn(
+            "native_compiler.get_version is deprecated.\n",
+            DeprecationWarning)
         if 'nt' != os.name:
             return None  # not implemented yet
         else:
@@ -282,6 +292,14 @@ class native_compiler(object):
 
     @staticmethod
     def get_gccxml_compiler():
+        """Get a modified version string of the compiler.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        """
+        warnings.warn(
+            "native_compiler.get_gccxml_compiler is deprecated.\n",
+            DeprecationWarning)
         compiler = native_compiler.get_version()
         if not compiler:
             return None
