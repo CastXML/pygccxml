@@ -54,12 +54,12 @@ Documentation contents
    documentation
    query_interface
    design
-   upgrade_issues
    users
    links
    releasing
    history
    apidocs/api
+   upgrade_issues
 
 .. _`Boost Software License`: http://boost.org/more/license_info.html
 .. _`Travis`: https://travis-ci.org/gccxml/pygccxml/builds
