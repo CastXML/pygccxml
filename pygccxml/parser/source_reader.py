@@ -93,6 +93,7 @@ class source_reader_t(object):
         self.__join_decls = join_decls
         self.__search_directories = []
         self.__config = config
+        self.__cxx_std = utils.cxx_standard(config.cflags)
         self.__search_directories.append(config.working_directory)
         self.__search_directories.extend(config.include_paths)
         if not cache:
@@ -163,30 +164,12 @@ class source_reader_t(object):
             # On mac or linux, use gcc or clang (the flag is the same)
             cmd.append('--castxml-cc-gnu ')
 
-            # Check for -std=xx flags passed to the compiler.
-            # A regex could be used but this is a moving target.
-            # See c++1z for example. It is preferable to have a defined
-            # list of what is allowed. http://clang.llvm.org/cxx_status.html
-            #
-            # Version 98 and 03 are only there in the case somebody is using
-            # these flags; this is the equivalent to not passing these flags.
-            standards = [
-                "-std=c++98",
-                "-std=c++03",
-                "-std=c++11",
-                "-std=c++14",
-                "-std=c++1z"]
+            if self.__cxx_std.is_implicit:
+                std_flag = ''
+            else:
+                std_flag = ' ' + self.__cxx_std.stdcxx + ' '
 
-            std_flag = ""
-            for standard in standards:
-                if standard in self.__config.cflags:
-                    std_flag = " " + standard + " "
-
-            # A -std= flag was passed, but is not in the list
-            if "-std=" in self.__config.cflags and std_flag == "":
-                raise(RuntimeError("Unknown -std=c++xx flag used !"))
-
-            if std_flag != "":
+            if std_flag:
                 cmd.append(
                     '"(" ' + self.__config.compiler_path + std_flag + '")"')
             else:
@@ -502,7 +485,8 @@ class source_reader_t(object):
         # void ddd(){ typedef typename X::Y YY;}
         # if I will fail on this bug next time, the right way to fix it may be
         # different
-        patcher.fix_calldef_decls(scanner_.calldefs(), scanner_.enums())
+        patcher.fix_calldef_decls(scanner_.calldefs(), scanner_.enums(),
+                                  self.__cxx_std)
         decls = [
             inst for inst in iter(
                 decls.values()) if isinstance(
