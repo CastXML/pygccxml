@@ -19,29 +19,50 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.architecture = architecture
         self.global_ns = None
+        self.__cxx_std = utils.cxx_standard(self.config.cflags)
 
     def test_enum_patcher(self):
         fix_enum = self.global_ns.free_fun("fix_enum")
         default_val = fix_enum.arguments[0].default_value
-        self.assertEqual(default_val, "::ns1::ns2::apple")
+        if self.__cxx_std.is_cxx11_or_greater:
+            val = "::ns1::ns2::fruit::apple"
+        else:
+            val = "::ns1::ns2::apple"
+        self.assertEqual(default_val, val)
 
         if 32 == self.architecture or "CastXML" in utils.xml_generator:
             fix_enum2 = self.global_ns.free_fun("fix_enum2")
             default_val = fix_enum2.arguments[0].default_value
-            self.assertEqual(default_val, "::ns1::ns2::apple")
+            self.assertEqual(default_val, val)
 
             ns1 = self.global_ns.namespace("ns1")
             ns2 = ns1.namespace("ns2")
             fix_enum2 = ns2.free_fun("fix_enum2")
             default_val = fix_enum2.arguments[0].default_value
-            self.assertEqual(default_val, "::ns1::ns2::apple")
+            self.assertEqual(default_val, val)
 
             fix_enum3 = self.global_ns.free_fun("fix_enum3")
             default_val = fix_enum3.arguments[0].default_value
-            self.assertEqual(default_val, "::ns1::ns2::orange")
+            val = val.replace("apple", "orange")
+            self.assertEqual(default_val, val)
 
-        # double_call = declarations.find_declaration(
-        # decls, type=declarations.free_function_t, name='double_call' )
+            if self.__cxx_std.is_cxx11_or_greater:
+                fix_enum4 = self.global_ns.free_fun("fix_enum4")
+                default_val = fix_enum4.arguments[0].default_value
+                self.assertEqual(default_val, "::ns4::color::blue")
+
+                fix_enum5 = self.global_ns.free_fun("fix_enum5")
+                default_val = fix_enum5.arguments[0].default_value
+                self.assertEqual(default_val, "::ns4::color::blue")
+
+            lpe = self.global_ns.free_fun("log_priority_enabled")
+            default_val = lpe.arguments[0].default_value
+            if self.__cxx_std.is_cxx11_or_greater:
+                val = "(long int)" + \
+                    "(::ACE_Log_Priority_Index::LM_INVALID_BIT_INDEX)"
+            else:
+                val = "(long int)(::LM_INVALID_BIT_INDEX)"
+            self.assertEqual(default_val, val)
 
     def test_numeric_patcher(self):
         fix_numeric = self.global_ns.free_function("fix_numeric")
@@ -126,13 +147,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_fun("fix_unnamed")
-        if ("CastXML" in utils.xml_generator and
-                utils.xml_output_version >= 1.137):
-            val = "fx::unnamed"
-        else:
-            val = "int(::fx::unnamed)"
         self.assertEqual(
-            fix_unnamed.arguments[0].default_value, val)
+            fix_unnamed.arguments[0].default_value, "int(::fx::unnamed)")
 
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun("fix_function_call")
@@ -150,9 +166,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
     def test_fundamental_patcher(self):
         fcall = self.global_ns.free_fun("fix_fundamental")
-        if ("CastXML" in utils.xml_generator and
-                utils.xml_output_version >= 1.137):
-            val = "fundamental::spam::eggs"
+        if self.__cxx_std.is_cxx11_or_greater:
+            val = "(unsigned int)(::fundamental::spam::eggs)"
         else:
             val = "(unsigned int)(::fundamental::eggs)"
         self.assertEqual(
@@ -163,14 +178,12 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         default_val = typedef__func.arguments[0].default_value
         if "0.9" in utils.xml_generator:
             val = "typedef_::original_name()"
-            self.assertEqual(default_val, val)
         elif "CastXML" in utils.xml_generator:
             # Most clean output, no need to patch
             val = "typedef_::alias()"
-            self.assertEqual(default_val, val)
         else:
             val = "::typedef_::alias( )"
-            self.assertEqual(default_val, val)
+        self.assertEqual(default_val, val)
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun("clone_tree")
             default_values = []

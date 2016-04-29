@@ -25,6 +25,22 @@ void fix_enum3( fruit arg=orange );
 
 }
 
+#if __cplusplus >= 201103L
+namespace ns4{
+
+enum class color {red, green, blue};
+void fix_enum4( color arg=color::blue );
+
+}
+
+namespace ns5{
+
+using namespace ns4;
+void fix_enum5( color arg=color::blue );
+
+}
+#endif
+
 typedef unsigned long long ull;
 void fix_numeric( ull arg=(ull)-1 );
 
@@ -74,6 +90,13 @@ struct st1{
 
 static int const DEFAULT_1 = 20;
 int fun2( int arg1=DEFAULT_1, int arg2=ns1::DEFAULT_1, long arg3=::ns1::st1::DEFAULT_2 );
+
+
+enum ACE_Log_Priority_Index
+{
+  LM_INVALID_BIT_INDEX = 32
+};
+static int log_priority_enabled(long priority_index = LM_INVALID_BIT_INDEX);
 
 
 /*struct default_arg_t{};*/
