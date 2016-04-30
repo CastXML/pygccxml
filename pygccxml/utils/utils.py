@@ -18,6 +18,12 @@ def is_str(string):
     """
     Python 2 and 3 compatible string checker.
 
+    Args:
+        string (str | basestring): the string to check
+
+    Returns:
+        bool: True or False
+
     """
     if sys.version_info >= (3, 0):
         return isinstance(string, str)
@@ -270,7 +276,7 @@ class enum(object):
             enum_numeric_value (int): the value to search for
 
         Returns:
-            boolean: True or False
+            bool: True or False
 
         """
         warnings.warn("enum.has_value is deprecated.", DeprecationWarning)
