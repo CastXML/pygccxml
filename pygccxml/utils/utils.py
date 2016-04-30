@@ -238,6 +238,10 @@ class cached(property):
 
 class enum(object):
     """
+    A small enum object.
+
+    Deprecated since 1.8.0. Will be removed in 1.9.0.
+
     Usage example:
 
     .. code-block:: python
@@ -251,8 +255,25 @@ class enum(object):
 
     """
 
+    def __init__(self):
+        super(enum, self).__init__()
+        warnings.warn("enum is deprecated.", DeprecationWarning)
+
     @classmethod
     def has_value(cls, enum_numeric_value):
+        """
+        Check if the enum contains the value.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Args:
+            enum_numeric_value (int): the value to search for
+
+        Returns:
+            boolean: True or False
+
+        """
+        warnings.warn("enum.has_value is deprecated.", DeprecationWarning)
         for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return True
@@ -261,6 +282,19 @@ class enum(object):
 
     @classmethod
     def name_of(cls, enum_numeric_value):
+        """
+        Name of the value.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Args:
+            enum_numeric_value (int): the value to search for
+
+        Returns:
+            str: the name of the value
+
+        """
+        warnings.warn("enum.name_of is deprecated.", DeprecationWarning)
         for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return name
