@@ -32,12 +32,12 @@ bool operator!( const number& x ){
 }
 
 number operator*( const number& n,  double i ){
-    number n2 = { n.i * i };
+    number n2 = { static_cast<int>(n.i * i) };
     return n2;
 }
 
 number operator*( double i, const number& n ){
-    number n2 = { n.i * i };
+    number n2 = { static_cast<int>(n.i * i) };
     return n2;
 }
 
