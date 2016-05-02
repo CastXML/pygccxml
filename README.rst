@@ -1,17 +1,17 @@
 pygccxml
 ========
 
-.. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=master
+.. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=develop
     :target: https://travis-ci.org/gccxml/pygccxml
     :alt: Unit tests status
-.. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=master
-    :target: https://coveralls.io/r/gccxml/pygccxml?branch=master
+.. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=develop
+    :target: https://coveralls.io/r/gccxml/pygccxml?branch=develop
     :alt: Code coverage status
-.. image:: https://readthedocs.io/projects/pygccxml/badge/?version=master
-    :target: https://readthedocs.io/projects/pygccxml/?badge=master
+.. image:: https://readthedocs.org/projects/pygccxml/badge/?version=develop
+    :target: http://pygccxml.readthedocs.io/en/develop/?badge=develop
     :alt: Documentation status
-.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin:master:HEAD/badge.svg
-    :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fmaster&tab=basics
+.. image:: https://www.quantifiedcode.com/api/v1/project/117af14ef32a455fb7b3762e21083fb3/snapshot/origin:develop:HEAD/badge.svg
+    :target: https://www.quantifiedcode.com/app/project/117af14ef32a455fb7b3762e21083fb3?branch=origin%2Fdevelop&tab=basics
     :alt: Code quality status
 
 pygccxml is a specialized XML reader that reads the output from CastXML or GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
