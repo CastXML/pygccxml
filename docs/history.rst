@@ -11,6 +11,13 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
+Version 1.7.5 (unreleased)
+--------------------------
+
+1. Version numbers are still tagged with the v prefix (1.7.4 was correctly tagged),
+   as this is recommended by GitHub. The version number in the __init__.py and
+   setup.py files are without v prefix, because this is what pip requires.
+
 Version 1.7.4
 -------------
 
