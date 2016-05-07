@@ -430,9 +430,11 @@ def create_compiler_path(xml_generator, compiler_path):
         if platform.system() != 'Windows':
             # On windows there is no need for the compiler path
             p = subprocess.Popen(
-                ['which', 'clang++'], stdout=subprocess.PIPE)
+                ['which', 'clang++'], stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
             p.stdout.close()
+            p.stderr.close()
             # No clang found; use gcc
             if compiler_path == '':
                 compiler_path = '/usr/bin/c++'
