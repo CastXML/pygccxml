@@ -9,7 +9,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class tester_t(parser_test_case.parser_test_case_t):

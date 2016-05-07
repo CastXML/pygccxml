@@ -9,7 +9,6 @@ defines few algorithms, that deals with different properties of functions
 
 from . import calldef
 from . import type_traits
-from . import class_declaration
 
 
 def is_same_return_type(f1, f2):

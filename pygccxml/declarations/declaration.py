@@ -9,7 +9,6 @@ base class.
 
 """
 
-import warnings
 from . import algorithm
 from . import algorithms_cache
 from .. import utils
