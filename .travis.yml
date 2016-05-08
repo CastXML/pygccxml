@@ -37,13 +37,29 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-          # This will be gcc 5.2.1
+          # gcc 5.2.1
             - g++-5
     - os: linux
       dist: trusty
       sudo: required
       python: 3.5
       env: XML_GENERATOR="castxml"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+         # gcc 4.8.2 with c++03
+         - XML_GENERATOR="castxml"
+         - CPPSTD="-std=c++03"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+         # gcc 4.8.2 with c++11
+         - XML_GENERATOR="castxml"
+         - CPPSTD="-std=c++11"
     - os: linux
       dist: trusty
       sudo: required
@@ -56,7 +72,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            # This will be gcc 5.3.0
+            # gcc 5.3.0
             - g++-5
     - os: osx
       osx_image: xcode7.2
@@ -70,6 +86,11 @@ matrix:
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
+  allow_failures:
+    - env:
+       - XML_GENERATOR="castxml"
+       - CPPSTD="-std=c++11"
+      python: 3.5
 
 
 before_install:
@@ -101,6 +122,16 @@ before_install:
   # Setup gccxml for the gccxml builds on linux
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get update -qq; fi
   - if [[ "$XML_GENERATOR" == "gccxml" ]]; then sudo apt-get install -qq gccxml; fi
+
+  # Patch the c++ version to test on the fly
+  - if [[ $CPPSTD == "-std=c++03" ]]; then
+      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++03\",%g autoconfig.py && cd ..;
+    fi
+
+  # Patch the c++ version to test on the fly
+  - if [[ $CPPSTD == "-std=c++11" ]]; then
+      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++11\",%g autoconfig.py && cd ..;
+    fi
 
   # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
