@@ -86,11 +86,6 @@ matrix:
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
-  allow_failures:
-    - env:
-       - XML_GENERATOR="castxml"
-       - CPPSTD="-std=c++11"
-      python: 3.5
 
 
 before_install:
