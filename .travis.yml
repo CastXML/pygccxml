@@ -99,7 +99,7 @@ before_install:
   # Download castxml binaries
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       if [ ! -e ${HOME}/castxml ]; then
-        curl http://midas3.kitware.com/midas/download/bitstream/460403/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
+        wget -O - https://midas3.kitware.com/midas/download/bitstream/460403/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
 
