@@ -74,6 +74,21 @@ matrix:
           packages:
             # gcc 5.3.0
             - g++-5
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+       - XML_GENERATOR="castxml"
+       - COMPILER=g++-5
+       - CPPSTD="-std=c++14"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            # gcc 5.3.0
+            - g++-5
     - os: osx
       osx_image: xcode7.2
       language: generic
@@ -126,6 +141,11 @@ before_install:
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++11" ]]; then
       cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++11\",%g autoconfig.py && cd ..;
+    fi
+
+  # Patch the c++ version to test on the fly
+  - if [[ $CPPSTD == "-std=c++14" ]]; then
+      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++14\",%g autoconfig.py && cd ..;
     fi
 
   # Patch the compiler path on the fly for gcc5 testing
