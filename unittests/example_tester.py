@@ -1,3 +1,6 @@
+# Copyright 2014-2016 Insight Software Consortium.
+# Distributed under the Boost Software License, Version 1.0.
+# See http://www.boost.org/LICENSE_1_0.txt
 
 import os
 import fnmatch
@@ -18,16 +21,17 @@ class tester_t(unittest.TestCase):
         # Allows to cover files run in a subprocess
         # http://nedbatchelder.com/code/coverage/subprocess.html
         env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
-        path += "/../docs/examples"
 
         # Find all the examples files
         file_paths = []
-        for root, dirnames, filenames in os.walk(path):
+        for root, dirnames, filenames in os.walk(path + "/../docs/examples"):
             for file_path in fnmatch.filter(filenames, '*.py'):
                 file_paths.append(os.path.join(root, file_path))
 
         for file_path in file_paths:
-            return_code = subprocess.call(["python", file_path], env=env)
+            return_code = subprocess.call(
+                ["python", path + "/example_tester_wrap.py", file_path],
+                env=env)
             self.assertFalse(
                 return_code,
                 msg="The example %s did not run correctly" % file_path)
