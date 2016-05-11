@@ -34,14 +34,14 @@ ns = global_namespace.namespace("ns")
 # We know that the c variable is the third one in the list:
 c = ns.variables()[2]
 print("My name is: " + c.name)
-print("My type is: " + str(c.type))
+print("My type is: " + str(c.decl_type))
 print("My value is: " + c.value)
 
 # Of course you can also loop over the list and look for the right name
 for var in ns.variables():
     if var.name == "c":
         print("My name is: " + var.name)
-        print("My type is: " + str(var.type))
+        print("My type is: " + str(var.decl_type))
         print("My value is: " + var.value)
 
 # One way to get a variable is to use the variable() method and
@@ -50,5 +50,5 @@ for var in ns.variables():
 # specific criteria.
 c = ns.variable(lambda v: v.name == "c")
 print("My name is: " + c.name)
-print("My type is: " + str(c.type))
+print("My type is: " + str(c.decl_type))
 print("My value is: " + c.value)
