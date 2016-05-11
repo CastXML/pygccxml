@@ -340,7 +340,8 @@ class core_t(parser_test_case.parser_test_case_t):
                 errors.append(
                     "there is a difference between typedef base type " +
                     "name('%s') and expected one('%s')" %
-                    (typedef.type.decl_string, fundamental_type.decl_string))
+                    (typedef.decl_type.decl_string,
+                     fundamental_type.decl_string))
         self.assertFalse(errors, pprint.pformat(errors))
 
     def test_compound_types(self):

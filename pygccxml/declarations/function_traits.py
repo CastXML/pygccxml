@@ -87,6 +87,6 @@ def is_same_function(f1, f2):
     if len(f1.arguments) != len(f2.arguments):
         return False
     for f1_arg, f2_arg in zip(f1.arguments, f2.arguments):
-        if not type_traits.is_same(f1_arg.type, f2_arg.type):
+        if not type_traits.is_same(f1_arg.decl_type, f2_arg.decl_type):
             return False
     return True

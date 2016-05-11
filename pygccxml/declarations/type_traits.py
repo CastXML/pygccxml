@@ -35,7 +35,7 @@ from .. import utils
 def __remove_alias(type_):
     """implementation details"""
     if isinstance(type_, typedef.typedef_t):
-        return __remove_alias(type_.type)
+        return __remove_alias(type_.decl_type)
     if isinstance(type_, cpptypes.declarated_t) and \
             isinstance(type_.declaration, typedef.typedef_t):
         return __remove_alias(type_.declaration.decl_type)
@@ -640,7 +640,7 @@ def is_unary_operator(oper):
         if 0 == len(oper.arguments):
             return True
         elif oper.symbol in ['++', '--'] and \
-                isinstance(oper.arguments[0].type, cpptypes.int_t):
+                isinstance(oper.arguments[0].decl_type, cpptypes.int_t):
             return True
         else:
             return False
@@ -649,7 +649,7 @@ def is_unary_operator(oper):
             return True
         elif oper.symbol in ['++', '--'] \
                 and 2 == len(oper.arguments) \
-                and isinstance(oper.arguments[1].type, cpptypes.int_t):
+                and isinstance(oper.arguments[1].decl_type, cpptypes.int_t):
             # may be I need to add additional check whether first argument is
             # reference or not?
             return True
@@ -971,7 +971,7 @@ class __is_convertible_t(object):
                             continue
                         # TODO: add test to check explicitness
                         if is_convertible(source,
-                                          constructor.arguments[0].type):
+                                          constructor.arguments[0].decl_type):
                             return True
 
         return False
@@ -1191,7 +1191,8 @@ class internal_type_traits(object):
     def get_by_name(type_, name):
         if class_traits.is_my_case(type_):
             cls = class_traits.declaration_class(type_)
-            return remove_declarated(cls.typedef(name, recursive=False).type)
+            return remove_declarated(
+                cls.typedef(name, recursive=False).decl_type)
         elif class_declaration_traits.is_my_case(type_):
             cls = class_declaration_traits.get_declaration(type_)
             value_type_str = templates.args(cls.name)[0]

@@ -42,7 +42,8 @@ class default_argument_patcher_t(object):
             return prefix + '::' + suffix
 
     def __is_unqualified_enum(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         if not declarations.is_enum(type_):
             return False
         enum_type = declarations.enum_declaration(type_)
@@ -53,7 +54,8 @@ class default_argument_patcher_t(object):
             arg.default_value.split('::')[-1])
 
     def __fix_unqualified_enum(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         enum_type = declarations.enum_declaration(type_)
         if self.__cxx_std.is_cxx11_or_greater:
             qualifier_decl_string = enum_type.decl_string
@@ -64,7 +66,8 @@ class default_argument_patcher_t(object):
             arg.default_value.split('::')[-1])
 
     def __is_invalid_integral(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         if not declarations.is_integral(type_):
             return False
         try:
@@ -107,8 +110,8 @@ class default_argument_patcher_t(object):
         while parent:
             found = self.__find_enum(parent, enum_value)
             if found:
-                if declarations.is_fundamental(arg.type) and ' ' in \
-                        arg.type.decl_string:
+                if declarations.is_fundamental(arg.decl_type) and ' ' in \
+                        arg.decl_type.decl_string:
                     template = '(%s)(%s)'
                 else:
                     template = '%s(%s)'
@@ -116,7 +119,7 @@ class default_argument_patcher_t(object):
                     qualifier_decl_string = found.decl_string
                 else:
                     qualifier_decl_string = found.parent.decl_string
-                return template % (arg.type.decl_string,
+                return template % (arg.decl_type.decl_string,
                                    self.__join_names(qualifier_decl_string,
                                                      enum_value))
             else:
@@ -135,7 +138,7 @@ class default_argument_patcher_t(object):
                 except declarations.matcher.declaration_not_found_t:
                     # ignore exceptions if a match is not found
                     found = None
-                if found and declarations.is_fundamental(arg.type):
+                if found and declarations.is_fundamental(arg.decl_type):
                     return "%s" % self.__join_names(
                         found.parent.decl_string, arg.default_value)
                 parent = parent.parent
@@ -182,7 +185,7 @@ class default_argument_patcher_t(object):
         if not call_invocation.is_call_invocation(dv):
             return False
         name = call_invocation.name(dv)
-        base_type = declarations.base_type(arg.type)
+        base_type = declarations.base_type(arg.decl_type)
         if not isinstance(base_type, declarations.declarated_t):
             return False
         decl = base_type.declaration
@@ -196,7 +199,7 @@ class default_argument_patcher_t(object):
         dv = arg.default_value
         if not call_invocation.is_call_invocation(dv):
             return False
-        base_type = declarations.base_type(arg.type)
+        base_type = declarations.base_type(arg.decl_type)
         decl = base_type.declaration
         name, args = call_invocation.split(dv)
         if decl.name != name:

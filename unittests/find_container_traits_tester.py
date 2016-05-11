@@ -148,7 +148,8 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_recursive_partial_name(self):
         f1 = self.global_ns.free_fun('f1')
-        t1 = declarations.class_traits.get_declaration(f1.arguments[0].type)
+        t1 = declarations.class_traits.get_declaration(
+            f1.arguments[0].decl_type)
         self.assertTrue(
             'type< std::set< std::vector< int > > >' == t1.partial_name)
 

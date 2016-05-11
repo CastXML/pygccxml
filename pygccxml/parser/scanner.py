@@ -451,7 +451,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 XML_AN_NAME,
                 'arg%d' % len(
                     self.__inst.arguments))
-            argument.type = attrs[XML_AN_TYPE]
+            argument.decl_type = attrs[XML_AN_TYPE]
             argument.default_value = attrs.get(XML_AN_DEFAULT)
             self.__read_attributes(argument, attrs)
             if 'CastXML' not in utils.xml_generator:

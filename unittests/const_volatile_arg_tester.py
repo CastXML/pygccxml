@@ -26,7 +26,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         f = self.global_ns.free_fun('pygccxml_bug')
-        t = f.arguments[0].type
+        t = f.arguments[0].decl_type
         self.assertTrue(isinstance(t, declarations.pointer_t))
         self.assertTrue(isinstance(t.base, declarations.volatile_t))
         self.assertTrue(isinstance(t.base.base, declarations.const_t))

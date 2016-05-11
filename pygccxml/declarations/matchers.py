@@ -426,7 +426,8 @@ class calldef_matcher_t(declaration_matcher_t):
                     if type_or_str is None:
                         continue
                     else:
-                        if not self.__compare_types(type_or_str, arg.type):
+                        if not self.__compare_types(
+                                type_or_str, arg.decl_type):
                             return False
         return True
 

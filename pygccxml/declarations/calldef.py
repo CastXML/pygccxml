@@ -17,6 +17,7 @@ This modules contains definition for next C++ declarations:
     - destructor
 """
 import re
+import warnings
 from . import cpptypes
 from . import algorithm
 from . import declaration
@@ -89,7 +90,7 @@ class argument_t(object):
 
         return argument_t(
             name=keywd.get('name', self.name),
-            type=keywd.get('type', self.type),
+            type=keywd.get('type', self.decl_type),
             default_value=keywd.get('default_value', self.default_value),
             attributes=keywd.get('attributes', self.attributes ))
 
@@ -97,7 +98,7 @@ class argument_t(object):
         return argument_t(
             name=keywd.get(
                 'name', self.name), type=keywd.get(
-                'type', self.type), default_value=keywd.get(
+                'type', self.decl_type), default_value=keywd.get(
                 'default_value', self.default_value), attributes=keywd.get(
                 'attributes', self.attributes))
 
@@ -106,22 +107,23 @@ class argument_t(object):
             return "..."
         else:
             if self.default_value is None:
-                return "%s %s" % (self.type, self.name)
+                return "%s %s" % (self.decl_type, self.name)
             else:
-                return "%s %s=%s" % (self.type, self.name, self.default_value)
+                return "%s %s=%s" % (
+                    self.decl_type, self.name, self.default_value)
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
         return self.name == other.name \
             and self.default_value == other.default_value \
-            and self.type == other.type
+            and self.decl_type == other.decl_type
 
     def __hash__(self, other):
         return (hash(self.__class__) ^
                 hash(self.name) ^
                 hash(self.default_value) ^
-                hash(self.type))
+                hash(self.decl_type))
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -131,7 +133,7 @@ class argument_t(object):
             return self.__class__.__name__ < other.__class__.__name__
         return self.name < other.name \
             and self.default_value < other.default_value \
-            and self.type < other.type
+            and self.decl_type < other.decl_type
 
     @property
     def name(self):
@@ -147,7 +149,7 @@ class argument_t(object):
     def ellipsis(self):
         """bool, if True argument represents ellipsis ( "..." )
         in function definition"""
-        return isinstance(self.type, cpptypes.ellipsis_t)
+        return isinstance(self.decl_type, cpptypes.ellipsis_t)
 
     @property
     def default_value(self):
@@ -161,12 +163,35 @@ class argument_t(object):
 
     @property
     def type(self):
-        """The argument :class:`type <type_t>`"""
+        """
+        Deprecated since v1.8.0. Will be removed in v1.9.0
+
+        """
+
+        warnings.warn(
+            "argument_t.type is deprecated.\n" +
+            "Please use argument_t.decl_type instead.", DeprecationWarning)
         return self._type
 
     @type.setter
-    def type(self, type):
-        self._type = type
+    def type(self, _type):
+        """
+        Deprecated since v1.8.0. Will be removed in v1.9.0
+
+        """
+
+        warnings.warn(
+            "argument_t.type is deprecated.\n" +
+            "Please use argument_t.decl_type instead.", DeprecationWarning)
+        self._type = _type
+
+    @property
+    def decl_type(self):
+        return self._type
+
+    @decl_type.setter
+    def decl_type(self, decl_type):
+        self._type = decl_type
 
     @property
     def attributes(self):
@@ -291,7 +316,7 @@ class calldef_t(declaration.declaration_t):
     @property
     def argument_types(self):
         """list of all argument types"""
-        return [arg.type for arg in self.arguments]
+        return [arg.decl_type for arg in self.arguments]
 
     @property
     def required_args(self):
@@ -460,7 +485,7 @@ class calldef_t(declaration.declaration_t):
             answer.append(
                 self._report(self.return_type, hint="return type"))
         for arg in self.arguments:
-            answer.append(self._report(arg.type))
+            answer.append(self._report(arg.decl_type))
         for exc in self.exceptions:
             answer.append(self._report(exc, hint="exception"))
         return answer
@@ -600,12 +625,12 @@ class member_calldef_t(calldef_t):
         if self.has_static:
             return cpptypes.free_function_type_t(
                 return_type=self.return_type,
-                arguments_types=[arg.type for arg in self.arguments])
+                arguments_types=[arg.decl_type for arg in self.arguments])
         else:
             return cpptypes.member_function_type_t(
                 class_inst=self.parent,
                 return_type=self.return_type,
-                arguments_types=[arg.type for arg in self.arguments],
+                arguments_types=[arg.decl_type for arg in self.arguments],
                 has_const=self.has_const)
 
     def create_decl_string(self, with_defaults=True):
@@ -660,7 +685,7 @@ class free_calldef_t(calldef_t):
         return cpptypes.free_function_type_t(
             return_type=self.return_type,
             arguments_types=[
-                arg.type for arg in self.arguments])
+                arg.decl_type for arg in self.arguments])
 
     def create_decl_string(self, with_defaults=True):
         f_type = self.function_type()
@@ -753,7 +778,7 @@ class constructor_t(member_calldef_t):
         # We have only one argument, get it
         arg = args[0]
 
-        if not isinstance(arg.type, cpptypes.compound_t):
+        if not isinstance(arg.decl_type, cpptypes.compound_t):
             # An argument of type declarated_t (a typedef) could be passed to
             # the constructor; and it could be a reference.
             # But in c++ you can NOT write :
@@ -765,14 +790,14 @@ class constructor_t(member_calldef_t):
             return False
 
         # The argument needs to be passed by reference in a copy constructor
-        if not type_traits.is_reference(arg.type):
+        if not type_traits.is_reference(arg.decl_type):
             return False
 
         # The argument needs to be const for a copy constructor
-        if not type_traits.is_const(arg.type.base):
+        if not type_traits.is_const(arg.decl_type.base):
             return False
 
-        un_aliased = type_traits.remove_alias(arg.type.base)
+        un_aliased = type_traits.remove_alias(arg.decl_type.base)
         # un_aliased now refers to const_t instance
         if not isinstance(un_aliased.base, cpptypes.declarated_t):
             # We are looking for a declaration

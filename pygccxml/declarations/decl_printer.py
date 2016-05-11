@@ -202,7 +202,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             retval = decl.return_type.decl_string
         args = []
         for arg in decl.arguments:
-            args.append(arg.type.decl_string + ' ' + arg.name)
+            args.append(arg.decl_type.decl_string + ' ' + arg.name)
         indent = ' ' * (self.level + 1) * self.INDENT_SIZE
         self.writer(indent + "is extern: " + str(decl.has_extern))
         self.writer(indent + "return type: " + str(retval))

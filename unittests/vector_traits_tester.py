@@ -74,7 +74,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         do_nothing = self.global_ns.free_fun('do_nothing')
         v = declarations.remove_reference(
             declarations.remove_declarated(
-                do_nothing.arguments[0].type))
+                do_nothing.arguments[0].decl_type))
         declarations.vector_traits.element_type(v)
 
 

@@ -86,7 +86,7 @@ class linker_t(
             self.__inst.arguments_types = linked_args
         else:
             for arg in self.__inst.arguments:
-                arg.type = self.__link_type(arg.type)
+                arg.decl_type = self.__link_type(arg.decl_type)
             for i, exception in enumerate(self.__inst.exceptions):
                 try:
                     self.__inst.exceptions[i] = self.__decls[exception]
