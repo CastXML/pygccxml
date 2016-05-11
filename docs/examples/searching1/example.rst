@@ -14,4 +14,4 @@ The following code will show you how to loop on the tree and find a declaration
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,14-24,26-
+   :lines: 5,6,7,16-26,28-

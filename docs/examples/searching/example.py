@@ -8,6 +8,8 @@ from pygccxml import parser
 
 import os
 import sys
+import warnings
+warnings.simplefilter("error", Warning)
 # Find out the file location within the sources tree
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
