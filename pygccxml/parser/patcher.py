@@ -10,9 +10,10 @@ from pygccxml import declarations
 
 class default_argument_patcher_t(object):
 
-    def __init__(self, enums):
+    def __init__(self, enums, cxx_std):
         object.__init__(self)
         self.__enums = enums
+        self.__cxx_std = cxx_std
 
     def __call__(self, decl):
         for arg in decl.arguments:
@@ -54,8 +55,12 @@ class default_argument_patcher_t(object):
     def __fix_unqualified_enum(self, func, arg):
         type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
         enum_type = declarations.enum_declaration(type_)
+        if self.__cxx_std.is_cxx11_or_greater:
+            qualifier_decl_string = enum_type.decl_string
+        else:
+            qualifier_decl_string = enum_type.parent.decl_string
         return self.__join_names(
-            enum_type.parent.decl_string,
+            qualifier_decl_string,
             arg.default_value.split('::')[-1])
 
     def __is_invalid_integral(self, func, arg):
@@ -95,19 +100,25 @@ class default_argument_patcher_t(object):
             pass
 
         # may be we deal with enum
+        # CastXML qualifies the enum value with enum type, so split the
+        # argument and use only the enum value
+        enum_value = arg.default_value.split('::')[-1]
         parent = func.parent
         while parent:
-            found = self.__find_enum(parent, arg.default_value)
+            found = self.__find_enum(parent, enum_value)
             if found:
                 if declarations.is_fundamental(arg.type) and ' ' in \
                         arg.type.decl_string:
                     template = '(%s)(%s)'
                 else:
                     template = '%s(%s)'
+                if self.__cxx_std.is_cxx11_or_greater:
+                    qualifier_decl_string = found.decl_string
+                else:
+                    qualifier_decl_string = found.parent.decl_string
                 return template % (arg.type.decl_string,
-                                   self.__join_names(
-                                       found.parent.decl_string,
-                                       arg.default_value))
+                                   self.__join_names(qualifier_decl_string,
+                                                     enum_value))
             else:
                 parent = parent.parent
 
@@ -133,7 +144,7 @@ class default_argument_patcher_t(object):
 
     def __find_enum(self, scope, default_value):
         # this algorithm could be improved: it could take into account
-        # 1. unnamed namespaced
+        # 1. unnamed namespace
         # 2. location within files
 
         for enum in self.__enums:
@@ -222,8 +233,8 @@ class casting_operator_patcher_t(object):
 _casting_oper_patcher_ = casting_operator_patcher_t()
 
 
-def fix_calldef_decls(decls, enums):
-    default_arg_patcher = default_argument_patcher_t(enums)
+def fix_calldef_decls(decls, enums, cxx_std):
+    default_arg_patcher = default_argument_patcher_t(enums, cxx_std)
     # decls should be flat list of all declarations, you want to apply patch on
     for decl in decls:
         default_arg_patcher(decl)

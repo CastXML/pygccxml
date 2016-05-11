@@ -378,3 +378,94 @@ def get_tr1(name):
     if "tr1" in name:
         tr1 = "tr1::"
     return tr1
+
+
+class cxx_standard(object):
+    """Helper class for parsing the C++ standard version.
+
+    This class holds the C++ standard version the XML generator has been
+    configured with, and provides helpers functions for querying C++ standard
+    version related information.
+    """
+
+    __STD_CXX = {
+        '-std=c++98': 199711,
+        '-std=gnu++98': 199711,
+        '-std=c++03': 199711,
+        '-std=gnu++03': 199711,
+        '-std=c++0x': 201103,
+        '-std=gnu++0x': 201103,
+        '-std=c++11': 201103,
+        '-std=gnu++11': 201103,
+        '-std=c++1y': 201402,
+        '-std=gnu++1y': 201402,
+        '-std=c++14': 201402,
+        '-std=gnu++14': 201402,
+        '-std=c++1z': float('inf'),
+        '-std=gnu++1z': float('inf'),
+    }
+
+    def __init__(self, cflags):
+        """Class constructor that parses the XML generator's command line
+
+        Args:
+            cflags (str): cflags command line arguments passed to the XML
+                generator
+        """
+        super(cxx_standard, self).__init__()
+
+        self._stdcxx = None
+        self._is_implicit = False
+        for key in cxx_standard.__STD_CXX:
+            if key in cflags:
+                self._stdcxx = key
+                self._cplusplus = cxx_standard.__STD_CXX[key]
+
+        if not self._stdcxx:
+            if '-std=' in cflags:
+                raise RuntimeError('Unknown -std=c++xx flag used')
+
+            # Assume c++03 by default
+            self._stdcxx = '-std=c++03'
+            self._cplusplus = cxx_standard.__STD_CXX['-std=c++03']
+            self._is_implicit = True
+
+    @property
+    def stdcxx(self):
+        """Returns the -std=c++xx option passed to the constructor"""
+        return self._stdcxx
+
+    @property
+    def is_implicit(self):
+        """Indicates whether a -std=c++xx was specified"""
+        return self._is_implicit
+
+    @property
+    def is_cxx03(self):
+        """Returns true if -std=c++03 is being used"""
+        return self._cplusplus == cxx_standard.__STD_CXX['-std=c++03']
+
+    @property
+    def is_cxx11(self):
+        """Returns true if -std=c++11 is being used"""
+        return self._cplusplus == cxx_standard.__STD_CXX['-std=c++11']
+
+    @property
+    def is_cxx11_or_greater(self):
+        """Returns true if -std=c++11 or a newer standard is being used"""
+        return self._cplusplus >= cxx_standard.__STD_CXX['-std=c++11']
+
+    @property
+    def is_cxx14(self):
+        """Returns true if -std=c++14 is being used"""
+        return self._cplusplus == cxx_standard.__STD_CXX['-std=c++14']
+
+    @property
+    def is_cxx14_or_greater(self):
+        """Returns true if -std=c++14 or a newer standard is being used"""
+        return self._cplusplus >= cxx_standard.__STD_CXX['-std=c++14']
+
+    @property
+    def is_cxx1z(self):
+        """Returns true if -std=c++1z is being used"""
+        return self._cplusplus == cxx_standard.__STD_CXX['-std=c++1z']
