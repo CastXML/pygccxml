@@ -227,7 +227,7 @@ class match_declaration_t(object):
     """
 
     def __init__(self, type=None, name=None, fullname=None, parent=None):
-        self.type = type
+        self._type = type
         self.name = name
         self.fullname = fullname
         self.parent = parent
@@ -244,8 +244,8 @@ class match_declaration_t(object):
         """
 
         answer = True
-        if self.type is not None:
-            answer &= isinstance(inst, self.type)
+        if self._type is not None:
+            answer &= isinstance(inst, self._type)
         if self.name is not None:
             answer &= inst.name == self.name
         if self.parent is not None:

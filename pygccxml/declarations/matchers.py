@@ -317,17 +317,17 @@ class variable_matcher_t(declaration_matcher_t):
             decl_type=variable.variable_t,
             header_dir=header_dir,
             header_file=header_file)
-        self.type = type
+        self._type = type
 
     def __call__(self, decl):
         if not super(variable_matcher_t, self).__call__(decl):
             return False
-        if self.type is not None:
-            if isinstance(self.type, cpptypes.type_t):
-                if self.type != decl.decl_type:
+        if self._type is not None:
+            if isinstance(self._type, cpptypes.type_t):
+                if self._type != decl.decl_type:
                     return False
             else:
-                if self.type != decl.decl_type.decl_string:
+                if self._type != decl.decl_type.decl_string:
                     return False
         return True
 
@@ -335,8 +335,8 @@ class variable_matcher_t(declaration_matcher_t):
         msg = [super(variable_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if self.type is not None:
-            msg.append('(value type==%s)' % str(self.type))
+        if self._type is not None:
+            msg.append('(value type==%s)' % str(self._type))
         if not msg:
             msg.append('any')
         return ' and '.join(msg)
