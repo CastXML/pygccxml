@@ -234,7 +234,7 @@ class undname_creator_t(object):
             result.append('static ')
         if hint == 'msvc':
             result.append(
-                self.__format_type_as_undecorated(decl.type, False, hint))
+                self.__format_type_as_undecorated(decl.decl_type, False, hint))
             result.append(' ')
         if is_mem_var:
             result.append(
