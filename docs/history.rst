@@ -14,9 +14,18 @@ by setting up a git repositery on github, hosted along with gccxml.
 Version 1.7.5 (unreleased)
 --------------------------
 
-1. Version numbers are still tagged with the v prefix (1.7.4 was correctly tagged),
+1. Improve error message when no castxml or gccxml is found.
+
+2. Fix compilation of tests with c++11.
+
+3. Fix patching of enums in default arguments for C++03.
+
+4. Version numbers are still tagged with the v prefix (1.7.4 was correctly tagged),
    as this is recommended by GitHub. The version number in the __init__.py and
    setup.py files are without v prefix, because this is what pip requires.
+
+Thanks to the following people for their contribution to this release:
+Ashish Sadanandan
 
 Version 1.7.4
 -------------
