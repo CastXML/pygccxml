@@ -35,13 +35,33 @@
 
 #else
 
-    // This is mostly for GCCXML (when using old compilers)
+    #if defined( __GCCXML__ )
 
-    #if defined( __GNUC__ )
+        #if defined( __GNUC__ )
+            #include <ext/hash_set>
+            #include <ext/hash_map>
+            #define HASH_XXX_NS __gnu_cxx
+        #else
+            #include <hash_set>
+            #include <hash_map>
+            #if !defined( __PYGCCXML_MSVC9__ )
+                #define HASH_XXX_NS std
+            #else
+                #define HASH_XXX_NS stdext
+            #endif
+
+        #endif
+
+        #define HASH_XXX_UMAP hash_map
+        #define HASH_XXX_USET hash_set
+        #define HASH_XXX_UMMAP hash_multimap
+        #define HASH_XXX_UMMSET hash_multiset
+
+    #else
+
         #if ((__GNUC__ > 4) || \
              (__GNUC__ == 4 && __GNUC_MINOR__ > 4) || \
-             (__GNUC__ == 4 && __GNUC_MINOR__ == 4 && __GNUC_PATCHLEVEL__ == 7)) && \
-            defined(__castxml__)
+             (__GNUC__ == 4 && __GNUC_MINOR__ == 4 && __GNUC_PATCHLEVEL__ == 7))
 
             // Use TR1 containers for gcc >= 4.4.7 + castxml
             // (this might work on older versions of gcc too, needs testing)
@@ -54,28 +74,10 @@
             #define HASH_XXX_UMMAP unordered_multimap
             #define HASH_XXX_UMMSET unordered_multiset
         #else
-            #include <ext/hash_set>
-            #include <ext/hash_map>
-            #define HASH_XXX_NS __gnu_cxx
-
-            #define HASH_XXX_UMAP hash_map
-            #define HASH_XXX_USET hash_set
-            #define HASH_XXX_UMMAP hash_multimap
-            #define HASH_XXX_UMMSET hash_multiset
+            // Older versions of gcc are not tested.
+            // 4.4.7 is already quite old.
+            #error "Not tested"
         #endif
-    #else
-        #include <hash_set>
-        #include <hash_map>
-        #if defined( __GCCXML__ ) && !defined( __PYGCCXML_MSVC9__ )
-            #define HASH_XXX_NS std
-        #else
-            #define HASH_XXX_NS stdext
-        #endif
-
-        #define HASH_XXX_UMAP hash_map
-        #define HASH_XXX_USET hash_set
-        #define HASH_XXX_UMMAP hash_multimap
-        #define HASH_XXX_UMMSET hash_multiset
     #endif
 
 #endif
