@@ -16,6 +16,8 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
+        # TODO: once gccxml is removed; rename this to something like
+        # annotate_tester
         self.header = "attributes_" + self.config.xml_generator + ".hpp"
 
     def setUp(self):
@@ -26,24 +28,24 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
 
-        if "CastXML" in utils.xml_generator:
-            prefix = "annotate"
-        else:
-            prefix = "gccxml"
-
         numeric = self.global_ns.class_('numeric_t')
-
-        # Dependending on the compiler, this attribute will be found
-        # or not: never on OS X (clang and gcc),
-        # always on ubuntu (clang and gcc). Just skip this test for the
-        # moment.
-
-        # self.assertTrue(None is numeric.attributes)
-
         do_nothing = numeric.mem_fun('do_nothing')
-        self.assertTrue((prefix + "(no throw)") == do_nothing.attributes)
         arg = do_nothing.arguments[0]
-        self.assertTrue((prefix + "(out)") == arg.attributes)
+
+        if "CastXML" in utils.xml_generator:
+            if utils.xml_output_version >= 1.137:
+                # This works since:
+                # https://github.com/CastXML/CastXML/issues/25
+                # https://github.com/CastXML/CastXML/pull/26
+                # https://github.com/CastXML/CastXML/pull/27
+                # The version bump to 1.137 came way later but this is the
+                # only way to make sure the test is running correctly
+                self.assertTrue("annotate(sealed)" == numeric.attributes)
+                self.assertTrue("annotate(no throw)" == do_nothing.attributes)
+                self.assertTrue("annotate(out)" == arg.attributes)
+        else:
+            self.assertTrue("gccxml(no throw)" == do_nothing.attributes)
+            self.assertTrue("gccxml(out)" == arg.attributes)
 
 
 def create_suite():
