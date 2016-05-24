@@ -11,8 +11,8 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
-Version 1.7.5 (unreleased)
---------------------------
+Version 1.7.5
+-------------
 
 1. Improve error message when no castxml or gccxml is found.
 
