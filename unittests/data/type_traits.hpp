@@ -576,12 +576,19 @@ namespace has_trivial_constructor{
 namespace details{
 
     struct const_item{ const int values[10]; };
-
-    void test_const_item( const_item x = const_item() );
-
     struct const_container{ const const_item items[10]; };
 
+#if __cplusplus >= 201103L
+    // C++11 and later must use braces to trigger aggregate initialization.
+    // Using parentheses will cause value-initialization, and since the
+    // two classes above have implicitly deleted default constructors,
+    // that causes default initialization to be performed, which is ill-formed.
+    void test_const_item( const_item x = const_item{} );
+    void test_const_container( const_container x = const_container{} );
+#else
+    void test_const_item( const_item x = const_item() );
     void test_const_container( const_container x = const_container() );
+#endif
 
 }
 

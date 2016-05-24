@@ -11,6 +11,22 @@ to python 3 (keeping it compatible with python 2).
 In Mai 2014, Michka Popoff and the Insight Software Consortium revived pygccxml
 by setting up a git repositery on github, hosted along with gccxml.
 
+Version 1.7.5
+-------------
+
+1. Improve error message when no castxml or gccxml is found.
+
+2. Fix compilation of tests with c++11.
+
+3. Fix patching of enums in default arguments for C++03.
+
+4. Version numbers are still tagged with the v prefix (1.7.4 was correctly tagged),
+   as this is recommended by GitHub. The version number in the __init__.py and
+   setup.py files are without v prefix, because this is what pip requires.
+
+Thanks to the following people for their contribution to this release:
+Ashish Sadanandan
+
 Version 1.7.4
 -------------
 
