@@ -99,15 +99,16 @@ from .calldef import CALLING_CONVENTION_TYPES
 from .calldef import argument_t
 from .calldef import calldef_t
 from .calldef import member_calldef_t
-from .calldef import free_calldef_t
 from .calldef import operator_t
 from .calldef import member_function_t
 from .calldef import constructor_t
 from .calldef import destructor_t
 from .calldef import member_operator_t
 from .calldef import casting_operator_t
-from .calldef import free_function_t
-from .calldef import free_operator_t
+
+from .free_calldef import free_calldef_t
+from .free_calldef import free_function_t
+from .free_calldef import free_operator_t
 
 from .decl_visitor import decl_visitor_t
 from .type_visitor import type_visitor_t
