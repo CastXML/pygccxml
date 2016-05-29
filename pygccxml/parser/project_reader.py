@@ -402,7 +402,7 @@ class project_reader_t(object):
         for other_ns in other_ns_list:
             main_ns = pygccxml.declarations.find_declaration(
                 answer,
-                type=pygccxml.declarations.namespace_t,
+                decl_type=pygccxml.declarations.namespace_t,
                 name=other_ns._name,
                 recursive=False)
             if main_ns:

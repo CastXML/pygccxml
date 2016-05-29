@@ -8,6 +8,8 @@ Define few unrelated algorithms that work on declarations.
 
 """
 
+import warnings
+
 
 def declaration_path(decl, with_defaults=True):
     """
@@ -226,8 +228,24 @@ class match_declaration_t(object):
 
     """
 
-    def __init__(self, type=None, name=None, fullname=None, parent=None):
-        self._type = type
+    def __init__(
+            self, type=None, decl_type=None,
+            name=None, fullname=None, parent=None):
+
+        if type is not None:
+            # Deprecated since 1.8.0. Will be removed in 1.9.0
+            warnings.warn(
+                "The type argument is deprecated. \n" +
+                "Please use the decl_type argument instead.",
+                DeprecationWarning)
+            if decl_type is not None:
+                raise (
+                    "Please use only either the type or " +
+                    "decl_type argument.")
+            # Still allow to use the old type for the moment.
+            decl_type = type
+
+        self._decl_type = decl_type
         self.name = name
         self.fullname = fullname
         self.parent = parent
@@ -244,8 +262,8 @@ class match_declaration_t(object):
         """
 
         answer = True
-        if self._type is not None:
-            answer &= isinstance(inst, self._type)
+        if self._decl_type is not None:
+            answer &= isinstance(inst, self._decl_type)
         if self.name is not None:
             answer &= inst.name == self.name
         if self.parent is not None:
@@ -271,6 +289,7 @@ class match_declaration_t(object):
 def find_all_declarations(
         declarations,
         type=None,
+        decl_type=None,
         name=None,
         parent=None,
         recursive=True,
@@ -285,6 +304,18 @@ def find_all_declarations(
     :rtype: [ matched declarations ]
 
     """
+    if type is not None:
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The type argument is deprecated. \n" +
+            "Please use the decl_type argument instead.",
+            DeprecationWarning)
+        if decl_type is not None:
+            raise (
+                "Please use only either the type or " +
+                "decl_type argument.")
+        # Still allow to use the old type for the moment.
+        decl_type = type
 
     if recursive:
         decls = make_flatten(declarations)
@@ -294,16 +325,17 @@ def find_all_declarations(
     return list(
         filter(
             match_declaration_t(
-                type,
-                name,
-                fullname,
-                parent),
+                decl_type=decl_type,
+                name=name,
+                fullname=fullname,
+                parent=parent),
             decls))
 
 
 def find_declaration(
         declarations,
         type=None,
+        decl_type=None,
         name=None,
         parent=None,
         recursive=True,
@@ -318,10 +350,22 @@ def find_declaration(
     :rtype: matched declaration :class:`declaration_t` or None
 
     """
+    if type is not None:
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The type argument is deprecated. \n" +
+            "Please use the decl_type argument instead.",
+            DeprecationWarning)
+        if decl_type is not None:
+            raise (
+                "Please use only either the type or " +
+                "decl_type argument.")
+        # Still allow to use the old type for the moment.
+        decl_type = type
 
     decl = find_all_declarations(
         declarations,
-        type=type,
+        decl_type=decl_type,
         name=name,
         parent=parent,
         recursive=recursive,
@@ -333,6 +377,7 @@ def find_declaration(
 def find_first_declaration(
         declarations,
         type=None,
+        decl_type=None,
         name=None,
         parent=None,
         recursive=True,
@@ -346,8 +391,24 @@ def find_first_declaration(
     :rtype: matched declaration :class:`declaration_t` or None
 
     """
+    if type is not None:
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The type argument is deprecated. \n" +
+            "Please use the decl_type argument instead.",
+            DeprecationWarning)
+        if decl_type is not None:
+            raise (
+                "Please use only either the type or " +
+                "decl_type argument.")
+        # Still allow to use the old type for the moment.
+        decl_type = type
 
-    matcher = match_declaration_t(type, name, fullname, parent)
+    matcher = match_declaration_t(
+        decl_type=decl_type,
+        name=name,
+        fullname=fullname,
+        parent=parent)
     if recursive:
         decls = make_flatten(declarations)
     else:

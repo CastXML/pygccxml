@@ -24,7 +24,7 @@ class tester_src_t(parser_test_case.parser_test_case_t):
             self.declarations = parser.parse([self.header], self.config)
             self.global_ns = declarations.find_declaration(
                 self.declarations,
-                type=declarations.namespace_t,
+                decl_type=declarations.namespace_t,
                 name='::')
             self.global_ns.init_optimizer()
 
@@ -54,7 +54,7 @@ class tester_prj_t(parser_test_case.parser_test_case_t):
     def test(self):
         item_cls = declarations.find_declaration(
             self.declarations,
-            type=declarations.class_t,
+            decl_type=declarations.class_t,
             name='item_t')
         self.assertTrue(item_cls, "unable to find class 'item_t'")
         self.assertTrue(len(item_cls.aliases) == 3)

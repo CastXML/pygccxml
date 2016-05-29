@@ -696,7 +696,7 @@ class __is_convertible_t(object):
         found = algorithm.find_declaration(
             class_decl.parent.declarations,
             name=class_decl.name,
-            type=class_declaration.class_t)
+            decl_type=class_declaration.class_t)
         return found
 
     def __normalize(self, type_):
@@ -950,7 +950,7 @@ class __is_convertible_t(object):
                 # has operator
                 casting_operators = algorithm.find_all_declarations(
                     source_inst.declarations,
-                    type=calldef.casting_operator_t,
+                    decl_type=calldef.casting_operator_t,
                     recursive=False)
                 if casting_operators:
                     for operator in casting_operators:
@@ -963,7 +963,7 @@ class __is_convertible_t(object):
             if isinstance(target.declaration, class_declaration.class_t):
                 constructors = algorithm.find_all_declarations(
                     target.declaration.declarations,
-                    type=calldef.constructor_t,
+                    decl_type=calldef.constructor_t,
                     recursive=False)
                 if constructors:
                     for constructor in constructors:

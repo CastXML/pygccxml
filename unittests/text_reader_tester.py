@@ -26,7 +26,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             compilation_mode=parser.COMPILATION_MODE.FILE_BY_FILE)
 
         var_i = declarations.find_declaration(
-            decls, type=declarations.variable_t, name='i')
+            decls, decl_type=declarations.variable_t, name='i')
         self.assertTrue(var_i, "Variable i has not been found.")
 
 
