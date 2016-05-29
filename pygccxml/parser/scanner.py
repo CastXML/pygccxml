@@ -515,7 +515,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             name=attrs.get(
                 XML_AN_NAME,
                 ''),
-            type=attrs[XML_AN_TYPE])
+            decl_type=attrs[XML_AN_TYPE])
 
     def __read_variable(self, attrs):
         type_qualifiers = declarations.type_qualifiers_t()
@@ -528,7 +528,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             name=attrs.get(
                 XML_AN_NAME,
                 ''),
-            type=attrs[XML_AN_TYPE],
+            decl_type=attrs[XML_AN_TYPE],
             type_qualifiers=type_qualifiers,
             value=attrs.get(
                 XML_AN_INIT),

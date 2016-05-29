@@ -74,7 +74,7 @@ print(funcD[1])
 criteria = declarations.variable_matcher(name="a")
 var_a1 = declarations.matcher.find(criteria, ns_namespace)
 
-criteria = declarations.variable_matcher(type=int_type)
+criteria = declarations.variable_matcher(decl_type=int_type)
 var_a2 = declarations.matcher.find(criteria, ns_namespace)
 
 print(var_a1[0])

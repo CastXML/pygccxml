@@ -504,18 +504,32 @@ class scopedef_t(declaration.declaration_t):
             name=None,
             function=None,
             type=None,
+            decl_type=None,
             header_dir=None,
             header_file=None,
             recursive=None):
         """returns reference to variable declaration, that is matched defined
         criteria"""
+        if type is not None:
+            # Deprecated since 1.8.0. Will be removed in 1.9.0
+            warnings.warn(
+                "The type argument is deprecated. \n" +
+                "Please use the decl_type argument instead.",
+                DeprecationWarning)
+            if decl_type is not None:
+                raise (
+                    "Please use only either the type or " +
+                    "decl_type argument.")
+            # Still allow to use the old type for the moment.
+            decl_type = type
+
         return (
             self._find_single(
                 self._impl_matchers[
                     scopedef_t.variable],
                 name=name,
                 function=function,
-                type=type,
+                decl_type=decl_type,
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive)
@@ -546,10 +560,25 @@ class scopedef_t(declaration.declaration_t):
             name=None,
             function=None,
             type=None,
+            decl_type=None,
             header_dir=None,
             header_file=None,
             recursive=None,
             allow_empty=None):
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        if type is not None:
+            warnings.warn(
+                "The type argument is deprecated. \n" +
+                "Please use the decl_type argument instead.",
+                DeprecationWarning)
+            if decl_type is not None:
+                raise (
+                    "Please use only either the type or " +
+                    "decl_type argument.")
+            # Still allow to use the old type for the moment.
+            decl_type = type
+
         """returns a set of variable declarations, that are matched defined
         criteria"""
         return (
@@ -558,7 +587,7 @@ class scopedef_t(declaration.declaration_t):
                     scopedef_t.variable],
                 name=name,
                 function=function,
-                type=type,
+                decl_type=decl_type,
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive,

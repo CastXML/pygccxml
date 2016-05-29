@@ -21,13 +21,27 @@ class variable_t(declaration.declaration_t):
             self,
             name='',
             type=None,
+            decl_type=None,
             type_qualifiers=None,
             value=None,
             bits=None,
             mangled=None):
         """creates class that describes C++ global or member variable"""
+
+        if type is not None:
+            warnings.warn(
+                "The type argument is deprecated. \n" +
+                "Please use the decl_type argument instead.",
+                DeprecationWarning)
+            if decl_type is not None:
+                raise (
+                    "Please use only either the type or " +
+                    "decl_type argument.")
+            # Still allow to use the old type for the moment.
+            decl_type = type
+
         declaration.declaration_t.__init__(self, name)
-        self._type = type
+        self._decl_type = decl_type
         self._type_qualifiers = type_qualifiers
         self._value = value
         self._bits = bits
@@ -59,10 +73,10 @@ class variable_t(declaration.declaration_t):
         warnings.warn(
             "variable_t.type is deprecated.\n" +
             "Please use variable_t.decl_type instead.", DeprecationWarning)
-        return self._type
+        return self._decl_type
 
     @type.setter
-    def type(self, _type):
+    def type(self, _decl_type):
         """
         Deprecated since v1.8.0. Will be removed in v1.9.0
 
@@ -70,16 +84,16 @@ class variable_t(declaration.declaration_t):
         warnings.warn(
             "variable_t.type is deprecated.\n" +
             "Please use variable_t.decl_type instead.", DeprecationWarning)
-        self._type = _type
+        self._decl_type = _decl_type
 
     @property
     def decl_type(self):
         """reference to the variable :class:`decl_type <type_t>`"""
-        return self._type
+        return self._decl_type
 
     @decl_type.setter
     def decl_type(self, decl_type):
-        self._type = decl_type
+        self._decl_type = decl_type
 
     @property
     def type_qualifiers(self):

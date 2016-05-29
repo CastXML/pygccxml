@@ -10,6 +10,7 @@ functionality according to some criteria
 
 import os
 import re
+import warnings
 from . import algorithm
 from . import variable
 from . import namespace
@@ -305,29 +306,44 @@ class variable_matcher_t(declaration_matcher_t):
             self,
             name=None,
             type=None,
+            decl_type=None,
             header_dir=None,
             header_file=None):
         """
-        :param type: variable type
-        :type type: string or instance of :class:`type_t` derived class
+        :param decl_type: variable type
+        :type decl_type: string or instance of :class:`type_t` derived class
         """
+
+        if type is not None:
+            # Deprecated since 1.8.0. Will be removed in 1.9.0
+            warnings.warn(
+                "The type argument is deprecated. \n" +
+                "Please use the decl_type argument instead.",
+                DeprecationWarning)
+            if decl_type is not None:
+                raise (
+                    "Please use only either the type or " +
+                    "decl_type argument.")
+            # Still allow to use the old type for the moment.
+            decl_type = type
+
         declaration_matcher_t.__init__(
             self,
             name=name,
             decl_type=variable.variable_t,
             header_dir=header_dir,
             header_file=header_file)
-        self._type = type
+        self._decl_type = decl_type
 
     def __call__(self, decl):
         if not super(variable_matcher_t, self).__call__(decl):
             return False
-        if self._type is not None:
-            if isinstance(self._type, cpptypes.type_t):
-                if self._type != decl.decl_type:
+        if self._decl_type is not None:
+            if isinstance(self._decl_type, cpptypes.type_t):
+                if self._decl_type != decl.decl_type:
                     return False
             else:
-                if self._type != decl.decl_type.decl_string:
+                if self._decl_type != decl.decl_type.decl_string:
                     return False
         return True
 
@@ -335,8 +351,8 @@ class variable_matcher_t(declaration_matcher_t):
         msg = [super(variable_matcher_t, self).__str__()]
         if msg == ['any']:
             msg = []
-        if self._type is not None:
-            msg.append('(value type==%s)' % str(self._type))
+        if self._decl_type is not None:
+            msg.append('(value type==%s)' % str(self._decl_type))
         if not msg:
             msg.append('any')
         return ' and '.join(msg)
