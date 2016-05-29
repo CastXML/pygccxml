@@ -464,7 +464,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         if isinstance(self.__inst, declarations.calldef_type_t):
             self.__inst.arguments_types.append('...')
         else:
-            argument = declarations.argument_t(type='...')
+            argument = declarations.argument_t(decl_type='...')
             self.__inst.arguments.append(argument)
 
     def __read_calldef(self, calldef, attrs, is_declaration):

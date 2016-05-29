@@ -114,7 +114,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             no_return_1_arg,
             [declarations.argument_t(
                 name=no_return_1_arg.arguments[0].name,
-                type=declarations.int_t())])
+                decl_type=declarations.int_t())])
 
         return_default_args = ns.free_function('return_default_args')
         self.assertTrue(
@@ -125,11 +125,11 @@ class declarations_t(parser_test_case.parser_test_case_t):
             return_default_args,
             [declarations.argument_t(
                 name=return_default_args.arguments[0].name,
-                type=declarations.int_t(),
+                decl_type=declarations.int_t(),
                 default_value='1'),
                 declarations.argument_t(
                     name=return_default_args.arguments[1].name,
-                    type=declarations.bool_t(),
+                    decl_type=declarations.bool_t(),
                     default_value='false')])
         self._test_calldef_exceptions(return_default_args, [])
 
@@ -150,7 +150,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self._test_calldef_args(
             member_inline_call, [
                 declarations.argument_t(
-                    name='i', type=declarations.int_t())])
+                    name='i', decl_type=declarations.int_t())])
 
         member_const_call = struct_calldefs.member_function(
             'member_const_call')
