@@ -10,7 +10,6 @@ user friendly format
 
 import os
 import sys
-from . import calldef
 from . import calldef_members
 from . import algorithm
 from . import decl_visitor
