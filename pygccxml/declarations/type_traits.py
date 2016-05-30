@@ -30,38 +30,8 @@ from . import namespace
 from . import templates
 from . import enumeration
 from . import class_declaration
+from . import type_traits_utils
 from .. import utils
-
-
-def __remove_alias(type_):
-    """implementation details"""
-    if isinstance(type_, typedef.typedef_t):
-        return __remove_alias(type_.decl_type)
-    if isinstance(type_, cpptypes.declarated_t) and \
-            isinstance(type_.declaration, typedef.typedef_t):
-        return __remove_alias(type_.declaration.decl_type)
-    if isinstance(type_, cpptypes.compound_t):
-        type_.base = __remove_alias(type_.base)
-        return type_
-    return type_
-
-
-def remove_alias(type_):
-    """returns type without typedefs"""
-    type_ref = None
-    if isinstance(type_, cpptypes.type_t):
-        type_ref = type_
-    elif isinstance(type_, typedef.typedef_t):
-        type_ref = type_.decl_type
-    else:
-        pass  # not a valid input, just return it
-    if not type_ref:
-        return type_
-    if type_ref.cache.remove_alias:
-        return type_ref.cache.remove_alias
-    no_alias = __remove_alias(type_ref.clone())
-    type_ref.cache.remove_alias = no_alias
-    return no_alias
 
 
 def create_cv_types(base):
@@ -134,12 +104,14 @@ def does_match_definition(given, main, secondary):
 
 def is_bool(type_):
     """returns True, if type represents `bool`, False otherwise"""
-    return remove_alias(type_) in create_cv_types(cpptypes.bool_t())
+    return type_traits_utils.remove_alias(type_) in create_cv_types(
+        cpptypes.bool_t())
 
 
 def is_void(type):
     """returns True, if type represents `void`, False otherwise"""
-    return remove_alias(type) in create_cv_types(cpptypes.void_t())
+    return type_traits_utils.remove_alias(type) in create_cv_types(
+        cpptypes.void_t())
 
 
 def is_void_pointer(type):
@@ -166,7 +138,7 @@ def is_integral(type):
         create_cv_types(cpptypes.int128_t()) +
         create_cv_types(cpptypes.uint128_t()))
 
-    return remove_alias(type) in integral_def
+    return type_traits_utils.remove_alias(type) in integral_def
 
 
 def is_floating_point(type):
@@ -177,7 +149,7 @@ def is_floating_point(type):
         create_cv_types(cpptypes.double_t()) +
         create_cv_types(cpptypes.long_double_t()))
 
-    return remove_alias(type) in float_def
+    return type_traits_utils.remove_alias(type) in float_def
 
 
 def is_arithmetic(type):
@@ -201,7 +173,7 @@ def is_calldef_pointer(type):
     False otherwise"""
     if not is_pointer(type):
         return False
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     nake_type = remove_cv(nake_type)
     return isinstance(nake_type, cpptypes.compound_t) \
         and isinstance(nake_type.base, cpptypes.calldef_type_t)
@@ -212,7 +184,7 @@ def remove_pointer(type):
 
     If type is not pointer type, it will be returned as is.
     """
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if not is_pointer(nake_type):
         return type
     elif isinstance(nake_type, cpptypes.volatile_t) and \
@@ -235,13 +207,13 @@ def remove_pointer(type):
 
 def is_reference(type):
     """returns True, if type represents C++ reference type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     return isinstance(nake_type, cpptypes.reference_t)
 
 
 def is_array(type):
     """returns True, if type represents C++ array type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     nake_type = remove_reference(nake_type)
     nake_type = remove_cv(nake_type)
     return isinstance(nake_type, cpptypes.array_t)
@@ -249,7 +221,7 @@ def is_array(type):
 
 def array_size(type):
     """returns array size"""
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     nake_type = remove_reference(nake_type)
     nake_type = remove_cv(nake_type)
     assert isinstance(nake_type, cpptypes.array_t)
@@ -259,7 +231,7 @@ def array_size(type):
 def array_item_type(type_):
     """returns array item type"""
     if is_array(type_):
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         type_ = remove_cv(type_)
         return type_.base
     elif is_pointer(type_):
@@ -275,7 +247,7 @@ def remove_reference(type):
 
     If type is not reference type, it will be returned as is.
     """
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if not is_reference(nake_type):
         return type
     else:
@@ -284,7 +256,7 @@ def remove_reference(type):
 
 def is_const(type):
     """returns True, if type represents C++ const type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if isinstance(nake_type, cpptypes.const_t):
         return True
     elif isinstance(nake_type, cpptypes.volatile_t):
@@ -300,7 +272,7 @@ def remove_const(type_):
     If type is not const type, it will be returned as is
     """
 
-    nake_type = remove_alias(type_)
+    nake_type = type_traits_utils.remove_alias(type_)
     if not is_const(nake_type):
         return type_
     else:
@@ -334,7 +306,7 @@ def remove_declarated(type_):
 
     If `type_` is not :class:`declarated_t`, it will be returned as is
     """
-    type_ = remove_alias(type_)
+    type_ = type_traits_utils.remove_alias(type_)
     if isinstance(type_, cpptypes.declarated_t):
         type_ = type_.declaration
     return type_
@@ -349,7 +321,7 @@ def is_same(type1, type2):
 
 def is_volatile(type):
     """returns True, if type represents C++ volatile type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if isinstance(nake_type, cpptypes.volatile_t):
         return True
     elif isinstance(nake_type, cpptypes.const_t):
@@ -364,7 +336,7 @@ def remove_volatile(type):
 
     If type is not volatile type, it will be returned as is
     """
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if not is_volatile(nake_type):
         return type
     else:
@@ -384,7 +356,7 @@ def remove_volatile(type):
 def remove_cv(type):
     """removes const and volatile from the type definition"""
 
-    nake_type = remove_alias(type)
+    nake_type = type_traits_utils.remove_alias(type)
     if not is_const(nake_type) and not is_volatile(nake_type):
         return type
     result = nake_type
@@ -425,7 +397,7 @@ class declaration_xxx_traits(object):
         - find out whether a declaration is a desired one
         - get reference to the declaration
     """
-    sequence = [remove_alias, remove_cv, remove_declarated]
+    sequence = [type_traits_utils.remove_alias, remove_cv, remove_declarated]
 
     def __init__(self, declaration_class):
         self.declaration_class = declaration_class
@@ -570,7 +542,7 @@ def has_any_non_copyconstructor(type):
 
 def has_public_binary_operator(type_, operator_symbol):
     """returns True, if `type_` has public binary operator, otherwise False"""
-    type_ = remove_alias(type_)
+    type_ = type_traits_utils.remove_alias(type_)
     type_ = remove_cv(type_)
     type_ = remove_declarated(type_)
     assert isinstance(type_, class_declaration.class_t)
@@ -701,7 +673,7 @@ class __is_convertible_t(object):
         return found
 
     def __normalize(self, type_):
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         bt_of_type = base_type(type_)
         if isinstance(bt_of_type, cpptypes.declarated_t) \
            and isinstance(bt_of_type.declaration,
@@ -1218,7 +1190,7 @@ class smart_pointer_traits(object):
     def is_smart_pointer(type_):
         """returns True, if type represents instantiation of
         `boost::shared_ptr` or `std::shared_ptr`, False otherwise"""
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         type_ = remove_cv(type_)
         type_ = remove_declarated(type_)
         if not isinstance(type_,
@@ -1252,7 +1224,7 @@ class auto_ptr_traits(object):
     def is_smart_pointer(type_):
         """returns True, if type represents instantiation of
         `boost::shared_ptr`, False otherwise"""
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         type_ = remove_cv(type_)
         type_ = remove_declarated(type_)
         if not isinstance(type_,
@@ -1306,7 +1278,7 @@ def is_std_string(type_):
     if utils.is_str(type_):
         return type_ in string_equivalences
     else:
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         return remove_cv(type_).decl_string in string_equivalences
 
 
@@ -1319,7 +1291,7 @@ def is_std_wstring(type_):
     if utils.is_str(type_):
         return type_ in wstring_equivalences
     else:
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         return remove_cv(type_).decl_string in wstring_equivalences
 
 
@@ -1332,7 +1304,7 @@ def is_std_ostream(type_):
     if utils.is_str(type_):
         return type_ in ostream_equivalences
     else:
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         return remove_cv(type_).decl_string in ostream_equivalences
 
 
@@ -1345,5 +1317,5 @@ def is_std_wostream(type_):
     if utils.is_str(type_):
         return type_ in wostream_equivalences
     else:
-        type_ = remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         return remove_cv(type_).decl_string in wostream_equivalences

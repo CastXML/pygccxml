@@ -12,6 +12,7 @@ import string
 from . import cpptypes
 from . import templates
 from . import type_traits
+from . import type_traits_utils
 from . import namespace
 from . import class_declaration
 from .. import utils
@@ -382,14 +383,14 @@ class container_traits_impl_t(object):
 
         """
 
-        type_ = type_traits.remove_alias(type_)
+        type_ = type_traits_utils.remove_alias(type_)
         type_ = type_traits.remove_cv(type_)
 
         utils.loggers.queries_engine.debug(
             "Container traits: cleaned up search %s" % type_)
 
         if isinstance(type_, cpptypes.declarated_t):
-            cls_declaration = type_traits.remove_alias(type_.declaration)
+            cls_declaration = type_traits_utils.remove_alias(type_.declaration)
         elif isinstance(type_, class_declaration.class_t):
             cls_declaration = type_
         elif isinstance(type_, class_declaration.class_declaration_t):

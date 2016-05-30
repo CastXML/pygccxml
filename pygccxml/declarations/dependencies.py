@@ -10,19 +10,22 @@ declaration
 """
 
 from . import cpptypes
+from . import declaration
 
 
 class impl_details(object):
 
     @staticmethod
     def dig_declarations(depend_on_it):
-        # prevent recursive import
-        from pygccxml import declarations
 
-        if isinstance(depend_on_it, declarations.declaration_t):
+        # FIXME: prevent cyclic imports
+        from . import type_traits
+        from . import type_traits_utils
+
+        if isinstance(depend_on_it, declaration.declaration_t):
             return [depend_on_it]
-        base_type = declarations.base_type(
-            declarations.remove_alias(depend_on_it))
+        base_type = type_traits.base_type(
+            type_traits_utils.remove_alias(depend_on_it))
         if isinstance(base_type, cpptypes.declarated_t):
             return [base_type.declaration]
         elif isinstance(base_type, cpptypes.calldef_type_t):
@@ -42,7 +45,7 @@ class dependency_info_t(object):
 
     def __init__(self, declaration, depend_on_it, access_type=None, hint=None):
         object.__init__(self)
-        # prevent recursive import
+        # FIXME: prevent cyclic import
         from . import class_declaration
         assert isinstance(
             depend_on_it,
@@ -92,7 +95,7 @@ class dependency_info_t(object):
     def i_depend_on_them(decl):
         """Returns set of declarations. every item in the returned set,
         depends on a declaration from the input"""
-        from . import class_declaration  # prevent cyclic imports
+        from . import class_declaration  # FIXME: prevent cyclic imports
         to_be_included = set()
         for dependency_info in decl.i_depend_on_them():
             for ddecl in dependency_info.find_out_depend_on_it_declarations():

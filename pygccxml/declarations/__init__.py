@@ -158,7 +158,6 @@ from .type_traits import array_item_type
 
 from .type_traits import remove_cv
 from .type_traits import remove_const
-from .type_traits import remove_alias
 from .type_traits import remove_pointer
 from .type_traits import remove_volatile
 from .type_traits import remove_reference
@@ -180,6 +179,8 @@ from .type_traits import has_any_non_copyconstructor
 from .type_traits import auto_ptr_traits
 from .type_traits import smart_pointer_traits
 from .type_traits import internal_type_traits
+
+from .type_traits_utils import remove_alias
 
 from .container_traits import list_traits
 from .container_traits import deque_traits

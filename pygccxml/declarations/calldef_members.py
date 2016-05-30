@@ -6,6 +6,7 @@
 from . import calldef
 from . import algorithm
 from . import cpptypes
+from . import type_traits_utils
 
 
 # Second level in hierarchy of calldef
@@ -224,7 +225,7 @@ class constructor_t(member_calldef_t):
         if not type_traits.is_const(arg.decl_type.base):
             return False
 
-        un_aliased = type_traits.remove_alias(arg.decl_type.base)
+        un_aliased = type_traits_utils.remove_alias(arg.decl_type.base)
         # un_aliased now refers to const_t instance
         if not isinstance(un_aliased.base, cpptypes.declarated_t):
             # We are looking for a declaration

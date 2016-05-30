@@ -21,9 +21,9 @@ import warnings
 from . import cpptypes
 from . import algorithm
 from . import declaration
-# from . import type_traits # moved below to fix a cyclic dependency problem
 from . import dependencies
 from . import call_invocation
+from . import type_traits_utils
 from .. import utils
 
 
@@ -436,8 +436,6 @@ class calldef_t(declaration.declaration_t):
         if "CastXML" in utils.xml_generator:
             raise Exception("Demangled name is not available with CastXML.")
 
-        from . import type_traits
-
         if not self.demangled:
             self._demangled_name = ''
 
@@ -449,7 +447,7 @@ class calldef_t(declaration.declaration_t):
 
         demangled = self.demangled
         if self.return_type:
-            return_type = type_traits.remove_alias(
+            return_type = type_traits_utils.remove_alias(
                 self.return_type).decl_string
 
             if return_type.startswith('::') and not \
