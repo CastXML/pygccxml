@@ -632,9 +632,10 @@ class class_t(scopedef.scopedef_t):
     def has_vtable(self):
         """True, if class has virtual table, False otherwise"""
         from . import calldef
+        from . import calldef_members
         return bool(
             self.calldefs(
-                lambda f: isinstance(f, calldef.member_function_t) and
+                lambda f: isinstance(f, calldef_members.member_function_t) and
                 f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL,
                 recursive=False,
                 allow_empty=True))

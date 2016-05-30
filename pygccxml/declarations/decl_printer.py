@@ -11,6 +11,7 @@ user friendly format
 import os
 import sys
 from . import calldef
+from . import calldef_members
 from . import algorithm
 from . import decl_visitor
 from . import variable_t
@@ -212,7 +213,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             "calling convention: __%s__" %
             decl.calling_convention +
             os.linesep)
-        if isinstance(decl, calldef.member_calldef_t):
+        if isinstance(decl, calldef_members.member_calldef_t):
             self.writer(indent +
                         "virtual: " +
                         str(decl.virtuality) +

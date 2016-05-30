@@ -7,11 +7,11 @@
 defines default declarations factory class
 """
 
-from .calldef import member_function_t
-from .calldef import constructor_t
-from .calldef import destructor_t
-from .calldef import member_operator_t
-from .calldef import casting_operator_t
+from .calldef_members import member_function_t
+from .calldef_members import constructor_t
+from .calldef_members import destructor_t
+from .calldef_members import member_operator_t
+from .calldef_members import casting_operator_t
 from .free_calldef import free_function_t
 from .free_calldef import free_operator_t
 from .enumeration import enumeration_t

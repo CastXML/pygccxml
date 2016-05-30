@@ -23,6 +23,7 @@ import os
 from . import matchers
 from . import typedef
 from . import calldef
+from . import calldef_members
 from . import cpptypes
 from . import algorithm
 from . import namespace
@@ -502,7 +503,7 @@ def has_destructor(class_):
     None otherwise"""
     class_ = class_traits.get_declaration(class_)
     destructor = class_.decls(
-        decl_type=calldef.destructor_t,
+        decl_type=calldef_members.destructor_t,
         recursive=False,
         allow_empty=True)
     if destructor:
@@ -632,11 +633,11 @@ def is_unary_operator(oper):
     # ret-type operator symbol( arg )
     # ret-type operator [++ --](X&, int)
     symbols = ['!', '&', '~', '*', '+', '++', '-', '--']
-    if not isinstance(oper, calldef.operator_t):
+    if not isinstance(oper, calldef_members.operator_t):
         return False
     if oper.symbol not in symbols:
         return False
-    if isinstance(oper, calldef.member_operator_t):
+    if isinstance(oper, calldef_members.member_operator_t):
         if 0 == len(oper.arguments):
             return True
         elif oper.symbol in ['++', '--'] and \
@@ -668,11 +669,11 @@ def is_binary_operator(oper):
         ',', '()', '[]', '!=', '%', '%=', '&', '&&', '&=', '*', '*=', '+',
         '+=', '-', '-=', '->', '->*', '/', '/=', '<', '<<', '<<=', '<=', '=',
         '==', '>', '>=', '>>', '>>=', '^', '^=', '|', '|=', '||']
-    if not isinstance(oper, calldef.operator_t):
+    if not isinstance(oper, calldef_members.operator_t):
         return False
     if oper.symbol not in symbols:
         return False
-    if isinstance(oper, calldef.member_operator_t):
+    if isinstance(oper, calldef_members.member_operator_t):
         if 1 == len(oper.arguments):
             return True
         else:
@@ -950,7 +951,7 @@ class __is_convertible_t(object):
                 # has operator
                 casting_operators = algorithm.find_all_declarations(
                     source_inst.declarations,
-                    decl_type=calldef.casting_operator_t,
+                    decl_type=calldef_members.casting_operator_t,
                     recursive=False)
                 if casting_operators:
                     for operator in casting_operators:
@@ -963,7 +964,7 @@ class __is_convertible_t(object):
             if isinstance(target.declaration, class_declaration.class_t):
                 constructors = algorithm.find_all_declarations(
                     target.declaration.declarations,
-                    decl_type=calldef.constructor_t,
+                    decl_type=calldef_members.constructor_t,
                     recursive=False)
                 if constructors:
                     for constructor in constructors:
@@ -1141,8 +1142,7 @@ class impl_details(object):
             value_type_str = '::' + value_type_str
         found = global_ns.decls(
             name=value_type_str,
-            function=lambda decl: not isinstance(decl,
-                                                 calldef.calldef_t),
+            function=lambda decl: not isinstance(decl, calldef.calldef_t),
             allow_empty=True)
         if not found:
             no_global_ns_value_type_str = value_type_str[2:]

@@ -8,6 +8,7 @@ defines few algorithms, that deals with different properties of functions
 """
 
 from . import calldef
+from . import calldef_members
 from . import type_traits
 
 
@@ -30,7 +31,7 @@ def is_same_return_type(f1, f2):
     if f1.__class__ is not f2.__class__:
         # it should be assert
         return False  # 2 different calldef types
-    if not isinstance(f1, calldef.member_calldef_t):
+    if not isinstance(f1, calldef_members.member_calldef_t):
         # for free functions we compare return types as usual
         return type_traits.is_same(f1.return_type, f2.return_type)
     if f1.virtuality == calldef.VIRTUALITY_TYPES.NOT_VIRTUAL \
@@ -77,7 +78,7 @@ def is_same_function(f1, f2):
         return True
     if f1.__class__ is not f2.__class__:
         return False
-    if isinstance(f1, calldef.member_calldef_t) and \
+    if isinstance(f1, calldef_members.member_calldef_t) and \
             f1.has_const != f2.has_const:
         return False
     if f1.name != f2.name:

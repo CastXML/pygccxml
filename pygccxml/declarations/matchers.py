@@ -15,6 +15,7 @@ from . import algorithm
 from . import variable
 from . import namespace
 from . import calldef
+from . import calldef_members
 from . import cpptypes
 from . import templates
 from . import class_declaration
@@ -498,7 +499,7 @@ class operator_matcher_t(calldef_matcher_t):
         :type symbol: str
         """
         if None is decl_type:
-            decl_type = calldef.operator_t
+            decl_type = calldef_members.operator_t
         calldef_matcher_t.__init__(
             self,
             name=name,

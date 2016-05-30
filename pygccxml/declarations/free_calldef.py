@@ -1,8 +1,10 @@
 # Copyright 2014-2016 Insight Software Consortium.
+# Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 from . import calldef
+from . import calldef_members
 from . import algorithm
 from . import cpptypes
 from . import type_traits
@@ -78,13 +80,13 @@ class free_function_t(free_calldef_t):
             return self._mangled
 
 
-class free_operator_t(free_calldef_t, calldef.operator_t):
+class free_operator_t(free_calldef_t, calldef_members.operator_t):
 
     """describes free operator declaration"""
 
     def __init__(self, *args, **keywords):
         free_calldef_t.__init__(self, *args, **keywords)
-        calldef.operator_t.__init__(self, *args, **keywords)
+        calldef_members.operator_t.__init__(self, *args, **keywords)
         self.__class_types = None
 
     @property
