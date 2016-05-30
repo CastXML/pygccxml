@@ -31,7 +31,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         tclass = self.global_ns.class_("test")
         ctors = []
         for decl in tclass.declarations:
-            if isinstance(decl, declarations.calldef.constructor_t):
+            if isinstance(decl, declarations.constructor_t):
                 ctors.append(decl)
 
         # test::test(test const & t0) [copy constructor]
@@ -44,7 +44,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         t2class = self.global_ns.class_("test2")
         ctors = []
         for decl in t2class.declarations:
-            if isinstance(decl, declarations.calldef.constructor_t):
+            if isinstance(decl, declarations.constructor_t):
                 ctors.append(decl)
 
         # GCCXML and CastXML return the constructors in a different order.
