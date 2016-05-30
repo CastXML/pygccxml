@@ -113,9 +113,6 @@ from .free_calldef import free_operator_t
 from .decl_visitor import decl_visitor_t
 from .type_visitor import type_visitor_t
 
-from .type_traits import decompose_type
-from .type_traits import decompose_class
-
 
 from .type_traits import is_enum
 from .type_traits import enum_declaration
@@ -132,7 +129,6 @@ from .type_traits import is_same
 from .type_traits import is_void
 from .type_traits import is_void_pointer
 from .type_traits import is_const
-from .type_traits import base_type
 from .type_traits import is_array
 from .type_traits import is_pointer
 from .type_traits import is_volatile
@@ -180,6 +176,9 @@ from .type_traits import auto_ptr_traits
 from .type_traits import smart_pointer_traits
 from .type_traits import internal_type_traits
 
+from .type_traits_utils import decompose_type
+from .type_traits_utils import decompose_class
+from .type_traits_utils import base_type
 from .type_traits_utils import remove_alias
 
 from .container_traits import list_traits

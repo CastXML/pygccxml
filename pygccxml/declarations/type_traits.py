@@ -21,7 +21,6 @@ which encapsulate a single trait from the C++ type system. For example:
 import os
 
 from . import matchers
-from . import typedef
 from . import calldef
 from . import calldef_members
 from . import cpptypes
@@ -45,40 +44,11 @@ def create_cv_types(base):
     )
 
 
-def decompose_type(tp):
-    """implementation details"""
-    # implementation of this function is important
-    if isinstance(tp, cpptypes.compound_t):
-        return [tp] + decompose_type(tp.base)
-    elif isinstance(tp, typedef.typedef_t):
-        return decompose_type(tp.decl_type)
-    elif isinstance(tp, cpptypes.declarated_t) and \
-            isinstance(tp.declaration, typedef.typedef_t):
-        return decompose_type(tp.declaration.decl_type)
-    else:
-        return [tp]
-
-
-def decompose_class(type):
-    """implementation details"""
-    types = decompose_type(type)
-    return [tp.__class__ for tp in types]
-
-
-def base_type(type):
-    """returns base type.
-
-    For `const int` will return `int`
-    """
-    types = decompose_type(type)
-    return types[-1]
-
-
 def does_match_definition(given, main, secondary):
     """implementation details"""
     assert isinstance(secondary, tuple)
     assert 2 == len(secondary)  # general solution could be provided
-    types = decompose_type(given)
+    types = type_traits_utils.decompose_type(given)
     if isinstance(types[0], main):
         return True
     elif 2 <= len(types) and \
@@ -674,12 +644,12 @@ class __is_convertible_t(object):
 
     def __normalize(self, type_):
         type_ = type_traits_utils.remove_alias(type_)
-        bt_of_type = base_type(type_)
+        bt_of_type = type_traits_utils.base_type(type_)
         if isinstance(bt_of_type, cpptypes.declarated_t) \
            and isinstance(bt_of_type.declaration,
                           class_declaration.class_declaration_t):
             type_ = type_.clone()
-            bt_of_type = base_type(type_)
+            bt_of_type = type_traits_utils.base_type(type_)
             bt_of_type.declaration = self.__find_class_by_class_declaration(
                 bt_of_type.declaration)
         return type_
@@ -710,10 +680,10 @@ class __is_convertible_t(object):
                     is_same(source.base, target.base.base):
                 return True  # X& => const X&
         if not is_const(source) and is_array(source) and is_pointer(target):
-            if is_same(base_type(source), target.base):
+            if is_same(type_traits_utils.base_type(source), target.base):
                 return True  # X[2] => X*
         if is_array(source) and is_pointer(target) and is_const(target.base):
-            if is_same(base_type(source), target.base.base):
+            if is_same(type_traits_utils.base_type(source), target.base.base):
                 return True
 
     def __test_pointer_to_func_or_mv__to__func_or_mv(self, source, target):
@@ -807,10 +777,11 @@ class __is_convertible_t(object):
         return False
 
     def __test_fundamental__to__fundamental(self, source, target):
-        if not is_fundamental(base_type(source)) or not \
-                is_fundamental(base_type(target)):
+        if not is_fundamental(type_traits_utils.base_type(source)) or not \
+                is_fundamental(type_traits_utils.base_type(target)):
             return False
-        if is_void(base_type(source)) or is_void(base_type(target)):
+        if is_void(type_traits_utils.base_type(source)) or \
+                is_void(type_traits_utils.base_type(target)):
             return False
         if is_fundamental(source) and is_fundamental(target):
             return True
@@ -832,8 +803,8 @@ class __is_convertible_t(object):
             isinstance(y, cpptypes.declarated_t))
 
     def __test_derived_to_based(self, source, target):
-        derived = base_type(source)
-        base = base_type(target)
+        derived = type_traits_utils.base_type(source)
+        base = type_traits_utils.base_type(target)
         if not (
                 isinstance(derived, cpptypes.declarated_t) and
                 isinstance(derived.declaration, class_declaration.class_t)):

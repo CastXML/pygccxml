@@ -4,8 +4,9 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import re
-from pygccxml import utils
-from pygccxml import declarations
+from .. import utils
+from .. import declarations
+from ..declarations import type_traits_utils
 
 
 class default_argument_patcher_t(object):
@@ -185,7 +186,7 @@ class default_argument_patcher_t(object):
         if not call_invocation.is_call_invocation(dv):
             return False
         name = call_invocation.name(dv)
-        base_type = declarations.base_type(arg.decl_type)
+        base_type = type_traits_utils.base_type(arg.decl_type)
         if not isinstance(base_type, declarations.declarated_t):
             return False
         decl = base_type.declaration
@@ -199,7 +200,7 @@ class default_argument_patcher_t(object):
         dv = arg.default_value
         if not call_invocation.is_call_invocation(dv):
             return False
-        base_type = declarations.base_type(arg.decl_type)
+        base_type = type_traits_utils.base_type(arg.decl_type)
         decl = base_type.declaration
         name, args = call_invocation.split(dv)
         if decl.name != name:

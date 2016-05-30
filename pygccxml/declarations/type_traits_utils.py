@@ -36,3 +36,32 @@ def remove_alias(type_):
     no_alias = __remove_alias(type_ref.clone())
     type_ref.cache.remove_alias = no_alias
     return no_alias
+
+
+def decompose_type(tp):
+    """implementation details"""
+    # implementation of this function is important
+    if isinstance(tp, cpptypes.compound_t):
+        return [tp] + decompose_type(tp.base)
+    elif isinstance(tp, typedef.typedef_t):
+        return decompose_type(tp.decl_type)
+    elif isinstance(tp, cpptypes.declarated_t) and \
+            isinstance(tp.declaration, typedef.typedef_t):
+        return decompose_type(tp.declaration.decl_type)
+    else:
+        return [tp]
+
+
+def decompose_class(type):
+    """implementation details"""
+    types = decompose_type(type)
+    return [tp.__class__ for tp in types]
+
+
+def base_type(type):
+    """returns base type.
+
+    For `const int` will return `int`
+    """
+    types = decompose_type(type)
+    return types[-1]
