@@ -16,7 +16,7 @@ from . import scopedef
 from . import algorithm
 from . import declaration
 from . import dependencies
-from pygccxml import utils
+from .. import utils
 
 
 class ACCESS_TYPES(object):
