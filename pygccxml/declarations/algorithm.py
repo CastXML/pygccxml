@@ -171,40 +171,6 @@ def make_flatten(decl_or_decls):
     return answer
 
 
-def __make_flatten_generator(decl_or_decls):
-    """
-    Converts tree representation of declarations to flatten one.
-
-    :param decl_or_decls: reference to list of declaration's or single
-    declaration
-    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
-
-    :rtype: [ all internal declarations ]
-
-    """
-
-    import pygccxml.declarations
-
-    def proceed_single(decl):
-        yield decl
-        if not isinstance(decl, pygccxml.declarations.scopedef_t):
-            return
-        for internal in decl.declarations:
-            if isinstance(internal, pygccxml.declarations.scopedef_t):
-                for internal_internal in proceed_single(internal):
-                    yield internal_internal
-            else:
-                yield internal
-
-    if isinstance(decl_or_decls, list):
-        for creator in decl_or_decls:
-            for internal in proceed_single(creator):
-                yield internal
-    else:
-        for internal in proceed_single(decl_or_decls):
-            yield internal
-
-
 def get_global_namespace(decls):
     import pygccxml.declarations
     found = [
