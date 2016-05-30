@@ -5,15 +5,14 @@
 
 import os
 import platform
+import subprocess
 from . import linker
 from . import config
 from . import patcher
-import subprocess
-import pygccxml.utils
-
-from .etree_scanner import ietree_scanner_t as scanner_t
 from . import declarations_cache
-from pygccxml import utils
+from .etree_scanner import ietree_scanner_t as scanner_t
+from .. import utils
+
 from pygccxml import declarations
 
 
@@ -269,9 +268,9 @@ class source_reader_t(object):
         xml_file = destination
         # If file specified, remove it to start else create new file name
         if xml_file:
-            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
+            utils.remove_file_no_raise(xml_file, self.__config)
         else:
-            xml_file = pygccxml.utils.create_temp_file_name(suffix='.xml')
+            xml_file = utils.create_temp_file_name(suffix='.xml')
         try:
             ffname = source_file
             if not os.path.isabs(ffname):
@@ -311,7 +310,7 @@ class source_reader_t(object):
                         self.__config.xml_generator.upper() + ": %s" %
                         gccxml_msg)
         except Exception:
-            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
+            utils.remove_file_no_raise(xml_file, self.__config)
             raise
         return xml_file
 
@@ -327,14 +326,14 @@ class source_reader_t(object):
 
         :rtype: returns file name of GCC-XML generated file
         """
-        header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
+        header_file = utils.create_temp_file_name(suffix='.h')
 
         try:
             with open(header_file, "w+") as header:
                 header.write(content)
             xml_file = self.create_xml_file(header_file, destination)
         finally:
-            pygccxml.utils.remove_file_no_raise(header_file, self.__config)
+            utils.remove_file_no_raise(header_file, self.__config)
         return xml_file
 
     def read_file(self, source_file):
@@ -367,10 +366,10 @@ class source_reader_t(object):
                         "from cache."))
         except Exception:
             if xml_file:
-                pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
+                utils.remove_file_no_raise(xml_file, self.__config)
             raise
         if xml_file:
-            pygccxml.utils.remove_file_no_raise(xml_file, self.__config)
+            utils.remove_file_no_raise(xml_file, self.__config)
 
         return decls
 
@@ -407,16 +406,16 @@ class source_reader_t(object):
 
         """
 
-        header_file = pygccxml.utils.create_temp_file_name(suffix='.h')
+        header_file = utils.create_temp_file_name(suffix='.h')
         with open(header_file, "w+") as f:
             f.write(content)
 
         try:
             decls = self.read_file(header_file)
         except Exception:
-            pygccxml.utils.remove_file_no_raise(header_file, self.__config)
+            utils.remove_file_no_raise(header_file, self.__config)
             raise
-        pygccxml.utils.remove_file_no_raise(header_file, self.__config)
+        utils.remove_file_no_raise(header_file, self.__config)
 
         return decls
 
@@ -466,7 +465,7 @@ class source_reader_t(object):
         # Join declarations
         if self.__join_decls:
             for ns in iter(decls.values()):
-                if isinstance(ns, pygccxml.declarations.namespace_t):
+                if isinstance(ns, declarations.namespace_t):
                     self.join_declarations(ns)
 
         # some times gccxml report typedefs defined in no namespace
@@ -487,12 +486,12 @@ class source_reader_t(object):
     def join_declarations(self, declref):
         self._join_namespaces(declref)
         for ns in declref.declarations:
-            if isinstance(ns, pygccxml.declarations.namespace_t):
+            if isinstance(ns, declarations.namespace_t):
                 self.join_declarations(ns)
 
     @staticmethod
     def _join_namespaces(nsref):
-        assert isinstance(nsref, pygccxml.declarations.namespace_t)
+        assert isinstance(nsref, declarations.namespace_t)
         ddhash = {}
         decls = []
 
@@ -506,18 +505,18 @@ class source_reader_t(object):
                     decls.append(decl)
                     joined_decls[decl._name] = [decl]
                 else:
-                    if isinstance(decl, pygccxml.declarations.calldef_t):
+                    if isinstance(decl, declarations.calldef_t):
                         if decl not in joined_decls[decl._name]:
                             # functions has overloading
                             decls.append(decl)
                             joined_decls[decl._name].append(decl)
-                    elif isinstance(decl, pygccxml.declarations.enumeration_t):
+                    elif isinstance(decl, declarations.enumeration_t):
                         # unnamed enums
                         if not decl.name and decl not in \
                                 joined_decls[decl._name]:
                             decls.append(decl)
                             joined_decls[decl._name].append(decl)
-                    elif isinstance(decl, pygccxml.declarations.class_t):
+                    elif isinstance(decl, declarations.class_t):
                         # unnamed classes
                         if not decl.name and decl not in \
                                 joined_decls[decl._name]:
@@ -525,11 +524,11 @@ class source_reader_t(object):
                             joined_decls[decl._name].append(decl)
                     else:
                         assert 1 == len(joined_decls[decl._name])
-                        if isinstance(decl, pygccxml.declarations.namespace_t):
+                        if isinstance(decl, declarations.namespace_t):
                             joined_decls[decl._name][0].take_parenting(decl)
 
-        class_t = pygccxml.declarations.class_t
-        class_declaration_t = pygccxml.declarations.class_declaration_t
+        class_t = declarations.class_t
+        class_declaration_t = declarations.class_declaration_t
         if class_t in ddhash and class_declaration_t in ddhash:
             # if there is a class and its forward declaration - get rid of the
             # second one.

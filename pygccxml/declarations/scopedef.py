@@ -11,8 +11,8 @@ from . import algorithm
 from . import templates
 from . import declaration
 from . import mdecl_wrapper
-from pygccxml import utils
 from . import matcher as matcher_module
+from .. import utils
 import collections
 
 
