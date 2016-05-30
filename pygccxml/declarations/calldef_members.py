@@ -195,48 +195,9 @@ class constructor_t(member_calldef_t):
 
         """
 
+        # FIXME: prevent cyclic dependencies
         from . import type_traits
-
-        args = self.arguments
-
-        # A copy constructor has only one argument
-        if len(args) != 1:
-            return False
-
-        # We have only one argument, get it
-        arg = args[0]
-
-        if not isinstance(arg.decl_type, cpptypes.compound_t):
-            # An argument of type declarated_t (a typedef) could be passed to
-            # the constructor; and it could be a reference.
-            # But in c++ you can NOT write :
-            #    "typedef class MyClass { MyClass(const MyClass & arg) {} }"
-            # If the argument is a typedef, this is not a copy constructor.
-            # See the hierarchy of declarated_t and coumpound_t. They both
-            # inherit from type_t but are not related so we can discriminate
-            # between them.
-            return False
-
-        # The argument needs to be passed by reference in a copy constructor
-        if not type_traits.is_reference(arg.decl_type):
-            return False
-
-        # The argument needs to be const for a copy constructor
-        if not type_traits.is_const(arg.decl_type.base):
-            return False
-
-        un_aliased = type_traits_utils.remove_alias(arg.decl_type.base)
-        # un_aliased now refers to const_t instance
-        if not isinstance(un_aliased.base, cpptypes.declarated_t):
-            # We are looking for a declaration
-            # If "class MyClass { MyClass(const int & arg) {} }" is used,
-            # this is not copy constructor, so we return False here.
-            # -> un_aliased.base == cpptypes.int_t (!= cpptypes.declarated_t)
-            return False
-
-        # Final check: compare the parent (the class declaration for example)
-        # with the declaration of the type passed as argument.
-        return id(un_aliased.base.declaration) == id(self.parent)
+        return type_traits.is_copy_constructor(self.arguments, self.parent)
 
     @property
     def is_trivial_constructor(self):
