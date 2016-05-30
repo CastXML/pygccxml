@@ -5,6 +5,7 @@
 
 from . import calldef
 from . import calldef_members
+from . import calldef_types
 from . import algorithm
 from . import cpptypes
 from . import type_traits
@@ -60,7 +61,7 @@ class free_calldef_t(calldef.calldef_t):
     def guess_calling_convention(self):
         """This function should be overriden in the derived classes and return
         more-or-less successfull guess about calling convention"""
-        return calldef.CALLING_CONVENTION_TYPES.UNKNOWN
+        return calldef_types.CALLING_CONVENTION_TYPES.UNKNOWN
 
 
 class free_function_t(free_calldef_t):

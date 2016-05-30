@@ -7,7 +7,7 @@
 defines few algorithms, that deals with different properties of functions
 """
 
-from . import calldef
+from . import calldef_types
 from . import calldef_members
 from . import type_traits
 
@@ -34,8 +34,8 @@ def is_same_return_type(f1, f2):
     if not isinstance(f1, calldef_members.member_calldef_t):
         # for free functions we compare return types as usual
         return type_traits.is_same(f1.return_type, f2.return_type)
-    if f1.virtuality == calldef.VIRTUALITY_TYPES.NOT_VIRTUAL \
-       or f2.virtuality == calldef.VIRTUALITY_TYPES.NOT_VIRTUAL:
+    if f1.virtuality == calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL \
+       or f2.virtuality == calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL:
         # for non-virtual member functions we compare types as usual
         return type_traits.is_same(f1.return_type, f2.return_type)
     rt1 = f1.return_type

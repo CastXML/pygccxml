@@ -16,7 +16,6 @@ This modules contains definition for next C++ declarations:
     - constructor
     - destructor
 """
-import re
 import warnings
 from . import cpptypes
 from . import algorithm
@@ -24,46 +23,8 @@ from . import declaration
 from . import dependencies
 from . import call_invocation
 from . import type_traits_utils
+from . import calldef_types
 from .. import utils
-
-
-class VIRTUALITY_TYPES(object):
-
-    """class that defines "virtuality" constants"""
-    NOT_VIRTUAL = 'not virtual'
-    VIRTUAL = 'virtual'
-    PURE_VIRTUAL = 'pure virtual'
-    ALL = [NOT_VIRTUAL, VIRTUAL, PURE_VIRTUAL]
-# preserving backward compatebility
-FUNCTION_VIRTUALITY_TYPES = VIRTUALITY_TYPES
-
-
-class CALLING_CONVENTION_TYPES(object):
-
-    """class that defines "calling convention" constants"""
-    UNKNOWN = ''
-    CDECL = 'cdecl'
-    STDCALL = 'stdcall'
-    THISCALL = 'thiscall'
-    FASTCALL = 'fastcall'
-    SYSTEM_DEFAULT = '<<<system default>>>'
-
-    all = (UNKNOWN, CDECL, STDCALL, THISCALL, FASTCALL, SYSTEM_DEFAULT)
-
-    pattern = re.compile(
-        r'.*(?:^|\s)(?:__)?(?P<cc>cdecl|stdcall|thiscall|fastcall)(?:__)?.*')
-
-    @staticmethod
-    def extract(text, default=UNKNOWN):
-        """extracts calling convention from the text. If the calling convention
-        could not be found, the "default"is used"""
-        if not text:
-            return default
-        found = CALLING_CONVENTION_TYPES.pattern.match(text)
-        if found:
-            return found.group('cc')
-        else:
-            return default
 
 
 # First level in hierarchy of calldef
@@ -506,15 +467,15 @@ class calldef_t(declaration.declaration_t):
     def guess_calling_convention(self):
         """This function should be overriden in the derived classes and return
         more-or-less successfull guess about calling convention"""
-        return CALLING_CONVENTION_TYPES.UNKNOWN
+        return calldef_types.CALLING_CONVENTION_TYPES.UNKNOWN
 
     @property
     def calling_convention(self):
         """function calling convention. See
             :class:CALLING_CONVENTION_TYPES class for possible values"""
         if self._calling_convention is None:
-            self._calling_convention = CALLING_CONVENTION_TYPES.extract(
-                self.attributes)
+            self._calling_convention = \
+                calldef_types.CALLING_CONVENTION_TYPES.extract(self.attributes)
             if not self._calling_convention:
                 self._calling_convention = self.guess_calling_convention()
         return self._calling_convention

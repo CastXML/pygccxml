@@ -93,9 +93,10 @@ from .algorithm import declaration_files
 from .algorithm import visit_function_has_not_been_found_t
 from .algorithm import get_global_namespace
 
-from .calldef import VIRTUALITY_TYPES
-from .calldef import FUNCTION_VIRTUALITY_TYPES
-from .calldef import CALLING_CONVENTION_TYPES
+from .calldef_types import VIRTUALITY_TYPES
+from .calldef_types import FUNCTION_VIRTUALITY_TYPES
+from .calldef_types import CALLING_CONVENTION_TYPES
+
 from .calldef import argument_t
 from .calldef import calldef_t
 from .calldef_members import member_calldef_t

@@ -6,7 +6,7 @@
 from . import calldef
 from . import algorithm
 from . import cpptypes
-from . import type_traits_utils
+from . import calldef_types
 
 
 # Second level in hierarchy of calldef
@@ -74,7 +74,7 @@ class member_calldef_t(calldef.calldef_t):
 
     @virtuality.setter
     def virtuality(self, virtuality):
-        assert virtuality in calldef.VIRTUALITY_TYPES.ALL
+        assert virtuality in calldef_types.VIRTUALITY_TYPES.ALL
         self._virtuality = virtuality
 
     @property
@@ -124,9 +124,9 @@ class member_calldef_t(calldef.calldef_t):
 
     def guess_calling_convention(self):
         if self.has_static:
-            return calldef.CALLING_CONVENTION_TYPES.SYSTEM_DEFAULT
+            return calldef_types.CALLING_CONVENTION_TYPES.SYSTEM_DEFAULT
         else:
-            return calldef.CALLING_CONVENTION_TYPES.THISCALL
+            return calldef_types.CALLING_CONVENTION_TYPES.THISCALL
 
 
 class operator_t(object):
