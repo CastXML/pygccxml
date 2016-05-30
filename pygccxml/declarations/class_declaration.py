@@ -18,6 +18,7 @@ from . import declaration
 from . import dependencies
 from . import calldef_members
 from . import calldef_types
+from . import templates
 from .. import utils
 
 
@@ -40,7 +41,6 @@ class CLASS_TYPES(object):
 
 
 def get_partial_name(name):
-    from . import templates
     from . import container_traits  # prevent cyclic dependencies
     ct = container_traits.find_container_traits(name)
     if ct:
