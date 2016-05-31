@@ -23,6 +23,7 @@ import os
 from . import matchers
 from . import calldef
 from . import calldef_members
+from . import calldef_types
 from . import cpptypes
 from . import namespace
 from . import scopedef
@@ -478,6 +479,17 @@ def has_public_destructor(type):
     """returns True, if class has public destructor, False otherwise"""
     d = has_destructor(type)
     return d and d.access_type == 'public'
+
+
+def has_vtable(type_):
+    """True, if class has virtual table, False otherwise"""
+    assert(isinstance(type_, class_declaration.class_t))
+    return bool(
+        type_.calldefs(
+            lambda f: isinstance(f, calldef_members.member_function_t) and
+            f.virtuality != calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL,
+            recursive=False,
+            allow_empty=True))
 
 
 def is_base_and_derived(based, derived):

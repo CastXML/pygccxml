@@ -12,12 +12,11 @@ This modules contains definition for next C++ declarations:
     - small helper class for describing C++ class hierarchy
 """
 
+import warnings
 from . import scopedef
 from . import declaration_utils
 from . import declaration
 from . import dependencies
-from . import calldef_members
-from . import calldef_types
 from . import templates
 from .. import utils
 
@@ -633,12 +632,17 @@ class class_t(scopedef.scopedef_t):
     @property
     def has_vtable(self):
         """True, if class has virtual table, False otherwise"""
-        return bool(
-            self.calldefs(
-                lambda f: isinstance(f, calldef_members.member_function_t) and
-                f.virtuality != calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL,
-                recursive=False,
-                allow_empty=True))
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The has_vtable argument is deprecated. \n" +
+            "Please use the has_vtable function from the type_traits \n" +
+            "module instead.",
+            DeprecationWarning)
+
+        # prevent cyclic import
+        from . import type_traits
+        return type_traits.has_vtable(self)
 
     @property
     def top_class(self):
