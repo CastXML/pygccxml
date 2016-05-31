@@ -12,7 +12,6 @@ Contains classes that describe different C++ declarations
 from . import xml_generators as compilers
 from . import xml_generators
 
-from .dependencies import dependency_info_t
 from .location import location_t
 from .declaration import declaration_t
 from .scopedef import scopedef_t
@@ -28,6 +27,7 @@ from .class_declaration import ACCESS_TYPES
 from .class_declaration import hierarchy_info_t
 from .class_declaration import class_declaration_t
 from .class_declaration import class_types
+from .class_declaration import dependency_info_t
 
 from .cpptypes import type_t
 from .cpptypes import dummy_type_t

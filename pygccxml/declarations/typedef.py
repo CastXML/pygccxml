@@ -9,7 +9,7 @@ defines class that describes C++ typedef declaration
 
 import warnings
 from . import declaration
-from . import dependencies
+from . import class_declaration
 
 
 class typedef_t(declaration.declaration_t):
@@ -80,7 +80,7 @@ class typedef_t(declaration.declaration_t):
         self._decl_type = decl_type
 
     def i_depend_on_them(self, recursive=True):
-        return [dependencies.dependency_info_t(self, self.decl_type)]
+        return [class_declaration.dependency_info_t(self, self.decl_type)]
 
     @property
     def byte_size(self):

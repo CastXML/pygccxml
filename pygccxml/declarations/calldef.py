@@ -20,7 +20,7 @@ import warnings
 from . import cpptypes
 from . import declaration_utils
 from . import declaration
-from . import dependencies
+from . import class_declaration
 from . import call_invocation
 from . import type_traits_utils
 from . import calldef_types
@@ -451,7 +451,7 @@ class calldef_t(declaration.declaration_t):
         return self.name
 
     def _report(self, *args, **keywd):
-        return dependencies.dependency_info_t(self, *args, **keywd)
+        return class_declaration.dependency_info_t(self, *args, **keywd)
 
     def i_depend_on_them(self, recursive=True):
         answer = []

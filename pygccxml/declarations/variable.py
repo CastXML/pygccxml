@@ -9,7 +9,6 @@ defines class that describes C++ global and member variable declaration
 
 import warnings
 from . import declaration
-from . import dependencies
 from . import class_declaration
 
 
@@ -157,7 +156,7 @@ class variable_t(declaration.declaration_t):
         self._mangled = mangled
 
     def i_depend_on_them(self, recursive=True):
-        return [dependencies.dependency_info_t(self, self.decl_type)]
+        return [class_declaration.dependency_info_t(self, self.decl_type)]
 
     def get_mangled_name(self):
         if not self._mangled and not self._demangled \
