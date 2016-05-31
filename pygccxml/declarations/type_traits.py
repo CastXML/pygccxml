@@ -24,7 +24,6 @@ from . import matchers
 from . import calldef
 from . import calldef_members
 from . import cpptypes
-from . import algorithm
 from . import namespace
 from . import scopedef
 from . import templates
