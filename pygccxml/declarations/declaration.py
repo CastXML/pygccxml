@@ -9,7 +9,7 @@ base class.
 
 """
 
-from . import algorithm
+from . import declaration_utils
 from . import algorithms_cache
 from .. import utils
 
@@ -93,8 +93,7 @@ class declaration_t(object):
         """
 
         data = [
-            algorithm.declaration_path(
-                self.parent),
+            declaration_utils.declaration_path(self.parent),
             self.name,
             self.location]
         data.extend(self._get__cmp__items())
@@ -116,8 +115,8 @@ class declaration_t(object):
             return False
         return self.name == other.name \
             and self.location == other.location \
-            and algorithm.declaration_path(self.parent) \
-            == algorithm.declaration_path(other.parent)
+            and declaration_utils.declaration_path(self.parent) \
+            == declaration_utils.declaration_path(other.parent)
 
     def __hash__(self):
         return (hash(self.__class__) ^
@@ -339,7 +338,7 @@ class declaration_t(object):
         self._attributes = attributes
 
     def create_decl_string(self, with_defaults=True):
-        return algorithm.full_name(self, with_defaults)
+        return declaration_utils.full_name(self, with_defaults)
 
     @property
     def decl_string(self):

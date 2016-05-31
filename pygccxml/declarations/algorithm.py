@@ -9,76 +9,7 @@ Define few unrelated algorithms that work on declarations.
 """
 
 import warnings
-
-
-def declaration_path(decl, with_defaults=True):
-    """
-    Returns a list of parent declarations names.
-
-    :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:`declaration_t`
-
-    :rtype: [names], where first item contains top parent name and last item
-             contains the `decl` name
-
-    """
-
-    if not decl:
-        return []
-    if not decl.cache.declaration_path:
-        result = [decl.name]
-        parent = decl.parent
-        while parent:
-            if parent.cache.declaration_path:
-                result.reverse()
-                decl.cache.declaration_path = parent.cache.declaration_path + \
-                    result
-                return decl.cache.declaration_path
-            else:
-                result.append(parent.name)
-                parent = parent.parent
-        result.reverse()
-        decl.cache.declaration_path = result
-        return result
-    else:
-        return decl.cache.declaration_path
-
-
-def partial_declaration_path(decl):
-    """
-    Returns a list of parent declarations names without template arguments that
-    have default value.
-
-    :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:`declaration_t`
-
-    :rtype: [names], where first item contains top parent name and last item
-             contains the `decl` name
-
-    """
-
-    # TODO:
-    # If parent declaration cache already has declaration_path, reuse it for
-    # calculation.
-    if not decl:
-        return []
-    if not decl.cache.partial_declaration_path:
-        result = [decl.partial_name]
-        parent = decl.parent
-        while parent:
-            if parent.cache.partial_declaration_path:
-                result.reverse()
-                decl.cache.partial_declaration_path \
-                    = parent.cache.partial_declaration_path + result
-                return decl.cache.partial_declaration_path
-            else:
-                result.append(parent.partial_name)
-                parent = parent.parent
-        result.reverse()
-        decl.cache.partial_declaration_path = result
-        return result
-    else:
-        return decl.cache.partial_declaration_path
+from . import declaration_utils
 
 
 def get_named_parent(decl):
@@ -99,41 +30,6 @@ def get_named_parent(decl):
     while parent and (not parent.name or parent.name == '::'):
         parent = parent.parent
     return parent
-
-
-def full_name_from_declaration_path(dpath):
-    # Here I have lack of knowledge:
-    # TODO: "What is the full name of declaration declared in unnamed
-    # namespace?"
-    result = [_f for _f in dpath if _f]
-    result = result[0] + '::'.join(result[1:])
-    return result
-
-
-def full_name(decl, with_defaults=True):
-    """
-    Returns declaration full qualified name.
-
-    If `decl` belongs to anonymous namespace or class, the function will return
-    C++ illegal qualified name.
-    :param decl: :class:`declaration_t`
-    :type decl: :class:`declaration_t`
-    :rtype: full name of declarations.
-
-    """
-
-    if None is decl:
-        raise RuntimeError("Unable to generate full name for None object!")
-    if with_defaults:
-        if not decl.cache.full_name:
-            decl.cache.full_name = full_name_from_declaration_path(
-                declaration_path(decl))
-        return decl.cache.full_name
-    else:
-        if not decl.cache.full_partial_name:
-            decl.cache.full_partial_name = full_name_from_declaration_path(
-                partial_declaration_path(decl))
-        return decl.cache.full_partial_name
 
 
 def make_flatten(decl_or_decls):
@@ -236,7 +132,7 @@ class match_declaration_t(object):
             answer &= self.parent is inst.parent
         if self.fullname is not None:
             if inst.name:
-                answer &= self.fullname == full_name(inst)
+                answer &= self.fullname == declaration_utils.full_name(inst)
             else:
                 answer = False
         return answer

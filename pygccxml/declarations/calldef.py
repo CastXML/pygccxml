@@ -18,7 +18,7 @@ This modules contains definition for next C++ declarations:
 """
 import warnings
 from . import cpptypes
-from . import algorithm
+from . import declaration_utils
 from . import declaration
 from . import dependencies
 from . import call_invocation
@@ -382,7 +382,7 @@ class calldef_t(declaration.declaration_t):
     def __remove_parent_fname(self, demangled):
         """implementation details"""
         demangled = demangled.strip()
-        parent_fname = algorithm.full_name(self.parent)
+        parent_fname = declaration_utils.full_name(self.parent)
         if parent_fname.startswith('::') and not demangled.startswith('::'):
             parent_fname = parent_fname[2:]
         demangled = demangled[len(parent_fname):]
@@ -429,7 +429,7 @@ class calldef_t(declaration.declaration_t):
             return self._demangled_name
 
         # well, I am going to try an other strategy
-        fname = algorithm.full_name(self)
+        fname = declaration_utils.full_name(self)
         found = self.demangled.find(fname)
         if -1 == found:
             if fname.startswith('::'):

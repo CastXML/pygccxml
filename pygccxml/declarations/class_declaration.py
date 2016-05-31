@@ -13,7 +13,7 @@ This modules contains definition for next C++ declarations:
 """
 
 from . import scopedef
-from . import algorithm
+from . import declaration_utils
 from . import declaration
 from . import dependencies
 from . import calldef_members
@@ -72,13 +72,13 @@ class hierarchy_info_t(object):
     def __eq__(self, other):
         if not isinstance(other, hierarchy_info_t):
             return False
-        return algorithm.declaration_path(self.related_class) == \
-            algorithm.declaration_path(other.related_class) \
+        return declaration_utils.declaration_path(self.related_class) == \
+            declaration_utils.declaration_path(other.related_class) \
             and self.access == other.access \
             and self.is_virtual == other.is_virtual
 
     def __hash__(self):
-        return hash(algorithm.declaration_path(self.related_class))
+        return hash(declaration_utils.declaration_path(self.related_class))
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -87,10 +87,10 @@ class hierarchy_info_t(object):
         if not isinstance(other, self.__class__):
             return self.__class__.__name__ < other.__class__.__name__
         return (
-            algorithm.declaration_path(self.related_class),
+            declaration_utils.declaration_path(self.related_class),
             self.access,
             self.is_virtual) < (
-            algorithm.declaration_path(
+            declaration_utils.declaration_path(
                 other.related_class),
             other.access,
             self.is_virtual)
@@ -228,7 +228,7 @@ class class_t(scopedef.scopedef_t):
         elif self.use_demangled_as_name and self.demangled:
 
             if not self.cache.demangled_name:
-                fname = algorithm.full_name(self.parent)
+                fname = declaration_utils.full_name(self.parent)
                 if fname.startswith('::') and \
                         not self.demangled.startswith('::'):
                     fname = fname[2:]
@@ -255,7 +255,7 @@ class class_t(scopedef.scopedef_t):
             return self._name
 
     def __str__(self):
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name[:2] == "::":
             name = name[2:]
         return "%s [%s]" % (name, self.class_type)
@@ -264,10 +264,10 @@ class class_t(scopedef.scopedef_t):
         """implementation details"""
         return [self.class_type,
                 self._sorted_list(
-                    [algorithm.declaration_path(base.related_class)
+                    [declaration_utils.declaration_path(base.related_class)
                         for base in self.bases]),
                 self._sorted_list(
-                    [algorithm.declaration_path(derive.related_class)
+                    [declaration_utils.declaration_path(derive.related_class)
                         for derive in self.derived]),
                 self.is_abstract,
                 self._sorted_list(self.public_members),
@@ -279,16 +279,16 @@ class class_t(scopedef.scopedef_t):
             return False
         return self.class_type == other.class_type \
             and self._sorted_list(
-                [algorithm.declaration_path(base.related_class)
+                [declaration_utils.declaration_path(base.related_class)
                     for base in self.bases]) \
             == other._sorted_list(
-                [algorithm.declaration_path(base.related_class)
+                [declaration_utils.declaration_path(base.related_class)
                     for base in other.bases]) \
             and self._sorted_list(
-                [algorithm.declaration_path(derive.related_class)
+                [declaration_utils.declaration_path(derive.related_class)
                     for derive in self.derived]) \
             == other._sorted_list(
-                [algorithm.declaration_path(derive.related_class)
+                [declaration_utils.declaration_path(derive.related_class)
                     for derive in other.derived]) \
             and self.is_abstract == other.is_abstract \
             and self._sorted_list(self.public_members) \

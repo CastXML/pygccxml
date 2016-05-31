@@ -11,7 +11,7 @@ functionality according to some criteria
 import os
 import re
 import warnings
-from . import algorithm
+from . import declaration_utils
 from . import variable
 from . import namespace
 from . import calldef
@@ -272,17 +272,20 @@ class declaration_matcher_t(matcher_base_t):
                     return False
             else:
                 if self.name != templates.normalize(
-                        algorithm.full_name(decl, with_defaults=True)) \
+                        declaration_utils.full_name(
+                            decl, with_defaults=True)) \
                     and self.name != templates.normalize(
-                        algorithm.full_name(decl, with_defaults=False)):
+                            declaration_utils.full_name(
+                                decl, with_defaults=False)):
                     return False
         else:
             if not self.__opt_is_full_name:
                 if self.name != decl.name and self.name != decl.partial_name:
                     return False
             else:
-                if self.name != algorithm.full_name(decl, with_defaults=True) \
-                   and self.name != algorithm.full_name(
+                if self.name != declaration_utils.full_name(
+                        decl, with_defaults=True) \
+                   and self.name != declaration_utils.full_name(
                         decl, with_defaults=False):
                     return False
         return True

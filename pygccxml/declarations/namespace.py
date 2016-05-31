@@ -10,7 +10,7 @@ Describe a C++ namespace declaration.
 
 import warnings
 from . import scopedef
-from . import algorithm
+from . import declaration_utils
 
 
 class namespace_t(scopedef.scopedef_t):
@@ -32,7 +32,7 @@ class namespace_t(scopedef.scopedef_t):
         self._declarations = declarations
 
     def __str__(self):
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name != "::" and name[:2] == "::":
             name = name[2:]
         return "%s [namespace]" % name

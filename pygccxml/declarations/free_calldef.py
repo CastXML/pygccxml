@@ -6,7 +6,7 @@
 from . import calldef
 from . import calldef_members
 from . import calldef_types
-from . import algorithm
+from . import declaration_utils
 from . import cpptypes
 from . import type_traits
 
@@ -21,7 +21,7 @@ class free_calldef_t(calldef.calldef_t):
 
     def __str__(self):
         # Get the full name of the calldef...
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name[:2] == "::":
             name = name[2:]
         # Add the arguments...

@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 from . import calldef
-from . import algorithm
+from . import declaration_utils
 from . import cpptypes
 from . import calldef_types
 
@@ -29,7 +29,7 @@ class member_calldef_t(calldef.calldef_t):
 
     def __str__(self):
         # Get the full name of the calldef...
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name[:2] == "::":
             name = name[2:]
         # Add the arguments...
@@ -175,7 +175,7 @@ class constructor_t(member_calldef_t):
 
     def __str__(self):
         # Get the full name of the calldef...
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name[:2] == "::":
             name = name[2:]
         # Add the arguments...
