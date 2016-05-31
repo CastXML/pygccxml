@@ -107,3 +107,23 @@ def full_name(decl, with_defaults=True):
             decl.cache.full_partial_name = full_name_from_declaration_path(
                 partial_declaration_path(decl))
         return decl.cache.full_partial_name
+
+
+def get_named_parent(decl):
+    """
+    Returns a reference to a named parent declaration.
+
+    :param decl: the child declaration
+    :type decl: :class:`declaration_t`
+
+    :rtype: reference to :class:`declaration_t` or None if not found
+
+    """
+
+    if not decl:
+        return None
+
+    parent = decl.parent
+    while parent and (not parent.name or parent.name == '::'):
+        parent = parent.parent
+    return parent

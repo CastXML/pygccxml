@@ -81,10 +81,10 @@ from .variable import variable_t
 from .declaration_utils import full_name
 from .declaration_utils import full_name_from_declaration_path
 from .declaration_utils import declaration_path
+from .declaration_utils import get_named_parent
 
 from .algorithm import make_flatten
 from .algorithm import apply_visitor
-from .algorithm import get_named_parent
 from .algorithm import find_declaration
 from .algorithm import match_declaration_t
 from .algorithm import find_all_declarations
