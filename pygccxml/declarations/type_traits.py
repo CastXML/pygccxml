@@ -26,6 +26,7 @@ from . import calldef_members
 from . import cpptypes
 from . import algorithm
 from . import namespace
+from . import scopedef
 from . import templates
 from . import enumeration
 from . import class_declaration
@@ -636,7 +637,7 @@ class __is_convertible_t(object):
         self.__target = self.__normalize(target)
 
     def __find_class_by_class_declaration(self, class_decl):
-        found = algorithm.find_declaration(
+        found = scopedef.find_declaration(
             class_decl.parent.declarations,
             name=class_decl.name,
             decl_type=class_declaration.class_t)
@@ -892,7 +893,7 @@ class __is_convertible_t(object):
                 source_inst = source.declaration
                 # class instance could be convertible to something else if it
                 # has operator
-                casting_operators = algorithm.find_all_declarations(
+                casting_operators = scopedef.find_all_declarations(
                     source_inst.declarations,
                     decl_type=calldef_members.casting_operator_t,
                     recursive=False)
@@ -905,7 +906,7 @@ class __is_convertible_t(object):
         # is has constructor from source
         if isinstance(target, cpptypes.declarated_t):
             if isinstance(target.declaration, class_declaration.class_t):
-                constructors = algorithm.find_all_declarations(
+                constructors = scopedef.find_all_declarations(
                     target.declaration.declarations,
                     decl_type=calldef_members.constructor_t,
                     recursive=False)

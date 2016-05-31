@@ -83,15 +83,17 @@ from .declaration_utils import full_name_from_declaration_path
 from .declaration_utils import declaration_path
 from .declaration_utils import get_named_parent
 
-from .algorithm import make_flatten
+from .scopedef import make_flatten
+from .scopedef import find_declaration
+from .scopedef import find_all_declarations
+from .scopedef import find_first_declaration
+from .scopedef import declaration_files
+from .scopedef import get_global_namespace
+from .scopedef import matcher
+
 from .algorithm import apply_visitor
-from .algorithm import find_declaration
 from .algorithm import match_declaration_t
-from .algorithm import find_all_declarations
-from .algorithm import find_first_declaration
-from .algorithm import declaration_files
 from .algorithm import visit_function_has_not_been_found_t
-from .algorithm import get_global_namespace
 
 from .calldef_types import VIRTUALITY_TYPES
 from .calldef_types import FUNCTION_VIRTUALITY_TYPES
@@ -224,8 +226,6 @@ from .matchers import access_type_matcher_t
 from .matchers import operator_matcher_t
 from .matchers import custom_matcher_t
 from .matchers import virtuality_type_matcher_t
-
-from .matcher import matcher
 
 from .mdecl_wrapper import mdecl_wrapper_t
 
