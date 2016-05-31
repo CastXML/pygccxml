@@ -17,8 +17,10 @@ from .location import location_t
 from .declaration import declaration_t
 from .scopedef import scopedef_t
 from .enumeration import enumeration_t
-from .namespace import namespace_t
 from .typedef import typedef_t
+
+from .namespace import namespace_t
+from .namespace import get_global_namespace
 
 from .class_declaration import class_t
 from .class_declaration import CLASS_TYPES
@@ -88,7 +90,6 @@ from .scopedef import find_declaration
 from .scopedef import find_all_declarations
 from .scopedef import find_first_declaration
 from .scopedef import declaration_files
-from .scopedef import get_global_namespace
 from .scopedef import matcher
 
 from .algorithm import apply_visitor

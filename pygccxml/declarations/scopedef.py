@@ -1185,17 +1185,6 @@ def make_flatten(decl_or_decls):
     return answer
 
 
-def get_global_namespace(decls):
-    # FIXME: prevent cyclic import
-    import pygccxml.declarations
-    found = [
-        decl for decl in make_flatten(decls) if decl.name == '::' and
-        isinstance(decl, pygccxml.declarations.namespace_t)]
-    if len(found) == 1:
-        return found[0]
-    raise RuntimeError("Unable to find global namespace.")
-
-
 def find_all_declarations(
         declarations,
         type=None,

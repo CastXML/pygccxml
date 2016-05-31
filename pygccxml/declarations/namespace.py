@@ -270,3 +270,12 @@ class namespace_t(scopedef.scopedef_t):
             for decl in self.declarations:
                 answer.extend(decl.i_depend_on_them())
         return answer
+
+
+def get_global_namespace(decls):
+    found = [
+        decl for decl in scopedef.make_flatten(decls) if decl.name == '::' and
+        isinstance(decl, namespace_t)]
+    if len(found) == 1:
+        return found[0]
+    raise RuntimeError("Unable to find global namespace.")
