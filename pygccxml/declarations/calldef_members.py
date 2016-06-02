@@ -3,6 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import warnings
 from . import calldef
 from . import declaration_utils
 from . import cpptypes
@@ -195,13 +196,30 @@ class constructor_t(member_calldef_t):
 
         """
 
-        # FIXME: prevent cyclic dependencies
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The is_copy_constructor attribute is deprecated. \n" +
+            "Please use the is_copy_constructor function from the \n" +
+            "type_traits module instead.",
+            DeprecationWarning)
+
+        # prevent cyclic dependencies
         from . import type_traits
-        return type_traits.is_copy_constructor(self.arguments, self.parent)
+        return type_traits.is_copy_constructor(self)
 
     @property
     def is_trivial_constructor(self):
-        return not bool(self.arguments)
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The is_trivial_constructor attribute is deprecated. \n" +
+            "Please use the is_trivial_constructor function from the \n" +
+            "type_traits module instead.",
+            DeprecationWarning)
+
+        # prevent cyclic dependencies
+        from . import type_traits
+        return type_traits.is_trivial_constructor(self)
 
 
 class destructor_t(member_calldef_t):

@@ -1304,12 +1304,21 @@ def is_std_wostream(type_):
         return remove_cv(type_).decl_string in wostream_equivalences
 
 
-def is_copy_constructor(args, parent):
+def is_copy_constructor(constructor):
         """
-        Returns True if described declaration is copy constructor,
-        otherwise False.
+        Check if the declaration is a copy constructor,
+
+        Args:
+            constructor (declarations.constructor_t): the constructor
+                to be checked.
+
+        Returns:
+            bool: True if this is a copy constructor, False instead.
 
         """
+        assert (isinstance(constructor, calldef_members.constructor_t))
+        args = constructor.arguments
+        parent = constructor.parent
 
         # A copy constructor has only one argument
         if len(args) != 1:
@@ -1349,3 +1358,19 @@ def is_copy_constructor(args, parent):
         # Final check: compare the parent (the class declaration for example)
         # with the declaration of the type passed as argument.
         return id(un_aliased.base.declaration) == id(parent)
+
+
+def is_trivial_constructor(constructor):
+    """
+    Check if the declaration is a trivial constructor.
+
+    Args:
+        constructor (declarations.constructor_t): the constructor
+            to be checked.
+
+    Returns:
+        bool: True if this is a trivial constructor, False instead.
+
+    """
+    assert(isinstance(constructor, calldef_members.constructor_t))
+    return not bool(constructor.arguments)

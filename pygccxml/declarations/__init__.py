@@ -150,6 +150,7 @@ from .type_traits import is_std_ostream
 from .type_traits import is_std_wostream
 from .type_traits import is_calldef_pointer
 from .type_traits import is_copy_constructor
+from .type_traits import is_trivial_constructor
 
 from .type_traits import is_unary_operator
 from .type_traits import is_binary_operator
