@@ -418,16 +418,54 @@ is_class_declaration = class_declaration_traits.is_my_case
 
 
 def find_trivial_constructor(type_):
-    """returns reference to trivial constructor or None"""
+    """
+    Returns reference to trivial constructor.
+
+    Args:
+        type_ (declarations.class_t): the class to be searched.
+
+    Returns:
+        declarations.constructor_t: the trivial constructor
+
+    """
     assert isinstance(type_, class_declaration.class_t)
-    return type_.find_trivial_constructor()
+
+    trivial = type_.constructors(
+        lambda x: is_trivial_constructor(x),
+        recursive=False,
+        allow_empty=True)
+    if trivial:
+        return trivial[0]
+    else:
+        return None
+
+
+def find_copy_constructor(type_):
+    """
+    Returns reference to copy constructor.
+
+    Args:
+        type_ (declarations.class_t): the class to be searched.
+
+    Returns:
+        declarations.constructor_t: the copy constructor
+
+    """
+    copy_ = type_.constructors(
+        lambda x: is_copy_constructor(x),
+        recursive=False,
+        allow_empty=True)
+    if copy_:
+        return copy_[0]
+    else:
+        return None
 
 
 def has_trivial_constructor(class_):
     """if class has public trivial constructor, this function will return
     reference to it, None otherwise"""
     class_ = class_traits.get_declaration(class_)
-    trivial = class_.find_trivial_constructor()
+    trivial = find_trivial_constructor(class_)
     if trivial and trivial.access_type == 'public':
         return trivial
 
@@ -436,7 +474,7 @@ def has_copy_constructor(class_):
     """if class has public copy constructor, this function will return
     reference to it, None otherwise"""
     class_ = class_traits.get_declaration(class_)
-    copy_constructor = class_.find_copy_constructor()
+    copy_constructor = find_copy_constructor(class_)
     if copy_constructor and copy_constructor.access_type == 'public':
         return copy_constructor
 
@@ -458,7 +496,7 @@ def has_public_constructor(class_):
     them, otherwise None"""
     class_ = class_traits.get_declaration(class_)
     decls = class_.constructors(
-        lambda c: not c.is_copy_constructor and c.access_type == 'public',
+        lambda c: not is_copy_constructor(c) and c.access_type == 'public',
         recursive=False,
         allow_empty=True)
     if decls:
@@ -515,7 +553,7 @@ def has_any_non_copyconstructor(type):
     this function will return list of them, otherwise None"""
     class_ = class_traits.get_declaration(type)
     decls = class_.constructors(
-        lambda c: not c.is_copy_constructor and c.access_type == 'public',
+        lambda c: not is_copy_constructor(c) and c.access_type == 'public',
         recursive=False,
         allow_empty=True)
     if decls:
@@ -985,7 +1023,7 @@ def is_noncopyable(class_):
 
     # if class has public, user defined copy constructor, than this class is
     # copyable
-    copy_ = class_decl.find_copy_constructor()
+    copy_ = find_copy_constructor(class_decl)
     if copy_ and copy_.access_type == 'public' and not copy_.is_artificial:
         return False
 
@@ -999,7 +1037,7 @@ def is_noncopyable(class_):
 
         if not has_copy_constructor(base_desc.related_class):
 
-            base_copy_ = base_desc.related_class.find_copy_constructor()
+            base_copy_ = find_copy_constructor(base_desc.related_class)
 
             if base_copy_:
 

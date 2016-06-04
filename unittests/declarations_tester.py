@@ -206,7 +206,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         error_text = "copy constructor has not been found"
         self.assertTrue(1 == len(
             [constructor for constructor in constructor_found if
-                constructor.is_copy_constructor]), error_text)
+                declarations.is_copy_constructor(constructor)]), error_text)
         # there is nothing to check about constructors - I know the
         # implementation of parser.
         # In this case it doesn't different from any other function

@@ -175,6 +175,7 @@ from .type_traits import has_public_destructor
 from .type_traits import has_public_constructor
 from .type_traits import has_trivial_constructor
 from .type_traits import find_trivial_constructor
+from .type_traits import find_copy_constructor
 from .type_traits import has_public_binary_operator
 from .type_traits import has_any_non_copyconstructor
 

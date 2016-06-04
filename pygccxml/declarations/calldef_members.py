@@ -184,8 +184,6 @@ class constructor_t(member_calldef_t):
         res = "%s(%s)" % (name, ", ".join(args))
         # Append the declaration class
         cls = 'constructor'
-        if self.is_copy_constructor:
-            cls = 'copy ' + cls
         return "%s [%s]" % (res, cls)
 
     @property

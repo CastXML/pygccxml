@@ -15,6 +15,7 @@ from . import algorithm
 from . import decl_visitor
 from . import variable_t
 from . import calldef_t
+from . import type_traits
 from .. import utils
 
 
@@ -243,7 +244,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
         if self.__print_details:
             self.writer(indent +
                         'copy constructor: ' +
-                        str(self.__inst.is_copy_constructor) +
+                        str(type_traits.is_copy_constructor(self.__inst)) +
                         os.linesep)
 
     def visit_destructor(self):

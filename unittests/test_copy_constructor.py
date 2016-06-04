@@ -35,11 +35,11 @@ class tester_t(parser_test_case.parser_test_case_t):
                 ctors.append(decl)
 
         # test::test(test const & t0) [copy constructor]
-        self.assertTrue(ctors[0].is_copy_constructor)
+        self.assertTrue(declarations.is_copy_constructor(ctors[0]))
         # test::test(float const & t0) [constructor]
-        self.assertFalse(ctors[1].is_copy_constructor)
+        self.assertFalse(declarations.is_copy_constructor(ctors[1]))
         # test::test(myvar t0) [constructor]
-        self.assertFalse(ctors[2].is_copy_constructor)
+        self.assertFalse(declarations.is_copy_constructor(ctors[2]))
 
         t2class = self.global_ns.class_("test2")
         ctors = []
@@ -56,9 +56,9 @@ class tester_t(parser_test_case.parser_test_case_t):
             positions = [1, 0]
 
         # test2::test2() [constructor]
-        self.assertFalse(ctors[positions[0]].is_copy_constructor)
+        self.assertFalse(declarations.is_copy_constructor(ctors[positions[0]]))
         # test2::test2(test2 const & arg0) [copy constructor]
-        self.assertTrue(ctors[positions[1]].is_copy_constructor)
+        self.assertTrue(declarations.is_copy_constructor(ctors[positions[1]]))
 
 
 def create_suite():

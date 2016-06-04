@@ -552,24 +552,28 @@ class class_t(scopedef.scopedef_t):
         return self._container_traits
 
     def find_copy_constructor(self):
-        copy_ = self.constructors(
-            lambda x: x.is_copy_constructor,
-            recursive=False,
-            allow_empty=True)
-        if copy_:
-            return copy_[0]
-        else:
-            return None
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The find_copy_constructor method is deprecated. \n" +
+            "Please use the find_copy_constructor function from the"
+            "type_traits module instead.",
+            DeprecationWarning)
+
+        from . import type_traits  # prevent cyclic dependencies
+        return type_traits.find_copy_constructor(self)
 
     def find_trivial_constructor(self):
-        trivial = self.constructors(
-            lambda x: x.is_trivial_constructor,
-            recursive=False,
-            allow_empty=True)
-        if trivial:
-            return trivial[0]
-        else:
-            return None
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The find_trivial_constructor method is deprecated. \n" +
+            "Please use the find_trivial_constructor function from the"
+            "type_traits module instead.",
+            DeprecationWarning)
+
+        from . import type_traits  # prevent cyclic dependencies
+        return type_traits.find_trivial_constructor(self)
 
     def _get_partial_name_impl(self):
         from . import type_traits  # prevent cyclic dependencies
