@@ -461,6 +461,62 @@ def find_copy_constructor(type_):
         return None
 
 
+def find_noncopyable_vars(type_):
+    """
+    Returns list of all `noncopyable` variables.
+
+    Args:
+        type_ (declarations.class_t): the class to be searched.
+
+    Returns:
+        list: list of all `noncopyable` variables.
+
+    """
+    assert(isinstance(type_, class_declaration.class_t))
+
+    logger = utils.loggers.cxx_parser
+    mvars = type_.variables(
+        lambda v: not v.type_qualifiers.has_static,
+        recursive=False,
+        allow_empty=True)
+    noncopyable_vars = []
+
+    message = (
+        "__contains_noncopyable_mem_var - %s - TRUE - " +
+        "contains const member variable")
+
+    for mvar in mvars:
+
+        type_ = remove_reference(mvar.decl_type)
+
+        if is_const(type_):
+            no_const = remove_const(type_)
+            if is_fundamental(no_const) or is_enum(no_const):
+                logger.debug((message + "- fundamental or enum")
+                             % type_.decl_string)
+                noncopyable_vars.append(mvar)
+            if is_class(no_const):
+                logger.debug((message + " - class") % type_.decl_string)
+                noncopyable_vars.append(mvar)
+            if is_array(no_const):
+                logger.debug((message + " - array") % type_.decl_string)
+                noncopyable_vars.append(mvar)
+
+        if class_traits.is_my_case(type_):
+
+            cls = class_traits.get_declaration(type_)
+            if is_noncopyable(cls):
+                logger.debug((message + " - class that is not copyable")
+                             % type_.decl_string)
+                noncopyable_vars.append(mvar)
+
+    logger.debug(
+        ("__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
+            "contain noncopyable members") % type_.decl_string)
+
+    return noncopyable_vars
+
+
 def has_trivial_constructor(class_):
     """if class has public trivial constructor, this function will return
     reference to it, None otherwise"""
@@ -994,7 +1050,7 @@ def __is_noncopyable_single(class_):
             "    public destructor: yes"])
         logger.debug(msg)
         return False
-    if class_.find_noncopyable_vars():
+    if find_noncopyable_vars(class_):
         logger.debug(
             ("__is_noncopyable_single(TRUE) - %s - contains noncopyable " +
              "members") % class_.decl_string)
