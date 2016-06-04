@@ -557,7 +557,7 @@ class class_t(scopedef.scopedef_t):
         warnings.warn(
             "The find_copy_constructor method is deprecated. \n" +
             "Please use the find_copy_constructor function from the"
-            "type_traits module instead.",
+            "declarations module instead.",
             DeprecationWarning)
 
         from . import type_traits  # prevent cyclic dependencies
@@ -569,7 +569,7 @@ class class_t(scopedef.scopedef_t):
         warnings.warn(
             "The find_trivial_constructor method is deprecated. \n" +
             "Please use the find_trivial_constructor function from the"
-            "type_traits module instead.",
+            "declarations module instead.",
             DeprecationWarning)
 
         from . import type_traits  # prevent cyclic dependencies
@@ -640,7 +640,7 @@ class class_t(scopedef.scopedef_t):
         # Deprecated since 1.8.0. Will be removed in 1.9.0
         warnings.warn(
             "The has_vtable argument is deprecated. \n" +
-            "Please use the has_vtable function from the type_traits \n" +
+            "Please use the has_vtable function from the declarations \n" +
             "module instead.",
             DeprecationWarning)
 

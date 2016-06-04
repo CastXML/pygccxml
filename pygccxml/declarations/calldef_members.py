@@ -198,7 +198,7 @@ class constructor_t(member_calldef_t):
         warnings.warn(
             "The is_copy_constructor attribute is deprecated. \n" +
             "Please use the is_copy_constructor function from the \n" +
-            "type_traits module instead.",
+            "declarations module instead.",
             DeprecationWarning)
 
         # prevent cyclic dependencies
@@ -212,7 +212,7 @@ class constructor_t(member_calldef_t):
         warnings.warn(
             "The is_trivial_constructor attribute is deprecated. \n" +
             "Please use the is_trivial_constructor function from the \n" +
-            "type_traits module instead.",
+            "declarations module instead.",
             DeprecationWarning)
 
         # prevent cyclic dependencies
