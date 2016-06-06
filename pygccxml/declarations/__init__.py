@@ -166,10 +166,8 @@ from .type_traits import remove_reference
 from .type_traits import remove_declarated
 
 from .type_traits import has_destructor
-from .type_traits import has_public_less
 from .type_traits import has_copy_constructor
 
-from .type_traits import has_public_equal
 from .type_traits import has_public_assign
 from .type_traits import has_public_destructor
 from .type_traits import has_public_constructor
@@ -177,8 +175,11 @@ from .type_traits import has_trivial_constructor
 from .type_traits import find_trivial_constructor
 from .type_traits import find_copy_constructor
 from .type_traits import find_noncopyable_vars
-from .type_traits import has_public_binary_operator
 from .type_traits import has_any_non_copyconstructor
+
+from .has_operator_matcher import has_public_binary_operator
+from .has_operator_matcher import has_public_equal
+from .has_operator_matcher import has_public_less
 
 from .type_traits import auto_ptr_traits
 from .type_traits import smart_pointer_traits
