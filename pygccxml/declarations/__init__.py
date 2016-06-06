@@ -221,15 +221,16 @@ from .matchers import matcher_base_t
 from .matchers import or_matcher_t
 from .matchers import and_matcher_t
 from .matchers import not_matcher_t
-from .matchers import declaration_matcher_t
-from .matchers import calldef_matcher_t
-from .matchers import namespace_matcher_t
-from .matchers import variable_matcher_t
 from .matchers import regex_matcher_t
-from .matchers import access_type_matcher_t
-from .matchers import operator_matcher_t
 from .matchers import custom_matcher_t
+from .matchers import access_type_matcher_t
 from .matchers import virtuality_type_matcher_t
+
+from .declarations_matchers import declaration_matcher_t
+from .declarations_matchers import calldef_matcher_t
+from .declarations_matchers import namespace_matcher_t
+from .declarations_matchers import variable_matcher_t
+from .declarations_matchers import operator_matcher_t
 
 from .mdecl_wrapper import mdecl_wrapper_t
 
