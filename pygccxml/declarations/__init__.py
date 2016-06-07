@@ -117,6 +117,10 @@ from .free_calldef import free_operator_t
 from .decl_visitor import decl_visitor_t
 from .type_visitor import type_visitor_t
 
+from .type_traits import decompose_type
+from .type_traits import decompose_class
+from .type_traits import base_type
+
 from .type_traits import is_bool
 from .type_traits import is_same
 from .type_traits import is_void
@@ -145,6 +149,7 @@ from .type_traits import remove_pointer
 from .type_traits import remove_volatile
 from .type_traits import remove_reference
 from .type_traits import remove_declarated
+from .type_traits import remove_alias
 
 from .has_operator_matcher import has_public_binary_operator
 from .has_operator_matcher import has_public_equal
@@ -205,11 +210,6 @@ from .container_traits import unordered_set_traits
 from .container_traits import unordered_multiset_traits
 
 from .function_traits import is_same_function
-
-from .type_traits_utils import decompose_type
-from .type_traits_utils import decompose_class
-from .type_traits_utils import base_type
-from .type_traits_utils import remove_alias
 
 from . import templates
 from . import call_invocation

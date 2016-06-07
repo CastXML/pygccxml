@@ -7,7 +7,6 @@ import os
 
 from . import class_declaration
 from . import type_traits
-from . import type_traits_utils
 from . import enumeration
 from . import calldef_members
 from . import calldef_types
@@ -33,7 +32,7 @@ class declaration_xxx_traits(object):
         - get reference to the declaration
     """
     sequence = [
-        type_traits_utils.remove_alias,
+        type_traits.remove_alias,
         type_traits.remove_cv,
         type_traits.remove_declarated]
 
@@ -299,13 +298,13 @@ class __is_convertible_t(object):
         return found
 
     def __normalize(self, type_):
-        type_ = type_traits_utils.remove_alias(type_)
-        bt_of_type = type_traits_utils.base_type(type_)
+        type_ = type_traits.remove_alias(type_)
+        bt_of_type = type_traits.base_type(type_)
         if isinstance(bt_of_type, cpptypes.declarated_t) \
            and isinstance(bt_of_type.declaration,
                           class_declaration.class_declaration_t):
             type_ = type_.clone()
-            bt_of_type = type_traits_utils.base_type(type_)
+            bt_of_type = type_traits.base_type(type_)
             bt_of_type.declaration = self.__find_class_by_class_declaration(
                 bt_of_type.declaration)
         return type_
@@ -342,13 +341,13 @@ class __is_convertible_t(object):
                 type_traits.is_array(source) and \
                 type_traits.is_pointer(target):
             if type_traits.is_same(
-                    type_traits_utils.base_type(source), target.base):
+                    type_traits.base_type(source), target.base):
                 return True  # X[2] => X*
         if type_traits.is_array(source) and \
                 type_traits.is_pointer(target) and \
                 type_traits.is_const(target.base):
             if type_traits.is_same(
-                    type_traits_utils.base_type(source), target.base.base):
+                    type_traits.base_type(source), target.base.base):
                 return True
 
     def __test_pointer_to_func_or_mv__to__func_or_mv(self, source, target):
@@ -447,12 +446,12 @@ class __is_convertible_t(object):
 
     def __test_fundamental__to__fundamental(self, source, target):
         if not type_traits.is_fundamental(
-                type_traits_utils.base_type(source)) or not \
+                type_traits.base_type(source)) or not \
                 type_traits.is_fundamental(
-                    type_traits_utils.base_type(target)):
+                    type_traits.base_type(target)):
             return False
-        if type_traits.is_void(type_traits_utils.base_type(source)) or \
-                type_traits.is_void(type_traits_utils.base_type(target)):
+        if type_traits.is_void(type_traits.base_type(source)) or \
+                type_traits.is_void(type_traits.base_type(target)):
             return False
         if type_traits.is_fundamental(source) and \
                 type_traits.is_fundamental(target):
@@ -477,8 +476,8 @@ class __is_convertible_t(object):
             isinstance(y, cpptypes.declarated_t))
 
     def __test_derived_to_based(self, source, target):
-        derived = type_traits_utils.base_type(source)
-        base = type_traits_utils.base_type(target)
+        derived = type_traits.base_type(source)
+        base = type_traits.base_type(target)
         if not (
                 isinstance(derived, cpptypes.declarated_t) and
                 isinstance(derived.declaration, class_declaration.class_t)):
@@ -807,7 +806,7 @@ def is_copy_constructor(constructor):
     if not type_traits.is_const(arg.decl_type.base):
         return False
 
-    un_aliased = type_traits_utils.remove_alias(arg.decl_type.base)
+    un_aliased = type_traits.remove_alias(arg.decl_type.base)
     # un_aliased now refers to const_t instance
     if not isinstance(un_aliased.base, cpptypes.declarated_t):
         # We are looking for a declaration

@@ -634,12 +634,12 @@ class impl_details(object):
     def dig_declarations(depend_on_it):
 
         # FIXME: prevent cyclic imports
-        from . import type_traits_utils
+        from . import type_traits
 
         if isinstance(depend_on_it, declaration.declaration_t):
             return [depend_on_it]
-        base_type = type_traits_utils.base_type(
-            type_traits_utils.remove_alias(depend_on_it))
+        base_type = type_traits.base_type(
+            type_traits.remove_alias(depend_on_it))
         if isinstance(base_type, cpptypes.declarated_t):
             return [base_type.declaration]
         elif isinstance(base_type, cpptypes.calldef_type_t):

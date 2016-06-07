@@ -1,5 +1,4 @@
 from . import type_traits
-from . import type_traits_utils
 from . import class_declaration
 from . import matchers
 from . import cpptypes
@@ -7,7 +6,7 @@ from . import cpptypes
 
 def has_public_binary_operator(type_, operator_symbol):
     """returns True, if `type_` has public binary operator, otherwise False"""
-    type_ = type_traits_utils.remove_alias(type_)
+    type_ = type_traits.remove_alias(type_)
     type_ = type_traits.remove_cv(type_)
     type_ = type_traits.remove_declarated(type_)
     assert isinstance(type_, class_declaration.class_t)
