@@ -10,6 +10,7 @@ defines few algorithms, that deals with different properties of functions
 from . import calldef_types
 from . import calldef_members
 from . import type_traits
+from . import type_traits_classes
 
 
 def is_same_return_type(f1, f2):
@@ -54,17 +55,19 @@ def is_same_return_type(f1, f2):
         rt2 = type_traits.remove_const(rt2)
     else:
         return False
-    if not type_traits.is_class(rt1) or not type_traits.is_class(rt2):
+    if not type_traits_classes.is_class(rt1) or not \
+            type_traits_classes.is_class(rt2):
         return type_traits.is_same(rt1, rt2)
 
-    if type_traits.is_union(rt1) or type_traits.is_union(rt2):
+    if type_traits_classes.is_union(rt1) or \
+            type_traits_classes.is_union(rt2):
         return type_traits.is_same(rt1, rt2)
 
-    c1 = type_traits.class_traits.get_declaration(rt1)
-    c2 = type_traits.class_traits.get_declaration(rt2)
+    c1 = type_traits_classes.class_traits.get_declaration(rt1)
+    c2 = type_traits_classes.class_traits.get_declaration(rt2)
     return type_traits.is_same(c1, c2) \
-        or type_traits.is_base_and_derived(c1, c2) \
-        or type_traits.is_base_and_derived(c2, c1)
+        or type_traits_classes.is_base_and_derived(c1, c2) \
+        or type_traits_classes.is_base_and_derived(c2, c1)
 
 
 def is_same_function(f1, f2):

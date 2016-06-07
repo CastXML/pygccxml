@@ -9,6 +9,7 @@ from . import calldef_types
 from . import declaration_utils
 from . import cpptypes
 from . import type_traits
+from . import type_traits_classes
 
 
 class free_calldef_t(calldef.calldef_t):
@@ -100,10 +101,11 @@ class free_operator_t(free_calldef_t, calldef_members.operator_t):
             for type_ in self.argument_types:
                 decl = None
                 type_ = type_traits.remove_reference(type_)
-                if type_traits.is_class(type_):
-                    decl = type_traits.class_traits.get_declaration(type_)
-                elif type_traits.is_class_declaration(type_):
-                    tt = type_traits.class_declaration_traits
+                if type_traits_classes.is_class(type_):
+                    decl = type_traits_classes.class_traits.get_declaration(
+                        type_)
+                elif type_traits_classes.is_class_declaration(type_):
+                    tt = type_traits_classes.class_declaration_traits
                     decl = tt.get_declaration(type_)
                 else:
                     pass

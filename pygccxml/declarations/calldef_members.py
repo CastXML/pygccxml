@@ -202,8 +202,8 @@ class constructor_t(member_calldef_t):
             DeprecationWarning)
 
         # prevent cyclic dependencies
-        from . import type_traits
-        return type_traits.is_copy_constructor(self)
+        from . import type_traits_classes
+        return type_traits_classes.is_copy_constructor(self)
 
     @property
     def is_trivial_constructor(self):
@@ -216,8 +216,8 @@ class constructor_t(member_calldef_t):
             DeprecationWarning)
 
         # prevent cyclic dependencies
-        from . import type_traits
-        return type_traits.is_trivial_constructor(self)
+        from . import type_traits_classes
+        return type_traits_classes.is_trivial_constructor(self)
 
 
 class destructor_t(member_calldef_t):

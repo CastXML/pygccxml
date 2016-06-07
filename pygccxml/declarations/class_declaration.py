@@ -560,8 +560,8 @@ class class_t(scopedef.scopedef_t):
             "declarations module instead.",
             DeprecationWarning)
 
-        from . import type_traits  # prevent cyclic dependencies
-        return type_traits.find_copy_constructor(self)
+        from . import type_traits_classes  # prevent cyclic dependencies
+        return type_traits_classes.find_copy_constructor(self)
 
     def find_trivial_constructor(self):
 
@@ -572,8 +572,8 @@ class class_t(scopedef.scopedef_t):
             "declarations module instead.",
             DeprecationWarning)
 
-        from . import type_traits  # prevent cyclic dependencies
-        return type_traits.find_trivial_constructor(self)
+        from . import type_traits_classes  # prevent cyclic dependencies
+        return type_traits_classes.find_trivial_constructor(self)
 
     def _get_partial_name_impl(self):
         from . import type_traits  # prevent cyclic dependencies
@@ -594,8 +594,8 @@ class class_t(scopedef.scopedef_t):
             "declarations module instead.",
             DeprecationWarning)
 
-        from . import type_traits  # prevent cyclic dependencies
-        type_traits.find_noncopyable_vars(self)
+        from . import type_traits_classes  # prevent cyclic dependencies
+        type_traits_classes.find_noncopyable_vars(self)
 
     @property
     def has_vtable(self):
@@ -609,8 +609,8 @@ class class_t(scopedef.scopedef_t):
             DeprecationWarning)
 
         # prevent cyclic import
-        from . import type_traits
-        return type_traits.has_vtable(self)
+        from . import type_traits_classes
+        return type_traits_classes.has_vtable(self)
 
     @property
     def top_class(self):

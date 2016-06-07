@@ -117,17 +117,6 @@ from .free_calldef import free_operator_t
 from .decl_visitor import decl_visitor_t
 from .type_visitor import type_visitor_t
 
-
-from .type_traits import is_enum
-from .type_traits import enum_declaration
-from .type_traits import enum_traits
-
-from .type_traits import is_class
-from .type_traits import class_traits
-from .type_traits import is_class_declaration
-from .type_traits import class_declaration_traits
-
-
 from .type_traits import is_bool
 from .type_traits import is_same
 from .type_traits import is_void
@@ -141,19 +130,11 @@ from .type_traits import is_reference
 from .type_traits import is_arithmetic
 from .type_traits import is_fundamental
 from .type_traits import is_floating_point
-from .type_traits import is_base_and_derived
-from .type_traits import is_convertible
-from .type_traits import is_noncopyable
 from .type_traits import is_std_string
 from .type_traits import is_std_wstring
 from .type_traits import is_std_ostream
 from .type_traits import is_std_wostream
 from .type_traits import is_calldef_pointer
-from .type_traits import is_copy_constructor
-from .type_traits import is_trivial_constructor
-
-from .type_traits import is_unary_operator
-from .type_traits import is_binary_operator
 
 from .type_traits import array_size
 from .type_traits import array_item_type
@@ -165,30 +146,42 @@ from .type_traits import remove_volatile
 from .type_traits import remove_reference
 from .type_traits import remove_declarated
 
-from .type_traits import has_destructor
-from .type_traits import has_copy_constructor
-
-from .type_traits import has_public_assign
-from .type_traits import has_public_destructor
-from .type_traits import has_public_constructor
-from .type_traits import has_trivial_constructor
-from .type_traits import find_trivial_constructor
-from .type_traits import find_copy_constructor
-from .type_traits import find_noncopyable_vars
-from .type_traits import has_any_non_copyconstructor
-
 from .has_operator_matcher import has_public_binary_operator
 from .has_operator_matcher import has_public_equal
 from .has_operator_matcher import has_public_less
 
-from .type_traits import auto_ptr_traits
-from .type_traits import smart_pointer_traits
-from .type_traits import internal_type_traits
+from .type_traits_classes import is_enum
+from .type_traits_classes import enum_declaration
+from .type_traits_classes import enum_traits
+from .type_traits_classes import is_class
+from .type_traits_classes import class_traits
+from .type_traits_classes import is_class_declaration
+from .type_traits_classes import class_declaration_traits
+from .type_traits_classes import is_base_and_derived
+from .type_traits_classes import is_convertible
+from .type_traits_classes import is_noncopyable
+from .type_traits_classes import is_copy_constructor
+from .type_traits_classes import is_trivial_constructor
+from .type_traits_classes import is_union
 
-from .type_traits_utils import decompose_type
-from .type_traits_utils import decompose_class
-from .type_traits_utils import base_type
-from .type_traits_utils import remove_alias
+from .type_traits_classes import is_unary_operator
+from .type_traits_classes import is_binary_operator
+
+from .type_traits_classes import has_destructor
+from .type_traits_classes import has_copy_constructor
+
+from .type_traits_classes import has_public_assign
+from .type_traits_classes import has_public_destructor
+from .type_traits_classes import has_public_constructor
+from .type_traits_classes import has_trivial_constructor
+from .type_traits_classes import find_trivial_constructor
+from .type_traits_classes import find_copy_constructor
+from .type_traits_classes import find_noncopyable_vars
+from .type_traits_classes import has_any_non_copyconstructor
+
+from .container_traits import auto_ptr_traits
+from .container_traits import smart_pointer_traits
+from .container_traits import internal_type_traits
 
 from .container_traits import list_traits
 from .container_traits import deque_traits
@@ -212,6 +205,11 @@ from .container_traits import unordered_set_traits
 from .container_traits import unordered_multiset_traits
 
 from .function_traits import is_same_function
+
+from .type_traits_utils import decompose_type
+from .type_traits_utils import decompose_class
+from .type_traits_utils import base_type
+from .type_traits_utils import remove_alias
 
 from . import templates
 from . import call_invocation
