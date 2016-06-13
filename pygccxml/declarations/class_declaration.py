@@ -145,8 +145,9 @@ class class_declaration_t(declaration.declaration_t):
         ( and not definition )"""
         declaration.declaration_t.__init__(self, name)
         self._aliases = []
-        self._container_traits = None
-        self._container_traits_set = False
+        self._container_traits = None  # Deprecated
+        self._container_traits_set = False  # Deprecated
+        self._container_traits_cache = None
 
     def _get__cmp__items(self):
         """implementation details"""
@@ -167,11 +168,20 @@ class class_declaration_t(declaration.declaration_t):
     @property
     def container_traits(self):
         """reference to :class:`container_traits_impl_t` or None"""
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The container_traits attribute is deprecated. \n" +
+            "Please use the find_container_traits function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
         if self._container_traits_set is False:
             from . import container_traits  # prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits(
                 self)
+            self._container_traits_cache = self._container_traits
         return self._container_traits
 
     def _get_partial_name_impl(self):
@@ -204,8 +214,9 @@ class class_t(scopedef.scopedef_t):
         self._aliases = []
         self._byte_size = 0
         self._byte_align = 0
-        self._container_traits = None
-        self._container_traits_set = False
+        self._container_traits_cache = None
+        self._container_traits = None  # Deprecated
+        self._container_traits_set = False  # Deprecated
         self._recursive_bases = None
         self._recursive_derived = None
         self._use_demangled_as_name = False
@@ -544,11 +555,20 @@ class class_t(scopedef.scopedef_t):
     @property
     def container_traits(self):
         """reference to :class:`container_traits_impl_t` or None"""
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The container_traits attribute is deprecated. \n" +
+            "Please use the find_container_traits function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
         if self._container_traits_set is False:
             from . import container_traits  # prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits(
                 self)
+            self._container_traits_cache = self.container_traits
         return self._container_traits
 
     def find_copy_constructor(self):

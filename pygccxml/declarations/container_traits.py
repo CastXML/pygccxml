@@ -688,6 +688,16 @@ container_traits = (
 
 
 def find_container_traits(cls_or_string):
+    """
+    Find the container traits type of a declaration.
+
+    Args:
+        cls_or_string (str | declarations.declaration_t): a string
+
+    Returns:
+        declarations.container_traits: a container traits
+    """
+
     if utils.is_str(cls_or_string):
         if not templates.is_instantiation(cls_or_string):
             return None
@@ -700,8 +710,18 @@ def find_container_traits(cls_or_string):
             if cls_traits.name() == name:
                 return cls_traits
     else:
+
+        if isinstance(cls_or_string, class_declaration.class_types):
+            # Look in the cache.
+            if cls_or_string._container_traits_cache is not None:
+                return cls_or_string._container_traits_cache
+
+        # Look for a container traits
         for cls_traits in container_traits:
             if cls_traits.is_my_case(cls_or_string):
+                # Store in the cache
+                if isinstance(cls_or_string, class_declaration.class_types):
+                    cls_or_string._container_traits_cache = cls_traits
                 return cls_traits
 
 
