@@ -14,8 +14,7 @@ from . import templates
 from . import type_traits
 from . import namespace
 from . import class_declaration
-from . import calldef
-from . import class_declaration_traits
+from . import traits_impl_details
 from .. import utils
 
 std_namespaces = ('std', 'stdext', '__gnu_cxx')
@@ -422,7 +421,7 @@ class container_traits_impl_t(object):
                 decl = cls_declaration.parent
 
         for ns in std_namespaces:
-            if impl_details.is_defined_in_xxx(ns, decl):
+            if traits_impl_details.impl_details.is_defined_in_xxx(ns, decl):
                 utils.loggers.queries_engine.debug(
                     "Container traits: get_container_or_none() will return " +
                     cls_declaration.name)
@@ -482,7 +481,7 @@ class container_traits_impl_t(object):
                 result = type_traits.remove_declarated(xxx_type)
             else:
                 xxx_type_str = templates.args(cls_declaration.name)[xxx_index]
-                result = impl_details.find_value_type(
+                result = traits_impl_details.impl_details.find_value_type(
                     cls_declaration.top_parent, xxx_type_str)
                 if None is result:
                     raise RuntimeError(
@@ -723,170 +722,3 @@ def find_container_traits(cls_or_string):
                 if isinstance(cls_or_string, class_declaration.class_types):
                     cls_or_string._container_traits_cache = cls_traits
                 return cls_traits
-
-
-class impl_details(object):
-
-    """implementation details"""
-    @staticmethod
-    def is_defined_in_xxx(xxx, cls):
-        """implementation details"""
-        if not cls.parent:
-            return False
-
-        if not isinstance(cls.parent, namespace.namespace_t):
-            return False
-
-        if xxx != cls.parent.name:
-            return False
-
-        xxx_ns = cls.parent
-        if not xxx_ns.parent:
-            return False
-
-        if not isinstance(xxx_ns.parent, namespace.namespace_t):
-            return False
-
-        if '::' != xxx_ns.parent.name:
-            return False
-
-        global_ns = xxx_ns.parent
-        return None is global_ns.parent
-
-    @staticmethod
-    def find_value_type(global_ns, value_type_str):
-        """implementation details"""
-        if not value_type_str.startswith('::'):
-            value_type_str = '::' + value_type_str
-        found = global_ns.decls(
-            name=value_type_str,
-            function=lambda decl: not isinstance(decl, calldef.calldef_t),
-            allow_empty=True)
-        if not found:
-            no_global_ns_value_type_str = value_type_str[2:]
-            if no_global_ns_value_type_str in cpptypes.FUNDAMENTAL_TYPES:
-                return cpptypes.FUNDAMENTAL_TYPES[no_global_ns_value_type_str]
-            elif type_traits.is_std_string(value_type_str):
-                string_ = global_ns.typedef('::std::string')
-                return type_traits.remove_declarated(string_)
-            elif type_traits.is_std_wstring(value_type_str):
-                string_ = global_ns.typedef('::std::wstring')
-                return type_traits.remove_declarated(string_)
-            else:
-                value_type_str = no_global_ns_value_type_str
-                has_const = value_type_str.startswith('const ')
-                if has_const:
-                    value_type_str = value_type_str[len('const '):]
-                has_pointer = value_type_str.endswith('*')
-                if has_pointer:
-                    value_type_str = value_type_str[:-1]
-                found = None
-                if has_const or has_pointer:
-                    found = impl_details.find_value_type(
-                        global_ns,
-                        value_type_str)
-                if not found:
-                    return None
-                else:
-                    if isinstance(found, class_declaration.class_types):
-                        found = cpptypes.declarated_t(found)
-                    if has_const:
-                        found = cpptypes.const_t(found)
-                    if has_pointer:
-                        found = cpptypes.pointer_t(found)
-                    return found
-        if len(found) == 1:
-            return found[0]
-        else:
-            return None
-
-
-class internal_type_traits(object):
-
-    """small convenience class, which provides access to internal types"""
-    # TODO: add exists function
-    @staticmethod
-    def get_by_name(type_, name):
-        if class_declaration_traits.class_traits.is_my_case(type_):
-            cls = class_declaration_traits.class_traits.declaration_class(
-                type_)
-            return type_traits.remove_declarated(
-                cls.typedef(name, recursive=False).decl_type)
-        elif class_declaration_traits.is_my_case(type_):
-            cls = class_declaration_traits.get_declaration(type_)
-            value_type_str = templates.args(cls.name)[0]
-            ref = impl_details.find_value_type(cls.top_parent, value_type_str)
-            if ref:
-                return ref
-            else:
-                raise RuntimeError((
-                    "Unable to find reference to internal " +
-                    "type '%s' in type '%s'.") % (name, cls.decl_string))
-        else:
-            raise RuntimeError((
-                "Unable to find reference to internal type '%s' in type '%s'.")
-                % (name, type_.decl_string))
-
-
-class smart_pointer_traits(object):
-
-    """implements functionality, needed for convenient work with
-    smart pointers"""
-
-    @staticmethod
-    def is_smart_pointer(type_):
-        """returns True, if type represents instantiation of
-        `boost::shared_ptr` or `std::shared_ptr`, False otherwise"""
-        type_ = type_traits.remove_alias(type_)
-        type_ = type_traits.remove_cv(type_)
-        type_ = type_traits.remove_declarated(type_)
-        if not isinstance(type_,
-                          (class_declaration.class_declaration_t,
-                           class_declaration.class_t)):
-            return False
-        if not (impl_details.is_defined_in_xxx('boost', type_) or
-                impl_details.is_defined_in_xxx('std', type_)):
-            return False
-        return type_.decl_string.startswith('::boost::shared_ptr<') or \
-            type_.decl_string.startswith('::std::shared_ptr<')
-
-    @staticmethod
-    def value_type(type_):
-        """returns reference to `boost::shared_ptr` \
-        or `std::shared_ptr` value type"""
-        if not smart_pointer_traits.is_smart_pointer(type_):
-            raise TypeError(
-                'Type "%s" is not an instantiation of \
-                boost::shared_ptr or std::shared_ptr' %
-                type_.decl_string)
-        return internal_type_traits.get_by_name(type_, "value_type")
-
-
-class auto_ptr_traits(object):
-
-    """implements functionality, needed for convenient work with
-    `std::auto_ptr` pointers"""
-
-    @staticmethod
-    def is_smart_pointer(type_):
-        """returns True, if type represents instantiation of
-        `boost::shared_ptr`, False otherwise"""
-        type_ = type_traits.remove_alias(type_)
-        type_ = type_traits.remove_cv(type_)
-        type_ = type_traits.remove_declarated(type_)
-        if not isinstance(type_,
-                          (class_declaration.class_declaration_t,
-                           class_declaration.class_t)):
-            return False
-        if not impl_details.is_defined_in_xxx('std', type_):
-            return False
-        return type_.decl_string.startswith('::std::auto_ptr<')
-
-    @staticmethod
-    def value_type(type_):
-        """returns reference to `boost::shared_ptr` value type"""
-        if not auto_ptr_traits.is_smart_pointer(type_):
-            raise TypeError(
-                'Type "%s" is not instantiation of std::auto_ptr' %
-                type_.decl_string)
-        return internal_type_traits.get_by_name(type_, "element_type")
