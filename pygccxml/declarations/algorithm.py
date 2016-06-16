@@ -126,13 +126,24 @@ def full_name(decl, with_defaults=True):
         raise RuntimeError("Unable to generate full name for None object!")
     if with_defaults:
         if not decl.cache.full_name:
-            decl.cache.full_name = full_name_from_declaration_path(
-                declaration_path(decl))
+            path = declaration_path(decl)
+            if path == [""]:
+                # Declarations without names are allowed (for examples class
+                # or struct instances). In this case set an empty name..
+                decl.cache.full_name = ""
+            else:
+                decl.cache.full_name = full_name_from_declaration_path(path)
         return decl.cache.full_name
     else:
         if not decl.cache.full_partial_name:
-            decl.cache.full_partial_name = full_name_from_declaration_path(
-                partial_declaration_path(decl))
+            path = partial_declaration_path(decl)
+            if path == [""]:
+                # Declarations without names are allowed (for examples class
+                # or struct instances). In this case set an empty name.
+                decl.cache.full_partial_name = ""
+            else:
+                decl.cache.full_partial_name = \
+                    full_name_from_declaration_path(path)
         return decl.cache.full_partial_name
 
 
