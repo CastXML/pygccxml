@@ -56,7 +56,7 @@ def args(declaration_string):
     """
     Returns list of function arguments
 
-    :type decl_string: str
+    :type declaration_string: str
     :rtype: [str]
 
     """
