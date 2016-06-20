@@ -236,11 +236,29 @@ class scopedef_t(declaration.declaration_t):
 
     @property
     def declarations(self):
-        """list of children :class:`declarations <declaration_t>`"""
+        """
+        List of children declarations.
+
+        Returns:
+            List[declarations.declaration_t]
+        """
         if self._optimized:
             return self._all_decls_not_recursive
         else:
             return self._get_declarations_impl()
+
+    @declarations.setter
+    def declarations(self, declarations):
+        """
+        Set list of all declarations defined in the namespace.
+
+        Args:
+            List[declarations.declaration_t]: list of declarations
+
+        Not implemented.
+
+        """
+        raise NotImplementedError()
 
     def remove_declaration(self, decl):
         raise NotImplementedError()

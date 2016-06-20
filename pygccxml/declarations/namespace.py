@@ -48,15 +48,25 @@ class namespace_t(scopedef.scopedef_t):
     def _get_declarations_impl(self):
         return self._declarations
 
-    @scopedef.scopedef_t.declarations.setter
+    @property
+    def declarations(self):
+        """
+        List of children declarations.
+
+        Returns:
+            List[declarations.declaration_t]
+        """
+        return scopedef.scopedef_t.declarations.fget(self)
+
+    @declarations.setter
     def declarations(self, declarations):
         """
-        List of all declarations defined in the namespace.
+        Set list of all declarations defined in the namespace.
 
-        The getter is defined in scopedef.scopedef_t.
+        Args:
+            List[declarations.declaration_t]: list of declarations
 
         """
-
         self._declarations = declarations
 
     def take_parenting(self, inst):
