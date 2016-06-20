@@ -12,11 +12,13 @@ This modules contains definition for next C++ declarations:
     - small helper class for describing C++ class hierarchy
 """
 
+import warnings
 from . import scopedef
-from . import algorithm
+from . import declaration_utils
 from . import declaration
-from . import dependencies
-from pygccxml import utils
+from . import templates
+from . import cpptypes
+from .. import utils
 
 
 class ACCESS_TYPES(object):
@@ -38,7 +40,6 @@ class CLASS_TYPES(object):
 
 
 def get_partial_name(name):
-    from . import templates
     from . import container_traits  # prevent cyclic dependencies
     ct = container_traits.find_container_traits(name)
     if ct:
@@ -70,13 +71,13 @@ class hierarchy_info_t(object):
     def __eq__(self, other):
         if not isinstance(other, hierarchy_info_t):
             return False
-        return algorithm.declaration_path(self.related_class) == \
-            algorithm.declaration_path(other.related_class) \
+        return declaration_utils.declaration_path(self.related_class) == \
+            declaration_utils.declaration_path(other.related_class) \
             and self.access == other.access \
             and self.is_virtual == other.is_virtual
 
     def __hash__(self):
-        return hash(algorithm.declaration_path(self.related_class))
+        return hash(declaration_utils.declaration_path(self.related_class))
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -85,10 +86,10 @@ class hierarchy_info_t(object):
         if not isinstance(other, self.__class__):
             return self.__class__.__name__ < other.__class__.__name__
         return (
-            algorithm.declaration_path(self.related_class),
+            declaration_utils.declaration_path(self.related_class),
             self.access,
             self.is_virtual) < (
-            algorithm.declaration_path(
+            declaration_utils.declaration_path(
                 other.related_class),
             other.access,
             self.is_virtual)
@@ -144,8 +145,9 @@ class class_declaration_t(declaration.declaration_t):
         ( and not definition )"""
         declaration.declaration_t.__init__(self, name)
         self._aliases = []
-        self._container_traits = None
-        self._container_traits_set = False
+        self._container_traits = None  # Deprecated
+        self._container_traits_set = False  # Deprecated
+        self._container_traits_cache = None
 
     def _get__cmp__items(self):
         """implementation details"""
@@ -166,11 +168,20 @@ class class_declaration_t(declaration.declaration_t):
     @property
     def container_traits(self):
         """reference to :class:`container_traits_impl_t` or None"""
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The container_traits attribute is deprecated. \n" +
+            "Please use the find_container_traits function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
         if self._container_traits_set is False:
             from . import container_traits  # prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits(
                 self)
+            self._container_traits_cache = self._container_traits
         return self._container_traits
 
     def _get_partial_name_impl(self):
@@ -203,8 +214,9 @@ class class_t(scopedef.scopedef_t):
         self._aliases = []
         self._byte_size = 0
         self._byte_align = 0
-        self._container_traits = None
-        self._container_traits_set = False
+        self._container_traits_cache = None
+        self._container_traits = None  # Deprecated
+        self._container_traits_set = False  # Deprecated
         self._recursive_bases = None
         self._recursive_derived = None
         self._use_demangled_as_name = False
@@ -226,7 +238,7 @@ class class_t(scopedef.scopedef_t):
         elif self.use_demangled_as_name and self.demangled:
 
             if not self.cache.demangled_name:
-                fname = algorithm.full_name(self.parent)
+                fname = declaration_utils.full_name(self.parent)
                 if fname.startswith('::') and \
                         not self.demangled.startswith('::'):
                     fname = fname[2:]
@@ -253,7 +265,7 @@ class class_t(scopedef.scopedef_t):
             return self._name
 
     def __str__(self):
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name[:2] == "::":
             name = name[2:]
         return "%s [%s]" % (name, self.class_type)
@@ -262,10 +274,10 @@ class class_t(scopedef.scopedef_t):
         """implementation details"""
         return [self.class_type,
                 self._sorted_list(
-                    [algorithm.declaration_path(base.related_class)
+                    [declaration_utils.declaration_path(base.related_class)
                         for base in self.bases]),
                 self._sorted_list(
-                    [algorithm.declaration_path(derive.related_class)
+                    [declaration_utils.declaration_path(derive.related_class)
                         for derive in self.derived]),
                 self.is_abstract,
                 self._sorted_list(self.public_members),
@@ -277,16 +289,16 @@ class class_t(scopedef.scopedef_t):
             return False
         return self.class_type == other.class_type \
             and self._sorted_list(
-                [algorithm.declaration_path(base.related_class)
+                [declaration_utils.declaration_path(base.related_class)
                     for base in self.bases]) \
             == other._sorted_list(
-                [algorithm.declaration_path(base.related_class)
+                [declaration_utils.declaration_path(base.related_class)
                     for base in other.bases]) \
             and self._sorted_list(
-                [algorithm.declaration_path(derive.related_class)
+                [declaration_utils.declaration_path(derive.related_class)
                     for derive in self.derived]) \
             == other._sorted_list(
-                [algorithm.declaration_path(derive.related_class)
+                [declaration_utils.declaration_path(derive.related_class)
                     for derive in other.derived]) \
             and self.is_abstract == other.is_abstract \
             and self._sorted_list(self.public_members) \
@@ -528,7 +540,7 @@ class class_t(scopedef.scopedef_t):
 
         for base in self.bases:
             answer.append(
-                dependencies.dependency_info_t(
+                dependency_info_t(
                     self,
                     base.related_class,
                     base.access_type,
@@ -543,32 +555,45 @@ class class_t(scopedef.scopedef_t):
     @property
     def container_traits(self):
         """reference to :class:`container_traits_impl_t` or None"""
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The container_traits attribute is deprecated. \n" +
+            "Please use the find_container_traits function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
         if self._container_traits_set is False:
             from . import container_traits  # prevent cyclic dependencies
             self._container_traits_set = True
             self._container_traits = container_traits.find_container_traits(
                 self)
+            self._container_traits_cache = self.container_traits
         return self._container_traits
 
     def find_copy_constructor(self):
-        copy_ = self.constructors(
-            lambda x: x.is_copy_constructor,
-            recursive=False,
-            allow_empty=True)
-        if copy_:
-            return copy_[0]
-        else:
-            return None
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The find_copy_constructor method is deprecated. \n" +
+            "Please use the find_copy_constructor function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
+        from . import type_traits_classes  # prevent cyclic dependencies
+        return type_traits_classes.find_copy_constructor(self)
 
     def find_trivial_constructor(self):
-        trivial = self.constructors(
-            lambda x: x.is_trivial_constructor,
-            recursive=False,
-            allow_empty=True)
-        if trivial:
-            return trivial[0]
-        else:
-            return None
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The find_trivial_constructor method is deprecated. \n" +
+            "Please use the find_trivial_constructor function from the"
+            "declarations module instead.",
+            DeprecationWarning)
+
+        from . import type_traits_classes  # prevent cyclic dependencies
+        return type_traits_classes.find_trivial_constructor(self)
 
     def _get_partial_name_impl(self):
         from . import type_traits  # prevent cyclic dependencies
@@ -582,62 +607,30 @@ class class_t(scopedef.scopedef_t):
     def find_noncopyable_vars(self):
         """returns list of all `noncopyable` variables"""
 
-        from . import type_traits as tt  # prevent cyclic dependencies
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The find_noncopyable_vars method is deprecated. \n" +
+            "Please use the find_noncopyable_vars function from the"
+            "declarations module instead.",
+            DeprecationWarning)
 
-        logger = utils.loggers.cxx_parser
-        mvars = self.variables(
-            lambda v: not v.type_qualifiers.has_static,
-            recursive=False,
-            allow_empty=True)
-        noncopyable_vars = []
-
-        message = (
-            "__contains_noncopyable_mem_var - %s - TRUE - " +
-            "containes const member variable")
-
-        for mvar in mvars:
-
-            type_ = tt.remove_reference(mvar.decl_type)
-
-            if tt.is_const(type_):
-                no_const = tt.remove_const(type_)
-                if tt.is_fundamental(no_const) or tt.is_enum(no_const):
-                    logger.debug((
-                        message + "- fundamental or enum")
-                        % self.decl_string)
-                    noncopyable_vars.append(mvar)
-                if tt.is_class(no_const):
-                    logger.debug((message + " - class") % self.decl_string)
-                    noncopyable_vars.append(mvar)
-                if tt.is_array(no_const):
-                    logger.debug((message + " - array") % self.decl_string)
-                    noncopyable_vars.append(mvar)
-
-            if tt.class_traits.is_my_case(type_):
-
-                cls = tt.class_traits.get_declaration(type_)
-                if tt.is_noncopyable(cls):
-                    logger.debug((
-                        message + " - class that is not copyable")
-                        % self.decl_string)
-                    noncopyable_vars.append(mvar)
-
-        logger.debug((
-            "__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
-            "contain noncopyable members") % self.decl_string)
-
-        return noncopyable_vars
+        from . import type_traits_classes  # prevent cyclic dependencies
+        type_traits_classes.find_noncopyable_vars(self)
 
     @property
     def has_vtable(self):
         """True, if class has virtual table, False otherwise"""
-        from . import calldef
-        return bool(
-            self.calldefs(
-                lambda f: isinstance(f, calldef.member_function_t) and
-                f.virtuality != calldef.VIRTUALITY_TYPES.NOT_VIRTUAL,
-                recursive=False,
-                allow_empty=True))
+
+        # Deprecated since 1.8.0. Will be removed in 1.9.0
+        warnings.warn(
+            "The has_vtable argument is deprecated. \n" +
+            "Please use the has_vtable function from the declarations \n" +
+            "module instead.",
+            DeprecationWarning)
+
+        # prevent cyclic import
+        from . import type_traits_classes
+        return type_traits_classes.has_vtable(self)
 
     @property
     def top_class(self):
@@ -653,3 +646,104 @@ class class_t(scopedef.scopedef_t):
         return curr
 
 class_types = (class_t, class_declaration_t)
+
+
+class impl_details(object):
+
+    @staticmethod
+    def dig_declarations(depend_on_it):
+
+        # FIXME: prevent cyclic imports
+        from . import type_traits
+
+        if isinstance(depend_on_it, declaration.declaration_t):
+            return [depend_on_it]
+        base_type = type_traits.base_type(
+            type_traits.remove_alias(depend_on_it))
+        if isinstance(base_type, cpptypes.declarated_t):
+            return [base_type.declaration]
+        elif isinstance(base_type, cpptypes.calldef_type_t):
+            result = []
+            result.extend(impl_details.dig_declarations(base_type.return_type))
+            for argtype in base_type.arguments_types:
+                result.extend(impl_details.dig_declarations(argtype))
+            if isinstance(base_type, cpptypes.member_function_type_t):
+                result.extend(
+                    impl_details.dig_declarations(
+                        base_type.class_inst))
+            return result
+        return []
+
+
+class dependency_info_t(object):
+
+    def __init__(self, declaration, depend_on_it, access_type=None, hint=None):
+        object.__init__(self)
+
+        assert isinstance(
+            depend_on_it,
+            (class_t,
+             cpptypes.type_t))
+        self._declaration = declaration
+        self._depend_on_it = depend_on_it
+        self._access_type = access_type
+        self._hint = hint
+
+    @property
+    def declaration(self):
+        return self._declaration
+    # short name
+    decl = declaration
+
+    @property
+    def depend_on_it(self):
+        return self._depend_on_it
+
+    @property
+    def access_type(self):
+        return self._access_type
+
+    @access_type.setter
+    def access_type(self, access_type):
+        self._access_type = access_type
+
+    def __str__(self):
+        return 'declaration "%s" depends( %s ) on "%s" ' \
+               % (self.declaration, self.access_type, self.depend_on_it)
+
+    @property
+    def hint(self):
+        """The declaration, that report dependency can put some additional
+        inforamtion about dependency. It can be used later"""
+        return self._hint
+
+    def find_out_depend_on_it_declarations(self):
+        """If declaration depends on other declaration and not on some type
+        this function will return reference to it. Otherwise None will be
+        returned
+        """
+        return impl_details.dig_declarations(self.depend_on_it)
+
+    @staticmethod
+    def i_depend_on_them(decl):
+        """Returns set of declarations. every item in the returned set,
+        depends on a declaration from the input"""
+
+        to_be_included = set()
+        for dependency_info in decl.i_depend_on_them():
+            for ddecl in dependency_info.find_out_depend_on_it_declarations():
+                if ddecl:
+                    to_be_included.add(ddecl)
+
+        if isinstance(decl.parent, class_t):
+            to_be_included.add(decl.parent)
+        return to_be_included
+
+    @staticmethod
+    def we_depend_on_them(decls):
+        """Returns set of declarations. every item in the returned set,
+        depends on a declaration from the input"""
+        to_be_included = set()
+        for decl in decls:
+            to_be_included.update(dependency_info_t.i_depend_on_them(decl))
+        return to_be_included

@@ -49,7 +49,7 @@ for decl in ns_namespace.declarations:
 for decl in ns_namespace.declarations:
     if decl.name == "b":
         print(decl)
-    if isinstance(decl, declarations.calldef.free_function_t):
+    if isinstance(decl, declarations.free_function_t):
         print(decl)
 
 # This prints:

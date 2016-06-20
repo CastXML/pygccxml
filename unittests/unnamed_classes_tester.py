@@ -31,12 +31,12 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def do_union_test(self, union_name, bitfields):
         s2 = self.global_ns.class_('S2')
-        self.assertFalse(type_traits.is_union(s2))
+        self.assertFalse(declarations.is_union(s2))
         self.assertEqual(s2.parent.name, 'S1')
-        self.assertFalse(type_traits.is_union(s2.parent))
+        self.assertFalse(declarations.is_union(s2.parent))
 
         union = s2.variable(union_name)
-        self.assertTrue(type_traits.is_union(union.decl_type))
+        self.assertTrue(declarations.is_union(union.decl_type))
 
         union_type = type_traits.remove_declarated(union.decl_type)
         self.validate_bitfields(union_type, bitfields)
@@ -81,7 +81,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         s3_vars = ['anon_mem_c', 'anon_mem_i', 's3_mem', 's2']
         for var in s3_vars:
-            self.assertFalse(type_traits.is_union(s3.variable(var).decl_type))
+            self.assertFalse(declarations.is_union(s3.variable(var).decl_type))
 
 
 def create_suite():

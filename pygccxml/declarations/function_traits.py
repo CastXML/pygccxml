@@ -7,8 +7,10 @@
 defines few algorithms, that deals with different properties of functions
 """
 
-from . import calldef
+from . import calldef_types
+from . import calldef_members
 from . import type_traits
+from . import type_traits_classes
 
 
 def is_same_return_type(f1, f2):
@@ -30,11 +32,11 @@ def is_same_return_type(f1, f2):
     if f1.__class__ is not f2.__class__:
         # it should be assert
         return False  # 2 different calldef types
-    if not isinstance(f1, calldef.member_calldef_t):
+    if not isinstance(f1, calldef_members.member_calldef_t):
         # for free functions we compare return types as usual
         return type_traits.is_same(f1.return_type, f2.return_type)
-    if f1.virtuality == calldef.VIRTUALITY_TYPES.NOT_VIRTUAL \
-       or f2.virtuality == calldef.VIRTUALITY_TYPES.NOT_VIRTUAL:
+    if f1.virtuality == calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL \
+       or f2.virtuality == calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL:
         # for non-virtual member functions we compare types as usual
         return type_traits.is_same(f1.return_type, f2.return_type)
     rt1 = f1.return_type
@@ -53,17 +55,19 @@ def is_same_return_type(f1, f2):
         rt2 = type_traits.remove_const(rt2)
     else:
         return False
-    if not type_traits.is_class(rt1) or not type_traits.is_class(rt2):
+    if not type_traits_classes.is_class(rt1) or not \
+            type_traits_classes.is_class(rt2):
         return type_traits.is_same(rt1, rt2)
 
-    if type_traits.is_union(rt1) or type_traits.is_union(rt2):
+    if type_traits_classes.is_union(rt1) or \
+            type_traits_classes.is_union(rt2):
         return type_traits.is_same(rt1, rt2)
 
-    c1 = type_traits.class_traits.get_declaration(rt1)
-    c2 = type_traits.class_traits.get_declaration(rt2)
+    c1 = type_traits_classes.class_traits.get_declaration(rt1)
+    c2 = type_traits_classes.class_traits.get_declaration(rt2)
     return type_traits.is_same(c1, c2) \
-        or type_traits.is_base_and_derived(c1, c2) \
-        or type_traits.is_base_and_derived(c2, c1)
+        or type_traits_classes.is_base_and_derived(c1, c2) \
+        or type_traits_classes.is_base_and_derived(c2, c1)
 
 
 def is_same_function(f1, f2):
@@ -77,7 +81,7 @@ def is_same_function(f1, f2):
         return True
     if f1.__class__ is not f2.__class__:
         return False
-    if isinstance(f1, calldef.member_calldef_t) and \
+    if isinstance(f1, calldef_members.member_calldef_t) and \
             f1.has_const != f2.has_const:
         return False
     if f1.name != f2.name:

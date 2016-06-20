@@ -8,7 +8,7 @@ import pprint
 import xml.sax
 import xml.sax.handler
 from .. import utils
-from pygccxml import declarations
+from .. import declarations
 
 # convention
 # XML_NN - XML Node Name

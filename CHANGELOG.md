@@ -20,8 +20,22 @@ Version 1.8.0 (not yet released)
 
 * Documentation update and cleanup
 
-* Remove compiler attribute in declarations.py and gccxml_path from config.py
+* [Removals] Remove compiler attribute in declarations.py and gccxml_path from config.py
   These were deprecated in pygccxml v1.7.0, and definitively removed for v1.8.0
+
+* [Deprecations] A bunch of attributes and methods were deprecated.
+  They will throw a warning when used with pygccxml 1.8.0, and will be removed
+  in version 1.9.0.
+     * In ``class_declaration_t``` and ```class_t```:
+       - decl.container_traits attribute => declarations.find_container_traits(decl)
+     * In ```class_t```
+       - decl.find_noncopyable_vars() method => declarations.find_noncopyable_vars(decl)
+       - decl.find_copy_constructor() method => declarations.find_copy_constructor(decl)
+       - decl.has_vtable argument => declarations.has_vtable(decl)
+     * ```constructor_t```
+       - ctor.is_copy_constructor attribute  => declarations.is_copy_constructor(ctor)
+       - ctor.is_trivial_constructor attribute => declarations.is_trivial_constructor(ctor)
+
 
 Version 1.7.6
 -------------

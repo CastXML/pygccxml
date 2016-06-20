@@ -10,7 +10,7 @@ Describe a C++ namespace declaration.
 
 import warnings
 from . import scopedef
-from . import algorithm
+from . import declaration_utils
 
 
 class namespace_t(scopedef.scopedef_t):
@@ -32,7 +32,7 @@ class namespace_t(scopedef.scopedef_t):
         self._declarations = declarations
 
     def __str__(self):
-        name = algorithm.full_name(self)
+        name = declaration_utils.full_name(self)
         if name != "::" and name[:2] == "::":
             name = name[2:]
         return "%s [namespace]" % name
@@ -270,3 +270,12 @@ class namespace_t(scopedef.scopedef_t):
             for decl in self.declarations:
                 answer.extend(decl.i_depend_on_them())
         return answer
+
+
+def get_global_namespace(decls):
+    found = [
+        decl for decl in scopedef.make_flatten(decls) if decl.name == '::' and
+        isinstance(decl, namespace_t)]
+    if len(found) == 1:
+        return found[0]
+    raise RuntimeError("Unable to find global namespace.")

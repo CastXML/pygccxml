@@ -38,7 +38,7 @@ class tester_t(parser_test_case.parser_test_case_t):
              expected.name(),
              traits.name()))
         cls = declarations.remove_declarated(typedef)
-        self.assertTrue(cls.container_traits is expected)
+        self.assertTrue(declarations.find_container_traits(cls) is expected)
         self.assertTrue(cls.partial_name == partial_name)
         cls = traits.class_declaration(cls)
 
@@ -157,7 +157,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         f2 = self.global_ns.free_fun('f2')
         type_info = f2.return_type
         traits = declarations.find_container_traits(type_info)
-        cls = traits .class_declaration(type_info)
+        cls = traits.class_declaration(type_info)
         # traits.remove_defaults(type_info)
         decl_string = cls.partial_decl_string
         key_type_string = traits.key_type(type_info).partial_decl_string
