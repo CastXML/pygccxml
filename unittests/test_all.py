@@ -72,7 +72,6 @@ import test_cpp_standards
 import unnamed_classes_tester
 import test_map_gcc5
 import test_argument_without_name
-import reopen_cache_tester
 
 testers = [
     # , demangled_tester # failing right now
@@ -137,8 +136,7 @@ testers = [
     test_cpp_standards,
     unnamed_classes_tester,
     test_map_gcc5,
-    test_argument_without_name,
-    reopen_cache_tester
+    test_argument_without_name
 ]
 
 if 'posix' in os.name:
