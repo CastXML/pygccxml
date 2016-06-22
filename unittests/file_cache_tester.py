@@ -85,9 +85,20 @@ class tester_t(parser_test_case.parser_test_case_t):
         Test opening cache files in a subprocess (with a clean environment).
 
         """
+
+        env = os.environ.copy()
+
+        # Get the path to current directory
+        path = os.path.dirname(os.path.realpath(__file__))
+        # Set the COVERAGE_PROCESS_START env. variable.
+        # Allows to cover files run in a subprocess
+        # http://nedbatchelder.com/code/coverage/subprocess.html
+        env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
+
         p = subprocess.Popen(
             [sys.executable, "unittests/reopen_cache_tester.py"],
-            stdout=subprocess.PIPE)
+            stdout=subprocess.PIPE,
+            env=env)
         print(p.stdout.read())
         p.stdout.close()
 
