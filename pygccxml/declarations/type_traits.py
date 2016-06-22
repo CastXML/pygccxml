@@ -69,18 +69,18 @@ def decompose_type(tp):
         return [tp]
 
 
-def decompose_class(type):
+def decompose_class(type_):
     """implementation details"""
-    types = decompose_type(type)
+    types = decompose_type(type_)
     return [tp.__class__ for tp in types]
 
 
-def base_type(type):
+def base_type(type_):
     """returns base type.
 
     For `const int` will return `int`
     """
-    types = decompose_type(type)
+    types = decompose_type(type_)
     return types[-1]
 
 
@@ -129,18 +129,18 @@ def is_bool(type_):
         cpptypes.bool_t())
 
 
-def is_void(type):
+def is_void(type_):
     """returns True, if type represents `void`, False otherwise"""
-    return remove_alias(type) in create_cv_types(
+    return remove_alias(type_) in create_cv_types(
         cpptypes.void_t())
 
 
-def is_void_pointer(type):
+def is_void_pointer(type_):
     """returns True, if type represents `void*`, False otherwise"""
-    return is_same(type, cpptypes.pointer_t(cpptypes.void_t()))
+    return is_same(type_, cpptypes.pointer_t(cpptypes.void_t()))
 
 
-def is_integral(type):
+def is_integral(type_):
     """returns True, if type represents C++ integral type, False otherwise"""
     integral_def = (
         create_cv_types(cpptypes.char_t()) +
@@ -159,10 +159,10 @@ def is_integral(type):
         create_cv_types(cpptypes.int128_t()) +
         create_cv_types(cpptypes.uint128_t()))
 
-    return remove_alias(type) in integral_def
+    return remove_alias(type_) in integral_def
 
 
-def is_floating_point(type):
+def is_floating_point(type_):
     """returns True, if type represents C++ floating point type,
     False otherwise"""
     float_def = (
@@ -170,44 +170,44 @@ def is_floating_point(type):
         create_cv_types(cpptypes.double_t()) +
         create_cv_types(cpptypes.long_double_t()))
 
-    return remove_alias(type) in float_def
+    return remove_alias(type_) in float_def
 
 
-def is_arithmetic(type):
+def is_arithmetic(type_):
     """returns True, if type represents C++ integral or floating point type,
     False otherwise"""
-    return is_integral(type) or is_floating_point(type)
+    return is_integral(type_) or is_floating_point(type_)
 
 
-def is_pointer(type):
+def is_pointer(type_):
     """returns True, if type represents C++ pointer type, False otherwise"""
-    return does_match_definition(type,
+    return does_match_definition(type_,
                                  cpptypes.pointer_t,
                                  (cpptypes.const_t, cpptypes.volatile_t)) \
-        or does_match_definition(type,
+        or does_match_definition(type_,
                                  cpptypes.pointer_t,
                                  (cpptypes.volatile_t, cpptypes.const_t))
 
 
-def is_calldef_pointer(type):
+def is_calldef_pointer(type_):
     """returns True, if type represents pointer to free/member function,
     False otherwise"""
-    if not is_pointer(type):
+    if not is_pointer(type_):
         return False
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     nake_type = remove_cv(nake_type)
     return isinstance(nake_type, cpptypes.compound_t) \
         and isinstance(nake_type.base, cpptypes.calldef_type_t)
 
 
-def remove_pointer(type):
+def remove_pointer(type_):
     """removes pointer from the type definition
 
     If type is not pointer type, it will be returned as is.
     """
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if not is_pointer(nake_type):
-        return type
+        return type_
     elif isinstance(nake_type, cpptypes.volatile_t) and \
             isinstance(nake_type.base, cpptypes.pointer_t):
         return cpptypes.volatile_t(nake_type.base.base)
@@ -221,28 +221,28 @@ def remove_pointer(type):
             cpptypes.volatile_t(cpptypes.const_t(nake_type.base.base.base))
         )
     elif isinstance(nake_type.base, cpptypes.calldef_type_t):
-        return type
+        return type_
     else:
         return nake_type.base
 
 
-def is_reference(type):
+def is_reference(type_):
     """returns True, if type represents C++ reference type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     return isinstance(nake_type, cpptypes.reference_t)
 
 
-def is_array(type):
+def is_array(type_):
     """returns True, if type represents C++ array type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     nake_type = remove_reference(nake_type)
     nake_type = remove_cv(nake_type)
     return isinstance(nake_type, cpptypes.array_t)
 
 
-def array_size(type):
+def array_size(type_):
     """returns array size"""
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     nake_type = remove_reference(nake_type)
     nake_type = remove_cv(nake_type)
     assert isinstance(nake_type, cpptypes.array_t)
@@ -263,21 +263,21 @@ def array_item_type(type_):
             "types")
 
 
-def remove_reference(type):
+def remove_reference(type_):
     """removes reference from the type definition
 
     If type is not reference type, it will be returned as is.
     """
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if not is_reference(nake_type):
-        return type
+        return type_
     else:
         return nake_type.base
 
 
-def is_const(type):
+def is_const(type_):
     """returns True, if type represents C++ const type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if isinstance(nake_type, cpptypes.const_t):
         return True
     elif isinstance(nake_type, cpptypes.volatile_t):
@@ -340,9 +340,9 @@ def is_same(type1, type2):
     return nake_type1 == nake_type2
 
 
-def is_volatile(type):
+def is_volatile(type_):
     """returns True, if type represents C++ volatile type, False otherwise"""
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if isinstance(nake_type, cpptypes.volatile_t):
         return True
     elif isinstance(nake_type, cpptypes.const_t):
@@ -352,14 +352,14 @@ def is_volatile(type):
     return False
 
 
-def remove_volatile(type):
+def remove_volatile(type_):
     """removes volatile from the type definition
 
     If type is not volatile type, it will be returned as is
     """
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if not is_volatile(nake_type):
-        return type
+        return type_
     else:
         if isinstance(nake_type, cpptypes.array_t):
             is_c = is_const(nake_type)
@@ -374,12 +374,12 @@ def remove_volatile(type):
         return nake_type.base
 
 
-def remove_cv(type):
+def remove_cv(type_):
     """removes const and volatile from the type definition"""
 
-    nake_type = remove_alias(type)
+    nake_type = remove_alias(type_)
     if not is_const(nake_type) and not is_volatile(nake_type):
-        return type
+        return type_
     result = nake_type
     if is_const(result):
         result = remove_const(result)
@@ -390,14 +390,14 @@ def remove_cv(type):
     return result
 
 
-def is_fundamental(type):
+def is_fundamental(type_):
     """returns True, if type represents C++ fundamental type"""
     return does_match_definition(
-        type,
+        type_,
         cpptypes.fundamental_t,
         (cpptypes.const_t, cpptypes.volatile_t)) \
         or does_match_definition(
-            type,
+            type_,
             cpptypes.fundamental_t,
             (cpptypes.volatile_t, cpptypes.const_t))
 
