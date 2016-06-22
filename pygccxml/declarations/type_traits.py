@@ -465,7 +465,9 @@ def is_std_string(type_):
         return type_ in string_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in string_equivalences
+        type_ = remove_reference(type_)
+        type_ = remove_cv(type_)
+        return type_.decl_string in string_equivalences
 
 
 def is_std_wstring(type_):
@@ -478,7 +480,9 @@ def is_std_wstring(type_):
         return type_ in wstring_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in wstring_equivalences
+        type_ = remove_reference(type_)
+        type_ = remove_cv(type_)
+        return type_.decl_string in wstring_equivalences
 
 
 def is_std_ostream(type_):
@@ -491,7 +495,9 @@ def is_std_ostream(type_):
         return type_ in ostream_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in ostream_equivalences
+        type_ = remove_reference(type_)
+        type_ = remove_cv(type_)
+        return type_.decl_string in ostream_equivalences
 
 
 def is_std_wostream(type_):
@@ -504,4 +510,6 @@ def is_std_wostream(type_):
         return type_ in wostream_equivalences
     else:
         type_ = remove_alias(type_)
-        return remove_cv(type_).decl_string in wostream_equivalences
+        type_ = remove_reference(type_)
+        type_ = remove_cv(type_)
+        return type_.decl_string in wostream_equivalences

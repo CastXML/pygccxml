@@ -14,6 +14,12 @@ Version 1.8.0 (not yet released)
   is the one used since many years now. The two other classes will be removed
   in 1.9.0.
 
+* ```declarations.is_string```, ```declarations.is_std_wstring```,
+  ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
+  correctly work when a the type is also a reference.
+  Example: ```declarations.is_string``` returned false for
+  ```typedef std::string& x3;```; it will return true now.
+
 * General code style overhaul (with the help of quantifiedcode.com)
 
 * Added a bunch of new examples

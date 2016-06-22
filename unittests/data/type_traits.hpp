@@ -27,7 +27,9 @@ struct some_struct_t{
 
 namespace is_std_ostream{
 namespace yes{
-    typedef std::ostream ostream_type;
+    typedef std::ostream ostream_type1;
+    typedef std::ostream& ostream_type2;
+    typedef const std::ostream& ostream_type3;
 }
 namespace no{
     typedef int int__;
@@ -36,7 +38,9 @@ namespace no{
 
 namespace is_std_wostream{
 namespace yes{
-    typedef std::wostream wostream_type;
+    typedef std::wostream wostream_type1;
+    typedef std::wostream& wostream_type2;
+    typedef const std::wostream& wostream_type3;
 }
 namespace no{
     typedef int int__;
