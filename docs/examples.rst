@@ -14,5 +14,6 @@ First examples
    examples/searching1/example.rst
    examples/searching/example.rst
    examples/equality/example.rst
+   examples/functions/example.rst
    examples/caching/example.rst
    examples/print-example/example.rst
