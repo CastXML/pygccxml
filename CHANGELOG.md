@@ -6,14 +6,6 @@ Version 1.8.0 (not yet released)
 
 * find_xml_generator will now look for castxml first
 
-* Deprecate the ns() method. The namespace() method can be used instead.
-  ns() will be removed in 1.9.0.
-
-* Deprecate etree_scanner_t and etree_saxifier_t classes.
-  The most efficient xml scanner class is the ietree_scanner_t class, which
-  is the one used since many years now. The two other classes will be removed
-  in 1.9.0.
-
 * ```declarations.is_string```, ```declarations.is_std_wstring```,
   ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
   correctly work when a the type is also a reference.
@@ -41,6 +33,12 @@ Version 1.8.0 (not yet released)
      * ```constructor_t```
        - ctor.is_copy_constructor attribute  => declarations.is_copy_constructor(ctor)
        - ctor.is_trivial_constructor attribute => declarations.is_trivial_constructor(ctor)
+
+     * Deprecate the ns() method. The namespace() method can be used instead.
+
+     * Deprecate etree_scanner_t and etree_saxifier_t classes.
+       The most efficient xml scanner class is the ietree_scanner_t class, which
+       is the one used since many years now.
 
 
 Version 1.7.6
