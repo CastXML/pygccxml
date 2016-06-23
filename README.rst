@@ -19,25 +19,19 @@ pygccxml is a specialized XML reader that reads the output from CastXML or GCCXM
 Install
 -------
 
-You can use pip to install pygccxml:
+Install instructions can be found `here <http://pygccxml.readthedocs.io/en/develop/install.html>`_.
 
-  pip install pygccxml
+Documentation and examples
+--------------------------
 
-To install from source, you can use the usual procedure:
-
-  python setup.py install
+The documentation can be found `here <http://pygccxml.readthedocs.io>`_, examples can be found `here <http://pygccxml.readthedocs.io/en/develop/examples.html>`_.
 
 Contact us
 ----------
 
-You can contact us through the CastXML mailing list: http://public.kitware.com/mailman/listinfo/castxml
+You can contact us through the `CastXML mailing list <http://public.kitware.com/mailman/listinfo/castxml/>`_.
 
-For issues with pygccxml you can open an issue here: https://github.com/gccxml/pygccxml/issues
-
-Documentation
--------------
-
-For examples and tutorials see the documentation: http://pygccxml.readthedocs.io
+For issues with pygccxml you can open an issue `here <https://github.com/gccxml/pygccxml/issues/>`_.
 
 Branches
 --------
@@ -50,8 +44,6 @@ Testing and code coverage
 -------------------------
 
 pygccxml has more than 200 unit tests. They are run after each code commit to ensure
-that the code stays functional and stable. You can find the builds here:
-https://travis-ci.org/gccxml/pygccxml/builds
+that the code stays functional and stable. You can find the builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_.
 
-Code coverage is also available. It is automatically updated after each commit and can be found here:
-https://coveralls.io/r/gccxml/pygccxml
+Code coverage is also available. It is automatically updated after each commit and can be found `here <https://coveralls.io/r/gccxml/pygccxml>`_.
