@@ -89,6 +89,23 @@ class MainFoo4 : Foo4 {
     char b;
 };
 
+// -----------------------------------------------
+
+// Foo5 is a base class, with a variable foo of type Foo4, which is not
+// copyable
+class Foo5 {
+  private:
+    Foo5();
+  protected:
+    const Foo4 foo;
+};
+
+// Use the base class
+class MainFoo5 : Foo5 {
+  public:
+    char b;
+};
+
 }
 
 #endif//__non_copyable_classes_hpp__

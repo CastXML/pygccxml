@@ -49,6 +49,9 @@ class tester_t(parser_test_case.parser_test_case_t):
         MainFoo4 = self.global_ns.class_('MainFoo4')
         self.assertTrue(declarations.is_noncopyable(MainFoo4))
 
+        MainFoo5 = self.global_ns.class_('MainFoo5')
+        self.assertTrue(declarations.is_noncopyable(MainFoo5))
+
 
 def create_suite():
     suite = unittest.TestSuite()
