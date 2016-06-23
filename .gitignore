@@ -9,5 +9,5 @@ dist
 build
 pygccxml.egg-info
 *.prof
-.coverage
+.coverage*
 docs/examples/caching/example.hpp.xml
