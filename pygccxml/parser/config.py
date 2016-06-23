@@ -12,6 +12,10 @@ import os
 import copy
 import platform
 import subprocess
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import SafeConfigParser as ConfigParser
 from .. import utils
 
 
@@ -343,10 +347,6 @@ def load_xml_generator_configuration(configuration, **defaults):
     """
     parser = configuration
     if utils.is_str(configuration):
-        try:
-            from configparser import ConfigParser
-        except ImportError:
-            from ConfigParser import SafeConfigParser as ConfigParser
         parser = ConfigParser()
         parser.read(configuration)
 
