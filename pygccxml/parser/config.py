@@ -424,9 +424,18 @@ def create_compiler_path(xml_generator, compiler_path):
 
     return compiler_path
 
-# Keep these for backward compatibility
-gccxml_configuration_t = xml_generator_configuration_t
-load_gccxml_configuration = load_xml_generator_configuration
+
+gccxml_configuration_t = utils.utils.DeprecationWrapper(
+    xml_generator_configuration_t,
+    "gccxml_configuration_t",
+    "xml_generator_configuration_t",
+    "1.9.0")
+load_gccxml_configuration = utils.utils.DeprecationWrapper(
+    load_xml_generator_configuration,
+    "load_gccxml_configuration",
+    "load_xml_generator_configuration",
+    "1.9.0")
+
 
 if __name__ == '__main__':
     print(load_xml_generator_configuration('xml_generator.cfg').__dict__)

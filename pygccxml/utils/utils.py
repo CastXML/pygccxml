@@ -469,3 +469,31 @@ class cxx_standard(object):
     def is_cxx1z(self):
         """Returns true if -std=c++1z is being used"""
         return self._cplusplus == cxx_standard.__STD_CXX['-std=c++1z']
+
+
+class DeprecationWrapper(object):
+    """
+    A small wrapper class useful when deprecation classes.
+
+    This class is not part of the public API.
+
+    """
+    def __init__(self, new_target, old_name, new_name, version):
+        self.new_target = new_target
+        self.old_name = old_name
+        self.new_name = new_name
+        self.version = version
+
+    def _warn(self):
+        warnings.warn(
+            self.old_name + " is deprecated. Please use " + self.new_name +
+            " instead. This will be removed in version " + self.version,
+            DeprecationWarning)
+
+    def __call__(self, *args, **kwargs):
+        self._warn()
+        return self.new_target(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        self._warn()
+        return getattr(self.new_target, attr)
