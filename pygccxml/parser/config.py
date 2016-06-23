@@ -321,43 +321,26 @@ compiler_path=
 
 def load_xml_generator_configuration(configuration, **defaults):
     """
-    loads CastXML or GCC-XML configuration from an `.ini` file or any other
-    file class
-    :class:`configparser.ConfigParser` is able to parse.
+    Loads CastXML or GCC-XML configuration.
 
-    :param configuration: configuration could be
-                          string(configuration file path) or instance
-                          of :class:`configparser.ConfigParser` class
+    Args:
+         configuration (string|configparser.ConfigParser): can be
+             a string (file path to a configuration file) or
+             instance of :class:`configparser.ConfigParser`.
+         defaults: can be used to override single configuration values.
 
-    :rtype: :class:`.xml_generator_configuration_t`
+    Returns:
+        :class:`.xml_generator_configuration_t`: a configuration object
 
-    Configuration file skeleton::
 
-       [gccxml]
-       #path to gccxml or castxml executable file - optional, if not provided,
-       os.environ['PATH']
-       #variable is used to find it
-       gccxml_path=(deprecated)
-       xml_generator_path=
-       #gccxml working directory - optional, could be set to your source
-       code directory
-       working_directory=
-       #additional include directories, separated by ';'
-       include_paths=
-       #gccxml has a nice algorithms, which selects what C++ compiler
-       to emulate.
-       #You can explicitly set what compiler it should emulate.
-       #Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
-       compiler=
-       # gccxml or castxml
-       xml_generator=
-       # Do we keep xml files or not after errors
-       keep_xml=
-       # Set the path to the compiler
-       compiler_path=
+    The file passed needs to be in a format that can be parsed by
+    :class:`configparser.ConfigParser`.
+
+    An example configuration file skeleton can be found
+    `here <https://github.com/gccxml/pygccxml/blob/develop/
+    unittests/xml_generator.cfg>`_.
 
     """
-
     parser = configuration
     if utils.is_str(configuration):
         try:
