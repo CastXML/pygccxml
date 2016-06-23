@@ -12,6 +12,7 @@ import os
 import copy
 import platform
 import subprocess
+import warnings
 try:
     from configparser import ConfigParser
 except ImportError:
@@ -298,7 +299,29 @@ class xml_generator_configuration_t(parser_configuration_t):
                     'valid file name.') % self.xml_generator_path
                 raise RuntimeError(msg)
 
-gccxml_configuration_example = \
+
+class _StringDeprecationWrapper(str):
+    """
+    A small wrapper class useful when deprecation strings.
+
+    This class is not part of the public API.
+
+    """
+
+    def __new__(cls, content):
+        cls.content = content
+        return str.__new__(cls, content)
+
+    def __str__(self):
+        warnings.warn(
+            "gccxml_configuration_example is deprecated. There is an " +
+            "example file here if you need one: unittests/xml_generator.cfg"
+            "This will be removed in version 1.9.0",
+            DeprecationWarning)
+        return self.content
+
+
+gccxml_configuration_example = _StringDeprecationWrapper(
     """
 [gccxml]
 #path to gccxml executable file - optional, if not provided, os.environ['PATH']
@@ -320,7 +343,7 @@ xml_generator=
 keep_xml=
 # Set the path to the compiler
 compiler_path=
-"""
+""")
 
 
 def load_xml_generator_configuration(configuration, **defaults):
