@@ -168,13 +168,12 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 # Mangled name is only available for functions and variables
                 # when using castxml.
                 print_mangled = False
-                if "GCC" in utils.xml_generator:
-                    if self.__inst.mangled:
-                        print_mangled = True
-                elif "CastXML" in utils.xml_generator:
-                    if isinstance(self.__inst, variable_t) or \
-                            isinstance(self.__inst, calldef_t):
-                        if self.__inst.mangled:
+                if "GCC" in utils.xml_generator and self.__inst.mangled:
+                    print_mangled = True
+                elif "CastXML" in utils.xml_generator and \
+                    (isinstance(self.__inst, variable_t) or
+                        isinstance(self.__inst, calldef_t)) and \
+                        self.__inst.mangled:
                             print_mangled = True
 
                 if print_mangled:

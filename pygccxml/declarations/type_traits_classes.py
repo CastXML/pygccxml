@@ -328,25 +328,26 @@ class __is_convertible_t(object):
                 return False
             else:
                 return True  # X => void*
-        if type_traits.is_pointer(source) and type_traits.is_pointer(target):
-            if type_traits.is_const(target.base) and \
-                    type_traits.is_same(source.base, target.base.base):
+        if type_traits.is_pointer(source) and \
+                type_traits.is_pointer(target) and \
+                type_traits.is_const(target.base) and \
+                type_traits.is_same(source.base, target.base.base):
                 return True  # X* => const X*
         if type_traits.is_reference(source) and \
-                type_traits.is_reference(target):
-            if type_traits.is_const(target.base) and \
-                    type_traits.is_same(source.base, target.base.base):
+                type_traits.is_reference(target) and \
+                type_traits.is_const(target.base) and \
+                type_traits.is_same(source.base, target.base.base):
                 return True  # X& => const X&
         if not type_traits.is_const(source) and \
                 type_traits.is_array(source) and \
-                type_traits.is_pointer(target):
-            if type_traits.is_same(
+                type_traits.is_pointer(target) and \
+                type_traits.is_same(
                     type_traits.base_type(source), target.base):
                 return True  # X[2] => X*
         if type_traits.is_array(source) and \
                 type_traits.is_pointer(target) and \
-                type_traits.is_const(target.base):
-            if type_traits.is_same(
+                type_traits.is_const(target.base) and \
+                type_traits.is_same(
                     type_traits.base_type(source), target.base.base):
                 return True
 
@@ -583,8 +584,8 @@ class __is_convertible_t(object):
 
         # may be target is class too, so in this case we should check whether
         # is has constructor from source
-        if isinstance(target, cpptypes.declarated_t):
-            if isinstance(target.declaration, class_declaration.class_t):
+        if isinstance(target, cpptypes.declarated_t) and \
+                isinstance(target.declaration, class_declaration.class_t):
                 constructors = scopedef.find_all_declarations(
                     target.declaration.declarations,
                     decl_type=calldef_members.constructor_t,
@@ -669,19 +670,16 @@ def is_noncopyable(class_):
 
             base_copy_ = find_copy_constructor(base_desc.related_class)
 
-            if base_copy_:
-
-                if base_copy_.access_type == 'private':
-                    logger.debug(
-                        true_header +
-                        "there is private copy constructor")
-                    return True
-            else:
-                if __is_noncopyable_single(base_desc.related_class):
-                    logger.debug(
-                        true_header +
-                        "__is_noncopyable_single returned True")
-                    return True
+            if base_copy_ and base_copy_.access_type == 'private':
+                logger.debug(
+                    true_header +
+                    "there is private copy constructor")
+                return True
+            elif __is_noncopyable_single(base_desc.related_class):
+                logger.debug(
+                    true_header +
+                    "__is_noncopyable_single returned True")
+                return True
 
         if __is_noncopyable_single(base_desc.related_class):
             logger.debug(
