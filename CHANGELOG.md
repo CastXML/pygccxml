@@ -39,6 +39,9 @@ Version 1.8.0 (not yet released)
      * Deprecate etree_scanner_t and etree_saxifier_t classes.
        The most efficient xml scanner class is the ietree_scanner_t class, which
        is the one used since many years now.
+       
+     * The [gccxml] section used in the configuration file is now deprecated.
+       Please use [xml_generator] instead.
 
 
 Version 1.7.6
