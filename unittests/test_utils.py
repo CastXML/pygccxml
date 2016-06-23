@@ -9,7 +9,7 @@ import parser_test_case
 from pygccxml import utils
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def test(self):
         path = os.path.normpath("/mypath/folder1/folder2/folder3")
@@ -28,7 +28,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

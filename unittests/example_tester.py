@@ -8,7 +8,7 @@ import unittest
 import subprocess
 
 
-class tester_t(unittest.TestCase):
+class Test(unittest.TestCase):
 
     def test_example(self):
         """Runs the example in the docs directory"""
@@ -39,7 +39,7 @@ class tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

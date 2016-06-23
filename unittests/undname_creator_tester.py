@@ -16,7 +16,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     global_ns = None
 
@@ -83,10 +83,10 @@ class tester_t(parser_test_case.parser_test_case_t):
             ext)
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-            tester_t.global_ns.init_optimizer()
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.global_ns.init_optimizer()
 
             process = subprocess.Popen(
                 args='scons msvc_compiler=%s' %
@@ -213,7 +213,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

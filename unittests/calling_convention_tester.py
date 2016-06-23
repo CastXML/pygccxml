@@ -7,7 +7,7 @@ import unittest
 from pygccxml import declarations
 
 
-class tester_t(unittest.TestCase):
+class Test(unittest.TestCase):
 
     def test_extract(self):
         data = [
@@ -26,7 +26,7 @@ class tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

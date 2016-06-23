@@ -10,7 +10,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     global_ns = None
 
@@ -20,10 +20,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-        self.global_ns = tester_t.global_ns
+            Test.global_ns = declarations.get_global_namespace(decls)
+        self.global_ns = Test.global_ns
 
     def test_yes(self):
         yes_ns = self.global_ns.namespace('yes')
@@ -44,7 +44,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

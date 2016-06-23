@@ -12,7 +12,7 @@ from pygccxml import declarations
 from pygccxml import utils
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     declarations = None
 
@@ -22,9 +22,9 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.declarations = None
 
     def setUp(self):
-        if not tester_t.declarations:
-            tester_t.declarations = parser.parse([self.header], self.config)
-        self.declarations = tester_t.declarations
+        if not Test.declarations:
+            Test.declarations = parser.parse([self.header], self.config)
+        self.declarations = Test.declarations
 
     def __test_type_category(self, ns_name, controller):
         ns_control = declarations.find_declaration(
@@ -384,9 +384,9 @@ class missing_decls_tester_t(unittest.TestCase):
         # self.declarations = None
 
     # def setUp(self):
-        # if not tester_t.declarations:
-        # tester_t.declarations = parser.parse([self.header], self.config)
-        # self.declarations = tester_t.declarations
+        # if not Test.declarations:
+        # Test.declarations = parser.parse([self.header], self.config)
+        # self.declarations = Test.declarations
 
     # def test( self ):
         # x = declarations.find_declaration( self.declarations
@@ -440,7 +440,7 @@ class class_traits_tester_t(unittest.TestCase):
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(class_traits_tester_t))
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     suite.addTest(unittest.makeSuite(missing_decls_tester_t))
     return suite
 

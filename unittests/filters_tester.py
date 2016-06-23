@@ -11,7 +11,7 @@ from pygccxml import declarations
 from pygccxml import utils
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     global_ns = None
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
 
@@ -21,11 +21,11 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-            tester_t.global_ns.init_optimizer()
-        self.global_ns = tester_t.global_ns
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.global_ns.init_optimizer()
+        self.global_ns = Test.global_ns
 
     def test_regex(self):
         criteria = declarations.regex_matcher_t(
@@ -94,7 +94,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

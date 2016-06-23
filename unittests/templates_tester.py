@@ -8,7 +8,7 @@ import unittest
 from pygccxml import declarations
 
 
-class tester_t(unittest.TestCase):
+class Test(unittest.TestCase):
 
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(
@@ -85,7 +85,7 @@ class tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

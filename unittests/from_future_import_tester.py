@@ -11,7 +11,7 @@ from pygccxml import declarations
 from pygccxml import parser
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     """
     Some methods like namespace() verify if their argument is a string.
@@ -40,7 +40,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 
