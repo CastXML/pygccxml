@@ -76,6 +76,7 @@ import test_argument_without_name
 testers = [
     # , demangled_tester # failing right now
     # , undname_creator_tester # failing right now
+    pep8_tester,
     decl_string_tester,
     declaration_files_tester,
     declarations_comparison_tester,
@@ -128,7 +129,6 @@ testers = [
     inline_specifier_tester,
     test_create_decl_string,
     from_future_import_tester,
-    pep8_tester,
     example_tester,
     test_utils,
     test_va_list_tag_removal,
