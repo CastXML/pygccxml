@@ -84,14 +84,16 @@ def base_type(type_):
     return types[-1]
 
 
-def create_cv_types(base):
-    """implementation details"""
+def _create_cv_types(base):
+    """
+    Implementation detail.
+
+    """
     return (
         [base,
-         cpptypes.const_t(
-             base),
-            cpptypes.volatile_t(base),
-            cpptypes.volatile_t(cpptypes.const_t(base))]
+         cpptypes.const_t(base),
+         cpptypes.volatile_t(base),
+         cpptypes.volatile_t(cpptypes.const_t(base))]
     )
 
 
@@ -125,14 +127,12 @@ def does_match_definition(given, main, secondary):
 
 def is_bool(type_):
     """returns True, if type represents `bool`, False otherwise"""
-    return remove_alias(type_) in create_cv_types(
-        cpptypes.bool_t())
+    return remove_alias(type_) in _create_cv_types(cpptypes.bool_t())
 
 
 def is_void(type_):
     """returns True, if type represents `void`, False otherwise"""
-    return remove_alias(type_) in create_cv_types(
-        cpptypes.void_t())
+    return remove_alias(type_) in _create_cv_types(cpptypes.void_t())
 
 
 def is_void_pointer(type_):
@@ -142,21 +142,21 @@ def is_void_pointer(type_):
 
 # Tuple of integral c++ types.
 _integral_def = (
-    create_cv_types(cpptypes.char_t()) +
-    create_cv_types(cpptypes.unsigned_char_t()) +
-    create_cv_types(cpptypes.signed_char_t()) +
-    create_cv_types(cpptypes.wchar_t()) +
-    create_cv_types(cpptypes.short_int_t()) +
-    create_cv_types(cpptypes.short_unsigned_int_t()) +
-    create_cv_types(cpptypes.bool_t()) +
-    create_cv_types(cpptypes.int_t()) +
-    create_cv_types(cpptypes.unsigned_int_t()) +
-    create_cv_types(cpptypes.long_int_t()) +
-    create_cv_types(cpptypes.long_unsigned_int_t()) +
-    create_cv_types(cpptypes.long_long_int_t()) +
-    create_cv_types(cpptypes.long_long_unsigned_int_t()) +
-    create_cv_types(cpptypes.int128_t()) +
-    create_cv_types(cpptypes.uint128_t()))
+    _create_cv_types(cpptypes.char_t()) +
+    _create_cv_types(cpptypes.unsigned_char_t()) +
+    _create_cv_types(cpptypes.signed_char_t()) +
+    _create_cv_types(cpptypes.wchar_t()) +
+    _create_cv_types(cpptypes.short_int_t()) +
+    _create_cv_types(cpptypes.short_unsigned_int_t()) +
+    _create_cv_types(cpptypes.bool_t()) +
+    _create_cv_types(cpptypes.int_t()) +
+    _create_cv_types(cpptypes.unsigned_int_t()) +
+    _create_cv_types(cpptypes.long_int_t()) +
+    _create_cv_types(cpptypes.long_unsigned_int_t()) +
+    _create_cv_types(cpptypes.long_long_int_t()) +
+    _create_cv_types(cpptypes.long_long_unsigned_int_t()) +
+    _create_cv_types(cpptypes.int128_t()) +
+    _create_cv_types(cpptypes.uint128_t()))
 
 
 def is_integral(type_):
@@ -176,9 +176,9 @@ def is_floating_point(type_):
     """returns True, if type represents C++ floating point type,
     False otherwise"""
     float_def = (
-        create_cv_types(cpptypes.float_t()) +
-        create_cv_types(cpptypes.double_t()) +
-        create_cv_types(cpptypes.long_double_t()))
+        _create_cv_types(cpptypes.float_t()) +
+        _create_cv_types(cpptypes.double_t()) +
+        _create_cv_types(cpptypes.long_double_t()))
 
     return remove_alias(type_) in float_def
 
