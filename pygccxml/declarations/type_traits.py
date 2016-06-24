@@ -140,26 +140,36 @@ def is_void_pointer(type_):
     return is_same(type_, cpptypes.pointer_t(cpptypes.void_t()))
 
 
-def is_integral(type_):
-    """returns True, if type represents C++ integral type, False otherwise"""
-    integral_def = (
-        create_cv_types(cpptypes.char_t()) +
-        create_cv_types(cpptypes.unsigned_char_t()) +
-        create_cv_types(cpptypes.signed_char_t()) +
-        create_cv_types(cpptypes.wchar_t()) +
-        create_cv_types(cpptypes.short_int_t()) +
-        create_cv_types(cpptypes.short_unsigned_int_t()) +
-        create_cv_types(cpptypes.bool_t()) +
-        create_cv_types(cpptypes.int_t()) +
-        create_cv_types(cpptypes.unsigned_int_t()) +
-        create_cv_types(cpptypes.long_int_t()) +
-        create_cv_types(cpptypes.long_unsigned_int_t()) +
-        create_cv_types(cpptypes.long_long_int_t()) +
-        create_cv_types(cpptypes.long_long_unsigned_int_t()) +
-        create_cv_types(cpptypes.int128_t()) +
-        create_cv_types(cpptypes.uint128_t()))
+# Tuple of integral c++ types.
+_integral_def = (
+    create_cv_types(cpptypes.char_t()) +
+    create_cv_types(cpptypes.unsigned_char_t()) +
+    create_cv_types(cpptypes.signed_char_t()) +
+    create_cv_types(cpptypes.wchar_t()) +
+    create_cv_types(cpptypes.short_int_t()) +
+    create_cv_types(cpptypes.short_unsigned_int_t()) +
+    create_cv_types(cpptypes.bool_t()) +
+    create_cv_types(cpptypes.int_t()) +
+    create_cv_types(cpptypes.unsigned_int_t()) +
+    create_cv_types(cpptypes.long_int_t()) +
+    create_cv_types(cpptypes.long_unsigned_int_t()) +
+    create_cv_types(cpptypes.long_long_int_t()) +
+    create_cv_types(cpptypes.long_long_unsigned_int_t()) +
+    create_cv_types(cpptypes.int128_t()) +
+    create_cv_types(cpptypes.uint128_t()))
 
-    return remove_alias(type_) in integral_def
+
+def is_integral(type_):
+    """
+    Check if type is a C++ integral type
+
+    Args:
+        type_ (type_t): The type to be checked
+
+    Returns:
+        bool: True if type is a C++ integral type, False otherwise.
+    """
+    return remove_alias(type_) in _integral_def
 
 
 def is_floating_point(type_):
