@@ -70,7 +70,6 @@ class defaults_eraser(object):
         return answer
 
     def erase_call(self, cls_name):
-        global find_container_traits
         c_traits = find_container_traits(cls_name)
         if not c_traits:
             return cls_name
