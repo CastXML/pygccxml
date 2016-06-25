@@ -203,7 +203,6 @@ class dll_file_parser_t(formated_mapping_parser_t):
     """parser for Windows .dll file"""
 
     def __init__(self, global_ns, map_file_path):
-        global dll_file_parser_warning
         warnings.warn(dll_file_parser_warning, LicenseWarning)
         formated_mapping_parser_t.__init__(
             self,
