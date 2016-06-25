@@ -30,7 +30,6 @@ def is_instantiation(decl_string):
 
     :rtype: bool
     """
-    global __THE_PARSER
     return __THE_PARSER.has_pattern(decl_string)
 
 
@@ -41,7 +40,6 @@ def name(decl_string):
     :type decl_string: str
     :rtype: str
     """
-    global __THE_PARSER
     return __THE_PARSER.name(decl_string)
 
 
@@ -52,25 +50,21 @@ def args(decl_string):
     :type decl_string: `str`
     :rtype: [`str`]
     """
-    global __THE_PARSER
     return __THE_PARSER.args(decl_string)
 
 
 def split(decl_string):
     """returns (name, [arguments] )"""
-    global __THE_PARSER
     return __THE_PARSER.split(decl_string)
 
 
 def split_recursive(decl_string):
     """returns [(name, [arguments])]"""
-    global __THE_PARSER
     return __THE_PARSER.split_recursive(decl_string)
 
 
 def join(name, args):
     """returns name< argument_1, argument_2, ..., argument_n >"""
-    global __THE_PARSER
     return __THE_PARSER.join(name, args)
 
 
@@ -80,5 +74,4 @@ def normalize(decl_string):
     this functionality allows to implement comparison of 2 different string
     which are actually same: x::y< z > and x::y<z>
     """
-    global __THE_PARSER
     return __THE_PARSER.normalize(decl_string)
