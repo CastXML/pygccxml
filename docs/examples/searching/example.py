@@ -38,19 +38,19 @@ double_type = declarations.cpptypes.double_t()
 
 # Search for the function by name
 criteria = declarations.calldef_matcher(name="func1")
-funcA = declarations.matcher.get_single(criteria, ns_namespace)
+func1 = declarations.matcher.get_single(criteria, ns_namespace)
 
 # Search for functions which return an int
 criteria = declarations.calldef_matcher(return_type="int")
-funcB = declarations.matcher.get_single(criteria, ns_namespace)
+func2 = declarations.matcher.get_single(criteria, ns_namespace)
 
 # Search for functions which return an int, using the cpptypes class
 criteria = declarations.calldef_matcher(return_type=int_type)
-funcC = declarations.matcher.get_single(criteria, ns_namespace)
+func3 = declarations.matcher.get_single(criteria, ns_namespace)
 
-print(funcA)
-print(funcB)
-print(funcC)
+print(func1)
+print(func2)
+print(func3)
 
 # This prints:
 # int ns::func1(int a) [free function]
@@ -59,11 +59,11 @@ print(funcC)
 
 # Search for functions which return a double. Two functions will be found
 criteria = declarations.calldef_matcher(return_type=double_type)
-funcD = declarations.matcher.find(criteria, ns_namespace)
+func4 = declarations.matcher.find(criteria, ns_namespace)
 
-print(len(funcD))
-print(funcD[0])
-print(funcD[1])
+print(len(func4))
+print(func4[0])
+print(func4[1])
 
 # This prints:
 # 2

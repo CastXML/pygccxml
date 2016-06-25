@@ -210,13 +210,13 @@ def read_export_table(dll_name, mmap=False, use_kernel=False):
                 raise DllException(
                     "Cant open, errcode = %d" %
                     kernel32.GetLastError())
-            mapH = kernel32.CreateFileMappingW(fileh, 0, 0x8000002, 0, 0, 0)
-            if mapH == 0:
+            maph = kernel32.CreateFileMappingW(fileh, 0, 0x8000002, 0, 0, 0)
+            if maph == 0:
                 raise DllException(
                     "Cant mmap, errocode = %d" %
                     kernel32.GetLastError())
             base_addr = ctypes.windll.kernel32.MapViewOfFile(
-                mapH, 0x4, 0, 0, 0)
+                maph, 0x4, 0, 0, 0)
             if base_addr == 0:
                 raise DllException(
                     "Cant mmap(2), errocode = %d" %
