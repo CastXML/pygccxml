@@ -72,19 +72,19 @@ class core_t(parser_test_case.parser_test_case_t):
                 ns is ns12.parent is ns22.parent is ns32.parent),
             'There are 2 or more instances of ns namespace.')
 
-        E11 = self.global_ns.enum(enums[0])
-        E21 = self.global_ns.enum(enums[1])
-        E31 = self.global_ns.enum(enums[2])
+        e11 = self.global_ns.enum(enums[0])
+        e21 = self.global_ns.enum(enums[1])
+        e31 = self.global_ns.enum(enums[2])
         self.assertTrue(
-            E11.parent is E21.parent is E31.parent,
+            e11.parent is e21.parent is e31.parent,
             'There are 2 or more instances of global namespace.')
 
-        nsE12 = self.global_ns.enum(enums[3])
-        nsE23 = self.global_ns.enum(enums[4])
-        nsE33 = self.global_ns.enum(enums[5])
+        nse12 = self.global_ns.enum(enums[3])
+        nse23 = self.global_ns.enum(enums[4])
+        nse33 = self.global_ns.enum(enums[5])
         self.assertTrue(
             ns and (
-                ns is nsE12.parent is nsE23.parent is nsE33.parent),
+                ns is nse12.parent is nse23.parent is nse33.parent),
             'There are 2 or more instances of ns namespace.')
 
     def _test_ns_membership(self, ns, enum_name):
