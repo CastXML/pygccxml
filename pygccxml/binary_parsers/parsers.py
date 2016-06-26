@@ -423,8 +423,15 @@ class dylib_file_parser_t(formated_mapping_parser_t):
 
 
 def merge_information(global_ns, fname, runs_under_unittest=False):
+
     """high level function - select the appropriate binary file parser and
     integrates the information from the file to the declarations tree. """
+
+    warnings.warn(
+        "merge_information is deprecated.\n" +
+        "Please have a look at the changelog for an explanation (since 1.8.0)",
+        DeprecationWarning)
+
     ext = os.path.splitext(fname)[1]
 
     if '.dll' == ext:

@@ -21,10 +21,23 @@ Version 1.8.0 (not yet released)
 * [Removals] Remove compiler attribute in declarations.py and gccxml_path from config.py
   These were deprecated in pygccxml v1.7.0, and definitively removed for v1.8.0
 
-* [Deprecations] A bunch of attributes and methods were deprecated.
-  They will throw a warning when used with pygccxml 1.8.0, and will be removed
-  in version 1.9.0.
-     * In ``class_declaration_t``` and ```class_t```:
+* [Deprecations]
+  * The ```binary_parsers``` module was deprecated. It seems that this module is not
+    used by other third-party projects, at least a quick search on GitHub
+    did not give any interesting usage. Also, this code is not tested, and
+    there seem to be some undefined variables, so it is highly probable that this
+    module is not working anyway.
+    I do not want to put much efforts in maintaining this module, but concentrate
+    on improving pygccxml's core features. If somebody wants to revive this
+    module it can still be done in a separate project.
+    Thus, the 3 following functions are now deprecated and will be removed in
+    pygccxml 1.9.0: ```merge_information```, ```undecorate_blob``` and ```format_decl```.
+    The ```undname_creator_t``` class is also deprecated for the same reason.
+
+  * A bunch of attributes and methods were deprecated.
+   They will throw a warning when used with pygccxml 1.8.0, and will be removed
+   in version 1.9.0.
+     * In ```class_declaration_t``` and ```class_t```:
        - decl.container_traits attribute => declarations.find_container_traits(decl)
      * In ```class_t```
        - decl.find_noncopyable_vars() method => declarations.find_noncopyable_vars(decl)

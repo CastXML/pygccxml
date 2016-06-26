@@ -18,6 +18,7 @@ On Linux:
 import os
 import re
 import ctypes
+import warnings
 from .. import declarations
 
 
@@ -94,6 +95,13 @@ class undname_creator_t(object):
     """
 
     def __init__(self):
+
+        warnings.warn(
+            "undname_creator_t is deprecated.\n" +
+            "Please have a look at the changelog for an explanation " +
+            "(since 1.8.0)",
+            DeprecationWarning)
+
         if 'nt' == os.name:
             import ctypes.wintypes
             self.__undname = ctypes.windll.dbghelp.UnDecorateSymbolName
