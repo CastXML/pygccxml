@@ -36,13 +36,15 @@ class default_argument_patcher_t(object):
         else:
             return None
 
-    def __join_names(self, prefix, suffix):
+    @staticmethod
+    def __join_names(prefix, suffix):
         if prefix == '::':
             return '::' + suffix
         else:
             return prefix + '::' + suffix
 
-    def __is_unqualified_enum(self, func, arg):
+    @staticmethod
+    def __is_unqualified_enum(func, arg):
         type_ = declarations.remove_reference(
             declarations.remove_cv(arg.decl_type))
         if not declarations.is_enum(type_):
@@ -66,7 +68,8 @@ class default_argument_patcher_t(object):
             qualifier_decl_string,
             arg.default_value.split('::')[-1])
 
-    def __is_invalid_integral(self, func, arg):
+    @staticmethod
+    def __is_invalid_integral(func, arg):
         type_ = declarations.remove_reference(
             declarations.remove_cv(arg.decl_type))
         if not declarations.is_integral(type_):
@@ -156,7 +159,8 @@ class default_argument_patcher_t(object):
                 return enum
         return None
 
-    def __is_double_call(self, func, arg):
+    @staticmethod
+    def __is_double_call(func, arg):
         call_invocation = declarations.call_invocation
         dv = arg.default_value
         found1 = call_invocation.find_args(dv)
@@ -169,7 +173,8 @@ class default_argument_patcher_t(object):
         args2 = call_invocation.args(dv[found2[0]: found2[1] + 1])
         return len(args1) == len(args2)
 
-    def __fix_double_call(self, func, arg):
+    @staticmethod
+    def __fix_double_call(func, arg):
         call_invocation = declarations.call_invocation
         dv = arg.default_value
         found1 = call_invocation.find_args(dv)
@@ -178,7 +183,8 @@ class default_argument_patcher_t(object):
         args2 = call_invocation.args(dv[found2[0]: found2[1] + 1])
         return call_invocation.join(dv[:found1[0]], args2)
 
-    def __is_constructor_call(self, func, arg):
+    @staticmethod
+    def __is_constructor_call(func, arg):
         # if '0.9' in utils.xml_generator:
         #    return False
         call_invocation = declarations.call_invocation

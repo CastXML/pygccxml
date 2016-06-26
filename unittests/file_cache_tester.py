@@ -80,7 +80,8 @@ class Test(parser_test_case.parser_test_case_t):
             ("cached declarations and source declarations are different, " +
                 "after pickling"))
 
-    def test_reopen_cache(self):
+    @staticmethod
+    def test_reopen_cache():
         """
         Test opening cache files in a subprocess (with a clean environment).
 

@@ -259,7 +259,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
         if name in self.deep_declarations:
             self.__inst = None
 
-    def __read_location(self, decl, attrs):
+    @staticmethod
+    def __read_location(decl, attrs):
 
         to_skip = []
         if "CastXML" in utils.xml_generator:
@@ -294,13 +295,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
             self.__members[parent] = []
         self.__members[parent].append(attrs[XML_AN_ID])
 
-    def __read_members(self, decl, attrs):
+    @staticmethod
+    def __read_members(decl, attrs):
         decl.declarations = attrs.get(XML_AN_MEMBERS, "")
 
-    def __read_bases(self, decl, attrs):
+    @staticmethod
+    def __read_bases(decl, attrs):
         decl.bases = attrs.get(XML_AN_BASES, "")
 
-    def __read_artificial(self, decl, attrs):
+    @staticmethod
+    def __read_artificial(decl, attrs):
         decl.is_artificial = attrs.get(XML_AN_ARTIFICIAL, False)
 
     def __read_mangled(self, decl, attrs):
@@ -311,10 +315,12 @@ class scanner_t(xml.sax.handler.ContentHandler):
             mangled = mangled[:self.__mangled_suffix_len]
         decl.mangled = mangled
 
-    def __read_demangled(self, decl, attrs):
+    @staticmethod
+    def __read_demangled(decl, attrs):
         decl.demangled = attrs.get(XML_AN_DEMANGLED)
 
-    def __read_attributes(self, decl, attrs):
+    @staticmethod
+    def __read_attributes(decl, attrs):
         decl.attributes = attrs.get(XML_AN_ATTRIBUTES)
 
     def __read_access(self, attrs):
@@ -323,19 +329,22 @@ class scanner_t(xml.sax.handler.ContentHandler):
             XML_AN_ACCESS,
             declarations.ACCESS_TYPES.PUBLIC)
 
-    def __read_byte_size(self, decl, attrs):
+    @staticmethod
+    def __read_byte_size(decl, attrs):
         """Using duck typing to set the size instead of in constructor"""
         size = attrs.get(XML_AN_SIZE, 0)
         # Make sure the size is in bytes instead of bits
         decl.byte_size = int(size) / 8
 
-    def __read_byte_offset(self, decl, attrs):
+    @staticmethod
+    def __read_byte_offset(decl, attrs):
         """Using duck typing to set the offset instead of in constructor"""
         offset = attrs.get(XML_AN_OFFSET, 0)
         # Make sure the size is in bytes instead of bits
         decl.byte_offset = int(offset) / 8
 
-    def __read_byte_align(self, decl, attrs):
+    @staticmethod
+    def __read_byte_align(decl, attrs):
         """Using duck typing to set the alignment"""
         align = attrs.get(XML_AN_ALIGN, 0)
         # Make sure the size is in bytes instead of bits
@@ -344,7 +353,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_root(self, attrs):
         pass
 
-    def __read_file(self, attrs):
+    @staticmethod
+    def __read_file(attrs):
         return attrs.get(XML_AN_NAME, '')
 
     def __read_namespace(self, attrs):
@@ -373,7 +383,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
         num = int(attrs[XML_AN_INIT])
         self.__inst.append_value(name, num)
 
-    def __guess_int_value(self, value_as_str):
+    @staticmethod
+    def __guess_int_value(value_as_str):
         # returns instance of int or None
         # if gcc compiled the code, than it is correct!
         numeric_suffix_letters = 'UuLlFf'
@@ -399,7 +410,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # warnings.warn( msg )
         return declarations.array_t(type_, size + 1)
 
-    def __read_cv_qualified_type(self, attrs):
+    @staticmethod
+    def __read_cv_qualified_type(attrs):
         if XML_AN_CONST in attrs and XML_AN_VOLATILE in attrs:
             return declarations.volatile_t(
                 declarations.const_t(attrs[XML_AN_TYPE]))
@@ -412,13 +424,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
         else:
             assert 0
 
-    def __read_pointer_type(self, attrs):
+    @staticmethod
+    def __read_pointer_type(attrs):
         return declarations.pointer_t(attrs[XML_AN_TYPE])
 
-    def __read_reference_type(self, attrs):
+    @staticmethod
+    def __read_reference_type(attrs):
         return declarations.reference_t(attrs[XML_AN_TYPE])
 
-    def __read_fundamental_type(self, attrs):
+    @staticmethod
+    def __read_fundamental_type(attrs):
         try:
             return declarations.FUNDAMENTAL_TYPES[attrs.get(XML_AN_NAME, '')]
         except KeyError:
@@ -430,7 +445,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             #    "pygccxml error: unable to find fundamental type with " +
             #    "name '%s'.") % attrs.get( XML_AN_NAME, '' ) )
 
-    def __read_offset_type(self, attrs):
+    @staticmethod
+    def __read_offset_type(attrs):
         base = attrs[XML_AN_BASE_TYPE]
         type_ = attrs[XML_AN_TYPE]
         if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
@@ -610,7 +626,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             operator.name = 'operator' + operator.name
         return operator
 
-    def __read_version(self, attrs):
+    @staticmethod
+    def __read_version(attrs):
         logger = utils.loggers.cxx_parser
         version_str = attrs.get(XML_AN_CVS_REVISION, 0.6)
         version = float(version_str)

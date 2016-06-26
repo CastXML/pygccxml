@@ -108,7 +108,8 @@ class decl_cache_tester(unittest.TestCase):
         cache = declarations_cache.file_cache_t(cache_file)
         self.assertTrue(len(cache._file_cache_t__cache) == 1)
 
-    def build_differing_cfg_list(self):
+    @staticmethod
+    def build_differing_cfg_list():
         """ Return a list of configurations that all differ. """
         cfg_list = []
         def_cfg = xml_generator_configuration_t(

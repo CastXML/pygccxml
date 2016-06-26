@@ -170,7 +170,8 @@ class Test(parser_test_case.parser_test_case_t):
             "key type string %r doesn't start with 'std::'" %
             key_type_string)
 
-    def test_from_ogre(self):
+    @staticmethod
+    def test_from_ogre():
         x = (
             'map<std::string, bool (*)(std::string&, ' +
             'Ogre::MaterialScriptContext&), std::less<std::string>, ' +
