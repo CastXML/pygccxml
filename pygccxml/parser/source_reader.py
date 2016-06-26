@@ -110,6 +110,28 @@ class source_reader_t(object):
         """
 
         if self.__config.xml_generator == "gccxml":
+
+            # Check if the gccxml which is being used is not the gccxml
+            # package that exists in newer debian versions, and which is
+            # a wrapper around CastXML. I do not want to support this hybrid
+            # package because it can mislead pygccxml by applying patches
+            # for gccxml when in fact we are using CastXML. People can still
+            # use the gccxml.real binary from the gccxml package; or CastXML
+            # directly.
+            p = subprocess.Popen([self.__config.xml_generator_path],
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE)
+            help = p.stdout.read().decode("utf-8")
+            p.stdout.close()
+            p.stderr.close()
+            if "CastXML wrapper" in help:
+                raise RuntimeError(
+                    "You are using the gccxml debian package, which is a " +
+                    "wrapper around CastXML. This is not allowed.\n" +
+                    "Please use the gccxml.real binary from that package, "
+                    "or use CastXML directly (which is recommended, as GCCXML "
+                    "is now deprecated).")
+
             return self.__create_command_line_gccxml(source_file, xml_file)
         elif self.__config.xml_generator == "castxml":
             return self.__create_command_line_castxml(source_file, xml_file)

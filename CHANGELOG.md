@@ -6,6 +6,12 @@ Version 1.8.0 (not yet released)
 
 * find_xml_generator will now look for castxml first
 
+* Do not allow to use the GCCXML provided by newer gccxml debian packages.
+  It is a wrapper around CastXML which can confuse pygccxml.
+  You should use the castxml package and the CastXML binary instead.
+  If you really want to use gccxml, the gccxml.real binary from the
+  gccxml debian package can still be used.
+
 * ```declarations.is_string```, ```declarations.is_std_wstring```,
   ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
   correctly work when a the type is also a reference.

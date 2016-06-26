@@ -125,6 +125,10 @@ class parser_configuration_t(object):
     @xml_generator.setter
     def xml_generator(self, xml_generator):
         """set xml_generator (gccxml or castxml)"""
+        if "real" in xml_generator:
+            # Support for gccxml.real from newer gccxml package
+            # Can be removed once gccxml support is dropped.
+            xml_generator = "gccxml"
         self.__xml_generator = xml_generator
 
     @property
