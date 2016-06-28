@@ -157,7 +157,7 @@ def remove_file_no_raise(file_name, config):
             os.remove(file_name)
     except Exception as error:
         loggers.root.error(
-            "Error ocured while removing temprorary created file('%s'): %s" %
+            "Error occurred while removing temporary created file('%s'): %s" %
             (file_name, str(error)))
 
 
