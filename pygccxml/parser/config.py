@@ -441,22 +441,55 @@ def create_compiler_path(xml_generator, compiler_path):
     """
     Try to guess a path for the compiler.
 
-    Only needed with castxml on Mac or Linux.
+    If you want ot use a specific compiler, please provide the compiler
+    path manually, as the guess may not be what you are expecting.
+    Providing the path can be done by passing it as an argument (compiler_path)
+    to the xml_generator_configuration_t() or by defining it in your pygccxml
+    configuration file.
 
     """
 
     if xml_generator == 'castxml' and compiler_path is None:
-        if platform.system() != 'Windows':
-            # On windows there is no need for the compiler path
+        if platform.system() == 'Windows':
+            # Look for msvc
             p = subprocess.Popen(
-                ['which', 'clang++'], stdout=subprocess.PIPE,
+                ['where', 'cl'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.stdout.close()
+            p.stderr.close()
+            # No mscv found; look for mingw
+            if compiler_path == '':
+                p = subprocess.Popen(
+                    ['where', 'mingw'],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
+                compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.stdout.close()
+                p.stderr.close()
+        else:
+            # OS X or Linux
+            # Look for clang first, then gcc
+            p = subprocess.Popen(
+                ['which', 'clang++'],
+                stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
             p.stdout.close()
             p.stderr.close()
             # No clang found; use gcc
             if compiler_path == '':
-                compiler_path = '/usr/bin/c++'
+                p = subprocess.Popen(
+                    ['which', 'c++'],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
+                compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.stdout.close()
+                p.stderr.close()
+
+        if compiler_path == "":
+            compiler_path = None
 
     return compiler_path
 
