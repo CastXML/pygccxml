@@ -341,6 +341,7 @@ class source_reader_t(object):
                             "Error occurred while running " +
                             self.__config.xml_generator.upper() + ": %s status:%s" %
                             (gccxml_msg, exit_status))
+                            
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
