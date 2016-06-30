@@ -164,9 +164,10 @@ class source_reader_t(object):
 
         # Always require a compiler path at this point
         if self.__config.compiler_path is None:
-            raise(RuntimeError("""Please pass the compiler_path as argument to 
-			your xml_generator_configuration_t(), or add it to your pygccxml 
-                configuration file."""))
+            raise(RuntimeError(
+                "Please pass the compiler_path as argument to " +
+                "your xml_generator_configuration_t(), or add it to your " +
+                "pygccxml configuration file."))
 
         # Platform specific options
         if platform.system() == 'Windows':
@@ -178,7 +179,8 @@ class source_reader_t(object):
                 cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
             else:
                 # We are using msvc
-                cmd.append('--castxml-cc-msvc ' + '"%s"' % self.__config.compiler_path)
+                cmd.append('--castxml-cc-msvc ' +
+                           '"%s"' % self.__config.compiler_path)
                 if 'msvc9' == self.__config.compiler:
                     cmd.append('-D"_HAS_TR1=0"')
         else:
@@ -335,13 +337,14 @@ class source_reader_t(object):
                     if not os.path.isfile(xml_file):
                         raise RuntimeError(
                             "Error occurred while running " +
-                            self.__config.xml_generator.upper() + " xml file does not exist")					
+                            self.__config.xml_generator.upper() +
+                            " xml file does not exist")
                     else:
                         raise RuntimeError(
                             "Error occurred while running " +
-                            self.__config.xml_generator.upper() + ": %s status:%s" %
-                            (gccxml_msg, exit_status))
-                            
+                            self.__config.xml_generator.upper() +
+                            ": %s status:%s" % (gccxml_msg, exit_status))
+
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
