@@ -164,12 +164,9 @@ class source_reader_t(object):
 
         # Always require a compiler path at this point
         if self.__config.compiler_path is None:
-            raise(
-                RuntimeError,
-                "The compiler_path is not defined.\n"
-                "Please pass the compiler_path as argument to your "
-                "xml_generator_configuration_t(), or add it to your pygccxml "
-                "configuration file.")
+            raise(RuntimeError("""Please pass the compiler_path as argument to 
+			your xml_generator_configuration_t(), or add it to your pygccxml 
+                configuration file."""))
 
         # Platform specific options
         if platform.system() == 'Windows':
@@ -181,7 +178,7 @@ class source_reader_t(object):
                 cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
             else:
                 # We are using msvc
-                cmd.append('--castxml-cc-msvc ' + self.__config.compiler_path)
+                cmd.append('--castxml-cc-msvc ' + '"%s"' % self.__config.compiler_path)
                 if 'msvc9' == self.__config.compiler:
                     cmd.append('-D"_HAS_TR1=0"')
         else:
