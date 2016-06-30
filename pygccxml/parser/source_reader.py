@@ -332,10 +332,15 @@ class source_reader_t(object):
             else:
                 if gccxml_msg or exit_status or not \
                         os.path.isfile(xml_file):
-                    raise RuntimeError(
-                        "Error occurred while running " +
-                        self.__config.xml_generator.upper() + ": %s" %
-                        gccxml_msg)
+                    if gccxml_msg or exit_status:
+                        raise RuntimeError(
+                            "Error occurred while running " +
+                            self.__config.xml_generator.upper() + ": %s status:%s" %
+                            (gccxml_msg, exit_status))
+                    else:
+                        raise RuntimeError(
+                            "Error occurred while running " +
+                            self.__config.xml_generator.upper() + " xml file does not exist")
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
