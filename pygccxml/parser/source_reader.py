@@ -181,7 +181,7 @@ class source_reader_t(object):
                 cmd.append('--castxml-cc-gnu ' + self.__config.compiler_path)
             else:
                 # We are using msvc
-                cmd.append('--castxml-cc-msvc' + self.__config.compiler_path)
+                cmd.append('--castxml-cc-msvc ' + self.__config.compiler_path)
                 if 'msvc9' == self.__config.compiler:
                     cmd.append('-D"_HAS_TR1=0"')
         else:
