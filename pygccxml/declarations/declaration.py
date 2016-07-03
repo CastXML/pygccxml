@@ -40,6 +40,7 @@ class declaration_t(object):
         self._compiler = None
         self._partial_name = None
         self._decorated_name = None
+        self._cmp_data = None
 
     def __str__(self):
         """
@@ -91,14 +92,16 @@ class declaration_t(object):
         Implementation detail.
 
         """
+        if self._cmp_data is None:
+            # Cache self.cmp_data, because it is expensive to generate
+            # it each time
+            self._cmp_data = [
+                declaration_utils.declaration_path(self.parent),
+                self.name,
+                self.location]
+            self._cmp_data.extend(self._get__cmp__items())
 
-        data = [
-            declaration_utils.declaration_path(self.parent),
-            self.name,
-            self.location]
-        data.extend(self._get__cmp__items())
-
-        return data
+        return self._cmp_data
 
     def __eq__(self, other):
         """
