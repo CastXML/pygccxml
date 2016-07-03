@@ -24,6 +24,7 @@ class declaration_algs_cache_t(object):
         self._partial_declaration_path = None
         self._container_key_type = None
         self._container_element_type = None
+        self._cmp_data = None
 
     def disable(self):
         self._enabled = False
@@ -121,6 +122,18 @@ class declaration_algs_cache_t(object):
             ktype = None
         self._container_key_type = ktype
 
+    @property
+    def cmp_data(self):
+        """Data used for comparison between declarations."""
+        return self._cmp_data
+
+    @cmp_data.setter
+    def cmp_data(self, cmp_data):
+        """Data used for comparison between declarations."""
+        if not self.enabled:
+            cmp_data = None
+        self._cmp_data = cmp_data
+
     def reset(self):
         self.full_name = None
         self.full_partial_name = None
@@ -131,6 +144,7 @@ class declaration_algs_cache_t(object):
         self.partial_declaration_path = None
         self.container_key_type = None
         self.container_element_type = None
+        self.cmp_data = None
 
     def reset_name_based(self):
         self.full_name = None
@@ -141,6 +155,7 @@ class declaration_algs_cache_t(object):
         self.partial_declaration_path = None
         self.container_key_type = None
         self.container_element_type = None
+        self.cmp_data = None
 
     def reset_access_type(self):
         self.access_type = None
