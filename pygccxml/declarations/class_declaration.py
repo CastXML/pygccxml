@@ -272,11 +272,12 @@ class class_t(scopedef.scopedef_t):
 
     def _get__cmp__scope_items(self):
         """implementation details"""
-        return [self.class_type,
-                    [declaration_utils.declaration_path(base.related_class)
-                        for base in self.bases].sort(),
-                    [declaration_utils.declaration_path(derive.related_class)
-                        for derive in self.derived].sort(),
+        return [
+                self.class_type,
+                [declaration_utils.declaration_path(base.related_class) for
+                 base in self.bases].sort(),
+                [declaration_utils.declaration_path(derive.related_class) for
+                 derive in self.derived].sort(),
                 self.is_abstract,
                 self.public_members.sort(),
                 self.private_members.sort(),
