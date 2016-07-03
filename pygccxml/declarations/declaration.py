@@ -66,12 +66,6 @@ class declaration_t(object):
 
         return "%s [%s]" % (name, cls)
 
-    @staticmethod
-    def _sorted_list(some_list):
-        """implementation details"""
-        some_list.sort()
-        return some_list
-
     def _get__cmp__items(self):
         """
         Implementation detail.

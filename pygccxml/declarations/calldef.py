@@ -228,7 +228,7 @@ class calldef_t(declaration.declaration_t):
                 self.return_type,
                 self.has_extern,
                 self.does_throw,
-                self._sorted_list(self.exceptions),
+                self.exceptions.sort(),
                 self.demangled_name,
                 self.has_inline]
         elif "CastXML" in utils.xml_generator:
@@ -238,7 +238,7 @@ class calldef_t(declaration.declaration_t):
                 self.return_type,
                 self.has_extern,
                 self.does_throw,
-                self._sorted_list(self.exceptions),
+                self.exceptions.sort(),
                 self.has_inline]
         items.extend(self._get__cmp__call_items())
         return items
@@ -252,8 +252,7 @@ class calldef_t(declaration.declaration_t):
                 and self.arguments == other.arguments \
                 and self.has_extern == other.has_extern \
                 and self.does_throw == other.does_throw \
-                and self._sorted_list(self.exceptions) == \
-                other._sorted_list(other.exceptions) \
+                and self.exceptions.sort() == other.exceptions.sort() \
                 and self.demangled_name == other.demangled_name
         elif "CastXML" in utils.xml_generator:
             # Do not check for demangled name
@@ -261,8 +260,7 @@ class calldef_t(declaration.declaration_t):
                 and self.arguments == other.arguments \
                 and self.has_extern == other.has_extern \
                 and self.does_throw == other.does_throw \
-                and self._sorted_list(self.exceptions) == \
-                other._sorted_list(other.exceptions)
+                and self.exceptions.sort() == other.exceptions.sort()
 
     def __hash__(self):
         if "GCC" in utils.xml_generator:

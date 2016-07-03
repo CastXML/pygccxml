@@ -208,23 +208,22 @@ class scopedef_t(declaration.declaration_t):
         if self._optimized:
             # in this case we don't need to build class internal declarations
             # list
-            items.append(self._sorted_list(self._all_decls_not_recursive))
+            items.append(self._all_decls_not_recursive.sort())
         else:
-            items.append(self._sorted_list(self.declarations))
+            items.append(self.declarations.sort())
         items.extend(self._get__cmp__scope_items())
         return items
 
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__(self, other):
             return False
-        return self._sorted_list(self.declarations[:]) \
-            == other._sorted_list(other.declarations[:])
+        return self.declarations[:].sort() == other.declarations[:].sort()
         # self_decls = self._all_decls_not_recursive
         # if not self._optimized:
-        # self_decls = self._sorted_list(self.declarations[:])
+        # self_decls = self.declarations[:].sort()
         # other_decls = other._all_decls_not_recursive[:]
         # if not other._optimized:
-        # other_decls = other._sorted_list(other.declarations[:])
+        # other_decls = other.declarations[:].sort()
         # else:
         # return self_decls == other_decls
 

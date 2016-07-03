@@ -43,7 +43,7 @@ class namespace_t(scopedef.scopedef_t):
 
         """
 
-        return [self._sorted_list(self.declarations)]
+        return [self.declarations.sort()]
 
     def _get_declarations_impl(self):
         return self._declarations

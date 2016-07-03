@@ -273,40 +273,34 @@ class class_t(scopedef.scopedef_t):
     def _get__cmp__scope_items(self):
         """implementation details"""
         return [self.class_type,
-                self._sorted_list(
                     [declaration_utils.declaration_path(base.related_class)
-                        for base in self.bases]),
-                self._sorted_list(
+                        for base in self.bases].sort(),
                     [declaration_utils.declaration_path(derive.related_class)
-                        for derive in self.derived]),
+                        for derive in self.derived].sort(),
                 self.is_abstract,
-                self._sorted_list(self.public_members),
-                self._sorted_list(self.private_members),
-                self._sorted_list(self.protected_members)]
+                self.public_members.sort(),
+                self.private_members.sort(),
+                self.protected_members.sort()]
 
     def __eq__(self, other):
         if not scopedef.scopedef_t.__eq__(self, other):
             return False
         return self.class_type == other.class_type \
-            and self._sorted_list(
-                [declaration_utils.declaration_path(base.related_class)
-                    for base in self.bases]) \
-            == other._sorted_list(
-                [declaration_utils.declaration_path(base.related_class)
-                    for base in other.bases]) \
-            and self._sorted_list(
-                [declaration_utils.declaration_path(derive.related_class)
-                    for derive in self.derived]) \
-            == other._sorted_list(
-                [declaration_utils.declaration_path(derive.related_class)
-                    for derive in other.derived]) \
+            and [declaration_utils.declaration_path(base.related_class)
+                    for base in self.bases].sort() \
+            == [declaration_utils.declaration_path(base.related_class)
+                    for base in other.bases].sort() \
+            and [declaration_utils.declaration_path(derive.related_class)
+                    for derive in self.derived].sort() \
+            == [declaration_utils.declaration_path(derive.related_class)
+                    for derive in other.derived].sort() \
             and self.is_abstract == other.is_abstract \
-            and self._sorted_list(self.public_members) \
-            == other._sorted_list(other.public_members) \
-            and self._sorted_list(self.private_members) \
-            == other._sorted_list(other.private_members) \
-            and self._sorted_list(self.protected_members) \
-            == self._sorted_list(other.protected_members)
+            and self.public_members.sort() \
+            == other.public_members.sort() \
+            and self.private_members.sort() \
+            == other.private_members.sort() \
+            and self.protected_members.sort() \
+            == other.protected_members.sort()
 
     def __hash__(self):
         return hash(self.class_type)
