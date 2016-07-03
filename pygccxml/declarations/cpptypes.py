@@ -19,8 +19,6 @@ class type_t(object):
         self.cache = algorithms_cache.type_algs_cache_t()
         self._byte_size = 0
         self._byte_align = 0
-        self._decl_string = None
-        self._partial_decl_string = None
 
     def __str__(self):
         res = self.decl_string
@@ -49,19 +47,15 @@ class type_t(object):
 
     @property
     def decl_string(self):
-        if self._decl_string is None:
-            self._decl_string = self.build_decl_string()
-            return self._decl_string
-        else:
-            return self._decl_string
+        if self.cache.decl_string is None:
+            self.cache.decl_string = self.build_decl_string()
+        return self.cache.decl_string
 
     @property
     def partial_decl_string(self):
-        if self._partial_decl_string is None:
-            self._partial_decl_string = self.build_decl_string(False)
-            return self._partial_decl_string
-        else:
-            return self._partial_decl_string
+        if self.cache.partial_decl_string is None:
+            self.cache.partial_decl_string = self.build_decl_string(False)
+        return self.cache.partial_decl_string
 
     def _clone_impl(self):
         raise NotImplementedError()

@@ -175,6 +175,8 @@ class type_algs_cache_t(object):
     def __init__(self):
         object.__init__(self)
         self._remove_alias = None
+        self._decl_string = None
+        self._partial_decl_string = None
 
     @property
     def remove_alias(self):
@@ -186,5 +188,27 @@ class type_algs_cache_t(object):
             remove_alias = None
         self._remove_alias = remove_alias
 
+    @property
+    def decl_string(self):
+        return self._decl_string
+
+    @decl_string.setter
+    def decl_string(self, decl_string):
+        if not type_algs_cache_t.enabled:
+            decl_string = None
+        self._decl_string = decl_string
+
+    @property
+    def partial_decl_string(self):
+        return self._partial_decl_string
+
+    @partial_decl_string.setter
+    def partial_decl_string(self, partial_decl_string):
+        if not type_algs_cache_t.enabled:
+            partial_decl_string = None
+        self._partial_decl_string = partial_decl_string
+
     def reset(self):
         self.remove_alias = None
+        self.decl_string = None
+        self.partial_decl_string = None
