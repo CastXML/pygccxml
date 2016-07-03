@@ -286,14 +286,14 @@ class class_t(scopedef.scopedef_t):
         if not scopedef.scopedef_t.__eq__(self, other):
             return False
         return self.class_type == other.class_type \
-            and [declaration_utils.declaration_path(base.related_class)
-                    for base in self.bases].sort() \
-            == [declaration_utils.declaration_path(base.related_class)
-                    for base in other.bases].sort() \
-            and [declaration_utils.declaration_path(derive.related_class)
-                    for derive in self.derived].sort() \
-            == [declaration_utils.declaration_path(derive.related_class)
-                    for derive in other.derived].sort() \
+            and [declaration_utils.declaration_path(base.related_class) for
+                 base in self.bases].sort() \
+            == [declaration_utils.declaration_path(base.related_class) for
+                base in other.bases].sort() \
+            and [declaration_utils.declaration_path(derive.related_class) for
+                 derive in self.derived].sort() \
+            == [declaration_utils.declaration_path(derive.related_class) for
+                derive in other.derived].sort() \
             and self.is_abstract == other.is_abstract \
             and self.public_members.sort() \
             == other.public_members.sort() \
