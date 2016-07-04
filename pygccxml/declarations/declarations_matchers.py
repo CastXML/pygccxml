@@ -156,26 +156,20 @@ class declaration_matcher_t(matcher_base_t):
         assert self.name is not None
         if self.__opt_is_tmpl_inst:
             if not self.__opt_is_full_name:
-                if self.name != templates.normalize(decl.name) \
-                   and self.name != templates.normalize(decl.partial_name):
+                if self.name != templates.normalize_name(decl) \
+                   and self.name != templates.normalize_partial_name(decl):
                     return False
             else:
-                if self.name != templates.normalize(
-                        declaration_utils.full_name(
-                            decl, with_defaults=True)) \
-                    and self.name != templates.normalize(
-                            declaration_utils.full_name(
-                                decl, with_defaults=False)):
+                if self.name != templates.normalize_full_name_true(decl) and \
+                        self.name != templates.normalize_full_name_false(decl):
                     return False
         else:
             if not self.__opt_is_full_name:
                 if self.name != decl.name and self.name != decl.partial_name:
                     return False
             else:
-                if self.name != declaration_utils.full_name(
-                        decl, with_defaults=True) \
-                   and self.name != declaration_utils.full_name(
-                        decl, with_defaults=False):
+                if self.name != templates.normalize_full_name_true(decl) and \
+                        self.name != templates.normalize_full_name_false(decl):
                     return False
         return True
 

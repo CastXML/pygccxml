@@ -17,6 +17,7 @@ C++ template instantiations
 """
 
 from . import pattern_parser
+from . import declaration_utils
 
 __THE_PARSER = pattern_parser.parser_t('<', '>', ',')
 
@@ -75,3 +76,65 @@ def normalize(decl_string):
     which are actually same: x::y< z > and x::y<z>
     """
     return __THE_PARSER.normalize(decl_string)
+
+
+def normalize_name(decl):
+    """
+    Cached variant of normalize
+
+    Args:
+        decl (declaration.declaration_t): the declaration
+
+    Returns:
+        str: normalized name
+    """
+    if decl.cache.normalized_name is None:
+        decl.cache.normalized_name = normalize(decl.name)
+    return decl.cache.normalized_name
+
+
+def normalize_partial_name(decl):
+    """
+    Cached variant of normalize
+
+    Args:
+        decl (declaration.declaration_t): the declaration
+
+    Returns:
+        str: normalized name
+    """
+    if decl.cache.normalized_partial_name is None:
+        decl.cache.normalized_partial_name = normalize(decl.partial_name)
+    return decl.cache.normalized_partial_name
+
+
+def normalize_full_name_true(decl):
+    """
+    Cached variant of normalize
+
+    Args:
+        decl (declaration.declaration_t): the declaration
+
+    Returns:
+        str: normalized name
+    """
+    if decl.cache.normalized_full_name_true is None:
+        decl.cache.normalized_full_name_true = normalize(
+            declaration_utils.full_name(decl, with_defaults=True))
+    return decl.cache.normalized_full_name_true
+
+
+def normalize_full_name_false(decl):
+    """
+    Cached variant of normalize
+
+    Args:
+        decl (declaration.declaration_t): the declaration
+
+    Returns:
+        str: normalized name
+    """
+    if decl.cache.normalized_full_name_false is None:
+        decl.cache.normalized_full_name_false = normalize(
+            declaration_utils.full_name(decl, with_defaults=False))
+    return decl.cache.normalized_full_name_false
