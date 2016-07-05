@@ -67,17 +67,20 @@ class hierarchy_info_t(object):
             assert(access in ACCESS_TYPES.ALL)
         self._access = access
         self._is_virtual = is_virtual
+        self._declaration_path = None
+        self._declaration_path_hash = None
 
     def __eq__(self, other):
         if not isinstance(other, hierarchy_info_t):
             return False
-        return declaration_utils.declaration_path(self.related_class) == \
-            declaration_utils.declaration_path(other.related_class) \
-            and self.access == other.access \
-            and self.is_virtual == other.is_virtual
+        return (self.declaration_path_hash ==
+                other.declaration_path_hash) \
+            and self._declaration_path == other._declaration_path \
+            and self._access == other._access \
+            and self._is_virtual == other._is_virtual
 
     def __hash__(self):
-        return hash(declaration_utils.declaration_path(self.related_class))
+        return self.declaration_path_hash
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -85,14 +88,8 @@ class hierarchy_info_t(object):
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
             return self.__class__.__name__ < other.__class__.__name__
-        return (
-            declaration_utils.declaration_path(self.related_class),
-            self.access,
-            self.is_virtual) < (
-            declaration_utils.declaration_path(
-                other.related_class),
-            other.access,
-            self.is_virtual)
+        return (self.declaration_path, self.access, self.is_virtual) < \
+            (other.declaration_path, other.access, other.is_virtual)
 
     @property
     def related_class(self):
@@ -104,6 +101,8 @@ class hierarchy_info_t(object):
         if new_related_class:
             assert(isinstance(new_related_class, class_t))
         self._related_class = new_related_class
+        self._declaration_path = None
+        self._declaration_path_hash = None
 
     @property
     def access(self):
@@ -134,6 +133,19 @@ class hierarchy_info_t(object):
     @is_virtual.setter
     def is_virtual(self, new_is_virtual):
         self._is_virtual = new_is_virtual
+
+    @property
+    def declaration_path(self):
+        if self._declaration_path is None:
+            self._declaration_path = declaration_utils.declaration_path(
+                self.related_class)
+        return self._declaration_path
+
+    @property
+    def declaration_path_hash(self):
+        if self._declaration_path_hash is None:
+            self._declaration_path_hash = hash(tuple(self.declaration_path))
+        return self._declaration_path_hash
 
 
 class class_declaration_t(declaration.declaration_t):
