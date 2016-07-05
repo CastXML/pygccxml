@@ -28,7 +28,6 @@ class parser_t(object):
 
     def has_pattern(self, decl_string):
         """implementation details"""
-        assert utils.is_str(decl_string)
         last_part = decl_string.split('::')[-1]
         return (
             -1 != decl_string.find(self.__begin) and -
@@ -37,7 +36,6 @@ class parser_t(object):
 
     def name(self, decl_string):
         """implementation details"""
-        assert utils.is_str(decl_string)
         if not self.has_pattern(decl_string):
             return decl_string
         args_begin = decl_string.find(self.__begin)

@@ -62,7 +62,6 @@ import gccxml10184_tester
 import gccxml10185_tester
 import inline_specifier_tester
 import test_create_decl_string
-import from_future_import_tester
 import pep8_tester
 import example_tester
 import test_utils
@@ -128,7 +127,6 @@ testers = [
     gccxml10185_tester,
     inline_specifier_tester,
     test_create_decl_string,
-    from_future_import_tester,
     example_tester,
     test_utils,
     test_va_list_tag_removal,
