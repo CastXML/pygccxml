@@ -16,7 +16,7 @@ class internal_type_traits(object):
     # TODO: add exists function
     @staticmethod
     def get_by_name(type_, name):
-        if class_declaration_traits.class_traits.is_my_case(type_):
+        if class_declaration_traits.is_my_case(type_):
             cls = class_declaration_traits.class_traits.declaration_class(
                 type_)
             return type_traits.remove_declarated(
