@@ -19,7 +19,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_other_traits(self):
         """
-        Test code in the smart_pointer_traits module (is_smart_pointer methods).
+        Test code in the smart_pointer_traits module.
 
         """
 
