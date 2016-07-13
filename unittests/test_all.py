@@ -142,6 +142,11 @@ testers = [
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
 
+if os.path.isfile("test_cost.log"):
+    # Remove the cost log file when tests are run again.
+    # See the parser_test_case which generates this file.
+    os.remove("test_cost.log")
+
 
 def create_suite():
     main_suite = unittest.TestSuite()

@@ -5,6 +5,7 @@
 
 import pprint
 import sys
+import time
 import unittest
 import autoconfig
 
@@ -12,6 +13,7 @@ import autoconfig
 class parser_test_case_t(unittest.TestCase):
 
     CXX_PARSER_CFG = None
+    cost_file = None
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
@@ -21,6 +23,37 @@ class parser_test_case_t(unittest.TestCase):
             self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
         else:
             pass
+
+    def run(self, result=None):
+        """
+        Override the run method.
+
+        Allows to measure the time each test needs. The result is written
+        in the test_cost.log file.
+
+        """
+        start_time = time.time()
+        super(parser_test_case_t, self).run(result)
+        name = super(parser_test_case_t, self).id()
+        self.cost_file.write(
+            name + " " +
+            str(time.time() - start_time) + "\n")
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Open the cost file before the test.
+
+        """
+        cls.cost_file = open("test_cost.log", "a")
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Close the cost file after the test.
+
+        """
+        cls.cost_file.close()
 
     def _test_type_composition(self, type_, expected_compound, expected_base):
         self.assertTrue(
