@@ -71,6 +71,7 @@ import test_cpp_standards
 import unnamed_classes_tester
 import test_map_gcc5
 import test_argument_without_name
+import test_smart_pointer
 
 testers = [
     # , demangled_tester # failing right now
@@ -134,7 +135,8 @@ testers = [
     test_cpp_standards,
     unnamed_classes_tester,
     test_map_gcc5,
-    test_argument_without_name
+    test_argument_without_name,
+    test_smart_pointer
 ]
 
 if 'posix' in os.name:
