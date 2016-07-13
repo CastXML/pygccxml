@@ -13,7 +13,6 @@ import autoconfig
 class parser_test_case_t(unittest.TestCase):
 
     CXX_PARSER_CFG = None
-    cost_file = None
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
@@ -32,28 +31,13 @@ class parser_test_case_t(unittest.TestCase):
         in the test_cost.log file.
 
         """
-        start_time = time.time()
-        super(parser_test_case_t, self).run(result)
-        name = super(parser_test_case_t, self).id()
-        self.cost_file.write(
-            name + " " +
-            str(time.time() - start_time) + "\n")
-
-    @classmethod
-    def setUpClass(cls):
-        """
-        Open the cost file before the test.
-
-        """
-        cls.cost_file = open("test_cost.log", "a")
-
-    @classmethod
-    def tearDownClass(cls):
-        """
-        Close the cost file after the test.
-
-        """
-        cls.cost_file.close()
+        with open("test_cost.log", "a") as cost_file:
+            start_time = time.time()
+            super(parser_test_case_t, self).run(result)
+            name = super(parser_test_case_t, self).id()
+            cost_file.write(
+                name + " " +
+                str(time.time() - start_time) + "\n")
 
     def _test_type_composition(self, type_, expected_compound, expected_base):
         self.assertTrue(
