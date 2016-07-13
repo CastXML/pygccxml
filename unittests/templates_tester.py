@@ -4,11 +4,11 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-
+import parser_test_case
 from pygccxml import declarations
 
 
-class Test(unittest.TestCase):
+class Test(parser_test_case.parser_test_case_t):
 
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(

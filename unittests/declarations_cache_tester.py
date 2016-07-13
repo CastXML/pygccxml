@@ -7,14 +7,15 @@ import os
 import unittest
 import os.path
 import autoconfig
+import parser_test_case
 from pygccxml.parser.config import xml_generator_configuration_t
 from pygccxml.parser import declarations_cache
 
 
-class decl_cache_tester(unittest.TestCase):
+class decl_cache_tester(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
+        parser_test_case.parser_test_case_t.__init__(self, *args)
         if not os.path.exists(autoconfig.build_directory):
             os.makedirs(autoconfig.build_directory)
 
