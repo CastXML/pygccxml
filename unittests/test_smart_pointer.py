@@ -17,7 +17,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.header = "test_smart_pointer.hpp"
         self.config.cflags = "-std=c++11"
 
-    def test_other_traits(self):
+    def test_smart_pointer(self):
         """
         Test code in the smart_pointer_traits module.
 
