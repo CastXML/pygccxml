@@ -11,6 +11,11 @@ Version 1.8.0 (not yet released)
   You should use the castxml package and the CastXML binary instead.
   If you really want to use gccxml, the gccxml.real binary from the
   gccxml debian package can still be used.
+  
+* Fix parsing of boost/locale.hpp code.
+  Templated class instantiations with specializations are now better supported,
+  specifically when containing parentheses:
+  myClass<std::vector<char>(const std::string &, const std::string &)> obj;
 
 * ```declarations.is_string```, ```declarations.is_std_wstring```,
   ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
