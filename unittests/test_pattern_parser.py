@@ -39,6 +39,10 @@ class Test(parser_test_case.parser_test_case_t):
         This exercises the whole pipeline even more.
 
         """
+
+        if self.config.xml_generator == "gccxml":
+            return
+
         decls = parser.parse([self.header], self.config)
         global_ns = declarations.get_global_namespace(decls)
         criteria = declarations.declaration_matcher(name="myClass")
