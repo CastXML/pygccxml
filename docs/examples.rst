@@ -15,5 +15,6 @@ First examples
    examples/searching/example.rst
    examples/equality/example.rst
    examples/functions/example.rst
+   examples/nested-types/example.rst
    examples/caching/example.rst
    examples/print-example/example.rst
