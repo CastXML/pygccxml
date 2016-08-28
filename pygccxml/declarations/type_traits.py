@@ -249,8 +249,6 @@ def remove_pointer(type_):
         return (
             cpptypes.volatile_t(cpptypes.const_t(nake_type.base.base.base))
         )
-    elif isinstance(nake_type.base, cpptypes.calldef_type_t):
-        return type_
     else:
         return nake_type.base
 

@@ -73,6 +73,7 @@ import test_map_gcc5
 import test_argument_without_name
 import test_smart_pointer
 import test_pattern_parser
+import test_function_pointer
 
 testers = [
     # , demangled_tester # failing right now
@@ -138,7 +139,8 @@ testers = [
     test_map_gcc5,
     test_argument_without_name,
     test_smart_pointer,
-    test_pattern_parser
+    test_pattern_parser,
+    test_function_pointer
 ]
 
 if 'posix' in os.name:

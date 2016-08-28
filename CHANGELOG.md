@@ -17,6 +17,9 @@ Version 1.8.0 (not yet released)
   specifically when containing parentheses:
   myClass<std::vector<char>(const std::string &, const std::string &)> obj;
 
+* When using the ```remove_pointer``` function on a function pointer, the
+  ```remove_pointer``` function now correctly returns a ```calldef_type_t```.
+
 * ```declarations.is_string```, ```declarations.is_std_wstring```,
   ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
   correctly work when a the type is also a reference.
