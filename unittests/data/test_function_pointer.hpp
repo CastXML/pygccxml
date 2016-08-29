@@ -10,3 +10,9 @@ void (*func1)(int, double);
 
 // Another pointer, but not a function pointer
 int const volatile* myPointer;
+
+// A struct
+struct some_struct_t{};
+
+// Another function pointer
+typedef void (some_struct_t::*x8)();

@@ -62,6 +62,20 @@ class Test(parser_test_case.parser_test_case_t):
             isinstance(declarations.remove_pointer(variables[0].decl_type),
                        declarations.volatile_t))
 
+        # Test on function pointer in struct (x8)
+        for d in global_ns.declarations:
+            if d.name == "x8":
+                self.assertTrue(
+                    isinstance(d.decl_type, declarations.pointer_t))
+                self.assertTrue(declarations.is_calldef_pointer(d.decl_type))
+                self.assertTrue(
+                    isinstance(
+                        declarations.remove_pointer(d.decl_type),
+                        declarations.member_function_type_t))
+                self.assertTrue(
+                    str(declarations.remove_pointer(d.decl_type)) ==
+                    "void ( ::some_struct_t::* )(  )")
+
 
 def create_suite():
     suite = unittest.TestSuite()
