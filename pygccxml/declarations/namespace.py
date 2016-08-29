@@ -283,6 +283,16 @@ class namespace_t(scopedef.scopedef_t):
 
 
 def get_global_namespace(decls):
+    """
+    Get the global namespace (::) from a declaration tree.
+
+    Args:
+        decls (list[declaration_t]): a list of declarations
+
+    Returns:
+        namespace_t: the global namespace_t object (::)
+
+    """
     found = [
         decl for decl in scopedef.make_flatten(decls) if decl.name == '::' and
         isinstance(decl, namespace_t)]
