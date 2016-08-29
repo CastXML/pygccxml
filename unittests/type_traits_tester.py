@@ -101,8 +101,8 @@ class Test(parser_test_case.parser_test_case_t):
                 declarations.is_same(
                     transformed,
                     tafter),
-                ("there is a difference between expected type({0}) " +
-                 "and result({1}). typedef name: {2}").format(
+                ("there is a difference between expected type '{0}' " +
+                 "and result '{1}'. typedef name: {2}").format(
                     declarations.remove_declarated(tafter).decl_string,
                     declarations.remove_declarated(transformed).decl_string,
                     tbefore.decl_string))
