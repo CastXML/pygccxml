@@ -23,6 +23,8 @@ Documentation and examples
 
 The documentation can be found `here <http://pygccxml.readthedocs.io>`_, examples can be found `here <http://pygccxml.readthedocs.io/en/develop/examples.html>`_.
 
+A `FAQ <http://pygccxml.readthedocs.io/en/develop/faq.html>`_. is also available and may answer some of your questions.
+
 Contact us
 ----------
 
