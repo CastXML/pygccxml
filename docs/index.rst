@@ -52,6 +52,7 @@ Documentation contents
    install
    examples
    documentation
+   faq
    query_interface
    design
    users
