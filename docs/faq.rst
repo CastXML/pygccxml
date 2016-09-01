@@ -45,3 +45,20 @@ Some things you may try (in order of priority):
 
 3) If you want to cache the declarations tree, there is a caching mechanism provided
    by pygccxml. You will find an example of this mechanism in the examples section.
+
+
+\_\_va_list_tag and other hidden declarations
+---------------------------------------------
+
+When parsing with CastXML, the XML tree can contain declarations named
+``__va_list_tag``. If the compiler is llvm 3.9,  ``__NSConstantString_tag``
+and ``__NSConstantString`` declarations may also be present.
+
+These declarations are internal declarations, coming from the std c++ library
+headers you include, and are often not needed. They are for example polluting
+the declarations tree when running pyplusplus.
+
+By default, pygccxml will ignore these declarations.
+To still read these declarations from the xml file, a config flag can
+be set (``config.flags = ["f1"]``), or a flag can be passed as argument the
+config setup (``flags=["f1"]``).
