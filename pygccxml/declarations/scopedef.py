@@ -456,9 +456,9 @@ class scopedef_t(declaration.declaration_t):
             name = None
 
         if name and decl_type:
-            matcher = scopedef_t._impl_matchers[scopedef_t.decl](name=name)
-            if matcher.is_full_name():
-                name = matcher.decl_name_only
+            impl_match = scopedef_t._impl_matchers[scopedef_t.decl](name=name)
+            if impl_match.is_full_name():
+                name = impl_match.decl_name_only
             if recursive:
                 self._logger.debug(
                     'query has been optimized on type and name')
