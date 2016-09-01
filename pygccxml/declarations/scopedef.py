@@ -462,17 +462,11 @@ class scopedef_t(declaration.declaration_t):
             if recursive:
                 self._logger.debug(
                     'query has been optimized on type and name')
-                if name in self._type2name2decls[decl_type]:
-                    return self._type2name2decls[decl_type][name]
-                else:
-                    return []
+                return self._type2name2decls[decl_type].get(name, [])
             else:
                 self._logger.debug(
                     'non recursive query has been optimized on type and name')
-                if name in self._type2name2decls_nr[decl_type]:
-                    return self._type2name2decls_nr[decl_type][name]
-                else:
-                    return []
+                return self._type2name2decls_nr[decl_type].get(name, [])
         elif decl_type:
             if recursive:
                 self._logger.debug('query has been optimized on type')
