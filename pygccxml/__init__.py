@@ -40,4 +40,4 @@ warnings.simplefilter("always", DeprecationWarning)
 # TODO:
 # 1. Add "explicit" property for constructors
 
-__version__ = '1.7.6'
+__version__ = '1.8.0'
