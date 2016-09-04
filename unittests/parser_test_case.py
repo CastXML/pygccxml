@@ -1,10 +1,11 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
 import sys
+import time
 import unittest
 import autoconfig
 
@@ -21,6 +22,22 @@ class parser_test_case_t(unittest.TestCase):
             self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
         else:
             pass
+
+    def run(self, result=None):
+        """
+        Override the run method.
+
+        Allows to measure the time each test needs. The result is written
+        in the test_cost.log file.
+
+        """
+        with open("test_cost.log", "a") as cost_file:
+            start_time = time.time()
+            super(parser_test_case_t, self).run(result)
+            name = super(parser_test_case_t, self).id()
+            cost_file.write(
+                name + " " +
+                str(time.time() - start_time) + "\n")
 
     def _test_type_composition(self, type_, expected_compound, expected_base):
         self.assertTrue(

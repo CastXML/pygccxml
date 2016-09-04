@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -12,7 +12,7 @@ from pygccxml import declarations
 from pygccxml import utils
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     declarations = None
 
@@ -22,32 +22,32 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.declarations = None
 
     def setUp(self):
-        if not tester_t.declarations:
-            tester_t.declarations = parser.parse([self.header], self.config)
-        self.declarations = tester_t.declarations
+        if not Test.declarations:
+            Test.declarations = parser.parse([self.header], self.config)
+        self.declarations = Test.declarations
 
     def __test_type_category(self, ns_name, controller):
         ns_control = declarations.find_declaration(
             self.declarations,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name=ns_name)
         self.assertTrue(ns_control, "unable to find '%s' namespace" % ns_name)
         ns_yes = declarations.find_declaration(
             ns_control,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name='yes')
         self.assertTrue(ns_yes, "unable to find 'yes' namespace")
         ns_no = declarations.find_declaration(
             ns_control,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name='no')
         self.assertTrue(ns_no, "unable to find 'no' namespace")
         er = 'for type "%s" the answer to the question "%s" should be True'
         for decl in ns_yes.declarations:
             if isinstance(decl, declarations.variable_t):
                 self.assertTrue(
-                    controller(decl.type),
-                    er % (decl.type.decl_string, ns_name))
+                    controller(decl.decl_type),
+                    er % (decl.decl_type.decl_string, ns_name))
             elif isinstance(decl, declarations.calldef_t) and \
                     decl.name.startswith('test_'):
                 continue
@@ -74,17 +74,17 @@ class tester_t(parser_test_case.parser_test_case_t):
     def __test_type_transformation(self, ns_name, transformer):
         ns_control = declarations.find_declaration(
             self.declarations,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name=ns_name)
         self.assertTrue(ns_control, "unable to find '%s' namespace" % ns_name)
         ns_before = declarations.find_declaration(
             ns_control,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name='before')
         self.assertTrue(ns_before, "unable to find 'before' namespace")
         ns_after = declarations.find_declaration(
             ns_control,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name='after')
         self.assertTrue(ns_after, "unable to find 'after' namespace")
 
@@ -101,8 +101,8 @@ class tester_t(parser_test_case.parser_test_case_t):
                 declarations.is_same(
                     transformed,
                     tafter),
-                ("there is a difference between expected type({0}) " +
-                 "and result({1}). typedef name: {2}").format(
+                ("there is a difference between expected type '{0}' " +
+                 "and result '{1}'. typedef name: {2}").format(
                     declarations.remove_declarated(tafter).decl_string,
                     declarations.remove_declarated(transformed).decl_string,
                     tbefore.decl_string))
@@ -189,16 +189,16 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_is_base_and_derived(self):
         ns = declarations.find_declaration(
             self.declarations,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name='is_base_and_derived')
         self.assertTrue(ns, "unable to find 'is_base_and_derived' namespace")
         base = declarations.find_declaration(
             ns.declarations,
-            type=declarations.class_t,
+            decl_type=declarations.class_t,
             name='base')
         derived = declarations.find_declaration(
             ns.declarations,
-            type=declarations.class_t,
+            decl_type=declarations.class_t,
             name='derived')
         self.assertTrue(
             base and derived and declarations.is_base_and_derived(
@@ -210,12 +210,12 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         unrelated1 = declarations.find_declaration(
             ns.declarations,
-            type=declarations.class_t,
+            decl_type=declarations.class_t,
             name='unrelated1')
 
         unrelated2 = declarations.find_declaration(
             ns.declarations,
-            type=declarations.class_t,
+            decl_type=declarations.class_t,
             name='unrelated2')
         self.assertTrue(
             base and derived and not declarations.is_base_and_derived(
@@ -227,7 +227,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             declarations.is_same(
                 declarations.int_t,
                 declarations.int_t))
-        self.failIf(
+        self.assertFalse(
             declarations.is_same(
                 declarations.int_t,
                 declarations.float_t))
@@ -258,7 +258,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_is_unary_binary_operator(self):
         operator_not = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::dummy::operator!')
         self.assertTrue(operator_not, 'operator! was not found')
         self.assertTrue(
@@ -270,7 +270,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         operator_class_p = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::dummy::operator+')
         self.assertTrue(operator_class_p, 'operator+ was not found')
         self.assertTrue(
@@ -282,7 +282,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         operator_class_pp = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::dummy::operator++')
         self.assertTrue(operator_class_pp, 'operator++ was not found')
         self.assertTrue(
@@ -294,7 +294,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         operator_pp = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::operator++')
         self.assertTrue(operator_pp, 'operator++ was not found')
         self.assertTrue(
@@ -306,7 +306,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         operator_mm = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::operator*')
         self.assertTrue(operator_mm, 'operator-- was not found')
         self.assertTrue(
@@ -318,7 +318,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
         operator_pe = declarations.find_declaration(
             self.declarations,
-            type=declarations.operator_t,
+            decl_type=declarations.operator_t,
             fullname='::is_unary_operator::operator+=')
         self.assertTrue(operator_pe, 'operator+= was not found')
         self.assertTrue(
@@ -335,7 +335,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         expected_type = declarations.find_declaration(
             defs,
             name='expected',
-            type=declarations.enumeration_t)
+            decl_type=declarations.enumeration_t)
         expected_value = bool(expected_type.get_name2value_dict()['value'])
         self.assertTrue(
             expected_value == declarations.is_convertible(
@@ -347,7 +347,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test_is_convertible(self):
         ns_is_convertible = declarations.find_declaration(
             self.declarations,
-            type=declarations.namespace_t,
+            decl_type=declarations.namespace_t,
             name="is_convertible")
 
         self.assertTrue(
@@ -361,9 +361,6 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 
 class missing_decls_tester_t(unittest.TestCase):
-
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
 
     def test(self):
         config = autoconfig.cxx_parsers_cfg.gccxml
@@ -387,13 +384,13 @@ class missing_decls_tester_t(unittest.TestCase):
         # self.declarations = None
 
     # def setUp(self):
-        # if not tester_t.declarations:
-        # tester_t.declarations = parser.parse([self.header], self.config)
-        # self.declarations = tester_t.declarations
+        # if not Test.declarations:
+        # Test.declarations = parser.parse([self.header], self.config)
+        # self.declarations = Test.declarations
 
     # def test( self ):
         # x = declarations.find_declaration( self.declarations
-        # , type=declarations.typedef_t
+        # , decl_type=declarations.typedef_t
         # , name="s2s_multimap_type" )
         # print declarations.is_noncopyable( x)
         # declarations.print_declarations(
@@ -401,9 +398,6 @@ class missing_decls_tester_t(unittest.TestCase):
 
 
 class class_traits_tester_t(unittest.TestCase):
-
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
 
     def test_get_declaration(self):
         code = """
@@ -446,7 +440,7 @@ class class_traits_tester_t(unittest.TestCase):
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(class_traits_tester_t))
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     suite.addTest(unittest.makeSuite(missing_decls_tester_t))
     return suite
 

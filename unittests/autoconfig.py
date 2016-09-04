@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -6,6 +6,7 @@
 import os
 import sys
 import logging
+import warnings
 
 # Prevents copy.deepcopy RecursionError in some tests (Travis build)
 sys.setrecursionlimit(10000)
@@ -26,6 +27,11 @@ import pygccxml.declarations  # nopep8
 import pygccxml.parser  # nopep8
 import pygccxml.utils  # nopep8
 
+# We want to make sure we throw an error for ALL the warnings during the
+# tests. This will allow us to be notified by the build bots, so that the
+# warnings can be fixed.
+warnings.simplefilter("error", Warning)
+
 # Set logging level
 pygccxml.utils.loggers.set_level(logging.INFO)
 
@@ -40,7 +46,7 @@ class cxx_parsers_cfg(object):
         'xml_generator.cfg',
         xml_generator_path=generator_path,
         working_directory=data_directory,
-        compiler=pygccxml.utils.native_compiler.get_gccxml_compiler(),
+        compiler=None,
         xml_generator=generator_name)
 
     if generator_name == 'gccxml':

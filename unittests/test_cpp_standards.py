@@ -6,7 +6,6 @@ import unittest
 import parser_test_case
 
 from pygccxml import parser
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):

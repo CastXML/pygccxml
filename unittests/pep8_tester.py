@@ -2,12 +2,10 @@
 import os
 import pep8
 import unittest
+import fnmatch
 
 
-class tester_t(unittest.TestCase):
-
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
+class Test(unittest.TestCase):
 
     def test_pep8_conformance_unitests(self):
         """Pep8 conformance test (unitests)
@@ -32,7 +30,7 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../pygccxml/"
+        path += "/../pygccxml/"
 
         self.run_check(path)
 
@@ -46,9 +44,16 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../docs/example/"
+        path += "/../docs/examples/"
 
-        self.run_check(path)
+        # Find all the examples files
+        file_paths = []
+        for root, dirnames, filenames in os.walk(path):
+            for file_path in fnmatch.filter(filenames, '*.py'):
+                file_paths.append(os.path.join(root, file_path))
+
+        for path in file_paths:
+            self.run_check(path)
 
     def test_pep8_conformance_setup(self):
         """Pep8 conformance test (setup)
@@ -60,7 +65,7 @@ class tester_t(unittest.TestCase):
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
-        path = path + "/../setup.py"
+        path += "/../setup.py"
 
         self.run_check(path)
 
@@ -78,7 +83,7 @@ class tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -11,7 +11,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -73,12 +73,11 @@ class tester_t(parser_test_case.parser_test_case_t):
             self.assertTrue(len(control_derived) == len(all_derived))
             all_derived_names = [hi.related_class.name for hi in all_derived]
             self.assertTrue(set(all_derived_names) == control_derived)
-        pass
 
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

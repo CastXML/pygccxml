@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -62,7 +62,6 @@ import gccxml10184_tester
 import gccxml10185_tester
 import inline_specifier_tester
 import test_create_decl_string
-import from_future_import_tester
 import pep8_tester
 import example_tester
 import test_utils
@@ -72,10 +71,14 @@ import test_cpp_standards
 import unnamed_classes_tester
 import test_map_gcc5
 import test_argument_without_name
+import test_smart_pointer
+import test_pattern_parser
+import test_function_pointer
 
 testers = [
     # , demangled_tester # failing right now
     # , undname_creator_tester # failing right now
+    pep8_tester,
     decl_string_tester,
     declaration_files_tester,
     declarations_comparison_tester,
@@ -127,8 +130,6 @@ testers = [
     gccxml10185_tester,
     inline_specifier_tester,
     test_create_decl_string,
-    from_future_import_tester,
-    pep8_tester,
     example_tester,
     test_utils,
     test_va_list_tag_removal,
@@ -136,11 +137,19 @@ testers = [
     test_cpp_standards,
     unnamed_classes_tester,
     test_map_gcc5,
-    test_argument_without_name
+    test_argument_without_name,
+    test_smart_pointer,
+    test_pattern_parser,
+    test_function_pointer
 ]
 
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
+
+if os.path.isfile("test_cost.log"):
+    # Remove the cost log file when tests are run again.
+    # See the parser_test_case which generates this file.
+    os.remove("test_cost.log")
 
 
 def create_suite():

@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -10,7 +10,7 @@ from pygccxml import declarations
 from pygccxml import utils
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     global_ns = None
 
     def __init__(self, *args):
@@ -18,10 +18,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.headers = ['remove_template_defaults.hpp', 'indexing_suites2.hpp']
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse(self.headers, self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-            tester_t.global_ns.init_optimizer()
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.global_ns.init_optimizer()
 
     def __cmp_traits(self, typedef, expected, partial_name, key_type=None):
         if utils.is_str(typedef):
@@ -38,7 +38,7 @@ class tester_t(parser_test_case.parser_test_case_t):
              expected.name(),
              traits.name()))
         cls = declarations.remove_declarated(typedef)
-        self.assertTrue(cls.container_traits is expected)
+        self.assertTrue(declarations.find_container_traits(cls) is expected)
         self.assertTrue(cls.partial_name == partial_name)
         cls = traits.class_declaration(cls)
 
@@ -148,7 +148,8 @@ class tester_t(parser_test_case.parser_test_case_t):
 
     def test_recursive_partial_name(self):
         f1 = self.global_ns.free_fun('f1')
-        t1 = declarations.class_traits.get_declaration(f1.arguments[0].type)
+        t1 = declarations.class_traits.get_declaration(
+            f1.arguments[0].decl_type)
         self.assertTrue(
             'type< std::set< std::vector< int > > >' == t1.partial_name)
 
@@ -156,20 +157,21 @@ class tester_t(parser_test_case.parser_test_case_t):
         f2 = self.global_ns.free_fun('f2')
         type_info = f2.return_type
         traits = declarations.find_container_traits(type_info)
-        cls = traits .class_declaration(type_info)
+        cls = traits.class_declaration(type_info)
         # traits.remove_defaults(type_info)
         decl_string = cls.partial_decl_string
         key_type_string = traits.key_type(type_info).partial_decl_string
-        self.assert_(
+        self.assertTrue(
             decl_string.startswith('::std::'),
             "declaration string %r doesn't start with 'std::'" %
             decl_string)
-        self.assert_(
+        self.assertTrue(
             key_type_string.startswith('::std::'),
             "key type string %r doesn't start with 'std::'" %
             key_type_string)
 
-    def test_from_ogre(self):
+    @staticmethod
+    def test_from_ogre():
         x = (
             'map<std::string, bool (*)(std::string&, ' +
             'Ogre::MaterialScriptContext&), std::less<std::string>, ' +
@@ -188,7 +190,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

@@ -5,7 +5,7 @@ import autoconfig
 from pygccxml.binary_parsers import bsc
 
 
-class tester_t(unittest.TestCase):
+class Test(unittest.TestCase):
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
@@ -32,7 +32,7 @@ class tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

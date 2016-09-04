@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -10,7 +10,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -20,7 +20,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        aaaa_type = global_ns.variable('aaaa').type
+        aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
             'int[2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
@@ -30,7 +30,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        aaaa_type = global_ns.variable('aaaa').type
+        aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
             'int *[2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
@@ -40,7 +40,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        aaaa_type = global_ns.variable('aaaa').type
+        aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
             'int[2]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
@@ -50,7 +50,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        aaaa_type = global_ns.variable('aaaa').type
+        aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
             '::xyz[2][3]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
@@ -60,7 +60,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        arr_type = global_ns.variable('arr').type
+        arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
                 'char[4] const' == arr_type.decl_string,
@@ -79,7 +79,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        arr_type = global_ns.variable('arr').type
+        arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
                 'char[4] volatile' == arr_type.decl_string,
@@ -98,7 +98,7 @@ class tester_t(parser_test_case.parser_test_case_t):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
-        arr_type = global_ns.variable('arr').type
+        arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
                 'char[4] const volatile' == arr_type.decl_string,
@@ -117,7 +117,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

@@ -1,12 +1,9 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""
-Logger classes and a few convenience methods.
-
-"""
+"""Logger classes and a few convenience methods."""
 
 import os
 import sys
@@ -14,18 +11,24 @@ import platform
 import logging
 import tempfile
 import subprocess
+import warnings
 
 
-def is_str(s):
+def is_str(string):
     """
     Python 2 and 3 compatible string checker.
 
-    """
+    Args:
+        string (str | basestring): the string to check
 
+    Returns:
+        bool: True or False
+
+    """
     if sys.version_info >= (3, 0):
-        return isinstance(s, str)
+        return isinstance(string, str)
     else:
-        return isinstance(s, basestring)
+        return isinstance(string, basestring)
 
 
 def find_xml_generator(name=None):
@@ -35,26 +38,25 @@ def find_xml_generator(name=None):
     :param name: name of the c++ parser: castxml or gccxml
     :type name: str
 
-    If no name is given the function first looks for gccxml,
-    then for castxml. If no c++ parser is found the function
+    If no name is given the function first looks for castxml,
+    then for gccxml. If no c++ parser is found the function
     raises an exception.
 
     """
-
     if platform.system() == "Windows":
         command = "where"
     else:
         command = "which"
 
     if name is None:
-        name = "gccxml"
+        name = "castxml"
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
         p.stdout.close()
         p.stderr.close()
         if path == "":
-            name = "castxml"
+            name = "gccxml"
             p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
             path = p.stdout.read().decode("utf-8")
@@ -74,11 +76,7 @@ def find_xml_generator(name=None):
 
 
 def _create_logger_(name):
-    """
-    Implementation detail, creates a logger.
-
-    """
-
+    """Implementation detail, creates a logger."""
     logger = logging.getLogger(name)
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter('%(levelname)s %(message)s'))
@@ -88,10 +86,7 @@ def _create_logger_(name):
 
 
 class loggers(object):
-    """
-    Class-namespace, defines a few loggers classes, used in the project.
-
-    """
+    """Class-namespace, defines a few loggers classes, used in the project."""
 
     cxx_parser = _create_logger_('pygccxml.cxx_parser')
     """
@@ -146,21 +141,13 @@ class loggers(object):
 
     @staticmethod
     def set_level(level):
-        """
-        Set the same logging level for all the loggers at once.
-
-        """
-
+        """Set the same logging level for all the loggers at once."""
         for logger in loggers.all_loggers:
             logger.setLevel(level)
 
 
 def remove_file_no_raise(file_name, config):
-    """
-    Removes file from disk if exception is raised.
-
-    """
-
+    """Removes file from disk if exception is raised."""
     # The removal can be disabled by the config for debugging purposes.
     if config.keep_xml:
         return True
@@ -170,7 +157,7 @@ def remove_file_no_raise(file_name, config):
             os.remove(file_name)
     except Exception as error:
         loggers.root.error(
-            "Error ocured while removing temprorary created file('%s'): %s" %
+            "Error occurred while removing temporary created file('%s'): %s" %
             (file_name, str(error)))
 
 
@@ -182,7 +169,6 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
     function tempfile.mkstemp.
 
     """
-
     if not prefix:
         prefix = tempfile.gettempprefix()
     fd, name = tempfile.mkstemp(suffix=suffix, prefix=prefix, dir=dir)
@@ -192,11 +178,7 @@ def create_temp_file_name(suffix, prefix=None, dir=None):
 
 
 def normalize_path(some_path):
-    """
-    Return os.path.normpath(os.path.normcase(some_path))
-
-    """
-
+    """Return os.path.normpath(os.path.normcase(some_path))."""
     return os.path.normpath(os.path.normcase(some_path))
 
 
@@ -208,7 +190,6 @@ def contains_parent_dir(fpath, dirs):
     this function.
 
     """
-
     # Note: this function is used nowhere in pygccxml but is used
     # at least by pypluplus; so it should stay here.
 
@@ -216,11 +197,7 @@ def contains_parent_dir(fpath, dirs):
 
 
 def _f(fpath, dir_):
-    """
-    Helper function for contains_parent_dir function.
-
-    """
-
+    """Helper function for contains_parent_dir function."""
     return fpath.startswith(dir_)
 
 
@@ -231,7 +208,6 @@ def get_architecture():
     The guess is based on maxint.
 
     """
-
     if sys.maxsize == 2147483647:
         return 32
     elif sys.maxsize == 9223372036854775807:
@@ -241,10 +217,7 @@ def get_architecture():
 
 
 class cached(property):
-    """
-    Convert a method into a cached attribute.
-
-    """
+    """Convert a method into a cached attribute."""
 
     # The following code is cut-and-paste from this post:
     # http://groups.google.com/group/comp.lang.python/browse_thread/
@@ -277,6 +250,10 @@ class cached(property):
 
 class enum(object):
     """
+    A small enum object.
+
+    Deprecated since 1.8.0. Will be removed in 1.9.0.
+
     Usage example:
 
     .. code-block:: python
@@ -290,8 +267,25 @@ class enum(object):
 
     """
 
+    def __init__(self):
+        super(enum, self).__init__()
+        warnings.warn("enum is deprecated.", DeprecationWarning)
+
     @classmethod
     def has_value(cls, enum_numeric_value):
+        """
+        Check if the enum contains the value.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Args:
+            enum_numeric_value (int): the value to search for
+
+        Returns:
+            bool: True or False
+
+        """
+        warnings.warn("enum.has_value is deprecated.", DeprecationWarning)
         for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return True
@@ -300,6 +294,19 @@ class enum(object):
 
     @classmethod
     def name_of(cls, enum_numeric_value):
+        """
+        Name of the value.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Args:
+            enum_numeric_value (int): the value to search for
+
+        Returns:
+            str: the name of the value
+
+        """
+        warnings.warn("enum.name_of is deprecated.", DeprecationWarning)
         for name, value in cls.__dict__.items():
             if enum_numeric_value == value:
                 return name
@@ -310,14 +317,23 @@ class enum(object):
 
 
 class native_compiler(object):
-    """
-    Provides information about the compiler which was used to build the
-    Python executable
-
-    """
+    """Get the compiler used to build the Python executable."""
 
     @staticmethod
     def get_version():
+        """
+        Get the version of the compiler used to build the Python executable.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Returns:
+            tuple:
+             * name of compiler (str): mscv
+             * compiler version (str): msvccompiler.get_build_version()
+        """
+        warnings.warn(
+            "native_compiler.get_version is deprecated.\n",
+            DeprecationWarning)
         if 'nt' != os.name:
             return None  # not implemented yet
         else:
@@ -326,6 +342,16 @@ class native_compiler(object):
 
     @staticmethod
     def get_gccxml_compiler():
+        """Get a modified version string of the compiler.
+
+        Deprecated since 1.8.0. Will be removed in 1.9.0.
+
+        Returns:
+            str: mscvXX, where XX is a version number. Works only on windows.
+        """
+        warnings.warn(
+            "native_compiler.get_gccxml_compiler is deprecated.\n",
+            DeprecationWarning)
         compiler = native_compiler.get_version()
         if not compiler:
             return None
@@ -337,17 +363,17 @@ class native_compiler(object):
 
 
 def get_tr1(name):
-    """
-    When using libstd++, there is a tr1 namespace.
-
-    Note that tr1 was also replaced by std in declarations.py,
-    for the parent attribute.
+    """In libstd++ the tr1 namespace needs special care.
 
     Return either an empty string or tr1::, useful for
     appending to search patterns.
 
-    """
+    Args:
+        name (str): the name of the declaration
 
+    Returns:
+        str: an empty string or "tr1::"
+    """
     tr1 = ""
     if "tr1" in name:
         tr1 = "tr1::"
@@ -443,3 +469,31 @@ class cxx_standard(object):
     def is_cxx1z(self):
         """Returns true if -std=c++1z is being used"""
         return self._cplusplus == cxx_standard.__STD_CXX['-std=c++1z']
+
+
+class DeprecationWrapper(object):
+    """
+    A small wrapper class useful when deprecation classes.
+
+    This class is not part of the public API.
+
+    """
+    def __init__(self, new_target, old_name, new_name, version):
+        self.new_target = new_target
+        self.old_name = old_name
+        self.new_name = new_name
+        self.version = version
+
+    def _warn(self):
+        warnings.warn(
+            self.old_name + " is deprecated. Please use " + self.new_name +
+            " instead. This will be removed in version " + self.version,
+            DeprecationWarning)
+
+    def __call__(self, *args, **kwargs):
+        self._warn()
+        return self.new_target(*args, **kwargs)
+
+    def __getattr__(self, attr):
+        self._warn()
+        return getattr(self.new_target, attr)

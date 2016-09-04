@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -52,7 +52,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
                 "value(%s) of 'initialized' variable") %
             (expected_value, initialized.value))
         self._test_type_composition(
-            initialized.type,
+            initialized.decl_type,
             declarations.const_t,
             declarations.long_unsigned_int_t)
 
@@ -114,7 +114,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             no_return_1_arg,
             [declarations.argument_t(
                 name=no_return_1_arg.arguments[0].name,
-                type=declarations.int_t())])
+                decl_type=declarations.int_t())])
 
         return_default_args = ns.free_function('return_default_args')
         self.assertTrue(
@@ -125,11 +125,11 @@ class declarations_t(parser_test_case.parser_test_case_t):
             return_default_args,
             [declarations.argument_t(
                 name=return_default_args.arguments[0].name,
-                type=declarations.int_t(),
+                decl_type=declarations.int_t(),
                 default_value='1'),
                 declarations.argument_t(
                     name=return_default_args.arguments[1].name,
-                    type=declarations.bool_t(),
+                    decl_type=declarations.bool_t(),
                     default_value='false')])
         self._test_calldef_exceptions(return_default_args, [])
 
@@ -150,7 +150,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self._test_calldef_args(
             member_inline_call, [
                 declarations.argument_t(
-                    name='i', type=declarations.int_t())])
+                    name='i', decl_type=declarations.int_t())])
 
         member_const_call = struct_calldefs.member_function(
             'member_const_call')
@@ -206,7 +206,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         error_text = "copy constructor has not been found"
         self.assertTrue(1 == len(
             [constructor for constructor in constructor_found if
-                constructor.is_copy_constructor]), error_text)
+                declarations.is_copy_constructor(constructor)]), error_text)
         # there is nothing to check about constructors - I know the
         # implementation of parser.
         # In this case it doesn't different from any other function
@@ -245,7 +245,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
                     decl.decl_string)
 
     def test_ellipsis(self):
-        ns = self.global_ns.ns('ellipsis_tester')
+        ns = self.global_ns.namespace('ellipsis_tester')
         do_smth = ns.mem_fun('do_smth')
         self.assertTrue(do_smth.has_ellipsis)
         do_smth_else = ns.free_fun('do_smth_else')

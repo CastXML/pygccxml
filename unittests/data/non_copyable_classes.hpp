@@ -1,4 +1,4 @@
-// Copyright 2014-2015 Insight Software Consortium.
+// Copyright 2014-2016 Insight Software Consortium.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
@@ -85,6 +85,23 @@ class Foo4 {
 
 // Use the base class
 class MainFoo4 : Foo4 {
+  public:
+    char b;
+};
+
+// -----------------------------------------------
+
+// Foo5 is a base class, with a variable foo of type Foo4, which is not
+// copyable
+class Foo5 {
+  private:
+    Foo5();
+  protected:
+    const Foo4 foo;
+};
+
+// Use the base class
+class MainFoo5 : Foo5 {
   public:
     char b;
 };

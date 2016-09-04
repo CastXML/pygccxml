@@ -1,11 +1,12 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import re
-from pygccxml import utils
-from pygccxml import declarations
+from .. import utils
+from .. import declarations
+from ..declarations import type_traits
 
 
 class default_argument_patcher_t(object):
@@ -35,14 +36,17 @@ class default_argument_patcher_t(object):
         else:
             return None
 
-    def __join_names(self, prefix, suffix):
+    @staticmethod
+    def __join_names(prefix, suffix):
         if prefix == '::':
             return '::' + suffix
         else:
             return prefix + '::' + suffix
 
-    def __is_unqualified_enum(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+    @staticmethod
+    def __is_unqualified_enum(func, arg):
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         if not declarations.is_enum(type_):
             return False
         enum_type = declarations.enum_declaration(type_)
@@ -53,7 +57,8 @@ class default_argument_patcher_t(object):
             arg.default_value.split('::')[-1])
 
     def __fix_unqualified_enum(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         enum_type = declarations.enum_declaration(type_)
         if self.__cxx_std.is_cxx11_or_greater:
             qualifier_decl_string = enum_type.decl_string
@@ -63,21 +68,25 @@ class default_argument_patcher_t(object):
             qualifier_decl_string,
             arg.default_value.split('::')[-1])
 
-    def __is_invalid_integral(self, func, arg):
-        type_ = declarations.remove_reference(declarations.remove_cv(arg.type))
+    @staticmethod
+    def __is_invalid_integral(func, arg):
+        type_ = declarations.remove_reference(
+            declarations.remove_cv(arg.decl_type))
         if not declarations.is_integral(type_):
             return False
         try:
             int(arg.default_value)
             return False
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             return True
 
     def __fix_invalid_integral(self, func, arg):
         try:
             int(arg.default_value)
             return arg.default_value
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             pass
 
         try:
@@ -93,7 +102,8 @@ class default_argument_patcher_t(object):
             if found_hex and not default_value.startswith('0x'):
                 int('0x' + default_value, 16)
                 return '0x' + default_value
-        except:
+        except ValueError:
+            # The arg.default_value string could not be converted to int
             pass
 
         # may be we deal with enum
@@ -104,8 +114,8 @@ class default_argument_patcher_t(object):
         while parent:
             found = self.__find_enum(parent, enum_value)
             if found:
-                if declarations.is_fundamental(arg.type) and ' ' in \
-                        arg.type.decl_string:
+                if declarations.is_fundamental(arg.decl_type) and ' ' in \
+                        arg.decl_type.decl_string:
                     template = '(%s)(%s)'
                 else:
                     template = '%s(%s)'
@@ -113,7 +123,7 @@ class default_argument_patcher_t(object):
                     qualifier_decl_string = found.decl_string
                 else:
                     qualifier_decl_string = found.parent.decl_string
-                return template % (arg.type.decl_string,
+                return template % (arg.decl_type.decl_string,
                                    self.__join_names(qualifier_decl_string,
                                                      enum_value))
             else:
@@ -127,16 +137,14 @@ class default_argument_patcher_t(object):
             parent = func.parent
             while parent:
                 try:
-                    found = parent.variable(arg.default_value,
-                                            recursive=False)
+                    found = parent.variable(
+                        arg.default_value, recursive=False)
                 except declarations.matcher.declaration_not_found_t:
                     # ignore exceptions if a match is not found
                     found = None
-                if found:
-                    if declarations.is_fundamental(arg.type):
-                        return "%s" % self.__join_names(
-                                        found.parent.decl_string,
-                                        arg.default_value)
+                if found and declarations.is_fundamental(arg.decl_type):
+                    return "%s" % self.__join_names(
+                        found.parent.decl_string, arg.default_value)
                 parent = parent.parent
 
         return arg.default_value
@@ -151,7 +159,8 @@ class default_argument_patcher_t(object):
                 return enum
         return None
 
-    def __is_double_call(self, func, arg):
+    @staticmethod
+    def __is_double_call(func, arg):
         call_invocation = declarations.call_invocation
         dv = arg.default_value
         found1 = call_invocation.find_args(dv)
@@ -164,7 +173,8 @@ class default_argument_patcher_t(object):
         args2 = call_invocation.args(dv[found2[0]: found2[1] + 1])
         return len(args1) == len(args2)
 
-    def __fix_double_call(self, func, arg):
+    @staticmethod
+    def __fix_double_call(func, arg):
         call_invocation = declarations.call_invocation
         dv = arg.default_value
         found1 = call_invocation.find_args(dv)
@@ -173,7 +183,8 @@ class default_argument_patcher_t(object):
         args2 = call_invocation.args(dv[found2[0]: found2[1] + 1])
         return call_invocation.join(dv[:found1[0]], args2)
 
-    def __is_constructor_call(self, func, arg):
+    @staticmethod
+    def __is_constructor_call(func, arg):
         # if '0.9' in utils.xml_generator:
         #    return False
         call_invocation = declarations.call_invocation
@@ -181,7 +192,7 @@ class default_argument_patcher_t(object):
         if not call_invocation.is_call_invocation(dv):
             return False
         name = call_invocation.name(dv)
-        base_type = declarations.base_type(arg.type)
+        base_type = type_traits.base_type(arg.decl_type)
         if not isinstance(base_type, declarations.declarated_t):
             return False
         decl = base_type.declaration
@@ -195,7 +206,7 @@ class default_argument_patcher_t(object):
         dv = arg.default_value
         if not call_invocation.is_call_invocation(dv):
             return False
-        base_type = declarations.base_type(arg.type)
+        base_type = type_traits.base_type(arg.decl_type)
         decl = base_type.declaration
         name, args = call_invocation.split(dv)
         if decl.name != name:

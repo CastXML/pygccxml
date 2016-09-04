@@ -1,10 +1,14 @@
-=================================
-GCC-XML 0.7 -> 0.9 upgrade issues
-=================================
+=========================================
+GCC-XML 0.7 → 0.9 upgrade issues (Legacy)
+=========================================
 
 ------------
 Introduction
 ------------
+
+This page is kept here for historical reasons. CastXML is the recommended
+xml generator and GCC-XML is being phased out. This page will be removed
+in version 2.0.0 of pygcxml.
 
 Recently, GCC-XML internal parser was updated to GCC 4.2. The internal representation
 of source code, provided by GCC's parser, has changed a lot and few backward
@@ -96,7 +100,8 @@ Free and member function default arguments
 Both versions of GCC-XML have a few issues, related to default arguments. GCC-XML 0.9
 fixes some issues, but introduces another ones. Take a look on the following examples:
 
-*
+* Example 1
+
   .. code-block:: c++
 
     void fix_numeric( ull arg=(ull)-1 );
@@ -114,7 +119,8 @@ fixes some issues, but introduces another ones. Take a look on the following exa
 
     <Argument name="arg" type="_103" default="0xffffffffffffffffu"/>
 
-*
+* Example 2
+
   .. code-block:: c++
 
     void fix_function_call( int i=calc( 1,2,3) );
@@ -132,7 +138,8 @@ fixes some issues, but introduces another ones. Take a look on the following exa
 
     <Argument name="i" type="_34" default="function_call::calc(1, 2, 3)"/>
 
-*
+* Example 3
+
   .. code-block:: c++
 
     void typedef__func( const typedef_::alias& position = typedef_::alias() );
@@ -150,7 +157,8 @@ fixes some issues, but introduces another ones. Take a look on the following exa
 
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
-*
+* Example 4
+
   .. code-block:: c++
 
     void typedef__func2( const typedef_::alias& position = alias() );
@@ -169,7 +177,8 @@ fixes some issues, but introduces another ones. Take a look on the following exa
     <Argument name="position" type="_1703" default="typedef_::original_name()"/>
 
 
-*
+* Example 5
+
   .. code-block:: c++
 
     node* clone_tree( const std::vector<std::string> &types=std::vector<std::string>() );

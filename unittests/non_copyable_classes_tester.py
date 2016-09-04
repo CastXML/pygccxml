@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
@@ -9,7 +9,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -25,34 +25,37 @@ class tester_t(parser_test_case.parser_test_case_t):
     def test(self):
 
         """
-        Search for two classes which can not be copied.
+        Search for classes which can not be copied.
 
         See bug #13
 
-        Covers two cases for the moment
         1) non copyable class
-        2) non copyable const (fundamental type)
-        3) non copyable const (class type)
-        4) non copyable const (array type)
+        2) non copyable const variable (fundamental type)
+        3) non copyable const variable (class type)
+        4) non copyable const variable (array type)
+        5) non copyable const variable (class type)
 
         """
 
-        MainFoo1 = self.global_ns.class_('MainFoo1')
-        self.assertTrue(declarations.is_noncopyable(MainFoo1))
+        main_foo_1 = self.global_ns.class_('MainFoo1')
+        self.assertTrue(declarations.is_noncopyable(main_foo_1))
 
-        MainFoo2 = self.global_ns.class_('MainFoo2')
-        self.assertTrue(declarations.is_noncopyable(MainFoo2))
+        main_foo_2 = self.global_ns.class_('MainFoo2')
+        self.assertTrue(declarations.is_noncopyable(main_foo_2))
 
-        MainFoo3 = self.global_ns.class_('MainFoo3')
-        self.assertTrue(declarations.is_noncopyable(MainFoo3))
+        main_foo_3 = self.global_ns.class_('MainFoo3')
+        self.assertTrue(declarations.is_noncopyable(main_foo_3))
 
-        MainFoo4 = self.global_ns.class_('MainFoo4')
-        self.assertTrue(declarations.is_noncopyable(MainFoo4))
+        main_foo_4 = self.global_ns.class_('MainFoo4')
+        self.assertTrue(declarations.is_noncopyable(main_foo_4))
+
+        main_foo_5 = self.global_ns.class_('MainFoo5')
+        self.assertTrue(declarations.is_noncopyable(main_foo_5))
 
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

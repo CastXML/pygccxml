@@ -1,9 +1,10 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
+import warnings
 try:
     import unittest2 as unittest
 except ImportError:
@@ -71,19 +72,19 @@ class core_t(parser_test_case.parser_test_case_t):
                 ns is ns12.parent is ns22.parent is ns32.parent),
             'There are 2 or more instances of ns namespace.')
 
-        E11 = self.global_ns.enum(enums[0])
-        E21 = self.global_ns.enum(enums[1])
-        E31 = self.global_ns.enum(enums[2])
+        e11 = self.global_ns.enum(enums[0])
+        e21 = self.global_ns.enum(enums[1])
+        e31 = self.global_ns.enum(enums[2])
         self.assertTrue(
-            E11.parent is E21.parent is E31.parent,
+            e11.parent is e21.parent is e31.parent,
             'There are 2 or more instances of global namespace.')
 
-        nsE12 = self.global_ns.enum(enums[3])
-        nsE23 = self.global_ns.enum(enums[4])
-        nsE33 = self.global_ns.enum(enums[5])
+        nse12 = self.global_ns.enum(enums[3])
+        nse23 = self.global_ns.enum(enums[4])
+        nse33 = self.global_ns.enum(enums[5])
         self.assertTrue(
             ns and (
-                ns is nsE12.parent is nsE23.parent is nsE33.parent),
+                ns is nse12.parent is nse23.parent is nse33.parent),
             'There are 2 or more instances of ns namespace.')
 
     def _test_ns_membership(self, ns, enum_name):
@@ -161,15 +162,25 @@ class core_t(parser_test_case.parser_test_case_t):
             declarations.ACCESS_TYPES.PRIVATE)
 
     def test_compiler_retrocompatibility(self):
-        # For retrocompatibility, test if the compiler
-        # attribute still works. This can be removed
-        # once compiler is dropped.
+        """
+        For retro-compatibility, test if the compiler attribute still works.
+
+        This can be removed once the compiler attribute is dropped.
+
+        """
+
+        # Do not clutter the tests with warnings
+        warnings.simplefilter("ignore", DeprecationWarning)
+
         std = self.global_ns.namespace("std")
         self.assertEqual(utils.xml_generator, std.compiler)
         if "GCC" in utils.xml_generator:
             self.assertIn("GCC", std.compiler)
         elif "CastXML" in utils.xml_generator:
             self.assertIn("CastXML", std.compiler)
+
+        # Reset this warning to always
+        warnings.simplefilter("error", DeprecationWarning)
 
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
@@ -325,19 +336,20 @@ class core_t(parser_test_case.parser_test_case_t):
                 typedef,
                 "unable to find typedef to build-in type '%s'" %
                 fundamental_type_name)
-            if typedef.type.decl_string != fundamental_type.decl_string:
+            if typedef.decl_type.decl_string != fundamental_type.decl_string:
                 errors.append(
                     "there is a difference between typedef base type " +
                     "name('%s') and expected one('%s')" %
-                    (typedef.type.decl_string, fundamental_type.decl_string))
-        self.failIf(errors, pprint.pformat(errors))
+                    (typedef.decl_type.decl_string,
+                     fundamental_type.decl_string))
+        self.assertFalse(errors, pprint.pformat(errors))
 
     def test_compound_types(self):
         typedef_inst = self.global_ns.decl(
             decl_type=declarations.typedef_t,
             name='typedef_const_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.const_t,
             declarations.int_t)
 
@@ -345,7 +357,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_pointer_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.pointer_t,
             declarations.int_t)
 
@@ -353,7 +365,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_reference_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.reference_t,
             declarations.int_t)
 
@@ -361,15 +373,15 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_const_unsigned_int_const_pointer')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.const_t,
             declarations.pointer_t)
         self._test_type_composition(
-            typedef_inst.type.base,
+            typedef_inst.decl_type.base,
             declarations.pointer_t,
             declarations.const_t)
         self._test_type_composition(
-            typedef_inst.type.base.base,
+            typedef_inst.decl_type.base.base,
             declarations.const_t,
             declarations.unsigned_int_t)
 
@@ -377,13 +389,13 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='typedef_volatile_int')
         self._test_type_composition(
-            typedef_inst.type,
+            typedef_inst.decl_type,
             declarations.volatile_t,
             declarations.int_t)
 
         var_inst = self.global_ns.variable('array255')
         self._test_type_composition(
-            var_inst.type,
+            var_inst.decl_type,
             declarations.array_t,
             declarations.int_t)
 
@@ -392,15 +404,15 @@ class core_t(parser_test_case.parser_test_case_t):
             name='typedef_EFavoriteDrinks')
         self.assertTrue(
             isinstance(
-                typedef_inst.type,
+                typedef_inst.decl_type,
                 declarations.declarated_t),
             " typedef to enum should be 'declarated_t' instead of '%s'" %
-            typedef_inst.type.__class__.__name__)
+            typedef_inst.decl_type.__class__.__name__)
         enum_declaration = self.global_ns.enum('EFavoriteDrinks')
         self.assertTrue(
-            typedef_inst.type.declaration is enum_declaration,
+            typedef_inst.decl_type.declaration is enum_declaration,
             "instance of declaration_t has reference to '%s' instead of '%s'" %
-            (typedef_inst.type.declaration.name,
+            (typedef_inst.decl_type.declaration.name,
              enum_declaration.name))
 
     def test_free_function_type(self):
@@ -408,10 +420,10 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='function_ptr')
         self._test_type_composition(
-            function_ptr.type,
+            function_ptr.decl_type,
             declarations.pointer_t,
             declarations.free_function_type_t)
-        function_type = function_ptr.type.base
+        function_type = function_ptr.decl_type.base
         self.assertTrue(
             isinstance(
                 function_type.return_type,
@@ -444,11 +456,11 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='member_function_ptr_t')
         self._test_type_composition(
-            function_ptr.type,
+            function_ptr.decl_type,
             declarations.pointer_t,
             declarations.member_function_type_t)
 
-        function_type = function_ptr.type.base
+        function_type = function_ptr.decl_type.base
 
         members_pointers = self.global_ns.class_('members_pointers_t')
         self.assertTrue(
@@ -487,7 +499,7 @@ class core_t(parser_test_case.parser_test_case_t):
             decl_type=declarations.typedef_t,
             name='member_variable_ptr_t')
         self._test_type_composition(
-            mv.type,
+            mv.decl_type,
             declarations.pointer_t,
             declarations.member_variable_type_t)
 
@@ -497,10 +509,10 @@ class core_t(parser_test_case.parser_test_case_t):
             "unable to find class('%s')" %
             'members_pointers_t')
         self._test_type_composition(
-            mv.type.base,
+            mv.decl_type.base,
             declarations.member_variable_type_t,
             declarations.declarated_t)
-        mv_type = mv.type.base
+        mv_type = mv.decl_type.base
         self.assertTrue(
             mv_type.base.declaration is members_pointers,
             "member function type class should be '%s' instead of '%s'" %

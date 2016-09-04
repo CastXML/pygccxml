@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -9,7 +9,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     global_ns = None
 
     def __init__(self, *args):
@@ -18,15 +18,15 @@ class tester_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-            tester_t.global_ns.init_optimizer()
-        self.global_ns = tester_t.global_ns
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.global_ns.init_optimizer()
+        self.global_ns = Test.global_ns
 
     def test(self):
         f = self.global_ns.free_fun('pygccxml_bug')
-        t = f.arguments[0].type
+        t = f.arguments[0].decl_type
         self.assertTrue(isinstance(t, declarations.pointer_t))
         self.assertTrue(isinstance(t.base, declarations.volatile_t))
         self.assertTrue(isinstance(t.base.base, declarations.const_t))
@@ -35,7 +35,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

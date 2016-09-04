@@ -1,6 +1,6 @@
-=======
-Example
-=======
+======================
+Print all declarations
+======================
 
 This example prints all declarations found in :doc:`example.hpp <example.hpp>`
 file.

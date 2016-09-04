@@ -1,16 +1,14 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
+import parser_test_case
 from pygccxml import declarations
 
 
-class tester_t(unittest.TestCase):
-
-    def __init__(self, *args):
-        unittest.TestCase.__init__(self, *args)
+class tester_t(parser_test_case.parser_test_case_t):
 
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(

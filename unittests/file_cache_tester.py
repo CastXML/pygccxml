@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -12,7 +12,7 @@ import parser_test_case
 from pygccxml import parser
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
 
     def __init__(self, *args):
@@ -80,21 +80,33 @@ class tester_t(parser_test_case.parser_test_case_t):
             ("cached declarations and source declarations are different, " +
                 "after pickling"))
 
-    def test_reopen_cache(self):
+    @staticmethod
+    def test_reopen_cache():
         """
         Test opening cache files in a subprocess (with a clean environment).
 
         """
+
+        env = os.environ.copy()
+
+        # Get the path to current directory
+        path = os.path.dirname(os.path.realpath(__file__))
+        # Set the COVERAGE_PROCESS_START env. variable.
+        # Allows to cover files run in a subprocess
+        # http://nedbatchelder.com/code/coverage/subprocess.html
+        env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
+
         p = subprocess.Popen(
             [sys.executable, "unittests/reopen_cache_tester.py"],
-            stdout=subprocess.PIPE)
+            stdout=subprocess.PIPE,
+            env=env)
         print(p.stdout.read())
         p.stdout.close()
 
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 

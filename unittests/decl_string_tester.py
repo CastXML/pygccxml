@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Insight Software Consortium.
+# Copyright 2014-2016 Insight Software Consortium.
 # Copyright 2004-2008 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
@@ -11,7 +11,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     global_ns = None
 
@@ -27,10 +27,10 @@ class tester_t(parser_test_case.parser_test_case_t):
         """
 
     def setUp(self):
-        if not tester_t.global_ns:
+        if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
-            tester_t.global_ns = declarations.get_global_namespace(decls)
-            tester_t.global_ns.init_optimizer()
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.global_ns.init_optimizer()
 
     def test_member_function(self):
         member_inline_call = self.global_ns.mem_fun('member_inline_call')
@@ -53,7 +53,7 @@ class tester_t(parser_test_case.parser_test_case_t):
             "Created decl_string for global function contains mistake")
 
     def test_all_mem_and_free_funs(self):
-        ns = self.global_ns.ns('::declarations::calldef')
+        ns = self.global_ns.namespace('::declarations::calldef')
         for f in ns.mem_funs():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
@@ -70,7 +70,7 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(unittest.makeSuite(Test))
     return suite
 
 
