@@ -11,7 +11,7 @@ Modify the version numbers in:
 
 ``docs/conf.py``
 
-Do not forget to document the changes in the ``docs/history.rst`` file.
+Do not forget to document the changes in the ``CHANGELOG.md`` file.
 
 Uploading to pypi
 -----------------
