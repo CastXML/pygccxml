@@ -1,41 +1,40 @@
 Changes
 =======
 
-Version 1.8.0 (not yet released)
---------------------------------
+Version 1.8.0
+-------------
 
-* find_xml_generator will now look for castxml first
+1. ```find_xml_generator``` will now look for castxml first
 
-* Do not allow to use the GCCXML provided by newer gccxml debian packages.
+2. Do not allow to use the GCCXML provided by newer gccxml debian packages.
   It is a wrapper around CastXML which can confuse pygccxml.
   You should use the castxml package and the CastXML binary instead.
   If you really want to use gccxml, the gccxml.real binary from the
   gccxml debian package can still be used.
   
-* Fix parsing of boost/locale.hpp code.
+3. Fix parsing of ```boost/locale.hpp``` code.
   Templated class instantiations with specializations are now better supported,
   specifically when containing parentheses:
-  myClass<std::vector<char>(const std::string &, const std::string &)> obj;
+  ```myClass<std::vector<char>(const std::string &, const std::string &)> obj;```
 
-* When using the ```remove_pointer``` function on a function pointer, the
+4. When using the ```remove_pointer``` function on a function pointer, the
   ```remove_pointer``` function now correctly returns a ```calldef_type_t```.
 
-* ```declarations.is_string```, ```declarations.is_std_wstring```,
+5. ```declarations.is_string```, ```declarations.is_std_wstring```,
   ```declarations.is_std_ostream``` and ```declarations.is_std_wostream``` now
   correctly work when a the type is also a reference.
   Example: ```declarations.is_string``` returned false for
   ```typedef std::string& x3;```; it will return true now.
 
-* General code style overhaul (with the help of quantifiedcode.com)
+6. General code style overhaul (with the help of quantifiedcode.com)
 
-* Added a bunch of new examples
+7. Added a bunch of new examples and documentation update and cleanup
 
-* Documentation update and cleanup
-
-* [Removals] Remove compiler attribute in declarations.py and gccxml_path from config.py
+8. [Removals] Remove ```compiler``` attribute in declarations.py and
+   ```gccxml_path``` from config.py
   These were deprecated in pygccxml v1.7.0, and definitively removed for v1.8.0
 
-* [Deprecations]
+9. [Deprecations]
   * The ```binary_parsers``` module was deprecated. It seems that this module is not
     used by other third-party projects, at least a quick search on GitHub
     did not give any interesting usage. Also, this code is not tested, and
@@ -57,18 +56,18 @@ Version 1.8.0 (not yet released)
        - decl.find_noncopyable_vars() method => declarations.find_noncopyable_vars(decl)
        - decl.find_copy_constructor() method => declarations.find_copy_constructor(decl)
        - decl.has_vtable argument => declarations.has_vtable(decl)
-     * ```constructor_t```
+     * In ```constructor_t```
        - ctor.is_copy_constructor attribute  => declarations.is_copy_constructor(ctor)
        - ctor.is_trivial_constructor attribute => declarations.is_trivial_constructor(ctor)
 
-     * Deprecate the ns() method. The namespace() method can be used instead.
+     * Deprecate the ```ns()``` method. The ```namespace()``` method can be used instead.
 
-     * Deprecate etree_scanner_t and etree_saxifier_t classes.
-       The most efficient xml scanner class is the ietree_scanner_t class, which
+     * Deprecate ```etree_scanner_t``` and ```etree_saxifier_t``` classes.
+       The most efficient xml scanner class is the ```ietree_scanner_t``` class, which
        is the one used since many years now.
        
-     * The [gccxml] section used in the configuration file is now deprecated.
-       Please use [xml_generator] instead.
+     * The ```[gccxml]``` section used in the configuration file is now deprecated.
+       Please use ```[xml_generator]``` instead.
 
 
 Version 1.7.6
