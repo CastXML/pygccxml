@@ -203,7 +203,7 @@ class declaration_t(object):
     @parent.setter
     def parent(self, new_parent):
         if new_parent:
-            assert(isinstance(new_parent, declaration_t))
+            assert isinstance(new_parent, declaration_t)
 
         self._parent = new_parent
 

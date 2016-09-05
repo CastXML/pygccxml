@@ -420,7 +420,7 @@ class source_reader_t(object):
 
         """
 
-        assert(self.__config is not None)
+        assert self.__config is not None
 
         ffname = self.__file_full_name(xml_file)
         self.logger.debug("Reading xml file: [%s]" % xml_file)

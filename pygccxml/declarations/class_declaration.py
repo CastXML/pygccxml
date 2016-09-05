@@ -61,10 +61,10 @@ class hierarchy_info_t(object):
         """creates class that contains partial information about class
         relationship"""
         if related_class:
-            assert(isinstance(related_class, class_t))
+            assert isinstance(related_class, class_t)
         self._related_class = related_class
         if access:
-            assert(access in ACCESS_TYPES.ALL)
+            assert access in ACCESS_TYPES.ALL
         self._access = access
         self._is_virtual = is_virtual
         self._declaration_path = None
@@ -99,7 +99,7 @@ class hierarchy_info_t(object):
     @related_class.setter
     def related_class(self, new_related_class):
         if new_related_class:
-            assert(isinstance(new_related_class, class_t))
+            assert isinstance(new_related_class, class_t)
         self._related_class = new_related_class
         self._declaration_path = None
         self._declaration_path_hash = None
@@ -110,7 +110,7 @@ class hierarchy_info_t(object):
 
     @access.setter
     def access(self, new_access):
-        assert(new_access in ACCESS_TYPES.ALL)
+        assert new_access in ACCESS_TYPES.ALL
         self._access = new_access
 
     # TODO: Why is there an access_type / access which are the same ?
@@ -215,7 +215,7 @@ class class_t(scopedef.scopedef_t):
         """creates class that describes C++ class definition"""
         scopedef.scopedef_t.__init__(self, name)
         if class_type:
-            assert(class_type in CLASS_TYPES.ALL)
+            assert class_type in CLASS_TYPES.ALL
         self._class_type = class_type
         self._bases = []
         self._derived = []
@@ -326,7 +326,7 @@ class class_t(scopedef.scopedef_t):
     @class_type.setter
     def class_type(self, new_class_type):
         if new_class_type:
-            assert(new_class_type in CLASS_TYPES.ALL)
+            assert new_class_type in CLASS_TYPES.ALL
         self._class_type = new_class_type
 
     @property

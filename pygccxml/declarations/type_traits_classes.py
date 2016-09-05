@@ -138,7 +138,7 @@ def find_noncopyable_vars(type_):
         list: list of all `noncopyable` variables.
 
     """
-    assert(isinstance(type_, class_declaration.class_t))
+    assert isinstance(type_, class_declaration.class_t)
 
     logger = utils.loggers.cxx_parser
     mvars = type_.variables(
@@ -243,7 +243,7 @@ def has_public_destructor(type):
 
 def has_vtable(type_):
     """True, if class has virtual table, False otherwise"""
-    assert(isinstance(type_, class_declaration.class_t))
+    assert isinstance(type_, class_declaration.class_t)
     return bool(
         type_.calldefs(
             lambda f: isinstance(f, calldef_members.member_function_t) and
@@ -774,7 +774,7 @@ def is_copy_constructor(constructor):
         bool: True if this is a copy constructor, False instead.
 
     """
-    assert (isinstance(constructor, calldef_members.constructor_t))
+    assert isinstance(constructor, calldef_members.constructor_t)
     args = constructor.arguments
     parent = constructor.parent
 
@@ -830,5 +830,5 @@ def is_trivial_constructor(constructor):
         bool: True if this is a trivial constructor, False instead.
 
     """
-    assert (isinstance(constructor, calldef_members.constructor_t))
+    assert isinstance(constructor, calldef_members.constructor_t)
     return not bool(constructor.arguments)
