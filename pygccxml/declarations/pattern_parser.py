@@ -195,7 +195,7 @@ class parser_t(object):
 
         if not args:
             args_str = ' '
-        elif 1 == len(args):
+        elif len(args) == 1:
             args_str = ' ' + args[0] + ' '
         else:
             args_str = ' ' + arg_separator.join(args) + ' '
