@@ -69,6 +69,10 @@ Version 1.8.0
      * The ```[gccxml]``` section used in the configuration file is now deprecated.
        Please use ```[xml_generator]``` instead.
 
+  * ```native_compiler``` and ```enum``` classes from the ```utils``` module. These were
+     not used in ```pygccxml```, and can easily be implemented in your own project if you
+     need and equivalent
+
 
 Version 1.7.6
 -------------
