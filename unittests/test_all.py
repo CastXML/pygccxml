@@ -53,7 +53,6 @@ import plain_c_tester
 import function_traits_tester
 import better_templates_matcher_tester
 import declaration_matcher_tester
-# import undname_creator_tester
 import calling_convention_tester
 import const_volatile_arg_tester
 import array_bug_tester
@@ -77,7 +76,6 @@ import test_function_pointer
 
 testers = [
     # , demangled_tester # failing right now
-    # , undname_creator_tester # failing right now
     pep8_tester,
     decl_string_tester,
     declaration_files_tester,
