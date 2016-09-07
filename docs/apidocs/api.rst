@@ -8,5 +8,4 @@ API
 
    declarations
    parser
-   binary_parsers
    utils

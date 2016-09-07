@@ -20,7 +20,6 @@ setup(name="pygccxml",
       packages=["pygccxml",
                 "pygccxml.declarations",
                 "pygccxml.parser",
-                "pygccxml.binary_parsers",
                 "pygccxml.utils"],
       classifiers=[
           "Development Status :: 5 - Production/Stable",
