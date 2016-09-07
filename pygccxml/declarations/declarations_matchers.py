@@ -7,7 +7,6 @@ import os
 import warnings
 
 from . import templates
-from . import declaration_utils
 from . import matcher_base_t
 from . import variable
 from . import cpptypes
