@@ -304,52 +304,6 @@ class xml_generator_configuration_t(parser_configuration_t):
                 raise RuntimeError(msg)
 
 
-class _StringDeprecationWrapper(str):
-    """
-    A small wrapper class useful when deprecation strings.
-
-    This class is not part of the public API.
-
-    """
-
-    def __new__(cls, content):
-        cls.content = content
-        return str.__new__(cls, content)
-
-    def __str__(self):
-        warnings.warn(
-            "gccxml_configuration_example is deprecated. There is an " +
-            "example file here if you need one: unittests/xml_generator.cfg"
-            "This will be removed in version 1.9.0",
-            DeprecationWarning)
-        return self.content
-
-
-gccxml_configuration_example = _StringDeprecationWrapper(
-    """
-[gccxml]
-#path to gccxml executable file - optional, if not provided, os.environ['PATH']
-#variable is used to find it
-gccxml_path=(deprecated)
-xml_generator_path=
-#gccxml working directory - optional, could be set to your source code
-directory
-working_directory=
-#additional include directories, separated by ';'
-include_paths=
-#gccxml has a nice algorithms, which selects what C++ compiler to emulate.
-#You can explicitly set what compiler it should emulate.
-#Valid options are: g++, msvc6, msvc7, msvc71, msvc8, cl.
-compiler=
-# gccxml or castxml
-xml_generator=
-# Do we keep xml files or not after errors
-keep_xml=
-# Set the path to the compiler
-compiler_path=
-""")
-
-
 def load_xml_generator_configuration(configuration, **defaults):
     """
     Loads CastXML or GCC-XML configuration.
@@ -492,18 +446,6 @@ def create_compiler_path(xml_generator, compiler_path):
             compiler_path = None
 
     return compiler_path
-
-
-gccxml_configuration_t = utils.utils.DeprecationWrapper(
-    xml_generator_configuration_t,
-    "gccxml_configuration_t",
-    "xml_generator_configuration_t",
-    "1.9.0")
-load_gccxml_configuration = utils.utils.DeprecationWrapper(
-    load_xml_generator_configuration,
-    "load_gccxml_configuration",
-    "load_xml_generator_configuration",
-    "1.9.0")
 
 
 if __name__ == '__main__':
