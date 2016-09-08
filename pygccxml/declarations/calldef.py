@@ -37,24 +37,10 @@ class argument_t(object):
     def __init__(
             self,
             name='',
-            type=None,
             decl_type=None,
             default_value=None,
             attributes=None):
         object.__init__(self)
-
-        if type is not None:
-            # Deprecated since 1.8.0. Will be removed in 1.9.0
-            warnings.warn(
-                "The type argument is deprecated. \n" +
-                "Please use the decl_type argument instead.",
-                DeprecationWarning)
-            if decl_type is not None:
-                raise (
-                    "Please use only either the type or " +
-                    "decl_type argument.")
-            # Still allow to use the old type for the moment.
-            decl_type = type
 
         self._name = name
         self._default_value = default_value
@@ -136,30 +122,6 @@ class argument_t(object):
     @default_value.setter
     def default_value(self, default_value):
         self._default_value = default_value
-
-    @property
-    def type(self):
-        """
-        Deprecated since v1.8.0. Will be removed in v1.9.0
-
-        """
-
-        warnings.warn(
-            "argument_t.type is deprecated.\n" +
-            "Please use argument_t.decl_type instead.", DeprecationWarning)
-        return self._decl_type
-
-    @type.setter
-    def type(self, _decl_type):
-        """
-        Deprecated since v1.8.0. Will be removed in v1.9.0
-
-        """
-
-        warnings.warn(
-            "argument_t.type is deprecated.\n" +
-            "Please use argument_t.decl_type instead.", DeprecationWarning)
-        self._decl_type = _decl_type
 
     @property
     def decl_type(self):

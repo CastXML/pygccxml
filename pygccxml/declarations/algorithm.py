@@ -26,21 +26,8 @@ class match_declaration_t(object):
     """
 
     def __init__(
-            self, type=None, decl_type=None,
+            self, decl_type=None,
             name=None, fullname=None, parent=None):
-
-        if type is not None:
-            # Deprecated since 1.8.0. Will be removed in 1.9.0
-            warnings.warn(
-                "The type argument is deprecated. \n" +
-                "Please use the decl_type argument instead.",
-                DeprecationWarning)
-            if decl_type is not None:
-                raise (
-                    "Please use only either the type or " +
-                    "decl_type argument.")
-            # Still allow to use the old type for the moment.
-            decl_type = type
 
         self._decl_type = decl_type
         self.name = name

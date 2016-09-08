@@ -615,25 +615,12 @@ class scopedef_t(declaration.declaration_t):
             self,
             name=None,
             function=None,
-            type=None,
             decl_type=None,
             header_dir=None,
             header_file=None,
             recursive=None):
         """returns reference to variable declaration, that is matched defined
         criteria"""
-        if type is not None:
-            # Deprecated since 1.8.0. Will be removed in 1.9.0
-            warnings.warn(
-                "The type argument is deprecated. \n" +
-                "Please use the decl_type argument instead.",
-                DeprecationWarning)
-            if decl_type is not None:
-                raise (
-                    "Please use only either the type or " +
-                    "decl_type argument.")
-            # Still allow to use the old type for the moment.
-            decl_type = type
 
         return (
             self._find_single(
@@ -651,25 +638,11 @@ class scopedef_t(declaration.declaration_t):
             self,
             name=None,
             function=None,
-            type=None,
             decl_type=None,
             header_dir=None,
             header_file=None,
             recursive=None,
             allow_empty=None):
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        if type is not None:
-            warnings.warn(
-                "The type argument is deprecated. \n" +
-                "Please use the decl_type argument instead.",
-                DeprecationWarning)
-            if decl_type is not None:
-                raise (
-                    "Please use only either the type or " +
-                    "decl_type argument.")
-            # Still allow to use the old type for the moment.
-            decl_type = type
 
         """returns a set of variable declarations, that are matched defined
         criteria"""
@@ -1155,7 +1128,6 @@ def make_flatten(decl_or_decls):
 
 def find_all_declarations(
         declarations,
-        type=None,
         decl_type=None,
         name=None,
         parent=None,
@@ -1171,19 +1143,6 @@ def find_all_declarations(
     :rtype: [ matched declarations ]
 
     """
-
-    if type is not None:
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The type argument is deprecated. \n" +
-            "Please use the decl_type argument instead.",
-            DeprecationWarning)
-        if decl_type is not None:
-            raise (
-                "Please use only either the type or " +
-                "decl_type argument.")
-        # Still allow to use the old type for the moment.
-        decl_type = type
 
     if recursive:
         decls = make_flatten(declarations)
@@ -1202,7 +1161,6 @@ def find_all_declarations(
 
 def find_declaration(
         declarations,
-        type=None,
         decl_type=None,
         name=None,
         parent=None,
@@ -1218,18 +1176,6 @@ def find_declaration(
     :rtype: matched declaration :class:`declaration_t` or None
 
     """
-    if type is not None:
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The type argument is deprecated. \n" +
-            "Please use the decl_type argument instead.",
-            DeprecationWarning)
-        if decl_type is not None:
-            raise (
-                "Please use only either the type or " +
-                "decl_type argument.")
-        # Still allow to use the old type for the moment.
-        decl_type = type
 
     decl = find_all_declarations(
         declarations,
@@ -1244,7 +1190,6 @@ def find_declaration(
 
 def find_first_declaration(
         declarations,
-        type=None,
         decl_type=None,
         name=None,
         parent=None,
@@ -1259,18 +1204,6 @@ def find_first_declaration(
     :rtype: matched declaration :class:`declaration_t` or None
 
     """
-    if type is not None:
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The type argument is deprecated. \n" +
-            "Please use the decl_type argument instead.",
-            DeprecationWarning)
-        if decl_type is not None:
-            raise (
-                "Please use only either the type or " +
-                "decl_type argument.")
-        # Still allow to use the old type for the moment.
-        decl_type = type
 
     matcher = algorithm.match_declaration_t(
         decl_type=decl_type,
