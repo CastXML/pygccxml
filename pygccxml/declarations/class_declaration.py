@@ -177,25 +177,6 @@ class class_declaration_t(declaration.declaration_t):
     def aliases(self, new_aliases):
         self._aliases = new_aliases
 
-    @property
-    def container_traits(self):
-        """reference to :class:`container_traits_impl_t` or None"""
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The container_traits attribute is deprecated. \n" +
-            "Please use the find_container_traits function from the"
-            "declarations module instead.",
-            DeprecationWarning)
-
-        if self._container_traits_set is False:
-            from . import container_traits  # prevent cyclic dependencies
-            self._container_traits_set = True
-            self._container_traits = container_traits.find_container_traits(
-                self)
-            self._container_traits_cache = self._container_traits
-        return self._container_traits
-
     def _get_partial_name_impl(self):
         return get_partial_name(self.name)
 
@@ -559,49 +540,6 @@ class class_t(scopedef.scopedef_t):
 
         return answer
 
-    @property
-    def container_traits(self):
-        """reference to :class:`container_traits_impl_t` or None"""
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The container_traits attribute is deprecated. \n" +
-            "Please use the find_container_traits function from the"
-            "declarations module instead.",
-            DeprecationWarning)
-
-        if self._container_traits_set is False:
-            from . import container_traits  # prevent cyclic dependencies
-            self._container_traits_set = True
-            self._container_traits = container_traits.find_container_traits(
-                self)
-            self._container_traits_cache = self.container_traits
-        return self._container_traits
-
-    def find_copy_constructor(self):
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The find_copy_constructor method is deprecated. \n" +
-            "Please use the find_copy_constructor function from the"
-            "declarations module instead.",
-            DeprecationWarning)
-
-        from . import type_traits_classes  # prevent cyclic dependencies
-        return type_traits_classes.find_copy_constructor(self)
-
-    def find_trivial_constructor(self):
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The find_trivial_constructor method is deprecated. \n" +
-            "Please use the find_trivial_constructor function from the"
-            "declarations module instead.",
-            DeprecationWarning)
-
-        from . import type_traits_classes  # prevent cyclic dependencies
-        return type_traits_classes.find_trivial_constructor(self)
-
     def _get_partial_name_impl(self):
         from . import type_traits  # prevent cyclic dependencies
         if type_traits.is_std_string(self):
@@ -610,34 +548,6 @@ class class_t(scopedef.scopedef_t):
             return 'wstring'
         else:
             return get_partial_name(self.name)
-
-    def find_noncopyable_vars(self):
-        """returns list of all `noncopyable` variables"""
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The find_noncopyable_vars method is deprecated. \n" +
-            "Please use the find_noncopyable_vars function from the"
-            "declarations module instead.",
-            DeprecationWarning)
-
-        from . import type_traits_classes  # prevent cyclic dependencies
-        type_traits_classes.find_noncopyable_vars(self)
-
-    @property
-    def has_vtable(self):
-        """True, if class has virtual table, False otherwise"""
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The has_vtable argument is deprecated. \n" +
-            "Please use the has_vtable function from the declarations \n" +
-            "module instead.",
-            DeprecationWarning)
-
-        # prevent cyclic import
-        from . import type_traits_classes
-        return type_traits_classes.has_vtable(self)
 
     @property
     def top_class(self):

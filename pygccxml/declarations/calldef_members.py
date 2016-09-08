@@ -186,39 +186,6 @@ class constructor_t(member_calldef_t):
         cls = 'constructor'
         return "%s [%s]" % (res, cls)
 
-    @property
-    def is_copy_constructor(self):
-        """
-        Returns True if described declaration is copy constructor,
-        otherwise False.
-
-        """
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The is_copy_constructor attribute is deprecated. \n" +
-            "Please use the is_copy_constructor function from the \n" +
-            "declarations module instead.",
-            DeprecationWarning)
-
-        # prevent cyclic dependencies
-        from . import type_traits_classes
-        return type_traits_classes.is_copy_constructor(self)
-
-    @property
-    def is_trivial_constructor(self):
-
-        # Deprecated since 1.8.0. Will be removed in 1.9.0
-        warnings.warn(
-            "The is_trivial_constructor attribute is deprecated. \n" +
-            "Please use the is_trivial_constructor function from the \n" +
-            "declarations module instead.",
-            DeprecationWarning)
-
-        # prevent cyclic dependencies
-        from . import type_traits_classes
-        return type_traits_classes.is_trivial_constructor(self)
-
 
 class destructor_t(member_calldef_t):
 

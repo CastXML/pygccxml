@@ -647,26 +647,6 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive)
         )
 
-    def var(self,
-            name=None,
-            function=None,
-            type=None,
-            header_dir=None,
-            header_file=None,
-            recursive=None):
-        """
-        Deprecated since v1.8.0. Will be removed in v1.9.0
-
-        """
-
-        warnings.warn(
-            "The var() method is deprecated. \n" +
-            "Please use the variable() method instead.",
-            DeprecationWarning)
-
-        return self.variable(
-            name, function, type, header_dir, header_file, recursive)
-
     def variables(
             self,
             name=None,
@@ -705,29 +685,6 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive,
                 allow_empty=allow_empty)
         )
-
-    def vars(
-            self,
-            name=None,
-            function=None,
-            type=None,
-            header_dir=None,
-            header_file=None,
-            recursive=None,
-            allow_empty=None):
-        """
-        Deprecated since v1.8.0. Will be removed in v1.9.0
-
-        """
-
-        warnings.warn(
-            "The vars() method is deprecated. \n" +
-            "Please use the variables() method instead.",
-            DeprecationWarning)
-
-        return self.variables(
-            name, function, type, header_dir,
-            header_file, recursive, allow_empty)
 
     def calldef(
             self,
