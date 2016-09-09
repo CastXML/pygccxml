@@ -12,7 +12,6 @@ This modules contains definition for next C++ declarations:
     - small helper class for describing C++ class hierarchy
 """
 
-import warnings
 from . import scopedef
 from . import declaration_utils
 from . import declaration

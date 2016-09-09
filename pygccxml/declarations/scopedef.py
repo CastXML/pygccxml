@@ -6,7 +6,6 @@
 """Defines :class:`scopedef_t` class"""
 
 import time
-import warnings
 import collections
 from . import algorithm
 from . import templates

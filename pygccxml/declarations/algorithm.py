@@ -8,7 +8,6 @@ Define few unrelated algorithms that work on declarations.
 
 """
 
-import warnings
 from . import declaration_utils
 
 

@@ -4,7 +4,6 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import warnings
 
 from . import templates
 from . import matcher_base_t

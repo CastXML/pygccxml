@@ -16,7 +16,6 @@ This modules contains definition for next C++ declarations:
     - constructor
     - destructor
 """
-import warnings
 from . import cpptypes
 from . import declaration_utils
 from . import declaration

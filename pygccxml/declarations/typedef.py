@@ -7,7 +7,6 @@
 defines class that describes C++ typedef declaration
 """
 
-import warnings
 from . import declaration
 from . import class_declaration
 
