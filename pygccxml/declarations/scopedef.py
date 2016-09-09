@@ -258,7 +258,8 @@ class scopedef_t(declaration.declaration_t):
     def remove_declaration(self, decl):
         raise NotImplementedError()
 
-    def __decl_types(self, decl):
+    @staticmethod
+    def __decl_types(decl):
         """implementation details"""
         types = []
         bases = list(decl.__class__.__bases__)
@@ -345,13 +346,15 @@ class scopedef_t(declaration.declaration_t):
                 "done( %f seconds ). ") % (time.clock() - start_time))
         self._optimized = True
 
-    def _build_operator_function(self, name, function):
+    @staticmethod
+    def _build_operator_function(name, function):
         if isinstance(name, collections.Callable):
             return name
         else:
             return function
 
-    def _build_operator_name(self, name, function, symbol):
+    @staticmethod
+    def _build_operator_name(name, function, symbol):
         """implementation details"""
         def add_operator(sym):
             if 'new' in sym or 'delete' in sym:
@@ -378,7 +381,8 @@ class scopedef_t(declaration.declaration_t):
         #    if self.parent._optimized:
         #        self.parent.init_optimizer()
 
-    def __normalize_args(self, **keywds):
+    @staticmethod
+    def __normalize_args(**keywds):
         """implementation details"""
         if isinstance(keywds['name'], collections.Callable) and \
                 None is keywds['function']:
@@ -400,7 +404,8 @@ class scopedef_t(declaration.declaration_t):
         else:
             return keywds['allow_empty']
 
-    def __findout_decl_type(self, match_class, **keywds):
+    @staticmethod
+    def __findout_decl_type(match_class, **keywds):
         """implementation details"""
         if 'decl_type' in keywds:
             return keywds['decl_type']
