@@ -32,7 +32,7 @@ class impl_details(object):
         if not isinstance(xxx_ns.parent, namespace.namespace_t):
             return False
 
-        if '::' != xxx_ns.parent.name:
+        if xxx_ns.parent.name != '::':
             return False
 
         global_ns = xxx_ns.parent

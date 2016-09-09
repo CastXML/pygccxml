@@ -126,15 +126,15 @@ _integral_def = (
 def does_match_definition(given, main, secondary):
     """implementation details"""
     assert isinstance(secondary, tuple)
-    assert 2 == len(secondary)  # general solution could be provided
+    assert len(secondary) == 2  # general solution could be provided
     types = decompose_type(given)
     if isinstance(types[0], main):
         return True
-    elif 2 <= len(types) and \
+    elif len(types) >= 2 and \
         ((isinstance(types[0], main) and isinstance(types[1], secondary)) or
             (isinstance(types[1], main) and isinstance(types[0], secondary))):
         return True
-    elif 3 <= len(types):
+    elif len(types) >= 3:
         classes = set([tp.__class__ for tp in types[:3]])
         desired = set([main] + list(secondary))
         diff = classes.symmetric_difference(desired)
@@ -450,7 +450,7 @@ def is_defined_in_xxx(xxx, cls):
     if not isinstance(xxx_ns.parent, namespace.namespace_t):
         return False
 
-    if '::' != xxx_ns.parent.name:
+    if xxx_ns.parent.name != '::':
         return False
 
     global_ns = xxx_ns.parent

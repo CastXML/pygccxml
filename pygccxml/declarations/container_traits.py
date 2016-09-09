@@ -101,7 +101,7 @@ class defaults_eraser(object):
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
-        if 2 != len(c_args):
+        if len(c_args) != 2:
             return
         value_type = c_args[0]
         tmpl = string.Template(
@@ -118,7 +118,7 @@ class defaults_eraser(object):
     def erase_container(self, cls_name, default_container_name='std::deque'):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
-        if 2 != len(c_args):
+        if len(c_args) != 2:
             return
         value_type = c_args[0]
         dc_no_defaults = self.erase_recursive(c_args[1])
@@ -135,7 +135,7 @@ class defaults_eraser(object):
             default_compare='std::less'):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
-        if 3 != len(c_args):
+        if len(c_args) != 3:
             return
         dc_no_defaults = self.erase_recursive(c_args[1])
         if self.normalize(dc_no_defaults) != self.normalize(
@@ -155,7 +155,7 @@ class defaults_eraser(object):
             default_allocator='std::allocator'):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
-        if 3 != len(c_args):
+        if len(c_args) != 3:
             return
         value_type = c_args[0]
         tmpl = string.Template(
@@ -178,7 +178,7 @@ class defaults_eraser(object):
             default_allocator='std::allocator'):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
-        if 4 != len(c_args):
+        if len(c_args) != 4:
             return
         key_type = c_args[0]
         mapped_type = c_args[1]
@@ -215,12 +215,12 @@ class defaults_eraser(object):
         default_equal_to = 'std::equal_to'
         default_allocator = 'std::allocator'
 
-        if 3 == len(c_args):
+        if len(c_args) == 3:
             default_hash = 'hash_compare'
             tmpl = (
                 "$container< $value_type, $hash<$value_type, " +
                 "$less<$value_type> >, $allocator<$value_type> >")
-        elif 4 == len(c_args):
+        elif len(c_args) == 4:
             default_hash = 'hash'
             tmpl = (
                 "$container< $value_type, $hash<$value_type >, " +
@@ -254,13 +254,13 @@ class defaults_eraser(object):
         default_allocator = 'std::allocator'
         default_equal_to = 'std::equal_to'
 
-        if 2 < len(c_args):
+        if len(c_args) > 2:
             key_type = c_args[0]
             mapped_type = c_args[1]
         else:
             return
 
-        if 4 == len(c_args):
+        if len(c_args) == 4:
             default_hash = 'hash_compare'
             tmpl = string.Template(
                 "$container< $key_type, $mapped_type, " +
@@ -271,7 +271,7 @@ class defaults_eraser(object):
                     "$container< $key_type, $mapped_type, $hash<$key_type, " +
                     "$less<$key_type> >, $allocator< std::pair< $key_type, " +
                     "$mapped_type> > >")
-        elif 5 == len(c_args):
+        elif len(c_args) == 5:
             default_hash = 'hash'
             if self.unordered_maps_and_sets:
                 tmpl = string.Template(

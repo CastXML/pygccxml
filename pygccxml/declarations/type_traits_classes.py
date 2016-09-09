@@ -592,7 +592,7 @@ class __is_convertible_t(object):
                     recursive=False)
                 if constructors:
                     for constructor in constructors:
-                        if 1 != len(constructor.arguments):
+                        if len(constructor.arguments) != 1:
                             continue
                         # TODO: add test to check explicitness
                         if is_convertible(source,
@@ -715,7 +715,7 @@ def is_unary_operator(oper):
     if oper.symbol not in symbols:
         return False
     if isinstance(oper, calldef_members.member_operator_t):
-        if 0 == len(oper.arguments):
+        if len(oper.arguments) == 0:
             return True
         elif oper.symbol in ['++', '--'] and \
                 isinstance(oper.arguments[0].decl_type, cpptypes.int_t):
@@ -723,10 +723,10 @@ def is_unary_operator(oper):
         else:
             return False
     else:
-        if 1 == len(oper.arguments):
+        if len(oper.arguments) == 1:
             return True
         elif oper.symbol in ['++', '--'] \
-                and 2 == len(oper.arguments) \
+                and len(oper.arguments) == 2 \
                 and isinstance(oper.arguments[1].decl_type, cpptypes.int_t):
             # may be I need to add additional check whether first argument is
             # reference or not?
@@ -751,12 +751,12 @@ def is_binary_operator(oper):
     if oper.symbol not in symbols:
         return False
     if isinstance(oper, calldef_members.member_operator_t):
-        if 1 == len(oper.arguments):
+        if len(oper.arguments) == 1:
             return True
         else:
             return False
     else:
-        if 2 == len(oper.arguments):
+        if len(oper.arguments) == 2:
             return True
         else:
             return False
