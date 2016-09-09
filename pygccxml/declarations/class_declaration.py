@@ -12,6 +12,7 @@ This modules contains definition for next C++ declarations:
     - small helper class for describing C++ class hierarchy
 """
 
+import warnings
 from . import scopedef
 from . import declaration_utils
 from . import declaration
@@ -593,23 +594,30 @@ class impl_details(object):
 
 class dependency_info_t(object):
 
-    def __init__(self, declaration, depend_on_it, access_type=None, hint=None):
+    def __init__(self, decl, depend_on_it, access_type=None, hint=None):
         object.__init__(self)
 
-        assert isinstance(
-            depend_on_it,
-            (class_t,
-             cpptypes.type_t))
-        self._declaration = declaration
+        assert isinstance(depend_on_it, (class_t, cpptypes.type_t))
+        self._decl = decl
         self._depend_on_it = depend_on_it
         self._access_type = access_type
         self._hint = hint
 
     @property
     def declaration(self):
-        return self._declaration
-    # short name
-    decl = declaration
+        return self._decl
+
+    @property
+    def decl(self):
+        """
+        Deprecated since 1.9.0. Will be removed in 2.0.0.
+
+        """
+        warnings.warn(
+            "The decl attribute is deprecated.\n" +
+            "Please use the declaration attribute instead.",
+            DeprecationWarning)
+        return self._decl
 
     @property
     def depend_on_it(self):

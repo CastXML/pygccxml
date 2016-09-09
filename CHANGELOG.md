@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 1.9.0 (not yet released)
+--------------------------------
+
+* Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
+  instead.
+
 Version 1.8.0
 -------------
 
