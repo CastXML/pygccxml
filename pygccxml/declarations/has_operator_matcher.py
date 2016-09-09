@@ -49,11 +49,11 @@ def has_public_binary_operator(type_, operator_symbol):
     return False
 
 
-def has_public_equal(type):
+def has_public_equal(decl_type):
     """returns True, if class has public operator==, otherwise False"""
-    return has_public_binary_operator(type, '==')
+    return has_public_binary_operator(decl_type, '==')
 
 
-def has_public_less(type):
+def has_public_less(decl_type):
     """returns True, if class has public operator<, otherwise False"""
-    return has_public_binary_operator(type, '<')
+    return has_public_binary_operator(decl_type, '<')

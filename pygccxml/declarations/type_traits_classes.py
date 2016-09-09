@@ -237,17 +237,17 @@ def has_public_assign(class_):
     return bool(decls)
 
 
-def has_public_destructor(type):
+def has_public_destructor(decl_type):
     """returns True, if class has public destructor, False otherwise"""
-    d = has_destructor(type)
+    d = has_destructor(decl_type)
     return d and d.access_type == 'public'
 
 
-def has_vtable(type_):
+def has_vtable(decl_type):
     """True, if class has virtual table, False otherwise"""
-    assert isinstance(type_, class_declaration.class_t)
+    assert isinstance(decl_type, class_declaration.class_t)
     return bool(
-        type_.calldefs(
+        decl_type.calldefs(
             lambda f: isinstance(f, calldef_members.member_function_t) and
             f.virtuality != calldef_types.VIRTUALITY_TYPES.NOT_VIRTUAL,
             recursive=False,
@@ -272,10 +272,10 @@ def is_base_and_derived(based, derived):
     return False
 
 
-def has_any_non_copyconstructor(type):
+def has_any_non_copyconstructor(decl_type):
     """if class has any public constructor, which is not copy constructor,
     this function will return list of them, otherwise None"""
-    class_ = class_traits.get_declaration(type)
+    class_ = class_traits.get_declaration(decl_type)
     decls = class_.constructors(
         lambda c: not is_copy_constructor(c) and c.access_type == 'public',
         recursive=False,
