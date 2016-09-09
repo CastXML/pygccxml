@@ -168,10 +168,7 @@ class constructor_t(member_calldef_t):
 
     @explicit.setter
     def explicit(self, explicit):
-        if explicit in [True, '1']:
-            self._explicit = True
-        else:
-            self._explicit = False
+        self._explicit = explicit in [True, '1']
 
     def __str__(self):
         # Get the full name of the calldef...
