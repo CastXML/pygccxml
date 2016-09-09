@@ -23,28 +23,28 @@ class matcher(object):
 
         """Exception raised when the declaration could not be found"""
 
-        def __init__(self, matcher):
+        def __init__(self, decl_matcher):
             RuntimeError.__init__(self)
-            self.matcher = matcher
+            self._decl_matcher = decl_matcher
 
         def __str__(self):
             return (
                 "Unable to find declaration. Matcher: [%s]" % str(
-                    self.matcher)
+                    self._decl_matcher)
             )
 
     class multiple_declarations_found_t(RuntimeError):
 
         """Exception raised when more than one declaration was found"""
 
-        def __init__(self, matcher):
+        def __init__(self, decl_matcher):
             RuntimeError.__init__(self)
-            self.matcher = matcher
+            self._decl_matcher = decl_matcher
 
         def __str__(self):
             return (
                 "Multiple declarations have been found. Matcher: [%s]" % str(
-                    self.matcher)
+                    self._decl_matcher)
             )
 
     @staticmethod
@@ -414,9 +414,9 @@ class scopedef_t(declaration.declaration_t):
         if 'allow_empty' in matcher_args:
             del matcher_args['allow_empty']
 
-        matcher = match_class(**matcher_args)
-        if matcher.decl_type:
-            return matcher.decl_type
+        decl_matcher = match_class(**matcher_args)
+        if decl_matcher.decl_type:
+            return decl_matcher.decl_type
         return None
 
     def __create_matcher(self, match_class, **keywds):
@@ -427,15 +427,15 @@ class scopedef_t(declaration.declaration_t):
         if 'allow_empty' in matcher_args:
             del matcher_args['allow_empty']
 
-        matcher = match_class(**matcher_args)
+        decl_matcher = decl_matcher = match_class(**matcher_args)
         if keywds['function']:
             self._logger.debug(
                 'running query: %s and <user defined function>' %
-                str(matcher))
-            return lambda decl: matcher(decl) and keywds['function'](decl)
+                str(decl_matcher))
+            return lambda decl: decl_matcher(decl) and keywds['function'](decl)
         else:
-            self._logger.debug('running query: %s' % str(matcher))
-            return matcher
+            self._logger.debug('running query: %s' % str(decl_matcher))
+            return decl_matcher
 
     def __findout_range(self, name, decl_type, recursive):
         """implementation details"""
@@ -491,11 +491,11 @@ class scopedef_t(declaration.declaration_t):
         self._logger.debug('find single query execution - started')
         start_time = time.clock()
         norm_keywds = self.__normalize_args(**keywds)
-        matcher = self.__create_matcher(match_class, **norm_keywds)
+        decl_matcher = self.__create_matcher(match_class, **norm_keywds)
         dtype = self.__findout_decl_type(match_class, **norm_keywds)
         recursive_ = self.__findout_recursive(**norm_keywds)
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
-        found = _matcher.get_single(matcher, decls, False)
+        found = _matcher.get_single(decl_matcher, decls, False)
         self._logger.debug(
             'find single query execution - done( %f seconds )' %
             (time.clock() - start_time))
@@ -506,12 +506,12 @@ class scopedef_t(declaration.declaration_t):
         self._logger.debug('find all query execution - started')
         start_time = time.clock()
         norm_keywds = self.__normalize_args(**keywds)
-        matcher = self.__create_matcher(match_class, **norm_keywds)
+        decl_matcher = self.__create_matcher(match_class, **norm_keywds)
         dtype = self.__findout_decl_type(match_class, **norm_keywds)
         recursive_ = self.__findout_recursive(**norm_keywds)
         allow_empty = self.__findout_allow_empty(**norm_keywds)
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
-        found = _matcher.find(matcher, decls, False)
+        found = _matcher.find(decl_matcher, decls, False)
         mfound = mdecl_wrapper.mdecl_wrapper_t(found)
         self._logger.debug('%d declaration(s) that match query' % len(mfound))
         self._logger.debug('find single query execution - done( %f seconds )'
@@ -1204,7 +1204,7 @@ def find_first_declaration(
 
     """
 
-    matcher = algorithm.match_declaration_t(
+    decl_matcher = algorithm.match_declaration_t(
         decl_type=decl_type,
         name=name,
         fullname=fullname,
@@ -1214,7 +1214,7 @@ def find_first_declaration(
     else:
         decls = declarations
     for decl in decls:
-        if matcher(decl):
+        if decl_matcher(decl):
             return decl
     return None
 
