@@ -318,7 +318,8 @@ class calldef_matcher_t(declaration_matcher_t):
                             return False
         return True
 
-    def __compare_types(self, type_or_str, decl_type):
+    @staticmethod
+    def __compare_types(type_or_str, decl_type):
         assert type_or_str
         if decl_type is None:
             return False
