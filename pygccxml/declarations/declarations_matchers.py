@@ -318,15 +318,15 @@ class calldef_matcher_t(declaration_matcher_t):
                             return False
         return True
 
-    def __compare_types(self, type_or_str, type):
+    def __compare_types(self, type_or_str, decl_type):
         assert type_or_str
-        if type is None:
+        if decl_type is None:
             return False
         if isinstance(type_or_str, cpptypes.type_t):
-            if type_or_str != type:
+            if type_or_str != decl_type:
                 return False
         else:
-            if type_or_str != type.decl_string:
+            if type_or_str != decl_type.decl_string:
                 return False
         return True
 
