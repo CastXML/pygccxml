@@ -343,7 +343,7 @@ class scopedef_t(declaration.declaration_t):
         if self.name == '::':
             self._logger.debug((
                 "preparing data structures for query optimizer - " +
-                "done( %f seconds ). ") % (time.clock() - start_time))
+                "done( %f seconds ). "), (time.clock() - start_time))
         self._optimized = True
 
     @staticmethod
@@ -432,11 +432,11 @@ class scopedef_t(declaration.declaration_t):
         decl_matcher = decl_matcher = match_class(**matcher_args)
         if keywds['function']:
             self._logger.debug(
-                'running query: %s and <user defined function>' %
+                'running query: %s and <user defined function>',
                 str(decl_matcher))
             return lambda decl: decl_matcher(decl) and keywds['function'](decl)
         else:
-            self._logger.debug('running query: %s' % str(decl_matcher))
+            self._logger.debug('running query: %s', str(decl_matcher))
             return decl_matcher
 
     def __findout_range(self, name, decl_type, recursive):
@@ -499,7 +499,7 @@ class scopedef_t(declaration.declaration_t):
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
         found = matcher.get_single(decl_matcher, decls, False)
         self._logger.debug(
-            'find single query execution - done( %f seconds )' %
+            'find single query execution - done( %f seconds )',
             (time.clock() - start_time))
         return found
 
@@ -515,9 +515,10 @@ class scopedef_t(declaration.declaration_t):
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
         found = matcher.find(decl_matcher, decls, False)
         mfound = mdecl_wrapper.mdecl_wrapper_t(found)
-        self._logger.debug('%d declaration(s) that match query' % len(mfound))
-        self._logger.debug('find single query execution - done( %f seconds )'
-                           % (time.clock() - start_time))
+        self._logger.debug('%d declaration(s) that match query', len(mfound))
+        self._logger.debug(
+            'find single query execution - done( %f seconds )',
+            (time.clock() - start_time))
         if not mfound and not allow_empty:
             raise RuntimeError(
                 "Multi declaration query returned 0 declarations.")

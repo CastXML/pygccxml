@@ -158,27 +158,29 @@ def find_noncopyable_vars(type_):
         if type_traits.is_const(type_):
             no_const = type_traits.remove_const(type_)
             if type_traits.is_fundamental(no_const) or is_enum(no_const):
-                logger.debug((message + "- fundamental or enum")
-                             % type_.decl_string)
+                logger.debug(
+                    (message + "- fundamental or enum"),
+                    type_.decl_string)
                 noncopyable_vars.append(mvar)
             if is_class(no_const):
-                logger.debug((message + " - class") % type_.decl_string)
+                logger.debug((message + " - class"), type_.decl_string)
                 noncopyable_vars.append(mvar)
             if type_traits.is_array(no_const):
-                logger.debug((message + " - array") % type_.decl_string)
+                logger.debug((message + " - array"), type_.decl_string)
                 noncopyable_vars.append(mvar)
 
         if class_traits.is_my_case(type_):
 
             cls = class_traits.get_declaration(type_)
             if is_noncopyable(cls):
-                logger.debug((message + " - class that is not copyable")
-                             % type_.decl_string)
+                logger.debug(
+                    (message + " - class that is not copyable"),
+                    type_.decl_string)
                 noncopyable_vars.append(mvar)
 
     logger.debug((
         "__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
-        "contain noncopyable members") % type_.decl_string)
+        "contain noncopyable members"), type_.decl_string)
 
     return noncopyable_vars
 
@@ -628,12 +630,12 @@ def __is_noncopyable_single(class_):
     if find_noncopyable_vars(class_):
         logger.debug(
             ("__is_noncopyable_single(TRUE) - %s - contains noncopyable " +
-             "members") % class_.decl_string)
+             "members"), class_.decl_string)
         return True
     else:
         logger.debug((
             "__is_noncopyable_single(FALSE) - %s - COPYABLE, because is " +
-            "doesn't contains noncopyable members") % class_.decl_string)
+            "doesn't contains noncopyable members"), class_.decl_string)
         return False
 
 
