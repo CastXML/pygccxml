@@ -85,7 +85,7 @@ class matcher(object):
         :param recursive: boolean, if True, the method will run `decl_matcher`
             on the internal declarations too
         """
-        answer = _matcher.find(decl_matcher, decls, recursive)
+        answer = matcher.find(decl_matcher, decls, recursive)
         if len(answer) == 1:
             return answer[0]
 
@@ -105,16 +105,13 @@ class matcher(object):
         :param recursive: boolean, if True, the method will run `decl_matcher`
             on the internal declarations too
         """
-        answer = _matcher.find(decl_matcher, decls, recursive)
+        answer = matcher.find(decl_matcher, decls, recursive)
         if len(answer) == 1:
             return answer[0]
         elif not answer:
-            raise _matcher.declaration_not_found_t(decl_matcher)
+            raise matcher.declaration_not_found_t(decl_matcher)
         else:
-            raise _matcher.multiple_declarations_found_t(decl_matcher)
-
-# FIXME: this is ugly
-_matcher = matcher
+            raise matcher.multiple_declarations_found_t(decl_matcher)
 
 
 class scopedef_t(declaration.declaration_t):
@@ -171,8 +168,8 @@ class scopedef_t(declaration.declaration_t):
     RECURSIVE_DEFAULT = True
     ALLOW_EMPTY_MDECL_WRAPPER = False
 
-    declaration_not_found_t = _matcher.declaration_not_found_t
-    multiple_declarations_found_t = _matcher.multiple_declarations_found_t
+    declaration_not_found_t = matcher.declaration_not_found_t
+    multiple_declarations_found_t = matcher.multiple_declarations_found_t
 
     # this class variable is used to prevent recursive imports
     _impl_matchers = {}
@@ -495,7 +492,7 @@ class scopedef_t(declaration.declaration_t):
         dtype = self.__findout_decl_type(match_class, **norm_keywds)
         recursive_ = self.__findout_recursive(**norm_keywds)
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
-        found = _matcher.get_single(decl_matcher, decls, False)
+        found = matcher.get_single(decl_matcher, decls, False)
         self._logger.debug(
             'find single query execution - done( %f seconds )' %
             (time.clock() - start_time))
@@ -511,7 +508,7 @@ class scopedef_t(declaration.declaration_t):
         recursive_ = self.__findout_recursive(**norm_keywds)
         allow_empty = self.__findout_allow_empty(**norm_keywds)
         decls = self.__findout_range(norm_keywds['name'], dtype, recursive_)
-        found = _matcher.find(decl_matcher, decls, False)
+        found = matcher.find(decl_matcher, decls, False)
         mfound = mdecl_wrapper.mdecl_wrapper_t(found)
         self._logger.debug('%d declaration(s) that match query' % len(mfound))
         self._logger.debug('find single query execution - done( %f seconds )'
