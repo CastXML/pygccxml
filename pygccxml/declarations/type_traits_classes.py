@@ -176,9 +176,9 @@ def find_noncopyable_vars(type_):
                              % type_.decl_string)
                 noncopyable_vars.append(mvar)
 
-    logger.debug(
-        ("__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
-            "contain noncopyable members") % type_.decl_string)
+    logger.debug((
+        "__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
+        "contain noncopyable members") % type_.decl_string)
 
     return noncopyable_vars
 
@@ -329,26 +329,26 @@ class __is_convertible_t(object):
             else:
                 return True  # X => void*
         if type_traits.is_pointer(source) and \
-                type_traits.is_pointer(target) and \
-                type_traits.is_const(target.base) and \
+            type_traits.is_pointer(target) and \
+            type_traits.is_const(target.base) and \
                 type_traits.is_same(source.base, target.base.base):
                 return True  # X* => const X*
         if type_traits.is_reference(source) and \
-                type_traits.is_reference(target) and \
-                type_traits.is_const(target.base) and \
+            type_traits.is_reference(target) and \
+            type_traits.is_const(target.base) and \
                 type_traits.is_same(source.base, target.base.base):
-                return True  # X& => const X&
+            return True  # X& => const X&
         if not type_traits.is_const(source) and \
-                type_traits.is_array(source) and \
-                type_traits.is_pointer(target) and \
-                type_traits.is_same(
-                    type_traits.base_type(source), target.base):
+            type_traits.is_array(source) and \
+            type_traits.is_pointer(target) and \
+            type_traits.is_same(
+                type_traits.base_type(source), target.base):
                 return True  # X[2] => X*
         if type_traits.is_array(source) and \
-                type_traits.is_pointer(target) and \
-                type_traits.is_const(target.base) and \
-                type_traits.is_same(
-                    type_traits.base_type(source), target.base.base):
+            type_traits.is_pointer(target) and \
+            type_traits.is_const(target.base) and \
+            type_traits.is_same(
+                type_traits.base_type(source), target.base.base):
                 return True
 
     def __test_pointer_to_func_or_mv__to__func_or_mv(self, source, target):

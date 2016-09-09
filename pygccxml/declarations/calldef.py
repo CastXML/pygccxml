@@ -57,11 +57,10 @@ class argument_t(object):
 
         """
         return argument_t(
-            name=keywd.get(
-                'name', self.name), decl_type=keywd.get(
-                'decl_type', self.decl_type), default_value=keywd.get(
-                'default_value', self.default_value), attributes=keywd.get(
-                'attributes', self.attributes))
+            name=keywd.get('name', self.name),
+            decl_type=keywd.get('decl_type', self.decl_type),
+            default_value=keywd.get('default_value', self.default_value),
+            attributes=keywd.get('attributes', self.attributes))
 
     def __str__(self):
         if self.ellipsis:

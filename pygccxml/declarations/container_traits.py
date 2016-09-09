@@ -122,8 +122,7 @@ class defaults_eraser(object):
             return
         value_type = c_args[0]
         dc_no_defaults = self.erase_recursive(c_args[1])
-        if self.normalize(dc_no_defaults) \
-           != self.normalize(
+        if self.normalize(dc_no_defaults) != self.normalize(
                 templates.join(default_container_name, [value_type])):
             return
         return templates.join(
@@ -139,13 +138,11 @@ class defaults_eraser(object):
         if 3 != len(c_args):
             return
         dc_no_defaults = self.erase_recursive(c_args[1])
-        if self.normalize(dc_no_defaults) \
-           != self.normalize(
+        if self.normalize(dc_no_defaults) != self.normalize(
                 templates.join(default_container_name, [c_args[0]])):
             return
         dcomp_no_defaults = self.erase_recursive(c_args[2])
-        if self.normalize(dcomp_no_defaults) \
-           != self.normalize(
+        if self.normalize(dcomp_no_defaults) != self.normalize(
                 templates.join(default_compare, [c_args[0]])):
             return
         value_type = self.erase_recursive(c_args[0])
@@ -202,12 +199,11 @@ class defaults_eraser(object):
                 mapped_type=mapped_type,
                 compare=default_compare,
                 allocator=default_allocator)
-            if self.normalize(cls_name) == \
-                    self.normalize(tmpl):
+            if self.normalize(cls_name) == self.normalize(tmpl):
                 return templates.join(
                     c_name,
                     [self.erase_recursive(key_type),
-                        self.erase_recursive(mapped_type)])
+                     self.erase_recursive(mapped_type)])
 
     def erase_hash_allocator(self, cls_name):
         cls_name = self.replace_basic_string(cls_name)
@@ -325,7 +321,7 @@ class defaults_eraser(object):
                 return templates.join(
                     c_name,
                     [self.erase_recursive(key_type),
-                        self.erase_recursive(mapped_type)])
+                     self.erase_recursive(mapped_type)])
 
 
 class container_traits_impl_t(object):
