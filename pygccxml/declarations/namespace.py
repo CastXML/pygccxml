@@ -22,12 +22,15 @@ class namespace_t(scopedef.scopedef_t):
         """
         Creates an object that describes a C++ namespace declaration.
 
-        """
+        Args:
+            name (str): name of the namespace
+            declarations (list[declaration_t]): list of declarations
 
+        """
         scopedef.scopedef_t.__init__(self, name)
         if not declarations:
             declarations = []
-        # list of all declarations belongs to this namespace
+        # List of all declarations belonging to this namespace
         self._declarations = declarations
 
     def __str__(self):
@@ -41,7 +44,6 @@ class namespace_t(scopedef.scopedef_t):
         Implementation detail.
 
         """
-
         return [self.declarations.sort()]
 
     def _get_declarations_impl(self):
@@ -53,7 +55,7 @@ class namespace_t(scopedef.scopedef_t):
         List of children declarations.
 
         Returns:
-            List[declarations.declaration_t]
+            list[declaration_t]
         """
         return scopedef.scopedef_t.declarations.fget(self)
 
@@ -63,7 +65,7 @@ class namespace_t(scopedef.scopedef_t):
         Set list of all declarations defined in the namespace.
 
         Args:
-            List[declarations.declaration_t]: list of declarations
+            declarations (list[declaration_t]): list of declarations
 
         """
         self._declarations = declarations
@@ -71,6 +73,9 @@ class namespace_t(scopedef.scopedef_t):
     def take_parenting(self, inst):
         """
         Takes parenting from inst and transfers it to self.
+
+        Args:
+            inst (namespace_t): a namespace declaration
 
         """
 
