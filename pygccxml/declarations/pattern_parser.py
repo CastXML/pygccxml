@@ -37,7 +37,7 @@ class parser_t(object):
         if self.__begin == "<":
             # Cleanup parentheses blocks before checking for the pattern
             # See also the args() method (in this file) for more explanations.
-            decl_string = re.sub("\s\(.*?\)", "", decl_string).strip()
+            decl_string = re.sub("\\s\\(.*?\\)", "", decl_string).strip()
 
         last_part = decl_string.split('::')[-1]
         return (
@@ -105,7 +105,7 @@ class parser_t(object):
 
             # Build a regex matching a space (\s)
             # + something inside parentheses
-            regex = re.compile("\s\(.*?\)")
+            regex = re.compile("\\s\\(.*?\\)")
             for m in regex.finditer(args_only):
                 # Store the position and the content
                 parentheses_blocks.append([m.start() - prev_span, m.group()])
