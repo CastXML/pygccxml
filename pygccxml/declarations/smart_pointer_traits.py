@@ -33,9 +33,9 @@ class internal_type_traits(object):
                     "Unable to find reference to internal " +
                     "type '%s' in type '%s'.") % (name, cls.decl_string))
         else:
-            raise RuntimeError((
-                "Unable to find reference to internal type '%s' in type '%s'.")
-                % (name, type_.decl_string))
+            raise RuntimeError(
+                ("Unable to find reference to internal type '%s'"
+                 "in type '%s'.") % (name, type_.decl_string))
 
 
 class smart_pointer_traits(object):
@@ -54,10 +54,11 @@ class smart_pointer_traits(object):
                           (class_declaration.class_declaration_t,
                            class_declaration.class_t)):
             return False
-        if not (traits_impl_details.impl_details.is_defined_in_xxx(
-                'boost', type_) or
+        if not (
                 traits_impl_details.impl_details.is_defined_in_xxx(
-                'std', type_)):
+                    'boost', type_) or
+                traits_impl_details.impl_details.is_defined_in_xxx(
+                    'std', type_)):
             return False
         return type_.decl_string.startswith('::boost::shared_ptr<') or \
             type_.decl_string.startswith('::std::shared_ptr<')

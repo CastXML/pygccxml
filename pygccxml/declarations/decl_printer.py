@@ -108,9 +108,8 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             return False
         # FIXME: This won't probably not work with CastXML.
         # It either needs to be removed or improved
-        return decl.location \
-           and decl.location.file_name \
-           and decl.location.file_name.endswith('gccxml_builtins.h')
+        return decl.location and decl.location.file_name \
+            and decl.location.file_name.endswith('gccxml_builtins.h')
 
     @staticmethod
     def __nice_decl_name(inst):
@@ -171,11 +170,11 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 print_mangled = False
                 if "GCC" in utils.xml_generator and self.__inst.mangled:
                     print_mangled = True
-                elif "CastXML" in utils.xml_generator and \
-                    (isinstance(self.__inst, variable_t) or
+                elif "CastXML" in utils.xml_generator and (
+                        isinstance(self.__inst, variable_t) or
                         isinstance(self.__inst, calldef_t)) and \
                         self.__inst.mangled:
-                            print_mangled = True
+                    print_mangled = True
 
                 if print_mangled:
                     mangled = 'mangled: %s' % self.__inst.mangled

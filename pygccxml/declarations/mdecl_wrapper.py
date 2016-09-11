@@ -86,9 +86,9 @@ class mdecl_wrapper_t(object):
         invalid_decls = [d for d in self.declarations if not hasattr(d, name)]
         sep = os.linesep + '    '
         if invalid_decls:
-            raise RuntimeError((
-                "Next declarations don't have '%s' attribute: %s")
-                % (name, sep.join(map(str, invalid_decls))))
+            raise RuntimeError(
+                ("Next declarations don't have '%s' attribute: %s") %
+                (name, sep.join(map(str, invalid_decls))))
 
     def __setattr__(self, name, value):
         """Updates the value of attribute on all declarations.
