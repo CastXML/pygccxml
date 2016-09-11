@@ -429,34 +429,6 @@ def is_fundamental(type_):
             (cpptypes.volatile_t, cpptypes.const_t))
 
 
-def is_defined_in_xxx(xxx, cls):
-    """
-    small helper function, that checks whether the class `cls` is defined
-    under `::xxx` namespace
-    """
-    if not cls.parent:
-        return False
-
-    if not isinstance(cls.parent, namespace.namespace_t):
-        return False
-
-    if xxx != cls.parent.name:
-        return False
-
-    xxx_ns = cls.parent
-    if not xxx_ns.parent:
-        return False
-
-    if not isinstance(xxx_ns.parent, namespace.namespace_t):
-        return False
-
-    if xxx_ns.parent.name != '::':
-        return False
-
-    global_ns = xxx_ns.parent
-    return None is global_ns.parent
-
-
 string_equivalences = [
     ('::std::basic_string<char,std::char_traits<char>,' +
         'std::allocator<char> >'),

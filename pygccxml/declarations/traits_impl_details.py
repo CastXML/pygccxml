@@ -15,7 +15,10 @@ class impl_details(object):
     """implementation details"""
     @staticmethod
     def is_defined_in_xxx(xxx, cls):
-        """implementation details"""
+        """
+        Small helper method that checks whether the class `cls` is defined
+        under `::xxx` namespace
+        """
         if not cls.parent:
             return False
 
