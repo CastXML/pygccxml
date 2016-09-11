@@ -129,13 +129,17 @@ class member_calldef_t(calldef.calldef_t):
             return calldef_types.CALLING_CONVENTION_TYPES.THISCALL
 
 
-class operator_t(object):
+class operator_t(calldef.calldef_t):
+    """
+    Base class for "operator" declarations.
 
-    """base class for "operator" declarations"""
+    Operators are constructs which behave like functions. Therefore,
+    operator_t has calldef_t as parent class.
+    """
     OPERATOR_WORD_LEN = len('operator')
 
-    def __init__(self):
-        object.__init__(self)
+    def __init__(self, *args, **keywords):
+        calldef.calldef_t.__init__(self, *args, **keywords)
 
     @property
     def symbol(self):
