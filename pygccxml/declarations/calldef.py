@@ -79,7 +79,7 @@ class argument_t(object):
             and self.default_value == other.default_value \
             and self.decl_type == other.decl_type
 
-    def __hash__(self, other):
+    def __hash__(self):
         return (hash(self.__class__) ^
                 hash(self.name) ^
                 hash(self.default_value) ^
