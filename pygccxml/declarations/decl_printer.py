@@ -105,12 +105,9 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
     def is_builtin_decl(self, decl):
         if not decl.name.startswith('__builtin_'):
             return False
-        if decl.location \
+        return decl.location \
            and decl.location.file_name \
-           and decl.location.file_name.endswith('gccxml_builtins.h'):
-            return True
-        else:
-            return False
+           and decl.location.file_name.endswith('gccxml_builtins.h')
 
     def __nice_decl_name(self, inst):
         name = inst.__class__.__name__
