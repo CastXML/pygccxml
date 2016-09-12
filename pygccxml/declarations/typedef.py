@@ -9,16 +9,21 @@ defines class that describes C++ typedef declaration
 
 from . import declaration
 from . import class_declaration
+from . import byte_info
 
 
-class typedef_t(declaration.declaration_t):
+class typedef_t(declaration.declaration_t, byte_info.byte_info):
 
     """describes C++ typedef declaration"""
 
     def __init__(self, name='', decl_type=None):
         """creates class that describes C++ typedef"""
         declaration.declaration_t.__init__(self, name)
+        byte_info.byte_info.__init__(self)
         self._decl_type = decl_type
+        if not isinstance(decl_type, str):
+            self.byte_size = decl_type.byte_size
+            self.byte_align = decl_type.byte_align
 
     def _get__cmp__items(self):
         """implementation details"""
@@ -40,16 +45,8 @@ class typedef_t(declaration.declaration_t):
     @decl_type.setter
     def decl_type(self, decl_type):
         self._decl_type = decl_type
+        self.byte_size = decl_type.byte_size
+        self.byte_align = decl_type.byte_align
 
     def i_depend_on_them(self, recursive=True):
         return [class_declaration.dependency_info_t(self, self.decl_type)]
-
-    @property
-    def byte_size(self):
-        """Size of this type in bytes @type: int"""
-        return self._decl_type.byte_size
-
-    @property
-    def byte_align(self):
-        """alignment of this type in bytes @type: int"""
-        return self._decl_type.byte_align

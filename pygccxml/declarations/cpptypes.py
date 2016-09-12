@@ -8,17 +8,16 @@ defines classes, that describe C++ types
 """
 
 from . import algorithms_cache
+from . import byte_info
 
 
-class type_t(object):
+class type_t(byte_info.byte_info):
 
     """base class for all types"""
 
     def __init__(self):
-        object.__init__(self)
+        byte_info.byte_info.__init__(self)
         self.cache = algorithms_cache.type_algs_cache_t()
-        self._byte_size = 0
-        self._byte_align = 0
 
     def __str__(self):
         res = self.decl_string
@@ -64,24 +63,6 @@ class type_t(object):
         """returns new instance of the type"""
         answer = self._clone_impl()
         return answer
-
-    @property
-    def byte_size(self):
-        """Size of this type in bytes @type: int"""
-        return self._byte_size
-
-    @byte_size.setter
-    def byte_size(self, new_byte_size):
-        self._byte_size = new_byte_size
-
-    @property
-    def byte_align(self):
-        """Alignment of this type in bytes @type: int"""
-        return self._byte_align
-
-    @byte_align.setter
-    def byte_align(self, new_byte_align):
-        self._byte_align = new_byte_align
 
 
 # There are cases when GCC-XML reports something like this
@@ -877,14 +858,17 @@ class member_variable_type_t(compound_t):
 ##########################################################################
 # declarated types:
 
-class declarated_t(type_t):
+class declarated_t(type_t, byte_info.byte_info):
 
     """class that binds between to hierarchies: :class:`type_t`
     and :class:`declaration_t`"""
 
     def __init__(self, declaration):
         type_t.__init__(self)
+        byte_info.byte_info.__init__(self)
         self._declaration = declaration
+        self.byte_size = self._declaration.byte_size
+        self.byte_align = self._declaration.byte_align
 
     @property
     def declaration(self):
@@ -894,6 +878,8 @@ class declarated_t(type_t):
     @declaration.setter
     def declaration(self, new_declaration):
         self._declaration = new_declaration
+        self.byte_size = self._declaration.byte_size
+        self.byte_align = self._declaration.byte_align
 
     def build_decl_string(self, with_defaults=True):
         if with_defaults:
@@ -903,16 +889,6 @@ class declarated_t(type_t):
 
     def _clone_impl(self):
         return declarated_t(self._declaration)
-
-    @property
-    def byte_size(self):
-        """Size of this type in bytes @type: int"""
-        return self._declaration.byte_size
-
-    @property
-    def byte_align(self):
-        """alignment of this type in bytes @type: int"""
-        return self._declaration.byte_align
 
 
 class type_qualifiers_t(object):

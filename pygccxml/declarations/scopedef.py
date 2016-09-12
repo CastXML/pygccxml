@@ -11,6 +11,7 @@ from . import algorithm
 from . import templates
 from . import declaration
 from . import mdecl_wrapper
+from . import byte_info
 from .. import utils
 
 
@@ -269,6 +270,8 @@ class scopedef_t(declaration.declaration_t):
         while bases:
             base = bases.pop()
             if base is declaration.declaration_t:
+                continue
+            if base is byte_info.byte_info:
                 continue
             if base in visited:
                 continue

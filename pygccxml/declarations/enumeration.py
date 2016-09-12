@@ -9,9 +9,10 @@ defines class, that describes C++ `enum`
 
 import copy
 from . import declaration
+from . import byte_info
 
 
-class enumeration_t(declaration.declaration_t):
+class enumeration_t(declaration.declaration_t, byte_info.byte_info):
 
     """
     describes C++ `enum`
@@ -31,6 +32,7 @@ class enumeration_t(declaration.declaration_t):
         :type values: list
         """
         declaration.declaration_t.__init__(self, name)
+        byte_info.byte_info.__init__(self)
 
         # A list of tuples (valname(str), valnum(int)). The order of the list
         # should be the same as the order in the C/C++ source file.
@@ -38,8 +40,6 @@ class enumeration_t(declaration.declaration_t):
 
         # Initialize values via property access
         self.values = values
-        self._byte_size = 0
-        self._byte_align = 0
 
     def __eq__(self, other):
         if not declaration.declaration_t.__eq__(self, other):
@@ -131,21 +131,3 @@ class enumeration_t(declaration.declaration_t):
 
     def i_depend_on_them(self, recursive=True):
         return []
-
-    @property
-    def byte_size(self):
-        """Size of this class in bytes @type: int"""
-        return self._byte_size
-
-    @byte_size.setter
-    def byte_size(self, new_byte_size):
-        self._byte_size = new_byte_size
-
-    @property
-    def byte_align(self):
-        """Alignment of this class in bytes @type: int"""
-        return self._byte_align
-
-    @byte_align.setter
-    def byte_align(self, new_byte_align):
-        self._byte_align = new_byte_align

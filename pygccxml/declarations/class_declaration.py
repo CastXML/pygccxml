@@ -18,6 +18,7 @@ from . import declaration_utils
 from . import declaration
 from . import templates
 from . import cpptypes
+from . import byte_info
 from .. import utils
 
 
@@ -181,7 +182,7 @@ class class_declaration_t(declaration.declaration_t):
         return get_partial_name(self.name)
 
 
-class class_t(scopedef.scopedef_t):
+class class_t(scopedef.scopedef_t, byte_info.byte_info):
 
     """describes class definition"""
 
@@ -195,6 +196,7 @@ class class_t(scopedef.scopedef_t):
             is_abstract=False):
         """creates class that describes C++ class definition"""
         scopedef.scopedef_t.__init__(self, name)
+        byte_info.byte_info.__init__(self)
         if class_type:
             assert class_type in CLASS_TYPES.ALL
         self._class_type = class_type
@@ -205,8 +207,6 @@ class class_t(scopedef.scopedef_t):
         self._private_members = []
         self._protected_members = []
         self._aliases = []
-        self._byte_size = 0
-        self._byte_align = 0
         self._container_traits_cache = None
         self._container_traits = None  # Deprecated
         self._container_traits_set = False  # Deprecated
@@ -400,24 +400,6 @@ class class_t(scopedef.scopedef_t):
     @aliases.setter
     def aliases(self, new_aliases):
         self._aliases = new_aliases
-
-    @property
-    def byte_size(self):
-        """Size of this class in bytes @type: int"""
-        return self._byte_size
-
-    @byte_size.setter
-    def byte_size(self, new_byte_size):
-        self._byte_size = new_byte_size
-
-    @property
-    def byte_align(self):
-        """Alignment of this class in bytes @type: int"""
-        return self._byte_align
-
-    @byte_align.setter
-    def byte_align(self, new_byte_align):
-        self._byte_align = new_byte_align
 
     def _get_declarations_impl(self):
         return self.get_members()
