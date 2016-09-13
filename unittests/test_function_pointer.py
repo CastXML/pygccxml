@@ -33,7 +33,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(
             isinstance(variables[0].decl_type, declarations.pointer_t))
         self.assertTrue(
-            str(variables[0].decl_type) == "void (*)( int,double ) *")
+            str(variables[0].decl_type) == "void (*)( int,double )")
         self.assertTrue(
             declarations.is_calldef_pointer(variables[0].decl_type))
         self.assertTrue(

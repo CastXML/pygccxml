@@ -555,7 +555,12 @@ class pointer_t(compound_t):
         compound_t.__init__(self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return self.base.build_decl_string(with_defaults) + ' *'
+        decl_string = self.base.build_decl_string(with_defaults)
+        if isinstance(self.base, calldef_type_t):
+            # This is a function pointer. Do not add supplementary *
+            return decl_string
+        else:
+            return decl_string + " *"
 
     def _clone_impl(self):
         return pointer_t(self.base.clone())
