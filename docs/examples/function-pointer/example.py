@@ -29,22 +29,26 @@ filename = this_module_dir_path + "/" + filename
 decls = parser.parse([filename], xml_generator_config)
 global_namespace = declarations.get_global_namespace(decls)
 
-function = global_namespace.variables()[0]
+function_ptr = global_namespace.variables()[0]
 
 # Print the name of the function pointer
-print(function.name)
+print(function_ptr.name)
 # > myFuncPointer
 
-# Print the type of the declaration (it's just a pointer)
-print(type(function.decl_type))
+# Print the type of the declaration
+print(function_ptr.decl_type)
+# > void (*)( int,double )
+
+# Print the real type of the declaration (it's just a pointer)
+print(type(function_ptr.decl_type))
 # > <class 'pygccxml.declarations.cpptypes.pointer_t'>
 
 # Check if this is a function pointer
-print(declarations.is_calldef_pointer(function.decl_type))
+print(declarations.is_calldef_pointer(function_ptr.decl_type))
 # > True
 
 # Remove the pointer part, to access the function's type
-f_type = declarations.remove_pointer(function.decl_type)
+f_type = declarations.remove_pointer(function_ptr.decl_type)
 
 # Print the type
 print(type(f_type))
