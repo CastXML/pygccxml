@@ -116,7 +116,7 @@ class enumeration_t(declaration.declaration_t, byte_info.byte_info):
         :type name: str
         :rtype: True if there is an enumeration value with the given name
         """
-        for val, num in self._values:
+        for val, _ in self._values:
             if val == name:
                 return True
         return False
