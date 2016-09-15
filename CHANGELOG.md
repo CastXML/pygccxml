@@ -4,6 +4,9 @@ Changes
 Version 1.9.0 (not yet released)
 --------------------------------
 
+* Added ```is_struct``` function to declarations package. It returns true if
+  a declaration is a struct.
+
 * Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
 

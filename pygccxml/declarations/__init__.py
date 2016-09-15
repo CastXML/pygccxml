@@ -167,6 +167,7 @@ from .type_traits_classes import is_convertible
 from .type_traits_classes import is_noncopyable
 from .type_traits_classes import is_copy_constructor
 from .type_traits_classes import is_trivial_constructor
+from .type_traits_classes import is_struct
 from .type_traits_classes import is_union
 
 from .type_traits_classes import is_unary_operator
