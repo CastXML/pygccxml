@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 1.8.1 (not yet released)
+--------------------------------
+
+* Added ```is_struct``` function to declarations package. It returns true if
+  a declaration is a struct.
+
 Version 1.8.0
 -------------
 

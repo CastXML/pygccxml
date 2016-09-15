@@ -15,12 +15,36 @@ from . import cpptypes
 from .. import utils
 
 
-def is_union(type_):
-    """returns True if type represents a C++ union"""
-    if not is_class(type_):
+def is_union(declaration):
+    """
+    Returns True if declaration represents a C++ union
+
+    Args:
+        declaration (declaration_t): the declaration to be checked.
+
+    Returns:
+        bool: True if declaration represents a C++ union
+    """
+    if not is_class(declaration):
         return False
-    decl = class_traits.get_declaration(type_)
+    decl = class_traits.get_declaration(declaration)
     return decl.class_type == class_declaration.CLASS_TYPES.UNION
+
+
+def is_struct(declaration):
+    """
+    Returns True if declaration represents a C++ struct
+
+    Args:
+        declaration (declaration_t): the declaration to be checked.
+
+    Returns:
+        bool: True if declaration represents a C++ struct
+    """
+    if not is_class(declaration):
+        return False
+    decl = class_traits.get_declaration(declaration)
+    return decl.class_type == class_declaration.CLASS_TYPES.STRUCT
 
 
 class declaration_xxx_traits(object):
