@@ -19,6 +19,10 @@ from . import type_traits_classes
 from .. import utils
 
 
+def _stdout_writer(x):
+    sys.stdout.write(x)
+
+
 class decl_printer_t(decl_visitor.decl_visitor_t):
 
     """helper class for printing declarations tree"""
@@ -31,7 +35,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
             level=0,
             print_details=True,
             recursive=True,
-            writer=None,
+            writer=_stdout_writer,
             verbose=True):
         decl_visitor.decl_visitor_t.__init__(self)
         self.__inst = None
@@ -40,8 +44,6 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
         self.__recursive = recursive
         self.__verbose = verbose
         self.__writer = writer
-        if not self.__writer:
-            self.__writer = lambda x: sys.stdout.write(x)
 
     def clone(self, increment_level=True):
         level = self.__level
