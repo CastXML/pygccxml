@@ -316,7 +316,8 @@ class __is_convertible_t(object):
         self.__source = self.__normalize(source)
         self.__target = self.__normalize(target)
 
-    def __find_class_by_class_declaration(self, class_decl):
+    @staticmethod
+    def __find_class_by_class_declaration(class_decl):
         found = scopedef.find_declaration(
             class_decl.parent.declarations,
             name=class_decl.name,
@@ -335,7 +336,8 @@ class __is_convertible_t(object):
                 bt_of_type.declaration)
         return type_
 
-    def __test_trivial(self, src, target):
+    @staticmethod
+    def __test_trivial(src, target):
         if not (src and target):
             return False
         if type_traits.is_same(src, target):
@@ -376,7 +378,8 @@ class __is_convertible_t(object):
                     type_traits.base_type(src), target.base.base):
             return True
 
-    def __test_pointer_to_func_or_mv__to__func_or_mv(self, source, target):
+    @staticmethod
+    def __test_pointer_to_func_or_mv__to__func_or_mv(source, target):
         if type_traits.is_pointer(source) \
            and type_traits.is_reference(target) \
            and isinstance(target.base,
@@ -411,7 +414,8 @@ class __is_convertible_t(object):
            and type_traits.is_same(target.base, source):
             return True
 
-    def __test_const_x_ref__to__x(self, source, target):
+    @staticmethod
+    def __test_const_x_ref__to__x(source, target):
         if not type_traits.is_reference(source) \
            or not type_traits.is_const(source.base) \
            or not type_traits.is_same(source.base.base, target):
@@ -426,7 +430,8 @@ class __is_convertible_t(object):
                 return True  # we have copy constructor
         return False
 
-    def __test_const_ref_x__to__y(self, source, target):
+    @staticmethod
+    def __test_const_ref_x__to__y(source, target):
         if not type_traits.is_reference(source) or not \
                 type_traits.is_const(source.base):
             return False
@@ -442,7 +447,8 @@ class __is_convertible_t(object):
                 return True  # we have copy constructor
         return False
 
-    def __test_ref_x__to__x(self, source, target):
+    @staticmethod
+    def __test_ref_x__to__x(source, target):
         if not type_traits.is_reference(source) or not \
                 type_traits.is_same(source.base, target):
             return False
@@ -456,7 +462,8 @@ class __is_convertible_t(object):
                 return True  # we have copy constructor
         return False
 
-    def __test_ref_x__to__y(self, source, target):
+    @staticmethod
+    def __test_ref_x__to__y(source, target):
         if not type_traits.is_reference(source):
             return False
         if type_traits.is_fundamental(source.base) and \
@@ -470,7 +477,8 @@ class __is_convertible_t(object):
                 return True  # we have copy constructor
         return False
 
-    def __test_fundamental__to__fundamental(self, source, target):
+    @staticmethod
+    def __test_fundamental__to__fundamental(source, target):
         if not type_traits.is_fundamental(
                 type_traits.base_type(source)) or not \
                 type_traits.is_fundamental(
@@ -496,7 +504,8 @@ class __is_convertible_t(object):
             return True  # X => const Y&
         return False
 
-    def _is_both_declarated(self, x, y):
+    @staticmethod
+    def _is_both_declarated(x, y):
         return (
             isinstance(x, cpptypes.declarated_t) and
             isinstance(y, cpptypes.declarated_t))
