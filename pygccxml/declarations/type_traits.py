@@ -129,9 +129,10 @@ def does_match_definition(given, main, secondary):
     types = decompose_type(given)
     if isinstance(types[0], main):
         return True
-    elif len(types) >= 2 and \
-        ((isinstance(types[0], main) and isinstance(types[1], secondary)) or
-            (isinstance(types[1], main) and isinstance(types[0], secondary))):
+    elif len(types) >= 2 and\
+            (isinstance(types[0], main) and isinstance(types[1], secondary)) \
+            or \
+            (isinstance(types[1], main) and isinstance(types[0], secondary)):
         return True
     elif len(types) >= 3:
         classes = set([tp.__class__ for tp in types[:3]])
@@ -429,16 +430,20 @@ def is_fundamental(type_):
 
 
 string_equivalences = [
-    ('::std::basic_string<char,std::char_traits<char>,' +
+    (
+        '::std::basic_string<char,std::char_traits<char>,'
         'std::allocator<char> >'),
-    ('::std::basic_string<char, std::char_traits<char>, ' +
+    (
+        '::std::basic_string<char, std::char_traits<char>, '
         'std::allocator<char> >'),
     '::std::basic_string<char>', '::std::string']
 
 wstring_equivalences = [
-    ('::std::basic_string<wchar_t,std::char_traits<wchar_t>,' +
+    (
+        '::std::basic_string<wchar_t,std::char_traits<wchar_t>,' +
         'std::allocator<wchar_t> >'),
-    ('::std::basic_string<wchar_t, std::char_traits<wchar_t>, ' +
+    (
+        '::std::basic_string<wchar_t, std::char_traits<wchar_t>, ' +
         'std::allocator<wchar_t> >'),
     '::std::basic_string<wchar_t>', '::std::wstring']
 
