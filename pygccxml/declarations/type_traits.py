@@ -20,7 +20,6 @@ which encapsulate a single trait from the C++ type system. For example:
 
 from . import cpptypes
 from . import typedef
-from . import namespace
 from .. import utils
 
 
