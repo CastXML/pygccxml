@@ -391,10 +391,10 @@ def remove_volatile(type_):
         if isinstance(nake_type, cpptypes.array_t):
             is_c = is_const(nake_type)
             if is_c:
-                base_type = nake_type.base.base.base
+                base_type_ = nake_type.base.base.base
             else:
-                base_type = nake_type.base.base
-            result_type = base_type
+                base_type_ = nake_type.base.base
+            result_type = base_type_
             if is_c:
                 result_type = cpptypes.const_t(result_type)
             return cpptypes.array_t(result_type, nake_type.size)
