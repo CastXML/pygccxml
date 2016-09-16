@@ -88,9 +88,9 @@ def split_recursive(declaration_string):
     return __THE_PARSER.split_recursive(declaration_string)
 
 
-def join(name, args, arg_separator=None):
+def join(name_, args_, arg_separator=None):
     """
     Returns name( argument_1, argument_2, ..., argument_n ).
 
     """
-    return __THE_PARSER.join(name, args, arg_separator)
+    return __THE_PARSER.join(name_, args_, arg_separator)

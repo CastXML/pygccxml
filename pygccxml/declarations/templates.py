@@ -64,9 +64,9 @@ def split_recursive(decl_string):
     return __THE_PARSER.split_recursive(decl_string)
 
 
-def join(name, args):
+def join(name_, args_):
     """returns name< argument_1, argument_2, ..., argument_n >"""
-    return __THE_PARSER.join(name, args)
+    return __THE_PARSER.join(name_, args_)
 
 
 def normalize(decl_string):
