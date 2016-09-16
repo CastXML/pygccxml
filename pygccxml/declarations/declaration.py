@@ -78,7 +78,7 @@ class declaration_t(object):
             '_get__cmp__items not implemented for class ',
             self.__class__.__name__)
 
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def _get__cmp__data(self):
         """
