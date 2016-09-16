@@ -55,7 +55,7 @@ class Test(parser_test_case.parser_test_case_t):
                 pass
         sys.stdout = DontPrint()
 
-        declarations.print_declarations(self.decls, writer=None)
+        declarations.print_declarations(self.decls)
 
     def test__str__(self):
         decls = declarations.make_flatten(self.decls)
