@@ -335,47 +335,46 @@ class __is_convertible_t(object):
                 bt_of_type.declaration)
         return type_
 
-    def __test_trivial(self, source, target):
-        if not (source and target):
+    def __test_trivial(self, src, target):
+        if not (src and target):
             return False
-        if type_traits.is_same(source, target):
+        if type_traits.is_same(src, target):
             return True  # X => X
         if type_traits.is_const(target) and type_traits.is_same(
-                source, target.base):
+                src, target.base):
             return True  # X => const X
         if type_traits.is_reference(target) and type_traits.is_same(
-                source, target.base):
+                src, target.base):
             return True  # X => X&
         if type_traits.is_reference(target) and type_traits.is_const(
-                target.base) and type_traits.is_same(source, target.base.base):
+                target.base) and type_traits.is_same(src, target.base.base):
             return True  # X => const X&
         if type_traits.is_same(target, cpptypes.pointer_t(cpptypes.void_t())):
-            if type_traits.is_integral(source) or is_enum(source):
+            if type_traits.is_integral(src) or is_enum(src):
                 return False
             else:
                 return True  # X => void*
-        if type_traits.is_pointer(source) and \
+        if type_traits.is_pointer(src) and \
             type_traits.is_pointer(target) and \
             type_traits.is_const(target.base) and \
-                type_traits.is_same(source.base, target.base.base):
-                return True  # X* => const X*
-        if type_traits.is_reference(source) and \
+                type_traits.is_same(src.base, target.base.base):
+            return True  # X* => const X*
+        if type_traits.is_reference(src) and \
             type_traits.is_reference(target) and \
             type_traits.is_const(target.base) and \
-                type_traits.is_same(source.base, target.base.base):
+                type_traits.is_same(src.base, target.base.base):
             return True  # X& => const X&
-        if not type_traits.is_const(source) and \
-            type_traits.is_array(source) and \
+        if not type_traits.is_const(src) and \
+            type_traits.is_array(src) and \
             type_traits.is_pointer(target) and \
-            type_traits.is_same(
-                type_traits.base_type(source), target.base):
-                return True  # X[2] => X*
-        if type_traits.is_array(source) and \
+                type_traits.is_same(type_traits.base_type(src), target.base):
+            return True  # X[2] => X*
+        if type_traits.is_array(src) and \
             type_traits.is_pointer(target) and \
             type_traits.is_const(target.base) and \
             type_traits.is_same(
-                type_traits.base_type(source), target.base.base):
-                return True
+                    type_traits.base_type(src), target.base.base):
+            return True
 
     def __test_pointer_to_func_or_mv__to__func_or_mv(self, source, target):
         if type_traits.is_pointer(source) \
@@ -612,18 +611,18 @@ class __is_convertible_t(object):
         # is has constructor from source
         if isinstance(target, cpptypes.declarated_t) and \
                 isinstance(target.declaration, class_declaration.class_t):
-                constructors = scopedef.find_all_declarations(
-                    target.declaration.declarations,
-                    decl_type=calldef_members.constructor_t,
-                    recursive=False)
-                if constructors:
-                    for constructor in constructors:
-                        if len(constructor.arguments) != 1:
-                            continue
-                        # TODO: add test to check explicitness
-                        if is_convertible(source,
-                                          constructor.arguments[0].decl_type):
-                            return True
+            constructors = scopedef.find_all_declarations(
+                target.declaration.declarations,
+                decl_type=calldef_members.constructor_t,
+                recursive=False)
+            if constructors:
+                for constructor in constructors:
+                    if len(constructor.arguments) != 1:
+                        continue
+                    # TODO: add test to check explicitness
+                    if is_convertible(source,
+                                      constructor.arguments[0].decl_type):
+                        return True
 
         return False
 
