@@ -326,7 +326,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
             return
 
         # Release the referenced files...
-        for id_, sig in entry.filesigs:
+        for id_, _ in entry.filesigs:
             self.__filename_rep.release_filename(id_)
 
         # Remove the cache entry...

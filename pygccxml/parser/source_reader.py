@@ -427,7 +427,7 @@ class source_reader_t(object):
         decls = self.__dcache.cached_value(ffname, self.__config)
         if not decls:
             self.logger.debug("File has not been found in cache, parsing...")
-            decls, files = self.__parse_xml_file(ffname)
+            decls, _ = self.__parse_xml_file(ffname)
             self.__dcache.update(ffname, self.__config, decls, [])
         else:
             self.logger.debug(
