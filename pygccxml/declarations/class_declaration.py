@@ -158,6 +158,7 @@ class class_declaration_t(declaration.declaration_t):
         ( and not definition )"""
         declaration.declaration_t.__init__(self, name)
         self._aliases = []
+        self._container_traits_cache = None
 
     def _get__cmp__items(self):
         """implementation details"""
@@ -207,6 +208,7 @@ class class_t(scopedef.scopedef_t, byte_info.byte_info):
         self._recursive_bases = None
         self._recursive_derived = None
         self._use_demangled_as_name = False
+        self._container_traits_cache = None
 
     @property
     def use_demangled_as_name(self):
