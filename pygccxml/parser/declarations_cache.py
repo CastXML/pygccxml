@@ -210,21 +210,22 @@ class file_cache_t(cache_base_t):
             return {}
         cache_file_obj = open(file_name, 'rb')
         try:
-            file_cache_t.logger.info('Loading cache file "%s".' % file_name)
+            file_cache_t.logger.info('Loading cache file "%s".', file_name)
             start_time = time.clock()
             cache = pickle.load(cache_file_obj)
             file_cache_t.logger.debug(
-                "Cache file has been loaded in %.1f secs" %
+                "Cache file has been loaded in %.1f secs",
                 (time.clock() - start_time))
-            file_cache_t.logger.debug("Found cache in file: [%s]  entries: %s"
-                                      % (file_name, len(list(cache.keys()))))
+            file_cache_t.logger.debug(
+                "Found cache in file: [%s]  entries: %s",
+                file_name, len(list(cache.keys())))
         except Exception as error:
             file_cache_t.logger.exception(
                 "Error occured while reading cache file: %s",
                 error)
             cache_file_obj.close()
             file_cache_t.logger.info(
-                "Invalid cache file: [%s]  Regenerating." %
+                "Invalid cache file: [%s]  Regenerating.",
                 file_name)
             open(file_name, 'w+b').close()   # Create empty file
             cache = {}                       # Empty cache
@@ -244,7 +245,7 @@ class file_cache_t(cache_base_t):
                 del self.__cache[key]
         if num_removed > 0:
             self.logger.debug(
-                "There are %s removed entries from cache." %
+                "There are %s removed entries from cache.",
                 num_removed)
         # Save out the cache to disk
         with open(self.__name, "w+b") as cache_file:

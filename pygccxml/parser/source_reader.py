@@ -216,7 +216,7 @@ class source_reader_t(object):
                 '--castxml-start "%s"' %
                 ','.join(self.__config.start_with_declarations))
         cmd_line = ' '.join(cmd)
-        self.logger.debug('castxml cmd: %s' % cmd_line)
+        self.logger.debug('castxml cmd: %s', cmd_line)
         return cmd_line
 
     def __create_command_line_gccxml(self, source_file, xmlfile):
@@ -254,7 +254,7 @@ class source_reader_t(object):
         if self.__config.compiler:
             cmd.append(" --gccxml-compiler %s" % self.__config.compiler)
         cmd_line = ' '.join(cmd)
-        self.logger.debug('gccxml cmd: %s' % cmd_line)
+        self.logger.debug('gccxml cmd: %s', cmd_line)
         return cmd_line
 
     def __add_symbols(self, cmd):
@@ -387,7 +387,7 @@ class source_reader_t(object):
         xml_file = ''
         try:
             ffname = self.__file_full_name(source_file)
-            self.logger.debug("Reading source file: [%s]." % ffname)
+            self.logger.debug("Reading source file: [%s].", ffname)
             decls = self.__dcache.cached_value(ffname, self.__config)
             if not decls:
                 self.logger.debug(
@@ -423,7 +423,7 @@ class source_reader_t(object):
         assert self.__config is not None
 
         ffname = self.__file_full_name(xml_file)
-        self.logger.debug("Reading xml file: [%s]" % xml_file)
+        self.logger.debug("Reading xml file: [%s]", xml_file)
         decls = self.__dcache.cached_value(ffname, self.__config)
         if not decls:
             self.logger.debug("File has not been found in cache, parsing...")

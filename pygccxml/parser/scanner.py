@@ -257,7 +257,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 'error occured, while parsing element with name "%s" ' +
                 'and attrs "%s".')
             msg = msg + os.linesep + 'Error: %s.' % str(error)
-            self.logger.error(msg % (name, pprint.pformat(list(attrs.keys()))))
+            self.logger.error(msg, name, pprint.pformat(list(attrs.keys())))
             raise
 
     def endElement(self, name):

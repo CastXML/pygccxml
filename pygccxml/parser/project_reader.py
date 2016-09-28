@@ -274,11 +274,11 @@ class project_reader_t(object):
 
             if content_type == \
                     file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE:
-                self.logger.info('Parsing source file "%s" ... ' % header)
+                self.logger.info('Parsing source file "%s" ... ', header)
                 decls = reader.read_file(header)
             elif content_type == \
                     file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE:
-                self.logger.info('Parsing xml file "%s" ... ' % header)
+                self.logger.info('Parsing xml file "%s" ... ', header)
                 decls = reader.read_xml_file(header)
             elif content_type == \
                     file_configuration_t.CONTENT_TYPE.CACHED_SOURCE_FILE:
@@ -288,11 +288,11 @@ class project_reader_t(object):
                     if dir_ and not os.path.exists(dir_):
                         os.makedirs(dir_)
                     self.logger.info(
-                        'Creating xml file "%s" from source file "%s" ... ' %
-                        (prj_file.cached_source_file, header))
+                        'Creating xml file "%s" from source file "%s" ... ',
+                        prj_file.cached_source_file, header)
                     reader.create_xml_file(header, prj_file.cached_source_file)
                 self.logger.info(
-                    'Parsing xml file "%s" ... ' %
+                    'Parsing xml file "%s" ... ',
                     prj_file.cached_source_file)
                 decls = reader.read_xml_file(prj_file.cached_source_file)
             else:
@@ -303,7 +303,7 @@ class project_reader_t(object):
         start_time = time.clock()
         self.__dcache.flush()
         self.logger.debug(
-            "Cache has been flushed in %.1f secs" %
+            "Cache has been flushed in %.1f secs",
             (time.clock() - start_time))
         answer = []
         self.logger.debug("Joining namespaces ...")
@@ -364,11 +364,11 @@ class project_reader_t(object):
             self.__decl_factory)
         try:
             if fc.content_type == fc.CONTENT_TYPE.STANDARD_SOURCE_FILE:
-                self.logger.info('Parsing source file "%s" ... ' % fc.data)
+                self.logger.info('Parsing source file "%s" ... ', fc.data)
                 xml_file_path = reader.create_xml_file(fc.data)
             elif fc.content_type == \
                     file_configuration_t.CONTENT_TYPE.GCCXML_GENERATED_FILE:
-                self.logger.info('Parsing xml file "%s" ... ' % fc.data)
+                self.logger.info('Parsing xml file "%s" ... ', fc.data)
                 xml_file_path = fc.data
                 delete_xml_file = False
             elif fc.content_type == fc.CONTENT_TYPE.CACHED_SOURCE_FILE:
@@ -378,8 +378,8 @@ class project_reader_t(object):
                     if dir_ and not os.path.exists(dir_):
                         os.makedirs(dir_)
                     self.logger.info(
-                        'Creating xml file "%s" from source file "%s" ... ' %
-                        (fc.cached_source_file, fc.data))
+                        'Creating xml file "%s" from source file "%s" ... ',
+                        fc.cached_source_file, fc.data)
                     xml_file_path = reader.create_xml_file(
                         fc.data,
                         fc.cached_source_file)
