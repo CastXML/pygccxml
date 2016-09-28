@@ -338,15 +338,6 @@ def load_xml_generator_configuration(configuration, **defaults):
     if not values:
         values = {}
 
-    if parser.has_section('gccxml'):
-        warnings.warn(
-            "The [gccxml] section in your configuration file is deprecated. "
-            "Please use [xml_generator] instead. This will no more work with "
-            "version 1.9.0")
-        for name, value in parser.items('gccxml'):
-            if value.strip():
-                values[name] = value
-
     if parser.has_section('xml_generator'):
         for name, value in parser.items('xml_generator'):
             if value.strip():
