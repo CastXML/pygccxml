@@ -239,7 +239,6 @@ class cached(property):
             del s.__dict__[private]
         super(cached, self).__init__(fget, fdel=fdel)
 
-    @staticmethod
     def reset(self):
         cls = self.__class__
         for name in dir(cls):
