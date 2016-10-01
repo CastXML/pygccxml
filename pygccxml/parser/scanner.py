@@ -515,7 +515,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             if None is throw_stmt:
                 calldef.does_throw = True
                 calldef.exceptions = []
-            elif "" == throw_stmt:
+            elif throw_stmt == "":
                 calldef.does_throw = False
                 calldef.exceptions = []
             else:

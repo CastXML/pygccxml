@@ -91,7 +91,7 @@ class default_argument_patcher_t(object):
 
         try:
             int(arg.default_value, 16)
-            if 64 == utils.get_architecture():
+            if utils.get_architecture() == 64:
                 # on 64 bit architecture, gccxml reports 0fffff, which is
                 # valid number the problem is that in this case it is so
                 # buggy so pygccxml can not fix it users will have to fix the
@@ -213,7 +213,7 @@ class default_argument_patcher_t(object):
             # we have some alias to the class
             relevant_typedefs = [
                 typedef for typedef in decl.aliases if typedef.name == name]
-            if 1 == len(relevant_typedefs):
+            if len(relevant_typedefs) == 1:
                 f_q_name = self.__join_names(
                     declarations.full_name(
                         relevant_typedefs[0].parent),

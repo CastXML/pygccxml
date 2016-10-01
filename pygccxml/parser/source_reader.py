@@ -181,7 +181,7 @@ class source_reader_t(object):
                 # We are using msvc
                 cmd.append('--castxml-cc-msvc ' +
                            '"%s"' % self.__config.compiler_path)
-                if 'msvc9' == self.__config.compiler:
+                if self.__config.compiler == 'msvc9':
                     cmd.append('-D"_HAS_TR1=0"')
         else:
 
@@ -224,7 +224,7 @@ class source_reader_t(object):
         # returns
         cmd = []
         # first is gccxml executable
-        if 'nt' == os.name:
+        if os.name == 'nt':
             cmd.append('"%s"' % os.path.normpath(
                 self.__config.xml_generator_path))
         else:
@@ -559,7 +559,7 @@ class source_reader_t(object):
                             decls.append(decl)
                             joined_decls[decl._name].append(decl)
                     else:
-                        assert 1 == len(joined_decls[decl._name])
+                        assert len(joined_decls[decl._name]) == 1
                         if isinstance(decl, declarations.namespace_t):
                             joined_decls[decl._name][0].take_parenting(decl)
 

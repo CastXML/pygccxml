@@ -55,7 +55,7 @@ class linker_t(
             base = declarations.declarated_t(declaration=self.__decls[type_id])
             self.__types[type_id] = base
             return base
-        elif '...' == type_id:
+        elif type_id == '...':
             return declarations.ellipsis_t()
         else:
             return declarations.unknown_t()
@@ -144,7 +144,7 @@ class linker_t(
             data = base.split(':')
             base_decl = self.__decls[data[-1]]
             access = declarations.ACCESS_TYPES.PUBLIC
-            if 2 == len(data):
+            if len(data) == 2:
                 access = data[0]
             self.__inst.bases.append(
                 declarations.hierarchy_info_t(base_decl, access))
