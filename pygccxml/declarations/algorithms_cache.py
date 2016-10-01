@@ -29,6 +29,7 @@ class declaration_algs_cache_t(object):
         self._normalized_partial_name = None
         self._normalized_full_name_true = None
         self._normalized_full_name_false = None
+        self._container_traits = None
 
     def disable(self):
         self._enabled = False
@@ -49,6 +50,16 @@ class declaration_algs_cache_t(object):
         if not self.enabled:
             fname = None
         self._full_name = fname
+
+    @property
+    def container_traits(self):
+        return self._container_traits
+
+    @container_traits.setter
+    def container_traits(self, container_traits):
+        if not self.enabled:
+            container_traits = None
+        self._container_traits = container_traits
 
     @property
     def full_partial_name(self):
@@ -193,6 +204,7 @@ class declaration_algs_cache_t(object):
         self.normalized_partial_name = None
         self.normalized_full_name_true = None
         self.normalized_full_name_false = None
+        self.container_traits = None
 
     def reset_name_based(self):
         self.full_name = None
@@ -208,6 +220,7 @@ class declaration_algs_cache_t(object):
         self.normalized_partial_name = None
         self.normalized_full_name_true = None
         self.normalized_full_name_false = None
+        self.container_traits = None
 
     def reset_access_type(self):
         self.access_type = None
