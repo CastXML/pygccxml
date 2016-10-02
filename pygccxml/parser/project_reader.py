@@ -488,12 +488,14 @@ class project_reader_t(object):
                 del declarations[declarations_ids.index(id(class_))]
         return leaved_classes
 
-    def _create_key2(self, decl):
+    @staticmethod
+    def _create_key2(decl):
         return (
             decl.location.as_tuple(),
             tuple(pygccxml.declarations.declaration_path(decl)))
 
-    def _create_name_key(self, decl):
+    @staticmethod
+    def _create_name_key(decl):
         # Not all declarations have a mangled name with castxml
         # we can only rely on the name
         if "GCC" in utils.xml_generator:
@@ -553,7 +555,8 @@ class project_reader_t(object):
                 if key in mangled_leaved_classes:
                     decl_wrapper_type.declaration = mangled_leaved_classes[key]
 
-    def __declarated_types(self, namespaces):
+    @staticmethod
+    def __declarated_types(namespaces):
         def get_from_type(cpptype):
             if not cpptype:
                 return []

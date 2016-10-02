@@ -290,7 +290,8 @@ class file_cache_t(cache_base_t):
             del self.__cache[key]
             return None
 
-    def __is_valid_signature(self, record):
+    @staticmethod
+    def __is_valid_signature(record):
         for index, included_file in enumerate(record.included_files):
             if file_signature(included_file) != \
                     record.included_files_signature[index]:
