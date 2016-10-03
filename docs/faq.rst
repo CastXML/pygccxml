@@ -8,6 +8,21 @@ GCCXML vs CastXML
 use ``CastXML``. ``GCCXML`` support will be removed from ``Pygccxml``
 in version 2.0.
 
+C++ and C code support
+----------------------
+
+``Pygccxml`` supports ``C++98``, as ``CastXML`` and ``GCCXML`` only output
+declarations from the ``C++98`` subset. Of course, newer versions of C++
+can be parsed (the tests currently all pass with ``C++11`` and ``C++14``),
+but not all new features from these language definitions can be used.
+
+``C`` code support has been reported to work. As ``C`` is similar to ``C++``,
+this makes sense. Some discrepancies may be present.
+
+Still, parsing ``C`` code is not officially supported by ``pygccxml``, as it
+falls out of scope of this project. Of course, if some volunteer wants to work
+on this, submissions would be accepted.
+
 Function and method bodies
 --------------------------
 
