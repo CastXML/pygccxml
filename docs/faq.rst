@@ -1,6 +1,13 @@
 FAQ
 ===
 
+GCCXML vs CastXML
+-----------------
+
+``GCCXML`` has been superseded by ``CastXML``. It is highly recommended to
+use ``CastXML``. ``GCCXML`` support will be removed from ``Pygccxml``
+in version 2.0.
+
 Function and method bodies
 --------------------------
 
