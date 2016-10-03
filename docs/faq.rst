@@ -1,6 +1,20 @@
 FAQ
 ===
 
+Function and method bodies
+--------------------------
+
+``Pygccxml`` does not allow to fetch declarations defined in function or method
+bodies. For example the following ``a`` variable will not appear in
+the declarations tree:
+
+ | int f() {
+ |   int a = 3;
+ |   return a;
+ | }
+
+Neither ``GCCXML`` or ``CastXML`` currently support this feature.
+``CastXML`` could probably be extended for this later, as ``pygccxml``.
 
 Performance
 -----------
