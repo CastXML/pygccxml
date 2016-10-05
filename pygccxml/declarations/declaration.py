@@ -253,7 +253,7 @@ class declaration_t(object):
 
     @is_artificial.setter
     def is_artificial(self, new_artificial):
-        self._is_artificial = new_artificial
+        self._is_artificial = bool(new_artificial)
 
     def get_mangled_name(self):
         return self._mangled
