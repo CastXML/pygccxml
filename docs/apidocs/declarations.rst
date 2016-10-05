@@ -108,14 +108,6 @@ decl_visitor
     :undoc-members:
     :show-inheritance:
 
-dependencies
-------------
-
-.. automodule:: pygccxml.declarations.dependencies
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 enumeration
 -----------
 
@@ -128,14 +120,6 @@ function_traits
 ---------------
 
 .. automodule:: pygccxml.declarations.function_traits
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-matcher
--------
-
-.. automodule:: pygccxml.declarations.matcher
     :members:
     :undoc-members:
     :show-inheritance:
