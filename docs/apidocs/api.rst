@@ -1,7 +1,7 @@
 API
 ===
 
-`pygccxml` consists from 4 sub packages
+`pygccxml` consists of 3 sub packages
 
 .. toctree::
    :maxdepth: 1
