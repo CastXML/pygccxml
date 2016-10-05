@@ -16,6 +16,7 @@ First examples
    examples/equality/example.rst
    examples/functions/example.rst
    examples/nested-types/example.rst
+   examples/artificial/example.rst
 
 Advanced examples
 -----------------
