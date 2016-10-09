@@ -49,10 +49,7 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 
-autogenerate:
-	sphinx-apidoc -o docs/apidocs pygccxml --separate --force --module-first --doc-project=API
-
-html: autogenerate
+html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

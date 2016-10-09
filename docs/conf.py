@@ -15,6 +15,7 @@
 import sys
 import os
 import sphinx_rtd_theme
+import subprocess
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -264,3 +265,25 @@ texinfo_documents = [
 # Override autodoc defaults
 autodoc_default_flags = [
     "members", "undoc-members", "show-inheritance", "inherited-members"]
+
+# Automate building apidoc when building with readthedocs
+# https://github.com/rtfd/readthedocs.org/issues/1139
+def run_apidoc(_):
+    modules = ['pygccxml']
+    for module in modules:
+        cur_dir = os.path.abspath(os.path.dirname(__file__))
+        output_path = os.path.join(cur_dir, 'apidocs')
+        cmd_path = 'sphinx-apidoc'
+        if hasattr(sys, 'real_prefix'):
+            # Check to see if we are in a virtualenv
+            # If we are, assemble the path manually
+            cmd_path = os.path.abspath(
+                os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
+        subprocess.check_call(
+            [cmd_path, '-o', output_path, module,
+             '--separate', '--force', '--module-first', '--doc-project=API'])
+
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
+
