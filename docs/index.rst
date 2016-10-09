@@ -24,7 +24,7 @@ The :doc:`examples <examples>` are a good way to learn how to use `pygccxml`.
 
 `pygccxml` provides a powerful API. If you want to know more about the provided API
 read the :doc:`query interface <query_interface>` document or the
-:doc:`API documentation <apidocs/api>`.
+:doc:`API documentation <apidocs/modules>`.
 
 Contributing
 ============
@@ -59,7 +59,7 @@ Documentation contents
    links
    releasing
    history
-   apidocs/api
+   apidocs/modules
    upgrade_issues
 
 .. _`Boost Software License`: http://boost.org/more/license_info.html

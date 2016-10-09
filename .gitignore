@@ -12,3 +12,4 @@ pygccxml.egg-info
 .coverage*
 docs/examples/caching/example.hpp.xml
 test_cost.log
+docs/apidocs
