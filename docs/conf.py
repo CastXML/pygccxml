@@ -280,7 +280,8 @@ def run_apidoc(_):
             cmd_path = os.path.abspath(
                 os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
         subprocess.check_call(
-            [cmd_path, '-o', output_path, module,
+            [cmd_path, '-o', output_path,
+             os.path.abspath(cur_dir + "/../" + module),
              '--separate', '--force', '--module-first', '--doc-project=API'])
 
 
