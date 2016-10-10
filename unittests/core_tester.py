@@ -655,14 +655,3 @@ def run_suite():
 
 if __name__ == "__main__":
     run_suite()
-# import hotshot
-# import hotshot.stats
-# statistics_file = tempfile.mkstemp( suffix='.stat' )[1]
-# profile = hotshot.Profile(statistics_file)
-#
-# profile.runcall( run_suite )
-# profile.close()
-# statistics = hotshot.stats.load( statistics_file )
-# statistics.strip_dirs()
-# statistics.sort_stats( 'time', 'calls' )
-# statistics.print_stats( 678 )
