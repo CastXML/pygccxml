@@ -570,6 +570,8 @@ class Core(parser_test_case.parser_test_case_t):
 class CoreXMLGenerator(Core):
     """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
+    COMPILATION_MODE = None
+    INIT_OPTIMIZER = None
 
     def __init__(self, *args):
         Core.__init__(self, *args)
