@@ -5,10 +5,7 @@
 
 import pprint
 import warnings
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import unittest
 import autoconfig
 import parser_test_case
 
