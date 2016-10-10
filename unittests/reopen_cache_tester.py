@@ -4,10 +4,6 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
 import autoconfig
 from pygccxml import parser
 from pygccxml import utils
