@@ -21,11 +21,8 @@ def is_sub_path(root, some_path):
     return some_path.startswith(root)
 
 
-class core_t(parser_test_case.parser_test_case_t):
-
-    """Tests core algorithms of GCC-XML and GCC-XML file reader.
-    Those most white-box testing.
-    """
+class Core(parser_test_case.parser_test_case_t):
+    """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
 
     def __init__(self, *args):
@@ -570,15 +567,12 @@ class core_t(parser_test_case.parser_test_case_t):
         self.assertTrue(mptrs.variable('xxx').byte_offset != 0)
 
 
-class core_gccxml_t(core_t):
-
-    """Tests core algorithms of GCC-XML and GCC-XML file reader.
-    Those most white-box testing.
-    """
+class CoreXMLGenerator(Core):
+    """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
 
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        Core.__init__(self, *args)
         self.test_files = [
             'core_ns_join_1.hpp',
             'core_ns_join_2.hpp',
@@ -596,48 +590,48 @@ class core_gccxml_t(core_t):
         self.global_ns = None
 
     def setUp(self):
-        if not core_t.global_ns:
+        if not Core.global_ns:
             decls = parser.parse(
                 self.test_files,
                 self.config,
                 self.COMPILATION_MODE)
-            core_t.global_ns = pygccxml.declarations.get_global_namespace(
+            Core.global_ns = pygccxml.declarations.get_global_namespace(
                 decls)
             if self.INIT_OPTIMIZER:
-                core_t.global_ns.init_optimizer()
-        self.global_ns = core_t.global_ns
+                Core.global_ns.init_optimizer()
+        self.global_ns = Core.global_ns
 
 
-class core_all_at_once_t(core_gccxml_t):
+class core_all_at_once_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_all_at_once_no_opt_t(core_gccxml_t):
+class core_all_at_once_no_opt_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = False
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_file_by_file_t(core_gccxml_t):
+class core_file_by_file_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = True
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_file_by_file_no_opt_t(core_gccxml_t):
+class core_file_by_file_no_opt_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = False
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
 def create_suite():
