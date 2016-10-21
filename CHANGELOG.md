@@ -7,6 +7,10 @@ Version 1.8.1 (not yet released)
 * Added ```is_struct``` function to declarations package. It returns true if
   a declaration is a struct.
 
+* Removed * from decl_string when type is a function pointer (#61)
+
+* Update travis.yml for newer OS X images
+
 Version 1.8.0
 -------------
 
