@@ -83,7 +83,8 @@ class directory_cache_t (declarations_cache.cache_base_t):
                          the modification date
         """
 
-        if dir is not None:
+        if dir != "cache":
+            # Somebody explicitly set a different value for dir
             warnings.warn(
                 "The dir argument is deprecated.\n" +
                 "Please use the directory argument instead.",
