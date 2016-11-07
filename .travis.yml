@@ -111,15 +111,17 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python; fi
 
   # Download castxml binaries
+  # To update the URLs, get the full URLS from ITK, and the run wget with --verbose on the URL.
+  # Look at the redirection and extract the direct URL for usage with Travis.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -q -O - https://midas3.kitware.com/midas/api/rest?method=midas.bitstream.download&checksum=d0688cf7fc0b0d568f5f26ffbf539a1e&name=castxml-macosx.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461589/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -q -O - https://midas3.kitware.com/midas/api/rest?method=midas.bitstream.download&checksum=76eb3b3acdae9d05b8c12aee28f04f5f&name=castxml-linux.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461590/castxml-linux.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
 
