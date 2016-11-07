@@ -9,7 +9,9 @@ Version 1.8.1 (not yet released)
 
 * Removed * from decl_string when type is a function pointer (#61)
 
-* Update travis.yml for newer OS X images
+* Update travis.yml for newer OS X images. Update CastXML binaries for Travis.
+
+* Fix regression in directory_cache, which was crashing due an unset variable.
 
 Version 1.8.0
 -------------
