@@ -568,8 +568,9 @@ class filename_repository_t(object):
             except OSError:
                 return None
 
-    def _dump(self):
-        """Dump contents for debugging/testing.
+    def _dump(self): # pragma: no cover
+        """
+        Dump contents for debugging/testing.
         """
 
         print(70 * "-")
