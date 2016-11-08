@@ -15,14 +15,14 @@ class Test(parser_test_case.parser_test_case_t):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = "core_cache.hpp"
 
-    def test_elaborated_types(self):
+    def test_directory_cache(self):
         """
         Test the directory cache
 
         """
 
         cache = parser.directory_cache_t(
-            directory="unittests/data/directory_cache_test")
+            dir="unittests/data/directory_cache_test")
         # Generate a cache on first read
         parser.parse([self.header], self.config, cache=cache)
         # Read from the cache the second time
