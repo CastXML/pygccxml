@@ -10,6 +10,19 @@ Version 1.9.0 (not yet released)
 * Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
 
+Version 1.8.1
+-------------
+
+1. Added ```is_struct``` function to declarations package. It returns true if
+  a declaration is a struct.
+
+2. Removed * from decl_string when type is a function pointer (#61)
+
+3. Update travis.yml for newer OS X images. Update CastXML binaries for Travis.
+
+4. Fix regression in directory_cache, which was crashing due an unset variable.
+  Add support for python3 in directory_cache.
+
 Version 1.8.0
 -------------
 

@@ -17,7 +17,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.header = "core_cache.hpp"
         self.cache_dir = "unittests/data/directory_cache_test"
 
-    def test_elaborated_types(self):
+    def test_directory_cache(self):
         """
         Test the directory cache
 

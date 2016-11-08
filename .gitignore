@@ -4,6 +4,7 @@
 docs/_build
 unittests/temp
 unittests/data/pygccxml.cache
+unittests/data/directory_cache_test
 .idea
 dist
 build
