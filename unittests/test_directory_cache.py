@@ -29,7 +29,8 @@ class Test(parser_test_case.parser_test_case_t):
         """
 
         # Clear the cache tree
-        shutil.rmtree(self.cache_dir)
+        if os.path.isdir(self.cache_dir):
+            shutil.rmtree(self.cache_dir)
 
         # Test with compression OFF
         cache = parser.directory_cache_t(directory=self.cache_dir)
