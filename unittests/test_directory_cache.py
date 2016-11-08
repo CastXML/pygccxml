@@ -3,6 +3,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import os
+import sys
 import shutil
 import unittest
 import parser_test_case
@@ -15,7 +17,10 @@ class Test(parser_test_case.parser_test_case_t):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = "core_cache.hpp"
-        self.cache_dir = "unittests/data/directory_cache_test"
+        this_module_dir_path = os.path.abspath(
+            os.path.dirname(sys.modules[__name__].__file__))
+        self.cache_dir = os.path.join(
+            this_module_dir_path, "data/directory_cache_test")
 
     def test_directory_cache(self):
         """
