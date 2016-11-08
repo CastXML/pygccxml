@@ -391,13 +391,13 @@ class directory_cache_t (declarations_cache.cache_base_t):
         m = hashlib.sha1()
         m.update(config.working_directory.encode("utf-8"))
         for p in config.include_paths:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.define_symbols:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.undefine_symbols:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.cflags:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         return m.digest()
 
 
