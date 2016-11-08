@@ -1,17 +1,18 @@
 Changes
 =======
 
-Version 1.8.1 (not yet released)
---------------------------------
+Version 1.8.1
+-------------
 
-* Added ```is_struct``` function to declarations package. It returns true if
+1. Added ```is_struct``` function to declarations package. It returns true if
   a declaration is a struct.
 
-* Removed * from decl_string when type is a function pointer (#61)
+2. Removed * from decl_string when type is a function pointer (#61)
 
-* Update travis.yml for newer OS X images. Update CastXML binaries for Travis.
+3. Update travis.yml for newer OS X images. Update CastXML binaries for Travis.
 
-* Fix regression in directory_cache, which was crashing due an unset variable.
+4. Fix regression in directory_cache, which was crashing due an unset variable.
+  Add support for python3 in directory_cache.
 
 Version 1.8.0
 -------------
