@@ -241,7 +241,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
             self.__filename_rep = filename_repository_t(self.__sha1_sigs)
 
         # Read the xml generator from the cache and set it
-        with open(os.path.join(self.__dir, "gen.dat"), "rb") as gen_file:
+        with open(os.path.join(self.__dir, "gen.dat"), "r") as gen_file:
             utils.xml_generator = gen_file.read()
 
         self.__modified_flag = False
@@ -263,7 +263,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
                  self.__filename_rep))
 
             # Read the xml generator from the cache and set it
-            with open(os.path.join(self.__dir, "gen.dat"), "wb") as gen_file:
+            with open(os.path.join(self.__dir, "gen.dat"), "w") as gen_file:
                 gen_file.write(utils.xml_generator)
 
             self.__modified_flag = False
@@ -377,7 +377,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
         :rtype: str
         """
         m = hashlib.sha1()
-        m.update(config.working_directory)
+        m.update(config.working_directory.encode("utf-8"))
         for p in config.include_paths:
             m.update(p)
         for p in config.define_symbols:
@@ -542,13 +542,13 @@ class filename_repository_t(object):
             if not os.path.exists(entry.filename):
                 return None
             try:
-                f = open(entry.filename)
+                f = open(entry.filename, "r")
             except IOError as e:
                 print("Cannot determine sha1 digest:", e)
                 return None
             data = f.read()
             f.close()
-            return hashlib.sha1(data).digest()
+            return hashlib.sha1(data.encode("utf-8")).digest()
         else:
             # return file modification date...
             try:
