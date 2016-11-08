@@ -24,7 +24,9 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
+
 from . import declarations_cache
+from .. import utils
 
 
 class index_entry_t(object):
@@ -238,6 +240,10 @@ class directory_cache_t (declarations_cache.cache_base_t):
             self.__index = {}
             self.__filename_rep = filename_repository_t(self.__sha1_sigs)
 
+        # Read the xml generator from the cache and set it
+        with open(os.path.join(self.__dir, "gen.dat"), "r") as gen_file:
+            utils.xml_generator = gen_file.read()
+
         self.__modified_flag = False
 
     def _save(self):
@@ -255,6 +261,11 @@ class directory_cache_t (declarations_cache.cache_base_t):
                 indexfilename,
                 (self.__index,
                  self.__filename_rep))
+
+            # Read the xml generator from the cache and set it
+            with open(os.path.join(self.__dir, "gen.dat"), "w") as gen_file:
+                gen_file.write(utils.xml_generator)
+
             self.__modified_flag = False
 
     def _read_file(self, filename):
@@ -366,15 +377,15 @@ class directory_cache_t (declarations_cache.cache_base_t):
         :rtype: str
         """
         m = hashlib.sha1()
-        m.update(config.working_directory)
+        m.update(config.working_directory.encode("utf-8"))
         for p in config.include_paths:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.define_symbols:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.undefine_symbols:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         for p in config.cflags:
-            m.update(p)
+            m.update(p.encode("utf-8"))
         return m.digest()
 
 
@@ -531,13 +542,13 @@ class filename_repository_t(object):
             if not os.path.exists(entry.filename):
                 return None
             try:
-                f = open(entry.filename)
+                f = open(entry.filename, "r")
             except IOError as e:
                 print("Cannot determine sha1 digest:", e)
                 return None
             data = f.read()
             f.close()
-            return hashlib.sha1(data).digest()
+            return hashlib.sha1(data.encode("utf-8")).digest()
         else:
             # return file modification date...
             try:
