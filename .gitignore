@@ -5,6 +5,7 @@ docs/_build
 unittests/temp
 unittests/data/pygccxml.cache
 unittests/data/directory_cache_test
+unittests/data/ogre.1.7.xml
 .idea
 dist
 build
