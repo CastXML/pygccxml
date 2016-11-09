@@ -7,6 +7,7 @@ import os
 import sys
 import shutil
 import unittest
+import warnings
 import parser_test_case
 
 from pygccxml import parser
@@ -22,16 +23,16 @@ class Test(parser_test_case.parser_test_case_t):
         self.cache_dir = os.path.join(
             this_module_dir_path, "data/directory_cache_test")
 
-    def test_directory_cache(self):
-        """
-        Test the directory cache
-
-        """
-
+    def setUp(self):
         # Clear the cache tree
         if os.path.isdir(self.cache_dir):  # pragma: no cover
             shutil.rmtree(self.cache_dir)
 
+    def test_directory_cache_without_compression(self):
+        """
+        Test the directory cache without compression
+
+        """
         # Test with compression OFF
         cache = parser.directory_cache_t(directory=self.cache_dir)
         # Generate a cache on first read
@@ -39,9 +40,11 @@ class Test(parser_test_case.parser_test_case_t):
         # Read from the cache the second time
         parser.parse([self.header], self.config, cache=cache)
 
-        # Clear the cache tree
-        shutil.rmtree(self.cache_dir)
+    def test_directory_cache_wit_compression(self):
+        """
+        Test the directory cache wit compression
 
+        """
         # Test with compression ON
         cache = parser.directory_cache_t(
             directory=self.cache_dir, compression=True)
@@ -49,6 +52,22 @@ class Test(parser_test_case.parser_test_case_t):
         parser.parse([self.header], self.config, cache=cache)
         # Read from the cache the second time
         parser.parse([self.header], self.config, cache=cache)
+
+    def test_dir_compatibility(self):
+        """
+        For retro-compatibility, test if the dir argument is still working
+
+        This test can be removed in v2.0.0.
+
+        """
+
+        # Do not clutter the tests with warnings
+        warnings.simplefilter("ignore", DeprecationWarning)
+
+        parser.directory_cache_t(dir=self.cache_dir, compression=True)
+
+        # Reset this warning to always
+        warnings.simplefilter("error", DeprecationWarning)
 
 
 def create_suite():
