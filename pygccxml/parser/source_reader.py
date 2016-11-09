@@ -345,6 +345,8 @@ class source_reader_t(object):
                             self.__config.xml_generator.upper() +
                             ": %s status:%s" % (gccxml_msg, exit_status))
 
+            process.stdout.close()
+
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
