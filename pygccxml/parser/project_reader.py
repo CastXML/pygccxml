@@ -387,9 +387,8 @@ class project_reader_t(object):
                     xml_file_path = fc.cached_source_file
             else:
                 xml_file_path = reader.create_xml_file_from_string(fc.data)
-            xml_file = open(xml_file_path, 'r')
-            xml = xml_file.read()
-            xml_file.close()
+            with open(xml_file_path, "r") as xml_file:
+                xml = xml_file.read()
             utils.remove_file_no_raise(xml_file_path, self.__config)
             return xml
         finally:
