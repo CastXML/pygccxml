@@ -554,13 +554,12 @@ class filename_repository_t(object):
             if not os.path.exists(entry.filename):
                 return None
             try:
-                f = open(entry.filename, "r")
+                with open(entry.filename, "r") as f:
+                    data = f.read()
+                    return hashlib.sha1(data.encode("utf-8")).digest()
             except IOError as e:
                 print("Cannot determine sha1 digest:", e)
                 return None
-            data = f.read()
-            f.close()
-            return hashlib.sha1(data.encode("utf-8")).digest()
         else:
             # return file modification date...
             try:
