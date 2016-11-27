@@ -26,14 +26,15 @@ Version 1.8.1
 Version 1.8.0
 -------------
 
-1. ```find_xml_generator``` will now look for castxml first
+1. ```CastXML``` is now the default XML generator (instead of ```GCCXML```)
+   ```find_xml_generator``` will now look for ```CastXML``` first too.
 
 2. Do not allow to use the GCCXML provided by newer gccxml debian packages.
   It is a wrapper around CastXML which can confuse pygccxml.
   You should use the castxml package and the CastXML binary instead.
   If you really want to use gccxml, the gccxml.real binary from the
   gccxml debian package can still be used.
-  
+
 3. Fix parsing of ```boost/locale.hpp``` code.
   Templated class instantiations with specializations are now better supported,
   specifically when containing parentheses:
@@ -87,7 +88,7 @@ Version 1.8.0
      * Deprecate ```etree_scanner_t``` and ```etree_saxifier_t``` classes.
        The most efficient xml scanner class is the ```ietree_scanner_t``` class, which
        is the one used since many years now.
-       
+
      * The ```[gccxml]``` section used in the configuration file is now deprecated.
        Please use ```[xml_generator]``` instead.
 
