@@ -1,6 +1,16 @@
 Changes
 =======
 
+
+Version 1.8.2 (Not yet released)
+--------------------------------
+
+1. ```xml_generator_configuration_t``` will no more try to find
+  castxml or gccxml. You can use ```utils.find_xml_generator``` to help you
+  finding the path to the xml generator, or set it manually.
+  It is now mandatory to pass a valid ```xml_generator``` and
+  ```xml_generator_path``` to the configuration (#65).
+
 Version 1.8.1
 -------------
 
