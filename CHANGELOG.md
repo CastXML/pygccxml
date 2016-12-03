@@ -2,8 +2,8 @@ Changes
 =======
 
 
-Version 1.8.2 (Not yet released)
---------------------------------
+Version 1.8.2
+-------------
 
 1. ```xml_generator_configuration_t``` will no more try to find
   castxml or gccxml. You can use ```utils.find_xml_generator``` to help you
