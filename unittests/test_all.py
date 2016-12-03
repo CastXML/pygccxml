@@ -151,7 +151,7 @@ if 'posix' in os.name:
 if os.path.isfile("test_cost.log"):
     # Remove the cost log file when tests are run again.
     # See the parser_test_case which generates this file.
-    os.remove("test_cost.log")
+    os.remove("test_cost.log")  # pragma: no cover
 
 
 def create_suite():
@@ -166,8 +166,8 @@ def run_suite():
     error_desc = 'EXCEPTION IN SAFE SELECT 9'
     all_errors = result.failures + result.errors
     for test_case, description in all_errors:
-        if error_desc not in description:
-            return 1
+        if error_desc not in description:  # pragma: no cover
+            return 1  # pragma: no cover
     return 0
 
 if __name__ == "__main__":
