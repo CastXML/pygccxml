@@ -300,19 +300,20 @@ class source_reader_t(object):
             utils.remove_file_no_raise(xml_file, self.__config)
         else:
             xml_file = utils.create_temp_file_name(suffix='.xml')
+
+        ffname = source_file
+        if not os.path.isabs(ffname):
+            ffname = self.__file_full_name(source_file)
+        command_line = self.__create_command_line(ffname, xml_file)
+
+        process = subprocess.Popen(
+            args=command_line,
+            shell=True,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE)
+        process.stdin.close()
+
         try:
-            ffname = source_file
-            if not os.path.isabs(ffname):
-                ffname = self.__file_full_name(source_file)
-            command_line = self.__create_command_line(ffname, xml_file)
-
-            process = subprocess.Popen(
-                args=command_line,
-                shell=True,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE)
-            process.stdin.close()
-
             gccxml_reports = []
             while process.poll() is None:
                 line = process.stdout.readline()
@@ -344,12 +345,11 @@ class source_reader_t(object):
                             "Error occurred while running " +
                             self.__config.xml_generator.upper() +
                             ": %s status:%s" % (gccxml_msg, exit_status))
-
-            process.stdout.close()
-
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
+        finally:
+            process.stdout.close()
         return xml_file
 
     def create_xml_file_from_string(self, content, destination=None):

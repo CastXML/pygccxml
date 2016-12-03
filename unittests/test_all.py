@@ -74,6 +74,7 @@ import test_smart_pointer
 import test_pattern_parser
 import test_function_pointer
 import test_directory_cache
+import test_config
 
 testers = [
     # , demangled_tester # failing right now
@@ -140,7 +141,8 @@ testers = [
     test_smart_pointer,
     test_pattern_parser,
     test_function_pointer,
-    test_directory_cache
+    test_directory_cache,
+    test_config
 ]
 
 if 'posix' in os.name:

@@ -45,7 +45,7 @@ class parser_configuration_t(object):
             undefine_symbols=None,
             cflags="",
             compiler=None,
-            xml_generator="castxml",
+            xml_generator=None,
             keep_xml=False,
             compiler_path=None,
             flags=None):
@@ -187,11 +187,16 @@ class parser_configuration_t(object):
                 (meaning, dir_path))
 
     def raise_on_wrong_settings(self):
-        """validates the configuration settings and raises RuntimeError on
-        error"""
+        """
+        Validates the configuration settings and raises RuntimeError on error
+        """
         self.__ensure_dir_exists(self.working_directory, 'working directory')
         for idir in self.include_paths:
             self.__ensure_dir_exists(idir, 'include directory')
+        if self.__xml_generator not in ["castxml", "gccxml"]:
+            msg = ('xml_generator("%s") should either be ' +
+                   '"castxml" or "gccxml".') % self.xml_generator
+            raise RuntimeError(msg)
 
 
 class xml_generator_configuration_t(parser_configuration_t):
@@ -215,7 +220,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             ignore_gccxml_output=False,
             cflags="",
             compiler=None,
-            xml_generator="castxml",
+            xml_generator=None,
             keep_xml=False,
             compiler_path=None,
             flags=None):
@@ -277,31 +282,12 @@ class xml_generator_configuration_t(parser_configuration_t):
 
     def raise_on_wrong_settings(self):
         super(xml_generator_configuration_t, self).raise_on_wrong_settings()
-        if os.path.isfile(self.xml_generator_path):
-            return
-        if os.name == 'nt':
-            gccxml_name = 'gccxml' + '.exe'
-            environment_var_delimiter = ';'
-        elif os.name == 'posix':
-            gccxml_name = 'gccxml'
-            environment_var_delimiter = ':'
-        else:
-            raise RuntimeError(
-                'unable to find out location of the xml generator')
-        may_be_gccxml = os.path.join(self.xml_generator_path, gccxml_name)
-        if os.path.isfile(may_be_gccxml):
-            self.xml_generator_path = may_be_gccxml
-        else:
-            for path in os.environ['PATH'].split(environment_var_delimiter):
-                xml_generator_path = os.path.join(path, gccxml_name)
-                if os.path.isfile(xml_generator_path):
-                    self.xml_generator_path = xml_generator_path
-                    break
-            else:
-                msg = (
-                    'xml_generator_path("%s") should exists or to be a ' +
-                    'valid file name.') % self.xml_generator_path
-                raise RuntimeError(msg)
+        if self.xml_generator_path is None or \
+                not os.path.isfile(self.xml_generator_path):
+            msg = (
+                'xml_generator_path("%s") should be set and exist.') \
+                % self.xml_generator_path
+            raise RuntimeError(msg)
 
 
 def load_xml_generator_configuration(configuration, **defaults):
