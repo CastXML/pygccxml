@@ -155,7 +155,7 @@ class source_reader_t(object):
 
         # Add additional includes directories
         dirs = self.__search_directories
-        cmd.append(''.join([' -I%s' % search_dir for search_dir in dirs]))
+        cmd.append(''.join([' -I"%s"' % search_dir for search_dir in dirs]))
 
         # Clang option: -c Only run preprocess, compile, and assemble steps
         cmd.append("-c")
