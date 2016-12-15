@@ -7,7 +7,7 @@
 from setuptools import setup
 from release_utils import utils
 
-version = utils.find_version("pygccxml/__init__.py")
+version = utils.find_version("../pygccxml/__init__.py")
 
 setup(name="pygccxml",
       version=version,
