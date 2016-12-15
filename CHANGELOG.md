@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 1.8.3
+-------------
+
+1. Single-source the version number to prevent version numbers mismatches.
+   Release 1.8.2 contained a wrong version number in its download url
+   on pypi.
 
 Version 1.8.2
 -------------
