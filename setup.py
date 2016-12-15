@@ -5,16 +5,20 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 from setuptools import setup
+from release_utils import utils
+
+version = utils.find_version("pygccxml/__init__.py")
 
 setup(name="pygccxml",
-      version="1.8.2",
+      version=version,
       author="Roman Yakovenko",
       author_email="roman yakovenko at gmail com",
       maintainer="Michka Popoff and the Insight Software Consortium",
       maintainer_email="castxml@public.kitware.com",
       description="Python package for easy C++ declarations navigation.",
       url="https://github.com/gccxml/pygccxml",
-      download_url="https://github.com/gccxml/pygccxml/archive/v1.8.1.tar.gz",
+      download_url="https://github.com/gccxml/pygccxml/archive/v" +
+                   version + ".tar.gz",
       license="Boost",
       keywords="C++, declaration parser, CastXML, gccxml",
       packages=["pygccxml",
