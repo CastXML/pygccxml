@@ -1,15 +1,12 @@
 Releasing
 =========
 
-To build a new release, the following files should be modified:
-
-Modify the version numbers in:
-
-``setup.py`` (version and download_url)
+To build a new release, modify the version number in:
 
 ``pygccxml/__init__.py``
 
-``docs/conf.py``
+This version number will then automatically be used to build
+the documentation and by the setup.py script when building the wheels.
 
 Do not forget to document the changes in the ``CHANGELOG.md`` file.
 
