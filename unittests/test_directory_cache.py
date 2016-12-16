@@ -28,7 +28,6 @@ class Test(parser_test_case.parser_test_case_t):
         # Clear the cache tree
         if os.path.isdir(self.cache_dir):  # pragma: no cover
             shutil.rmtree(self.cache_dir)
-        utils.xml_generator = None
 
     def test_directory_cache_without_compression(self):
         """
