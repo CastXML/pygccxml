@@ -7,6 +7,7 @@ import os
 import sys
 import logging
 import warnings
+import platform
 
 # Prevents copy.deepcopy RecursionError in some tests (Travis build)
 sys.setrecursionlimit(10000)
@@ -46,18 +47,10 @@ class cxx_parsers_cfg(object):
         os.path.normpath(this_module_dir_path + '/xml_generator.cfg'),
         xml_generator_path=generator_path,
         working_directory=data_directory,
-        compiler=None,
         xml_generator=generator_name)
 
-    if generator_name == 'gccxml':
-        gccxml.define_symbols.append('__GCCXML_09__')
-
-    if 'nt' == os.name:
-        gccxml.define_symbols.append(
-            '__PYGCCXML_%s__' %
-            gccxml.compiler.upper())
-        if 'msvc9' == gccxml.compiler:
-            gccxml.define_symbols.append('_HAS_TR1=0')
+    if platform.system() == 'Windows':
+        gccxml.define_symbols.append('_HAS_EXCEPTIONS=0')
 
 if cxx_parsers_cfg.gccxml.xml_generator:
     generator_name = cxx_parsers_cfg.gccxml.xml_generator
