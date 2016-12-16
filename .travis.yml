@@ -136,22 +136,22 @@ before_install:
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++03" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++03\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std03.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++11" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++11\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std14.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++14" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++14\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std14.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
-      cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py && cd ..;
+     mv unittests/configs/travis_gcc5.cfg unittests/xml_generator.cfg;
     fi
 
   # Install pep8, needed by the unit tests
