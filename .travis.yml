@@ -141,7 +141,7 @@ before_install:
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++11" ]]; then
-      mv unittests/configs/travis_std14.cfg unittests/xml_generator.cfg;
+      mv unittests/configs/travis_std11.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the c++ version to test on the fly
