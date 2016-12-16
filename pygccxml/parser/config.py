@@ -397,7 +397,7 @@ def load_xml_generator_configuration(configuration, **defaults):
             for p in value.split(';'):
                 p = p.strip()
                 if p:
-                    cfg.include_paths.append(p)
+                    cfg.include_paths.append(os.path.normpath(p))
         elif name == 'compiler':
             cfg.compiler = value
         elif name == 'xml_generator':
