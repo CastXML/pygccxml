@@ -3,7 +3,10 @@ pygccxml
 
 .. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=develop
     :target: https://travis-ci.org/gccxml/pygccxml
-    :alt: Unit tests status
+    :alt: Linux and Mac tests status
+.. image:: https://ci.appveyor.com/api/projects/status/knt8ej6vp1w76may/branch/develop?svg=true
+    :target: https://ci.appveyor.com/project/iMichka/pygccxml
+    :alt: Windows tests status
 .. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=develop
     :target: https://coveralls.io/r/gccxml/pygccxml?branch=develop
     :alt: Code coverage status
@@ -42,7 +45,8 @@ The develop branch contains the latest improvements but can be unstable. Pull Re
 Testing and code coverage
 -------------------------
 
-pygccxml has more than 200 unit tests. They are run after each code commit to ensure
-that the code stays functional and stable. You can find the builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_.
+pygccxml has more than 250 unit tests. They are run after each code commit to ensure
+that the code stays functional and stable. You can find the Mac and Linux builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_ and
+the Windows builds `here <https://ci.appveyor.com/project/iMichka/pygccxml>`_.
 
 Code coverage is also available. It is automatically updated after each commit and can be found `here <https://coveralls.io/r/gccxml/pygccxml>`_.

@@ -10,6 +10,12 @@ Version 1.9.0 (not yet released)
 * Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
 
+* Add Appveyor Windows build (castxml, VS 2013, python 3.5)
+
+* Fix a bug with include paths under windows: paths are now correctly normed
+  when read from configuration files, and put between quotes in the case there
+  are spaces in the path.
+
 Version 1.8.3
 -------------
 
