@@ -16,6 +16,8 @@ Version 1.9.0 (not yet released)
   when read from configuration files, and put between quotes in the case there
   are spaces in the path.
 
+* Add Windows buildbot (using appveyor) and merge coverage results with Travis.
+
 Version 1.8.3
 -------------
 
