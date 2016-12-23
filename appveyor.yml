@@ -30,3 +30,7 @@ test_script:
 
   # Run the tests with coverage
   - "coverage run unittests/test_all.py"
+  - "coverage combine"
+
+artifacts:
+  - path: .coverage

@@ -1,8 +1,15 @@
 language:
   - python
 
+env:
+  global:
+    - WINDOWS=0
+
 matrix:
   include:
+    - os: linux
+      python: 3.5
+      env: WINDOWS=1
     - os: linux
       python: 2.6
       env: XML_GENERATOR="gccxml"
@@ -154,23 +161,26 @@ before_install:
      mv unittests/configs/travis_gcc5.cfg unittests/xml_generator.cfg;
     fi
 
-  # Install pep8, needed by the unit tests
-  - pip install pep8
+  - pip install coveralls
 
   # Install coverage tools (On 3.2 the new coverage is broken, use an old one)
   # https://github.com/menegazzo/travispy/issues/20
-  - if [ $TRAVIS_PYTHON_VERSION == 3.2 ]; then
-      pip install 'coverage<4.0';
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install 'coverage<4.0'; fi
+  - if [[ $TRAVIS_PYTHON_VERSION != 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install coverage; fi
+
+  # appveyor-artifacts will be used to fetch coverage results from appveyor
+  - if [ $WINDOWS == 0 ]; then
+      pip install pep8;
     else
-      pip install coverage;
+      pip install appveyor-artifacts;
     fi
-  - pip install coveralls
 
 install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install unittest2; fi
 
 script:
   - echo $TRAVIS_OS_NAME
+  - echo $WINDOWS
 
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
@@ -184,14 +194,19 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]];
     then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.5/site-packages/sitecustomize.py"; fi
 
-  # Install pygccxml
-  - python setup.py install
-
-  # Run the tests with coverage
-  - coverage run unittests/test_all.py
-  # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
-  - coverage combine
+  # Install pygccxml, run the tests with coverage and
+  # combine multiple .coverage files
+  # We have multiple coverage files because some scripts run in a subprocess
+  - if [ $WINDOWS == 0 ]; then
+      python setup.py install;
+      coverage run unittests/test_all.py;
+      coverage combine;
+    fi
 
 after_success:
   # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
+  # For the "empty" windows build, fetch the coverage results from appveyor
+  - if [ $WINDOWS == 1 ]; then
+      appveyor-artifacts -m --owner-name=iMichka --verbose download;
+    fi
   - coveralls
