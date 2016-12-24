@@ -14,14 +14,14 @@ class Test(parser_test_case.parser_test_case_t):
     def test(self):
         path = os.path.normpath("/mypath/folder1/folder2/folder3")
         dirs = [
-            "/mypath/folder1/folder2/",
-            "/mypath3/folder1/folder2/folder3",
-            "home",
-            "/test/test1/mypath"]
+            os.path.normpath("/mypath/folder1/folder2/"),
+            os.path.normpath("/mypath3/folder1/folder2/folder3"),
+            os.path.normpath("home"),
+            os.path.normpath("/test/test1/mypath")]
 
         self.assertTrue(utils.utils.contains_parent_dir(path, dirs))
 
-        dirs = ["/home", "/mypath/test/"]
+        dirs = [os.path.normpath("/home"), os.path.normpath("/mypath/test/")]
 
         self.assertFalse(utils.utils.contains_parent_dir(path, dirs))
 

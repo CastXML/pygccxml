@@ -133,14 +133,14 @@ testers = [
     test_pattern_parser,
     test_function_pointer,
     test_directory_cache,
-    test_config
+    test_config,
+    test_utils
 ]
 
 if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(decl_printer_tester)
     testers.append(test_va_list_tag_removal)
-    testers.append(test_utils)
     testers.append(example_tester)
     testers.append(attributes_tester)
     testers.append(test_cpp_standards)

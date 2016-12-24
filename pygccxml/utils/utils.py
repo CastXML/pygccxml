@@ -196,7 +196,7 @@ def contains_parent_dir(fpath, dirs):
     """
     Returns true if paths in dirs start with fpath.
 
-    Precondition: dirs and fpath should be normalizeed before calling
+    Precondition: dirs and fpath should be normalized before calling
     this function.
 
     """
