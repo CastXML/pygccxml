@@ -443,6 +443,7 @@ def create_compiler_path(xml_generator, compiler_path):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.wait()
             p.stdout.close()
             p.stderr.close()
             # No mscv found; look for mingw
@@ -452,6 +453,7 @@ def create_compiler_path(xml_generator, compiler_path):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
                 compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.wait()
                 p.stdout.close()
                 p.stderr.close()
         else:
@@ -462,6 +464,7 @@ def create_compiler_path(xml_generator, compiler_path):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.wait()
             p.stdout.close()
             p.stderr.close()
             # No clang found; use gcc
@@ -471,6 +474,7 @@ def create_compiler_path(xml_generator, compiler_path):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
                 compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.wait()
                 p.stdout.close()
                 p.stderr.close()
 
