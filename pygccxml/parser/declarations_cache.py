@@ -221,7 +221,7 @@ class file_cache_t(cache_base_t):
                 file_name, len(list(cache.keys())))
         except Exception as error:
             file_cache_t.logger.exception(
-                "Error occured while reading cache file: %s",
+                "Error occurred while reading cache file: %s",
                 error)
             cache_file_obj.close()
             file_cache_t.logger.info(
@@ -229,6 +229,8 @@ class file_cache_t(cache_base_t):
                 file_name)
             open(file_name, 'w+b').close()   # Create empty file
             cache = {}                       # Empty cache
+        finally:
+            cache_file_obj.close()
         return cache
 
     def flush(self):
