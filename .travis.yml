@@ -192,7 +192,7 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]];
     then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.5/site-packages/sitecustomize.py"; fi
+    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.6/site-packages/sitecustomize.py"; fi
 
   # Install pygccxml, run the tests with coverage and
   # combine multiple .coverage files
