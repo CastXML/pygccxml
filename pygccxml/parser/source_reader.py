@@ -122,6 +122,7 @@ class source_reader_t(object):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
             help_str = p.stdout.read().decode("utf-8")
+            p.wait()
             p.stdout.close()
             p.stderr.close()
             if "CastXML wrapper" in help_str:
@@ -349,6 +350,7 @@ class source_reader_t(object):
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
         finally:
+            process.wait()
             process.stdout.close()
         return xml_file
 

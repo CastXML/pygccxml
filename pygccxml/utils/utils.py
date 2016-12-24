@@ -53,6 +53,7 @@ def find_xml_generator(name=None):
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
+        p.wait()
         p.stdout.close()
         p.stderr.close()
         if path == "":
@@ -60,12 +61,14 @@ def find_xml_generator(name=None):
             p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
             path = p.stdout.read().decode("utf-8")
+            p.wait()
             p.stdout.close()
             p.stderr.close()
     else:
         p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         path = p.stdout.read().decode("utf-8")
+        p.wait()
         p.stdout.close()
         p.stderr.close()
     if path == "":
