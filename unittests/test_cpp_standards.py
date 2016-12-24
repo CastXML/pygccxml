@@ -2,6 +2,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import platform
 import unittest
 import parser_test_case
 
@@ -22,11 +23,12 @@ class Test(parser_test_case.parser_test_case_t):
 
         parser.parse(["cpp_standards.hpp"], self.config)
 
-        self.config.cflags = "-std=c++98"
-        parser.parse(["cpp_standards.hpp"], self.config)
+        if platform.system() != 'Windows':
+            self.config.cflags = "-std=c++98"
+            parser.parse(["cpp_standards.hpp"], self.config)
 
-        self.config.cflags = "-std=c++03"
-        parser.parse(["cpp_standards.hpp"], self.config)
+            self.config.cflags = "-std=c++03"
+            parser.parse(["cpp_standards.hpp"], self.config)
 
         self.config.cflags = "-std=c++11"
         parser.parse(["cpp_standards.hpp"], self.config)

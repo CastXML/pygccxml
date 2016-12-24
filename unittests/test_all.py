@@ -134,7 +134,8 @@ testers = [
     test_function_pointer,
     test_directory_cache,
     test_config,
-    test_utils
+    test_utils,
+    test_cpp_standards,
 ]
 
 if platform.system() != 'Windows':
@@ -143,7 +144,6 @@ if platform.system() != 'Windows':
     testers.append(test_va_list_tag_removal)
     testers.append(example_tester)
     testers.append(attributes_tester)
-    testers.append(test_cpp_standards)
     testers.append(find_container_traits_tester)
     testers.append(remove_template_defaults_tester)
     testers.append(patcher_tester)
