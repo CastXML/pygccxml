@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
+import platform
 import unittest
 import parser_test_case
 
@@ -34,7 +35,8 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_keep_va_list_tag(self):
 
-        if "gccxml" in self.config.xml_generator:
+        if "gccxml" in self.config.xml_generator or \
+                platform.system() == 'Windows':
             return True
 
         self.config.flags = ["f1"]
@@ -86,7 +88,8 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_remove_va_list_tag(self):
 
-        if "gccxml" in self.config.xml_generator:
+        if "gccxml" in self.config.xml_generator or \
+                platform.system() == 'Windows':
             return True
 
         self.config.flags = []
