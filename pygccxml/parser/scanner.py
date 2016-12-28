@@ -246,7 +246,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
             elif utils.is_str(obj):
 
-                self.__files[element_id] = obj
+                self.__files[element_id] = os.path.normpath(obj)
 
             else:
                 self.logger.warning(
