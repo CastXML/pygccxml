@@ -488,12 +488,6 @@ class project_reader_t(object):
         return leaved_classes
 
     @staticmethod
-    def _create_key2(decl):
-        return (
-            decl.location.as_tuple(),
-            tuple(pygccxml.declarations.declaration_path(decl)))
-
-    @staticmethod
     def _create_name_key(decl):
         # Not all declarations have a mangled name with castxml
         # we can only rely on the name
@@ -516,7 +510,7 @@ class project_reader_t(object):
             if isinstance(
                     decl_wrapper_type.declaration,
                     pygccxml.declarations.class_t):
-                key = self._create_key2(decl_wrapper_type.declaration)
+                key = self._create_key(decl_wrapper_type.declaration)
                 if key in leaved_classes:
                     decl_wrapper_type.declaration = leaved_classes[key]
                 else:
