@@ -466,17 +466,6 @@ class source_reader_t(object):
                 return file_path
         raise RuntimeError("pygccxml error: file '%s' does not exist" % file)
 
-    def __produce_full_file(self, file_path):
-        if os.name in ['nt', 'posix']:
-            file_path = file_path.replace(r'\/', os.path.sep)
-        if os.path.isabs(file_path):
-            return file_path
-        abs_file_path = os.path.realpath(
-            os.path.join(self.__config.working_directory, file_path))
-        if os.path.exists(abs_file_path):
-            return os.path.normpath(abs_file_path)
-        return file_path
-
     def __parse_xml_file(self, xml_file):
         scanner_ = scanner_t(xml_file, self.__decl_factory, self.__config)
         scanner_.read()
@@ -484,7 +473,7 @@ class source_reader_t(object):
         types = scanner_.types()
         files = {}
         for file_id, file_path in scanner_.files().items():
-            files[file_id] = self.__produce_full_file(file_path)
+            files[file_id] = os.path.normpath(file_path)
         linker_ = linker.linker_t(
             decls=decls,
             types=types,
