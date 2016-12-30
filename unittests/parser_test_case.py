@@ -18,8 +18,8 @@ class parser_test_case_t(unittest.TestCase):
         unittest.TestCase.__init__(self, *args)
         if self.CXX_PARSER_CFG:
             self.config = self.CXX_PARSER_CFG.clone()
-        elif autoconfig.cxx_parsers_cfg.gccxml:
-            self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
+        elif autoconfig.cxx_parsers_cfg.config:
+            self.config = autoconfig.cxx_parsers_cfg.config.clone()
         else:
             pass
 

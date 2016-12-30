@@ -363,7 +363,7 @@ class Test(parser_test_case.parser_test_case_t):
 class missing_decls_tester_t(unittest.TestCase):
 
     def test(self):
-        config = autoconfig.cxx_parsers_cfg.gccxml
+        config = autoconfig.cxx_parsers_cfg.config
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
@@ -428,7 +428,7 @@ class class_traits_tester_t(unittest.TestCase):
 
         global_ns = parser.parse_string(
             code,
-            autoconfig.cxx_parsers_cfg.gccxml)
+            autoconfig.cxx_parsers_cfg.config)
         global_ns = declarations.get_global_namespace(global_ns)
         easy = global_ns.typedef('easy')
         declarations.class_traits.get_declaration(easy)

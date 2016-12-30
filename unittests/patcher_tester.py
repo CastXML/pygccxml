@@ -248,7 +248,7 @@ class tester_64_t(tester_impl_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    if "castxml" not in autoconfig.cxx_parsers_cfg.gccxml.xml_generator:
+    if "castxml" not in autoconfig.cxx_parsers_cfg.config.xml_generator:
         suite.addTest(unittest.makeSuite(tester_32_t))
     suite.addTest(unittest.makeSuite(tester_64_t))
     return suite

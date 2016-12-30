@@ -36,7 +36,7 @@ class Test(parser_test_case.parser_test_case_t):
                     new_file.write(data)
                 bz2_file.close()
 
-            reader = parser.source_reader_t(autoconfig.cxx_parsers_cfg.gccxml)
+            reader = parser.source_reader_t(autoconfig.cxx_parsers_cfg.config)
             self.global_ns = declarations.get_global_namespace(
                 reader.read_xml_file(
                     self.xml_path))

@@ -43,20 +43,20 @@ pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 
 class cxx_parsers_cfg(object):
-    gccxml = pygccxml.parser.load_xml_generator_configuration(
+    config = pygccxml.parser.load_xml_generator_configuration(
         os.path.normpath(this_module_dir_path + '/xml_generator.cfg'),
         xml_generator_path=generator_path,
         working_directory=data_directory,
         xml_generator=generator_name)
 
     if platform.system() == 'Windows':
-        gccxml.define_symbols.append('_HAS_EXCEPTIONS=0')
+        config.define_symbols.append('_HAS_EXCEPTIONS=0')
 
-if cxx_parsers_cfg.gccxml.xml_generator:
-    generator_name = cxx_parsers_cfg.gccxml.xml_generator
-if cxx_parsers_cfg.gccxml.xml_generator_path:
-    generator_path = cxx_parsers_cfg.gccxml.xml_generator_path
+if cxx_parsers_cfg.config.xml_generator:
+    generator_name = cxx_parsers_cfg.config.xml_generator
+if cxx_parsers_cfg.config.xml_generator_path:
+    generator_path = cxx_parsers_cfg.config.xml_generator_path
 
 print(
     '%s configured to simulate compiler %s' %
-    (generator_name.title(), cxx_parsers_cfg.gccxml.compiler))
+    (generator_name.title(), cxx_parsers_cfg.config.compiler))

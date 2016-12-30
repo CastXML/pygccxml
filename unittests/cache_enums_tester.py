@@ -48,7 +48,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
 
 
 class gccxml_tester_t(tester_impl_t):
-    CXX_PARSER_CFG = autoconfig.cxx_parsers_cfg.gccxml
+    CXX_PARSER_CFG = autoconfig.cxx_parsers_cfg.config
 
 
 def create_suite():
