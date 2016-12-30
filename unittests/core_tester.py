@@ -638,11 +638,10 @@ class core_file_by_file_no_opt_t(CoreXMLGenerator):
 
 def create_suite():
     suite = unittest.TestSuite()
-    if autoconfig.cxx_parsers_cfg.config is not None:
-        suite.addTest(unittest.makeSuite(core_all_at_once_t))
-        suite.addTest(unittest.makeSuite(core_all_at_once_no_opt_t))
-        suite.addTest(unittest.makeSuite(core_file_by_file_t))
-        suite.addTest(unittest.makeSuite(core_file_by_file_no_opt_t))
+    suite.addTest(unittest.makeSuite(core_all_at_once_t))
+    suite.addTest(unittest.makeSuite(core_all_at_once_no_opt_t))
+    suite.addTest(unittest.makeSuite(core_file_by_file_t))
+    suite.addTest(unittest.makeSuite(core_file_by_file_no_opt_t))
     return suite
 
 
