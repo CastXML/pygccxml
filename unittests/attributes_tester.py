@@ -21,12 +21,14 @@ class Test(parser_test_case.parser_test_case_t):
         self.header = "attributes_" + self.config.xml_generator + ".hpp"
 
     def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-            Test.global_ns.init_optimizer()
+        # Reset flags before each test
+        self.config.flags = ""
 
-    def test(self):
+    def test_attributes(self):
+
+        decls = parser.parse([self.header], self.config)
+        Test.global_ns = declarations.get_global_namespace(decls)
+        Test.global_ns.init_optimizer()
 
         numeric = self.global_ns.class_('numeric_t')
         do_nothing = numeric.mem_fun('do_nothing')
@@ -43,9 +45,40 @@ class Test(parser_test_case.parser_test_case_t):
                 self.assertTrue("annotate(sealed)" == numeric.attributes)
                 self.assertTrue("annotate(no throw)" == do_nothing.attributes)
                 self.assertTrue("annotate(out)" == arg.attributes)
+                self.assertTrue(
+                    numeric.member_operators(name="=")[0].attributes is None)
         else:
             self.assertTrue("gccxml(no throw)" == do_nothing.attributes)
             self.assertTrue("gccxml(out)" == arg.attributes)
+
+    def test_attributes_thiscall(self):
+        """
+        Test attributes with the "f2" flag
+
+        """
+        if self.config.compiler != "msvc":
+            return
+
+        self.config.flags = ["f2"]
+
+        decls = parser.parse([self.header], self.config)
+        Test.global_ns = declarations.get_global_namespace(decls)
+        Test.global_ns.init_optimizer()
+
+        numeric = self.global_ns.class_('numeric_t')
+        do_nothing = numeric.mem_fun('do_nothing')
+        arg = do_nothing.arguments[0]
+
+        if "CastXML" in utils.xml_generator and \
+                utils.xml_output_version >= 1.137:
+            self.assertTrue("annotate(sealed)" == numeric.attributes)
+            self.assertTrue("annotate(out)" == arg.attributes)
+
+            self.assertTrue(
+                "__thiscall__ annotate(no throw)" == do_nothing.attributes)
+            self.assertTrue(
+                numeric.member_operators(name="=")[0].attributes ==
+                "__thiscall__")
 
 
 def create_suite():

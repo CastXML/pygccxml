@@ -391,7 +391,7 @@ def create_compiler_path(xml_generator, compiler_path):
             p.wait()
             p.stdout.close()
             p.stderr.close()
-            # No mscv found; look for mingw
+            # No msvc found; look for mingw
             if compiler_path == '':
                 p = subprocess.Popen(
                     ['where', 'mingw'],

@@ -83,8 +83,8 @@ Some things you may try (in order of priority):
    by pygccxml. You will find an example of this mechanism in the examples section.
 
 
-\_\_va_list_tag and other hidden declarations
----------------------------------------------
+\_\_va_list_tag and other hidden declarations (f1)
+--------------------------------------------------
 
 When parsing with CastXML, the XML tree can contain declarations named
 ``__va_list_tag``. If the compiler is llvm 3.9,  ``__NSConstantString_tag``
@@ -98,3 +98,11 @@ By default, pygccxml will ignore these declarations.
 To still read these declarations from the xml file, a config flag can
 be set (``config.flags = ["f1"]``), or a flag can be passed as argument the
 config setup (``flags=["f1"]``).
+
+\_\_thiscall\_\_ in attributes (f2)
+-----------------------------------
+
+Attributes defined as ```__thiscall__``` are now ignored (tested with VS 2013).
+The ```__thiscall__``` in some attributes will be removed too. If you still
+want to have access to these attributes, you can use the
+``config.flags = ["f2"]`` option.

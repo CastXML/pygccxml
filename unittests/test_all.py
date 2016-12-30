@@ -138,12 +138,12 @@ testers = [
     test_cpp_standards,
     test_va_list_tag_removal,
     decl_printer_tester,
+    attributes_tester,
 ]
 
 if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(example_tester)
-    testers.append(attributes_tester)
     testers.append(find_container_traits_tester)
     testers.append(remove_template_defaults_tester)
     testers.append(patcher_tester)

@@ -339,9 +339,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_demangled(decl, attrs):
         decl.demangled = attrs.get(XML_AN_DEMANGLED)
 
-    @staticmethod
-    def __read_attributes(decl, attrs):
-        decl.attributes = attrs.get(XML_AN_ATTRIBUTES)
+    def __read_attributes(self, decl, attrs):
+        attribute = attrs.get(XML_AN_ATTRIBUTES)
+        if attribute is not None and \
+                self.config.compiler == "msvc" and \
+                "f2" not in self.config.flags:
+            if "__thiscall__" == attribute:
+                return
+            if "__thiscall__" in attribute:
+                attribute = attribute.replace("__thiscall__ ", "")
+        decl.attributes = attribute
 
     def __read_access(self, attrs):
         self.__access[
