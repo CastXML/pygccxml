@@ -139,6 +139,7 @@ testers = [
     test_va_list_tag_removal,
     decl_printer_tester,
     attributes_tester,
+    type_traits_tester,
 ]
 
 if platform.system() != 'Windows':
@@ -147,7 +148,6 @@ if platform.system() != 'Windows':
     testers.append(find_container_traits_tester)
     testers.append(remove_template_defaults_tester)
     testers.append(patcher_tester)
-    testers.append(type_traits_tester)
 
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
