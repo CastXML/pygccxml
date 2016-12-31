@@ -213,7 +213,7 @@ before_install:
   - if [ $WINDOWS == 0 ]; then
       pip install pycodestyle;
     else
-      pip install appveyor-artifacts;
+      pip install https://github.com/Robpol86/appveyor-artifacts/archive/master.zip;
     fi
 
 install:
@@ -238,11 +238,11 @@ script:
       coverage run unittests/test_all.py;
       coverage combine;
     fi
-
-after_success:
-  # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
   # For the "empty" windows build, fetch the coverage results from appveyor
   - if [ $WINDOWS == 1 ]; then
       appveyor-artifacts -m --owner-name=iMichka --verbose download;
     fi
+
+after_success:
+  # Send coverage result to https://coveralls.io/r/gccxml/pygccxml
   - coveralls
