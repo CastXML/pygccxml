@@ -489,9 +489,9 @@ class source_reader_t(object):
 
         # Join declarations
         if self.__join_decls:
-            for ns in iter(decls.values()):
-                if isinstance(ns, declarations.namespace_t):
-                    self.join_declarations(ns)
+            for namespace in iter(decls.values()):
+                if isinstance(namespace, declarations.namespace_t):
+                    self.join_declarations(namespace)
 
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
@@ -508,30 +508,29 @@ class source_reader_t(object):
                 declarations.namespace_t) and not inst.parent]
         return decls, list(files.values())
 
-    def join_declarations(self, declref):
-        self._join_namespaces(declref)
-        for ns in declref.declarations:
+    def join_declarations(self, namespace):
+        self.__join_namespaces(namespace)
+        for ns in namespace.declarations:
             if isinstance(ns, declarations.namespace_t):
                 self.join_declarations(ns)
 
     @staticmethod
-    def _join_namespaces(nsref):
-        assert isinstance(nsref, declarations.namespace_t)
+    def __join_namespaces(namespace):
         ddhash = {}
         decls = []
 
-        for decl in nsref.declarations:
+        for decl in namespace.declarations:
             source_reader_t.__fill_declarations(ddhash, decls, decl)
 
         class_t = declarations.class_t
         class_declaration_t = declarations.class_declaration_t
         if class_t in ddhash and class_declaration_t in ddhash:
             # If there is a class and its forward declaration in the namespace,
-            # Remove the second one from the delcaration tree
+            # Remove the second one from the declaration tree
             source_reader_t.__remove_second_class(
                 ddhash, decls, class_t, class_declaration_t)
 
-        nsref.declarations = decls
+        namespace.declarations = decls
 
     @staticmethod
     def __fill_declarations(ddhash, decls, decl):
