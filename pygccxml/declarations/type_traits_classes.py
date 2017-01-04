@@ -82,6 +82,7 @@ class declaration_xxx_traits(object):
         """
         return self.__apply_sequence(type_)
 
+
 enum_traits = declaration_xxx_traits(enumeration.enumeration_t)
 """implements functionality, needed for convenient work with C++ enums"""
 

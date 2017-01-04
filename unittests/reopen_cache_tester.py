@@ -42,5 +42,6 @@ def test_re_opening_cache_file():
     if "CastXML" not in utils.xml_generator:
         raise Exception
 
+
 if __name__ == "__main__":
     test_re_opening_cache_file()

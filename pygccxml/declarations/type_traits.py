@@ -95,6 +95,7 @@ def _create_cv_types(base):
          cpptypes.volatile_t(cpptypes.const_t(base))]
     )
 
+
 # Some tuples containing combinations of different types
 # These are created once the module is loaded, so that when they are used
 # they do not need to be re-created.

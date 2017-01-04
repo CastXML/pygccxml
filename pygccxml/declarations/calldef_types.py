@@ -13,6 +13,8 @@ class VIRTUALITY_TYPES(object):
     VIRTUAL = 'virtual'
     PURE_VIRTUAL = 'pure virtual'
     ALL = [NOT_VIRTUAL, VIRTUAL, PURE_VIRTUAL]
+
+
 # preserving backward compatebility
 FUNCTION_VIRTUALITY_TYPES = VIRTUALITY_TYPES
 

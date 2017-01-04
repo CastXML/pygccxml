@@ -58,6 +58,7 @@ def args(declaration_string):
     """
     return __THE_PARSER.args(declaration_string)
 
+
 NOT_FOUND = __THE_PARSER.NOT_FOUND
 
 

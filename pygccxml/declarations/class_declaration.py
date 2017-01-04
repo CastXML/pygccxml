@@ -538,6 +538,7 @@ class class_t(scopedef.scopedef_t, byte_info.byte_info):
             parent = parent.parent
         return curr
 
+
 class_types = (class_t, class_declaration_t)
 
 

@@ -52,6 +52,7 @@ class cxx_parsers_cfg(object):
     if platform.system() == 'Windows':
         config.define_symbols.append('_HAS_EXCEPTIONS=0')
 
+
 if cxx_parsers_cfg.config.xml_generator:
     generator_name = cxx_parsers_cfg.config.xml_generator
 if cxx_parsers_cfg.config.xml_generator_path:

@@ -174,5 +174,6 @@ def run_suite():
             return 1  # pragma: no cover
     return 0
 
+
 if __name__ == "__main__":
     sys.exit(run_suite())

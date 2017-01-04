@@ -532,6 +532,7 @@ class container_traits_impl_t(object):
         else:
             return no_defaults
 
+
 list_traits = container_traits_impl_t(
     'list',
     0,

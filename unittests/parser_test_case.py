@@ -100,6 +100,7 @@ class parser_test_case_t(unittest.TestCase):
              pprint.pformat([delc.name for delc in exception_decls]),
              pprint.pformat([delc.name for delc in exceptions_indeed])))
 
+
 if sys.version_info < (2, 7, 0):
     # Python2.6 does not have the following methods in the unittest module
     parser_test_case_t.assertIn = \

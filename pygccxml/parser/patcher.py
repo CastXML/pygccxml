@@ -240,6 +240,7 @@ class casting_operator_patcher_t(object):
     def __call__(self, decl):
         decl.name = 'operator ' + decl.return_type.decl_string
 
+
 _casting_oper_patcher_ = casting_operator_patcher_t()
 
 
