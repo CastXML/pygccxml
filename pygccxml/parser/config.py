@@ -12,7 +12,6 @@ import os
 import copy
 import platform
 import subprocess
-import warnings
 try:
     from configparser import ConfigParser
 except ImportError:
