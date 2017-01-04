@@ -561,7 +561,6 @@ class source_reader_t(object):
                         decls.append(decl)
                         joined_decls[decl.name].append(decl)
                 else:
-                    assert len(joined_decls[decl.name]) == 1
                     if isinstance(decl, declarations.namespace_t):
                         joined_decls[decl.name][0].take_parenting(decl)
 
