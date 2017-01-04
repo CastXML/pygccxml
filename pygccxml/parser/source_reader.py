@@ -535,35 +535,35 @@ class source_reader_t(object):
     @staticmethod
     def __fill_declarations(ddhash, decls, decl):
         if decl.__class__ not in ddhash:
-            ddhash[decl.__class__] = {decl._name: [decl]}
+            ddhash[decl.__class__] = {decl.name: [decl]}
             decls.append(decl)
         else:
             joined_decls = ddhash[decl.__class__]
-            if decl._name not in joined_decls:
+            if decl.name not in joined_decls:
                 decls.append(decl)
-                joined_decls[decl._name] = [decl]
+                joined_decls[decl.name] = [decl]
             else:
                 if isinstance(decl, declarations.calldef_t):
-                    if decl not in joined_decls[decl._name]:
+                    if decl not in joined_decls[decl.name]:
                         # functions has overloading
                         decls.append(decl)
-                        joined_decls[decl._name].append(decl)
+                        joined_decls[decl.name].append(decl)
                 elif isinstance(decl, declarations.enumeration_t):
                     # unnamed enums
                     if not decl.name and decl not in \
-                            joined_decls[decl._name]:
+                            joined_decls[decl.name]:
                         decls.append(decl)
-                        joined_decls[decl._name].append(decl)
+                        joined_decls[decl.name].append(decl)
                 elif isinstance(decl, declarations.class_t):
                     # unnamed classes
                     if not decl.name and decl not in \
-                            joined_decls[decl._name]:
+                            joined_decls[decl.name]:
                         decls.append(decl)
-                        joined_decls[decl._name].append(decl)
+                        joined_decls[decl.name].append(decl)
                 else:
-                    assert len(joined_decls[decl._name]) == 1
+                    assert len(joined_decls[decl.name]) == 1
                     if isinstance(decl, declarations.namespace_t):
-                        joined_decls[decl._name][0].take_parenting(decl)
+                        joined_decls[decl.name][0].take_parenting(decl)
 
     @staticmethod
     def __remove_second_class(ddhash, decls, class_t, class_declaration_t):
