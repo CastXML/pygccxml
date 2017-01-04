@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import pep8
+import pycodestyle
 import unittest
 import fnmatch
 
@@ -76,8 +76,7 @@ class Test(unittest.TestCase):
     def run_check(self, path):
         """Common method to run the pep8 test."""
 
-        pep8style = pep8.StyleGuide()
-        result = pep8style.check_files(paths=[path])
+        result = pycodestyle.StyleGuide().check_files(paths=[path])
 
         if result.total_errors != 0:
             self.assertEqual(

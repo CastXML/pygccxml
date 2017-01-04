@@ -170,7 +170,7 @@ before_install:
 
   # appveyor-artifacts will be used to fetch coverage results from appveyor
   - if [ $WINDOWS == 0 ]; then
-      pip install pep8;
+      pip install pycodestyle;
     else
       pip install appveyor-artifacts;
     fi
