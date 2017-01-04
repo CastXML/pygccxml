@@ -560,9 +560,8 @@ class source_reader_t(object):
                             joined_decls[decl.name]:
                         decls.append(decl)
                         joined_decls[decl.name].append(decl)
-                else:
-                    if isinstance(decl, declarations.namespace_t):
-                        joined_decls[decl.name][0].take_parenting(decl)
+                elif isinstance(decl, declarations.namespace_t):
+                    joined_decls[decl.name][0].take_parenting(decl)
 
     @staticmethod
     def __remove_second_class(ddhash, decls, class_t, class_declaration_t):
