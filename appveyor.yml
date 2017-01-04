@@ -11,7 +11,7 @@ init:
 
 install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "%PYTHON%/Scripts/pip.exe install pep8"
+  - "%PYTHON%/Scripts/pip.exe install pycodestyle"
   - "%PYTHON%/Scripts/pip.exe install coverage"
   - "%PYTHON%/Scripts/pip.exe install coveralls"
 
