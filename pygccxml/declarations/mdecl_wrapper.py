@@ -108,7 +108,8 @@ class mdecl_wrapper_t(object):
         return item in self.declarations
 
     def to_list(self):
-        l = []
+        # Not used internally. Used by py++. TODO: Add test or deprecate ?
+        li = []
         for d in self.declarations:
-            l.append(d)
-        return l
+            li.append(d)
+        return li

@@ -67,100 +67,100 @@ class Test(parser_test_case.parser_test_case_t):
 
         for arg in args_list:
 
-            l = [p1]
+            li = [p1]
             name, args = declarations.templates.split(
-                "myClass0a<" + ", ".join(l) + ">")
+                "myClass0a<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass0a")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p1, p2]
+            li = [p1, p2]
             name, args = declarations.templates.split(
-                "myClass0b<" + ", ".join(l) + ">")
+                "myClass0b<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass0b")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p1, p2, p2]
+            li = [p1, p2, p2]
             name, args = declarations.templates.split(
-                "myClass0c<" + ", ".join(l) + ">")
+                "myClass0c<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass0c")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p1 + " (" + arg + ")"]
+            li = [p1 + " (" + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass1<" + ", ".join(l) + ">")
+                "myClass1<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass1")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p1 + " (" + arg + ", " + arg + ")"]
+            li = [p1 + " (" + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass2<" + ", ".join(l) + ">")
+                "myClass2<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass2")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p2 + " (" + arg + ", " + arg + ")"]
+            li = [p2 + " (" + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass3<" + ", ".join(l) + ">")
+                "myClass3<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass3")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [p1 + " (" + arg + ", " + arg + ", " + arg + ")"]
+            li = [p1 + " (" + arg + ", " + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass4<" + ", ".join(l) + ">")
+                "myClass4<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass4")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p1 + " (" + arg + ", " + arg + ", " + arg + ")",
                 p1]
             name, args = declarations.templates.split(
-                "myClass5<" + ", ".join(l) + ">")
+                "myClass5<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass5")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p1,
                 p1 + " (" + arg + ", " + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass6<" + ", ".join(l) + ">")
+                "myClass6<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass6")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p2 + " (" + arg + ")",
                 p1,
                 p1 + " (" + arg + ", " + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass7<" + ", ".join(l) + ">")
+                "myClass7<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass7")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p1,
                 p2 + " (" + arg + ")",
                 p1 + " (" + arg + ", " + arg + ", " + arg + ")"]
             name, args = declarations.templates.split(
-                "myClass8<" + ", ".join(l) + ">")
+                "myClass8<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass8")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p2 + " (" + arg + ")",
                 p1 + " (" + arg + ", " + arg + ")",
                 p1]
             name, args = declarations.templates.split(
-                "myClass9<" + ", ".join(l) + ">")
+                "myClass9<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass9")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
-            l = [
+            li = [
                 p2 + " (" + arg + ")",
                 p1 + " (" + arg + ", " + arg + ", " + arg + ")",
                 p1,
                 p2]
             name, args = declarations.templates.split(
-                "myClass10<" + ", ".join(l) + ">")
+                "myClass10<" + ", ".join(li) + ">")
             self.assertEqual(name, "myClass10")
-            self.assertEqual(args, l)
+            self.assertEqual(args, li)
 
 
 def create_suite():
