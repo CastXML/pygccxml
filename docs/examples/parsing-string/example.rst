@@ -13,4 +13,4 @@ and how to parse the string containing the c++ code:
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,11-
+   :lines: 6,7,8,12-

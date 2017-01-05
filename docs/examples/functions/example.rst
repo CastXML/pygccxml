@@ -8,11 +8,11 @@ Let's consider the following c++ file:
 
 .. literalinclude:: example.hpp
    :language: c++
-   :lines: 4-
+   :lines: 5-
 
 The following code can be used to find the different arguments of a function and
 do some basic operations on them:
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,16-26,28-
+   :lines: 6,7,8,17-27,29-

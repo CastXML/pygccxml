@@ -8,10 +8,10 @@ Let's consider the following c++ file (example.hpp):
 
 .. literalinclude:: example.hpp
    :language: c++
-   :lines: 4-
+   :lines: 5-
 
 The following code will show you how to loop on the tree and find a declaration
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,16-26,28-
+   :lines: 6,7,8,17-27,29-

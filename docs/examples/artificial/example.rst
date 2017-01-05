@@ -14,7 +14,7 @@ Let’s consider the following c++ file (example.hpp):
 
 .. literalinclude:: example.hpp
    :language: c++
-   :lines: 4-
+   :lines: 5-
 
 In this example, the constructor is explicitly defined. The declaration tree
 will contain two constructors. The first one is the one we defined explicitly,
@@ -23,4 +23,4 @@ implicitly added, and is marked as artificial.
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,16-26,28-
+   :lines: 6,7,8,17-27,29-
