@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'pygccxml'
-copyright = u'2014-2016, Insight Software Consortium'
+copyright = u'2014-2017, Insight Software Consortium'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
