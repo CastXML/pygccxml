@@ -269,8 +269,7 @@ class project_reader_t(object):
             reader = source_reader.source_reader_t(
                 config,
                 self.__dcache,
-                self.__decl_factory,
-                join_decls=False)
+                self.__decl_factory)
 
             if content_type == \
                     file_configuration_t.CONTENT_TYPE.STANDARD_SOURCE_FILE:

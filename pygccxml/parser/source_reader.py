@@ -62,7 +62,7 @@ class source_reader_t(object):
         generated ids with references to declarations or type class instances.
     """
 
-    def __init__(self, config, cache=None, decl_factory=None, join_decls=True):
+    def __init__(self, config, cache=None, decl_factory=None):
         """
         :param config: Instance of :class:`xml_generator_configuration_t`
                        class, that contains GCC-XML or CastXML configuration.
@@ -75,16 +75,9 @@ class source_reader_t(object):
                              declarations factory( :class:`decl_factory_t` )
                              will be used.
 
-        :param join_decls: Skip the joining of the declarations for the file.
-                           This can then be done once, in the case where
-                           there are multiple files, for example in the
-                           project_reader. Is True per default.
-        :type boolean
-
         """
 
         self.logger = utils.loggers.cxx_parser
-        self.__join_decls = join_decls
         self.__search_directories = []
         self.__config = config
         self.__cxx_std = utils.cxx_standard(config.cflags)
@@ -486,12 +479,6 @@ class source_reader_t(object):
             linker_.instance = decl
             declarations.apply_visitor(linker_, decl)
         bind_aliases(iter(decls.values()))
-
-        # Join declarations
-        if self.__join_decls:
-            for namespace in iter(decls.values()):
-                if isinstance(namespace, declarations.namespace_t):
-                    self.join_declarations(namespace)
 
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
