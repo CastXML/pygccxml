@@ -25,7 +25,7 @@ void fix_enum3( fruit arg=orange );
 
 }
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || defined(_MSC_VER)
 namespace ns4{
 
 enum class color {red, green, blue};
