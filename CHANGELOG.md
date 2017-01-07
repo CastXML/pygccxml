@@ -17,6 +17,9 @@ Version 1.8.4
 
 2. Updated travis setup to python 3.6 for OS X.
 
+ * Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
+   with python 2.7.13.
+
 Version 1.8.3
 -------------
 
