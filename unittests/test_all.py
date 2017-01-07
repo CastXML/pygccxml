@@ -141,13 +141,13 @@ testers = [
     attributes_tester,
     type_traits_tester,
     remove_template_defaults_tester,
-    patcher_tester
+    patcher_tester,
+    find_container_traits_tester
 ]
 
 if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(example_tester)
-    testers.append(find_container_traits_tester)
 
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
