@@ -22,6 +22,9 @@ Version 1.9.0 (not yet released)
   want to have access to these attributes, you can use the
   ```config.flags = ["f2"]``` option.
 
+ * Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
+   with python 2.7.13.
+
 Version 1.8.3
 -------------
 

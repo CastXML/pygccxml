@@ -12,10 +12,15 @@ import os
 import copy
 import platform
 import subprocess
+# In py3, ConfigParser was renamed to the more-standard configparser.
+# But there's a py3 backport that installs "configparser" in py2, and I don't
+# want it because it has annoying deprecation warnings. So try the real py2
+# import first
+# Inspired by https://bitbucket.org/ned/coveragepy/commits/f8e9d62f1412
 try:
-    from configparser import ConfigParser
-except ImportError:
     from ConfigParser import SafeConfigParser as ConfigParser
+except ImportError:
+    from configparser import ConfigParser
 from .. import utils
 
 
