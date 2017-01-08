@@ -31,7 +31,7 @@
 #if defined( __castxml__ )
 
     #if defined( __llvm__ )
-        // This is for CastXML and llvml
+        // This is for CastXML and llvm
 
         // When parsing with clang//llvm use the new c++11 (c++0x even ?)
         // unordered_maps and unordered_sets
@@ -55,10 +55,8 @@
         #define HASH_XXX_USET unordered_set
         #define HASH_XXX_UMMAP unordered_multimap
         #define HASH_XXX_UMMSET unordered_multiset
-
-    #endif
-
-    #if defined( _MSC_VER )
+    #elif defined( _MSC_VER )
+        // This is for CastXML and Visual Studio
         #include <unordered_map>
         #include <unordered_set>
         #define HASH_XXX_NS std::tr1
