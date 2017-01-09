@@ -132,7 +132,7 @@ class source_reader_t(object):
         elif self.__config.xml_generator == "castxml":
             return self.__create_command_line_castxml(source_file, xml_file)
 
-    def __create_command_line_castxml(self, source_file, xmlfile):
+    def __create_command_line_common(self):
         assert isinstance(self.__config, config.xml_generator_configuration_t)
 
         cmd = []
@@ -140,13 +140,19 @@ class source_reader_t(object):
         # Add xml generator executable (between "" for windows)
         cmd.append('"%s"' % os.path.normpath(self.__config.xml_generator_path))
 
-        # Add all cflags passed
+        # Add all passed cflags
         if self.__config.cflags != "":
             cmd.append(" %s " % self.__config.cflags)
 
         # Add additional includes directories
         dirs = self.__search_directories
         cmd.append(''.join([' -I"%s"' % search_dir for search_dir in dirs]))
+
+        return cmd
+
+    def __create_command_line_castxml(self, source_file, xmlfile):
+
+        cmd = self.__create_command_line_common()
 
         # Clang option: -c Only run preprocess, compile, and assemble steps
         cmd.append("-c")
@@ -211,19 +217,8 @@ class source_reader_t(object):
         return cmd_line
 
     def __create_command_line_gccxml(self, source_file, xmlfile):
-        assert isinstance(self.__config, config.xml_generator_configuration_t)
-        # returns
-        cmd = []
 
-        # Add xml generator executable (between "" for windows)
-        cmd.append('"%s"' % os.path.normpath(self.__config.xml_generator_path))
-
-        # Add all cflags passed
-        if self.__config.cflags != "":
-            cmd.append(" %s " % self.__config.cflags)
-        # second all additional includes directories
-        dirs = self.__search_directories
-        cmd.append(''.join([' -I"%s"' % search_dir for search_dir in dirs]))
+        cmd = self.__create_command_line_common()
 
         # Add symbols
         cmd = self.__add_symbols(cmd)
