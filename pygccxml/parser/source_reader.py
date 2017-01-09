@@ -22,26 +22,17 @@ def bind_aliases(decls):
     """
     This function binds between class and it's typedefs.
 
+    Deprecated since 1.9.0, will be removed in 2.0.0
+
     :param decls: list of all declarations
 
     :rtype: None
 
     """
+    warnings.warn(
+        "The bind_aliases function is deprecated", DeprecationWarning)
 
-    visited = set()
-    typedefs = [
-        decl for decl in decls if isinstance(decl, declarations.typedef_t)]
-    for decl in typedefs:
-        type_ = declarations.remove_alias(decl.decl_type)
-        if not isinstance(type_, declarations.declarated_t):
-            continue
-        cls_inst = type_.declaration
-        if not isinstance(cls_inst, declarations.class_types):
-            continue
-        if id(cls_inst) not in visited:
-            visited.add(id(cls_inst))
-            del cls_inst.aliases[:]
-        cls_inst.aliases.append(decl)
+    declarations_joiner.bind_aliases(decls)
 
 
 class source_reader_t(object):
@@ -466,7 +457,7 @@ class source_reader_t(object):
         for decl in decls.values():
             linker_.instance = decl
             declarations.apply_visitor(linker_, decl)
-        bind_aliases(iter(decls.values()))
+        declarations_joiner.bind_aliases(iter(decls.values()))
 
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation

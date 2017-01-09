@@ -7,6 +7,32 @@ from .. import utils
 from .. import declarations
 
 
+def bind_aliases(decls):
+    """
+    This function binds between class and it's typedefs.
+
+    :param decls: list of all declarations
+
+    :rtype: None
+
+    """
+
+    visited = set()
+    typedefs = [
+        decl for decl in decls if isinstance(decl, declarations.typedef_t)]
+    for decl in typedefs:
+        type_ = declarations.remove_alias(decl.decl_type)
+        if not isinstance(type_, declarations.declarated_t):
+            continue
+        cls_inst = type_.declaration
+        if not isinstance(cls_inst, declarations.class_types):
+            continue
+        if id(cls_inst) not in visited:
+            visited.add(id(cls_inst))
+            del cls_inst.aliases[:]
+        cls_inst.aliases.append(decl)
+
+
 def join_declarations(namespace):
     _join_namespaces(namespace)
     for ns in namespace.declarations:

@@ -317,7 +317,8 @@ class project_reader_t(object):
         types = self.__declarated_types(answer)
         self.logger.debug("Relinking declared types ...")
         self._relink_declarated_types(leaved_classes, types)
-        source_reader.bind_aliases(pygccxml.declarations.make_flatten(answer))
+        declarations_joiner.bind_aliases(
+            pygccxml.declarations.make_flatten(answer))
         return answer
 
     def __parse_all_at_once(self, files):
