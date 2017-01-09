@@ -7,6 +7,7 @@ import os
 import time
 from . import source_reader
 from . import declarations_cache
+from . import declarations_joiner
 import pygccxml.declarations
 from .. import utils
 
@@ -311,7 +312,7 @@ class project_reader_t(object):
         self.logger.debug("Joining declarations ...")
         for ns in answer:
             if isinstance(ns, pygccxml.declarations.namespace_t):
-                reader.join_declarations(ns)
+                declarations_joiner.join_declarations(ns)
         leaved_classes = self._join_class_hierarchy(answer)
         types = self.__declarated_types(answer)
         self.logger.debug("Relinking declared types ...")

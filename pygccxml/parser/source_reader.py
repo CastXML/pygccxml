@@ -6,10 +6,12 @@
 import os
 import platform
 import subprocess
+import warnings
 from . import linker
 from . import config
 from . import patcher
 from . import declarations_cache
+from . import declarations_joiner
 from .etree_scanner import ietree_scanner_t as scanner_t
 from .. import utils
 
@@ -496,82 +498,7 @@ class source_reader_t(object):
         return decls, list(files.values())
 
     def join_declarations(self, namespace):
-        self.__join_namespaces(namespace)
-        for ns in namespace.declarations:
-            if isinstance(ns, declarations.namespace_t):
-                self.join_declarations(ns)
-
-    @staticmethod
-    def __join_namespaces(namespace):
-        ddhash = {}
-        decls = []
-
-        for decl in namespace.declarations:
-            source_reader_t.__fill_declarations(ddhash, decls, decl)
-
-        class_t = declarations.class_t
-        class_declaration_t = declarations.class_declaration_t
-        if class_t in ddhash and class_declaration_t in ddhash:
-            # If there is a class and its forward declaration in the namespace,
-            # Remove the second one from the declaration tree
-            source_reader_t.__remove_second_class(
-                ddhash, decls, class_t, class_declaration_t)
-
-        namespace.declarations = decls
-
-    @staticmethod
-    def __fill_declarations(ddhash, decls, decl):
-        if decl.__class__ not in ddhash:
-            ddhash[decl.__class__] = {decl.name: [decl]}
-            decls.append(decl)
-        else:
-            joined_decls = ddhash[decl.__class__]
-            if decl.name not in joined_decls:
-                decls.append(decl)
-                joined_decls[decl.name] = [decl]
-            else:
-                if isinstance(decl, declarations.calldef_t):
-                    if decl not in joined_decls[decl.name]:
-                        # functions has overloading
-                        decls.append(decl)
-                        joined_decls[decl.name].append(decl)
-                elif isinstance(decl, declarations.enumeration_t):
-                    # unnamed enums
-                    if not decl.name and decl not in \
-                            joined_decls[decl.name]:
-                        decls.append(decl)
-                        joined_decls[decl.name].append(decl)
-                elif isinstance(decl, declarations.class_t):
-                    # unnamed classes
-                    if not decl.name and decl not in \
-                            joined_decls[decl.name]:
-                        decls.append(decl)
-                        joined_decls[decl.name].append(decl)
-                elif isinstance(decl, declarations.namespace_t):
-                    joined_decls[decl.name][0].take_parenting(decl)
-
-    @staticmethod
-    def __remove_second_class(ddhash, decls, class_t, class_declaration_t):
-        class_names = set()
-        for name, same_name_classes in ddhash[class_t].items():
-            if not name:
-                continue
-            if "GCC" in utils.xml_generator:
-                class_names.add(same_name_classes[0].mangled)
-            elif "CastXML" in utils.xml_generator:
-                class_names.add(same_name_classes[0].name)
-
-        class_declarations = ddhash[class_declaration_t]
-        for name, same_name_class_declarations in \
-                class_declarations.items():
-            if not name:
-                continue
-            for class_declaration in same_name_class_declarations:
-                if "GCC" in utils.xml_generator:
-                    if class_declaration.mangled and \
-                                    class_declaration.mangled in class_names:
-                        decls.remove(class_declaration)
-                elif "CastXML" in utils.xml_generator:
-                    if class_declaration.name and \
-                                    class_declaration.name in class_names:
-                        decls.remove(class_declaration)
+        warnings.warn(
+            "The join_declarations method is deprecated", DeprecationWarning)
+        # Deprecated since 1.9.0, will be removed in 2.0.0
+        declarations_joiner.join_declarations(namespace)
