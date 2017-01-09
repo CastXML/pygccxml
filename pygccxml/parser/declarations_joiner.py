@@ -8,30 +8,30 @@ from .. import declarations
 
 
 def join_declarations(namespace):
-    __join_namespaces(namespace)
+    _join_namespaces(namespace)
     for ns in namespace.declarations:
         if isinstance(ns, declarations.namespace_t):
             join_declarations(ns)
 
 
-def __join_namespaces(namespace):
+def _join_namespaces(namespace):
     ddhash = {}
     decls = []
 
     for decl in namespace.declarations:
-        __fill_declarations(ddhash, decls, decl)
+        _fill_declarations(ddhash, decls, decl)
 
     class_t = declarations.class_t
     class_declaration_t = declarations.class_declaration_t
     if class_t in ddhash and class_declaration_t in ddhash:
         # If there is a class and its forward declaration in the namespace,
         # Remove the second one from the declaration tree
-        __remove_second_class(ddhash, decls, class_t, class_declaration_t)
+        _remove_second_class(ddhash, decls, class_t, class_declaration_t)
 
     namespace.declarations = decls
 
 
-def __fill_declarations(ddhash, decls, decl):
+def _fill_declarations(ddhash, decls, decl):
     if decl.__class__ not in ddhash:
         ddhash[decl.__class__] = {decl.name: [decl]}
         decls.append(decl)
@@ -62,7 +62,7 @@ def __fill_declarations(ddhash, decls, decl):
                 joined_decls[decl.name][0].take_parenting(decl)
 
 
-def __remove_second_class(ddhash, decls, class_t, class_declaration_t):
+def _remove_second_class(ddhash, decls, class_t, class_declaration_t):
     class_names = set()
     for name, same_name_classes in ddhash[class_t].items():
         if not name:
