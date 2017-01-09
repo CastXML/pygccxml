@@ -137,13 +137,8 @@ class source_reader_t(object):
 
         cmd = []
 
-        # first is gccxml executable
-        if platform.system() == 'Windows':
-            cmd.append('"%s"' % os.path.normpath(
-                self.__config.xml_generator_path))
-        else:
-            cmd.append('%s' % os.path.normpath(
-                self.__config.xml_generator_path))
+        # Add xml generator executable (between "" for windows)
+        cmd.append('"%s"' % os.path.normpath(self.__config.xml_generator_path))
 
         # Add all cflags passed
         if self.__config.cflags != "":
@@ -219,13 +214,9 @@ class source_reader_t(object):
         assert isinstance(self.__config, config.xml_generator_configuration_t)
         # returns
         cmd = []
-        # first is gccxml executable
-        if os.name == 'nt':
-            cmd.append('"%s"' % os.path.normpath(
-                self.__config.xml_generator_path))
-        else:
-            cmd.append('%s' % os.path.normpath(
-                self.__config.xml_generator_path))
+
+        # Add xml generator executable (between "" for windows)
+        cmd.append('"%s"' % os.path.normpath(self.__config.xml_generator_path))
 
         # Add all cflags passed
         if self.__config.cflags != "":
