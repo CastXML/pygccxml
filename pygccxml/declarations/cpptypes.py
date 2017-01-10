@@ -911,7 +911,7 @@ class type_qualifiers_t(object):
             and self.has_mutable == other.has_mutable
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(type_qualifiers_t, self).__hash__()
 
     def __ne__(self, other):
         return not self.__eq__(other)

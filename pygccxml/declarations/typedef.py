@@ -35,7 +35,7 @@ class typedef_t(declaration.declaration_t, byte_info.byte_info):
         return self.decl_type == other.decl_type
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(typedef_t, self).__hash__(self)
 
     @property
     def decl_type(self):
