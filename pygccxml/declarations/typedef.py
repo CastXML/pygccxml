@@ -44,7 +44,7 @@ class typedef_t(declaration.declaration_t):
         return self.decl_type == other.decl_type
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(typedef_t, self).__hash__(self)
 
     @property
     def type(self):
