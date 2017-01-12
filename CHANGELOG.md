@@ -15,10 +15,10 @@ Version 1.8.4
    Detected by Python 3.6. Fixes the following warning:
    ResourceWarning: subprocess xxxxx is still running
 
-2. Updated travis setup to python 3.6 for OS X.
+4. Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
+   with python 2.7.13. Fix the usage of ```pygccxml``` with python 3.6.
 
- * Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
-   with python 2.7.13.
+5. Updated travis setup to python 3.6 for OS X.
 
 Version 1.8.3
 -------------
