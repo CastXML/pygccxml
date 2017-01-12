@@ -1,6 +1,22 @@
 Changes
 =======
 
+Version 1.8.4
+-------------
+
+1. Include paths read from configuration files on windows are now normed
+   and passed between quotation marks. This makes ```pygccxml``` more robust
+   when used on Windows (with paths containing whitespaces).
+
+2. Closed cache file handle, which would not be closed in case of an exception
+   (warning thrown by Python 2.7.13)
+
+3. Always call wait() on subprocesses before closing stdout/stderr streams.
+   Detected by Python 3.6. Fixes the following warning:
+   ResourceWarning: subprocess xxxxx is still running
+
+2. Updated travis setup to python 3.6 for OS X.
+
 Version 1.8.3
 -------------
 
