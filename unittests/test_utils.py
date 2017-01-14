@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
+import warnings
 import unittest
 import parser_test_case
 
@@ -25,6 +26,32 @@ class Test(parser_test_case.parser_test_case_t):
         dirs = [os.path.normpath("/home"), os.path.normpath("/mypath/test/")]
 
         self.assertFalse(utils.utils.contains_parent_dir(path, dirs))
+
+    def test_deprecation_wrapper(self):
+        """
+        The DeprecationWrapper is not part of the public API
+
+        We still need to test it.
+        """
+
+        a = utils.utils.DeprecationWrapper(
+            DeprecatedClass,
+            "DeprecatedClass",
+            "NewClass",
+            "1.9.0")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            a()
+            assert len(w) == 1
+            assert issubclass(w[-1].category, DeprecationWarning)
+            assert "deprecated" in str(w[-1].message)
+
+
+class DeprecatedClass(object):
+    """
+    An empty class used for testing purposes.
+    """
+    pass
 
 
 def create_suite():
