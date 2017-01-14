@@ -4,6 +4,10 @@ Changes
 Version 1.9.0 (not yet released)
 --------------------------------
 
+* Full Python 3.6 support
+
+* Full pypy and pypy3 support
+
 * Added ```is_struct``` function to declarations package. It returns true if
   a declaration is a struct.
 
