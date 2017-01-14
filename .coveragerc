@@ -2,7 +2,7 @@
 source = pygccxml,docs/examples,unittests
 # unittest/misc contains some tests that are just there for debugging
 # purposes and which do not need to be covered.
-omit = unittests/misc
+omit = unittests/misc,unittests/demangled_tester.py
 parallel = True
 
 [report]
