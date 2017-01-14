@@ -63,7 +63,7 @@ class member_calldef_t(calldef.calldef_t):
             and self.has_const == other.has_const
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(member_calldef_t, self).__hash__()
 
     @property
     def virtuality(self):

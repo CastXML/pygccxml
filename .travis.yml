@@ -4,6 +4,7 @@ language:
 env:
   global:
     - WINDOWS=0
+    - SITECUSTOMIZELIBPATH=0
 
 matrix:
   include:
@@ -12,36 +13,65 @@ matrix:
       env: WINDOWS=1
     - os: linux
       python: 2.6
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.6/lib/python2.6/sitecustomize.py"
     - os: linux
       python: 2.7
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
       python: 3.2
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.2/lib/python3.2/sitecustomize.py"
     - os: linux
       python: 3.3
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.3/lib/python3.3/sitecustomize.py"
     - os: linux
       python: 3.4
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.4/lib/python3.4/sitecustomize.py"
     - os: linux
       python: 3.5
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       python: 2.7
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
       python: 3.5
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       python: 3.6
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
+    - os: linux
+      python: "pypy"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy/lib-python/2.7/sitecustomize.py"
+    - os: linux
+      python: "pypy3.3-5.2-alpha1"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy3/lib-python/3/sitecustomize.py"
     - os: linux
       python: 3.5
       env:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -53,7 +83,9 @@ matrix:
       dist: trusty
       sudo: required
       python: 3.5
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -62,6 +94,7 @@ matrix:
          # gcc 4.8.2 with c++03
          - XML_GENERATOR="castxml"
          - CPPSTD="-std=c++03"
+         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -70,6 +103,7 @@ matrix:
          # gcc 4.8.2 with c++11
          - XML_GENERATOR="castxml"
          - CPPSTD="-std=c++11"
+         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -77,6 +111,7 @@ matrix:
       env:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -92,6 +127,7 @@ matrix:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
        - CPPSTD="-std=c++14"
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -105,12 +141,14 @@ matrix:
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="2"
+        - SITECUSTOMIZELIBPATH="/usr/local/lib/python2.7/site-packages/sitecustomize.py"
     - os: osx
       osx_image: xcode7.3
       language: generic
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
+        - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
 
 
 before_install:
@@ -184,18 +222,13 @@ install:
 script:
   - echo $TRAVIS_OS_NAME
   - echo $WINDOWS
+  - python --version
 
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]]; then touch "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then touch "/usr/local/lib/python3.6/site-packages/sitecustomize.py"; fi
-
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.6/site-packages/sitecustomize.py"; fi
+  - if [ $WINDOWS == 0 ]; then
+      touch ${SITECUSTOMIZELIBPATH};
+      printf "import coverage\ncoverage.process_startup()\n" > ${SITECUSTOMIZELIBPATH};
+    fi
 
   # Install pygccxml, run the tests with coverage and
   # combine multiple .coverage files

@@ -46,7 +46,7 @@ class variable_t(declaration.declaration_t):
             and self.bits == other.bits
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(variable_t, self).__hash__()
 
     @property
     def decl_type(self):
