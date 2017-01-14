@@ -18,6 +18,9 @@ Version 1.9.0 (not yet released)
   want to have access to these attributes, you can use the
   ```config.flags = ["f2"]``` option.
 
+* Deprecate the ```mdecl_wrapper_t.to_list()```. You can implement your own
+  version of it if you really need it.
+
 Version 1.8.4
 -------------
 
