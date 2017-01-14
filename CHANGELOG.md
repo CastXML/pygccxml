@@ -13,17 +13,29 @@ Version 1.9.0 (not yet released)
 * Add Appveyor Windows build (castxml, VS 2013, python 3.5) and merge coverage
   results with Travis.
 
-* Fix a bug with include paths under windows: paths are now correctly normed
-  when read from configuration files, and put between quotes in the case there
-  are spaces in the path.
-
 * Attributes defined as ```__thiscall__``` are now ignored (tested with VS 2013).
   The ```__thiscall__``` in some attributes will be removed too. If you still
   want to have access to these attributes, you can use the
   ```config.flags = ["f2"]``` option.
 
- * Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
-   with python 2.7.13.
+Version 1.8.4
+-------------
+
+1. Include paths read from configuration files on windows are now normed
+   and passed between quotation marks. This makes ```pygccxml``` more robust
+   when used on Windows (with paths containing whitespaces).
+
+2. Closed cache file handle, which would not be closed in case of an exception
+   (warning thrown by Python 2.7.13)
+
+3. Always call wait() on subprocesses before closing stdout/stderr streams.
+   Detected by Python 3.6. Fixes the following warning:
+   ResourceWarning: subprocess xxxxx is still running
+
+4. Fix deprecation warnings thrown by ```ConfigParser``` when using pygccxml
+   with python 2.7.13. Fix the usage of ```pygccxml``` with python 3.6.
+
+5. Updated travis setup to python 3.6 for OS X.
 
 Version 1.8.3
 -------------
