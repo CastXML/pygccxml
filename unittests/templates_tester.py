@@ -16,7 +16,8 @@ class Test(parser_test_case.parser_test_case_t):
 
     def __test_split_recursive_impl(self, decl_string, control_seq):
         self.assertTrue(
-            control_seq == declarations.templates.split_recursive(decl_string))
+            control_seq ==
+            list(declarations.templates.split_recursive(decl_string)))
 
     def __test_is_template_impl(self, decl_string):
         self.assertTrue(declarations.templates.is_instantiation(decl_string))

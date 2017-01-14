@@ -17,7 +17,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def __test_split_recursive_impl(self, decl_string, control_seq):
         self.assertTrue(
             control_seq ==
-            declarations.call_invocation.split_recursive(decl_string))
+            list(declarations.call_invocation.split_recursive(decl_string)))
 
     def __test_is_call_invocation_impl(self, decl_string):
         self.assertTrue(

@@ -177,15 +177,13 @@ class parser_t(object):
     def split_recursive(self, decl_string):
         """implementation details"""
         assert self.has_pattern(decl_string)
-        answer = []
         to_go = [decl_string]
         while to_go:
             name, args = self.split(to_go.pop())
-            answer.append((name, args))
             for arg in args:
                 if self.has_pattern(arg):
                     to_go.append(arg)
-        return answer
+            yield name, args
 
     def join(self, name, args, arg_separator=None):
         """implementation details"""
