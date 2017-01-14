@@ -88,7 +88,7 @@ class mdecl_wrapper_t(object):
         sep = os.linesep + '    '
         if invalid_decls:
             raise RuntimeError(
-                ("Next declarations don't have '%s' attribute: %s") %
+                "Next declarations don't have '%s' attribute: %s" %
                 (name, sep.join(map(str, invalid_decls))))
 
     def __setattr__(self, name, value):
