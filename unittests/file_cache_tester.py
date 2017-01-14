@@ -101,6 +101,7 @@ class Test(parser_test_case.parser_test_case_t):
             stdout=subprocess.PIPE,
             env=env)
         print(p.stdout.read())
+        p.wait()
         p.stdout.close()
 
 

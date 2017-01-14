@@ -13,10 +13,15 @@ import copy
 import platform
 import subprocess
 import warnings
+# In py3, ConfigParser was renamed to the more-standard configparser.
+# But there's a py3 backport that installs "configparser" in py2, and I don't
+# want it because it has annoying deprecation warnings. So try the real py2
+# import first
+# Inspired by https://bitbucket.org/ned/coveragepy/commits/f8e9d62f1412
 try:
-    from configparser import ConfigParser
-except ImportError:
     from ConfigParser import SafeConfigParser as ConfigParser
+except ImportError:
+    from configparser import ConfigParser
 from .. import utils
 
 
@@ -397,7 +402,7 @@ def load_xml_generator_configuration(configuration, **defaults):
             for p in value.split(';'):
                 p = p.strip()
                 if p:
-                    cfg.include_paths.append(p)
+                    cfg.include_paths.append(os.path.normpath(p))
         elif name == 'compiler':
             cfg.compiler = value
         elif name == 'xml_generator':
@@ -443,6 +448,7 @@ def create_compiler_path(xml_generator, compiler_path):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.wait()
             p.stdout.close()
             p.stderr.close()
             # No mscv found; look for mingw
@@ -452,6 +458,7 @@ def create_compiler_path(xml_generator, compiler_path):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
                 compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.wait()
                 p.stdout.close()
                 p.stderr.close()
         else:
@@ -462,6 +469,7 @@ def create_compiler_path(xml_generator, compiler_path):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            p.wait()
             p.stdout.close()
             p.stderr.close()
             # No clang found; use gcc
@@ -471,6 +479,7 @@ def create_compiler_path(xml_generator, compiler_path):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
                 compiler_path = p.stdout.read().decode("utf-8").rstrip()
+                p.wait()
                 p.stdout.close()
                 p.stderr.close()
 
