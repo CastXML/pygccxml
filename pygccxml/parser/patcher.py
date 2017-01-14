@@ -185,8 +185,6 @@ class default_argument_patcher_t(object):
 
     @staticmethod
     def __is_constructor_call(func, arg):
-        # if '0.9' in utils.xml_generator:
-        #    return False
         call_invocation = declarations.call_invocation
         dv = arg.default_value
         if not call_invocation.is_call_invocation(dv):
