@@ -3,12 +3,12 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-from . import scanner
-
 # keep py2exe happy
 import xml.etree.ElementTree
 
 import xml.etree.cElementTree as ElementTree
+
+from . import scanner
 
 
 class ietree_scanner_t(scanner.scanner_t):
