@@ -26,16 +26,17 @@ find all those declaration classes in the :mod:declarations sub-package.
 
 """
 
-# Always show deprecation warnings.
-# These are hidden by default since python 2.7.
-# pygccxml is a tool for developers, and these need
-# to know what is deprecated.
 import warnings
-warnings.simplefilter("always", DeprecationWarning)
 
 from . import declarations
 from . import parser
 from . import utils
+
+# Always show deprecation warnings.
+# These are hidden by default since python 2.7.
+# pygccxml is a tool for developers, and these need
+# to know what is deprecated.
+warnings.simplefilter("always", DeprecationWarning)
 
 # TODO:
 # 1. Add "explicit" property for constructors
