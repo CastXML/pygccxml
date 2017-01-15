@@ -242,7 +242,6 @@ from .decl_printer import print_declarations
 from . import scopedef
 
 from .container_traits import all_container_traits
-"""tuple of all STD container traits classes"""
 
 sequential_container_traits = [
     list_traits,
