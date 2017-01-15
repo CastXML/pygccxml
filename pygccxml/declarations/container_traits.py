@@ -229,9 +229,9 @@ class defaults_eraser(object):
             return
 
         value_type = c_args[0]
-        tmpl = string.Template(tmpl)
+        template = string.Template(tmpl)
         for ns in std_namespaces:
-            inst = tmpl.substitute(
+            inst = template.substitute(
                 container=c_name,
                 value_type=value_type,
                 hash=ns + '::' + utils.get_tr1(cls_name) + default_hash,
