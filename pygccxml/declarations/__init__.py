@@ -242,19 +242,7 @@ from .decl_printer import print_declarations
 from . import scopedef
 
 from .container_traits import all_container_traits
-
-sequential_container_traits = [
-    list_traits,
-    deque_traits,
-    queue_traits,
-    priority_queue_traits,
-    vector_traits,
-    stack_traits,
-    set_traits,
-    hash_set_traits,
-    multiset_traits,
-    hash_multiset_traits]
-"""list, that contains all STD container traits classes"""
+from .container_traits import sequential_container_traits
 
 # make matchers to look more like functors
 or_matcher = or_matcher_t

@@ -681,6 +681,19 @@ all_container_traits = (
     unordered_multiset_traits)
 """tuple of all STD container traits classes"""
 
+sequential_container_traits = [
+    list_traits,
+    deque_traits,
+    queue_traits,
+    priority_queue_traits,
+    vector_traits,
+    stack_traits,
+    set_traits,
+    hash_set_traits,
+    multiset_traits,
+    hash_multiset_traits]
+"""list, that contains all STD container traits classes"""
+
 
 def find_container_traits(cls_or_string):
     """
