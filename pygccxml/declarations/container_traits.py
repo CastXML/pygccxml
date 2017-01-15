@@ -660,7 +660,7 @@ unordered_multiset_traits = container_traits_impl_t(
     'erase_hash_allocator',
     unordered_maps_and_sets=True)
 
-container_traits = (
+all_container_traits = (
     list_traits,
     deque_traits,
     queue_traits,
@@ -701,7 +701,7 @@ def find_container_traits(cls_or_string):
             name = name[len('std::'):]
         if name.startswith('std::tr1::'):
             name = name[len('std::tr1::'):]
-        for cls_traits in container_traits:
+        for cls_traits in all_container_traits:
             if cls_traits.name() == name:
                 return cls_traits
     else:
@@ -712,7 +712,7 @@ def find_container_traits(cls_or_string):
                 return cls_or_string.cache.container_traits
 
         # Look for a container traits
-        for cls_traits in container_traits:
+        for cls_traits in all_container_traits:
             if cls_traits.is_my_case(cls_or_string):
                 # Store in the cache
                 if isinstance(cls_or_string, class_declaration.class_types):
