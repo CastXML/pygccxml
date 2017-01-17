@@ -790,13 +790,6 @@ class member_function_type_t(type_t, calldef_type_t):
                 [_f(x, with_defaults) for x in self.arguments_types]),
             'has_const': has_const_str}
 
-    def create(self):
-        return self.build_decl_string(
-            self.return_type,
-            self.class_inst.decl_string,
-            self.arguments_types,
-            self.has_const)
-
     @staticmethod
     def create_decl_string(
             return_type,
