@@ -389,11 +389,11 @@ class calldef_t(declaration.declaration_t):
         # well, I am going to try an other strategy
         fname = declaration_utils.full_name(self)
         found = self.demangled.find(fname)
-        if -1 == found:
+        if found == -1:
             if fname.startswith('::'):
                 fname = fname[2:]
             found = self.demangled.find(fname)
-            if -1 == found:
+            if found == -1:
                 self._demangled_name = ''
                 return self.name
         demangled_name = call_invocation.name(self.demangled[found:])
@@ -404,7 +404,6 @@ class calldef_t(declaration.declaration_t):
         if demangled_name.startswith(self.name):
             self._demangled_name = demangled_name
             return self._demangled_name
-        # if -1 == found:
         self._demangled_name = ''
         return self.name
 

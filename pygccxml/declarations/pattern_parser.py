@@ -41,8 +41,8 @@ class parser_t(object):
 
         last_part = decl_string.split('::')[-1]
         return (
-            -1 != decl_string.find(self.__begin) and -
-            1 != last_part.find(self.__end)
+            decl_string.find(self.__begin) != -1 and
+            last_part.find(self.__end) != -1
         )
 
     def name(self, decl_string):
@@ -118,7 +118,7 @@ class parser_t(object):
         previous_found, found = 0, 0
         while True:
             found = self.__find_args_separator(args_only, previous_found)
-            if -1 == found:
+            if found == -1:
                 args.append(args_only[previous_found:].strip())
                 # This is the last argument. Break out of the loop.
                 break
@@ -162,7 +162,7 @@ class parser_t(object):
         previous_found, found = first_occurance + 1, 0
         while True:
             found = self.__find_args_separator(text, previous_found)
-            if -1 == found:
+            if found == -1:
                 return self.NOT_FOUND
             elif text[found] == self.__end:
                 return first_occurance, found
