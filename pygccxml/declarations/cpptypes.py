@@ -494,6 +494,12 @@ class compound_t(type_t):
     def base(self, new_base):
         self._base = new_base
 
+    def build_decl_string(self, with_defaults=True):
+        raise NotImplementedError()
+
+    def _clone_impl(self):
+        raise NotImplementedError()
+
 
 class volatile_t(compound_t):
 
