@@ -188,7 +188,7 @@ class scopedef_t(declaration.declaration_t):
         self._type2decls_nr = {}
         self._type2name2decls_nr = {}
         self._all_decls = None
-        self._all_decls_not_recursive = None
+        self._all_decls_not_recursive = []
 
     @property
     def _logger(self):
