@@ -219,7 +219,8 @@ class file_cache_t(cache_base_t):
             file_cache_t.logger.debug(
                 "Found cache in file: [%s]  entries: %s",
                 file_name, len(list(cache.keys())))
-        except Exception as error:
+        except (pickle.UnpicklingError, AttributeError, EOFError,
+                ImportError, IndexError) as error:
             file_cache_t.logger.exception(
                 "Error occurred while reading cache file: %s",
                 error)
