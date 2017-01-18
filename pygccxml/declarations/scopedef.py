@@ -215,14 +215,6 @@ class scopedef_t(declaration.declaration_t):
         if not declaration.declaration_t.__eq__(self, other):
             return False
         return self.declarations[:].sort() == other.declarations[:].sort()
-        # self_decls = self._all_decls_not_recursive
-        # if not self._optimized:
-        # self_decls = self.declarations[:].sort()
-        # other_decls = other._all_decls_not_recursive[:]
-        # if not other._optimized:
-        # other_decls = other.declarations[:].sort()
-        # else:
-        # return self_decls == other_decls
 
     def __hash__(self):
         return super(scopedef_t, self).__hash__()
