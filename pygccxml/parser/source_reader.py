@@ -38,9 +38,10 @@ class source_reader_t(object):
         generated ids with references to declarations or type class instances.
     """
 
-    def __init__(self, config, cache=None, decl_factory=None):
+    def __init__(self, configuration, cache=None, decl_factory=None):
         """
-        :param config: Instance of :class:`xml_generator_configuration_t`
+        :param configuration:
+                       Instance of :class:`xml_generator_configuration_t`
                        class, that contains GCC-XML or CastXML configuration.
 
         :param cache: Reference to cache object, that will be updated after a
@@ -55,10 +56,10 @@ class source_reader_t(object):
 
         self.logger = utils.loggers.cxx_parser
         self.__search_directories = []
-        self.__config = config
-        self.__cxx_std = utils.cxx_standard(config.cflags)
-        self.__search_directories.append(config.working_directory)
-        self.__search_directories.extend(config.include_paths)
+        self.__config = configuration
+        self.__cxx_std = utils.cxx_standard(configuration.cflags)
+        self.__search_directories.append(configuration.working_directory)
+        self.__search_directories.extend(configuration.include_paths)
         if not cache:
             cache = declarations_cache.dummy_cache_t()
         self.__dcache = cache
