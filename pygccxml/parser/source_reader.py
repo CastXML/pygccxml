@@ -412,14 +412,14 @@ class source_reader_t(object):
 
         return decls
 
-    def __file_full_name(self, file):
-        if os.path.isfile(file):
-            return file
+    def __file_full_name(self, file_):
+        if os.path.isfile(file_):
+            return file_
         for path in self.__search_directories:
-            file_path = os.path.join(path, file)
+            file_path = os.path.join(path, file_)
             if os.path.isfile(file_path):
                 return file_path
-        raise RuntimeError("pygccxml error: file '%s' does not exist" % file)
+        raise RuntimeError("pygccxml error: file '%s' does not exist" % file_)
 
     def __parse_xml_file(self, xml_file):
         scanner_ = scanner_t(xml_file, self.__decl_factory, self.__config)
