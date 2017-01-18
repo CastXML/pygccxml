@@ -58,7 +58,7 @@ class index_entry_t(object):
         self.filesigs, self.configsig = state
 
 
-class directory_cache_t (declarations_cache.cache_base_t):
+class directory_cache_t(declarations_cache.cache_base_t):
 
     """cache class that stores its data as multiple files inside a directory.
 
