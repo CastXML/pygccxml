@@ -7,15 +7,17 @@ import os
 import platform
 import subprocess
 import warnings
+
+from pygccxml import declarations
+
 from . import linker
 from . import config
 from . import patcher
 from . import declarations_cache
 from . import declarations_joiner
 from .etree_scanner import ietree_scanner_t as scanner_t
-from .. import utils
 
-from pygccxml import declarations
+from .. import utils
 
 
 class source_reader_t(object):
