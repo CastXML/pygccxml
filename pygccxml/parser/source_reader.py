@@ -452,12 +452,12 @@ class source_reader_t(object):
         # different
         patcher.fix_calldef_decls(scanner_.calldefs(), scanner_.enums(),
                                   self.__cxx_std)
-        decls = [
-            inst for inst in iter(
-                decls.values()) if isinstance(
-                inst,
-                declarations.namespace_t) and not inst.parent]
+        decls = [inst for inst in iter(decls.values()) if self.__check(inst)]
         return decls, list(files.values())
+
+    @staticmethod
+    def __check(inst):
+        return isinstance(inst, declarations.namespace_t) and not inst.parent
 
     def join_declarations(self, namespace):
         warnings.warn(
