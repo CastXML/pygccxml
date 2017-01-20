@@ -12,41 +12,13 @@ from . import templates
 from . import declaration
 from . import mdecl_wrapper
 from . import byte_info
+from . import runtime_errors
 from .. import utils
 
 
 class matcher(object):
 
-    """Class-namespace, contains implementation of a few "find" algorithms
-    and definition of the related exception classes"""
-
-    class declaration_not_found_t(RuntimeError):
-
-        """Exception raised when the declaration could not be found"""
-
-        def __init__(self, decl_matcher):
-            RuntimeError.__init__(self)
-            self._decl_matcher = decl_matcher
-
-        def __str__(self):
-            return (
-                "Unable to find declaration. Matcher: [%s]" % str(
-                    self._decl_matcher)
-            )
-
-    class multiple_declarations_found_t(RuntimeError):
-
-        """Exception raised when more than one declaration was found"""
-
-        def __init__(self, decl_matcher):
-            RuntimeError.__init__(self)
-            self._decl_matcher = decl_matcher
-
-        def __str__(self):
-            return (
-                "Multiple declarations have been found. Matcher: [%s]" % str(
-                    self._decl_matcher)
-            )
+    """Class-namespace, contains implementation of a few "find" algorithms"""
 
     @staticmethod
     def find(decl_matcher, decls, recursive=True):
@@ -110,9 +82,9 @@ class matcher(object):
         if len(answer) == 1:
             return answer[0]
         elif not answer:
-            raise matcher.declaration_not_found_t(decl_matcher)
+            raise runtime_errors.declaration_not_found_t(decl_matcher)
         else:
-            raise matcher.multiple_declarations_found_t(decl_matcher)
+            raise runtime_errors.multiple_declarations_found_t(decl_matcher)
 
 
 class scopedef_t(declaration.declaration_t):
@@ -169,8 +141,9 @@ class scopedef_t(declaration.declaration_t):
     RECURSIVE_DEFAULT = True
     ALLOW_EMPTY_MDECL_WRAPPER = False
 
-    declaration_not_found_t = matcher.declaration_not_found_t
-    multiple_declarations_found_t = matcher.multiple_declarations_found_t
+    declaration_not_found_t = runtime_errors.declaration_not_found_t
+    multiple_declarations_found_t = \
+        runtime_errors.multiple_declarations_found_t
 
     # this class variable is used to prevent recursive imports
     _impl_matchers = {}

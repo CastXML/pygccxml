@@ -9,6 +9,7 @@ Define few unrelated algorithms that work on declarations.
 """
 
 from . import declaration_utils
+from . import runtime_errors
 
 
 class match_declaration_t(object):
@@ -69,24 +70,6 @@ class match_declaration_t(object):
         return self.does_match_exist(inst)
 
 
-class visit_function_has_not_been_found_t(RuntimeError):
-    """
-    Exception that is raised, from :func:`apply_visitor`, when a visitor could
-    not be applied.
-
-    """
-
-    def __init__(self, visitor, decl_inst):
-        RuntimeError.__init__(self)
-        self.__msg = (
-            "Unable to find visit function. Visitor class: %s. " +
-            "Declaration instance class: %s'") \
-            % (visitor.__class__.__name__, decl_inst.__class__.__name__)
-
-    def __str__(self):
-        return self.__msg
-
-
 def apply_visitor(visitor, decl_inst):
     """
     Applies a visitor on declaration instance.
@@ -99,5 +82,6 @@ def apply_visitor(visitor, decl_inst):
     fname = 'visit_' + \
         decl_inst.__class__.__name__[:-2]  # removing '_t' from class name
     if not hasattr(visitor, fname):
-        raise visit_function_has_not_been_found_t(visitor, decl_inst)
+        raise runtime_errors.visit_function_has_not_been_found_t(
+            visitor, decl_inst)
     return getattr(visitor, fname)()

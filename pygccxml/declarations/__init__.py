@@ -94,7 +94,6 @@ from .scopedef import matcher
 
 from .algorithm import apply_visitor
 from .algorithm import match_declaration_t
-from .algorithm import visit_function_has_not_been_found_t
 
 from .calldef_types import VIRTUALITY_TYPES
 from .calldef_types import FUNCTION_VIRTUALITY_TYPES
@@ -243,6 +242,10 @@ from . import scopedef
 
 from .container_traits import all_container_traits
 from .container_traits import sequential_container_traits
+
+from .runtime_errors import declaration_not_found_t
+from .runtime_errors import multiple_declarations_found_t
+from .runtime_errors import visit_function_has_not_been_found_t
 
 # make matchers to look more like functors
 or_matcher = or_matcher_t

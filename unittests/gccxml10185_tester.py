@@ -46,7 +46,7 @@ class Test(parser_test_case.parser_test_case_t):
             a.mem_fun('size')
         elif 'CastXML' in utils.xml_generator:
             self.assertRaises(
-                global_ns.declaration_not_found_t,
+                declarations.declaration_not_found_t,
                 lambda: global_ns.class_('A<const char [N]>'))
 
 

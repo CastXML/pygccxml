@@ -139,7 +139,7 @@ class default_argument_patcher_t(object):
                 try:
                     found = parent.variable(
                         arg.default_value, recursive=False)
-                except declarations.matcher.declaration_not_found_t:
+                except declarations.declaration_not_found_t:
                     # ignore exceptions if a match is not found
                     found = None
                 if found and declarations.is_fundamental(arg.decl_type):
