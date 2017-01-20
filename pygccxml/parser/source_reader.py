@@ -225,13 +225,12 @@ class source_reader_t(object):
         if self.__config.define_symbols:
             symbols = self.__config.define_symbols
             cmd.append(''.join(
-                [' -D"%s"' % defined_symbol for defined_symbol in symbols]))
+                [' -D"%s"' % def_symbol for def_symbol in symbols]))
 
         if self.__config.undefine_symbols:
             un_symbols = self.__config.undefine_symbols
-            cmd.append(
-                ''.join([' -U"%s"' % undefined_symbol for
-                        undefined_symbol in un_symbols]))
+            cmd.append(''.join(
+                [' -U"%s"' % undef_symbol for undef_symbol in un_symbols]))
 
         return cmd
 
@@ -357,9 +356,9 @@ class source_reader_t(object):
                 self.__dcache.update(
                     ffname, self.__config, decls, files)
             else:
-                self.logger.debug(
-                    ("File has not been changed, reading declarations " +
-                        "from cache."))
+                self.logger.debug((
+                    "File has not been changed, reading declarations " +
+                    "from cache."))
         except Exception:
             if xml_file:
                 utils.remove_file_no_raise(xml_file, self.__config)
