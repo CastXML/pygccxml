@@ -6,6 +6,7 @@
 """Defines :class:`scopedef_t` class"""
 
 import time
+import warnings
 import collections
 from . import algorithm
 from . import templates
@@ -141,9 +142,24 @@ class scopedef_t(declaration.declaration_t):
     RECURSIVE_DEFAULT = True
     ALLOW_EMPTY_MDECL_WRAPPER = False
 
-    declaration_not_found_t = runtime_errors.declaration_not_found_t
-    multiple_declarations_found_t = \
-        runtime_errors.multiple_declarations_found_t
+    @property
+    def declaration_not_found_t(self):
+        warnings.warn(
+            "The declaration_not_found_t attribute is deprecated. Please use"
+            "pygccxml.declaration.declaration_not_found_t instead.",
+            DeprecationWarning)
+        # Deprecated since 1.9.0, will be removed in 2.0.0
+        return runtime_errors.declaration_not_found_t
+
+    @property
+    def multiple_declarations_found_t(self):
+        warnings.warn(
+            "The multiple_declarations_found_t attribute is deprecated. "
+            "Please use pygccxml.declaration.multiple_declarations_found_t "
+            "instead.",
+            DeprecationWarning)
+        # Deprecated since 1.9.0, will be removed in 2.0.0
+        return runtime_errors.multiple_declarations_found_t
 
     # this class variable is used to prevent recursive imports
     _impl_matchers = {}

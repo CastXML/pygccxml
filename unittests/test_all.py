@@ -76,6 +76,7 @@ import test_pattern_parser
 import test_function_pointer
 import test_directory_cache
 import test_config
+import deprecation_tester
 
 testers = [
     # , demangled_tester # failing right now
@@ -142,7 +143,8 @@ testers = [
     type_traits_tester,
     remove_template_defaults_tester,
     patcher_tester,
-    find_container_traits_tester
+    find_container_traits_tester,
+    deprecation_tester
 ]
 
 if platform.system() != 'Windows':

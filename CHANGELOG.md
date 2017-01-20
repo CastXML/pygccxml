@@ -22,8 +22,12 @@ Version 1.9.0 (not yet released)
   want to have access to these attributes, you can use the
   ```config.flags = ["f2"]``` option.
 
-* Deprecate the ```mdecl_wrapper_t.to_list()```. You can implement your own
+* Deprecated the ```mdecl_wrapper_t.to_list()```. You can implement your own
   version of it if you really need it.
+
+* Deprecated the ```declaration_not_found_t``` and ```multiple_declarations_found_t```
+  attributes from the ```scopedef_t``` class. These exceptions are available
+  through the ```pygccxml.declarations``` package.
 
 Version 1.8.4
 -------------
