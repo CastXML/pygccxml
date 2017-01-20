@@ -344,17 +344,15 @@ class scanner_t(xml.sax.handler.ContentHandler):
         if attribute is not None and \
                 self.config.compiler == "msvc" and \
                 "f2" not in self.config.flags:
-            if "__thiscall__" == attribute:
+            if attribute == "__thiscall__":
                 return
             if "__thiscall__" in attribute:
                 attribute = attribute.replace("__thiscall__ ", "")
         decl.attributes = attribute
 
     def __read_access(self, attrs):
-        self.__access[
-            attrs[XML_AN_ID]] = attrs.get(
-            XML_AN_ACCESS,
-            declarations.ACCESS_TYPES.PUBLIC)
+        self.__access[attrs[XML_AN_ID]] = \
+            attrs.get(XML_AN_ACCESS, declarations.ACCESS_TYPES.PUBLIC)
 
     @staticmethod
     def __read_byte_size(decl, attrs):
