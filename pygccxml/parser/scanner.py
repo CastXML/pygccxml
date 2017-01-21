@@ -589,10 +589,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             decl = self.__decl_factory.create_class(
                 name=name,
                 class_type=class_type)
-            if attrs.get(XML_AN_ABSTRACT, False):
-                decl.is_abstract = True
-            else:
-                decl.is_abstract = False
+            decl.is_abstract = bool(attrs.get(XML_AN_ABSTRACT, False))
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
         return decl
