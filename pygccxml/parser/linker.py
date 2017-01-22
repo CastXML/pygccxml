@@ -263,9 +263,10 @@ class linker_t(
         self.__link_compound_type()
 
     def visit_pointer(self):
-        if ('0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator) \
-                and isinstance(
-                    self.__inst.base, declarations.member_variable_type_t):
+        gen = utils.xml_generator
+        if ('0.9' in gen or 'CastXML' in gen) and \
+                isinstance(self.__inst.base,
+                           declarations.member_variable_type_t):
             original_inst = self.__inst
             self.__inst = self.__inst.base
             self.visit_member_variable_type()

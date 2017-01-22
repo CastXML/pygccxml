@@ -576,8 +576,7 @@ class project_reader_t(object):
             if isinstance(decl, pygccxml.declarations.calldef_t):
                 types.extend(get_from_type(decl.function_type()))
             elif isinstance(
-                    decl,
-                    (pygccxml.declarations.typedef_t,
-                        pygccxml.declarations.variable_t)):
+                    decl, (pygccxml.declarations.typedef_t,
+                           pygccxml.declarations.variable_t)):
                 types.extend(get_from_type(decl.decl_type))
         return types

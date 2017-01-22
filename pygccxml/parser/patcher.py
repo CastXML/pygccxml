@@ -197,7 +197,11 @@ class default_argument_patcher_t(object):
         return (
             decl.name == name or
             (isinstance(decl, declarations.class_t) and
-                name in [typedef.name for typedef in decl.aliases]))
+             default_argument_patcher_t.__is_decl_in_aliases(decl, name)))
+
+    @staticmethod
+    def __is_decl_in_aliases(declaration, name):
+        return name in [typedef.name for typedef in declaration.aliases]
 
     def __fix_constructor_call(self, func, arg):
         call_invocation = declarations.call_invocation
