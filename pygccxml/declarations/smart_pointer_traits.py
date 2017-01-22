@@ -7,6 +7,7 @@ from . import templates
 from . import type_traits
 from . import class_declaration
 from . import class_declaration_traits
+from . import class_traits
 from . import traits_impl_details
 
 
@@ -17,8 +18,7 @@ class internal_type_traits(object):
     @staticmethod
     def get_by_name(type_, name):
         if class_declaration_traits.is_my_case(type_):
-            cls = class_declaration_traits.class_traits.declaration_class(
-                type_)
+            cls = class_traits.declaration_class(type_)
             return type_traits.remove_declarated(
                 cls.typedef(name, recursive=False).decl_type)
         elif class_declaration_traits.is_my_case(type_):
