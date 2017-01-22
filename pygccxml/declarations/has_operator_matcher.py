@@ -24,12 +24,12 @@ def has_public_binary_operator(type_, operator_symbol):
     if operators:
         return True
 
-    t = cpptypes.declarated_t(type_)
-    t = cpptypes.const_t(t)
-    t = cpptypes.reference_t(t)
+    declarated = cpptypes.declarated_t(type_)
+    const = cpptypes.const_t(declarated)
+    reference = cpptypes.reference_t(const)
     operators = type_.top_parent.operators(
         function=lambda decl: not decl.is_artificial,
-        arg_types=[t, None],
+        arg_types=[reference, None],
         symbol=operator_symbol,
         allow_empty=True,
         recursive=True)
