@@ -5,10 +5,12 @@
 
 import os
 import time
+
+import pygccxml.declarations
+
 from . import source_reader
 from . import declarations_cache
 from . import declarations_joiner
-import pygccxml.declarations
 from .. import utils
 
 
