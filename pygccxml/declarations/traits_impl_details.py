@@ -77,12 +77,11 @@ class impl_details(object):
                     return None
                 else:
                     if isinstance(found, class_declaration.class_types):
-                        found = cpptypes.declarated_t(found)
+                        return cpptypes.declarated_t(found)
                     if has_const:
-                        found = cpptypes.const_t(found)
+                        return cpptypes.const_t(found)
                     if has_pointer:
-                        found = cpptypes.pointer_t(found)
-                    return found
+                        return cpptypes.pointer_t(found)
         if len(found) == 1:
             return found[0]
         else:
