@@ -19,5 +19,5 @@ from .utils import get_tr1
 from .utils import cxx_standard
 
 # Version of xml generator which was used.
-xml_generator = None
-xml_output_version = None
+xml_generator = ""
+xml_output_version = ""

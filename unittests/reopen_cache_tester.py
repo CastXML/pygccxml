@@ -20,7 +20,7 @@ def test_re_opening_cache_file():
     data = autoconfig.data_directory
 
     # xml_generator has not been set
-    if utils.xml_generator is not None:
+    if utils.xml_generator is not "":
         raise Exception
 
     # Try to reopen an old cache file and check if there is an exception
