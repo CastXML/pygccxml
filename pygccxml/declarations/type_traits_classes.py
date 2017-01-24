@@ -55,18 +55,16 @@ class declaration_xxx_traits(object):
         - find out whether a declaration is a desired one
         - get reference to the declaration
     """
-    sequence = [
-        type_traits.remove_alias,
-        type_traits.remove_cv,
-        type_traits.remove_declarated]
 
     def __init__(self, declaration_class):
         self.declaration_class = declaration_class
 
-    def __apply_sequence(self, type_):
-        for f in self.sequence:
-            type_ = f(type_)
-        return type_
+    @staticmethod
+    def __apply_sequence(type_):
+        return \
+            type_traits.remove_declarated(
+                type_traits.remove_cv(
+                    type_traits.remove_alias(type_)))
 
     def is_my_case(self, type_):
         """returns True, if type represents the desired declaration,
