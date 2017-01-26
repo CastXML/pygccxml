@@ -58,6 +58,7 @@ class index_entry_t(object):
         self.filesigs, self.configsig = state
 
 
+# pylint: disable=W0622
 class directory_cache_t(declarations_cache.cache_base_t):
 
     """cache class that stores its data as multiple files inside a directory.

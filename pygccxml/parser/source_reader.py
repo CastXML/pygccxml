@@ -460,6 +460,7 @@ class source_reader_t(object):
         return isinstance(inst, declarations.namespace_t) and not inst.parent
 
     def join_declarations(self, namespace):
+        # pylint: disable=R0201
         warnings.warn(
             "The join_declarations method is deprecated", DeprecationWarning)
         # Deprecated since 1.9.0, will be removed in 2.0.0

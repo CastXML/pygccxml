@@ -164,6 +164,7 @@ def remove_file_no_raise(file_name, config):
             file_name, str(error))
 
 
+# pylint: disable=W0622
 def create_temp_file_name(suffix, prefix=None, dir=None, directory=None):
     """
     Small convenience function that creates temporary files.
