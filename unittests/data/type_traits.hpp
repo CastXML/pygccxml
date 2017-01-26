@@ -63,6 +63,19 @@ namespace no{
     typedef void (some_struct_t::*member_function_t)();
 } }
 
+namespace is_bool{
+namespace yes{
+    TYPE_PERMUTATION( bool, bool )
+}
+namespace no{
+    typedef void* void_ptr_t;
+    typedef int int_t;
+    typedef some_struct_t some_struct_alias_t;
+    typedef incomplete_type incomplete_type_alias_t;
+    typedef void(*function_t)();
+    typedef void (some_struct_t::*member_function_t)();
+} }
+
 namespace is_noncopyable{
 
 namespace detail{

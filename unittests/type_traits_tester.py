@@ -113,6 +113,9 @@ class Test(parser_test_case.parser_test_case_t):
     def test_is_void(self):
         self.__test_type_category('is_void', declarations.is_void)
 
+    def test_is_bool(self):
+        self.__test_type_category('is_bool', declarations.is_bool)
+
     def test_is_integral(self):
         self.__test_type_category('is_integral', declarations.is_integral)
 
