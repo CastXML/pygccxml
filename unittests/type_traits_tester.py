@@ -122,6 +122,10 @@ class Test(parser_test_case.parser_test_case_t):
     def test_is_pointer(self):
         self.__test_type_category('is_pointer', declarations.is_pointer)
 
+    def test_is_void_pointer(self):
+        self.__test_type_category(
+            'is_void_pointer', declarations.is_void_pointer)
+
     def test_is_const(self):
         self.__test_type_category('is_const', declarations.is_const)
 
