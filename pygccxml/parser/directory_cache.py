@@ -158,7 +158,6 @@ class directory_cache_t(declarations_cache.cache_base_t):
         dependent_files = {}
         for name in [source_file] + included_files:
             dependent_files[name] = 1
-        dependent_files = list(dependent_files.keys())
 
         key = self._create_cache_key(source_file)
         # Remove an existing entry (if there is one)
@@ -170,7 +169,7 @@ class directory_cache_t(declarations_cache.cache_base_t):
 
         # Create the sigs of all dependent files...
         filesigs = []
-        for filename in dependent_files:
+        for filename in list(dependent_files.keys()):
             id_, sig = self.__filename_rep.acquire_filename(filename)
             filesigs.append((id_, sig))
 
