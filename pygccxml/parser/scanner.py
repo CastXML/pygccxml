@@ -265,7 +265,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             self.__inst = None
 
     @staticmethod
-    def __read_location_bootstrap(inst, decl, attrs, to_skip):
+    def __read_location_bootstrap(inst, decl, attrs, _):
         """ This function monkey patches the __read_location function to either
         __read_location_gccxml or __read_location_castxml depending on the
         xml generator in use
@@ -293,7 +293,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         return inst.__read_location(decl, attrs, inst.__name_attrs_to_skip)
 
     @staticmethod
-    def __read_location_gccxml(decl, attrs, to_skip):
+    def __read_location_gccxml(decl, attrs, _):
         decl.location = declarations.location_t(
             file_name=attrs[XML_AN_FILE],
             line=int(attrs[XML_AN_LINE]))
