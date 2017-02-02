@@ -25,8 +25,6 @@ from .. import utils
 
 def __remove_alias(type_):
     """implementation details"""
-    if isinstance(type_, typedef.typedef_t):
-        return __remove_alias(type_.decl_type)
     if isinstance(type_, cpptypes.declarated_t) and \
             isinstance(type_.declaration, typedef.typedef_t):
         return __remove_alias(type_.declaration.decl_type)
