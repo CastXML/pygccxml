@@ -64,9 +64,6 @@ class declarations_t(parser_test_case.parser_test_case_t):
             not static_var.type_qualifiers.has_mutable,
             "static_var must not have mutable type qualifier")
 
-        if 'PDB' in utils.xml_generator:
-            return  # TODO find out work around
-
         m_mutable = initialized = self.global_ns.variable(name='m_mutable')
         self.assertTrue(
             not m_mutable.type_qualifiers.has_static,
