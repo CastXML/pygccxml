@@ -36,8 +36,6 @@ class declaration_t(object):
         self._attributes = attributes
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
-        # Kept for retrocompatibility. Use utils.xml_generator instead
-        self._compiler = None
         self._partial_name = None
         self._decorated_name = None
 
