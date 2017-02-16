@@ -222,9 +222,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 if rm1 and str(obj.name) in names:
                     return
 
-                # XML generator. Kept for retrocompatibily
-                obj.compiler = utils.xml_generator
-
                 self.__update_membership(attrs)
                 self.__declarations[element_id] = obj
                 if not isinstance(obj, declarations.namespace_t):

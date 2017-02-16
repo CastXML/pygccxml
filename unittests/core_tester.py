@@ -155,27 +155,6 @@ class Core(parser_test_case.parser_test_case_t):
             'ENestedPrivate',
             declarations.ACCESS_TYPES.PRIVATE)
 
-    def test_compiler_retrocompatibility(self):
-        """
-        For retro-compatibility, test if the compiler attribute still works.
-
-        This can be removed once the compiler attribute is dropped.
-
-        """
-
-        # Do not clutter the tests with warnings
-        warnings.simplefilter("ignore", DeprecationWarning)
-
-        std = self.global_ns.namespace("std")
-        self.assertEqual(utils.xml_generator, std.compiler)
-        if "GCC" in utils.xml_generator:
-            self.assertIn("GCC", std.compiler)
-        elif "CastXML" in utils.xml_generator:
-            self.assertIn("CastXML", std.compiler)
-
-        # Reset this warning to always
-        warnings.simplefilter("error", DeprecationWarning)
-
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
         self.assertTrue(std, "std namespace has not been found")
