@@ -1,6 +1,11 @@
 Changes
 =======
 
+Version 1.8.5
+-------------
+
+1. Fix multiple calls to __hash__() (#70)
+
 Version 1.8.4
 -------------
 
