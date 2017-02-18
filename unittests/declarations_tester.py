@@ -56,24 +56,77 @@ class declarations_t(parser_test_case.parser_test_case_t):
             declarations.const_t,
             declarations.long_unsigned_int_t)
 
-        static_var = initialized = self.global_ns.variable(name='static_var')
+        m_mutable = self.global_ns.variable(name="m_mutable")
+        self.assertFalse(
+            m_mutable.type_qualifiers.has_static,
+            "m_mutable must not have static type qualifier")
+
+        if "GCC-XML" in utils.xml_generator:
+            # Old GCC-XML behaviour. Can be dropped once GCC-XML is removed.
+            static_var = self.global_ns.variable(name="extern_var")
+            self.assertTrue(
+                static_var.type_qualifiers.has_static,
+                "static_var must have static type qualifier")
+            self.assertFalse(
+                static_var.type_qualifiers.has_mutable,
+                "static_var must not have mutable type qualifier")
+            return
+
+        # CastXML only tests --------------
+
+        self.assertTrue(
+            m_mutable.type_qualifiers.has_mutable,
+            "m_mutable must have mutable type qualifier")
+
+        # External static variable
+        extern_var = self.global_ns.variable(name="extern_var")
+        self.assertTrue(
+            extern_var.type_qualifiers.has_extern,
+            "extern_var must have extern type qualifier")
+        self.assertFalse(
+            extern_var.type_qualifiers.has_static,
+            "extern_var must not have a static type qualifier")
+        self.assertFalse(
+            extern_var.type_qualifiers.has_mutable,
+            "static_var must not have mutable type qualifier")
+
+        # Static variable
+        static_var = self.global_ns.variable(name="static_var")
         self.assertTrue(
             static_var.type_qualifiers.has_static,
             "static_var must have static type qualifier")
-        self.assertTrue(
-            not static_var.type_qualifiers.has_mutable,
+        self.assertFalse(
+            static_var.type_qualifiers.has_extern,
+            "static_var must not have an extern type qualifier")
+        self.assertFalse(
+            static_var.type_qualifiers.has_mutable,
             "static_var must not have mutable type qualifier")
+
+        ssv_static_var = self.global_ns.variable(name="ssv_static_var")
+        self.assertTrue(
+            ssv_static_var.type_qualifiers.has_static,
+            "ssv_static_var must have static type qualifier")
+        self.assertFalse(
+            ssv_static_var.type_qualifiers.has_extern,
+            "ssv_static_var must not have an extern type qualifier")
+        self.assertFalse(
+            ssv_static_var.type_qualifiers.has_mutable,
+            "ssv_static_var must not have mutable type qualifier")
+
+        ssv_static_var_value = self.global_ns.variable(
+            name="ssv_static_var_value")
+        self.assertTrue(
+            ssv_static_var_value.type_qualifiers.has_static,
+            "ssv_static_var_value must have static type qualifier")
+        self.assertFalse(
+            ssv_static_var_value.type_qualifiers.has_extern,
+            "ssv_static_var_value must not have an extern type qualifier")
+        self.assertFalse(
+            ssv_static_var_value.type_qualifiers.has_mutable,
+            "ssv_static_var_value must not have mutable type qualifier")
 
         if 'PDB' in utils.xml_generator:
             return  # TODO find out work around
-
-        m_mutable = initialized = self.global_ns.variable(name='m_mutable')
-        self.assertTrue(
-            not m_mutable.type_qualifiers.has_static,
-            "m_mutable must not have static type qualifier")
-        # TODO: "There is bug in GCCXML: doesn't write mutable qualifier."
-        # self.assertTrue( m_mutable.type_qualifiers.has_mutable
-        #                 , "static_var must have mutable type qualifier" )
 
     def test_calldef_free_functions(self):
         ns = self.global_ns.namespace('calldef')
