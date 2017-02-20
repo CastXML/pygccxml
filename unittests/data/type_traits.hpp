@@ -191,6 +191,7 @@ namespace yes{
     typedef detail::g_t g_t;
     typedef detail::const_container const_container_t;
     typedef detail::const_item const_item_t;
+    typedef detail::const_item *const_item_t_ptr;
 
 }
 namespace no{
@@ -200,6 +201,7 @@ namespace no{
     typedef std::set< std::string > string_set_type;
     typedef std::multimap< std::string, std::string > s2s_multimap_type;
     typedef detail::vertex vertex_type;
+    typedef detail::vertex *vertex_type_ptr;
 }
 }
 

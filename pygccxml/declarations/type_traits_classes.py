@@ -56,6 +56,7 @@ class declaration_xxx_traits(object):
         - get reference to the declaration
     """
     sequence = [
+        type_traits.remove_pointer,
         type_traits.remove_alias,
         type_traits.remove_cv,
         type_traits.remove_declarated]
