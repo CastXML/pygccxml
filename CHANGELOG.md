@@ -29,6 +29,11 @@ Version 1.9.0 (not yet released)
   attributes from the ```scopedef_t``` class. These exceptions are available
   through the ```pygccxml.declarations``` package.
 
+* Deprecated the ```decorated_name``` attribute from ```declaration_t```.
+  This was used by the binary parses, which have been removed in this version.
+  As these attributes still could be used somewhere (but always returned None
+  anyway), they need to go through a deprecation cycle first.
+
 Version 1.8.4
 -------------
 

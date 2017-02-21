@@ -13,6 +13,8 @@ from . import declaration_utils
 from . import algorithms_cache
 from .. import utils
 
+import warnings
+
 
 class declaration_t(object):
     """
@@ -308,11 +310,18 @@ class declaration_t(object):
            @type: str
 
         """
-
+        warnings.warn(
+            "The decorated_name attribute is deprecated. See the changelog.",
+            DeprecationWarning)
+        # Deprecated since 1.9.0, will be removed in 2.0.0
         return self._decorated_name
 
     @decorated_name.setter
     def decorated_name(self, decorated_name):
+        warnings.warn(
+            "The decorated_name attribute is deprecated. See the changelog.",
+            DeprecationWarning)
+        # Deprecated since 1.9.0, will be removed in 2.0.0
         self._decorated_name = decorated_name
 
     @property
