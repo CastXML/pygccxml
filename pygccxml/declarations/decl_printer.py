@@ -186,15 +186,6 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                         self.INDENT_SIZE +
                         mangled)
 
-                if self.__inst.decorated_name:
-                    decorated_name = 'decorated name: %s' % (
-                        self.__inst.decorated_name)
-                    self.writer(
-                        ' ' *
-                        curr_level *
-                        self.INDENT_SIZE +
-                        decorated_name)
-
     def print_calldef_info(self, decl=None):
         if None is decl:
             decl = self.__inst
