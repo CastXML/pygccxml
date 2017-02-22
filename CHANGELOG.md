@@ -1,6 +1,17 @@
 Changes
 =======
 
+Version 1.8.5
+-------------
+
+1. Fix multiple calls to ``` __hash__()``` (#70)
+
+2. ```Static``` and ```extern``` qualifiers are now no more treated as equivalents
+    in the type_qualifiers class (for ```CastXML```).
+    The old behaviour is kept for ```GCC-XML``` (```static == extern```).
+
+3. Fix for ```declarations.is_noncopyable``` when used on a ```pointer_t```.
+
 Version 1.8.4
 -------------
 

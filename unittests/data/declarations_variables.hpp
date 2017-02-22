@@ -11,8 +11,8 @@ namespace declarations{ namespace variables{
 const long unsigned int initialized = 10122004;
 int array[255];
 
-//TODO: explain why such variables is not peeked
-extern int static_var;
+static int static_var;
+extern int extern_var;
 
 struct struct_variables_t{
     mutable int m_mutable;
@@ -20,6 +20,11 @@ struct struct_variables_t{
 
 struct struct_variables_holder_t{
 	struct_variables_t m_struct_variables;
+};
+
+struct struct_static_variables_t{
+    static const int ssv_static_var;
+    static const int ssv_static_var_value = 1;
 };
 
 } }

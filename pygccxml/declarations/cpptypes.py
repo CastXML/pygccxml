@@ -924,18 +924,20 @@ class type_qualifiers_t(object):
 
     """contains additional information about type: mutable, static, extern"""
 
-    def __init__(self, has_static=False, has_mutable=False):
+    def __init__(self, has_static=False, has_mutable=False, has_extern=False):
         self._has_static = has_static
+        self._has_extern = has_extern
         self._has_mutable = has_mutable
 
     def __eq__(self, other):
         if not isinstance(other, type_qualifiers_t):
             return False
         return self.has_static == other.has_static \
+            and self.has_extern == other.has_extern \
             and self.has_mutable == other.has_mutable
 
     def __hash__(self):
-        return super.__hash__(self)
+        return super(type_qualifiers_t, self).__hash__()
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -944,6 +946,7 @@ class type_qualifiers_t(object):
         if not isinstance(other, type_qualifiers_t):
             return object.__lt__(self, other)
         return self.has_static < other.has_static \
+            and self.has_extern < other.has_extern \
             and self.has_mutable < other.has_mutable
 
     @property
@@ -956,12 +959,11 @@ class type_qualifiers_t(object):
 
     @property
     def has_extern(self):
-        """synonym to static"""
-        return self.has_static
+        return self._has_extern
 
     @has_extern.setter
     def has_extern(self, has_extern):
-        self.has_static = has_extern
+        self._has_extern = has_extern
 
     @property
     def has_mutable(self):

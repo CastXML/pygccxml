@@ -556,7 +556,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_variable(self, attrs):
         type_qualifiers = declarations.type_qualifiers_t()
         type_qualifiers.has_mutable = attrs.get(XML_AN_MUTABLE, False)
-        type_qualifiers.has_static = attrs.get(XML_AN_EXTERN, False)
+        if "GCC-XML" in utils.xml_generator:
+            # Old behaviour with gccxml. Will be dropped when gccxml
+            # is removed.
+            type_qualifiers.has_static = attrs.get(XML_AN_EXTERN, False)
+            # With gccxml both were equivalent (at least this was the old
+            # behaviour in pygccxml)
+            type_qualifiers.has_extern = type_qualifiers.has_static
+        else:
+            type_qualifiers.has_static = attrs.get(XML_AN_STATIC, False)
+            type_qualifiers.has_extern = attrs.get(XML_AN_EXTERN, False)
         bits = attrs.get(XML_AN_BITS)
         if bits:
             bits = int(bits)

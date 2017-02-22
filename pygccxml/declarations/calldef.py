@@ -264,12 +264,12 @@ class calldef_t(declaration.declaration_t):
 
     def __hash__(self):
         if "GCC" in utils.xml_generator:
-            return (super.__hash__(self) ^
+            return (super(calldef_t, self).__hash__() ^
                     hash(self.return_type) ^
                     hash(self.demangled_name))
         elif "CastXML" in utils.xml_generator:
             # No demangled name with castxml. Use the normal name.
-            return (super.__hash__(self) ^
+            return (super(calldef_t, self).__hash__() ^
                     hash(self.return_type) ^
                     hash(self.name))
 
