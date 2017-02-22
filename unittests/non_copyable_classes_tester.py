@@ -8,6 +8,7 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
+from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -52,6 +53,12 @@ class Test(parser_test_case.parser_test_case_t):
 
         main_foo_5 = self.global_ns.class_('MainFoo5')
         self.assertTrue(declarations.is_noncopyable(main_foo_5))
+
+        if "CastXML" in utils.xml_generator:
+            # CastXML only test
+            # MainFoo6 is copyable
+            main_foo_6 = self.global_ns.class_('MainFoo6')
+            self.assertFalse(declarations.is_noncopyable(main_foo_6))
 
 
 def create_suite():

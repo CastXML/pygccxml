@@ -64,7 +64,8 @@ class declaration_xxx_traits(object):
         return \
             type_traits.remove_declarated(
                 type_traits.remove_cv(
-                    type_traits.remove_alias(type_)))
+                    type_traits.remove_alias(
+                        type_traits.remove_pointer(type_))))
 
     def is_my_case(self, type_):
         """returns True, if type represents the desired declaration,

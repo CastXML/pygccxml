@@ -107,6 +107,24 @@ class MainFoo5 : Foo5 {
     char b;
 };
 
+// ----------------------------------------------- Member with static qualifiers
+
+// Foo6 is a base class (with a static const variable foo)
+class Foo6 {
+  private:
+    Foo6();
+  protected:
+    static const int foo1;
+};
+
+// Use the base class: this class is copyable, it has a public ctor, and
+// the base class does not contain non-copyable members (because of the static
+// qualifier)
+class MainFoo6 : Foo6 {
+  public:
+    MainFoo6();
+};
+
 }
 
 #endif//__non_copyable_classes_hpp__
