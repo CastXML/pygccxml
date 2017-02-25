@@ -656,28 +656,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     @staticmethod
     def __read_version(attrs):
-        logger = utils.loggers.cxx_parser
-        version_str = attrs.get(XML_AN_CVS_REVISION, 0.6)
-        version = float(version_str)
-        if version is None:
-            logger.debug('GCCXML version - 0.6')
-            utils.xml_generator = declarations.xml_generators.gccxml_06
-        elif version <= 1.114:
-            logger.debug('GCCXML version - 0.7')
-            utils.xml_generator = declarations.xml_generators.gccxml_07
-        elif 1.115 <= version <= 1.126:
-            logger.debug('GCCXML version - 0.9 BUGGY ( %s )', version_str)
-            utils.xml_generator = declarations.xml_generators.gccxml_09_buggy
-        elif 1.126 <= version <= 1.135:
-            logger.debug('GCCXML version - 0.9 ( %s )', version_str)
-            utils.xml_generator = declarations.xml_generators.gccxml_09
-        else:
-            # CastXML starts with revision 1.136, but still writes the GCCXML
-            # tag and the 0.9 version number in the XML files for backward
-            # compatibility.
-            logger.debug('CASTXML version - None ( %s )', version_str)
-            utils.xml_generator = declarations.xml_generators.castxml_none
-        utils.xml_output_version = version
+        version = attrs.get(XML_AN_CVS_REVISION, 0.6)
+        xml_generator = utils.xml_generators(utils.loggers.cxx_parser, version)
+        utils.xml_generator = xml_generator.get_string_repr()
+        utils.xml_output_version = float(version)
 
     def __update_unnamed_class(self, decl, attrs):
         """

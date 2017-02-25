@@ -77,6 +77,7 @@ import test_function_pointer
 import test_directory_cache
 import test_config
 import deprecation_tester
+import test_xml_generators
 
 testers = [
     # , demangled_tester # failing right now
@@ -144,7 +145,8 @@ testers = [
     remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,
-    deprecation_tester
+    deprecation_tester,
+    test_xml_generators,
 ]
 
 if platform.system() != 'Windows':

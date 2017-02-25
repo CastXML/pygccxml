@@ -17,6 +17,7 @@ from .utils import normalize_path
 from .utils import find_xml_generator
 from .utils import get_tr1
 from .utils import cxx_standard
+from .xml_generators import xml_generators
 
 # Version of xml generator which was used.
 xml_generator = ""
