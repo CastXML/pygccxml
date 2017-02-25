@@ -16,7 +16,13 @@ class xml_generators(object):
     __separator = "@"
 
     def __init__(self, logger, xml_output_version):
+        """
+        Create a new xml_generators object.
 
+        Args:
+            logger (logging.Logger) : a logger for debugging output
+            xml_output_version (float): the xml output version
+        """
         if xml_output_version is None:
             logger.debug("GCCXML version - 0.6")
             xml_generator = self.__gccxml_06
@@ -43,35 +49,83 @@ class xml_generators(object):
         self._is_castxml = "CastXML" in xml_generator
 
     def get_string_repr(self):
-        return self._xml_generator_version + \
-               self.__separator + \
-               str(self._xml_output_version)
+        """
+        Get a string identifier for the current type of xml generator
+
+        Returns:
+            str: identifier
+        """
+        return \
+            self._xml_generator_version + \
+            self.__separator + \
+            str(self._xml_output_version)
 
     @property
     def is_gccxml(self):
+        """
+        Is the current xml generator gccxml?
+
+        Returns:
+            bool: is gccxml being used?
+        """
         return self._is_gccxml
 
     @property
     def is_castxml(self):
+        """
+        Is the current xml generator castxml?
+
+        Returns:
+            bool: is castxml being used?
+        """
         return self._is_castxml
 
     @property
     def is_gccxml_06(self):
-        print("here", self._xml_generator_version)
+        """
+        Is the current xml generator gccxml (version 0.6)?
+
+        Returns:
+            bool: is gccxml 0.6 being used?
+        """
         return self._xml_generator_version == self.__gccxml_06
 
     @property
     def is_gccxml_07(self):
+        """
+        Is the current xml generator gccxml (version 0.7)?
+
+        Returns:
+            bool: is gccxml 0.7 being used?
+        """
         return self._xml_generator_version == self.__gccxml_07
 
     @property
     def is_gccxml_09(self):
+        """
+        Is the current xml generator gccxml (version 0.9)?
+
+        Returns:
+            bool: is gccxml 0.9 being used?
+        """
         return self._xml_generator_version == self.__gccxml_09
 
     @property
     def is_gccxml_09_buggy(self):
+        """
+        Is the current xml generator gccxml (version 0.9 - buggy)?
+
+        Returns:
+            bool: is gccxml 0.9 (buggy) being used?
+        """
         return self._xml_generator_version == self.__gccxml_09_buggy
 
     @property
     def xml_output_version(self):
+        """
+        The current xml output version for the parsed file.
+
+        Returns:
+            float: the xml output version
+        """
         return self._xml_output_version
