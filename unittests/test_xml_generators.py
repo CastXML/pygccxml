@@ -32,7 +32,7 @@ class Test(parser_test_case.parser_test_case_t):
             self.assertTrue(gen.is_gccxml)
             self.assertFalse(gen.is_castxml)
         self.assertTrue(getattr(gen, expected_version))
-        self.assertEquals(gen.xml_output_version, version)
+        self.assertEqual(gen.xml_output_version, version)
 
 
 def create_suite():
