@@ -27,7 +27,7 @@ class xml_generators(object):
             logger.debug(
                 "GCCXML version - 0.9 BUGGY ( %s )", xml_output_version)
             xml_generator = self.__gccxml_09_buggy
-        elif 1.126 <= xml_output_version <= 1.135:
+        elif 1.127 <= xml_output_version <= 1.135:
             logger.debug("GCCXML version - 0.9 ( %s )", xml_output_version)
             xml_generator = self.__gccxml_09
         else:
