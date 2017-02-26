@@ -1,6 +1,11 @@
 Changes
 =======
 
+Version 1.8.6
+-------------
+
+1. Fix _HAS_TR1=0 definition for msvc9 (#72)
+
 Version 1.8.5
 -------------
 
