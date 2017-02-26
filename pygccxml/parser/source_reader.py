@@ -133,7 +133,7 @@ class source_reader_t(object):
                 cmd.append('--castxml-cc-msvc ' +
                            '"%s"' % self.__config.compiler_path)
                 if self.__config.compiler == 'msvc9':
-                    cmd.append('-D"_HAS_TR1=0"')
+                    cmd.append('"-D_HAS_TR1=0"')
         else:
 
             # On mac or linux, use gcc or clang (the flag is the same)
