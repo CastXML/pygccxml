@@ -5,6 +5,40 @@
 
 #include <sstream>
 
+// Demonstration of the real problem with basic c++
+namespace Test1 {
+
+// Forward declaration
+class Base2;
+
+// Base 1, with pointer to Base2
+class Base1 {
+  private:
+    Base1();
+
+  protected:
+    Base2* aBasePtr2;
+};
+
+// Base 2, child class of Base1
+class Base2: public Base1 {
+  private:
+    Base2();
+};
+
+// Child class of Base2
+// Holds a pointer to Base2
+class Child: public Base2 {
+  private:
+    Child();
+
+  protected:
+    Base2* aBasePtr2;
+};
+
+}
+
+// Real-life test with std::istream where this happened
 namespace Test2 {
 
 class FileStreamDataStream {
