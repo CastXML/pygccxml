@@ -14,7 +14,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = "test_stream.hpp"
+        self.header = "test_non_copyable_recursive.hpp"
         self.config.cflags = "-std=c++11"
 
     def test_infinite_recursion_base_classes(self):
