@@ -76,6 +76,7 @@ import test_pattern_parser
 import test_function_pointer
 import test_directory_cache
 import test_config
+import test_non_copyable_recursive
 
 testers = [
     # , demangled_tester # failing right now
@@ -144,7 +145,8 @@ testers = [
     test_pattern_parser,
     test_function_pointer,
     test_directory_cache,
-    test_config
+    test_config,
+    test_non_copyable_recursive
 ]
 
 if 'posix' in os.name:
