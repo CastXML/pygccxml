@@ -39,6 +39,7 @@ class Test(parser_test_case.parser_test_case_t):
         test_ns = global_ns.namespace('Test1')
         cls = test_ns.class_('Child')
         declarations.type_traits_classes.find_noncopyable_vars(cls)
+        self.assertTrue(declarations.type_traits_classes.is_noncopyable(cls))
 
     def test_infinite_recursion_sstream(self):
         """
@@ -60,6 +61,7 @@ class Test(parser_test_case.parser_test_case_t):
         test_ns = global_ns.namespace('Test2')
         cls = test_ns.class_('FileStreamDataStream')
         declarations.type_traits_classes.find_noncopyable_vars(cls)
+        self.assertFalse(declarations.type_traits_classes.is_noncopyable(cls))
 
 
 def create_suite():
