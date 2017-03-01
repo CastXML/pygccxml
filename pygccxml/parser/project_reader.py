@@ -196,6 +196,18 @@ class project_reader_t(object):
             self.__decl_factory = pygccxml.declarations.decl_factory_t()
 
         self.logger = utils.loggers.cxx_parser
+        self.__xml_generator_from_xml_file = None
+
+    @property
+    def xml_generator_from_xml_file(self):
+        """
+        Configuration object containing information about the xml generator
+        read from the xml file.
+
+        Returns:
+            utils.xml_generator_from_file: configuration object
+        """
+        return self.__xml_generator_from_xml_file
 
     @staticmethod
     def get_os_file_names(files):
@@ -299,6 +311,8 @@ class project_reader_t(object):
                 decls = reader.read_xml_file(prj_file.cached_source_file)
             else:
                 decls = reader.read_string(header)
+            self.__xml_generator_from_xml_file = \
+                reader.xml_generator_from_xml_file
             namespaces.append(decls)
 
         self.logger.debug("Flushing cache... ")
@@ -352,7 +366,9 @@ class project_reader_t(object):
             self.__config,
             None,
             self.__decl_factory)
-        return reader.read_string(content)
+        decls = reader.read_string(content)
+        self.__xml_generator_from_xml_file = reader.xml_generator_from_xml_file
+        return decls
 
     def read_xml(self, file_configuration):
         """parses C++ code, defined on the file_configurations and returns
@@ -393,6 +409,8 @@ class project_reader_t(object):
             with open(xml_file_path, "r") as xml_file:
                 xml = xml_file.read()
             utils.remove_file_no_raise(xml_file_path, self.__config)
+            self.__xml_generator_from_xml_file = \
+                reader.xml_generator_from_xml_file
             return xml
         finally:
             if xml_file_path and delete_xml_file:

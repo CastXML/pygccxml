@@ -69,6 +69,18 @@ class source_reader_t(object):
         self.__decl_factory = decl_factory
         if not decl_factory:
             self.__decl_factory = declarations.decl_factory_t()
+        self.__xml_generator_from_xml_file = None
+
+    @property
+    def xml_generator_from_xml_file(self):
+        """
+        Configuration object containing information about the xml generator
+        read from the xml file.
+
+        Returns:
+            utils.xml_generator_from_file: configuration object
+        """
+        return self.__xml_generator_from_xml_file
 
     def __create_command_line(self, source_file, xml_file):
         """
@@ -426,6 +438,8 @@ class source_reader_t(object):
     def __parse_xml_file(self, xml_file):
         scanner_ = scanner_t(xml_file, self.__decl_factory, self.__config)
         scanner_.read()
+        self.__xml_generator_from_xml_file = \
+            scanner_.xml_generator_from_xml_file
         decls = scanner_.declarations()
         types = scanner_.types()
         files = scanner_.files()
