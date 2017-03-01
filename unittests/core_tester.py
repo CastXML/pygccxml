@@ -24,6 +24,7 @@ def is_sub_path(root, some_path):
 class Core(parser_test_case.parser_test_case_t):
     """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
+    xml_generator_from_xml_file = None
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -160,11 +161,11 @@ class Core(parser_test_case.parser_test_case_t):
         self.assertTrue(std, "std namespace has not been found")
         # GCCXML had mangled names for everything. With CastXML
         # there are only mangled names for functions and variables.
-        if "GCC" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 std.mangled,
                 "Mangled name of std namespace should be different from None")
-        elif "CastXML" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_castxml:
             # Check if an assertion is correctly raised when using castxml.
             # Call the getter by using lambda, else assertRaises does not
             # work as expected.
@@ -580,6 +581,8 @@ class CoreXMLGenerator(Core):
                 decls)
             if self.INIT_OPTIMIZER:
                 Core.global_ns.init_optimizer()
+            Core.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.global_ns = Core.global_ns
 
 
