@@ -252,6 +252,8 @@ class xml_generator_configuration_t(parser_configuration_t):
 
         self.__ignore_gccxml_output = ignore_gccxml_output
 
+        self.__xml_generator_from_xml_file = None
+
     def clone(self):
         return copy.deepcopy(self)
 
@@ -267,6 +269,21 @@ class xml_generator_configuration_t(parser_configuration_t):
     @xml_generator_path.setter
     def xml_generator_path(self, new_path):
         self.__xml_generator_path = new_path
+
+    @property
+    def xml_generator_from_xml_file(self):
+        """
+        Configuration object containing information about the xml generator
+        read from the xml file.
+
+        Returns:
+            utils.xml_generator_from_file: configuration object
+        """
+        return self.__xml_generator_from_xml_file
+
+    @xml_generator_from_xml_file.setter
+    def xml_generator_from_xml_file(self, xml_generator_from_xml_file):
+        self.__xml_generator_from_xml_file = xml_generator_from_xml_file
 
     @property
     def start_with_declarations(self):

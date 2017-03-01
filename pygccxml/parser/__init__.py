@@ -48,17 +48,22 @@ def parse(
     if not config:
         config = xml_generator_configuration_t()
     parser = project_reader_t(config=config, cache=cache)
-    answer = parser.read_files(files, compilation_mode)
-    return answer
+    declarations = parser.read_files(files, compilation_mode)
+    config.xml_generator_from_xml_file = parser.xml_generator_from_xml_file
+    return declarations
 
 
 def parse_string(content, config=None):
     if not config:
         config = xml_generator_configuration_t()
     parser = project_reader_t(config)
-    return parser.read_string(content)
+    declarations = parser.read_string(content)
+    config.xml_generator_from_xml_file = parser.xml_generator_from_xml_file
+    return declarations
 
 
 def parse_xml_file(content, config=None):
     parser = source_reader_t(config)
-    return parser.read_xml_file(content)
+    decls = parser.read_xml_file(content)
+    config.xml_generator_from_xml_file = parser.xml_generator_from_xml_file
+    return decls
