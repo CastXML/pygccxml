@@ -8,7 +8,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -22,8 +21,11 @@ class Test(parser_test_case.parser_test_case_t):
     def setUp(self):
         if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
             Test.global_ns = declarations.get_global_namespace(decls)
             Test.global_ns.init_optimizer()
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
         self.global_ns = Test.global_ns
 
     def test_variable(self):
@@ -45,7 +47,9 @@ class Test(parser_test_case.parser_test_case_t):
 
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
-        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
+        generator = self.xml_generator_from_xml_file
+        if generator.is_gccxml_09 or generator.is_gccxml_09_buggy or \
+                generator.is_castxml:
             # GCCXML R122 adds compiler generated constructors/destructors
             # and operator= to the class, if it has
             dependencies = [

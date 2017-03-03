@@ -8,7 +8,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -23,6 +22,9 @@ class Test(parser_test_case.parser_test_case_t):
             decls = parser.parse([self.header], self.config)
             self.global_ns = declarations.get_global_namespace(decls)
             self.global_ns.init_optimizer()
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def test(self):
 
@@ -54,7 +56,7 @@ class Test(parser_test_case.parser_test_case_t):
         main_foo_5 = self.global_ns.class_('MainFoo5')
         self.assertTrue(declarations.is_noncopyable(main_foo_5))
 
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             # CastXML only test
             # MainFoo6 is copyable
             main_foo_6 = self.global_ns.class_('MainFoo6')

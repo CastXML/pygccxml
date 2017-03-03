@@ -8,7 +8,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -25,7 +24,10 @@ class Test(parser_test_case.parser_test_case_t):
             decls = parser.parse([self.header], self.config)
             Test.global_ns = declarations.get_global_namespace(decls)
             Test.global_ns.init_optimizer()
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.global_ns = Test.global_ns
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def test_regex(self):
         criteria = declarations.regex_matcher_t(
@@ -40,7 +42,7 @@ class Test(parser_test_case.parser_test_case_t):
             declarations.ACCESS_TYPES.PUBLIC)
         public_members = declarations.matcher.find(criteria, self.global_ns)
         public_members = [d for d in public_members if not d.is_artificial]
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             nbr = len(public_members)
             self.assertTrue(nbr in [17, 21])
             if nbr == 21:
@@ -62,10 +64,11 @@ class Test(parser_test_case.parser_test_case_t):
             criteria1 | criteria2,
             self.global_ns)
 
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             found = [d for d in found if not d.is_artificial]
             self.assertTrue(len(found) != 35)
-        elif "0.9" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_gccxml_09 or \
+                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
             found = [d for d in found if not d.is_artificial]
             self.assertTrue(15 <= len(found) <= 21)
         else:

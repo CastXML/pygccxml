@@ -5,6 +5,7 @@
 
 import unittest
 import parser_test_case
+
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -25,9 +26,8 @@ class Test(parser_test_case.parser_test_case_t):
         parser_test_case.parser_test_case_t.__init__(self, *args)
 
     def test(self):
-        src_reader = parser.source_reader_t(self.config)
-        global_ns = declarations.get_global_namespace(
-            src_reader.read_string(code))
+        decls = parser.parse_string(code, self.config)
+        global_ns = declarations.get_global_namespace(decls)
         self.assertTrue(global_ns.variable('a').bits == 1)
         self.assertTrue(global_ns.variable('unused').bits == 31)
 

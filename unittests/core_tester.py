@@ -4,7 +4,6 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import warnings
 import unittest
 import autoconfig
 import parser_test_case
@@ -24,7 +23,6 @@ def is_sub_path(root, some_path):
 class Core(parser_test_case.parser_test_case_t):
     """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
-    xml_generator_from_xml_file = None
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -192,12 +190,12 @@ class Core(parser_test_case.parser_test_case_t):
         # This works with gccxml only. Check if an assertion is correctly
         # raised when using castxml.
         var_inst = self.global_ns.variable('array255')
-        if "GCC" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 var_inst.demangled,
                 "Demangled name of array255 variable should be different +"
                 "from None")
-        elif "CastXML" in utils.xml_generator:
+        else:
             # Call the getter by using lambda, else assertRaises does not
             # work as expected.
             self.assertRaises(Exception, lambda: var_inst.demangled)
@@ -584,6 +582,7 @@ class CoreXMLGenerator(Core):
             Core.xml_generator_from_xml_file = \
                 self.config.xml_generator_from_xml_file
         self.global_ns = Core.global_ns
+        self.xml_generator_from_xml_file = Core.xml_generator_from_xml_file
 
 
 class core_all_at_once_t(CoreXMLGenerator):

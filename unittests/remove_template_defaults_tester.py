@@ -22,6 +22,9 @@ class Test(parser_test_case.parser_test_case_t):
             decls = parser.parse([self.header], self.config)
             Test.global_ns = declarations.get_global_namespace(decls)
             Test.global_ns.init_optimizer()
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def test_vector(self):
         v_int = self.global_ns.typedef('v_int')
@@ -124,7 +127,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_hash_set(self):
         hs_v_int = self.global_ns.typedef('hs_v_int')
-        if 'CastXML' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             hs_traits = declarations.unordered_set_traits
             name = 'unordered_set'
         else:
@@ -140,7 +143,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_hash_multiset(self):
         mhs_v_int = self.global_ns.typedef('mhs_v_int')
-        if 'CastXML' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             mhs_traits = declarations.unordered_multiset_traits
             name = 'unordered_multiset'
         else:
@@ -156,7 +159,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_hash_map(self):
         hm_i2d = self.global_ns.typedef('hm_i2d')
-        if 'CastXML' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             hm_traits = declarations.unordered_map_traits
             name = 'unordered_map'
         else:
@@ -171,7 +174,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_hash_multimap(self):
         hmm_i2d = self.global_ns.typedef('hmm_i2d')
-        if 'CastXML' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             hmm_traits = declarations.unordered_multimap_traits
             name = 'unordered_multimap'
         else:

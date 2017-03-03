@@ -9,7 +9,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -24,7 +23,10 @@ class Test(parser_test_case.parser_test_case_t):
     def setUp(self):
         if not Test.declarations:
             Test.declarations = parser.parse([self.header], self.config)
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.declarations = Test.declarations
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def __test_type_category(self, ns_name, controller):
         ns_control = declarations.find_declaration(
@@ -55,14 +57,15 @@ class Test(parser_test_case.parser_test_case_t):
                 self.assertTrue(
                     controller(decl), er % (decl.decl_string, ns_name))
         er = 'for type "%s" the answer to the question "%s" should be False'
+        generator = self.xml_generator_from_xml_file
         for decl in ns_no.declarations:
             if isinstance(decl, declarations.calldef_t) and \
                     decl.name.startswith('test_'):
                 continue
 
-            if ("CastXML" in utils.xml_generator and
-                    utils.xml_output_version < 1.138 and
-                    decl.name in ['const_item', 'const_container']):
+            if generator.is_castxml and \
+                    generator.xml_output_version < 1.138 and \
+                    decl.name in ['const_item', 'const_container']:
                 # Skip this test to workaround CastXML bug.
                 # See https://github.com/CastXML/CastXML/issues/55
                 continue
@@ -374,10 +377,10 @@ class missing_decls_tester_t(unittest.TestCase):
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        if ("CastXML" not in utils.xml_generator or
-                utils.xml_output_version >= 1.138):
-            # Prior to version 1.138, CastXML would incorrect create a default
-            # constructor definition.
+        generator = config.xml_generator_from_xml_file
+        if generator.is_castxml or generator.xml_output_version >= 1.138:
+            # Prior to version 1.138, CastXML would incorrectly create a
+            # default constructor definition.
             # See https://github.com/CastXML/CastXML/issues/55
             # Copy constructor, destructor, variable
             self.assertEqual(len(ci.declarations), 3)

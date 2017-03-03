@@ -34,12 +34,14 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                     autoconfig.data_directory,
                     'demangled_tester_64bit.xml'))
             utils.get_architecture = original_get_architecture
+            tester_impl_t.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.global_ns = declarations.get_global_namespace(decls)
 
     def test(self):
         demangled = self.global_ns.namespace('demangled')
 
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             # Do not test demangled name for CastXML
             return True
 

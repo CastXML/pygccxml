@@ -13,9 +13,11 @@ import autoconfig
 class parser_test_case_t(unittest.TestCase):
 
     CXX_PARSER_CFG = None
+    xml_generator_from_xml_file = None
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
+        self.xml_generator_from_xml_file = None
         if self.CXX_PARSER_CFG:
             self.config = self.CXX_PARSER_CFG.clone()
         elif autoconfig.cxx_parsers_cfg.config:

@@ -7,7 +7,6 @@ import unittest
 import parser_test_case
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
@@ -21,14 +20,16 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
 
     def setUp(self):
         decls = parser.parse([self.header], self.config)
+        self.xml_generator_from_xml_file = \
+            self.config.xml_generator_from_xml_file
         self.global_ns = declarations.get_global_namespace(decls)
 
     def test_name_based(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
 
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             self.assertRaises(Exception, lambda: cls.cache.demangled_name)
-        elif "GCCXML" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(cls.cache.demangled_name == cls.name)
 
         cls_full_name = declarations.full_name(cls)
@@ -48,12 +49,12 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         # now we change class name, all internal decls cache should be cleared
         cls.name = "new_name"
         self.assertTrue(not cls.cache.full_name)
-        if "GCCXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(not cls.cache.demangled_name)
         self.assertTrue(not cls.cache.declaration_path)
 
         self.assertTrue(not enum.cache.full_name)
-        if "GCCXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(not enum.cache.demangled_name)
         self.assertTrue(not enum.cache.declaration_path)
 

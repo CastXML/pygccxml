@@ -30,7 +30,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
             val = "::ns1::ns2::apple"
         self.assertEqual(default_val, val)
 
-        if 32 == self.architecture or "CastXML" in utils.xml_generator:
+        if 32 == self.architecture or \
+                self.xml_generator_from_xml_file.is_castxml:
             fix_enum2 = self.global_ns.free_fun("fix_enum2")
             default_val = fix_enum2.arguments[0].default_value
             self.assertEqual(default_val, val)
@@ -67,7 +68,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_numeric_patcher(self):
         fix_numeric = self.global_ns.free_function("fix_numeric")
         if 32 == self.architecture:
-            if "0.9" in utils.xml_generator:
+            if self.xml_generator_from_xml_file.is_gccxml_09 or \
+                    self.xml_generator_from_xml_file.is_gccxml_09_buggy:
                 if platform.machine() == "x86_64":
                     self.assertEqual(
                         fix_numeric.arguments[0].default_value, "-1u")
@@ -80,8 +82,9 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                 self.assertEqual(
                     fix_numeric.arguments[0].default_value, val)
         else:
-            if "CastXML" in utils.xml_generator:
-                if utils.xml_output_version >= 1.137:
+            generator = self.xml_generator_from_xml_file
+            if generator.is_castxml:
+                if generator.xml_output_version >= 1.137:
                     val = "(unsigned long long)-1"
                 else:
                     val = "(ull)-1"
@@ -92,7 +95,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                     fix_numeric.arguments[0].default_value, "0ffffffff")
 
     def test_unqualified_integral_patcher(self):
-        if 32 != self.architecture and "CastXML" not in utils.xml_generator:
+        if 32 != self.architecture and \
+                self.xml_generator_from_xml_file.is_gccxml:
             # For this check to be removed, patcher_tester_64bit.xml
             # will need to be updated for GCCXML
             return
@@ -100,8 +104,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         ns1 = self.global_ns.namespace("ns1")
         st1 = ns1.class_("st1")
         fun1 = st1.member_function("fun1")
-        if "CastXML" in utils.xml_generator:
-            if utils.xml_output_version >= 1.137:
+        if self.xml_generator_from_xml_file.is_castxml:
+            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
                 val1 = "ns1::DEFAULT_1"
                 val2 = "ns1::st1::DEFAULT_2"
             else:
@@ -123,8 +127,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         self.assertEqual(
             fun2.arguments[0].default_value,
             "::DEFAULT_1")
-        if "CastXML" in utils.xml_generator:
-            if utils.xml_output_version >= 1.137:
+        if self.xml_generator_from_xml_file.is_castxml:
+            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
                 val1 = "ns1::DEFAULT_1"
                 val2 = "ns1::st1::DEFAULT_2"
             else:
@@ -153,12 +157,13 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_fun("fix_function_call")
         default_val = fix_function_call.arguments[0].default_value
-        if "CastXML" in utils.xml_generator:
-            if utils.xml_output_version >= 1.137:
+        if self.xml_generator_from_xml_file.is_castxml:
+            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
                 val = "function_call::calc(1, 2, 3)"
             else:
                 val = "calc(1, 2, 3)"
-        elif "0.9" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_gccxml_09 or \
+                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
             val = "function_call::calc(1, 2, 3)"
         else:
             val = "function_call::calc( 1, 2, 3 )"
@@ -176,9 +181,10 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_fun("typedef__func")
         default_val = typedef__func.arguments[0].default_value
-        if "0.9" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml_09 or \
+                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
             val = "typedef_::original_name()"
-        elif "CastXML" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_castxml:
             # Most clean output, no need to patch
             val = "typedef_::alias()"
         else:
@@ -187,7 +193,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun("clone_tree")
             default_values = []
-            if "0.9" in utils.xml_generator:
+            if self.xml_generator_from_xml_file.is_gccxml_09 or \
+                    self.xml_generator_from_xml_file.is_gccxml_09_buggy:
                 default_values = []
             else:
                 default_values = [
@@ -216,7 +223,11 @@ class tester_32_t(tester_impl_t):
             reader = parser.source_reader_t(self.config)
             tester_32_t.global_ns = reader.read_file(
                 "patcher.hpp")[0].top_parent
+            tester_32_t.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.global_ns = tester_32_t.global_ns
+        self.xml_generator_from_xml_file = \
+            tester_32_t.xml_generator_from_xml_file
 
 
 class tester_64_t(tester_impl_t):
@@ -240,7 +251,11 @@ class tester_64_t(tester_impl_t):
             else:
                 tester_64_t.global_ns = reader.read_file(
                     "patcher.hpp")[0].top_parent
+            tester_64_t.xml_generator_from_xml_file = \
+                reader.xml_generator_from_xml_file
         self.global_ns = tester_64_t.global_ns
+        self.xml_generator_from_xml_file = \
+            tester_64_t.xml_generator_from_xml_file
 
     def tearDown(self):
         utils.get_architecture = self.original_get_architecture

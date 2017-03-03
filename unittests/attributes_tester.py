@@ -8,7 +8,6 @@ import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -34,8 +33,8 @@ class Test(parser_test_case.parser_test_case_t):
         do_nothing = numeric.mem_fun('do_nothing')
         arg = do_nothing.arguments[0]
 
-        if "CastXML" in utils.xml_generator:
-            if utils.xml_output_version >= 1.137:
+        generator = self.config.xml_generator_from_xml_file
+        if generator.is_castxml and generator.xml_output_version >= 1.137:
                 # This works since:
                 # https://github.com/CastXML/CastXML/issues/25
                 # https://github.com/CastXML/CastXML/pull/26
@@ -69,8 +68,8 @@ class Test(parser_test_case.parser_test_case_t):
         do_nothing = numeric.mem_fun('do_nothing')
         arg = do_nothing.arguments[0]
 
-        if "CastXML" in utils.xml_generator and \
-                utils.xml_output_version >= 1.137:
+        generator = self.config.xml_generator_from_xml_file
+        if generator.is_castxml and generator.xml_output_version >= 1.137:
             self.assertTrue("annotate(sealed)" == numeric.attributes)
             self.assertTrue("annotate(out)" == arg.attributes)
 
