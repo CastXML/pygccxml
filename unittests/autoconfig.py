@@ -34,7 +34,7 @@ import pygccxml.utils  # nopep8
 warnings.simplefilter("error", Warning)
 
 # Set logging level
-pygccxml.utils.loggers.set_level(logging.INFO)
+pygccxml.utils.loggers.set_level(logging.CRITICAL)
 
 # Find out the c++ parser (gccxml or castxml)
 generator_path, generator_name = pygccxml.utils.find_xml_generator()
