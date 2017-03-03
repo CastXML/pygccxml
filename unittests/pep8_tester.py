@@ -12,12 +12,11 @@ import fnmatch
 class Test(unittest.TestCase):
 
     def test_pep8_conformance_unitests(self):
-        """Pep8 conformance test (unitests)
+        """
+        Pep8 conformance test (unitests)
 
         Runs on the unittest directory.
         """
-
-        print("\r\n")
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
@@ -25,12 +24,11 @@ class Test(unittest.TestCase):
         self.run_check(path)
 
     def test_pep8_conformance_pygccxml(self):
-        """Pep8 conformance test (pygccxml)
+        """
+        Pep8 conformance test (pygccxml)
 
         Runs on the pygccxml directory.
         """
-
-        print("\r\n")
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
@@ -39,12 +37,11 @@ class Test(unittest.TestCase):
         self.run_check(path)
 
     def test_pep8_conformance_example(self):
-        """Pep8 conformance test (examples)
+        """
+        Pep8 conformance test (examples)
 
         Runs on the example file in the docs.
         """
-
-        print("\r\n")
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
@@ -60,12 +57,11 @@ class Test(unittest.TestCase):
             self.run_check(path)
 
     def test_pep8_conformance_setup(self):
-        """Pep8 conformance test (setup)
+        """
+        Pep8 conformance test (setup)
 
         Runs on the setup.py file
         """
-
-        print("\r\n")
 
         # Get the path to current directory
         path = os.path.dirname(os.path.realpath(__file__))
