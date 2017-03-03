@@ -57,7 +57,3 @@ if cxx_parsers_cfg.config.xml_generator:
     generator_name = cxx_parsers_cfg.config.xml_generator
 if cxx_parsers_cfg.config.xml_generator_path:
     generator_path = cxx_parsers_cfg.config.xml_generator_path
-
-print(
-    '%s configured to simulate compiler %s' %
-    (generator_name.title(), cxx_parsers_cfg.config.compiler))
