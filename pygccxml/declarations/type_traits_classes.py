@@ -152,12 +152,18 @@ def find_copy_constructor(type_):
         return None
 
 
-def find_noncopyable_vars(type_):
+def find_noncopyable_vars(type_, already_visited_cls_vars=None):
     """
     Returns list of all `noncopyable` variables.
 
+    If an already_visited_cls_vars list is provided as argument, the returned
+    list will not contain these variables. This list will be extended with
+    whatever variables pointing to classes have been found.
+
     Args:
         type_ (declarations.class_t): the class to be searched.
+        already_visited_cls_vars (list): optional list of vars that should not
+            be checked a second time, to prevent infinite recursions.
 
     Returns:
         list: list of all `noncopyable` variables.
@@ -171,6 +177,9 @@ def find_noncopyable_vars(type_):
         recursive=False,
         allow_empty=True)
     noncopyable_vars = []
+
+    if already_visited_cls_vars is None:
+        already_visited_cls_vars = []
 
     message = (
         "__contains_noncopyable_mem_var - %s - TRUE - " +
@@ -196,7 +205,13 @@ def find_noncopyable_vars(type_):
         if class_traits.is_my_case(type_):
 
             cls = class_traits.get_declaration(type_)
-            if is_noncopyable(cls):
+
+            # Exclude classes that have already been visited.
+            if cls in already_visited_cls_vars:
+                continue
+            already_visited_cls_vars.append(cls)
+
+            if is_noncopyable(cls, already_visited_cls_vars):
                 logger.debug((message + " - class that is not copyable")
                              % type_.decl_string)
                 noncopyable_vars.append(mvar)
@@ -632,8 +647,20 @@ def is_convertible(source, target):
     return __is_convertible_t(source, target).is_convertible()
 
 
-def __is_noncopyable_single(class_):
-    """implementation details"""
+def __is_noncopyable_single(class_, already_visited_cls_vars=None):
+    """
+    Implementation detail.
+
+    Checks if the class is non copyable, without considering the base classes.
+
+    Args:
+        class_ (declarations.class_t): the class to be checked
+        already_visited_cls_vars (list): optional list of vars that should not
+            be checked a second time, to prevent infinite recursions.
+
+    Returns:
+        bool: if the class is non copyable
+    """
     # It is not enough to check base classes, we should also to check
     # member variables.
     logger = utils.loggers.cxx_parser
@@ -650,7 +677,11 @@ def __is_noncopyable_single(class_):
             "    public destructor: yes"])
         logger.debug(msg)
         return False
-    if find_noncopyable_vars(class_):
+
+    if already_visited_cls_vars is None:
+        already_visited_cls_vars = []
+
+    if find_noncopyable_vars(class_, already_visited_cls_vars):
         logger.debug(
             ("__is_noncopyable_single(TRUE) - %s - contains noncopyable " +
              "members") % class_.decl_string)
@@ -662,9 +693,22 @@ def __is_noncopyable_single(class_):
         return False
 
 
-def is_noncopyable(class_):
-    """returns True, if class is noncopyable, False otherwise"""
+def is_noncopyable(class_, already_visited_cls_vars=None):
+    """
+    Checks if class is non copyable
+
+    Args:
+        class_ (declarations.class_t): the class to be checked
+        already_visited_cls_vars (list): optional list of vars that should not
+            be checked a second time, to prevent infinite recursions.
+            In general you can ignore this argument, it is mainly used during
+            recursive calls of is_noncopyable() done by pygccxml.
+
+    Returns:
+        bool: if the class is non copyable
+    """
     logger = utils.loggers.cxx_parser
+
     class_decl = class_traits.get_declaration(class_)
 
     true_header = "is_noncopyable(TRUE) - %s - " % class_.decl_string
@@ -683,6 +727,9 @@ def is_noncopyable(class_):
     if copy_ and copy_.access_type == 'public' and not copy_.is_artificial:
         return False
 
+    if already_visited_cls_vars is None:
+        already_visited_cls_vars = []
+
     for base_desc in class_decl.recursive_bases:
         assert isinstance(base_desc, class_declaration.hierarchy_info_t)
 
@@ -700,13 +747,15 @@ def is_noncopyable(class_):
                     true_header +
                     "there is private copy constructor")
                 return True
-            elif __is_noncopyable_single(base_desc.related_class):
+            elif __is_noncopyable_single(
+                    base_desc.related_class, already_visited_cls_vars):
                 logger.debug(
                     true_header +
                     "__is_noncopyable_single returned True")
                 return True
 
-        if __is_noncopyable_single(base_desc.related_class):
+        if __is_noncopyable_single(
+                base_desc.related_class, already_visited_cls_vars):
             logger.debug(
                 true_header +
                 "__is_noncopyable_single returned True")
@@ -722,7 +771,7 @@ def is_noncopyable(class_):
         logger.debug(true_header + "has private destructor")
         return True
     else:
-        return __is_noncopyable_single(class_decl)
+        return __is_noncopyable_single(class_decl, already_visited_cls_vars)
 
 
 def is_unary_operator(oper):
