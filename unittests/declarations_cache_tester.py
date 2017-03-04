@@ -6,8 +6,10 @@
 import os
 import unittest
 import os.path
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml.parser.config import xml_generator_configuration_t
 from pygccxml.parser import declarations_cache
 

@@ -5,10 +5,10 @@
 
 import pprint
 import unittest
-import autoconfig
-import parser_test_case
 
-import pygccxml
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
@@ -575,7 +575,7 @@ class CoreXMLGenerator(Core):
                 self.test_files,
                 self.config,
                 self.COMPILATION_MODE)
-            Core.global_ns = pygccxml.declarations.get_global_namespace(
+            Core.global_ns = declarations.get_global_namespace(
                 decls)
             if self.INIT_OPTIMIZER:
                 Core.global_ns.init_optimizer()

@@ -29,7 +29,7 @@ test_script:
   - "%CMD_IN_ENV% python setup.py install"
 
   # Run the tests with coverage
-  - "coverage run unittests/test_all.py"
+  - "coverage run -m unittests.test_all"
   - "coverage combine"
 
 artifacts:

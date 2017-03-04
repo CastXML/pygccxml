@@ -5,7 +5,9 @@
 
 import os
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import parser
 
 

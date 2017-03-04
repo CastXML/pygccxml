@@ -235,7 +235,7 @@ script:
   # We have multiple coverage files because some scripts run in a subprocess
   - if [ $WINDOWS == 0 ]; then
       python setup.py install;
-      coverage run unittests/test_all.py;
+      coverage run -m unittests.test_all;
       coverage combine;
     fi
   # For the "empty" windows build, fetch the coverage results from appveyor

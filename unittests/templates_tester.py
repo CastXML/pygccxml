@@ -4,7 +4,9 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import declarations
 
 
