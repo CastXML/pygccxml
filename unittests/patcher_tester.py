@@ -6,8 +6,9 @@
 import os
 import unittest
 import platform
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
 
 from pygccxml import utils
 from pygccxml import parser

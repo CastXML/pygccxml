@@ -6,7 +6,7 @@
 import unittest
 import warnings
 
-import parser_test_case
+from . import parser_test_case
 
 from pygccxml import declarations
 

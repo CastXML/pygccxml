@@ -7,7 +7,8 @@ import pprint
 import sys
 import time
 import unittest
-import autoconfig
+
+from . import autoconfig
 
 
 class parser_test_case_t(unittest.TestCase):

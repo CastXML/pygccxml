@@ -8,77 +8,77 @@ import sys
 import unittest
 import platform
 
-import decl_string_tester
-import declaration_files_tester
-import declarations_comparison_tester
-import declarations_tester
-import file_cache_tester
-import gccxml_runner_tester
-import project_reader_correctness_tester
-import source_reader_tester
-import start_with_declarations_tester
-import templates_tester
-import type_traits_tester
-import core_tester
-import xmlfile_reader_tester
-import text_reader_tester
-import hierarchy_traveling
-import patcher_tester
-import call_invocation_tester
-import bit_fields_tester
-import complex_types_tester
-import cached_source_file_tester
-import variable_matcher_tester
-import namespace_matcher_tester
-import calldef_matcher_tester
-import filters_tester
-import cache_enums_tester
-import decl_printer_tester
-import typedefs_tester
-import non_copyable_classes_tester
-# import demangled_tester
-import unnamed_enums_bug_tester
-import vector_traits_tester
-import string_traits_tester
-import declarations_cache_tester
-import has_binary_operator_traits_tester
-import algorithms_cache_tester
-import dependencies_tester
-import free_operators_tester
-import remove_template_defaults_tester
-import find_container_traits_tester
-import attributes_tester
-import type_as_exception_bug_tester
-import copy_constructor_tester
-import plain_c_tester
-import function_traits_tester
-import better_templates_matcher_tester
-import declaration_matcher_tester
-import calling_convention_tester
-import const_volatile_arg_tester
-import array_bug_tester
-import gccxml10183_tester
-import gccxml10184_tester
-import gccxml10185_tester
-import inline_specifier_tester
-import test_create_decl_string
-import pep8_tester
-import example_tester
-import test_utils
-import test_va_list_tag_removal
-import test_copy_constructor
-import test_cpp_standards
-import unnamed_classes_tester
-import test_map_gcc5
-import test_argument_without_name
-import test_smart_pointer
-import test_pattern_parser
-import test_function_pointer
-import test_directory_cache
-import test_config
-import deprecation_tester
-import test_xml_generators
-import test_non_copyable_recursive
+from . import decl_string_tester
+from . import declaration_files_tester
+from . import declarations_comparison_tester
+from . import declarations_tester
+from . import file_cache_tester
+from . import gccxml_runner_tester
+from . import project_reader_correctness_tester
+from . import source_reader_tester
+from . import start_with_declarations_tester
+from . import templates_tester
+from . import type_traits_tester
+from . import core_tester
+from . import xmlfile_reader_tester
+from . import text_reader_tester
+from . import hierarchy_traveling
+from . import patcher_tester
+from . import call_invocation_tester
+from . import bit_fields_tester
+from . import complex_types_tester
+from . import cached_source_file_tester
+from . import variable_matcher_tester
+from . import namespace_matcher_tester
+from . import calldef_matcher_tester
+from . import filters_tester
+from . import cache_enums_tester
+from . import decl_printer_tester
+from . import typedefs_tester
+from . import non_copyable_classes_tester
+# from . import demangled_tester
+from . import unnamed_enums_bug_tester
+from . import vector_traits_tester
+from . import string_traits_tester
+from . import declarations_cache_tester
+from . import has_binary_operator_traits_tester
+from . import algorithms_cache_tester
+from . import dependencies_tester
+from . import free_operators_tester
+from . import remove_template_defaults_tester
+from . import find_container_traits_tester
+from . import attributes_tester
+from . import type_as_exception_bug_tester
+from . import copy_constructor_tester
+from . import plain_c_tester
+from . import function_traits_tester
+from . import better_templates_matcher_tester
+from . import declaration_matcher_tester
+from . import calling_convention_tester
+from . import const_volatile_arg_tester
+from . import array_bug_tester
+from . import gccxml10183_tester
+from . import gccxml10184_tester
+from . import gccxml10185_tester
+from . import inline_specifier_tester
+from . import test_create_decl_string
+from . import pep8_tester
+from . import example_tester
+from . import test_utils
+from . import test_va_list_tag_removal
+from . import test_copy_constructor
+from . import test_cpp_standards
+from . import unnamed_classes_tester
+from . import test_map_gcc5
+from . import test_argument_without_name
+from . import test_smart_pointer
+from . import test_pattern_parser
+from . import test_function_pointer
+from . import test_directory_cache
+from . import test_config
+from . import deprecation_tester
+from . import test_xml_generators
+from . import test_non_copyable_recursive
 
 testers = [
     # , demangled_tester # failing right now

@@ -8,7 +8,8 @@ import sys
 import shutil
 import unittest
 import warnings
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import utils

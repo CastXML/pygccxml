@@ -6,9 +6,11 @@
 import os
 import sys
 import unittest
-import autoconfig
 import subprocess
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml import parser
 
 
