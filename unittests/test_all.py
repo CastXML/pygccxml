@@ -78,6 +78,7 @@ import test_directory_cache
 import test_config
 import deprecation_tester
 import test_xml_generators
+import test_non_copyable_recursive
 
 testers = [
     # , demangled_tester # failing right now
@@ -147,6 +148,7 @@ testers = [
     find_container_traits_tester,
     deprecation_tester,
     test_xml_generators,
+    test_non_copyable_recursive
 ]
 
 if platform.system() != 'Windows':
