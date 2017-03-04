@@ -12,7 +12,9 @@ class linker_t(
         declarations.type_visitor_t,
         object):
 
-    def __init__(self, decls, types, access, membership, files):
+    def __init__(
+            self, decls, types, access, membership,
+            files, xml_generator_from_xml_file=None):
         declarations.decl_visitor_t.__init__(self)
         declarations.type_visitor_t.__init__(self)
         object.__init__(self)
@@ -23,6 +25,7 @@ class linker_t(
         self.__membership = membership
         self.__files = files
         self.__inst = None
+        self.__xml_generator_from_xml_file = xml_generator_from_xml_file
 
     @property
     def instance(self):
@@ -263,8 +266,8 @@ class linker_t(
         self.__link_compound_type()
 
     def visit_pointer(self):
-        gen = utils.xml_generator
-        if ('0.9' in gen or 'CastXML' in gen) and \
+        gen = self.__xml_generator_from_xml_file
+        if (gen.is_castxml or gen.is_gccxml_09 or gen.is_gccxml_09_buggy) and \
                 isinstance(self.__inst.base,
                            declarations.member_variable_type_t):
             original_inst = self.__inst

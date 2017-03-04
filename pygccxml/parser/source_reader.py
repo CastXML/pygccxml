@@ -448,7 +448,8 @@ class source_reader_t(object):
             types=types,
             access=scanner_.access(),
             membership=scanner_.members(),
-            files=files)
+            files=files,
+            xml_generator_from_xml_file=self.__xml_generator_from_xml_file)
         for type_ in list(types.values()):
             # I need this copy because internaly linker change types collection
             linker_.instance = type_
