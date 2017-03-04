@@ -6,6 +6,8 @@ Version 1.8.6
 
 1. Fix _HAS_TR1=0 definition for msvc9 (#72)
 
+2. Fix possible infinite recursion in ```find_noncopyable_vars()``` (#71)
+
 Version 1.8.5
 -------------
 
