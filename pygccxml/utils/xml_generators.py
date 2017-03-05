@@ -23,37 +23,42 @@ class xml_generators(object):
             logger (logging.Logger) : a logger for debugging output
             xml_output_version (str): the xml output version
         """
+
+        self.logger = logger
+        self._xml_generator_version, self._xml_output_version = \
+            self.__extract_versions(xml_output_version)
+        self._is_gccxml = "GCC-XML" in self._xml_generator_version
+        self._is_castxml = "CastXML" in self._xml_generator_version
+
+    def __extract_versions(self, xml_output_version):
         if xml_output_version is None or xml_output_version == "0.6":
             # It is not clear what gccxml 0.6 had as version (0.6 or None),
             # but both cases get caught here.
-            logger.debug("GCCXML version - 0.6")
+            self.logger.debug("GCCXML version - 0.6")
             xml_generator = self.__gccxml_06
             if xml_output_version is not None:
                 xml_output_version = float(xml_output_version)
         else:
             xml_output_version = float(xml_output_version)
             if xml_output_version <= 1.114:
-                logger.debug("GCCXML version - 0.7")
+                self.logger.debug("GCCXML version - 0.7")
                 xml_generator = self.__gccxml_07
             elif 1.115 <= xml_output_version <= 1.126:
-                logger.debug(
+                self.logger.debug(
                     "GCCXML version - 0.9 BUGGY ( %s )", xml_output_version)
                 xml_generator = self.__gccxml_09_buggy
             elif 1.127 <= xml_output_version <= 1.135:
-                logger.debug("GCCXML version - 0.9 ( %s )", xml_output_version)
+                self.logger.debug(
+                    "GCCXML version - 0.9 ( %s )", xml_output_version)
                 xml_generator = self.__gccxml_09
             else:
                 # CastXML starts with revision 1.136, but still writes the
                 # GCCXML tag and the 0.9 version number in the XML files
                 # for backward compatibility.
-                logger.debug(
+                self.logger.debug(
                     "CASTXML version - None ( %s )", xml_output_version)
                 xml_generator = self.__castxml
-
-        self._xml_generator_version = xml_generator
-        self._xml_output_version = xml_output_version
-        self._is_gccxml = "GCC-XML" in xml_generator
-        self._is_castxml = "CastXML" in xml_generator
+        return xml_generator, xml_output_version
 
     def get_string_repr(self):
         """
