@@ -182,24 +182,15 @@ class calldef_t(declaration.declaration_t):
 
         """
 
-        if "GCC" in utils.xml_generator:
-            items = [
-                self.arguments,
-                self.return_type,
-                self.has_extern,
-                self.does_throw,
-                self.exceptions.sort(),
-                self.demangled_name,
-                self.has_inline]
-        elif "CastXML" in utils.xml_generator:
-            # No demangled name
-            items = [
-                self.arguments,
-                self.return_type,
-                self.has_extern,
-                self.does_throw,
-                self.exceptions.sort(),
-                self.has_inline]
+        items = [
+            self.arguments,
+            self.return_type,
+            self.has_extern,
+            self.does_throw,
+            self.exceptions.sort(),
+            self.demangled_name,
+            self.has_inline]
+
         items.extend(self._get__cmp__call_items())
         return items
 
@@ -207,31 +198,18 @@ class calldef_t(declaration.declaration_t):
         if not declaration.declaration_t.__eq__(self, other):
             return False
 
-        if "GCC" in utils.xml_generator:
-            return self.return_type == other.return_type \
-                and self.arguments == other.arguments \
-                and self.has_extern == other.has_extern \
-                and self.does_throw == other.does_throw \
-                and self.exceptions.sort() == other.exceptions.sort() \
-                and self.demangled_name == other.demangled_name
-        elif "CastXML" in utils.xml_generator:
-            # Do not check for demangled name
-            return self.return_type == other.return_type \
-                and self.arguments == other.arguments \
-                and self.has_extern == other.has_extern \
-                and self.does_throw == other.does_throw \
-                and self.exceptions.sort() == other.exceptions.sort()
+        return self.return_type == other.return_type \
+            and self.arguments == other.arguments \
+            and self.has_extern == other.has_extern \
+            and self.does_throw == other.does_throw \
+            and self.exceptions.sort() == other.exceptions.sort() \
+            and self.demangled_name == other.demangled_name
 
     def __hash__(self):
-        if "GCC" in utils.xml_generator:
-            return (super(calldef_t, self).__hash__() ^
-                    hash(self.return_type) ^
-                    hash(self.demangled_name))
-        elif "CastXML" in utils.xml_generator:
-            # No demangled name with castxml. Use the normal name.
-            return (super(calldef_t, self).__hash__() ^
-                    hash(self.return_type) ^
-                    hash(self.name))
+        return (super(calldef_t, self).__hash__() ^
+                hash(self.return_type) ^
+                hash(self.demangled_name) ^
+                hash(self.name))
 
     @property
     def arguments(self):
@@ -351,9 +329,6 @@ class calldef_t(declaration.declaration_t):
 
         """returns function demangled name. It can help you to deal with
             function template instantiations"""
-
-        if "CastXML" in utils.xml_generator:
-            raise Exception("Demangled name is not available with CastXML.")
 
         if not self.demangled:
             self._demangled_name = ''

@@ -19,7 +19,6 @@ from . import declaration
 from . import templates
 from . import cpptypes
 from . import byte_info
-from .. import utils
 
 
 class ACCESS_TYPES(object):
@@ -210,10 +209,7 @@ class class_t(scopedef.scopedef_t, byte_info.byte_info):
 
     @property
     def use_demangled_as_name(self):
-        if "GCC" in utils.xml_generator:
-            return class_t.USE_DEMANGLED_AS_NAME
-        elif "CastXML" in utils.xml_generator:
-            return False
+        return class_t.USE_DEMANGLED_AS_NAME
 
     @use_demangled_as_name.setter
     def use_demangled_as_name(self, use_demangled_as_name):

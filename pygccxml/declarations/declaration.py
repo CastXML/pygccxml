@@ -11,7 +11,6 @@ base class.
 
 from . import declaration_utils
 from . import algorithms_cache
-from .. import utils
 
 import warnings
 
@@ -272,13 +271,7 @@ class declaration_t(object):
 
         """
 
-        if "GCC" in utils.xml_generator:
-            return self.get_mangled_name()
-        elif "CastXML" in utils.xml_generator:
-            raise Exception(
-                "Mangled name is not available with CastXML for all " +
-                "declarations: you can get the mangled name only " +
-                "for functions and variable declarations.")
+        return self._mangled
 
     @mangled.setter
     def mangled(self, mangled):
@@ -292,10 +285,7 @@ class declaration_t(object):
            @type: str
 
         """
-        if "GCC" in utils.xml_generator:
-            return self._demangled
-        elif "CastXML" in utils.xml_generator:
-            raise Exception("Demangled name is not available with CastXML.")
+        return self._demangled
 
     @demangled.setter
     def demangled(self, demangled):

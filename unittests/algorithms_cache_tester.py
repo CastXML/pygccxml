@@ -30,7 +30,7 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
 
         if self.xml_generator_from_xml_file.is_castxml:
-            self.assertRaises(Exception, lambda: cls.cache.demangled_name)
+            self.assertIsNone(cls.cache.demangled_name)
         elif self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(cls.cache.demangled_name == cls.name)
 
