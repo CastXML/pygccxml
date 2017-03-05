@@ -21,27 +21,34 @@ class xml_generators(object):
 
         Args:
             logger (logging.Logger) : a logger for debugging output
-            xml_output_version (float): the xml output version
+            xml_output_version (str): the xml output version
         """
-        if xml_output_version is None:
+        if xml_output_version is None or xml_output_version == "0.6":
+            # It is not clear what gccxml 0.6 had as version (0.6 or None),
+            # but both cases get caught here.
             logger.debug("GCCXML version - 0.6")
             xml_generator = self.__gccxml_06
-        elif xml_output_version <= 1.114:
-            logger.debug("GCCXML version - 0.7")
-            xml_generator = self.__gccxml_07
-        elif 1.115 <= xml_output_version <= 1.126:
-            logger.debug(
-                "GCCXML version - 0.9 BUGGY ( %s )", xml_output_version)
-            xml_generator = self.__gccxml_09_buggy
-        elif 1.127 <= xml_output_version <= 1.135:
-            logger.debug("GCCXML version - 0.9 ( %s )", xml_output_version)
-            xml_generator = self.__gccxml_09
+            if xml_output_version is not None:
+                xml_output_version = float(xml_output_version)
         else:
-            # CastXML starts with revision 1.136, but still writes the GCCXML
-            # tag and the 0.9 version number in the XML files for backward
-            # compatibility.
-            logger.debug("CASTXML version - None ( %s )", xml_output_version)
-            xml_generator = self.__castxml
+            xml_output_version = float(xml_output_version)
+            if xml_output_version <= 1.114:
+                logger.debug("GCCXML version - 0.7")
+                xml_generator = self.__gccxml_07
+            elif 1.115 <= xml_output_version <= 1.126:
+                logger.debug(
+                    "GCCXML version - 0.9 BUGGY ( %s )", xml_output_version)
+                xml_generator = self.__gccxml_09_buggy
+            elif 1.127 <= xml_output_version <= 1.135:
+                logger.debug("GCCXML version - 0.9 ( %s )", xml_output_version)
+                xml_generator = self.__gccxml_09
+            else:
+                # CastXML starts with revision 1.136, but still writes the
+                # GCCXML tag and the 0.9 version number in the XML files
+                # for backward compatibility.
+                logger.debug(
+                    "CASTXML version - None ( %s )", xml_output_version)
+                xml_generator = self.__castxml
 
         self._xml_generator_version = xml_generator
         self._xml_output_version = xml_output_version

@@ -667,7 +667,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         return operator
 
     def __read_version(self, attrs):
-        version = float(attrs.get(XML_AN_CVS_REVISION, 0.6))
+        version = attrs.get(XML_AN_CVS_REVISION)
         xml_generator = utils.xml_generators(utils.loggers.cxx_parser, version)
         utils.xml_generator = xml_generator.get_string_repr()
         utils.xml_output_version = version
