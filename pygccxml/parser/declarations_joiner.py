@@ -93,9 +93,9 @@ def _remove_second_class(ddhash, decls, class_t, class_declaration_t):
     for name, same_name_classes in ddhash[class_t].items():
         if not name:
             continue
-        if "GCC" in utils.xml_generator:
+        if same_name_classes[0].mangled:
             class_names.add(same_name_classes[0].mangled)
-        elif "CastXML" in utils.xml_generator:
+        else:
             class_names.add(same_name_classes[0].name)
 
     class_declarations = ddhash[class_declaration_t]
@@ -104,11 +104,10 @@ def _remove_second_class(ddhash, decls, class_t, class_declaration_t):
         if not name:
             continue
         for class_declaration in same_name_class_declarations:
-            if "GCC" in utils.xml_generator:
-                if class_declaration.mangled and \
-                                class_declaration.mangled in class_names:
+            if class_declaration.mangled is not None:
+                # gccxml
+                if class_declaration.mangled in class_names:
                     decls.remove(class_declaration)
-            elif "CastXML" in utils.xml_generator:
-                if class_declaration.name and \
-                                class_declaration.name in class_names:
+            elif class_declaration.name in class_names:
+                # castxml
                     decls.remove(class_declaration)

@@ -512,9 +512,11 @@ class project_reader_t(object):
     def _create_name_key(decl):
         # Not all declarations have a mangled name with castxml
         # we can only rely on the name
-        if "GCC" in utils.xml_generator:
+        if decl.mangled is not None:
+            # gccxml
             return decl.location.as_tuple(), decl.mangled
-        elif "CastXML" in utils.xml_generator:
+        else:
+            # castxml
             return decl.location.as_tuple(), decl.name
 
     def _relink_declarated_types(self, leaved_classes, declarated_types):
