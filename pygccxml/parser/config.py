@@ -52,7 +52,8 @@ class parser_configuration_t(object):
             xml_generator=None,
             keep_xml=False,
             compiler_path=None,
-            flags=None):
+            flags=None,
+            castxml_epic_version=None):
 
         object.__init__(self)
         self.__working_directory = working_directory
@@ -74,6 +75,8 @@ class parser_configuration_t(object):
         self.__compiler = compiler
 
         self.__xml_generator = xml_generator
+
+        self.__castxml_epic_version = castxml_epic_version
 
         self.__keep_xml = keep_xml
 
@@ -134,6 +137,20 @@ class parser_configuration_t(object):
             # Can be removed once gccxml support is dropped.
             xml_generator = "gccxml"
         self.__xml_generator = xml_generator
+
+    @property
+    def castxml_epic_version(self):
+        """
+        File format version used by castxml.
+        """
+        return self.__castxml_epic_version
+
+    @castxml_epic_version.setter
+    def castxml_epic_version(self, castxml_epic_version):
+        """
+        File format version used by castxml.
+        """
+        self.__castxml_epic_version = castxml_epic_version
 
     @property
     def keep_xml(self):
@@ -227,7 +244,8 @@ class xml_generator_configuration_t(parser_configuration_t):
             xml_generator=None,
             keep_xml=False,
             compiler_path=None,
-            flags=None):
+            flags=None,
+            castxml_epic_version=None):
 
         parser_configuration_t.__init__(
             self,
@@ -240,7 +258,8 @@ class xml_generator_configuration_t(parser_configuration_t):
             xml_generator=xml_generator,
             keep_xml=keep_xml,
             compiler_path=compiler_path,
-            flags=flags)
+            flags=flags,
+            castxml_epic_version=castxml_epic_version)
 
         if gccxml_path != '':
             self.__gccxml_path = gccxml_path
@@ -368,6 +387,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             cfg.compiler = value
         elif name == 'xml_generator':
             cfg.xml_generator = value
+        elif name == 'castxml_epic_version':
+            cfg.castxml_epic_version = value
         elif name == 'keep_xml':
             cfg.keep_xml = value
         elif name == 'cflags':

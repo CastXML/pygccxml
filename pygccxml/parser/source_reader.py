@@ -162,9 +162,14 @@ class source_reader_t(object):
             else:
                 cmd.append(self.__config.compiler_path)
 
-        # Tell castxml to output xml compatible files with gccxml
-        # so that we can parse them with pygccxml
-        cmd.append('--castxml-gccxml')
+        if self.__config.castxml_epic_version is not None:
+            # Tell castxml to output xml file with a specific epic version
+            cmd.append(
+                '--castxml-output=' + str(self.__config.castxml_epic_version))
+        else:
+            # Tell castxml to output xml files that are backward compatible
+            # with the format from gccxml
+            cmd.append('--castxml-gccxml')
 
         # Add symbols
         cmd = self.__add_symbols(cmd)
