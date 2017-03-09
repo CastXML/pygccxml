@@ -9,6 +9,7 @@ import logging
 from . import parser_test_case
 
 from pygccxml import utils
+from pygccxml import parser
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -23,6 +24,21 @@ class Test(parser_test_case.parser_test_case_t):
         self._test_impl(1.126, False, "is_gccxml_09_buggy")
         self._test_impl(1.127, False, "is_gccxml_09")
         self._test_impl(1.136, True, "is_castxml")
+
+    def test_castml_epic_version(self):
+        """
+        Test with the castxml_epic_version set to 1
+        """
+        return
+        # TODO: Test old and new versions of castxml
+        # TODO: Test if setting version to 1 on old castxml or gccxml
+        # raises an exception
+        self.config.castxml_epic_version = "1"
+        parser.parse_string("namespace ns {};", self.config)
+        gen = self.config.xml_generator_from_xml_file
+        self.assertFalse(gen.is_gccxml)
+        self.assertTrue(gen.is_castxml)
+        self.assertTrue(gen.is_castxml1)
 
     def _test_impl(self, version, is_castxml, expected_version):
         gen = utils.xml_generators(logging.getLogger("Test"), version)

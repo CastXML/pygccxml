@@ -12,22 +12,34 @@ class xml_generators(object):
     __gccxml_07 = "GCC-XML 0.7"
     __gccxml_09 = "GCC-XML 0.9"
     __gccxml_09_buggy = "GCC-XML 0.9 BUGGY"
-    __castxml = "CastXML"
+    __castxml = "CastXML (gccxml like)"
+    __castxml1 = "CastXML (format version 1)"
     __separator = "@"
 
-    def __init__(self, logger, xml_output_version):
+    def __init__(self, logger, gccxml_cvs_revision=None, castxml_format=None):
         """
         Create a new xml_generators object.
 
         Args:
             logger (logging.Logger) : a logger for debugging output
-            xml_output_version (str): the xml output version
+            gccxml_cvs_revision (str): the xml output version
+            castxml_format (str): the xml output version
         """
 
-        self._xml_generator_version, self._xml_output_version = \
-            self.__extract_versions(logger, xml_output_version)
-        self._is_gccxml = "GCC-XML" in self._xml_generator_version
-        self._is_castxml = "CastXML" in self._xml_generator_version
+        self._is_castxml1 = False
+        self._is_castxml = False
+        self._is_gccxml = False
+
+        if castxml_format is not None:
+            self._xml_generator_version = self.__castxml
+            self._xml_output_version = castxml_format
+            self._is_castxml = True
+            self._is_castxml1 = True
+        else:
+            self._xml_generator_version, self._xml_output_version = \
+                self.__extract_versions(logger, gccxml_cvs_revision)
+            self._is_gccxml = "GCC-XML" in self._xml_generator_version
+            self._is_castxml = "CastXML" in self._xml_generator_version
 
     def __extract_versions(self, logger, xml_output_version):
         if xml_output_version is None or xml_output_version == "0.6":
@@ -90,6 +102,16 @@ class xml_generators(object):
             bool: is castxml being used?
         """
         return self._is_castxml
+
+    @property
+    def is_castxml1(self):
+        """
+        Is the current xml generator castxml (with output format version 1)?
+
+        Returns:
+            bool: is castxml (with output format version 1) being used?
+        """
+        return self._is_castxml1
 
     @property
     def is_gccxml_06(self):

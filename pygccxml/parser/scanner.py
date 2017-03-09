@@ -25,6 +25,7 @@ XML_AN_BITS = "bits"
 XML_AN_CONST = "const"
 XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
+XML_AN_CASTXML_FORMAT = "format"
 XML_AN_DEFAULT = "default"
 XML_AN_DEMANGLED = "demangled"
 XML_AN_EXPLICIT = "explicit"
@@ -67,6 +68,7 @@ XML_NN_FUNCTION_TYPE = "FunctionType"
 XML_NN_FUNDAMENTAL_TYPE = "FundamentalType"
 XML_NN_FREE_OPERATOR = "OperatorFunction"
 XML_NN_GCC_XML = "GCC_XML"
+XML_NN_CASTXML = "CastXML"
 XML_NN_MEMBER_OPERATOR = "OperatorMethod"
 XML_NN_METHOD = "Method"
 XML_NN_METHOD_TYPE = "MethodType"
@@ -117,6 +119,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             XML_NN_MEMBER_OPERATOR: self.__read_member_operator,
             XML_NN_METHOD: self.__read_method,
             XML_NN_GCC_XML: self.__read_version,
+            XML_NN_CASTXML: self.__read_version,
             XML_NN_ELLIPSIS: self.__read_ellipsis}
         self.deep_declarations = [
             XML_NN_CASTING_OPERATOR,
@@ -667,10 +670,14 @@ class scanner_t(xml.sax.handler.ContentHandler):
         return operator
 
     def __read_version(self, attrs):
-        version = attrs.get(XML_AN_CVS_REVISION)
-        xml_generator = utils.xml_generators(utils.loggers.cxx_parser, version)
+        castxml_format = attrs.get(XML_AN_CASTXML_FORMAT)
+        gccxml_cvs_revision = None
+        if castxml_format is None:
+            gccxml_cvs_revision = attrs.get(XML_AN_CVS_REVISION)
+        xml_generator = utils.xml_generators(
+            utils.loggers.cxx_parser, gccxml_cvs_revision, castxml_format)
         utils.xml_generator = xml_generator.get_string_repr()
-        utils.xml_output_version = version
+        utils.xml_output_version = gccxml_cvs_revision
         self.__xml_generator_from_xml_file = xml_generator
 
     def __update_unnamed_class(self, decl, attrs):
