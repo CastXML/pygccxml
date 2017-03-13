@@ -12,6 +12,7 @@ from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
+    mock_logger = logging.getLogger("Test")
 
     def test_old_xml_generators(self):
         """
@@ -31,7 +32,7 @@ class Test(parser_test_case.parser_test_case_t):
         Test with the castxml epic version set to 1
         """
         gen = utils.xml_generators(
-            logging.getLogger("Test"), castxml_format="1.1.0")
+            self.mock_logger, castxml_format="1.1.0")
         self.assertFalse(gen.is_gccxml)
         self.assertTrue(gen.is_castxml)
         self.assertTrue(gen.is_castxml1)
@@ -50,7 +51,7 @@ class Test(parser_test_case.parser_test_case_t):
                 attribute is set to True.
         """
         gen = utils.xml_generators(
-            logging.getLogger("Test"), gccxml_cvs_revision)
+            self.mock_logger, gccxml_cvs_revision)
         if is_castxml:
             self.assertFalse(gen.is_gccxml)
             self.assertTrue(gen.is_castxml)
