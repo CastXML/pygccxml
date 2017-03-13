@@ -9,47 +9,55 @@ import logging
 from . import parser_test_case
 
 from pygccxml import utils
-from pygccxml import parser
 
 
 class Test(parser_test_case.parser_test_case_t):
 
-    def test_xml_generators(self):
+    def test_old_xml_generators(self):
         """
         Tests for the xml_generators class.
+
+        This is for gccxml and for castxml using the gccxml xml file format
         """
         self._test_impl(None, False, "is_gccxml_06")
-        self._test_impl(1.114, False, "is_gccxml_07")
-        self._test_impl(1.115, False, "is_gccxml_09_buggy")
-        self._test_impl(1.126, False, "is_gccxml_09_buggy")
-        self._test_impl(1.127, False, "is_gccxml_09")
-        self._test_impl(1.136, True, "is_castxml")
+        self._test_impl("1.114", False, "is_gccxml_07")
+        self._test_impl("1.115", False, "is_gccxml_09_buggy")
+        self._test_impl("1.126", False, "is_gccxml_09_buggy")
+        self._test_impl("1.127", False, "is_gccxml_09")
+        self._test_impl("1.136", True, "is_castxml")
 
-    def test_castml_epic_version(self):
+    def test_casxtml_epic_version_1(self):
         """
-        Test with the castxml_epic_version set to 1
+        Test with the castxml epic version set to 1
         """
-        return
-        # TODO: Test old and new versions of castxml
-        # TODO: Test if setting version to 1 on old castxml or gccxml
-        # raises an exception
-        self.config.castxml_epic_version = "1"
-        parser.parse_string("namespace ns {};", self.config)
-        gen = self.config.xml_generator_from_xml_file
+        gen = utils.xml_generators(
+            logging.getLogger("Test"), castxml_format="1.1.0")
         self.assertFalse(gen.is_gccxml)
         self.assertTrue(gen.is_castxml)
         self.assertTrue(gen.is_castxml1)
 
-    def _test_impl(self, version, is_castxml, expected_version):
-        gen = utils.xml_generators(logging.getLogger("Test"), version)
+    def _test_impl(
+            self, gccxml_cvs_revision, is_castxml,
+            expected_gccxml_cvs_revision):
+        """
+        Implementation detail for the test
+
+        Args:
+            gccxml_cvs_revision (str|None) : a known cvs revision
+            is_castxml (bool): check for castxml
+            expected_gccxml_cvs_revision (str): will be used to check if the
+                attribute is set to True.
+        """
+        gen = utils.xml_generators(
+            logging.getLogger("Test"), gccxml_cvs_revision)
         if is_castxml:
             self.assertFalse(gen.is_gccxml)
             self.assertTrue(gen.is_castxml)
         else:
             self.assertTrue(gen.is_gccxml)
             self.assertFalse(gen.is_castxml)
-        self.assertTrue(getattr(gen, expected_version))
-        self.assertEqual(gen.xml_output_version, version)
+        self.assertTrue(getattr(gen, expected_gccxml_cvs_revision))
+        self.assertEqual(str(gen.xml_output_version), gccxml_cvs_revision)
 
 
 def create_suite():
