@@ -19,7 +19,7 @@ class Test(parser_test_case.parser_test_case_t):
 
         This is for gccxml and for castxml using the gccxml xml file format
         """
-        self._test_impl(None, False, "is_gccxml_06")
+        self._test_impl("0.6", False, "is_gccxml_06")
         self._test_impl("1.114", False, "is_gccxml_07")
         self._test_impl("1.115", False, "is_gccxml_09_buggy")
         self._test_impl("1.126", False, "is_gccxml_09_buggy")

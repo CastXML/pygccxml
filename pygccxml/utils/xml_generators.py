@@ -47,8 +47,7 @@ class xml_generators(object):
             # but both cases get caught here.
             logger.debug("GCCXML version - 0.6")
             xml_generator = self.__gccxml_06
-            if xml_output_version is not None:
-                xml_output_version = float(xml_output_version)
+            xml_output_version = 0.6
         else:
             xml_output_version = float(xml_output_version)
             if xml_output_version <= 1.114:
