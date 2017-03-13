@@ -35,6 +35,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertFalse(gen.is_gccxml)
         self.assertTrue(gen.is_castxml)
         self.assertTrue(gen.is_castxml1)
+        self.assertEqual(str(gen.xml_output_version), "1.1.0")
 
     def _test_impl(
             self, gccxml_cvs_revision, is_castxml,
