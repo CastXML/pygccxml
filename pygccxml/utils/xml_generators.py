@@ -22,9 +22,13 @@ class xml_generators(object):
 
         Args:
             logger (logging.Logger) : a logger for debugging output
-            gccxml_cvs_revision (str): the xml output version
-            castxml_format (str): the xml output version
+            gccxml_cvs_revision (str|None): the xml output version
+            castxml_format (str|None): the xml output version
         """
+
+        if castxml_format is not None and gccxml_cvs_revision is not None:
+            raise RuntimeError("Setting both gccxml_cvs_revision and"
+                               "castxml_format is not allowed!")
 
         self._is_castxml1 = False
         self._is_castxml = False
@@ -35,11 +39,14 @@ class xml_generators(object):
             self._xml_output_version = castxml_format
             self._is_castxml = True
             self._is_castxml1 = True
-        else:
+        elif gccxml_cvs_revision is not None:
             self._xml_generator_version, self._xml_output_version = \
                 self.__extract_versions(logger, gccxml_cvs_revision)
             self._is_gccxml = "GCC-XML" in self._xml_generator_version
             self._is_castxml = "CastXML" in self._xml_generator_version
+        else:
+            raise RuntimeError("Either castxml_format or gccxml_cvs_revision"
+                               "need to be defined!")
 
     def __extract_versions(self, logger, xml_output_version):
         if xml_output_version is None or xml_output_version == "0.6":
