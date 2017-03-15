@@ -76,6 +76,7 @@ XML_NN_NAMESPACE = "Namespace"
 XML_NN_OFFSET_TYPE = "OffsetType"
 XML_NN_POINTER_TYPE = "PointerType"
 XML_NN_REFERENCE_TYPE = "ReferenceType"
+XML_NN_ELABORATED_TYPE = "ElaboratedType"
 XML_NN_ROOT = "GCC_XML"
 XML_NN_STRUCT = "Struct"
 XML_NN_TYPEDEF = "Typedef"
@@ -100,6 +101,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             XML_NN_CV_QUALIFIED_TYPE: self.__read_cv_qualified_type,
             XML_NN_POINTER_TYPE: self.__read_pointer_type,
             XML_NN_REFERENCE_TYPE: self.__read_reference_type,
+            XML_NN_ELABORATED_TYPE: self.__read_elaborated_type,
             XML_NN_FUNDAMENTAL_TYPE: self.__read_fundamental_type,
             XML_NN_ARGUMENT: self.__read_argument,
             XML_NN_FUNCTION_TYPE: self.__read_function_type,
@@ -466,6 +468,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
     @staticmethod
     def __read_reference_type(attrs):
         return declarations.reference_t(attrs[XML_AN_TYPE])
+
+    @staticmethod
+    def __read_elaborated_type(attrs):
+        return declarations.elaborated_t(attrs[XML_AN_TYPE])
 
     @staticmethod
     def __read_fundamental_type(attrs):

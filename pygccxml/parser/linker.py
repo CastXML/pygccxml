@@ -280,6 +280,9 @@ class linker_t(
     def visit_reference(self):
         self.__link_compound_type()
 
+    def visit_elaborated(self):
+        self.__link_compound_type()
+
     def visit_array(self):
         self.__link_compound_type()
 
