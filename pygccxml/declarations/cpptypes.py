@@ -586,6 +586,20 @@ class reference_t(compound_t):
         return reference_t(self.base.clone())
 
 
+class elaborated_t(compound_t):
+
+    """represents `elaborated` type"""
+
+    def __init__(self, base):
+        compound_t.__init__(self, base)
+
+    def build_decl_string(self, with_defaults=True):
+        return self.base.build_decl_string(with_defaults)
+
+    def _clone_impl(self):
+        return reference_t(self.base.clone())
+
+
 class array_t(compound_t):
 
     """represents C++ array type"""
