@@ -3,12 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
-namespace ns {
+namespace elaborated_t {
 
-    namespace variable_t {
-        struct Foo1 {};
+    struct Foo1 {};
+
+    namespace yes {
         struct Foo1 x1 = {};
-        struct Foo2 {};
-        Foo2 x2 = {};
+    }
+
+    namespace no {
+        Foo1 x2 = {};
     }
 }

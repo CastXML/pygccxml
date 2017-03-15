@@ -26,15 +26,15 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(decls)
 
         if self.config.xml_generator_from_xml_file.is_castxml1:
-            ns = global_ns.namespace(name="::ns::variable_t")
-            for decl in ns.declarations:
-                if not isinstance(decl, declarations.class_t):
-                    if decl.name == "x1":
-                        self.assertTrue(isinstance(
-                            decl.decl_type, declarations.elaborated_t))
-                    if decl.name == "x2":
-                        self.assertTrue(isinstance(
-                            decl.decl_type, declarations.declarated_t))
+            yes = global_ns.namespace(name="::elaborated_t::yes")
+            for decl in yes.declarations:
+                self.assertTrue(isinstance(
+                    decl.decl_type, declarations.elaborated_t))
+
+            no = global_ns.namespace(name="::elaborated_t::no")
+            for decl in no.declarations:
+                self.assertFalse(isinstance(
+                    decl.decl_type, declarations.elaborated_t))
 
 
 def create_suite():
