@@ -597,7 +597,7 @@ class elaborated_t(compound_t):
         return self.base.build_decl_string(with_defaults)
 
     def _clone_impl(self):
-        return reference_t(self.base.clone())
+        return elaborated_t(self.base.clone())
 
 
 class array_t(compound_t):
