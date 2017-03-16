@@ -17,9 +17,9 @@ class Test(parser_test_case.parser_test_case_t):
         self.header = "test_elaborated_types.hpp"
         self.config.castxml_epic_version = 1
 
-    def test_elaborated_types(self):
+    def test_is_elaborated_type(self):
         """
-        Minimal test for elaborated types.
+        Test for the is_elaborated function
         """
 
         decls = parser.parse([self.header], self.config)
