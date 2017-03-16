@@ -371,6 +371,16 @@ def is_same(type1, type2):
     return nake_type1 == nake_type2
 
 
+def is_elaborated(type_):
+    """returns True, if type represents C++ elaborated type, False otherwise"""
+    nake_type = remove_alias(type_)
+    if isinstance(nake_type, cpptypes.elaborated_t):
+        return True
+    elif isinstance(nake_type, cpptypes.const_t):
+        return is_elaborated(nake_type.base)
+    return False
+
+
 def is_volatile(type_):
     """returns True, if type represents C++ volatile type, False otherwise"""
     nake_type = remove_alias(type_)

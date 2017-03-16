@@ -139,6 +139,7 @@ from .type_traits import is_std_wstring
 from .type_traits import is_std_ostream
 from .type_traits import is_std_wostream
 from .type_traits import is_calldef_pointer
+from .type_traits import is_elaborated
 
 from .type_traits import array_size
 from .type_traits import array_item_type

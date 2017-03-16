@@ -28,13 +28,13 @@ class Test(parser_test_case.parser_test_case_t):
         if self.config.xml_generator_from_xml_file.is_castxml1:
             yes = global_ns.namespace(name="::elaborated_t::yes")
             for decl in yes.declarations:
-                self.assertTrue(isinstance(
-                    decl.decl_type, declarations.elaborated_t))
+                self.assertTrue(
+                    declarations.is_elaborated(decl.decl_type))
 
             no = global_ns.namespace(name="::elaborated_t::no")
             for decl in no.declarations:
-                self.assertFalse(isinstance(
-                    decl.decl_type, declarations.elaborated_t))
+                self.assertFalse(
+                    declarations.is_elaborated(decl.decl_type))
 
 
 def create_suite():
