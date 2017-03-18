@@ -189,10 +189,10 @@ before_install:
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml-18032017" ]]; then
-    if [ ! -e ${HOME}/castxml ]; then
-      wget -q -O - https://sourceforge.net/projects/pygccxml-castxml-binaries/files/castxml-linux-18032017.tar.gz | tar zxf - -C ${HOME};
-    fi;
-  fi
+      if [ ! -e ${HOME}/castxml ]; then
+        wget -q -O - https://sourceforge.net/projects/pygccxml-castxml-binaries/files/castxml-linux-18032017.tar.gz | tar zxf - -C ${HOME};
+      fi;
+    fi
 
   # Add the castxml binary to the path
   - if [[ $XML_GENERATOR == "castxml" ]]; then
