@@ -15,7 +15,6 @@ class Test(parser_test_case.parser_test_case_t):
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = "test_elaborated_types.hpp"
-        self.config.castxml_epic_version = 1
 
     def test_is_elaborated_type(self):
         """
@@ -24,6 +23,9 @@ class Test(parser_test_case.parser_test_case_t):
 
         decls = parser.parse([self.header], self.config)
         global_ns = declarations.get_global_namespace(decls)
+
+        if self.config.castxml_epic_version != 1:
+            return
 
         if self.config.xml_generator_from_xml_file.is_castxml1:
             yes = global_ns.namespace(name="::elaborated_t::yes")

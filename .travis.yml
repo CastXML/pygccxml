@@ -149,6 +149,21 @@ matrix:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+        - XML_GENERATOR="castxml-18032017"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+        - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+        - XML_GENERATOR="castxml-18032017"
+        - CASTXML_EPIC="1"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
 
 
 before_install:
@@ -172,6 +187,12 @@ before_install:
         wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461590/castxml-linux.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml-18032017" ]]; then
+    if [ ! -e ${HOME}/castxml ]; then
+      wget -q -O - https://sourceforge.net/projects/pygccxml-castxml-binaries/files/castxml-linux-18032017.tar.gz | tar zxf - -C ${HOME};
+    fi;
+  fi
 
   # Add the castxml binary to the path
   - if [[ $XML_GENERATOR == "castxml" ]]; then
@@ -200,6 +221,11 @@ before_install:
   # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
      mv unittests/configs/travis_gcc5.cfg unittests/xml_generator.cfg;
+    fi
+
+    # Patch the c++ version to test on the fly
+  - if [[ $CASTXML_EPIC == "1" ]]; then
+      mv unittests/configs/castxml_epic1.cfg unittests/xml_generator.cfg;
     fi
 
   - pip install coveralls
