@@ -156,7 +156,7 @@ matrix:
       env:
         - XML_GENERATOR="castxml-18032017"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
-        - os: linux
+    - os: linux
       dist: trusty
       sudo: required
       python: 3.5
