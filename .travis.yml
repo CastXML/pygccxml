@@ -195,7 +195,7 @@ before_install:
     fi
 
   # Add the castxml binary to the path
-  - if [[ $XML_GENERATOR == "castxml" ]]; then
+  - if [[ $XML_GENERATOR == "castxml" ]] || [[ $XML_GENERATOR == "castxml-18032017" ]]; then
       export PATH=$PATH:~/castxml/bin/;
     fi
 
