@@ -226,21 +226,21 @@ script:
 
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
   - if [ $WINDOWS == 0 ]; then
-      touch ${SITECUSTOMIZELIBPATH};
-      printf "import coverage\ncoverage.process_startup()\n" > ${SITECUSTOMIZELIBPATH};
+      touch ${SITECUSTOMIZELIBPATH} || travis_terminate 1;
+      printf "import coverage\ncoverage.process_startup()\n" > ${SITECUSTOMIZELIBPATH} || travis_terminate 1;
     fi
 
   # Install pygccxml, run the tests with coverage and
   # combine multiple .coverage files
   # We have multiple coverage files because some scripts run in a subprocess
   - if [ $WINDOWS == 0 ]; then
-      python setup.py install;
-      coverage run -m unittests.test_all;
-      coverage combine;
+      python setup.py install || travis_terminate 1;
+      coverage run -m unittests.test_all || travis_terminate 1;
+      coverage combine || travis_terminate 1;
     fi
   # For the "empty" windows build, fetch the coverage results from appveyor
   - if [ $WINDOWS == 1 ]; then
-      appveyor-artifacts -m --owner-name=iMichka --verbose download;
+      appveyor-artifacts -m --owner-name=iMichka --verbose download || travis_terminate 1;
     fi
 
 after_success:
