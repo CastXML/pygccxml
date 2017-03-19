@@ -4,7 +4,10 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
+import sys
+
 import autoconfig
+
 from pygccxml import parser
 from pygccxml import utils
 
@@ -16,6 +19,15 @@ def test_re_opening_cache_file():
     This test is run by file_cache_tester.py in a subprocess.
 
     """
+
+    if "__pypy__" in sys.builtin_module_names:
+        # This test is broken on travis with pypy3.3-5.2-alpha1
+        # It is annoying but only the alpha version is working without
+        # segfaulting, and it is quite old now. Also; this test is due for
+        # removal because the utils.xml_generator mechanism is being
+        # deprecated. So this test can just be skipped until it is completely
+        # removed
+        return
 
     data = autoconfig.data_directory
 
