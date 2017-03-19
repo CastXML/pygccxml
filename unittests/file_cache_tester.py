@@ -100,11 +100,13 @@ class Test(parser_test_case.parser_test_case_t):
 
         p = subprocess.Popen(
             [sys.executable, "unittests/reopen_cache_tester.py"],
-            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             env=env)
-        print(p.stdout.read())
         p.wait()
-        p.stdout.close()
+        error = p.stderr.read().decode("utf-8").rstrip()
+        p.stderr.close()
+        if p.returncode != 0:
+            raise Exception(error)
 
 
 def create_suite():
