@@ -225,7 +225,7 @@ class tester_32_t(tester_impl_t):
             tester_32_t.global_ns = reader.read_file(
                 "patcher.hpp")[0].top_parent
             tester_32_t.xml_generator_from_xml_file = \
-                self.config.xml_generator_from_xml_file
+                reader.xml_generator_from_xml_file
         self.global_ns = tester_32_t.global_ns
         self.xml_generator_from_xml_file = \
             tester_32_t.xml_generator_from_xml_file
