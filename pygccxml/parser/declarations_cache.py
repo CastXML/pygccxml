@@ -189,7 +189,7 @@ class file_cache_t(cache_base_t):
                     "The %s cache file is not compatible with this version " +
                     "of pygccxml. Please regenerate it.") % name
                 raise RuntimeError(msg)
-            if utils.xml_generator is None:
+            if not utils.xml_generator:
                 # Set the xml_generator to the one read in the cache file
                 utils.xml_generator = xml_generator
             elif utils.xml_generator != xml_generator:
