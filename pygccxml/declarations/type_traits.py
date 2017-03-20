@@ -359,6 +359,8 @@ def remove_declarated(type_):
     If `type_` is not :class:`declarated_t`, it will be returned as is
     """
     type_ = remove_alias(type_)
+    if isinstance(type_, cpptypes.elaborated_t):
+        type_ = type_.base
     if isinstance(type_, cpptypes.declarated_t):
         type_ = type_.declaration
     return type_
@@ -383,6 +385,21 @@ def is_elaborated(type_):
     elif isinstance(nake_type, cpptypes.const_t):
         return is_elaborated(nake_type.base)
     return False
+
+
+def remove_elaborated(type_):
+    """removes type-declaration class-binder :class:`elaborated_t` from
+    the `type_`
+
+    If `type_` is not :class:`elaborated_t`, it will be returned as is
+    """
+    nake_type = remove_alias(type_)
+    if not is_elaborated(nake_type):
+        return type_
+    else:
+        if isinstance(type_, cpptypes.elaborated_t):
+            type_ = type_.base
+    return type_
 
 
 def is_volatile(type_):
