@@ -253,3 +253,30 @@ def fix_calldef_decls(decls, enums, cxx_std):
         default_arg_patcher(decl)
         if isinstance(decl, declarations.casting_operator_t):
             _casting_oper_patcher_(decl)
+
+
+def update_unnamed_class(decl):
+    """
+    Called for typedef declarations. If CastXML is being used, then type
+    definitions with an unnamed class/struct are split across two nodes in
+    the XML tree. For example,
+
+        typedef struct {} cls;
+
+    produces
+
+        <Struct id="_7" name="" context="_1" .../>
+        <Typedef id="_8" name="cls" type="_7" context="_1" .../>
+
+    So we'll look at the type of the typedef and try to update an
+    unnamed class/struct with the matching name, to keep the same behaviour
+    as with gccxml.
+    """
+
+    referent = decl.decl_type
+    if not isinstance(referent, declarations.declarated_t):
+        return
+    referent = referent.declaration
+    if referent.name or not isinstance(referent, declarations.class_t):
+        return
+    referent.name = decl.name

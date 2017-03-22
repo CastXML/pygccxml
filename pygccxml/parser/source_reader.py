@@ -464,6 +464,11 @@ class source_reader_t(object):
             declarations.apply_visitor(linker_, decl)
         declarations_joiner.bind_aliases(iter(decls.values()))
 
+        if self.__xml_generator_from_xml_file.is_castxml:
+            for decl in decls.values():
+                if isinstance(decl, declarations.typedef_t):
+                    patcher.update_unnamed_class(decl)
+
         # some times gccxml report typedefs defined in no namespace
         # it happens for example in next situation
         # template< typename X>
