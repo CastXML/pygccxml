@@ -464,19 +464,14 @@ class source_reader_t(object):
             declarations.apply_visitor(linker_, decl)
         declarations_joiner.bind_aliases(iter(decls.values()))
 
+        # Patch the declarations tree
         if self.__xml_generator_from_xml_file.is_castxml:
             for decl in decls.values():
                 if isinstance(decl, declarations.typedef_t):
                     patcher.update_unnamed_class(decl)
+        patcher.fix_calldef_decls(
+            scanner_.calldefs(), scanner_.enums(), self.__cxx_std)
 
-        # some times gccxml report typedefs defined in no namespace
-        # it happens for example in next situation
-        # template< typename X>
-        # void ddd(){ typedef typename X::Y YY;}
-        # if I will fail on this bug next time, the right way to fix it may be
-        # different
-        patcher.fix_calldef_decls(scanner_.calldefs(), scanner_.enums(),
-                                  self.__cxx_std)
         decls = [inst for inst in iter(decls.values()) if self.__check(inst)]
         return decls, list(files.values())
 

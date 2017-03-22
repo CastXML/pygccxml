@@ -247,6 +247,14 @@ _casting_oper_patcher_ = casting_operator_patcher_t()
 
 
 def fix_calldef_decls(decls, enums, cxx_std):
+    """
+    some times gccxml report typedefs defined in no namespace
+    it happens for example in next situation
+    template< typename X>
+    void ddd(){ typedef typename X::Y YY;}
+    if I will fail on this bug next time, the right way to fix it may be
+    different
+    """
     default_arg_patcher = default_argument_patcher_t(enums, cxx_std)
     # decls should be flat list of all declarations, you want to apply patch on
     for decl in decls:
