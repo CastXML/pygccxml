@@ -265,9 +265,10 @@ def fix_calldef_decls(decls, enums, cxx_std):
 
 def update_unnamed_class(decls):
     """
-    Called for typedef declarations. If CastXML is being used, then type
-    definitions with an unnamed class/struct are split across two nodes in
-    the XML tree. For example,
+    Adds name to class_t declarations.
+
+    If CastXML is being used, the type definitions with an unnamed
+    class/struct are split across two nodes in the XML tree. For example,
 
         typedef struct {} cls;
 
@@ -276,9 +277,15 @@ def update_unnamed_class(decls):
         <Struct id="_7" name="" context="_1" .../>
         <Typedef id="_8" name="cls" type="_7" context="_1" .../>
 
-    So we'll look at the type of the typedef and try to update an
-    unnamed class/struct with the matching name, to keep the same behaviour
-    as with gccxml.
+    For each typedef, we look at which class it refers to, and update the name
+    accordingly. This helps the matcher classes finding these declarations.
+    This was the behaviour with gccxml too, so this is important for
+    backward compatibility.
+
+    Args:
+        decls (list[declaration_t]): a list of declarations to be patched.
+    Returns:
+        None
     """
 
     for decl in decls:
