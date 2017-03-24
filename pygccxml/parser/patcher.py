@@ -263,7 +263,7 @@ def fix_calldef_decls(decls, enums, cxx_std):
             _casting_oper_patcher_(decl)
 
 
-def update_unnamed_class(decl):
+def update_unnamed_class(decls):
     """
     Called for typedef declarations. If CastXML is being used, then type
     definitions with an unnamed class/struct are split across two nodes in
@@ -281,10 +281,12 @@ def update_unnamed_class(decl):
     as with gccxml.
     """
 
-    referent = decl.decl_type
-    if not isinstance(referent, declarations.declarated_t):
-        return
-    referent = referent.declaration
-    if referent.name or not isinstance(referent, declarations.class_t):
-        return
-    referent.name = decl.name
+    for decl in decls:
+        if isinstance(decl, declarations.typedef_t):
+            referent = decl.decl_type
+            if not isinstance(referent, declarations.declarated_t):
+                continue
+            referent = referent.declaration
+            if referent.name or not isinstance(referent, declarations.class_t):
+                continue
+            referent.name = decl.name

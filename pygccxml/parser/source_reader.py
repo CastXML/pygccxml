@@ -466,9 +466,7 @@ class source_reader_t(object):
 
         # Patch the declarations tree
         if self.__xml_generator_from_xml_file.is_castxml:
-            for decl in decls.values():
-                if isinstance(decl, declarations.typedef_t):
-                    patcher.update_unnamed_class(decl)
+            patcher.update_unnamed_class(decls.values())
         patcher.fix_calldef_decls(
             scanner_.calldefs(), scanner_.enums(), self.__cxx_std)
 
