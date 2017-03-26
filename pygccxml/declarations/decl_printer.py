@@ -16,7 +16,6 @@ from . import decl_visitor
 from . import variable_t
 from . import calldef_t
 from . import type_traits_classes
-from .. import utils
 
 
 def _stdout_writer(x):

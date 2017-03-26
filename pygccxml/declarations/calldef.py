@@ -23,7 +23,6 @@ from . import class_declaration
 from . import call_invocation
 from . import type_traits
 from . import calldef_types
-from .. import utils
 
 
 # First level in hierarchy of calldef
