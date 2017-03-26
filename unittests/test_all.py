@@ -79,6 +79,7 @@ from . import test_config
 from . import deprecation_tester
 from . import test_xml_generators
 from . import test_non_copyable_recursive
+from . import test_castxml_wrong_epic
 
 testers = [
     # , demangled_tester # failing right now
@@ -148,7 +149,8 @@ testers = [
     find_container_traits_tester,
     deprecation_tester,
     test_xml_generators,
-    test_non_copyable_recursive
+    test_non_copyable_recursive,
+    test_castxml_wrong_epic
 ]
 
 if platform.system() != 'Windows':
