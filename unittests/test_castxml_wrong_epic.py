@@ -17,6 +17,11 @@ class Test(parser_test_case.parser_test_case_t):
         Test using a forbidden value for the castxml epic version.
 
         """
+
+        if not self.config.castxml_epic_version >= 1:
+            # Run this test only with the new castxml version.
+            return
+
         self.config.castxml_epic_version = 2
         self.assertRaises(
             RuntimeError, lambda: parser.parse_string("", self.config))
