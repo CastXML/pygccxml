@@ -7,6 +7,7 @@ namespace elaborated_t {
 
     class Foo1 {};
     struct Foo2 {};
+    enum Foo3 {e1};
 
     namespace yes {
 
@@ -57,6 +58,24 @@ namespace elaborated_t {
         typedef volatile struct Foo2 *ss3ptr;
         typedef volatile const struct Foo2 *ss4ptr;
         typedef const volatile struct Foo2 *ss5ptr;
+
+        enum Foo3 e1;
+        //const enum Foo3 e2; (not valid c++)
+        volatile enum Foo3 e3;
+        //volatile const enum Foo3 e4; (not valid c++)
+        //const volatile enum Foo3 e5; (not valid c++)
+
+        enum Foo3 *e1ptr;
+        const enum Foo3 *e2ptr;
+        volatile enum Foo3 *e3ptr;
+        volatile const enum Foo3 *e4ptr;
+        const volatile enum Foo3 *e5ptr;
+
+        typedef enum Foo3 *ee1ptr;
+        typedef const enum Foo3 *ee2ptr;
+        typedef volatile enum Foo3 *ee3ptr;
+        typedef volatile const enum Foo3 *ee4ptr;
+        typedef const volatile enum Foo3 *ee5ptr;
 
     }
 
@@ -109,6 +128,24 @@ namespace elaborated_t {
         typedef volatile Foo2 *ss3ptr;
         typedef volatile const Foo2 *ss4ptr;
         typedef const volatile Foo2 *ss5ptr;
+
+        Foo3 e1;
+        //const enum Foo3 e2; (not valid c++)
+        volatile Foo3 e3;
+        //volatile const Foo3 e4; (not valid c++)
+        //const volatile Foo3 e5; (not valid c++)
+
+        Foo3 *e1ptr;
+        const Foo3 *e2ptr;
+        volatile Foo3 *e3ptr;
+        volatile const Foo3 *e4ptr;
+        const volatile Foo3 *e5ptr;
+
+        typedef Foo3 *ee1ptr;
+        typedef const Foo3 *ee2ptr;
+        typedef volatile Foo3 *ee3ptr;
+        typedef volatile const Foo3 *ee4ptr;
+        typedef const volatile Foo3 *ee5ptr;
 
     }
 }
