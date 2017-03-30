@@ -18,8 +18,7 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        if self.config.castxml_epic_version is not None and \
-                not self.config.castxml_epic_version >= 1:
+        if self.config.castxml_epic_version != 1:
             # Run this test only with the new castxml version.
             return
 
