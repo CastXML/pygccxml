@@ -8,6 +8,7 @@ namespace elaborated_t {
     class FooClass {};
     struct FooStruct {};
     enum FooEnum {e1};
+    union FooUnion {};
 
     namespace yes {
 
@@ -76,6 +77,24 @@ namespace elaborated_t {
         typedef volatile enum FooEnum *ee3ptr;
         typedef volatile const enum FooEnum *ee4ptr;
         typedef const volatile enum FooEnum *ee5ptr;
+
+        union FooUnion u1;
+        const union FooUnion u2;
+        volatile union FooUnion u3;
+        volatile const union FooUnion e4;
+        const volatile union FooUnion e5;
+
+        union FooUnion *u1ptr;
+        const union FooUnion *u2ptr;
+        volatile union FooUnion *u3ptr;
+        volatile const union FooUnion *u4ptr;
+        const volatile union FooUnion *u5ptr;
+
+        typedef union FooUnion *uu1ptr;
+        typedef const union FooUnion *uu2ptr;
+        typedef volatile union FooUnion *uu3ptr;
+        typedef volatile const union FooUnion *uu4ptr;
+        typedef const volatile union FooUnion *uu5ptr;
 
     }
 
@@ -146,6 +165,24 @@ namespace elaborated_t {
         typedef volatile FooEnum *ee3ptr;
         typedef volatile const FooEnum *ee4ptr;
         typedef const volatile FooEnum *ee5ptr;
+
+        FooUnion u1;
+        const FooUnion u2;
+        volatile FooUnion u3;
+        volatile const FooUnion e4;
+        const volatile FooUnion e5;
+
+        FooUnion *u1ptr;
+        const FooUnion *u2ptr;
+        volatile FooUnion *u3ptr;
+        volatile const FooUnion *u4ptr;
+        const volatile FooUnion *u5ptr;
+
+        typedef FooUnion *uu1ptr;
+        typedef const FooUnion *uu2ptr;
+        typedef volatile FooUnion *uu3ptr;
+        typedef volatile const FooUnion *uu4ptr;
+        typedef const volatile FooUnion *uu5ptr;
 
     }
 }
