@@ -214,6 +214,12 @@ namespace elaborated_t {
         void testClass3ptr(volatile FooClass *no, volatile class FooClass *yes);
         void testClass4ptr(const volatile FooClass *no, const volatile class FooClass *yes);
         void testClass5ptr(volatile const FooClass *no, volatile const class FooClass *yes);
+
+        void testClass1ref(FooClass &no, class FooClass &yes);
+        void testClass2ref(const FooClass &no, const class FooClass &yes);
+        void testClass3ref(volatile FooClass &no, volatile class FooClass &yes);
+        void testClass4ref(const volatile FooClass &no, const volatile class FooClass &yes);
+        void testClass5ref(volatile const FooClass &no, volatile const class FooClass &yes);
     }
 
     namespace arguments_struct {
@@ -228,6 +234,12 @@ namespace elaborated_t {
         void testStruct3ptr(volatile FooStruct *no, volatile struct FooStruct *yes);
         void testStruct4ptr(const volatile FooStruct *no, const volatile struct FooStruct *yes);
         void testStruct5ptr(volatile const FooStruct *no, volatile const struct FooStruct *yes);
+
+        void testStruct1ref(FooStruct &no, struct FooStruct &yes);
+        void testStruct2ref(const FooStruct &no, const struct FooStruct &yes);
+        void testStruct3ref(volatile FooStruct &no, volatile struct FooStruct &yes);
+        void testStruct4ref(const volatile FooStruct &no, const volatile struct FooStruct &yes);
+        void testStruct5ref(volatile const FooStruct &no, volatile const struct FooStruct &yes);
     }
 
     namespace arguments_enum {
@@ -242,6 +254,12 @@ namespace elaborated_t {
         void testEnum3ptr(volatile FooEnum *no, volatile enum FooEnum *yes);
         void testEnum4ptr(const volatile FooEnum *no, const volatile enum FooEnum *yes);
         void testEnum5ptr(volatile const FooEnum *no, volatile const enum FooEnum *yes);
+
+        void testEnum1ref(FooEnum &no, enum FooEnum &yes);
+        void testEnum2ref(const FooEnum &no, const enum FooEnum &yes);
+        void testEnum3ref(volatile FooEnum &no, volatile enum FooEnum &yes);
+        void testEnum4ref(const volatile FooEnum &no, const volatile enum FooEnum &yes);
+        void testEnum5ref(volatile const FooEnum &no, volatile const enum FooEnum &yes);
     }
 
     namespace arguments_union {
@@ -256,5 +274,11 @@ namespace elaborated_t {
         void testUnion3ptr(volatile FooUnion *no, volatile union FooUnion *yes);
         void testUnion4ptr(const volatile FooUnion *no, const volatile union FooUnion *yes);
         void testUnion5ptr(volatile const FooUnion *no, volatile const union FooUnion *yes);
+
+        void testUnion1ref(FooUnion &no, union FooUnion &yes);
+        void testUnion2ref(const FooUnion &no, const union FooUnion &yes);
+        void testUnion3ref(volatile FooUnion &no, volatile union FooUnion &yes);
+        void testUnion4ref(const volatile FooUnion &no, const volatile union FooUnion &yes);
+        void testUnion5ref(volatile const FooUnion &no, volatile const union FooUnion &yes);
     }
 }

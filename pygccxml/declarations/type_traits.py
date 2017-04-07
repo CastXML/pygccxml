@@ -378,6 +378,8 @@ def is_elaborated(type_):
     nake_type = remove_alias(type_)
     if isinstance(nake_type, cpptypes.elaborated_t):
         return True
+    elif isinstance(nake_type, cpptypes.reference_t):
+        return is_elaborated(nake_type.base)
     elif isinstance(nake_type, cpptypes.pointer_t):
         return is_elaborated(nake_type.base)
     elif isinstance(nake_type, cpptypes.volatile_t):
