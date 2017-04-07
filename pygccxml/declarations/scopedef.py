@@ -246,7 +246,6 @@ class scopedef_t(declaration.declaration_t):
         """implementation details"""
         types = []
         bases = list(decl.__class__.__bases__)
-        visited = set()
         if 'pygccxml' in decl.__class__.__module__:
             types.append(decl.__class__)
         while bases:
@@ -256,8 +255,6 @@ class scopedef_t(declaration.declaration_t):
             if base is byte_info.byte_info:
                 continue
             if base is elaborated_info.elaborated_info:
-                continue
-            if base in visited:
                 continue
             if 'pygccxml' not in base.__module__:
                 continue
