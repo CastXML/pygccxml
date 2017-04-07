@@ -29,15 +29,10 @@ class Test(parser_test_case.parser_test_case_t):
             return
 
         if self.config.xml_generator_from_xml_file.is_castxml1:
-            self._test_impl_yes(global_ns, "class")
-            self._test_impl_yes(global_ns, "struct")
-            self._test_impl_yes(global_ns, "enum")
-            self._test_impl_yes(global_ns, "union")
-
-            self._test_impl_no(global_ns, "class")
-            self._test_impl_no(global_ns, "struct")
-            self._test_impl_no(global_ns, "enum")
-            self._test_impl_no(global_ns, "union")
+            for specifier in ["class", "struct", "enum", "union"]:
+                self._test_impl_yes(global_ns, specifier)
+                self._test_impl_no(global_ns, specifier)
+                self._test_arg_impl(global_ns, specifier)
 
     def _test_impl_yes(self, global_ns, specifier):
         yes = global_ns.namespace(name="::elaborated_t::yes_" + specifier)
@@ -52,6 +47,19 @@ class Test(parser_test_case.parser_test_case_t):
             self.assertFalse(
                 declarations.is_elaborated(decl.decl_type))
             self.assertNotIn(specifier, str(decl.decl_type))
+
+    def _test_arg_impl(self, global_ns, specifier):
+        decls = global_ns.namespace(
+            name="::elaborated_t::arguments_" + specifier)
+        for decl in decls.declarations:
+            # The first argument is not elaborated
+            no = decl.arguments[0].decl_type
+            # The second argument is always elaborated
+            yes = decl.arguments[1].decl_type
+            self.assertTrue(declarations.is_elaborated(yes))
+            self.assertFalse(declarations.is_elaborated(no))
+            self.assertIn(specifier, str(yes))
+            self.assertNotIn(specifier, str(no))
 
 
 def create_suite():
