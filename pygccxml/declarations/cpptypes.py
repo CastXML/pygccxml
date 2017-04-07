@@ -594,7 +594,11 @@ class elaborated_t(compound_t):
         compound_t.__init__(self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return self.base.build_decl_string(with_defaults)
+        if hasattr(self.base.declaration, "elaborated_type_specifier"):
+            suffix = " " + self.base.declaration.elaborated_type_specifier
+        else:
+            suffix = ""
+        return self.base.build_decl_string(with_defaults) + suffix
 
     def _clone_impl(self):
         return elaborated_t(self.base.clone())

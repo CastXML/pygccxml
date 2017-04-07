@@ -19,6 +19,7 @@ from . import declaration
 from . import templates
 from . import cpptypes
 from . import byte_info
+from . import elaborated_info
 
 
 class ACCESS_TYPES(object):
@@ -178,7 +179,10 @@ class class_declaration_t(declaration.declaration_t):
         return get_partial_name(self.name)
 
 
-class class_t(scopedef.scopedef_t, byte_info.byte_info):
+class class_t(
+        scopedef.scopedef_t,
+        byte_info.byte_info,
+        elaborated_info.elaborated_info):
 
     """describes class definition"""
 
@@ -193,6 +197,7 @@ class class_t(scopedef.scopedef_t, byte_info.byte_info):
         """creates class that describes C++ class definition"""
         scopedef.scopedef_t.__init__(self, name)
         byte_info.byte_info.__init__(self)
+        elaborated_info.elaborated_info.__init__(self, class_type)
         if class_type:
             assert class_type in CLASS_TYPES.ALL
         self._class_type = class_type
