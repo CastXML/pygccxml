@@ -13,6 +13,7 @@ from . import templates
 from . import declaration
 from . import mdecl_wrapper
 from . import byte_info
+from . import elaborated_info
 from . import runtime_errors
 from .. import utils
 
@@ -253,6 +254,8 @@ class scopedef_t(declaration.declaration_t):
             if base is declaration.declaration_t:
                 continue
             if base is byte_info.byte_info:
+                continue
+            if base is elaborated_info.elaborated_info:
                 continue
             if base in visited:
                 continue
