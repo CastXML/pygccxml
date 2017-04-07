@@ -29,15 +29,29 @@ class Test(parser_test_case.parser_test_case_t):
             return
 
         if self.config.xml_generator_from_xml_file.is_castxml1:
-            yes = global_ns.namespace(name="::elaborated_t::yes")
-            for decl in yes.declarations:
-                self.assertTrue(
-                    declarations.is_elaborated(decl.decl_type))
+            self._test_impl_yes(global_ns, "class")
+            self._test_impl_yes(global_ns, "struct")
+            self._test_impl_yes(global_ns, "enum")
+            self._test_impl_yes(global_ns, "union")
 
-            no = global_ns.namespace(name="::elaborated_t::no")
-            for decl in no.declarations:
-                self.assertFalse(
-                    declarations.is_elaborated(decl.decl_type))
+            self._test_impl_no(global_ns, "class")
+            self._test_impl_no(global_ns, "struct")
+            self._test_impl_no(global_ns, "enum")
+            self._test_impl_no(global_ns, "union")
+
+    def _test_impl_yes(self, global_ns, specifier):
+        yes = global_ns.namespace(name="::elaborated_t::yes_" + specifier)
+        for decl in yes.declarations:
+            self.assertTrue(
+                declarations.is_elaborated(decl.decl_type))
+            self.assertIn(specifier, str(decl.decl_type))
+
+    def _test_impl_no(self, global_ns, specifier):
+        no = global_ns.namespace(name="::elaborated_t::no_" + specifier)
+        for decl in no.declarations:
+            self.assertFalse(
+                declarations.is_elaborated(decl.decl_type))
+            self.assertNotIn(specifier, str(decl.decl_type))
 
 
 def create_suite():

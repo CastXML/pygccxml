@@ -10,7 +10,7 @@ namespace elaborated_t {
     enum FooEnum {e1};
     union FooUnion {};
 
-    namespace yes {
+    namespace yes_class {
 
         class FooClass c1 = {};
         const class FooClass c2 = {};
@@ -35,6 +35,9 @@ namespace elaborated_t {
         typedef volatile class FooClass *cc3ptr;
         typedef volatile const class FooClass *cc4ptr;
         typedef const volatile class FooClass *cc5ptr;
+        };
+
+    namespace yes_struct {
 
         struct FooStruct s1 = {};
         const struct FooStruct s2 = {};
@@ -59,6 +62,9 @@ namespace elaborated_t {
         typedef volatile struct FooStruct *ss3ptr;
         typedef volatile const struct FooStruct *ss4ptr;
         typedef const volatile struct FooStruct *ss5ptr;
+        };
+
+    namespace yes_enum {
 
         enum FooEnum e1;
         //const enum FooEnum e2; (not valid c++)
@@ -77,6 +83,9 @@ namespace elaborated_t {
         typedef volatile enum FooEnum *ee3ptr;
         typedef volatile const enum FooEnum *ee4ptr;
         typedef const volatile enum FooEnum *ee5ptr;
+        };
+
+    namespace yes_union {
 
         union FooUnion u1;
         const union FooUnion u2;
@@ -95,10 +104,9 @@ namespace elaborated_t {
         typedef volatile union FooUnion *uu3ptr;
         typedef volatile const union FooUnion *uu4ptr;
         typedef const volatile union FooUnion *uu5ptr;
+        };
 
-    }
-
-    namespace no {
+    namespace no_class {
 
         FooClass c1 = {};
         const FooClass c2 = {};
@@ -123,6 +131,9 @@ namespace elaborated_t {
         typedef volatile FooClass *cc3ptr;
         typedef volatile const FooClass *cc4ptr;
         typedef const volatile FooClass *cc5ptr;
+        };
+
+    namespace no_struct {
 
         FooStruct s1 = {};
         const FooStruct s2 = {};
@@ -147,6 +158,9 @@ namespace elaborated_t {
         typedef volatile FooStruct *ss3ptr;
         typedef volatile const FooStruct *ss4ptr;
         typedef const volatile FooStruct *ss5ptr;
+        };
+
+    namespace no_enum {
 
         FooEnum e1;
         //const enum FooEnum e2; (not valid c++)
@@ -165,6 +179,9 @@ namespace elaborated_t {
         typedef volatile FooEnum *ee3ptr;
         typedef volatile const FooEnum *ee4ptr;
         typedef const volatile FooEnum *ee5ptr;
+        };
+
+    namespace no_union {
 
         FooUnion u1;
         const FooUnion u2;
@@ -183,6 +200,5 @@ namespace elaborated_t {
         typedef volatile FooUnion *uu3ptr;
         typedef volatile const FooUnion *uu4ptr;
         typedef const volatile FooUnion *uu5ptr;
-
-    }
+        };
 }
