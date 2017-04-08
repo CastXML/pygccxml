@@ -22,13 +22,12 @@ class Test(parser_test_case.parser_test_case_t):
         Test for the is_elaborated function
         """
 
-        decls = parser.parse([self.header], self.config)
-        global_ns = declarations.get_global_namespace(decls)
-
         if self.config.castxml_epic_version != 1:
             return
 
         if self.config.xml_generator_from_xml_file.is_castxml1:
+            decls = parser.parse([self.header], self.config)
+            global_ns = declarations.get_global_namespace(decls)
             for specifier in ["class", "struct", "enum", "union"]:
                 self._test_impl_yes(global_ns, specifier)
                 self._test_impl_no(global_ns, specifier)
