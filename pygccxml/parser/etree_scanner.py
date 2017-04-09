@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 # keep py2exe happy
-import xml.etree.ElementTree
+import xml.etree.ElementTree  # pylint: disable=W0611
 
 import xml.etree.cElementTree as ElementTree
 
