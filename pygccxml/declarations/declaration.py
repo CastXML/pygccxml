@@ -366,6 +366,4 @@ class declaration_t(object):
         Return list of all types and declarations the declaration depends on
 
         """
-
-        print(self)
         raise NotImplementedError()
