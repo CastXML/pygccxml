@@ -214,15 +214,13 @@ class declaration_t(object):
            @type: declaration_t
 
         """
-
         parent = self.parent
-        me = self
-        while True:
-            if not parent:
-                return me
+        while parent is not None:
+            if parent.parent is None:
+                return parent
             else:
-                me = parent
-                parent = me.parent
+                parent = parent.parent
+        return self
 
     @property
     def location(self):
