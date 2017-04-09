@@ -164,7 +164,9 @@ class source_reader_t(object):
 
         if self.__config.castxml_epic_version is not None:
             if self.__config.castxml_epic_version != 1:
-                raise RuntimeError("The CastXML epic version can only be 1")
+                raise RuntimeError(
+                    "The CastXML epic version can only be 1, "
+                    "but it was " + str(self.__config.castxml_epic_version))
             # Tell castxml to output xml file with a specific epic version
             cmd.append(
                 '--castxml-output=' + str(self.__config.castxml_epic_version))
