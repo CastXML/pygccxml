@@ -9,10 +9,10 @@ base class.
 
 """
 
+import warnings
+
 from . import declaration_utils
 from . import algorithms_cache
-
-import warnings
 
 
 class declaration_t(object):
