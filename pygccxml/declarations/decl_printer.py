@@ -171,7 +171,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                 print_mangled = False
                 if self.__inst.mangled and \
                     (isinstance(self.__inst, variable_t) or
-                        isinstance(self.__inst, calldef_t)):
+                     isinstance(self.__inst, calldef_t)):
                     print_mangled = True
 
                 if print_mangled:

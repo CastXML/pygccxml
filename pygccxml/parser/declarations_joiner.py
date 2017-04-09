@@ -109,4 +109,4 @@ def _remove_second_class(ddhash, decls, class_t, class_declaration_t):
                     decls.remove(class_declaration)
             elif class_declaration.name in class_names:
                 # castxml
-                    decls.remove(class_declaration)
+                decls.remove(class_declaration)
