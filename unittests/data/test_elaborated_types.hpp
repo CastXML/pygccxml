@@ -88,10 +88,10 @@ namespace elaborated_t {
     namespace yes_union {
 
         union FooUnion u1;
-        const union FooUnion u2;
+        const union FooUnion u2 = {};
         volatile union FooUnion u3;
-        volatile const union FooUnion e4;
-        const volatile union FooUnion e5;
+        volatile const union FooUnion e4 = {};
+        const volatile union FooUnion e5 = {};
 
         union FooUnion *u1ptr;
         const union FooUnion *u2ptr;
@@ -184,10 +184,10 @@ namespace elaborated_t {
     namespace no_union {
 
         FooUnion u1;
-        const FooUnion u2;
+        const FooUnion u2 = {};
         volatile FooUnion u3;
-        volatile const FooUnion e4;
-        const volatile FooUnion e5;
+        volatile const FooUnion e4 = {};
+        const volatile FooUnion e5 = {};
 
         FooUnion *u1ptr;
         const FooUnion *u2ptr;
