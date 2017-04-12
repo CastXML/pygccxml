@@ -75,7 +75,7 @@ class xml_generators(object):
                 logger.debug(
                     "CASTXML version - None ( %s )", xml_output_version)
                 xml_generator = self.__castxml
-        return xml_generator, xml_output_version
+        return xml_generator, str(xml_output_version)
 
     def get_string_repr(self):
         """
@@ -165,6 +165,6 @@ class xml_generators(object):
         The current xml output version for the parsed file.
 
         Returns:
-            float: the xml output version
+            str: the xml output version
         """
         return self._xml_output_version

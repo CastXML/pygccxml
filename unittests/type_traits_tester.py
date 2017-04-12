@@ -64,12 +64,13 @@ class Test(parser_test_case.parser_test_case_t):
                     decl.name.startswith('test_'):
                 continue
 
-            if generator.is_castxml and \
-                    generator.xml_output_version < 1.138 and \
-                    decl.name in ['const_item', 'const_container']:
-                # Skip this test to workaround CastXML bug.
-                # See https://github.com/CastXML/CastXML/issues/55
-                continue
+            if generator.is_castxml1 or (
+                    generator.is_castxml and
+                    float(generator.xml_output_version) < 1.138):
+                if decl.name in ['const_item', 'const_container']:
+                    # Skip this test to workaround CastXML bug.
+                    # See https://github.com/CastXML/CastXML/issues/55
+                    continue
 
             self.assertFalse(
                 controller(decl),
@@ -379,7 +380,9 @@ class missing_decls_tester_t(unittest.TestCase):
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
         generator = config.xml_generator_from_xml_file
-        if generator.is_castxml or generator.xml_output_version >= 1.138:
+        if generator.is_castxml1 or (
+                generator.is_castxml and
+                float(generator.xml_output_version) >= 1.138):
             # Prior to version 1.138, CastXML would incorrectly create a
             # default constructor definition.
             # See https://github.com/CastXML/CastXML/issues/55

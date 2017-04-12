@@ -36,7 +36,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertFalse(gen.is_gccxml)
         self.assertTrue(gen.is_castxml)
         self.assertTrue(gen.is_castxml1)
-        self.assertEqual(str(gen.xml_output_version), "1.1.0")
+        self.assertEqual(gen.xml_output_version, "1.1.0")
 
         self.assertRaises(RuntimeError, lambda: utils.xml_generators(
             self.mock_logger, "1.136", "1.1.0"))
@@ -65,7 +65,7 @@ class Test(parser_test_case.parser_test_case_t):
             self.assertTrue(gen.is_gccxml)
             self.assertFalse(gen.is_castxml)
         self.assertTrue(getattr(gen, expected_gccxml_cvs_revision))
-        self.assertEqual(str(gen.xml_output_version), gccxml_cvs_revision)
+        self.assertEqual(gen.xml_output_version, gccxml_cvs_revision)
 
 
 def create_suite():
