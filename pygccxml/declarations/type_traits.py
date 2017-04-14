@@ -36,14 +36,12 @@ def __remove_alias(type_):
 
 def remove_alias(type_):
     """returns type without typedefs"""
-    type_ref = None
     if isinstance(type_, cpptypes.type_t):
         type_ref = type_
     elif isinstance(type_, typedef.typedef_t):
         type_ref = type_.decl_type
     else:
-        pass  # not a valid input, just return it
-    if not type_ref:
+        # Not a valid input, just return it
         return type_
     if type_ref.cache.remove_alias:
         return type_ref.cache.remove_alias
