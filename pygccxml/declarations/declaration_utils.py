@@ -10,12 +10,14 @@ def declaration_path(decl, with_defaults=None):
     """
     Returns a list of parent declarations names.
 
-    :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:`declaration_t`
+    Args:
+        decl (declaration_t): declaration for which declaration path
+                              should be calculated.
 
-    :rtype: [names], where first item contains top parent name and last item
-             contains the `decl` name
-
+    Returns:
+        list[(str | basestring)]: list of names, where first item is the top
+                                  parent name and last item the inputted
+                                  declaration name.
     """
 
     if with_defaults is not None:
@@ -49,12 +51,14 @@ def partial_declaration_path(decl):
     Returns a list of parent declarations names without template arguments that
     have default value.
 
-    :param decl: declaration for which declaration path should be calculated
-    :type decl: :class:`declaration_t`
+    Args:
+        decl (declaration_t): declaration for which the partial declaration
+                              path should be calculated.
 
-    :rtype: [names], where first item contains top parent name and last item
-             contains the `decl` name
-
+    Returns:
+        list[(str | basestring)]: list of names, where first item is the top
+                                  parent name and last item the inputted
+                                  declaration name.
     """
 
     # TODO:
@@ -96,9 +100,13 @@ def full_name(decl, with_defaults=True):
 
     If `decl` belongs to anonymous namespace or class, the function will return
     C++ illegal qualified name.
-    :param decl: :class:`declaration_t`
-    :type decl: :class:`declaration_t`
-    :rtype: full name of declarations.
+
+    Args:
+        decl (declaration_t): declaration for which the full qualified name
+                              should be calculated.
+
+    Returns:
+        list[(str | basestring)]: full name of the declaration.
 
     """
 
@@ -131,10 +139,11 @@ def get_named_parent(decl):
     """
     Returns a reference to a named parent declaration.
 
-    :param decl: the child declaration
-    :type decl: :class:`declaration_t`
+    Args:
+        decl (declaration_t): the child declaration
 
-    :rtype: reference to :class:`declaration_t` or None if not found
+    Returns:
+        declaration_t: the declaration or None if not found.
 
     """
 
