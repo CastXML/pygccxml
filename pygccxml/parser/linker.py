@@ -153,6 +153,9 @@ class linker_t(
             base_decl.derived.append(
                 declarations.hierarchy_info_t(self.__inst, access))
 
+    def visit_ellipsis(self):
+        pass
+
     def visit_enumeration(self):
         pass
 

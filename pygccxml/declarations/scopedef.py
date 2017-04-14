@@ -1078,6 +1078,9 @@ class scopedef_t(declaration.declaration_t):
         """
         return self.decls(name_or_function)
 
+    def i_depend_on_them(self, recursive=True):
+        raise NotImplementedError()
+
 
 def make_flatten(decl_or_decls):
     """

@@ -141,6 +141,9 @@ class operator_t(calldef.calldef_t):
     def __init__(self, *args, **keywords):
         calldef.calldef_t.__init__(self, *args, **keywords)
 
+    def _get__cmp__call_items(self):
+        raise NotImplementedError()
+
     @property
     def symbol(self):
         """operator's symbol. For example: operator+, symbol is equal to '+'"""
