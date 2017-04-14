@@ -193,11 +193,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         self.assertEqual(default_val, val)
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_fun("clone_tree")
-            default_values = []
-            if self.xml_generator_from_xml_file.is_gccxml_09 or \
-                    self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-                default_values = []
-            else:
+            if not self.xml_generator_from_xml_file.is_gccxml_09 and \
+                    not self.xml_generator_from_xml_file.is_gccxml_09_buggy:
                 default_values = [
                     ("vector<std::basic_string<char, std::char_traits<char>," +
                         " std::allocator<char> >,std::allocator" +
