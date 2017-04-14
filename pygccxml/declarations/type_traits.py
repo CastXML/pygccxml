@@ -24,7 +24,15 @@ from .. import utils
 
 
 def __remove_alias(type_):
-    """implementation details"""
+    """
+    Implementation detail.
+
+    Args:
+        type_ (type_t): type
+
+    Returns:
+        type_t: the type associated to the inputted type
+    """
     if isinstance(type_, cpptypes.declarated_t) and \
             isinstance(type_.declaration, typedef.typedef_t):
         return __remove_alias(type_.declaration.decl_type)
@@ -35,7 +43,15 @@ def __remove_alias(type_):
 
 
 def remove_alias(type_):
-    """returns type without typedefs"""
+    """
+    Returns `type_t` without typedef
+    
+    Args:
+        type_ (type_t | declaration_t): type or declaration
+
+    Returns:
+        type_t: the type associated to the inputted declaration
+    """
     if isinstance(type_, cpptypes.type_t):
         type_ref = type_
     elif isinstance(type_, typedef.typedef_t):
@@ -51,8 +67,9 @@ def remove_alias(type_):
 
 
 def decompose_type(tp):
-    """implementation details"""
-    # implementation of this function is important
+    """
+    Implementation detail
+    """
     if isinstance(tp, cpptypes.compound_t):
         return [tp] + decompose_type(tp.base)
     elif isinstance(tp, typedef.typedef_t):
