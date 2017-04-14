@@ -29,6 +29,16 @@ class Test(parser_test_case.parser_test_case_t):
             _ = scopedef.multiple_declarations_found_t
             self._check(w)
 
+    def test_declaration_path(self):
+        """
+        Test the deprecated with_defaults parameter
+
+        """
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            declarations.declaration_path(None, True)
+            self._check(w)
+
     @staticmethod
     def _check(w):
         assert len(w) == 1

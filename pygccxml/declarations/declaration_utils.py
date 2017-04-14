@@ -3,8 +3,10 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import warnings
 
-def declaration_path(decl, with_defaults=True):
+
+def declaration_path(decl, with_defaults=None):
     """
     Returns a list of parent declarations names.
 
@@ -15,6 +17,11 @@ def declaration_path(decl, with_defaults=True):
              contains the `decl` name
 
     """
+
+    if with_defaults is not None:
+        # Deprecated since 1.9.0, will be removed in 2.0.0
+        warnings.warn(
+            "The with_defaults parameter is deprecated.\n", DeprecationWarning)
 
     if not decl:
         return []
