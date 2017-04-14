@@ -62,7 +62,7 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
+        if src_reader.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 'char[4] const' == arr_type.decl_string,
                 arr_type.decl_string)
@@ -81,7 +81,7 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
+        if src_reader.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 'char[4] volatile' == arr_type.decl_string,
                 arr_type.decl_string)
@@ -100,7 +100,7 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
+        if src_reader.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 'char[4] const volatile' == arr_type.decl_string,
                 arr_type.decl_string)
