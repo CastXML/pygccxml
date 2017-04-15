@@ -374,6 +374,8 @@ def remove_declarated(type_):
     If `type_` is not :class:`declarated_t`, it will be returned as is
     """
     type_ = remove_alias(type_)
+    if isinstance(type_, cpptypes.elaborated_t):
+        type_ = type_.base
     if isinstance(type_, cpptypes.declarated_t):
         type_ = type_.declaration
     return type_
@@ -384,6 +386,37 @@ def is_same(type1, type2):
     nake_type1 = remove_declarated(type1)
     nake_type2 = remove_declarated(type2)
     return nake_type1 == nake_type2
+
+
+def is_elaborated(type_):
+    """returns True, if type represents C++ elaborated type, False otherwise"""
+    nake_type = remove_alias(type_)
+    if isinstance(nake_type, cpptypes.elaborated_t):
+        return True
+    elif isinstance(nake_type, cpptypes.reference_t):
+        return is_elaborated(nake_type.base)
+    elif isinstance(nake_type, cpptypes.pointer_t):
+        return is_elaborated(nake_type.base)
+    elif isinstance(nake_type, cpptypes.volatile_t):
+        return is_elaborated(nake_type.base)
+    elif isinstance(nake_type, cpptypes.const_t):
+        return is_elaborated(nake_type.base)
+    return False
+
+
+def remove_elaborated(type_):
+    """removes type-declaration class-binder :class:`elaborated_t` from
+    the `type_`
+
+    If `type_` is not :class:`elaborated_t`, it will be returned as is
+    """
+    nake_type = remove_alias(type_)
+    if not is_elaborated(nake_type):
+        return type_
+    else:
+        if isinstance(type_, cpptypes.elaborated_t):
+            type_ = type_.base
+    return type_
 
 
 def is_volatile(type_):

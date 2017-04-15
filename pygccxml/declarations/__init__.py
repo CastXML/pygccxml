@@ -59,6 +59,7 @@ from .cpptypes import volatile_t
 from .cpptypes import const_t
 from .cpptypes import pointer_t
 from .cpptypes import reference_t
+from .cpptypes import elaborated_t
 from .cpptypes import restrict_t
 from .cpptypes import array_t
 from .cpptypes import calldef_type_t
@@ -138,6 +139,7 @@ from .type_traits import is_std_wstring
 from .type_traits import is_std_ostream
 from .type_traits import is_std_wostream
 from .type_traits import is_calldef_pointer
+from .type_traits import is_elaborated
 
 from .type_traits import array_size
 from .type_traits import array_item_type

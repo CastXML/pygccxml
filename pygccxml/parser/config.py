@@ -388,7 +388,7 @@ def load_xml_generator_configuration(configuration, **defaults):
         elif name == 'xml_generator':
             cfg.xml_generator = value
         elif name == 'castxml_epic_version':
-            cfg.castxml_epic_version = value
+            cfg.castxml_epic_version = int(value)
         elif name == 'keep_xml':
             cfg.keep_xml = value
         elif name == 'cflags':

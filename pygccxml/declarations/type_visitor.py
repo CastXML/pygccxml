@@ -121,6 +121,9 @@ class type_visitor_t(object):
     def visit_reference(self):
         raise NotImplementedError()
 
+    def visit_elaborated(self):
+        raise NotImplementedError()
+
     def visit_array(self):
         raise NotImplementedError()
 

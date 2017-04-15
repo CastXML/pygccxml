@@ -85,7 +85,8 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         else:
             generator = self.xml_generator_from_xml_file
             if generator.is_castxml:
-                if generator.xml_output_version >= 1.137:
+                if generator.is_castxml1 or \
+                        float(generator.xml_output_version) >= 1.137:
                     val = "(unsigned long long)-1"
                 else:
                     val = "(ull)-1"
@@ -106,7 +107,9 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         st1 = ns1.class_("st1")
         fun1 = st1.member_function("fun1")
         if self.xml_generator_from_xml_file.is_castxml:
-            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
+            output_verion = self.xml_generator_from_xml_file.xml_output_version
+            if self.xml_generator_from_xml_file.is_castxml1 or \
+                    float(output_verion) >= 1.137:
                 val1 = "ns1::DEFAULT_1"
                 val2 = "ns1::st1::DEFAULT_2"
             else:
@@ -129,7 +132,9 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
             fun2.arguments[0].default_value,
             "::DEFAULT_1")
         if self.xml_generator_from_xml_file.is_castxml:
-            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
+            output_verion = self.xml_generator_from_xml_file.xml_output_version
+            if self.xml_generator_from_xml_file.is_castxml1 or \
+                    float(output_verion) >= 1.137:
                 val1 = "ns1::DEFAULT_1"
                 val2 = "ns1::st1::DEFAULT_2"
             else:
@@ -159,7 +164,9 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
         fix_function_call = self.global_ns.free_fun("fix_function_call")
         default_val = fix_function_call.arguments[0].default_value
         if self.xml_generator_from_xml_file.is_castxml:
-            if self.xml_generator_from_xml_file.xml_output_version >= 1.137:
+            output_verion = self.xml_generator_from_xml_file.xml_output_version
+            if self.xml_generator_from_xml_file.is_castxml1 or \
+                    float(output_verion) >= 1.137:
                 val = "function_call::calc(1, 2, 3)"
             else:
                 val = "calc(1, 2, 3)"

@@ -10,9 +10,13 @@ defines class, that describes C++ `enum`
 import copy
 from . import declaration
 from . import byte_info
+from . import elaborated_info
 
 
-class enumeration_t(declaration.declaration_t, byte_info.byte_info):
+class enumeration_t(
+        declaration.declaration_t,
+        byte_info.byte_info,
+        elaborated_info.elaborated_info):
 
     """
     describes C++ `enum`
@@ -33,6 +37,7 @@ class enumeration_t(declaration.declaration_t, byte_info.byte_info):
         """
         declaration.declaration_t.__init__(self, name)
         byte_info.byte_info.__init__(self)
+        elaborated_info.elaborated_info.__init__(self, "enum")
 
         # A list of tuples (valname(str), valnum(int)). The order of the list
         # should be the same as the order in the C/C++ source file.

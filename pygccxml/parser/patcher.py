@@ -282,6 +282,10 @@ def update_unnamed_class(decls):
     This was the behaviour with gccxml too, so this is important for
     backward compatibility.
 
+    If the castxml epic version 1 is used, there is even an elaborated type
+    declaration between the typedef and the struct/class, that also needs to be
+    taken care of.
+
     Args:
         decls (list[declaration_t]): a list of declarations to be patched.
     Returns:
@@ -291,6 +295,8 @@ def update_unnamed_class(decls):
     for decl in decls:
         if isinstance(decl, declarations.typedef_t):
             referent = decl.decl_type
+            if isinstance(referent, declarations.elaborated_t):
+                referent = referent.base
             if not isinstance(referent, declarations.declarated_t):
                 continue
             referent = referent.declaration

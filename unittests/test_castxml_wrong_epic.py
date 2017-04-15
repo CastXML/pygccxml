@@ -19,12 +19,15 @@ class Test(parser_test_case.parser_test_case_t):
         """
 
         if self.config.castxml_epic_version != 1:
-            # Run this test only with the new castxml version.
+            # Run this test only with castxml epic version == 1
             return
 
         self.config.castxml_epic_version = 2
         self.assertRaises(
             RuntimeError, lambda: parser.parse_string("", self.config))
+
+        # Reset castxml epic version
+        self.config.castxml_epic_version = 1
 
 
 def create_suite():
