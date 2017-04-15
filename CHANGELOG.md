@@ -11,6 +11,18 @@ Version 1.9.0 (not yet released)
 * Added ```is_struct``` function to declarations package. It returns true if
   a declaration is a struct.
 
+* Added support for the castxml epic version format 1.
+  This is a new format which is partially not backward compatible with the
+  legacy format. To use this new format, use the ```castxml_epic_version``` flag
+  and set it to 1.
+  This new format will allow to support new c++ features that were not recognized
+  by ```gccxml``` and previous versions of ```castxml```.
+
+* Added support for elaborated type specifiers.
+  A new ```elaborated_t``` type was added, with the related ```is_elaborated```
+  function. This is only available when setting the ```castxml_epic_version```
+  flag to 1 .
+
 * Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
 
@@ -30,7 +42,7 @@ Version 1.9.0 (not yet released)
   through the ```pygccxml.declarations``` package.
 
 * Deprecated the ```decorated_name``` attribute from ```declaration_t```.
-  This was used by the binary parses, which have been removed in this version.
+  This was used by the binary parser, which have been removed in this version.
   As these attributes still could be used somewhere (but always returned None
   anyway), they need to go through a deprecation cycle first.
 
