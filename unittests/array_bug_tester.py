@@ -57,63 +57,32 @@ class Test(parser_test_case.parser_test_case_t):
             aaaa_type.decl_string)
 
     def test5(self):
-        code = 'char const arr[4] = {};'
-        src_reader = parser.source_reader_t(self.config)
-        global_ns = declarations.get_global_namespace(
-            src_reader.read_string(code))
-        arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char[4] const' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char const[4]' == arr_type.decl_string,
-                arr_type.decl_string)
-        self.assertTrue(
-            declarations.is_array(arr_type))
-        self.assertTrue(
-            declarations.is_const(arr_type))
+        self._test_impl('char const arr[4] = {};', 'const char[4]', True)
+        self._test_impl('const char arr[4] = {};', 'const char[4]', True)
 
     def test6(self):
-        code = 'char volatile arr[4] = {};'
-        src_reader = parser.source_reader_t(self.config)
-        global_ns = declarations.get_global_namespace(
-            src_reader.read_string(code))
-        arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char[4] volatile' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char volatile[4]' == arr_type.decl_string,
-                arr_type.decl_string)
-        self.assertTrue(
-            declarations.is_array(arr_type))
-        self.assertTrue(
-            declarations.is_volatile(arr_type))
+        self._test_impl('char volatile arr[4] = {};',
+                        'volatile char[4]', False)
+        self._test_impl('volatile char arr[4] = {};',
+                        'volatile char[4]', False)
 
     def test7(self):
-        code = 'char const volatile arr[4] = {};'
+        self._test_impl('char const volatile arr[4] = {};',
+                        'volatile const char[4]', True)
+        self._test_impl('const volatile char arr[4] = {};',
+                        'volatile const char[4]', True)
+
+    def _test_impl(self, code, expected, is_const_check):
         src_reader = parser.source_reader_t(self.config)
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char[4] const volatile' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char const volatile[4]' == arr_type.decl_string,
-                arr_type.decl_string)
         self.assertTrue(
-            declarations.is_array(arr_type))
-        self.assertTrue(
-            declarations.is_const(arr_type))
-        self.assertTrue(
-            declarations.is_volatile(arr_type))
+            expected == arr_type.decl_string,
+            arr_type.decl_string)
+        self.assertTrue(declarations.is_array(arr_type))
+        if is_const_check:
+            self.assertTrue(declarations.is_const(arr_type))
 
 
 def create_suite():

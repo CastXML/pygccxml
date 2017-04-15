@@ -509,7 +509,7 @@ class volatile_t(compound_t):
         compound_t.__init__(self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return self.base.build_decl_string(with_defaults) + ' volatile'
+        return 'volatile ' + self.base.build_decl_string(with_defaults)
 
     def _clone_impl(self):
         return volatile_t(self.base.clone())
@@ -547,7 +547,7 @@ class const_t(compound_t):
         compound_t.__init__(self, base)
 
     def build_decl_string(self, with_defaults=True):
-        return self.base.build_decl_string(with_defaults) + ' const'
+        return 'const ' + self.base.build_decl_string(with_defaults)
 
     def _clone_impl(self):
         return const_t(self.base.clone())
@@ -595,10 +595,10 @@ class elaborated_t(compound_t):
 
     def build_decl_string(self, with_defaults=True):
         if hasattr(self.base.declaration, "elaborated_type_specifier"):
-            suffix = " " + self.base.declaration.elaborated_type_specifier
+            prefix = self.base.declaration.elaborated_type_specifier + " "
         else:
-            suffix = ""
-        return self.base.build_decl_string(with_defaults) + suffix
+            prefix = ""
+        return prefix + self.base.build_decl_string(with_defaults)
 
     def _clone_impl(self):
         return elaborated_t(self.base.clone())
@@ -625,8 +625,6 @@ class array_t(compound_t):
         self._size = size
 
     def build_decl_string(self, with_defaults=True):
-        # return self.base.build_decl_string(with_defaults) + '[%d]' %
-        # self.size
         return self.__bds_for_multi_dim_arrays(None, with_defaults)
 
     def __bds_for_multi_dim_arrays(self, parent_dims=None, with_defaults=True):
