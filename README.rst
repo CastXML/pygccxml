@@ -49,4 +49,10 @@ pygccxml has more than 250 unit tests. They are run after each code commit to en
 that the code stays functional and stable. You can find the Mac and Linux builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_ and
 the Windows builds `here <https://ci.appveyor.com/project/iMichka/pygccxml>`_.
 
+Running the test suite is done with:
+
+.. code-block::
+
+  python3 -m unittests.test_all
+
 Code coverage is also available. It is automatically updated after each commit and can be found `here <https://coveralls.io/r/gccxml/pygccxml>`_.
