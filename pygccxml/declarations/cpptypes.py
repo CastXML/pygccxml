@@ -625,8 +625,6 @@ class array_t(compound_t):
         self._size = size
 
     def build_decl_string(self, with_defaults=True):
-        # return self.base.build_decl_string(with_defaults) + '[%d]' %
-        # self.size
         return self.__bds_for_multi_dim_arrays(None, with_defaults)
 
     def __bds_for_multi_dim_arrays(self, parent_dims=None, with_defaults=True):
