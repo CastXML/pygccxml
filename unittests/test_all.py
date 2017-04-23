@@ -81,6 +81,7 @@ from . import test_xml_generators
 from . import test_non_copyable_recursive
 from . import test_castxml_wrong_epic
 from . import test_elaborated_types
+from . import test_order
 
 testers = [
     # , demangled_tester # failing right now
@@ -152,7 +153,8 @@ testers = [
     test_xml_generators,
     test_non_copyable_recursive,
     test_castxml_wrong_epic,
-    test_elaborated_types
+    test_elaborated_types,
+    test_order
 ]
 
 if platform.system() != 'Windows':
