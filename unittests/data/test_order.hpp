@@ -29,4 +29,4 @@ const int ac1[2] = {};
 int const ac2[2] = {};
 
 class A {};
-const class A classA;
+const class A classA = {};
