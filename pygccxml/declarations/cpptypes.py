@@ -641,7 +641,8 @@ class array_t(compound_t):
             tmp = []
             for s in parent_dims:
                 tmp.append('[%d]' % s)
-            return self.base.build_decl_string(with_defaults) + ''.join(tmp)
+            return \
+                self.base.build_decl_string(with_defaults) + " " + "".join(tmp)
 
     def _clone_impl(self):
         return array_t(self.base.clone(), self.size)
