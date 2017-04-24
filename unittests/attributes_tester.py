@@ -31,7 +31,7 @@ class Test(parser_test_case.parser_test_case_t):
         Test.global_ns.init_optimizer()
 
         numeric = self.global_ns.class_('numeric_t')
-        do_nothing = numeric.mem_fun('do_nothing')
+        do_nothing = numeric.member_function('do_nothing')
         arg = do_nothing.arguments[0]
 
         generator = self.config.xml_generator_from_xml_file
@@ -68,7 +68,7 @@ class Test(parser_test_case.parser_test_case_t):
         Test.global_ns.init_optimizer()
 
         numeric = self.global_ns.class_('numeric_t')
-        do_nothing = numeric.mem_fun('do_nothing')
+        do_nothing = numeric.member_function('do_nothing')
         arg = do_nothing.arguments[0]
 
         generator = self.config.xml_generator_from_xml_file

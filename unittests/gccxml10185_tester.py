@@ -42,7 +42,7 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(decls)
         if self.config.xml_generator_from_xml_file.is_gccxml:
             a = global_ns.class_('A<const char [N]>')
-            a.mem_fun('size')
+            a.member_function('size')
         elif self.config.xml_generator_from_xml_file.is_castxml:
             self.assertRaises(
                 declarations.declaration_not_found_t,

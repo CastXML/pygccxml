@@ -27,7 +27,7 @@ class source_reader_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        enums = self.global_ns.enums()
+        enums = self.global_ns.enumerations()
         for enum in enums:
             names.extend(list(enum.get_name2value_dict().keys()))
         self.assertTrue(len(names) == 4)
@@ -52,7 +52,7 @@ class project_reader_1_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        for enum in self.global_ns.enums():
+        for enum in self.global_ns.enumerations():
             names.extend(list(enum.get_name2value_dict().keys()))
         self.assertTrue(len(names) == 4)
         self.assertTrue('x1' in names)
@@ -79,7 +79,7 @@ class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        enums = self.global_ns.enums()
+        enums = self.global_ns.enumerations()
         list(map(
             lambda enum: names.extend(list(enum.get_name2value_dict().keys())),
             enums))

@@ -29,8 +29,8 @@ class Test(parser_test_case.parser_test_case_t):
         d = self.global_ns.class_('better_algorithm_t')
         b = self.global_ns.class_('algorithm_t')
 
-        df = d.mem_fun('f')
-        bf = b.mem_fun('f')
+        df = d.member_function('f')
+        bf = b.member_function('f')
 
         self.assertTrue(
             id(df) != id(bf) and declarations.is_same_function(df, bf))

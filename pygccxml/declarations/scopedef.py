@@ -781,7 +781,31 @@ class scopedef_t(declaration.declaration_t):
                 header_file=header_file,
                 recursive=recursive)
         )
-    mem_fun = member_function
+
+    def mem_fun(
+            self,
+            name=None,
+            function=None,
+            return_type=None,
+            arg_types=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None):
+        """
+        Deprecated method. Use the member_function() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The mem_fun() method is deprecated. \n" +
+            "Please use the member_function() method instead.",
+            DeprecationWarning)
+
+        return self.member_function(
+            name, function,
+            return_type, arg_types,
+            header_dir, header_file,
+            recursive)
 
     def member_functions(
             self,
@@ -809,7 +833,32 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive,
                 allow_empty=allow_empty)
         )
-    mem_funs = member_functions
+
+    def mem_funs(
+            self,
+            name=None,
+            function=None,
+            return_type=None,
+            arg_types=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None,
+            allow_empty=None):
+        """
+        Deprecated method. Use the member_functions() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The mem_funs() method is deprecated. \n" +
+            "Please use the member_functions() method instead.",
+            DeprecationWarning)
+
+        return self.member_functions(
+            name, function,
+            return_type, arg_types,
+            header_dir, header_file,
+            recursive, allow_empty)
 
     def constructor(
             self,
@@ -891,7 +940,32 @@ class scopedef_t(declaration.declaration_t):
                 header_file=header_file,
                 recursive=recursive)
         )
-    mem_oper = member_operator
+
+    def mem_oper(
+            self,
+            name=None,
+            function=None,
+            symbol=None,
+            return_type=None,
+            arg_types=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None):
+        """
+        Deprecated method. Use the member_operator() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The mem_oper() method is deprecated. \n" +
+            "Please use the member_operator() method instead.",
+            DeprecationWarning)
+
+        return self.member_operator(
+            name, function,
+            symbol, return_type,
+            arg_types, header_dir,
+            header_file, recursive)
 
     def member_operators(
             self,
@@ -923,7 +997,34 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive,
                 allow_empty=allow_empty)
         )
-    mem_opers = member_operators
+
+    def mem_opers(
+            self,
+            name=None,
+            function=None,
+            symbol=None,
+            return_type=None,
+            arg_types=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None,
+            allow_empty=None):
+        """
+        Deprecated method. Use the member_operators() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The mem_opers() method is deprecated. \n" +
+            "Please use the member_operators() method instead.",
+            DeprecationWarning)
+
+        return self.member_operators(
+            name, function,
+            symbol, return_type,
+            arg_types, header_dir,
+            header_file, recursive,
+            allow_empty)
 
     def casting_operator(
             self,
@@ -998,8 +1099,25 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive)
         )
 
-    enum = enumeration
-    """adding small aliase to enumeration method"""
+    def enum(
+            self,
+            name=None,
+            function=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None):
+        """
+        Deprecated method. Use the enumeration() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The enum() method is deprecated. \n" +
+            "Please use the enumeration() method instead.",
+            DeprecationWarning)
+
+        return self.enumeration(
+            name, function, header_dir, header_file, recursive)
 
     def enumerations(
             self,
@@ -1023,8 +1141,27 @@ class scopedef_t(declaration.declaration_t):
                 recursive=recursive,
                 allow_empty=allow_empty)
         )
-    # adding small aliase
-    enums = enumerations
+
+    def enums(
+            self,
+            name=None,
+            function=None,
+            header_dir=None,
+            header_file=None,
+            recursive=None,
+            allow_empty=None):
+        """
+        Deprecated method. Use the enumerations() method instead.
+
+        Deprecated since v1.9.0. Will be removed in v2.0.0
+        """
+        warnings.warn(
+            "The enums() method is deprecated. \n" +
+            "Please use the enumerations() method instead.",
+            DeprecationWarning)
+
+        return self.enumerations(
+            name, function, header_dir, header_file, recursive, allow_empty)
 
     def typedef(
             self,

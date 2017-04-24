@@ -270,7 +270,7 @@ def has_public_constructor(class_):
 def has_public_assign(class_):
     """returns True, if class has public assign operator, False otherwise"""
     class_ = class_traits.get_declaration(class_)
-    decls = class_.mem_opers(
+    decls = class_.member_operators(
         lambda o: o.symbol == '=' and o.access_type == 'public',
         recursive=False,
         allow_empty=True)

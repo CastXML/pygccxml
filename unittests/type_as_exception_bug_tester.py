@@ -25,7 +25,7 @@ class Test(parser_test_case.parser_test_case_t):
             Test.global_ns.init_optimizer()
 
     def test(self):
-        buggy = self.global_ns.mem_fun('buggy')
+        buggy = self.global_ns.member_function('buggy')
         expression_error = self.global_ns.class_('ExpressionError')
         self.assertTrue(len(buggy.exceptions) == 1)
         err = buggy.exceptions[0]

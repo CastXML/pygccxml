@@ -66,6 +66,60 @@ class Test(parser_test_case.parser_test_case_t):
                 pass
             self._check(w)
 
+    def test_mem_fun(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().mem_fun()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_mem_funs(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().mem_funs()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_mem_oper(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().mem_oper()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_mem_opers(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().mem_opers()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_enum(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().enum()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_enums(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.scopedef_t().enums()
+            except RuntimeError:
+                pass
+            self._check(w)
+
     @staticmethod
     def _check(w):
         assert len(w) == 1

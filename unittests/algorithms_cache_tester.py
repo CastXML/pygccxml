@@ -40,7 +40,7 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         cls_declaration_path = declarations.declaration_path(cls)
         self.assertTrue(cls.cache.declaration_path == cls_declaration_path)
 
-        enum = cls.enum('ENestedPublic')
+        enum = cls.enumeration('ENestedPublic')
 
         enum_full_name = declarations.full_name(enum)
         self.assertTrue(enum.cache.full_name == enum_full_name)
@@ -62,7 +62,7 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
 
     def test_access_type(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
-        enum = cls.enum('ENestedPublic')
+        enum = cls.enumeration('ENestedPublic')
         self.assertTrue(enum.cache.access_type == 'public')
         enum.cache.reset_access_type()
         self.assertTrue(not enum.cache.access_type)

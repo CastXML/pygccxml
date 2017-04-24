@@ -30,6 +30,11 @@ Version 1.9.0 (not yet released)
   ```namespace_t``` class. Use the ```namespaces```, ```free_function``` and
   ```free_functions``` methods instead.
 
+* Deprecated the ```mem_fun```, ```mem_funs```, ```mem_oper```, ```mem_opers```,
+  ```enum``` and ```enums``` methods from the ```scopedef_t``` class.
+  Use the ```member_function```, ```member_functions```, ```member_operator```,
+  ```member_operators```, ```enumeration``` and ```enumerations``` methods instead.
+
 * Add Appveyor Windows build (castxml, VS 2013, python 3.5) and merge coverage
   results with Travis.
 

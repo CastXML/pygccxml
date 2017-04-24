@@ -20,7 +20,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def test_enumeration_t(self):
-        enum = self.global_ns.enum('ENumbers')
+        enum = self.global_ns.enumeration('ENumbers')
         expected_values = list(
             zip(['e%d' % index for index in range(10)],
                 [index for index in range(10)]))
@@ -297,7 +297,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
 
     def test_ellipsis(self):
         ns = self.global_ns.namespace('ellipsis_tester')
-        do_smth = ns.mem_fun('do_smth')
+        do_smth = ns.member_function('do_smth')
         self.assertTrue(do_smth.has_ellipsis)
         do_smth_else = ns.free_function('do_smth_else')
         self.assertTrue(do_smth_else.has_ellipsis)

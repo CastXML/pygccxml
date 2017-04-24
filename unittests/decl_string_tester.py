@@ -35,7 +35,8 @@ class Test(parser_test_case.parser_test_case_t):
             Test.global_ns.init_optimizer()
 
     def test_member_function(self):
-        member_inline_call = self.global_ns.mem_fun('member_inline_call')
+        member_inline_call = \
+            self.global_ns.member_function('member_inline_call')
         decls = parser.parse_string(
             self.template %
             member_inline_call.decl_string,
@@ -57,7 +58,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_all_mem_and_free_funs(self):
         ns = self.global_ns.namespace('::declarations::calldef')
-        for f in ns.mem_funs():
+        for f in ns.member_functions():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
             self.assertTrue(

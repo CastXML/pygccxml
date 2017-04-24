@@ -29,7 +29,7 @@ class Core(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def test_top_parent(self):
-        enum = self.global_ns.enum('::ns::ns32::E33')
+        enum = self.global_ns.enumeration('::ns::ns32::E33')
         self.assertTrue(self.global_ns is enum.top_parent)
 
     # tests namespaces join functionality. described in gccxml.py
@@ -54,7 +54,7 @@ class Core(parser_test_case.parser_test_case_t):
             self.global_ns.namespace(ns)
 
         for enum in enums:
-            self.global_ns.enum(enum)
+            self.global_ns.enumeration(enum)
 
         ns = self.global_ns.namespace(nss[0])
         ns12 = self.global_ns.namespace(nss[1])
@@ -65,23 +65,23 @@ class Core(parser_test_case.parser_test_case_t):
                 ns is ns12.parent is ns22.parent is ns32.parent),
             'There are 2 or more instances of ns namespace.')
 
-        e11 = self.global_ns.enum(enums[0])
-        e21 = self.global_ns.enum(enums[1])
-        e31 = self.global_ns.enum(enums[2])
+        e11 = self.global_ns.enumeration(enums[0])
+        e21 = self.global_ns.enumeration(enums[1])
+        e31 = self.global_ns.enumeration(enums[2])
         self.assertTrue(
             e11.parent is e21.parent is e31.parent,
             'There are 2 or more instances of global namespace.')
 
-        nse12 = self.global_ns.enum(enums[3])
-        nse23 = self.global_ns.enum(enums[4])
-        nse33 = self.global_ns.enum(enums[5])
+        nse12 = self.global_ns.enumeration(enums[3])
+        nse23 = self.global_ns.enumeration(enums[4])
+        nse33 = self.global_ns.enumeration(enums[5])
         self.assertTrue(
             ns and (
                 ns is nse12.parent is nse23.parent is nse33.parent),
             'There are 2 or more instances of ns namespace.')
 
     def _test_ns_membership(self, ns, enum_name):
-        unnamed_enum = ns.enum(
+        unnamed_enum = ns.enumeration(
             lambda d: d.name == '' and is_sub_path(
                 autoconfig.data_directory,
                 d.location.file_name),
@@ -91,7 +91,7 @@ class Core(parser_test_case.parser_test_case_t):
             "namespace '%s' does not contains unnamed enum." %
             ns.name)
 
-        enum = ns.enum(enum_name, recursive=False)
+        enum = ns.enumeration(enum_name, recursive=False)
 
         self.assertTrue(
             enum in ns.declarations,
@@ -110,12 +110,12 @@ class Core(parser_test_case.parser_test_case_t):
 
     def _test_class_membership(self, class_inst, enum_name, access):
         # getting enum through get_members function
-        nested_enum1 = class_inst.enum(
+        nested_enum1 = class_inst.enumeration(
             name=enum_name,
             function=declarations.access_type_matcher_t(access))
 
         # getting enum through declarations property
-        nested_enum2 = class_inst.enum(enum_name)
+        nested_enum2 = class_inst.enumeration(enum_name)
 
         # it shoud be same object
         self.assertTrue(
@@ -375,7 +375,7 @@ class Core(parser_test_case.parser_test_case_t):
                 declarations.declarated_t),
             " typedef to enum should be 'declarated_t' instead of '%s'" %
             typedef_inst.decl_type.__class__.__name__)
-        enum_declaration = self.global_ns.enum('EFavoriteDrinks')
+        enum_declaration = self.global_ns.enumeration('EFavoriteDrinks')
         self.assertTrue(
             typedef_inst.decl_type.declaration is enum_declaration,
             "instance of declaration_t has reference to '%s' instead of '%s'" %
