@@ -299,7 +299,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         ns = self.global_ns.namespace('ellipsis_tester')
         do_smth = ns.mem_fun('do_smth')
         self.assertTrue(do_smth.has_ellipsis)
-        do_smth_else = ns.free_fun('do_smth_else')
+        do_smth_else = ns.free_function('do_smth_else')
         self.assertTrue(do_smth_else.has_ellipsis)
 
 

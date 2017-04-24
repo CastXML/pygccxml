@@ -39,6 +39,33 @@ class Test(parser_test_case.parser_test_case_t):
             declarations.declaration_path(None, True)
             self._check(w)
 
+    def test_nss(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.namespace_t().nss()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_free_fun(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.namespace_t().free_fun()
+            except RuntimeError:
+                pass
+            self._check(w)
+
+    def test_free_funs(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            try:
+                declarations.namespace_t().free_funs()
+            except RuntimeError:
+                pass
+            self._check(w)
+
     @staticmethod
     def _check(w):
         assert len(w) == 1

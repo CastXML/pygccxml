@@ -73,7 +73,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(declarations.vector_traits is traits)
 
     def test_element_type(self):
-        do_nothing = self.global_ns.free_fun('do_nothing')
+        do_nothing = self.global_ns.free_function('do_nothing')
         v = declarations.remove_reference(
             declarations.remove_declarated(
                 do_nothing.arguments[0].decl_type))

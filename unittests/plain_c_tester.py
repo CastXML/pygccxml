@@ -25,9 +25,9 @@ class Test(parser_test_case.parser_test_case_t):
             self.global_ns.init_optimizer()
 
     def test(self):
-        self.global_ns.free_fun('hello_sum')
-        self.global_ns.free_fun('hello_print')
-        f = self.global_ns.free_fun('do_smth')
+        self.global_ns.free_function('hello_sum')
+        self.global_ns.free_function('hello_print')
+        f = self.global_ns.free_function('do_smth')
         for arg in f.arguments:
             self.assertTrue(arg.decl_type.decl_string)
 

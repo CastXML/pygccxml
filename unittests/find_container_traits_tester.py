@@ -153,14 +153,14 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(m.partial_name == 'multimap< int, int >')
 
     def test_recursive_partial_name(self):
-        f1 = self.global_ns.free_fun('f1')
+        f1 = self.global_ns.free_function('f1')
         t1 = declarations.class_traits.get_declaration(
             f1.arguments[0].decl_type)
         self.assertTrue(
             'type< std::set< std::vector< int > > >' == t1.partial_name)
 
     def test_remove_defaults_partial_name_namespace(self):
-        f2 = self.global_ns.free_fun('f2')
+        f2 = self.global_ns.free_function('f2')
         type_info = f2.return_type
         traits = declarations.find_container_traits(type_info)
         cls = traits.class_declaration(type_info)
@@ -187,7 +187,7 @@ class Test(parser_test_case.parser_test_case_t):
         ct.remove_defaults(x)
 
     def test_infinite_loop(self):
-        rt = self.global_ns.free_fun('test_infinite_loop').return_type
+        rt = self.global_ns.free_function('test_infinite_loop').return_type
         map_traits = declarations.find_container_traits(rt)
         self.assertTrue(map_traits is declarations.map_traits)
         elem = map_traits.element_type(rt)

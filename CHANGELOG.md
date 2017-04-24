@@ -23,8 +23,12 @@ Version 1.9.0 (not yet released)
   function. This is only available when setting the ```castxml_epic_version```
   flag to 1 .
 
-* Deprecate ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
+* Deprecated ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
+
+* Deprecated the ```nss```, ```free_fun``` and ```free_funs``` methods from the
+  ```namespace_t``` class. Use the ```namespaces```, ```free_function``` and
+  ```free_functions``` methods instead.
 
 * Add Appveyor Windows build (castxml, VS 2013, python 3.5) and merge coverage
   results with Travis.

@@ -45,7 +45,8 @@ class Test(parser_test_case.parser_test_case_t):
             "Created decl_string for member function contains mistake")
 
     def test_free_function(self):
-        return_default_args = self.global_ns.free_fun('return_default_args')
+        return_default_args = \
+            self.global_ns.free_function('return_default_args')
         decls = parser.parse_string(
             self.template %
             return_default_args.decl_string,
@@ -62,7 +63,7 @@ class Test(parser_test_case.parser_test_case_t):
             self.assertTrue(
                 decls,
                 "Created decl_string for member function contains mistake")
-        for f in ns.free_funs():
+        for f in ns.free_functions():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
             self.assertTrue(

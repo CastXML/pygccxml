@@ -32,7 +32,7 @@ class Test(parser_test_case.parser_test_case_t):
         # support is dropped.
         if self.config.xml_generator_from_xml_file.is_gccxml:
             global_ns.decl('A<int>')
-            f = global_ns.free_fun('f')
+            f = global_ns.free_function('f')
             self.assertTrue(f.demangled == 'void f<int>(A<int> const&)')
 
 
