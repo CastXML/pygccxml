@@ -28,5 +28,8 @@ int volatile const * volatile const cvptr4 = 0;
 const int ac1[2] = {};
 int const ac2[2] = {};
 
+const int * const acptr1[2] = {};
+int const * const acptr2[2] = {};
+
 class A {};
 const class A classA = {};
