@@ -42,8 +42,8 @@ There are few different ways to install GCC-XML on your system:
 .. _`instructions`: http://gccxml.org/HTML/Install.html
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`CastXML`: https://github.com/CastXML/CastXML
-.. _`Linux`: https://midas3.kitware.com/midas/download/bitstream/460535/castxml-linux.tar.gz
-.. _`OS X`: https://midas3.kitware.com/midas/download/bitstream/460536/castxml-macosx.tar.gz
-.. _`Windows`: https://midas3.kitware.com/midas/download/bitstream/460537/castxml-windows.zip
+.. _`Linux`: https://midas3.kitware.com/midas/folder/13152
+.. _`OS X`: https://midas3.kitware.com/midas/folder/13152
+.. _`Windows`: https://midas3.kitware.com/midas/folder/13152
 .. _`SuperBuild`: https://github.com/thewtex/CastXMLSuperbuild
 .. _`full install instructions`: https://github.com/CastXML/CastXML#build
