@@ -20,8 +20,8 @@ Version 1.9.0 (not yet released)
 
 * Added support for elaborated type specifiers.
   A new ```elaborated_t``` type was added, with the related ```is_elaborated```
-  function. This is only available when setting the ```castxml_epic_version```
-  flag to 1 .
+  and ```remove_elaborated``` function.
+  This is only available when setting the ```castxml_epic_version``` flag to 1 .
 
 * Deprecated ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
