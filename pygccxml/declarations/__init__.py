@@ -151,6 +151,7 @@ from .type_traits import remove_volatile
 from .type_traits import remove_reference
 from .type_traits import remove_declarated
 from .type_traits import remove_alias
+from .type_traits import remove_elaborated
 
 from .has_operator_matcher import has_public_binary_operator
 from .has_operator_matcher import has_public_equal
