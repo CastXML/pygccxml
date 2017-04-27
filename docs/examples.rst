@@ -2,14 +2,21 @@
 Examples
 ========
 
-First examples
---------------
+Setting up pygccxml and parsing c/c++ code
+------------------------------------------
 
 .. toctree::
    :maxdepth: 1
 
    examples/parsing/example.rst
    examples/parsing-string/example.rst
+
+First examples
+--------------
+
+.. toctree::
+   :maxdepth: 1
+
    examples/variables/example.rst
    examples/searching1/example.rst
    examples/searching/example.rst
