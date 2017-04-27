@@ -8,8 +8,10 @@ import fnmatch
 import unittest
 import subprocess
 
+from . import parser_test_case
 
-class Test(unittest.TestCase):
+
+class Test(parser_test_case.parser_test_case_t):
 
     def test_example(self):
         """Runs the example in the docs directory"""
@@ -30,6 +32,14 @@ class Test(unittest.TestCase):
                 file_paths.append(os.path.join(root, file_path))
 
         for file_path in file_paths:
+
+            if "elaborated" in file_path and\
+                    self.config.castxml_epic_version != 1:
+                # Don't run this test if the castxml_epic_version was not
+                # set to 1, because the test needs to be able to run with
+                # that version
+                continue
+
             return_code = subprocess.call(
                 ["python", path + "/example_tester_wrap.py", file_path],
                 env=env)

@@ -33,6 +33,8 @@ Advanced examples
 .. toctree::
    :maxdepth: 1
 
+   examples/elaborated/example.rst
    examples/function-pointer/example.rst
    examples/caching/example.rst
    examples/print-example/example.rst
+
