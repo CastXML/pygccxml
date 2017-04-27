@@ -17,6 +17,7 @@ First examples
    examples/functions/example.rst
    examples/nested-types/example.rst
    examples/artificial/example.rst
+   examples/compound/example.rst
    examples/templates/example.rst
 
 Advanced examples
