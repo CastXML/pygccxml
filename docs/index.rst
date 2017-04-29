@@ -51,15 +51,15 @@ Documentation contents
 
    install
    examples
-   documentation
    faq
+   apidocs/modules
+   documentation
    query_interface
    design
    users
    links
    releasing
    history
-   apidocs/modules
    upgrade_issues
 
 .. _`Boost Software License`: http://boost.org/more/license_info.html
