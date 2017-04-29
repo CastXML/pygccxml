@@ -296,7 +296,7 @@ class xml_generator_configuration_t(parser_configuration_t):
         read from the xml file.
 
         Returns:
-            utils.xml_generator_from_file: configuration object
+            utils.xml_generators: configuration object
         """
         return self.__xml_generator_from_xml_file
 

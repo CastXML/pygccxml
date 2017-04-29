@@ -205,7 +205,7 @@ class project_reader_t(object):
         read from the xml file.
 
         Returns:
-            utils.xml_generator_from_file: configuration object
+            utils.xml_generators: configuration object
         """
         return self.__xml_generator_from_xml_file
 
