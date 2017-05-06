@@ -228,6 +228,10 @@ before_install:
       mv unittests/configs/castxml_epic1.cfg unittests/xml_generator.cfg;
     fi
 
+  # The setuptools version installed on travis is too new and will
+  # not work with python 3.2
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install 'setuptools<30.0.0'; fi
+
   - pip install coveralls
 
   # Install coverage tools (On 3.2 the new coverage is broken, use an old one)
