@@ -524,9 +524,6 @@ class Core(parser_test_case.parser_test_case_t):
             not implementation.is_abstract,
             "class 'implementation' should not be abstract")
 
-    def test_versioning(self):
-        self.assertTrue(utils.xml_generator)
-
     def test_byte_size(self):
         mptrs = self.global_ns.class_('members_pointers_t')
         self.assertTrue(mptrs.byte_size != 0)

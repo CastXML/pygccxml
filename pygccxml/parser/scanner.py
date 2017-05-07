@@ -680,6 +680,5 @@ class scanner_t(xml.sax.handler.ContentHandler):
             gccxml_cvs_revision = attrs.get(XML_AN_CVS_REVISION)
         xml_generator = utils.xml_generators(
             utils.loggers.cxx_parser, gccxml_cvs_revision, castxml_format)
-        utils.xml_generator = xml_generator.get_string_repr()
         utils.xml_output_version = gccxml_cvs_revision
         self.__xml_generator_from_xml_file = xml_generator

@@ -23,6 +23,11 @@ Version 1.9.0 (not yet released)
   and ```remove_elaborated``` function.
   This is only available when setting the ```castxml_epic_version``` flag to 1 .
 
+* Removed ```utils.xml_generator``` and ```utils.xml_output_version``` attributes.
+  These two variables should not have made it into the public API. There is no
+  deprecation cycle for these because of the complexity of keeping these
+  module attributes around.
+
 * Deprecated ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
   instead.
 

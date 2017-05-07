@@ -12,7 +12,6 @@ import warnings
 from . import parser_test_case
 
 from pygccxml import parser
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -41,7 +40,6 @@ class Test(parser_test_case.parser_test_case_t):
         parser.parse([self.header], self.config, cache=cache)
         # Read from the cache the second time
         parser.parse([self.header], self.config, cache=cache)
-        self.assertIsNotNone(utils.xml_generator)
 
     def test_directory_cache_with_compression(self):
         """
@@ -55,7 +53,6 @@ class Test(parser_test_case.parser_test_case_t):
         parser.parse([self.header], self.config, cache=cache)
         # Read from the cache the second time
         parser.parse([self.header], self.config, cache=cache)
-        self.assertIsNotNone(utils.xml_generator)
 
     def test_dir_compatibility(self):
         """
@@ -74,8 +71,6 @@ class Test(parser_test_case.parser_test_case_t):
         # Reset this warning to always
         warnings.simplefilter("error", DeprecationWarning)
 
-        self.assertIsNotNone(utils.xml_generator)
-
     def test_directory_cache_twice(self):
         """
         Setup two caches in a row.
@@ -86,8 +81,6 @@ class Test(parser_test_case.parser_test_case_t):
         parser.parse([self.header], self.config, cache=cache)
         cache = parser.directory_cache_t(directory=self.cache_dir)
         parser.parse([self.header], self.config, cache=cache)
-
-        self.assertIsNotNone(utils.xml_generator)
 
     def test_directory_existing_dir(self):
         """

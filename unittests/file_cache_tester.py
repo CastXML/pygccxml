@@ -82,32 +82,6 @@ class Test(parser_test_case.parser_test_case_t):
             ("cached declarations and source declarations are different, " +
                 "after pickling"))
 
-    @staticmethod
-    def test_reopen_cache():
-        """
-        Test opening cache files in a subprocess (with a clean environment).
-
-        """
-
-        env = os.environ.copy()
-
-        # Get the path to current directory
-        path = os.path.dirname(os.path.realpath(__file__))
-        # Set the COVERAGE_PROCESS_START env. variable.
-        # Allows to cover files run in a subprocess
-        # http://nedbatchelder.com/code/coverage/subprocess.html
-        env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
-
-        p = subprocess.Popen(
-            [sys.executable, "unittests/reopen_cache_tester.py"],
-            stderr=subprocess.PIPE,
-            env=env)
-        p.wait()
-        error = p.stderr.read().decode("utf-8").rstrip()
-        p.stderr.close()
-        if p.returncode != 0:
-            raise Exception(error)
-
 
 def create_suite():
     suite = unittest.TestSuite()

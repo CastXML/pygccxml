@@ -27,7 +27,6 @@ except ImportError:
     import pickle
 
 from . import declarations_cache
-from .. import utils
 
 
 class index_entry_t(object):
@@ -252,10 +251,6 @@ class directory_cache_t(declarations_cache.cache_base_t):
             self.__index = {}
             self.__filename_rep = filename_repository_t(self.__sha1_sigs)
 
-        # Read the xml generator from the cache and set it
-        with open(os.path.join(self.__dir, "gen.dat"), "r") as gen_file:
-            utils.xml_generator = gen_file.read()
-
         self.__modified_flag = False
 
     def _save(self):
@@ -273,10 +268,6 @@ class directory_cache_t(declarations_cache.cache_base_t):
                 indexfilename,
                 (self.__index,
                  self.__filename_rep))
-
-            # Read the xml generator from the cache and set it
-            with open(os.path.join(self.__dir, "gen.dat"), "w") as gen_file:
-                gen_file.write(utils.xml_generator)
 
             self.__modified_flag = False
 
