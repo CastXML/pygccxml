@@ -1,8 +1,8 @@
 Changes
 =======
 
-Version 1.9.0 (not yet released)
---------------------------------
+Version 1.9.0
+-------------
 
 1. [New features]
 
