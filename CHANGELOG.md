@@ -4,62 +4,73 @@ Changes
 Version 1.9.0 (not yet released)
 --------------------------------
 
-* Full Python 3.6 support
+1. [New features]
 
-* Full pypy and pypy3 support
+  * Full Python 3.6 support
 
-* Added ```is_struct``` function to declarations package. It returns true if
-  a declaration is a struct.
+  * Full pypy and pypy3 support
 
-* Added support for the castxml epic version format 1.
-  This is a new format which is partially not backward compatible with the
-  legacy format. To use this new format, use the ```castxml_epic_version``` flag
-  and set it to 1.
-  This new format will allow to support new c++ features that were not recognized
-  by ```gccxml``` and previous versions of ```castxml```.
+  * Better windows support
 
-* Added support for elaborated type specifiers.
-  A new ```elaborated_t``` type was added, with the related ```is_elaborated```
-  and ```remove_elaborated``` function.
-  This is only available when setting the ```castxml_epic_version``` flag to 1 .
+  * Small performance improvements
 
-* Removed ```utils.xml_generator``` and ```utils.xml_output_version``` attributes.
-  These two variables should not have made it into the public API. There is no
-  deprecation cycle for these because of the complexity of keeping these
-  module attributes around.
+  * Added ```is_struct``` function to declarations package. It returns true if
+    a declaration is a struct.
 
-* Deprecated ```decl``` attribute from ```dependency_info_t```. Use ```declaration```
-  instead.
+  * Added support for the castxml epic version format 1.
+    This is a new format which is partially not backward compatible with the
+    legacy format. To use this new format, use the ```castxml_epic_version``` flag
+    and set it to 1.
+    This new format will allow to support new c++ features that were not recognized
+    by ```gccxml``` and previous versions of ```castxml```.
 
-* Deprecated the ```nss```, ```free_fun``` and ```free_funs``` methods from the
-  ```namespace_t``` class. Use the ```namespaces```, ```free_function``` and
-  ```free_functions``` methods instead.
+  * Added support for elaborated type specifiers.
+    A new ```elaborated_t``` type was added, with the related ```is_elaborated```
+    and ```remove_elaborated``` function.
+    This is only available when setting the ```castxml_epic_version``` flag to 1 .
 
-* Deprecated the ```mem_fun```, ```mem_funs```, ```mem_oper```, ```mem_opers```,
-  ```enum``` and ```enums``` methods from the ```scopedef_t``` class.
-  Use the ```member_function```, ```member_functions```, ```member_operator```,
-  ```member_operators```, ```enumeration``` and ```enumerations``` methods instead.
+2. [Windows]
 
-* Add Appveyor Windows build (castxml, VS 2013, python 3.5) and merge coverage
-  results with Travis.
+  * Add Appveyor Windows build (castxml, VS 2013, python 3.5) and merge coverage
+    results with Travis.
 
-* Attributes defined as ```__thiscall__``` are now ignored (tested with VS 2013).
-  The ```__thiscall__``` in some attributes will be removed too. If you still
-  want to have access to these attributes, you can use the
-  ```config.flags = ["f2"]``` option.
+  * Attributes defined as ```__thiscall__``` are now ignored (tested with VS 2013).
+    The ```__thiscall__``` in some attributes will be removed too. If you still
+    want to have access to these attributes, you can use the
+    ```config.flags = ["f2"]``` option.
 
-* Deprecated the ```mdecl_wrapper_t.to_list()```. You can implement your own
-  version of it if you really need it.
+3. [Deprecations]
 
-* Deprecated the ```declaration_not_found_t``` and ```multiple_declarations_found_t```
-  attributes from the ```scopedef_t``` class. These exceptions are available
-  through the ```pygccxml.declarations``` package.
+  * Deprecated ```decl``` attribute from ```dependency_info_t```.
+    Use the ```declaration``` attribute instead.
 
-* Deprecated the ```decorated_name``` attribute from ```declaration_t```.
-  This was used by the binary parser, which have been removed in this version.
-  As these attributes still could be used somewhere (but always returned None
-  anyway), they need to go through a deprecation cycle first.
+  * Deprecated the ```nss```, ```free_fun``` and ```free_funs``` methods from the
+    ```namespace_t``` class. Use the ```namespaces```, ```free_function``` and
+    ```free_functions``` methods instead.
 
+  * Deprecated the ```mem_fun```, ```mem_funs```, ```mem_oper```, ```mem_opers```,
+    ```enum``` and ```enums``` methods from the ```scopedef_t``` class.
+    Use the ```member_function```, ```member_functions```, ```member_operator```,
+    ```member_operators```, ```enumeration``` and ```enumerations``` methods instead.
+
+  * Deprecated the ```mdecl_wrapper_t.to_list()```. You can implement your own
+      version of it if you really need it.
+
+  * Deprecated the ```declaration_not_found_t``` and ```multiple_declarations_found_t```
+    attributes from the ```scopedef_t``` class. These exceptions are available
+    through the ```pygccxml.declarations``` package.
+
+  * Deprecated the ```decorated_name``` attribute from ```declaration_t```.
+    This was used by the binary parser, which have been removed in this version.
+    As these attributes still could be used somewhere (but always returned None
+    anyway), they need to go through a deprecation cycle first.
+
+4. [Removals]
+
+  * Removed ```utils.xml_generator``` and ```utils.xml_output_version``` attributes.
+    These two variables should not have made it into the public API. There is no
+    deprecation cycle for these because of the complexity of keeping these
+    module attributes around.
 
 Version 1.8.6
 -------------
