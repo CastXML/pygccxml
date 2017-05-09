@@ -83,6 +83,18 @@ Some things you may try (in order of priority):
    by pygccxml. You will find an example of this mechanism in the examples section.
 
 
+Flags
+-----
+
+castxml_epic_version
+--------------------
+
+The ```castxml_epic_version``` can be set to 1 to benefit from new castxml
+and pygccxml features. To be able to use this, you will need the latest
+castxml version.
+
+Currently this adds the support for elaborated type specifiers.
+
 \_\_va_list_tag and other hidden declarations (f1)
 --------------------------------------------------
 
