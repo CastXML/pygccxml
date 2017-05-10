@@ -1,13 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -22,6 +23,9 @@ class Test(parser_test_case.parser_test_case_t):
             decls = parser.parse([self.header], self.config)
             self.global_ns = declarations.get_global_namespace(decls)
             self.global_ns.init_optimizer()
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def test(self):
 
@@ -53,7 +57,7 @@ class Test(parser_test_case.parser_test_case_t):
         main_foo_5 = self.global_ns.class_('MainFoo5')
         self.assertTrue(declarations.is_noncopyable(main_foo_5))
 
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             # CastXML only test
             # MainFoo6 is copyable
             main_foo_6 = self.global_ns.class_('MainFoo6')
@@ -68,6 +72,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

@@ -1,12 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
 import unittest
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -33,7 +35,8 @@ class Test(parser_test_case.parser_test_case_t):
             Test.global_ns.init_optimizer()
 
     def test_member_function(self):
-        member_inline_call = self.global_ns.mem_fun('member_inline_call')
+        member_inline_call = \
+            self.global_ns.member_function('member_inline_call')
         decls = parser.parse_string(
             self.template %
             member_inline_call.decl_string,
@@ -43,7 +46,8 @@ class Test(parser_test_case.parser_test_case_t):
             "Created decl_string for member function contains mistake")
 
     def test_free_function(self):
-        return_default_args = self.global_ns.free_fun('return_default_args')
+        return_default_args = \
+            self.global_ns.free_function('return_default_args')
         decls = parser.parse_string(
             self.template %
             return_default_args.decl_string,
@@ -54,13 +58,13 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_all_mem_and_free_funs(self):
         ns = self.global_ns.namespace('::declarations::calldef')
-        for f in ns.mem_funs():
+        for f in ns.member_functions():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
             self.assertTrue(
                 decls,
                 "Created decl_string for member function contains mistake")
-        for f in ns.free_funs():
+        for f in ns.free_functions():
             decls = parser.parse_string(
                 self.template % f.decl_string, self.config)
             self.assertTrue(
@@ -76,6 +80,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

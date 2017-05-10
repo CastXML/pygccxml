@@ -1,0 +1,36 @@
+build: false
+
+environment:
+  matrix:
+  - PYTHON: "C:\\Python35"
+    PYTHON_VERSION: 3.5
+    PYTHON_ARCH: 32
+
+init:
+  - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
+
+install:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "%PYTHON%/Scripts/pip.exe install pycodestyle"
+  - "%PYTHON%/Scripts/pip.exe install coverage"
+  - "%PYTHON%/Scripts/pip.exe install coveralls"
+
+  # Install castxml
+  - ps: wget https://midas3.kitware.com/midas/download/bitstream/461597/castxml-windows.zip -OutFile castxml.zip
+  - cmd: echo "Unzipping castxml..."
+  - cmd: 7z x castxml.zip -o"C:\Program Files\" -y > nul
+  - cmd: set PATH=%PATH:castxml\bin=%;C:\Program Files\castxml\bin
+  - cmd: castxml --version
+
+  - cmd: move unittests\configs\appveyor.cfg unittests\xml_generator.cfg;
+
+test_script:
+  # Install pygccxml
+  - "%CMD_IN_ENV% python setup.py install"
+
+  # Run the tests with coverage
+  - "coverage run -m unittests.test_all"
+  - "coverage combine"
+
+artifacts:
+  - path: .coverage

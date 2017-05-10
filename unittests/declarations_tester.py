@@ -1,16 +1,16 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
 import unittest
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class declarations_t(parser_test_case.parser_test_case_t):
@@ -20,7 +20,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def test_enumeration_t(self):
-        enum = self.global_ns.enum('ENumbers')
+        enum = self.global_ns.enumeration('ENumbers')
         expected_values = list(
             zip(['e%d' % index for index in range(10)],
                 [index for index in range(10)]))
@@ -41,7 +41,8 @@ class declarations_t(parser_test_case.parser_test_case_t):
         initialized = self.global_ns.variable(name='initialized')
 
         expected_value = None
-        if '0.9' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml_09 or \
+                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
             expected_value = '10122004ul'
         else:
             expected_value = '10122004'
@@ -61,7 +62,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
             m_mutable.type_qualifiers.has_static,
             "m_mutable must not have static type qualifier")
 
-        if "GCC-XML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             # Old GCC-XML behaviour. Can be dropped once GCC-XML is removed.
             static_var = self.global_ns.variable(name="extern_var")
             self.assertTrue(
@@ -125,9 +126,6 @@ class declarations_t(parser_test_case.parser_test_case_t):
             ssv_static_var_value.type_qualifiers.has_mutable,
             "ssv_static_var_value must not have mutable type qualifier")
 
-        if 'PDB' in utils.xml_generator:
-            return  # TODO find out work around
-
     def test_calldef_free_functions(self):
         ns = self.global_ns.namespace('calldef')
 
@@ -139,7 +137,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         # qualifier, which is wrong; Keep the test like this for gccxml as
         # gccxml will be dropped one day. With castxml check if function has
         # no extern qualifier.
-        if 'GCC-XML' in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 no_return_no_args.has_extern,
                 "function 'no_return_no_args' should have an extern qualifier")
@@ -299,9 +297,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
 
     def test_ellipsis(self):
         ns = self.global_ns.namespace('ellipsis_tester')
-        do_smth = ns.mem_fun('do_smth')
+        do_smth = ns.member_function('do_smth')
         self.assertTrue(do_smth.has_ellipsis)
-        do_smth_else = ns.free_fun('do_smth_else')
+        do_smth_else = ns.free_function('do_smth_else')
         self.assertTrue(do_smth_else.has_ellipsis)
 
 
@@ -324,7 +322,11 @@ class gccxml_declarations_t(declarations_t):
                 self.COMPILATION_MODE)
             gccxml_declarations_t.global_ns = \
                 declarations.get_global_namespace(decls)
+            gccxml_declarations_t.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         if not self.global_ns:
+            self.xml_generator_from_xml_file = \
+                gccxml_declarations_t.xml_generator_from_xml_file
             self.global_ns = gccxml_declarations_t.global_ns
 
 
@@ -361,6 +363,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

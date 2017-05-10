@@ -1,18 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pprint
-import warnings
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-import autoconfig
-import parser_test_case
+import unittest
 
-import pygccxml
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml import utils
 from pygccxml import parser
 from pygccxml import declarations
@@ -24,11 +20,8 @@ def is_sub_path(root, some_path):
     return some_path.startswith(root)
 
 
-class core_t(parser_test_case.parser_test_case_t):
-
-    """Tests core algorithms of GCC-XML and GCC-XML file reader.
-    Those most white-box testing.
-    """
+class Core(parser_test_case.parser_test_case_t):
+    """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
 
     def __init__(self, *args):
@@ -36,7 +29,7 @@ class core_t(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def test_top_parent(self):
-        enum = self.global_ns.enum('::ns::ns32::E33')
+        enum = self.global_ns.enumeration('::ns::ns32::E33')
         self.assertTrue(self.global_ns is enum.top_parent)
 
     # tests namespaces join functionality. described in gccxml.py
@@ -61,7 +54,7 @@ class core_t(parser_test_case.parser_test_case_t):
             self.global_ns.namespace(ns)
 
         for enum in enums:
-            self.global_ns.enum(enum)
+            self.global_ns.enumeration(enum)
 
         ns = self.global_ns.namespace(nss[0])
         ns12 = self.global_ns.namespace(nss[1])
@@ -72,23 +65,23 @@ class core_t(parser_test_case.parser_test_case_t):
                 ns is ns12.parent is ns22.parent is ns32.parent),
             'There are 2 or more instances of ns namespace.')
 
-        e11 = self.global_ns.enum(enums[0])
-        e21 = self.global_ns.enum(enums[1])
-        e31 = self.global_ns.enum(enums[2])
+        e11 = self.global_ns.enumeration(enums[0])
+        e21 = self.global_ns.enumeration(enums[1])
+        e31 = self.global_ns.enumeration(enums[2])
         self.assertTrue(
             e11.parent is e21.parent is e31.parent,
             'There are 2 or more instances of global namespace.')
 
-        nse12 = self.global_ns.enum(enums[3])
-        nse23 = self.global_ns.enum(enums[4])
-        nse33 = self.global_ns.enum(enums[5])
+        nse12 = self.global_ns.enumeration(enums[3])
+        nse23 = self.global_ns.enumeration(enums[4])
+        nse33 = self.global_ns.enumeration(enums[5])
         self.assertTrue(
             ns and (
                 ns is nse12.parent is nse23.parent is nse33.parent),
             'There are 2 or more instances of ns namespace.')
 
     def _test_ns_membership(self, ns, enum_name):
-        unnamed_enum = ns.enum(
+        unnamed_enum = ns.enumeration(
             lambda d: d.name == '' and is_sub_path(
                 autoconfig.data_directory,
                 d.location.file_name),
@@ -98,7 +91,7 @@ class core_t(parser_test_case.parser_test_case_t):
             "namespace '%s' does not contains unnamed enum." %
             ns.name)
 
-        enum = ns.enum(enum_name, recursive=False)
+        enum = ns.enumeration(enum_name, recursive=False)
 
         self.assertTrue(
             enum in ns.declarations,
@@ -117,12 +110,12 @@ class core_t(parser_test_case.parser_test_case_t):
 
     def _test_class_membership(self, class_inst, enum_name, access):
         # getting enum through get_members function
-        nested_enum1 = class_inst.enum(
+        nested_enum1 = class_inst.enumeration(
             name=enum_name,
             function=declarations.access_type_matcher_t(access))
 
         # getting enum through declarations property
-        nested_enum2 = class_inst.enum(enum_name)
+        nested_enum2 = class_inst.enumeration(enum_name)
 
         # it shoud be same object
         self.assertTrue(
@@ -161,41 +154,17 @@ class core_t(parser_test_case.parser_test_case_t):
             'ENestedPrivate',
             declarations.ACCESS_TYPES.PRIVATE)
 
-    def test_compiler_retrocompatibility(self):
-        """
-        For retro-compatibility, test if the compiler attribute still works.
-
-        This can be removed once the compiler attribute is dropped.
-
-        """
-
-        # Do not clutter the tests with warnings
-        warnings.simplefilter("ignore", DeprecationWarning)
-
-        std = self.global_ns.namespace("std")
-        self.assertEqual(utils.xml_generator, std.compiler)
-        if "GCC" in utils.xml_generator:
-            self.assertIn("GCC", std.compiler)
-        elif "CastXML" in utils.xml_generator:
-            self.assertIn("CastXML", std.compiler)
-
-        # Reset this warning to always
-        warnings.simplefilter("error", DeprecationWarning)
-
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
         self.assertTrue(std, "std namespace has not been found")
         # GCCXML had mangled names for everything. With CastXML
         # there are only mangled names for functions and variables.
-        if "GCC" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 std.mangled,
                 "Mangled name of std namespace should be different from None")
-        elif "CastXML" in utils.xml_generator:
-            # Check if an assertion is correctly raised when using castxml.
-            # Call the getter by using lambda, else assertRaises does not
-            # work as expected.
-            self.assertRaises(Exception, lambda: std.mangled)
+        elif self.xml_generator_from_xml_file.is_castxml:
+            self.assertIsNone(std.mangled)
 
     def test_mangled_name_functions(self):
         # This works with gccxml and castxml
@@ -218,15 +187,13 @@ class core_t(parser_test_case.parser_test_case_t):
         # This works with gccxml only. Check if an assertion is correctly
         # raised when using castxml.
         var_inst = self.global_ns.variable('array255')
-        if "GCC" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(
                 var_inst.demangled,
                 "Demangled name of array255 variable should be different +"
                 "from None")
-        elif "CastXML" in utils.xml_generator:
-            # Call the getter by using lambda, else assertRaises does not
-            # work as expected.
-            self.assertRaises(Exception, lambda: var_inst.demangled)
+        else:
+            self.assertIsNone(var_inst.demangled)
 
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
@@ -408,7 +375,7 @@ class core_t(parser_test_case.parser_test_case_t):
                 declarations.declarated_t),
             " typedef to enum should be 'declarated_t' instead of '%s'" %
             typedef_inst.decl_type.__class__.__name__)
-        enum_declaration = self.global_ns.enum('EFavoriteDrinks')
+        enum_declaration = self.global_ns.enumeration('EFavoriteDrinks')
         self.assertTrue(
             typedef_inst.decl_type.declaration is enum_declaration,
             "instance of declaration_t has reference to '%s' instead of '%s'" %
@@ -557,9 +524,6 @@ class core_t(parser_test_case.parser_test_case_t):
             not implementation.is_abstract,
             "class 'implementation' should not be abstract")
 
-    def test_versioning(self):
-        self.assertTrue(utils.xml_generator)
-
     def test_byte_size(self):
         mptrs = self.global_ns.class_('members_pointers_t')
         self.assertTrue(mptrs.byte_size != 0)
@@ -573,15 +537,14 @@ class core_t(parser_test_case.parser_test_case_t):
         self.assertTrue(mptrs.variable('xxx').byte_offset != 0)
 
 
-class core_gccxml_t(core_t):
-
-    """Tests core algorithms of GCC-XML and GCC-XML file reader.
-    Those most white-box testing.
-    """
+class CoreXMLGenerator(Core):
+    """Tests core algorithms of GCC-XML and CastXML file readers."""
     global_ns = None
+    COMPILATION_MODE = None
+    INIT_OPTIMIZER = None
 
     def __init__(self, *args):
-        core_t.__init__(self, *args)
+        Core.__init__(self, *args)
         self.test_files = [
             'core_ns_join_1.hpp',
             'core_ns_join_2.hpp',
@@ -599,73 +562,65 @@ class core_gccxml_t(core_t):
         self.global_ns = None
 
     def setUp(self):
-        if not core_t.global_ns:
+        if not Core.global_ns:
             decls = parser.parse(
                 self.test_files,
                 self.config,
                 self.COMPILATION_MODE)
-            core_t.global_ns = pygccxml.declarations.get_global_namespace(
+            Core.global_ns = declarations.get_global_namespace(
                 decls)
             if self.INIT_OPTIMIZER:
-                core_t.global_ns.init_optimizer()
-        self.global_ns = core_t.global_ns
+                Core.global_ns.init_optimizer()
+            Core.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
+        self.global_ns = Core.global_ns
+        self.xml_generator_from_xml_file = Core.xml_generator_from_xml_file
 
 
-class core_all_at_once_t(core_gccxml_t):
+class core_all_at_once_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_all_at_once_no_opt_t(core_gccxml_t):
+class core_all_at_once_no_opt_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = False
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_file_by_file_t(core_gccxml_t):
+class core_file_by_file_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = True
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
-class core_file_by_file_no_opt_t(core_gccxml_t):
+class core_file_by_file_no_opt_t(CoreXMLGenerator):
     COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     INIT_OPTIMIZER = False
 
     def __init__(self, *args):
-        core_gccxml_t.__init__(self, *args)
+        CoreXMLGenerator.__init__(self, *args)
 
 
 def create_suite():
     suite = unittest.TestSuite()
-    if autoconfig.cxx_parsers_cfg.gccxml:
-        suite.addTest(unittest.makeSuite(core_all_at_once_t))
-        suite.addTest(unittest.makeSuite(core_all_at_once_no_opt_t))
-        suite.addTest(unittest.makeSuite(core_file_by_file_t))
-        suite.addTest(unittest.makeSuite(core_file_by_file_no_opt_t))
+    suite.addTest(unittest.makeSuite(core_all_at_once_t))
+    suite.addTest(unittest.makeSuite(core_all_at_once_no_opt_t))
+    suite.addTest(unittest.makeSuite(core_file_by_file_t))
+    suite.addTest(unittest.makeSuite(core_file_by_file_no_opt_t))
     return suite
 
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
 
+
 if __name__ == "__main__":
     run_suite()
-# import hotshot
-# import hotshot.stats
-# statistics_file = tempfile.mkstemp( suffix='.stat' )[1]
-# profile = hotshot.Profile(statistics_file)
-#
-# profile.runcall( run_suite )
-# profile.close()
-# statistics = hotshot.stats.load( statistics_file )
-# statistics.strip_dirs()
-# statistics.sort_stats( 'time', 'calls' )
-# statistics.print_stats( 678 )

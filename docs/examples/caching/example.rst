@@ -10,13 +10,13 @@ Let's consider the following c++ file:
 
 .. literalinclude:: example.hpp
    :language: c++
-   :lines: 4-
+   :lines: 5-
 
 To enable caching, you can use the following code:
 
 .. literalinclude:: example.py
    :language: python
-   :lines: 5,6,7,16-26,28-
+   :lines: 6,7,8,17-27,29-
 
 The first time you run this example, the c++ file will be read and a xml
 file will be generated:

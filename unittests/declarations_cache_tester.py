@@ -1,13 +1,15 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
 import unittest
 import os.path
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
+
 from pygccxml.parser.config import xml_generator_configuration_t
 from pygccxml.parser import declarations_cache
 
@@ -166,6 +168,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

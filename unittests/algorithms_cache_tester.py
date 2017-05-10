@@ -1,13 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
@@ -21,14 +22,16 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
 
     def setUp(self):
         decls = parser.parse([self.header], self.config)
+        self.xml_generator_from_xml_file = \
+            self.config.xml_generator_from_xml_file
         self.global_ns = declarations.get_global_namespace(decls)
 
     def test_name_based(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
 
-        if "CastXML" in utils.xml_generator:
-            self.assertRaises(Exception, lambda: cls.cache.demangled_name)
-        elif "GCCXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
+            self.assertIsNone(cls.cache.demangled_name)
+        elif self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(cls.cache.demangled_name == cls.name)
 
         cls_full_name = declarations.full_name(cls)
@@ -37,7 +40,7 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         cls_declaration_path = declarations.declaration_path(cls)
         self.assertTrue(cls.cache.declaration_path == cls_declaration_path)
 
-        enum = cls.enum('ENestedPublic')
+        enum = cls.enumeration('ENestedPublic')
 
         enum_full_name = declarations.full_name(enum)
         self.assertTrue(enum.cache.full_name == enum_full_name)
@@ -48,18 +51,18 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         # now we change class name, all internal decls cache should be cleared
         cls.name = "new_name"
         self.assertTrue(not cls.cache.full_name)
-        if "GCCXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(not cls.cache.demangled_name)
         self.assertTrue(not cls.cache.declaration_path)
 
         self.assertTrue(not enum.cache.full_name)
-        if "GCCXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_gccxml:
             self.assertTrue(not enum.cache.demangled_name)
         self.assertTrue(not enum.cache.declaration_path)
 
     def test_access_type(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
-        enum = cls.enum('ENestedPublic')
+        enum = cls.enumeration('ENestedPublic')
         self.assertTrue(enum.cache.access_type == 'public')
         enum.cache.reset_access_type()
         self.assertTrue(not enum.cache.access_type)
@@ -76,6 +79,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

@@ -1,10 +1,12 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import declarations
 
 
@@ -17,7 +19,7 @@ class tester_t(parser_test_case.parser_test_case_t):
     def __test_split_recursive_impl(self, decl_string, control_seq):
         self.assertTrue(
             control_seq ==
-            declarations.call_invocation.split_recursive(decl_string))
+            list(declarations.call_invocation.split_recursive(decl_string)))
 
     def __test_is_call_invocation_impl(self, decl_string):
         self.assertTrue(
@@ -94,6 +96,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

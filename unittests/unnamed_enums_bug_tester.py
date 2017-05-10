@@ -1,10 +1,11 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
@@ -26,7 +27,7 @@ class source_reader_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        enums = self.global_ns.enums()
+        enums = self.global_ns.enumerations()
         for enum in enums:
             names.extend(list(enum.get_name2value_dict().keys()))
         self.assertTrue(len(names) == 4)
@@ -51,7 +52,7 @@ class project_reader_1_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        for enum in self.global_ns.enums():
+        for enum in self.global_ns.enumerations():
             names.extend(list(enum.get_name2value_dict().keys()))
         self.assertTrue(len(names) == 4)
         self.assertTrue('x1' in names)
@@ -78,7 +79,7 @@ class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
 
     def test(self):
         names = []
-        enums = self.global_ns.enums()
+        enums = self.global_ns.enumerations()
         list(map(
             lambda enum: names.extend(list(enum.get_name2value_dict().keys())),
             enums))
@@ -101,6 +102,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

@@ -1,10 +1,12 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -25,9 +27,8 @@ class Test(parser_test_case.parser_test_case_t):
         parser_test_case.parser_test_case_t.__init__(self, *args)
 
     def test(self):
-        src_reader = parser.source_reader_t(self.config)
-        global_ns = declarations.get_global_namespace(
-            src_reader.read_string(code))
+        decls = parser.parse_string(code, self.config)
+        global_ns = declarations.get_global_namespace(decls)
         self.assertTrue(global_ns.variable('a').bits == 1)
         self.assertTrue(global_ns.variable('unused').bits == 31)
 
@@ -40,6 +41,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

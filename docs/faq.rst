@@ -1,6 +1,42 @@
 FAQ
 ===
 
+GCCXML vs CastXML
+-----------------
+
+``GCCXML`` has been superseded by ``CastXML``. It is highly recommended to
+use ``CastXML``. ``GCCXML`` support will be removed from ``Pygccxml``
+in version 2.0.
+
+C++ and C code support
+----------------------
+
+``Pygccxml`` supports ``C++98``, as ``CastXML`` and ``GCCXML`` only output
+declarations from the ``C++98`` subset. Of course, newer versions of C++
+can be parsed (the tests currently all pass with ``C++11`` and ``C++14``),
+but not all new features from these language definitions can be used.
+
+``C`` code support has been reported to work. As ``C`` is similar to ``C++``,
+this makes sense. Some discrepancies may be present.
+
+Still, parsing ``C`` code is not officially supported by ``pygccxml``, as it
+falls out of scope of this project. Of course, if some volunteer wants to work
+on this, submissions would be accepted.
+
+Function and method bodies
+--------------------------
+
+``Pygccxml`` does not allow to fetch declarations defined in function or method
+bodies. For example the following ``a`` variable will not appear in
+the declarations tree:
+
+ | int f() {
+ |   int a = 3;
+ |   return a;
+ | }
+
+Neither ``GCCXML`` or ``CastXML`` currently support this feature.
+``CastXML`` could probably be extended for this later, as ``pygccxml``.
 
 Performance
 -----------
@@ -47,8 +83,20 @@ Some things you may try (in order of priority):
    by pygccxml. You will find an example of this mechanism in the examples section.
 
 
-\_\_va_list_tag and other hidden declarations
----------------------------------------------
+Flags
+-----
+
+castxml_epic_version
+--------------------
+
+The ```castxml_epic_version``` can be set to 1 to benefit from new castxml
+and pygccxml features. To be able to use this, you will need the latest
+castxml version.
+
+Currently this adds the support for elaborated type specifiers.
+
+\_\_va_list_tag and other hidden declarations (f1)
+--------------------------------------------------
 
 When parsing with CastXML, the XML tree can contain declarations named
 ``__va_list_tag``. If the compiler is llvm 3.9,  ``__NSConstantString_tag``
@@ -62,3 +110,11 @@ By default, pygccxml will ignore these declarations.
 To still read these declarations from the xml file, a config flag can
 be set (``config.flags = ["f1"]``), or a flag can be passed as argument the
 config setup (``flags=["f1"]``).
+
+\_\_thiscall\_\_ in attributes (f2)
+-----------------------------------
+
+Attributes defined as ```__thiscall__``` are now ignored (tested with VS 2013).
+The ```__thiscall__``` in some attributes will be removed too. If you still
+want to have access to these attributes, you can use the
+``config.flags = ["f2"]`` option.

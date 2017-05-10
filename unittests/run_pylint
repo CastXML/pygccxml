@@ -5,4 +5,4 @@ DIRECTORY=$( cd "$( dirname "$0" )" && pwd )
 # Get parent directory
 DIR=${DIRECTORY%/*}
 
-pylint --rcfile=$DIRECTORY"/pylint.cfg" $DIR/pygccxml/declarations
+pylint --rcfile=$DIRECTORY"/pylint.cfg" $DIR/pygccxml/

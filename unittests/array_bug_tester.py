@@ -1,10 +1,11 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
@@ -22,7 +23,7 @@ class Test(parser_test_case.parser_test_case_t):
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
-            'int[2][3][4][5]' == aaaa_type.decl_string,
+            'int [2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
     def test2(self):
@@ -32,7 +33,7 @@ class Test(parser_test_case.parser_test_case_t):
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
-            'int *[2][3][4][5]' == aaaa_type.decl_string,
+            'int * [2][3][4][5]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
     def test3(self):
@@ -42,7 +43,7 @@ class Test(parser_test_case.parser_test_case_t):
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
-            'int[2]' == aaaa_type.decl_string,
+            'int [2]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
     def test4(self):
@@ -52,7 +53,7 @@ class Test(parser_test_case.parser_test_case_t):
             src_reader.read_string(code))
         aaaa_type = global_ns.variable('aaaa').decl_type
         self.assertTrue(
-            '::xyz[2][3]' == aaaa_type.decl_string,
+            '::xyz [2][3]' == aaaa_type.decl_string,
             aaaa_type.decl_string)
 
     def test5(self):
@@ -63,11 +64,11 @@ class Test(parser_test_case.parser_test_case_t):
         arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
-                'char[4] const' == arr_type.decl_string,
+                'char [4] const' == arr_type.decl_string,
                 arr_type.decl_string)
         else:
             self.assertTrue(
-                'char const[4]' == arr_type.decl_string,
+                'char const [4]' == arr_type.decl_string,
                 arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
@@ -82,11 +83,11 @@ class Test(parser_test_case.parser_test_case_t):
         arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
-                'char[4] volatile' == arr_type.decl_string,
+                'char [4] volatile' == arr_type.decl_string,
                 arr_type.decl_string)
         else:
             self.assertTrue(
-                'char volatile[4]' == arr_type.decl_string,
+                'char volatile [4]' == arr_type.decl_string,
                 arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
@@ -101,11 +102,11 @@ class Test(parser_test_case.parser_test_case_t):
         arr_type = global_ns.variable('arr').decl_type
         if self.config.xml_generator == "gccxml":
             self.assertTrue(
-                'char[4] const volatile' == arr_type.decl_string,
+                'char [4] const volatile' == arr_type.decl_string,
                 arr_type.decl_string)
         else:
             self.assertTrue(
-                'char const volatile[4]' == arr_type.decl_string,
+                'char const volatile [4]' == arr_type.decl_string,
                 arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
@@ -123,6 +124,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

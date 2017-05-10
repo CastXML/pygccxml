@@ -1,10 +1,12 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
+
 from pygccxml import parser
 from pygccxml import declarations
 
@@ -25,7 +27,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.global_ns = Test.global_ns
 
     def test(self):
-        f = self.global_ns.free_fun('pygccxml_bug')
+        f = self.global_ns.free_function('pygccxml_bug')
         t = f.arguments[0].decl_type
         self.assertTrue(isinstance(t, declarations.pointer_t))
         self.assertTrue(isinstance(t.base, declarations.volatile_t))
@@ -41,6 +43,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

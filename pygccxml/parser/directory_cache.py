@@ -1,5 +1,5 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 #
@@ -20,13 +20,13 @@ import os
 import os.path
 import gzip
 import hashlib
+import warnings
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
 
 from . import declarations_cache
-from .. import utils
 
 
 class index_entry_t(object):
@@ -57,7 +57,8 @@ class index_entry_t(object):
         self.filesigs, self.configsig = state
 
 
-class directory_cache_t (declarations_cache.cache_base_t):
+# pylint: disable=W0622
+class directory_cache_t(declarations_cache.cache_base_t):
 
     """cache class that stores its data as multiple files inside a directory.
 
@@ -70,7 +71,9 @@ class directory_cache_t (declarations_cache.cache_base_t):
     modified since the last run).
     """
 
-    def __init__(self, dir="cache", compression=False, sha1_sigs=True):
+    def __init__(
+            self, dir="cache", directory="cache",
+            compression=False, sha1_sigs=True):
         """
         :param dir: cache directory path, it is created, if it does not exist
 
@@ -82,10 +85,19 @@ class directory_cache_t (declarations_cache.cache_base_t):
                          the modification date
         """
 
+        if dir != "cache":
+            # Somebody explicitly set a different value for dir
+            warnings.warn(
+                "The dir argument is deprecated.\n" +
+                "Please use the directory argument instead.",
+                DeprecationWarning)
+            # Deprecated since 1.9.0, will be removed in 2.0.0
+            directory = dir
+
         declarations_cache.cache_base_t.__init__(self)
 
         # Cache directory
-        self.__dir = os.path.abspath(dir)
+        self.__dir = os.path.abspath(directory)
 
         # Flag that determines whether the cache files will be compressed
         self.__compression = compression
@@ -145,7 +157,6 @@ class directory_cache_t (declarations_cache.cache_base_t):
         dependent_files = {}
         for name in [source_file] + included_files:
             dependent_files[name] = 1
-        dependent_files = list(dependent_files.keys())
 
         key = self._create_cache_key(source_file)
         # Remove an existing entry (if there is one)
@@ -157,7 +168,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
 
         # Create the sigs of all dependent files...
         filesigs = []
-        for filename in dependent_files:
+        for filename in list(dependent_files.keys()):
             id_, sig = self.__filename_rep.acquire_filename(filename)
             filesigs.append((id_, sig))
 
@@ -240,10 +251,6 @@ class directory_cache_t (declarations_cache.cache_base_t):
             self.__index = {}
             self.__filename_rep = filename_repository_t(self.__sha1_sigs)
 
-        # Read the xml generator from the cache and set it
-        with open(os.path.join(self.__dir, "gen.dat"), "r") as gen_file:
-            utils.xml_generator = gen_file.read()
-
         self.__modified_flag = False
 
     def _save(self):
@@ -261,10 +268,6 @@ class directory_cache_t (declarations_cache.cache_base_t):
                 indexfilename,
                 (self.__index,
                  self.__filename_rep))
-
-            # Read the xml generator from the cache and set it
-            with open(os.path.join(self.__dir, "gen.dat"), "w") as gen_file:
-                gen_file.write(utils.xml_generator)
 
             self.__modified_flag = False
 
@@ -326,7 +329,7 @@ class directory_cache_t (declarations_cache.cache_base_t):
             return
 
         # Release the referenced files...
-        for id_, sig in entry.filesigs:
+        for id_, _ in entry.filesigs:
             self.__filename_rep.release_filename(id_)
 
         # Remove the cache entry...
@@ -542,13 +545,12 @@ class filename_repository_t(object):
             if not os.path.exists(entry.filename):
                 return None
             try:
-                f = open(entry.filename, "r")
+                with open(entry.filename, "r") as f:
+                    data = f.read()
+                    return hashlib.sha1(data.encode("utf-8")).digest()
             except IOError as e:
                 print("Cannot determine sha1 digest:", e)
                 return None
-            data = f.read()
-            f.close()
-            return hashlib.sha1(data.encode("utf-8")).digest()
         else:
             # return file modification date...
             try:
@@ -556,8 +558,9 @@ class filename_repository_t(object):
             except OSError:
                 return None
 
-    def _dump(self):
-        """Dump contents for debugging/testing.
+    def _dump(self):  # pragma: no cover
+        """
+        Dump contents for debugging/testing.
         """
 
         print(70 * "-")

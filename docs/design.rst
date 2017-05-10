@@ -14,11 +14,6 @@ pygccxml has 4 packages:
   or `CastXML`_ generated files. It also defines a few classes that will help
   you unnecessary parsing of C++ source files.
 
-* :mod:`binary_parsers <pygccxml.binary_parsers>`
-
-  This package extracts information from binary files (`.so`, `.dll`, `.map`)
-  and merges it with the declarations tree.
-
 * :mod:`utils <pygccxml.utils>`
 
   This package defines a few functions useful for the whole project,

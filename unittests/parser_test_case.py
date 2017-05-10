@@ -1,5 +1,5 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
@@ -7,19 +7,22 @@ import pprint
 import sys
 import time
 import unittest
-import autoconfig
+
+from . import autoconfig
 
 
 class parser_test_case_t(unittest.TestCase):
 
     CXX_PARSER_CFG = None
+    xml_generator_from_xml_file = None
 
     def __init__(self, *args):
         unittest.TestCase.__init__(self, *args)
+        self.xml_generator_from_xml_file = None
         if self.CXX_PARSER_CFG:
             self.config = self.CXX_PARSER_CFG.clone()
-        elif autoconfig.cxx_parsers_cfg.gccxml:
-            self.config = autoconfig.cxx_parsers_cfg.gccxml.clone()
+        elif autoconfig.cxx_parsers_cfg.config:
+            self.config = autoconfig.cxx_parsers_cfg.config.clone()
         else:
             pass
 
@@ -99,6 +102,7 @@ class parser_test_case_t(unittest.TestCase):
             (calldef.name,
              pprint.pformat([delc.name for delc in exception_decls]),
              pprint.pformat([delc.name for delc in exceptions_indeed])))
+
 
 if sys.version_info < (2, 7, 0):
     # Python2.6 does not have the following methods in the unittest module

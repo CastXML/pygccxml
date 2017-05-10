@@ -1,11 +1,12 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import sys
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
@@ -55,7 +56,7 @@ class Test(parser_test_case.parser_test_case_t):
                 pass
         sys.stdout = DontPrint()
 
-        declarations.print_declarations(self.decls, writer=None)
+        declarations.print_declarations(self.decls)
 
     def test__str__(self):
         decls = declarations.make_flatten(self.decls)
@@ -71,6 +72,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

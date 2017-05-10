@@ -1,69 +1,75 @@
-// Copyright 2014-2016 Insight Software Consortium.
-// Copyright 2004-2008 Roman Yakovenko.
+// Copyright 2014-2017 Insight Software Consortium.
+// Copyright 2004-2009 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
 #ifndef __remove_template_defaults_hpp__
 #define __remove_template_defaults_hpp__
 
-#if defined( __llvm__ )
-
-    // This is mostly for CastXML with newer compilers
-
-    // When parsing with clang//llvm use the new c++11 (c++0x even ?)
-    // unordered_maps and unordered_sets
-
-    // First, include a library that does nothing ...
-    // This will force the preprocessor to load _LIBCPP_VERSION
-    #include <ciso646>
-
-    #if defined( _LIBCPP_VERSION )
-        // libc++ (mostly OS X)
-        #include <unordered_map>
-        #include <unordered_set>
-        #define HASH_XXX_NS std
+#if defined( __GCCXML__ )
+    #if defined( __GNUC__ )
+        #include <ext/hash_set>
+        #include <ext/hash_map>
+        #define HASH_XXX_NS __gnu_cxx
     #else
-        // libstd++ (mostly Linux)
-        #include <tr1/unordered_map>
-        #include <tr1/unordered_set>
-        #define HASH_XXX_NS std::tr1
-    #endif
-    #define HASH_XXX_UMAP unordered_map
-    #define HASH_XXX_USET unordered_set
-    #define HASH_XXX_UMMAP unordered_multimap
-    #define HASH_XXX_UMMSET unordered_multiset
-
-#else
-
-    #if defined( __GCCXML__ )
-
-        #if defined( __GNUC__ )
-            #include <ext/hash_set>
-            #include <ext/hash_map>
-            #define HASH_XXX_NS __gnu_cxx
+        #include <hash_set>
+        #include <hash_map>
+        #if !defined( __PYGCCXML_MSVC9__ )
+            #define HASH_XXX_NS std
         #else
-            #include <hash_set>
-            #include <hash_map>
-            #if !defined( __PYGCCXML_MSVC9__ )
-                #define HASH_XXX_NS std
-            #else
-                #define HASH_XXX_NS stdext
-            #endif
-
+            #define HASH_XXX_NS stdext
         #endif
 
-        #define HASH_XXX_UMAP hash_map
-        #define HASH_XXX_USET hash_set
-        #define HASH_XXX_UMMAP hash_multimap
-        #define HASH_XXX_UMMSET hash_multiset
+    #endif
 
+    #define HASH_XXX_UMAP hash_map
+    #define HASH_XXX_USET hash_set
+    #define HASH_XXX_UMMAP hash_multimap
+    #define HASH_XXX_UMMSET hash_multiset
+#endif
+
+#if defined( __castxml__ )
+
+    #if defined( __llvm__ )
+        // This is for CastXML and llvm
+
+        // When parsing with clang//llvm use the new c++11 (c++0x even ?)
+        // unordered_maps and unordered_sets
+
+        // First, include a library that does nothing ...
+        // This will force the preprocessor to load _LIBCPP_VERSION
+        #include <ciso646>
+
+        #if defined( _LIBCPP_VERSION )
+            // libc++ (mostly OS X)
+            #include <unordered_map>
+            #include <unordered_set>
+            #define HASH_XXX_NS std
+        #else
+            // libstd++ (mostly Linux)
+            #include <tr1/unordered_map>
+            #include <tr1/unordered_set>
+            #define HASH_XXX_NS std::tr1
+        #endif
+        #define HASH_XXX_UMAP unordered_map
+        #define HASH_XXX_USET unordered_set
+        #define HASH_XXX_UMMAP unordered_multimap
+        #define HASH_XXX_UMMSET unordered_multiset
+    #elif defined( _MSC_VER )
+        // This is for CastXML and Visual Studio
+        #include <unordered_map>
+        #include <unordered_set>
+        #define HASH_XXX_NS std::tr1
+        #define HASH_XXX_UMAP unordered_map
+        #define HASH_XXX_USET unordered_set
+        #define HASH_XXX_UMMAP unordered_multimap
+        #define HASH_XXX_UMMSET unordered_multiset
     #else
-
         #if ((__GNUC__ > 4) || \
              (__GNUC__ == 4 && __GNUC_MINOR__ > 4) || \
              (__GNUC__ == 4 && __GNUC_MINOR__ == 4 && __GNUC_PATCHLEVEL__ == 7))
 
-            // Use TR1 containers for gcc >= 4.4.7 + castxml
+            // Use TR1 containers for gcc >= 4.4.7 or MSCV + castxml
             // (this might work on older versions of gcc too, needs testing)
             #include <tr1/unordered_map>
             #include <tr1/unordered_set>
@@ -78,6 +84,7 @@
             // 4.4.7 is already quite old.
             #error "Not tested"
         #endif
+
     #endif
 
 #endif

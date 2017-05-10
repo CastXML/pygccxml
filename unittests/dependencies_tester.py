@@ -1,14 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -22,8 +22,11 @@ class Test(parser_test_case.parser_test_case_t):
     def setUp(self):
         if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
             Test.global_ns = declarations.get_global_namespace(decls)
             Test.global_ns.init_optimizer()
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
         self.global_ns = Test.global_ns
 
     def test_variable(self):
@@ -45,7 +48,9 @@ class Test(parser_test_case.parser_test_case_t):
 
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
-        if '0.9' in utils.xml_generator or 'CastXML' in utils.xml_generator:
+        generator = self.xml_generator_from_xml_file
+        if generator.is_gccxml_09 or generator.is_gccxml_09_buggy or \
+                generator.is_castxml:
             # GCCXML R122 adds compiler generated constructors/destructors
             # and operator= to the class, if it has
             dependencies = [
@@ -105,6 +110,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

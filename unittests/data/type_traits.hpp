@@ -1,5 +1,5 @@
-// Copyright 2014-2016 Insight Software Consortium.
-// Copyright 2004-2008 Roman Yakovenko.
+// Copyright 2014-2017 Insight Software Consortium.
+// Copyright 2004-2009 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
@@ -53,6 +53,37 @@ struct incomplete_type;
 namespace is_void{
 namespace yes{
     TYPE_PERMUTATION( void, void )
+}
+namespace no{
+    typedef void* void_ptr_t;
+    typedef int int_t;
+    typedef some_struct_t some_struct_alias_t;
+    typedef incomplete_type incomplete_type_alias_t;
+    typedef void(*function_t)();
+    typedef void (some_struct_t::*member_function_t)();
+} }
+
+namespace is_void_pointer{
+namespace yes{
+    void *void_ptr1;
+    typedef void *void_ptr2;
+    void *ptr1 = 0;
+}
+namespace no{
+    const void *ptr1;
+    volatile void *ptr2;
+    const volatile void *ptr3;
+    typedef bool bool_t;
+    typedef int int_t;
+    typedef some_struct_t some_struct_alias_t;
+    typedef incomplete_type incomplete_type_alias_t;
+    typedef void(*function_t)();
+    typedef void (some_struct_t::*member_function_t)();
+} }
+
+namespace is_bool{
+namespace yes{
+    TYPE_PERMUTATION( bool, bool )
 }
 namespace no{
     typedef void* void_ptr_t;
@@ -590,11 +621,13 @@ namespace details{
     struct const_item{ const int values[10]; };
     struct const_container{ const const_item items[10]; };
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || defined(_MSC_VER)
     // C++11 and later must use braces to trigger aggregate initialization.
     // Using parentheses will cause value-initialization, and since the
     // two classes above have implicitly deleted default constructors,
     // that causes default initialization to be performed, which is ill-formed.
+    // Note: MSVC is using c++11 but still defines __cplusplus as 199711L. In
+    // that case use the c++11 feature, because that specific one is supported.
     void test_const_item( const_item x = const_item{} );
     void test_const_container( const_container x = const_container{} );
 #else

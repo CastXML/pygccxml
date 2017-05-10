@@ -1,37 +1,77 @@
 language:
   - python
 
+env:
+  global:
+    - WINDOWS=0
+    - SITECUSTOMIZELIBPATH=0
+
 matrix:
   include:
     - os: linux
+      python: 3.5
+      env: WINDOWS=1
+    - os: linux
       python: 2.6
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.6/lib/python2.6/sitecustomize.py"
     - os: linux
       python: 2.7
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
       python: 3.2
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.2/lib/python3.2/sitecustomize.py"
     - os: linux
       python: 3.3
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.3/lib/python3.3/sitecustomize.py"
     - os: linux
       python: 3.4
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.4/lib/python3.4/sitecustomize.py"
     - os: linux
       python: 3.5
-      env: XML_GENERATOR="gccxml"
+      env:
+        - XML_GENERATOR="gccxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       python: 2.7
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
       python: 3.5
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+    - os: linux
+      python: 3.6
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
+    - os: linux
+      python: "pypy"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy/lib-python/2.7/sitecustomize.py"
+    - os: linux
+      python: "pypy3.3-5.2-alpha1"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy3/lib-python/3/sitecustomize.py"
     - os: linux
       python: 3.5
       env:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -43,7 +83,9 @@ matrix:
       dist: trusty
       sudo: required
       python: 3.5
-      env: XML_GENERATOR="castxml"
+      env:
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -52,6 +94,7 @@ matrix:
          # gcc 4.8.2 with c++03
          - XML_GENERATOR="castxml"
          - CPPSTD="-std=c++03"
+         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -60,6 +103,7 @@ matrix:
          # gcc 4.8.2 with c++11
          - XML_GENERATOR="castxml"
          - CPPSTD="-std=c++11"
+         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
       dist: trusty
       sudo: required
@@ -67,6 +111,7 @@ matrix:
       env:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -82,6 +127,7 @@ matrix:
        - XML_GENERATOR="castxml"
        - COMPILER=g++-5
        - CPPSTD="-std=c++14"
+       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
       addons:
         apt:
           sources:
@@ -95,12 +141,29 @@ matrix:
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="2"
+        - SITECUSTOMIZELIBPATH="/usr/local/lib/python2.7/site-packages/sitecustomize.py"
     - os: osx
       osx_image: xcode7.3
       language: generic
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
+        - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+        - XML_GENERATOR="castxml-18032017"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+    - os: linux
+      dist: trusty
+      sudo: required
+      python: 3.5
+      env:
+        - XML_GENERATOR="castxml-18032017"
+        - CASTXML_EPIC="1"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
 
 
 before_install:
@@ -111,20 +174,28 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python; fi
 
   # Download castxml binaries
+  # To update the URLs, get the full URLS from ITK, and the run wget with --verbose on the URL.
+  # Look at the redirection and extract the direct URL for usage with Travis.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -O - https://midas3.kitware.com/midas/download/bitstream/460403/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461589/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -O - https://midas3.kitware.com/midas/download/bitstream/460468/castxml-linux.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461590/castxml-linux.tar.gz | tar zxf - -C ${HOME};
+      fi;
+    fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml-18032017" ]]; then
+      if [ ! -e ${HOME}/castxml ]; then
+        wget -q -O - https://sourceforge.net/projects/pygccxml-castxml-binaries/files/castxml-linux-18032017.tar.gz | tar zxf - -C ${HOME};
       fi;
     fi
 
   # Add the castxml binary to the path
-  - if [[ $XML_GENERATOR == "castxml" ]]; then
+  - if [[ $XML_GENERATOR == "castxml" ]] || [[ $XML_GENERATOR == "castxml-18032017" ]]; then
       export PATH=$PATH:~/castxml/bin/;
     fi
 
@@ -134,61 +205,73 @@ before_install:
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++03" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++03\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std03.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++11" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++11\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std11.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++14" ]]; then
-      cd unittests && sed -i s%compiler=None,%compiler=None,\\n\ \ \ \ \ \ \ \ cflags=\"-std=c++14\",%g autoconfig.py && cd ..;
+      mv unittests/configs/travis_std14.cfg unittests/xml_generator.cfg;
     fi
 
   # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
-      cd unittests && sed -i s%compiler=None%compiler=\"/usr/bin/g++-5\"%g autoconfig.py && cd ..;
+     mv unittests/configs/travis_gcc5.cfg unittests/xml_generator.cfg;
     fi
 
-  # Install pep8, needed by the unit tests
-  - pip install pep8
+    # Patch the c++ version to test on the fly
+  - if [[ $CASTXML_EPIC == "1" ]]; then
+      mv unittests/configs/castxml_epic1.cfg unittests/xml_generator.cfg;
+    fi
+
+  # The setuptools version installed on travis is too new and will
+  # not work with python 3.2
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install 'setuptools<30.0.0'; fi
+
+  - pip install coveralls
 
   # Install coverage tools (On 3.2 the new coverage is broken, use an old one)
   # https://github.com/menegazzo/travispy/issues/20
-  - if [ $TRAVIS_PYTHON_VERSION == 3.2 ]; then
-      pip install 'coverage<4.0';
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install 'coverage<4.0'; fi
+  - if [[ $TRAVIS_PYTHON_VERSION != 3.2 ]] && [[ $WINDOWS == 0 ]]; then pip install coverage; fi
+
+  # appveyor-artifacts will be used to fetch coverage results from appveyor
+  - if [ $WINDOWS == 0 ]; then
+      pip install pycodestyle;
     else
-      pip install coverage;
+      pip install https://github.com/Robpol86/appveyor-artifacts/archive/master.zip;
     fi
-  - pip install coveralls
 
 install:
   - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then pip install unittest2; fi
 
 script:
   - echo $TRAVIS_OS_NAME
+  - echo $WINDOWS
+  - python --version
 
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then touch "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]]; then touch "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then touch "/usr/local/lib/python3.6/site-packages/sitecustomize.py"; fi
+  - if [ $WINDOWS == 0 ]; then
+      touch ${SITECUSTOMIZELIBPATH} || travis_terminate 1;
+      printf "import coverage\ncoverage.process_startup()\n" > ${SITECUSTOMIZELIBPATH} || travis_terminate 1;
+    fi
 
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/lib/python${TRAVIS_PYTHON_VERSION}/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 2 ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python2.7/site-packages/sitecustomize.py"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]];
-    then printf "import coverage\ncoverage.process_startup()\n" > "/usr/local/lib/python3.6/site-packages/sitecustomize.py"; fi
-
-  # Install pygccxml
-  - python setup.py install
-
-  # Run the tests with coverage
-  - coverage run unittests/test_all.py
-  # Combine multiple .coverage files (we have multiple files because some scripts were run in a subprocess).
-  - coverage combine
+  # Install pygccxml, run the tests with coverage and
+  # combine multiple .coverage files
+  # We have multiple coverage files because some scripts run in a subprocess
+  - if [ $WINDOWS == 0 ]; then
+      python setup.py install || travis_terminate 1;
+      coverage run -m unittests.test_all || travis_terminate 1;
+      coverage combine || travis_terminate 1;
+    fi
+  # For the "empty" windows build, fetch the coverage results from appveyor
+  - if [ $WINDOWS == 1 ]; then
+      appveyor-artifacts -m --owner-name=iMichka --verbose download || travis_terminate 1;
+    fi
 
 after_success:
   # Send coverage result to https://coveralls.io/r/gccxml/pygccxml

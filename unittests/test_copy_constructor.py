@@ -1,24 +1,32 @@
-# Copyright 2014-2016 Insight Software Consortium.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
+    global_ns = None
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = "test_copy_constructor.hpp"
+        self.global_ns = None
 
     def setUp(self):
-        decls = parser.parse([self.header], self.config)
-        self.global_ns = declarations.get_global_namespace(decls)
+        if not self.global_ns:
+            decls = parser.parse([self.header], self.config)
+            Test.global_ns = declarations.get_global_namespace(decls)
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
+        self.global_ns = Test.global_ns
 
     def test(self):
         """
@@ -50,9 +58,9 @@ class Test(parser_test_case.parser_test_case_t):
         # GCCXML and CastXML return the constructors in a different order.
         # I hope this index inversion will cover the two cases. If different
         # compilers give other orders, we will need to find a nicer solution.
-        if "CastXML" in utils.xml_generator:
+        if self.xml_generator_from_xml_file.is_castxml:
             positions = [0, 1]
-        elif "GCC" in utils.xml_generator:
+        elif self.xml_generator_from_xml_file.is_gccxml:
             positions = [1, 0]
 
         # test2::test2() [constructor]
@@ -69,6 +77,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

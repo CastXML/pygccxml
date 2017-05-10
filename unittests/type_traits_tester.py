@@ -1,15 +1,15 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import autoconfig
-import parser_test_case
+
+from . import autoconfig
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -24,7 +24,10 @@ class Test(parser_test_case.parser_test_case_t):
     def setUp(self):
         if not Test.declarations:
             Test.declarations = parser.parse([self.header], self.config)
+            Test.xml_generator_from_xml_file = \
+                self.config.xml_generator_from_xml_file
         self.declarations = Test.declarations
+        self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
 
     def __test_type_category(self, ns_name, controller):
         ns_control = declarations.find_declaration(
@@ -55,17 +58,19 @@ class Test(parser_test_case.parser_test_case_t):
                 self.assertTrue(
                     controller(decl), er % (decl.decl_string, ns_name))
         er = 'for type "%s" the answer to the question "%s" should be False'
+        generator = self.xml_generator_from_xml_file
         for decl in ns_no.declarations:
             if isinstance(decl, declarations.calldef_t) and \
                     decl.name.startswith('test_'):
                 continue
 
-            if ("CastXML" in utils.xml_generator and
-                    utils.xml_output_version < 1.138 and
-                    decl.name in ['const_item', 'const_container']):
-                # Skip this test to workaround CastXML bug.
-                # See https://github.com/CastXML/CastXML/issues/55
-                continue
+            if generator.is_castxml1 or (
+                    generator.is_castxml and
+                    float(generator.xml_output_version) < 1.138):
+                if decl.name in ['const_item', 'const_container']:
+                    # Skip this test to workaround CastXML bug.
+                    # See https://github.com/CastXML/CastXML/issues/55
+                    continue
 
             self.assertFalse(
                 controller(decl),
@@ -113,11 +118,18 @@ class Test(parser_test_case.parser_test_case_t):
     def test_is_void(self):
         self.__test_type_category('is_void', declarations.is_void)
 
+    def test_is_bool(self):
+        self.__test_type_category('is_bool', declarations.is_bool)
+
     def test_is_integral(self):
         self.__test_type_category('is_integral', declarations.is_integral)
 
     def test_is_pointer(self):
         self.__test_type_category('is_pointer', declarations.is_pointer)
+
+    def test_is_void_pointer(self):
+        self.__test_type_category(
+            'is_void_pointer', declarations.is_void_pointer)
 
     def test_is_const(self):
         self.__test_type_category('is_const', declarations.is_const)
@@ -363,14 +375,16 @@ class Test(parser_test_case.parser_test_case_t):
 class missing_decls_tester_t(unittest.TestCase):
 
     def test(self):
-        config = autoconfig.cxx_parsers_cfg.gccxml
+        config = autoconfig.cxx_parsers_cfg.config
         code = "struct const_item{ const int values[10]; };"
         global_ns = parser.parse_string(code, config)[0]
         ci = global_ns.class_('const_item')
-        if ("CastXML" not in utils.xml_generator or
-                utils.xml_output_version >= 1.138):
-            # Prior to version 1.138, CastXML would incorrect create a default
-            # constructor definition.
+        generator = config.xml_generator_from_xml_file
+        if generator.is_castxml1 or (
+                generator.is_castxml and
+                float(generator.xml_output_version) >= 1.138):
+            # Prior to version 1.138, CastXML would incorrectly create a
+            # default constructor definition.
             # See https://github.com/CastXML/CastXML/issues/55
             # Copy constructor, destructor, variable
             self.assertEqual(len(ci.declarations), 3)
@@ -428,7 +442,7 @@ class class_traits_tester_t(unittest.TestCase):
 
         global_ns = parser.parse_string(
             code,
-            autoconfig.cxx_parsers_cfg.gccxml)
+            autoconfig.cxx_parsers_cfg.config)
         global_ns = declarations.get_global_namespace(global_ns)
         easy = global_ns.typedef('easy')
         declarations.class_traits.get_declaration(easy)
@@ -447,6 +461,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()

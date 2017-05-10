@@ -1,5 +1,5 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
@@ -7,6 +7,7 @@ import os
 import sys
 import logging
 import warnings
+import platform
 
 # Prevents copy.deepcopy RecursionError in some tests (Travis build)
 sys.setrecursionlimit(10000)
@@ -22,10 +23,9 @@ sys.path.insert(1, os.path.join(os.curdir, '..'))
 # in site-packages. Insert the directory's path.
 sys.path.insert(1, "../pygccxml")
 
-import pygccxml  # nopep8
-import pygccxml.declarations  # nopep8
-import pygccxml.parser  # nopep8
-import pygccxml.utils  # nopep8
+from pygccxml import declarations  # nopep8
+from pygccxml import parser  # nopep8
+from pygccxml import utils  # nopep8
 
 # We want to make sure we throw an error for ALL the warnings during the
 # tests. This will allow us to be notified by the build bots, so that the
@@ -33,37 +33,26 @@ import pygccxml.utils  # nopep8
 warnings.simplefilter("error", Warning)
 
 # Set logging level
-pygccxml.utils.loggers.set_level(logging.INFO)
+utils.loggers.set_level(logging.CRITICAL)
 
 # Find out the c++ parser (gccxml or castxml)
-generator_path, generator_name = pygccxml.utils.find_xml_generator()
+generator_path, generator_name = utils.find_xml_generator()
 
-pygccxml.declarations.class_t.USE_DEMANGLED_AS_NAME = True
+declarations.class_t.USE_DEMANGLED_AS_NAME = True
 
 
 class cxx_parsers_cfg(object):
-    gccxml = pygccxml.parser.load_xml_generator_configuration(
-        'xml_generator.cfg',
+    config = parser.load_xml_generator_configuration(
+        os.path.normpath(this_module_dir_path + '/xml_generator.cfg'),
         xml_generator_path=generator_path,
         working_directory=data_directory,
-        compiler=None,
         xml_generator=generator_name)
 
-    if generator_name == 'gccxml':
-        gccxml.define_symbols.append('__GCCXML_09__')
+    if platform.system() == 'Windows':
+        config.define_symbols.append('_HAS_EXCEPTIONS=0')
 
-    if 'nt' == os.name:
-        gccxml.define_symbols.append(
-            '__PYGCCXML_%s__' %
-            gccxml.compiler.upper())
-        if 'msvc9' == gccxml.compiler:
-            gccxml.define_symbols.append('_HAS_TR1=0')
 
-if cxx_parsers_cfg.gccxml.xml_generator:
-    generator_name = cxx_parsers_cfg.gccxml.xml_generator
-if cxx_parsers_cfg.gccxml.xml_generator_path:
-    generator_path = cxx_parsers_cfg.gccxml.xml_generator_path
-
-print(
-    '%s configured to simulate compiler %s' %
-    (generator_name.title(), cxx_parsers_cfg.gccxml.compiler))
+if cxx_parsers_cfg.config.xml_generator:
+    generator_name = cxx_parsers_cfg.config.xml_generator
+if cxx_parsers_cfg.config.xml_generator_path:
+    generator_path = cxx_parsers_cfg.config.xml_generator_path

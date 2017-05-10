@@ -1,5 +1,5 @@
-// Copyright 2014-2016 Insight Software Consortium.
-// Copyright 2004-2008 Roman Yakovenko.
+// Copyright 2014-2017 Insight Software Consortium.
+// Copyright 2004-2009 Roman Yakovenko.
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
@@ -25,7 +25,7 @@ void fix_enum3( fruit arg=orange );
 
 }
 
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || defined(_MSC_VER)
 namespace ns4{
 
 enum class color {red, green, blue};

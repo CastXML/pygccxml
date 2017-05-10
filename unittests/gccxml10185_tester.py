@@ -1,14 +1,14 @@
-# Copyright 2014-2016 Insight Software Consortium.
-# Copyright 2004-2008 Roman Yakovenko.
+# Copyright 2014-2017 Insight Software Consortium.
+# Copyright 2004-2009 Roman Yakovenko.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import parser_test_case
+
+from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 code = \
     """
@@ -38,15 +38,14 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        src_reader = parser.source_reader_t(self.config)
-        global_ns = declarations.get_global_namespace(
-            src_reader.read_string(code))
-        if 'GCCXML' in utils.xml_generator:
+        decls = parser.parse_string(code, self.config)
+        global_ns = declarations.get_global_namespace(decls)
+        if self.config.xml_generator_from_xml_file.is_gccxml:
             a = global_ns.class_('A<const char [N]>')
-            a.mem_fun('size')
-        elif 'CastXML' in utils.xml_generator:
+            a.member_function('size')
+        elif self.config.xml_generator_from_xml_file.is_castxml:
             self.assertRaises(
-                global_ns.declaration_not_found_t,
+                declarations.declaration_not_found_t,
                 lambda: global_ns.class_('A<const char [N]>'))
 
 
@@ -58,6 +57,7 @@ def create_suite():
 
 def run_suite():
     unittest.TextTestRunner(verbosity=2).run(create_suite())
+
 
 if __name__ == "__main__":
     run_suite()
