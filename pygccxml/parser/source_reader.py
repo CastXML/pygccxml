@@ -234,26 +234,26 @@ class source_reader_t(object):
             stdout=subprocess.PIPE)
 
         try:
-            gccxml_reports = []
+            results = []
             while process.poll() is None:
                 line = process.stdout.readline()
                 if line.strip():
-                    gccxml_reports.append(line.rstrip())
+                    results.append(line.rstrip())
             for line in process.stdout.readlines():
                 if line.strip():
-                    gccxml_reports.append(line.rstrip())
+                    results.append(line.rstrip())
 
             exit_status = process.returncode
-            gccxml_msg = os.linesep.join([str(s) for s in gccxml_reports])
+            msg = os.linesep.join([str(s) for s in results])
             if self.__config.ignore_gccxml_output:
                 if not os.path.isfile(xml_file):
                     raise RuntimeError(
                         "Error occurred while running " +
                         self.__config.xml_generator.upper() +
                         ": %s status:%s" %
-                        (gccxml_msg, exit_status))
+                        (msg, exit_status))
             else:
-                if gccxml_msg or exit_status or not \
+                if msg or exit_status or not \
                         os.path.isfile(xml_file):
                     if not os.path.isfile(xml_file):
                         raise RuntimeError(
@@ -264,7 +264,7 @@ class source_reader_t(object):
                         raise RuntimeError(
                             "Error occurred while running " +
                             self.__config.xml_generator.upper() +
-                            ": %s status:%s" % (gccxml_msg, exit_status))
+                            ": %s status:%s" % (msg, exit_status))
         except Exception:
             utils.remove_file_no_raise(xml_file, self.__config)
             raise
