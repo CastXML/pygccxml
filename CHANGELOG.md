@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 2.0.0 (unreleased)
+--------------------------
+
+1. Drop support for ```GCC-XML```.
+
+2. Drop support for ```Python 2.6``` and ```Python 3.2```
+
 Version 1.9.0
 -------------
 
