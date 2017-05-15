@@ -71,23 +71,13 @@ class Test(parser_test_case.parser_test_case_t):
 
         ac1 = global_ns.variable("ac1")
         ac2 = global_ns.variable("ac2")
-        if self.config.xml_generator_from_xml_file.is_gccxml:
-            self.assertEqual(ac1.decl_type.decl_string, "int [2] const")
-            self.assertEqual(ac2.decl_type.decl_string, "int [2] const")
-        else:
-            self.assertEqual(ac1.decl_type.decl_string, "int const [2]")
-            self.assertEqual(ac2.decl_type.decl_string, "int const [2]")
+        self.assertEqual(ac1.decl_type.decl_string, "int const [2]")
+        self.assertEqual(ac2.decl_type.decl_string, "int const [2]")
 
         acptr1 = global_ns.variable("acptr1")
         acptr2 = global_ns.variable("acptr2")
-        if self.config.xml_generator_from_xml_file.is_gccxml:
-            decl_string = "int const * [2] const"
-            self.assertEqual(acptr1.decl_type.decl_string, decl_string)
-            self.assertEqual(acptr2.decl_type.decl_string, decl_string)
-        else:
-            t_string = "int const * const [2]"
-            self.assertEqual(acptr1.decl_type.decl_string, t_string)
-            self.assertEqual(acptr2.decl_type.decl_string, t_string)
+        self.assertEqual(acptr1.decl_type.decl_string, "int const * const [2]")
+        self.assertEqual(acptr2.decl_type.decl_string, "int const * const [2]")
 
         class_a = global_ns.variable("classA")
         if self.config.xml_generator_from_xml_file.is_castxml1:

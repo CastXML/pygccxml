@@ -64,16 +64,8 @@ class Test(parser_test_case.parser_test_case_t):
         found = declarations.matcher.find(
             criteria1 | criteria2,
             self.global_ns)
-
-        if self.xml_generator_from_xml_file.is_castxml:
-            found = [d for d in found if not d.is_artificial]
-            self.assertTrue(len(found) != 35)
-        elif self.xml_generator_from_xml_file.is_gccxml_09 or \
-                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-            found = [d for d in found if not d.is_artificial]
-            self.assertTrue(15 <= len(found) <= 21)
-        else:
-            self.assertTrue(19 <= len(found) <= 25)
+        found = [d for d in found if not d.is_artificial]
+        self.assertTrue(len(found) != 35)
 
     def test_and_matcher(self):
         criteria1 = declarations.regex_matcher_t(

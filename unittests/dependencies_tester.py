@@ -49,16 +49,9 @@ class Test(parser_test_case.parser_test_case_t):
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
         generator = self.xml_generator_from_xml_file
-        if generator.is_gccxml_09 or generator.is_gccxml_09_buggy or \
-                generator.is_castxml:
-            # GCCXML R122 adds compiler generated constructors/destructors
-            # and operator= to the class, if it has
-            dependencies = [
-                d for d in dependencies if not d.declaration.is_artificial]
-            self.assertTrue(len(dependencies) == 1)
-        else:
-            # compiler generated copy constructor
-            self.assertTrue(len(dependencies) == 2)
+        dependencies = [
+            d for d in dependencies if not d.declaration.is_artificial]
+        self.assertTrue(len(dependencies) == 1)
 
         m_mutable = ns_vars.variable('m_mutable')
         dependencies = [
