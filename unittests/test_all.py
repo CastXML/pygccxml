@@ -57,7 +57,6 @@ from . import declaration_matcher_tester
 from . import calling_convention_tester
 from . import const_volatile_arg_tester
 from . import array_bug_tester
-from . import gccxml10183_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
@@ -126,7 +125,6 @@ testers = [
     calling_convention_tester,
     const_volatile_arg_tester,
     array_bug_tester,
-    gccxml10183_tester,
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
