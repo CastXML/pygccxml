@@ -29,11 +29,6 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
     def test_name_based(self):
         cls = self.global_ns.class_(name='class_for_nested_enums_t')
 
-        if self.xml_generator_from_xml_file.is_castxml:
-            self.assertIsNone(cls.cache.demangled_name)
-        elif self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(cls.cache.demangled_name == cls.name)
-
         cls_full_name = declarations.full_name(cls)
         self.assertTrue(cls.cache.full_name == cls_full_name)
 
@@ -51,13 +46,9 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
         # now we change class name, all internal decls cache should be cleared
         cls.name = "new_name"
         self.assertTrue(not cls.cache.full_name)
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(not cls.cache.demangled_name)
         self.assertTrue(not cls.cache.declaration_path)
 
         self.assertTrue(not enum.cache.full_name)
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(not enum.cache.demangled_name)
         self.assertTrue(not enum.cache.declaration_path)
 
     def test_access_type(self):
