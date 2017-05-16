@@ -36,7 +36,6 @@ from . import cache_enums_tester
 from . import decl_printer_tester
 from . import typedefs_tester
 from . import non_copyable_classes_tester
-# from . import demangled_tester
 from . import unnamed_enums_bug_tester
 from . import vector_traits_tester
 from . import string_traits_tester
@@ -83,7 +82,6 @@ from . import test_elaborated_types
 from . import test_order
 
 testers = [
-    # , demangled_tester # failing right now
     pep8_tester,
     decl_string_tester,
     declaration_files_tester,

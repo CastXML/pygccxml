@@ -27,13 +27,11 @@ class declaration_t(object):
             location=None,
             is_artificial=False,
             mangled=None,
-            demangled=None,
             attributes=None):
         self._name = name
         self._location = location
         self._is_artificial = is_artificial
         self._mangled = mangled
-        self._demangled = demangled
         self._attributes = attributes
         self._parent = None
         self._cache = algorithms_cache.declaration_algs_cache_t()
@@ -274,20 +272,6 @@ class declaration_t(object):
     @mangled.setter
     def mangled(self, mangled):
         self._mangled = mangled
-
-    @property
-    def demangled(self):
-        """
-        Declaration name, reconstructed from GCCXML generated unique name.
-
-           @type: str
-
-        """
-        return self._demangled
-
-    @demangled.setter
-    def demangled(self, demangled):
-        self._demangled = demangled
 
     @property
     def decorated_name(self):

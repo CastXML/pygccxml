@@ -27,7 +27,6 @@ XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_CASTXML_FORMAT = "format"
 XML_AN_DEFAULT = "default"
-XML_AN_DEMANGLED = "demangled"
 XML_AN_EXPLICIT = "explicit"
 XML_AN_EXTERN = "extern"
 XML_AN_FILE = "file"
@@ -248,7 +247,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
                     self.__read_bases(obj, attrs)
                 self.__read_artificial(obj, attrs)
                 self.__read_mangled(obj, attrs)
-                self.__read_demangled(obj, attrs)
                 self.__read_attributes(obj, attrs)
 
             elif isinstance(obj, declarations.type_t):
@@ -346,10 +344,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 mangled.endswith(self.__mangled_suffix):
             mangled = mangled[:self.__mangled_suffix_len]
         decl.mangled = mangled
-
-    @staticmethod
-    def __read_demangled(decl, attrs):
-        decl.demangled = attrs.get(XML_AN_DEMANGLED)
 
     def __read_attributes(self, decl, attrs):
         attribute = attrs.get(XML_AN_ATTRIBUTES)

@@ -122,7 +122,7 @@ class variable_t(declaration.declaration_t):
         return [class_declaration.dependency_info_t(self, self.decl_type)]
 
     def get_mangled_name(self):
-        if not self._mangled and not self._demangled \
+        if not self._mangled \
            and not isinstance(self.parent, class_declaration.class_t):
             return self.name
         else:

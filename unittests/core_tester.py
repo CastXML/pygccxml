@@ -183,18 +183,6 @@ class Core(parser_test_case.parser_test_case_t):
             "Mangled name of array255 variable should be different +"
             "from None")
 
-    def test_demangled_name_variable(self):
-        # This works with gccxml only. Check if an assertion is correctly
-        # raised when using castxml.
-        var_inst = self.global_ns.variable('array255')
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(
-                var_inst.demangled,
-                "Demangled name of array255 variable should be different +"
-                "from None")
-        else:
-            self.assertIsNone(var_inst.demangled)
-
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)
         dhi_not_v = declarations.hierarchy_info_t(derived, access, False)

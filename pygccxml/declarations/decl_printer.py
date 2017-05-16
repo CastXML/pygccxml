@@ -156,15 +156,6 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
                         curr_level *
                         self.INDENT_SIZE +
                         attributes)
-                if self.__inst.demangled:
-                    # Working only with gccxml.
-                    # No demangled attribute with castxml
-                    demangled = 'demangled: %s' % self.__inst.demangled
-                    self.writer(
-                        ' ' *
-                        curr_level *
-                        self.INDENT_SIZE +
-                        demangled)
 
                 # Mangled name is only available for functions and variables
                 # when using castxml.

@@ -109,6 +109,8 @@ class linker_t(
 
     def visit_casting_operator(self):
         self.__link_calldef()
+        # FIXME: is the patch still needed as the demangled name support has
+        # been dropped?
         # will be fixed by patcher. It is needed because of demangled name
         # taken into account
         # self.__inst._name = 'operator ' + self.__inst.return_type.decl_string

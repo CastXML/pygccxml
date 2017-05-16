@@ -186,9 +186,6 @@ class class_t(
 
     """describes class definition"""
 
-    # Can be set from outside
-    USE_DEMANGLED_AS_NAME = True
-
     def __init__(
             self,
             name='',
@@ -210,47 +207,9 @@ class class_t(
         self._aliases = []
         self._recursive_bases = None
         self._recursive_derived = None
-        self._use_demangled_as_name = False
-
-    @property
-    def use_demangled_as_name(self):
-        return class_t.USE_DEMANGLED_AS_NAME
-
-    @use_demangled_as_name.setter
-    def use_demangled_as_name(self, use_demangled_as_name):
-        self._use_demangled_as_name = use_demangled_as_name
 
     def _get_name_impl(self):
-        if not self._name:  # class with empty name
-            return self._name
-        elif self.use_demangled_as_name and self.demangled:
-
-            if not self.cache.demangled_name:
-                fname = declaration_utils.full_name(self.parent)
-                if fname.startswith('::') and \
-                        not self.demangled.startswith('::'):
-                    fname = fname[2:]
-                if self.demangled.startswith(fname):
-                    tmp = self.demangled[len(fname):]  # demangled::name
-                    if tmp.startswith('::'):
-                        tmp = tmp[2:]
-                    if '<' not in tmp and '<' in self._name:
-                        # we have template class, but for some reason demangled
-                        # name doesn't contain any template
-                        # This happens for std::string class, but this breaks
-                        # other cases, because this behaviour is not consistent
-                        self.cache.demangled_name = self._name
-                        return self.cache.demangled_name
-                    else:
-                        self.cache.demangled_name = tmp
-                        return tmp
-                else:
-                    self.cache.demangled_name = self._name
-                    return self._name
-            else:
-                return self.cache.demangled_name
-        else:
-            return self._name
+        return self._name
 
     def __str__(self):
         name = declaration_utils.full_name(self)

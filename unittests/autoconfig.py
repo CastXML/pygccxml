@@ -38,8 +38,6 @@ utils.loggers.set_level(logging.CRITICAL)
 # Find out the c++ parser (gccxml or castxml)
 generator_path, generator_name = utils.find_xml_generator()
 
-declarations.class_t.USE_DEMANGLED_AS_NAME = True
-
 
 class cxx_parsers_cfg(object):
     config = parser.load_xml_generator_configuration(
