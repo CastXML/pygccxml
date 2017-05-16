@@ -271,10 +271,7 @@ class linker_t(
         self.__link_compound_type()
 
     def visit_pointer(self):
-        gen = self.__xml_generator_from_xml_file
-        if (gen.is_castxml or gen.is_gccxml_09 or gen.is_gccxml_09_buggy) and \
-                isinstance(self.__inst.base,
-                           declarations.member_variable_type_t):
+        if isinstance(self.__inst.base, declarations.member_variable_type_t):
             original_inst = self.__inst
             self.__inst = self.__inst.base
             self.visit_member_variable_type()

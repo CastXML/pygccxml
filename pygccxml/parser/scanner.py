@@ -483,16 +483,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_offset_type(self, attrs):
         base = attrs[XML_AN_BASE_TYPE]
         type_ = attrs[XML_AN_TYPE]
-        if self.__xml_generator_from_xml_file.is_castxml or \
-            self.__xml_generator_from_xml_file.is_gccxml_09 or \
-                self.__xml_generator_from_xml_file.is_gccxml_09_buggy:
-            return declarations.pointer_t(
-                declarations.member_variable_type_t(
-                    class_inst=base,
-                    variable_type=type_))
-        else:
-            return declarations.member_variable_type_t(
-                class_inst=base, variable_type=type_)
+        return declarations.pointer_t(
+            declarations.member_variable_type_t(
+                class_inst=base,
+                variable_type=type_))
 
     def __read_argument(self, attrs):
         if isinstance(self.__inst, declarations.calldef_type_t):
@@ -506,9 +500,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
             argument.decl_type = attrs[XML_AN_TYPE]
             argument.default_value = attrs.get(XML_AN_DEFAULT)
             self.__read_attributes(argument, attrs)
-            if self.__xml_generator_from_xml_file.is_gccxml:
-                if argument.default_value == '<gccxml-cast-expr>':
-                    argument.default_value = None
             self.__inst.arguments.append(argument)
 
     def __read_ellipsis(self, attrs):
@@ -571,16 +562,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_variable(self, attrs):
         type_qualifiers = declarations.type_qualifiers_t()
         type_qualifiers.has_mutable = attrs.get(XML_AN_MUTABLE, False)
-        if self.__xml_generator_from_xml_file.is_gccxml:
-            # Old behaviour with gccxml. Will be dropped when gccxml
-            # is removed.
-            type_qualifiers.has_static = attrs.get(XML_AN_EXTERN, False)
-            # With gccxml both were equivalent (at least this was the old
-            # behaviour in pygccxml)
-            type_qualifiers.has_extern = type_qualifiers.has_static
-        else:
-            type_qualifiers.has_static = attrs.get(XML_AN_STATIC, False)
-            type_qualifiers.has_extern = attrs.get(XML_AN_EXTERN, False)
+        type_qualifiers.has_static = attrs.get(XML_AN_STATIC, False)
+        type_qualifiers.has_extern = attrs.get(XML_AN_EXTERN, False)
         bits = attrs.get(XML_AN_BITS)
         if bits:
             bits = int(bits)

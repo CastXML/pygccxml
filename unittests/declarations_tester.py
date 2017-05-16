@@ -40,13 +40,7 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self.global_ns.namespace('variables')
         initialized = self.global_ns.variable(name='initialized')
 
-        expected_value = None
-        if self.xml_generator_from_xml_file.is_gccxml_09 or \
-                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-            expected_value = '10122004ul'
-        else:
-            expected_value = '10122004'
-
+        expected_value = '10122004'
         self.assertTrue(
             initialized.value == expected_value,
             ("there is a difference between expected value( %s ) and real " +
@@ -61,19 +55,6 @@ class declarations_t(parser_test_case.parser_test_case_t):
         self.assertFalse(
             m_mutable.type_qualifiers.has_static,
             "m_mutable must not have static type qualifier")
-
-        if self.xml_generator_from_xml_file.is_gccxml:
-            # Old GCC-XML behaviour. Can be dropped once GCC-XML is removed.
-            static_var = self.global_ns.variable(name="extern_var")
-            self.assertTrue(
-                static_var.type_qualifiers.has_static,
-                "static_var must have static type qualifier")
-            self.assertFalse(
-                static_var.type_qualifiers.has_mutable,
-                "static_var must not have mutable type qualifier")
-            return
-
-        # CastXML only tests --------------
 
         self.assertTrue(
             m_mutable.type_qualifiers.has_mutable,
@@ -132,19 +113,9 @@ class declarations_t(parser_test_case.parser_test_case_t):
         no_return_no_args = ns.free_function('no_return_no_args')
 
         self._test_calldef_return_type(no_return_no_args, declarations.void_t)
-
-        # TODO: gccxml reported no_return_no_args as having an extern
-        # qualifier, which is wrong; Keep the test like this for gccxml as
-        # gccxml will be dropped one day. With castxml check if function has
-        # no extern qualifier.
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(
-                no_return_no_args.has_extern,
-                "function 'no_return_no_args' should have an extern qualifier")
-        else:
-            self.assertTrue(
-                not no_return_no_args.has_extern,
-                "function 'no_return_no_args' should have an extern qualifier")
+        self.assertTrue(
+            not no_return_no_args.has_extern,
+            "function 'no_return_no_args' should have an extern qualifier")
 
         # Static_call is explicetely defined as extern, this works with gccxml
         # and castxml.
