@@ -7,7 +7,6 @@ import os
 import sys
 import shutil
 import unittest
-import warnings
 
 from . import parser_test_case
 

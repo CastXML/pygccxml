@@ -8,8 +8,6 @@ Describe a C++ namespace declaration.
 
 """
 
-import warnings
-
 from . import scopedef
 from . import declaration_utils
 

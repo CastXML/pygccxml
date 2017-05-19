@@ -20,7 +20,6 @@ import os
 import os.path
 import gzip
 import hashlib
-import warnings
 try:
     import cPickle as pickle
 except ImportError:

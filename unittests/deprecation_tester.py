@@ -4,11 +4,8 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import unittest
-import warnings
 
 from . import parser_test_case
-
-from pygccxml import declarations
 
 
 class Test(parser_test_case.parser_test_case_t):

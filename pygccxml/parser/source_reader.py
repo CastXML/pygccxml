@@ -6,7 +6,6 @@
 import os
 import platform
 import subprocess
-import warnings
 
 from pygccxml import declarations
 

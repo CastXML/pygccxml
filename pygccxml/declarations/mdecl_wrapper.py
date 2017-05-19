@@ -12,7 +12,6 @@ within the code.
 """
 
 import os
-import warnings
 
 
 class call_redirector_t(object):

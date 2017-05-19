@@ -17,11 +17,8 @@ This modules contains definition for next C++ declarations:
     - destructor
 """
 from . import cpptypes
-from . import declaration_utils
 from . import declaration
 from . import class_declaration
-from . import call_invocation
-from . import type_traits
 from . import calldef_types
 
 
