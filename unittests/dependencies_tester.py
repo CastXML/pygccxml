@@ -48,7 +48,6 @@ class Test(parser_test_case.parser_test_case_t):
 
         cls = ns_vars.class_('struct_variables_t')
         dependencies = cls.i_depend_on_them()
-        generator = self.xml_generator_from_xml_file
         dependencies = [
             d for d in dependencies if not d.declaration.is_artificial]
         self.assertTrue(len(dependencies) == 1)
