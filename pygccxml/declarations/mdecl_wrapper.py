@@ -107,12 +107,3 @@ class mdecl_wrapper_t(object):
 
     def __contains__(self, item):
         return item in self.declarations
-
-    def to_list(self):  # pragma: no cover
-        warnings.warn(
-            "The to_list method is deprecated. Please implement your own "
-            "version of it if you really need it.", DeprecationWarning)
-        li = []
-        for d in self.declarations:
-            li.append(d)
-        return li

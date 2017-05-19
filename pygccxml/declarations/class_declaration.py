@@ -545,18 +545,6 @@ class dependency_info_t(object):
         return self._decl
 
     @property
-    def decl(self):
-        """
-        Deprecated since 1.9.0. Will be removed in 2.0.0.
-
-        """
-        warnings.warn(
-            "The decl attribute is deprecated.\n" +
-            "Please use the declaration attribute instead.",
-            DeprecationWarning)
-        return self._decl
-
-    @property
     def depend_on_it(self):
         return self._depend_on_it
 

@@ -274,29 +274,6 @@ class declaration_t(object):
         self._mangled = mangled
 
     @property
-    def decorated_name(self):
-        """
-        Unique declaration name extracted from a binary file
-        ( .map, .dll, .so, etc ).
-
-           @type: str
-
-        """
-        warnings.warn(
-            "The decorated_name attribute is deprecated. See the changelog.",
-            DeprecationWarning)
-        # Deprecated since 1.9.0, will be removed in 2.0.0
-        return self._decorated_name
-
-    @decorated_name.setter
-    def decorated_name(self, decorated_name):
-        warnings.warn(
-            "The decorated_name attribute is deprecated. See the changelog.",
-            DeprecationWarning)
-        # Deprecated since 1.9.0, will be removed in 2.0.0
-        self._decorated_name = decorated_name
-
-    @property
     def attributes(self):
         """
         GCCXML attributes, set using __attribute__((gccxml("...")))
