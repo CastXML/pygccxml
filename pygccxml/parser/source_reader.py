@@ -423,27 +423,3 @@ class source_reader_t(object):
     @staticmethod
     def __check(inst):
         return isinstance(inst, declarations.namespace_t) and not inst.parent
-
-    def join_declarations(self, namespace):
-        # pylint: disable=R0201
-        warnings.warn(
-            "The join_declarations method is deprecated", DeprecationWarning)
-        # Deprecated since 1.9.0, will be removed in 2.0.0
-        declarations_joiner.join_declarations(namespace)
-
-
-def bind_aliases(decls):
-    """
-    This function binds between class and it's typedefs.
-
-    Deprecated since 1.9.0, will be removed in 2.0.0
-
-    :param decls: list of all declarations
-
-    :rtype: None
-
-    """
-    warnings.warn(
-        "The bind_aliases function is deprecated", DeprecationWarning)
-
-    declarations_joiner.bind_aliases(decls)
