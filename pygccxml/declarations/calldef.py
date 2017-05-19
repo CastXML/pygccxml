@@ -61,12 +61,11 @@ class argument_t(object):
     def __str__(self):
         if self.ellipsis:
             return "..."
-        else:
-            if self.default_value is None:
-                return "%s %s" % (self.decl_type, self.name)
-            else:
-                return "%s %s=%s" % (
-                    self.decl_type, self.name, self.default_value)
+
+        if self.default_value is None:
+            return "%s %s" % (self.decl_type, self.name)
+
+        return "%s %s=%s" % (self.decl_type, self.name, self.default_value)
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):

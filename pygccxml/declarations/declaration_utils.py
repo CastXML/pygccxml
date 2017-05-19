@@ -35,8 +35,8 @@ def declaration_path(decl):
         result.reverse()
         decl.cache.declaration_path = result
         return result
-    else:
-        return decl.cache.declaration_path
+
+    return decl.cache.declaration_path
 
 
 def partial_declaration_path(decl):
@@ -74,8 +74,8 @@ def partial_declaration_path(decl):
         result.reverse()
         decl.cache.partial_declaration_path = result
         return result
-    else:
-        return decl.cache.partial_declaration_path
+
+    return decl.cache.partial_declaration_path
 
 
 def full_name_from_declaration_path(dpath):

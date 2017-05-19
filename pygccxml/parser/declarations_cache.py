@@ -265,9 +265,10 @@ class file_cache_t(cache_base_t):
         if self.__is_valid_signature(record):
             record.was_hit = True  # Record cache hit
             return record.declarations
-        else:  # some file has been changed
-            del self.__cache[key]
-            return None
+
+        # some file has been changed
+        del self.__cache[key]
+        return None
 
     @staticmethod
     def __is_valid_signature(record):

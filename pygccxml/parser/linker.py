@@ -59,8 +59,8 @@ class linker_t(
             return base
         elif type_id == '...':
             return declarations.ellipsis_t()
-        else:
-            return declarations.unknown_t()
+
+        return declarations.unknown_t()
 
     def __link_compound_type(self):
         self.__inst.base = self.__link_type(self.__inst.base)

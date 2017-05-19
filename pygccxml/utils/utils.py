@@ -27,8 +27,8 @@ def is_str(string):
     """
     if sys.version_info >= (3, 0):
         return isinstance(string, str)
-    else:
-        return isinstance(string, basestring)
+
+    return isinstance(string, basestring)
 
 
 def find_xml_generator(name=None):

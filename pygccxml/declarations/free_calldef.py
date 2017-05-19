@@ -56,8 +56,8 @@ class free_calldef_t(calldef.calldef_t):
         f_type = self.function_type()
         if with_defaults:
             return f_type.decl_string
-        else:
-            return f_type.partial_decl_string
+
+        return f_type.partial_decl_string
 
     def guess_calling_convention(self):
         """This function should be overriden in the derived classes and return
@@ -78,8 +78,8 @@ class free_function_t(free_calldef_t):
             # it is possible we deal with C function, so lets put it name as
             # mangled one
             return self.name
-        else:
-            return self._mangled
+
+        return self._mangled
 
 
 class free_operator_t(free_calldef_t, calldef_members.operator_t):

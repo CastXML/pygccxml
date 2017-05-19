@@ -42,15 +42,17 @@ class CLASS_TYPES(object):
 def get_partial_name(name):
     from . import container_traits  # prevent cyclic dependencies
     ct = container_traits.find_container_traits(name)
+
     if ct:
         return ct.remove_defaults(name)
-    elif templates.is_instantiation(name):
+
+    if templates.is_instantiation(name):
         tmpl_name, args = templates.split(name)
         for i, arg_name in enumerate(args):
             args[i] = get_partial_name(arg_name.strip())
         return templates.join(tmpl_name, args)
-    else:
-        return name
+
+    return name
 
 
 class hierarchy_info_t(object):
@@ -376,12 +378,12 @@ class class_t(
             return self.protected_members
         elif access == ACCESS_TYPES.PRIVATE:
             return self.private_members
-        else:
-            all_members = []
-            all_members.extend(self.public_members)
-            all_members.extend(self.protected_members)
-            all_members.extend(self.private_members)
-            return all_members
+
+        all_members = []
+        all_members.extend(self.public_members)
+        all_members.extend(self.protected_members)
+        all_members.extend(self.private_members)
+        return all_members
 
     def adopt_declaration(self, decl, access):
         """adds new declaration to the class
@@ -479,10 +481,10 @@ class class_t(
         from . import type_traits  # prevent cyclic dependencies
         if type_traits.is_std_string(self):
             return 'string'
-        elif type_traits.is_std_wstring(self):
+        if type_traits.is_std_wstring(self):
             return 'wstring'
-        else:
-            return get_partial_name(self.name)
+
+        return get_partial_name(self.name)
 
     @property
     def top_class(self):

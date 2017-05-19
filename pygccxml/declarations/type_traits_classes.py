@@ -127,8 +127,8 @@ def find_trivial_constructor(type_):
         allow_empty=True)
     if trivial:
         return trivial[0]
-    else:
-        return None
+
+    return None
 
 
 def find_copy_constructor(type_):
@@ -148,8 +148,8 @@ def find_copy_constructor(type_):
         allow_empty=True)
     if copy_:
         return copy_[0]
-    else:
-        return None
+
+    return None
 
 
 def find_noncopyable_vars(type_, already_visited_cls_vars=None):
@@ -370,8 +370,7 @@ class __is_convertible_t(object):
         if type_traits.is_same(target, cpptypes.pointer_t(cpptypes.void_t())):
             if type_traits.is_integral(src) or is_enum(src):
                 return False
-            else:
-                return True  # X => void*
+            return True  # X => void*
         if type_traits.is_pointer(src) and \
             type_traits.is_pointer(target) and \
             type_traits.is_const(target.base) and \
@@ -696,11 +695,11 @@ def __is_noncopyable_single(class_, already_visited_cls_vars=None):
             ("__is_noncopyable_single(TRUE) - %s - contains noncopyable " +
              "members"), class_.decl_string)
         return True
-    else:
-        logger.debug((
-            "__is_noncopyable_single(FALSE) - %s - COPYABLE, because is " +
-            "doesn't contains noncopyable members"), class_.decl_string)
-        return False
+
+    logger.debug((
+        "__is_noncopyable_single(FALSE) - %s - COPYABLE, because is " +
+        "doesn't contains noncopyable members"), class_.decl_string)
+    return False
 
 
 def is_noncopyable(class_, already_visited_cls_vars=None):
@@ -780,8 +779,8 @@ def is_noncopyable(class_, already_visited_cls_vars=None):
     elif has_destructor(class_decl) and not has_public_destructor(class_decl):
         logger.debug(true_header + "has private destructor")
         return True
-    else:
-        return __is_noncopyable_single(class_decl, already_visited_cls_vars)
+
+    return __is_noncopyable_single(class_decl, already_visited_cls_vars)
 
 
 def is_unary_operator(oper):
@@ -804,19 +803,17 @@ def is_unary_operator(oper):
         elif oper.symbol in ['++', '--'] and \
                 isinstance(oper.arguments[0].decl_type, cpptypes.int_t):
             return True
-        else:
-            return False
-    else:
-        if len(oper.arguments) == 1:
-            return True
-        elif oper.symbol in ['++', '--'] \
-                and len(oper.arguments) == 2 \
-                and isinstance(oper.arguments[1].decl_type, cpptypes.int_t):
-            # may be I need to add additional check whether first argument is
-            # reference or not?
-            return True
-        else:
-            return False
+        return False
+
+    if len(oper.arguments) == 1:
+        return True
+    elif oper.symbol in ['++', '--'] \
+            and len(oper.arguments) == 2 \
+            and isinstance(oper.arguments[1].decl_type, cpptypes.int_t):
+        # may be I need to add additional check whether first argument is
+        # reference or not?
+        return True
+    return False
 
 
 def is_binary_operator(oper):
@@ -834,16 +831,15 @@ def is_binary_operator(oper):
         return False
     if oper.symbol not in symbols:
         return False
+
     if isinstance(oper, calldef_members.member_operator_t):
         if len(oper.arguments) == 1:
             return True
-        else:
-            return False
-    else:
-        if len(oper.arguments) == 2:
-            return True
-        else:
-            return False
+        return False
+
+    if len(oper.arguments) == 2:
+        return True
+    return False
 
 
 def is_copy_constructor(constructor):

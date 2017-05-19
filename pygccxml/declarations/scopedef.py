@@ -203,8 +203,8 @@ class scopedef_t(declaration.declaration_t):
         """
         if self._optimized:
             return self._all_decls_not_recursive
-        else:
-            return self._get_declarations_impl()
+
+        return self._get_declarations_impl()
 
     @declarations.setter
     def declarations(self, declarations):
@@ -315,8 +315,8 @@ class scopedef_t(declaration.declaration_t):
     def _build_operator_function(name, function):
         if isinstance(name, collections.Callable):
             return name
-        else:
-            return function
+
+        return function
 
     @staticmethod
     def _build_operator_name(name, function, symbol):
@@ -324,8 +324,7 @@ class scopedef_t(declaration.declaration_t):
         def add_operator(sym):
             if 'new' in sym or 'delete' in sym:
                 return 'operator ' + sym
-            else:
-                return 'operator' + sym
+            return 'operator' + sym
         if isinstance(name, collections.Callable) and None is function:
             name = None
         if name:
@@ -359,15 +358,15 @@ class scopedef_t(declaration.declaration_t):
         """implementation details"""
         if None is keywds['recursive']:
             return self.RECURSIVE_DEFAULT
-        else:
-            return keywds['recursive']
+
+        return keywds['recursive']
 
     def __findout_allow_empty(self, **keywds):
         """implementation details"""
         if None is keywds['allow_empty']:
             return self.ALLOW_EMPTY_MDECL_WRAPPER
-        else:
-            return keywds['allow_empty']
+
+        return keywds['allow_empty']
 
     @staticmethod
     def __findout_decl_type(match_class, **keywds):
@@ -400,9 +399,9 @@ class scopedef_t(declaration.declaration_t):
                 'running query: %s and <user defined function>',
                 str(decl_matcher))
             return lambda decl: decl_matcher(decl) and keywds['function'](decl)
-        else:
-            self._logger.debug('running query: %s', str(decl_matcher))
-            return decl_matcher
+
+        self._logger.debug('running query: %s', str(decl_matcher))
+        return decl_matcher
 
     def __findout_range(self, name, decl_type, recursive):
         """implementation details"""
@@ -429,29 +428,29 @@ class scopedef_t(declaration.declaration_t):
                 self._logger.debug(
                     'query has been optimized on type and name')
                 return self._type2name2decls[decl_type].get(name, [])
-            else:
-                self._logger.debug(
-                    'non recursive query has been optimized on type and name')
-                return self._type2name2decls_nr[decl_type].get(name, [])
+
+            self._logger.debug(
+                'non recursive query has been optimized on type and name')
+            return self._type2name2decls_nr[decl_type].get(name, [])
         elif decl_type:
             if recursive:
                 self._logger.debug('query has been optimized on type')
                 return self._type2decls[decl_type]
-            else:
-                self._logger.debug(
-                    'non recursive query has been optimized on type')
-                return self._type2decls_nr[decl_type]
+
+            self._logger.debug(
+                'non recursive query has been optimized on type')
+            return self._type2decls_nr[decl_type]
         else:
             if recursive:
                 self._logger.debug((
                     'query has not been optimized ( hint: query does not ' +
                     'contain type and/or name )'))
                 return self._all_decls
-            else:
-                self._logger.debug((
-                    'non recursive query has not been optimized ( hint: ' +
-                    'query does not contain type and/or name )'))
-                return self._all_decls_not_recursive
+
+            self._logger.debug((
+                'non recursive query has not been optimized ( hint: ' +
+                'query does not contain type and/or name )'))
+            return self._all_decls_not_recursive
 
     def _find_single(self, match_class, **keywds):
         """implementation details"""

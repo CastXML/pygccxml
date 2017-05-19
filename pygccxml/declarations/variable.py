@@ -125,5 +125,5 @@ class variable_t(declaration.declaration_t):
         if not self._mangled \
            and not isinstance(self.parent, class_declaration.class_t):
             return self.name
-        else:
-            return self._mangled
+
+        return self._mangled
