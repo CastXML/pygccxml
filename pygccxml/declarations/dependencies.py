@@ -121,7 +121,7 @@ class dependency_info_t(object):
         depends on a declaration from the input"""
 
         to_be_included = set()
-        for dependency_info in decl.i_depend_on_them():
+        for dependency_info in i_depend_on_them(decl):
             for ddecl in dependency_info.find_out_depend_on_it_declarations():
                 if ddecl:
                     to_be_included.add(ddecl)
