@@ -460,12 +460,13 @@ class class_t(
         return answer
 
     def i_depend_on_them(self, recursive=True):
+        from . import dependencies  # prevent cyclic dependencies
 
         answer = []
 
         for base in self.bases:
             answer.append(
-                dependency_info_t(
+                dependencies.dependency_info_t(
                     self,
                     base.related_class,
                     base.access_type,
