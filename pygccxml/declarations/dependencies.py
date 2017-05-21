@@ -19,32 +19,30 @@ def i_depend_on_them(decl, recursive=True):
     Returns the list of all types and declarations the declaration depends on.
 
     """
+    result = []
     if isinstance(decl, enumeration.enumeration_t) or \
             isinstance(decl, class_declaration.class_declaration_t):
-        return []
+        return result
     if isinstance(decl, typedef.typedef_t) or \
             isinstance(decl, variable.variable_t):
         return [dependency_info_t(decl, decl.decl_type)]
     if isinstance(decl, namespace.namespace_t):
-        answer = []
         if recursive:
             for d in decl.declarations:
-                answer.extend(i_depend_on_them(d))
-        return answer
+                result.extend(i_depend_on_them(d))
+        return result
     if isinstance(decl, calldef.calldef_t):
-        answer = []
         if decl.return_type:
-            answer.append(
+            result.append(
                 dependency_info_t(decl, decl.return_type, hint="return type"))
         for arg in decl.arguments:
-            answer.append(dependency_info_t(decl, arg.decl_type))
+            result.append(dependency_info_t(decl, arg.decl_type))
         for exc in decl.exceptions:
-            answer.append(dependency_info_t(decl, exc, hint="exception"))
-        return answer
+            result.append(dependency_info_t(decl, exc, hint="exception"))
+        return result
     if isinstance(decl, class_declaration.class_t):
-        answer = []
         for base in decl.bases:
-            answer.append(
+            result.append(
                 dependency_info_t(
                     decl,
                     base.related_class,
@@ -52,11 +50,10 @@ def i_depend_on_them(decl, recursive=True):
                     "base class"))
         if recursive:
             for access_type in class_declaration.ACCESS_TYPES.ALL:
-                answer.extend(
+                result.extend(
                     __find_out_member_dependencies(
                         decl.get_members(access_type), access_type))
-
-        return answer
+        return result
 
 
 def __find_out_member_dependencies(members, access_type):
