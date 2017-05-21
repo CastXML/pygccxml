@@ -20,9 +20,6 @@ def i_depend_on_them(decl, recursive=True):
 
     """
     result = []
-    if isinstance(decl, enumeration.enumeration_t) or \
-            isinstance(decl, class_declaration.class_declaration_t):
-        return result
     if isinstance(decl, typedef.typedef_t) or \
             isinstance(decl, variable.variable_t):
         return [dependency_info_t(decl, decl.decl_type)]
@@ -54,6 +51,7 @@ def i_depend_on_them(decl, recursive=True):
                     __find_out_member_dependencies(
                         decl.get_members(access_type), access_type))
         return result
+    return result
 
 
 def __find_out_member_dependencies(members, access_type):
