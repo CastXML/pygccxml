@@ -262,6 +262,7 @@ class namespace_t(scopedef.scopedef_t):
         )
 
     def i_depend_on_them(self, recursive=True):
+        self._warn_deprecated()
         answer = []
         if recursive:
             for decl in self.declarations:

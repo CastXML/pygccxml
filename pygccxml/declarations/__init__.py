@@ -27,7 +27,6 @@ from .class_declaration import ACCESS_TYPES
 from .class_declaration import hierarchy_info_t
 from .class_declaration import class_declaration_t
 from .class_declaration import class_types
-from .class_declaration import dependency_info_t
 
 from .cpptypes import type_t
 from .cpptypes import dummy_type_t
@@ -217,6 +216,9 @@ from .function_traits import is_same_function
 
 from . import templates
 from . import call_invocation
+
+from .dependencies import i_depend_on_them
+from .dependencies import dependency_info_t
 
 from .decl_factory import decl_factory_t
 

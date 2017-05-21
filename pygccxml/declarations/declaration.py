@@ -9,6 +9,8 @@ base class.
 
 """
 
+import warnings
+
 from . import declaration_utils
 from . import algorithms_cache
 
@@ -323,4 +325,15 @@ class declaration_t(object):
         Return list of all types and declarations the declaration depends on
 
         """
+        self._warn_deprecated()
         raise NotImplementedError()
+
+    @staticmethod
+    def _warn_deprecated():
+        """
+        Implementation detail.
+        """
+        warnings.warn(
+            "The i_depend_on_them() method is deprecated.\n" +
+            "Please use the declarations.i_depend_on_them() method instead.\n",
+            DeprecationWarning)

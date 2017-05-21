@@ -49,4 +49,6 @@ class typedef_t(declaration.declaration_t, byte_info.byte_info):
         self.byte_align = decl_type.byte_align
 
     def i_depend_on_them(self, recursive=True):
-        return [class_declaration.dependency_info_t(self, self.decl_type)]
+        self._warn_deprecated()
+        from . import dependencies
+        return [dependencies.dependency_info_t(self, self.decl_type)]

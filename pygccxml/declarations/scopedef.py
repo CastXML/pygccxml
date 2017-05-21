@@ -1050,6 +1050,7 @@ class scopedef_t(declaration.declaration_t):
         return self.decls(name_or_function)
 
     def i_depend_on_them(self, recursive=True):
+        self._warn_deprecated()
         raise NotImplementedError()
 
 

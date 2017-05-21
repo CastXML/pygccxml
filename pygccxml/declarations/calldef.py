@@ -18,7 +18,6 @@ This modules contains definition for next C++ declarations:
 """
 from . import cpptypes
 from . import declaration
-from . import class_declaration
 from . import calldef_types
 
 
@@ -307,7 +306,8 @@ class calldef_t(declaration.declaration_t):
         self._has_inline = has_inline
 
     def _report(self, *args, **keywd):
-        return class_declaration.dependency_info_t(self, *args, **keywd)
+        from . import dependencies
+        return dependencies.dependency_info_t(self, *args, **keywd)
 
     def i_depend_on_them(self, recursive=True):
         answer = []
