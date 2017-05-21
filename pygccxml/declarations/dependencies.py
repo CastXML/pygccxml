@@ -4,7 +4,6 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 from . import declaration
-from . import enumeration
 from . import typedef
 from . import cpptypes
 from . import type_traits
