@@ -14,7 +14,7 @@ from . import calldef
 from . import namespace
 
 
-def i_depend_on_them(decl, recursive=True):
+def get_dependencies_from_decl(decl, recursive=True):
     """
     Returns the list of all types and declarations the declaration depends on.
 
@@ -26,7 +26,7 @@ def i_depend_on_them(decl, recursive=True):
     if isinstance(decl, namespace.namespace_t):
         if recursive:
             for d in decl.declarations:
-                result.extend(i_depend_on_them(d))
+                result.extend(get_dependencies_from_decl(d))
         return result
     if isinstance(decl, calldef.calldef_t):
         if decl.return_type:
@@ -57,7 +57,7 @@ def i_depend_on_them(decl, recursive=True):
 def __find_out_member_dependencies(members, access_type):
     answer = []
     for mem in members:
-        answer.extend(i_depend_on_them(mem, recursive=True))
+        answer.extend(get_dependencies_from_decl(mem, recursive=True))
     member_ids = set([id(m) for m in members])
     for dependency in answer:
         if id(dependency.declaration) in member_ids:
@@ -116,7 +116,7 @@ class dependency_info_t(object):
         depends on a declaration from the input"""
 
         to_be_included = set()
-        for dependency_info in i_depend_on_them(decl):
+        for dependency_info in get_dependencies_from_decl(decl):
             for ddecl in dependency_info.find_out_depend_on_it_declarations():
                 if ddecl:
                     to_be_included.add(ddecl)

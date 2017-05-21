@@ -217,7 +217,7 @@ from .function_traits import is_same_function
 from . import templates
 from . import call_invocation
 
-from .dependencies import i_depend_on_them
+from .dependencies import get_dependencies_from_decl
 from .dependencies import dependency_info_t
 
 from .decl_factory import decl_factory_t

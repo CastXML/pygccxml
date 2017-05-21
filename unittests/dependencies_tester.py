@@ -42,7 +42,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(dependencies_old[0].declaration is static_var)
         self.assertTrue(dependencies_old[0].depend_on_it.decl_string == 'int')
 
-        dependencies_new = declarations.i_depend_on_them(static_var)
+        dependencies_new = declarations.get_dependencies_from_decl(static_var)
         self.assertTrue(len(dependencies_new) == 1)
         self.assertTrue(dependencies_new[0].declaration is static_var)
         self.assertTrue(dependencies_new[0].depend_on_it.decl_string == 'int')
@@ -57,7 +57,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(dependencies_old[0].declaration is m_mutable)
         self.assertTrue(dependencies_old[0].depend_on_it.decl_string == 'int')
 
-        dependencies_new = declarations.i_depend_on_them(m_mutable)
+        dependencies_new = declarations.get_dependencies_from_decl(m_mutable)
         self.assertTrue(len(dependencies_new) == 1)
         self.assertTrue(dependencies_new[0].declaration is m_mutable)
         self.assertTrue(dependencies_new[0].depend_on_it.decl_string == 'int')
@@ -75,7 +75,7 @@ class Test(parser_test_case.parser_test_case_t):
             d for d in dependencies_old if not d.declaration.is_artificial]
         self.assertTrue(len(dependencies_old) == 1)
 
-        dependencies_new = declarations.i_depend_on_them(cls)
+        dependencies_new = declarations.get_dependencies_from_decl(cls)
         dependencies_new = [
             d for d in dependencies_new if not d.declaration.is_artificial]
         self.assertTrue(len(dependencies_new) == 1)
@@ -103,7 +103,7 @@ class Test(parser_test_case.parser_test_case_t):
 
         # Legacy way of fetching dependencies. Is still valid but deprecated
         warnings.simplefilter("ignore", Warning)
-        dependencies_old = declarations.i_depend_on_them(fd_cls)
+        dependencies_old = declarations.get_dependencies_from_decl(fd_cls)
         warnings.simplefilter("error", Warning)
         dependencies_old = [
             dependency for dependency in dependencies_old if
@@ -112,7 +112,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(dependencies_old[0].depend_on_it is derived1_cls)
         self.assertTrue(dependencies_old[0].access_type == 'public')
 
-        dependencies_new = declarations.i_depend_on_them(fd_cls)
+        dependencies_new = declarations.get_dependencies_from_decl(fd_cls)
         dependencies_new = [
             dependency for dependency in dependencies_new if
             dependency.depend_on_it is derived1_cls]
@@ -134,7 +134,8 @@ class Test(parser_test_case.parser_test_case_t):
             for dependency in dependencies_old]
         self.assertTrue(used_types == ['int', 'int', 'bool'])
 
-        dependencies_new = declarations.i_depend_on_them(return_default_args)
+        dependencies_new = declarations.get_dependencies_from_decl(
+            return_default_args)
         self.assertTrue(len(dependencies_new) == 3)
         used_types = [
             dependency.depend_on_it.decl_string
@@ -155,7 +156,8 @@ class Test(parser_test_case.parser_test_case_t):
             dependency.depend_on_it in (some_exception, other_exception)]
         self.assertTrue(len(dependencies_old) == 2)
 
-        dependencies_new = declarations.i_depend_on_them(calldef_with_throw)
+        dependencies_new = declarations.get_dependencies_from_decl(
+            calldef_with_throw)
         self.assertTrue(len(dependencies_new) == 3)
         dependencies_new = [
             dependency for dependency in dependencies_new if
@@ -163,7 +165,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertTrue(len(dependencies_new) == 2)
 
     def test_coverage(self):
-        declarations.i_depend_on_them(self.global_ns)
+        declarations.get_dependencies_from_decl(self.global_ns)
 
 
 def create_suite():

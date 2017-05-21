@@ -14,8 +14,8 @@ Version 2.0.0 (unreleased)
 
 3. Deprecated all the `i_depend_on_them` methods from the `declaration_t`
    class hierarchy. Instead of using `decl.i_depend_on_them()`, please use the
-   `declarations.i_depend_on_them(decl)` function from the `declarations`
-   module, which produces the same result.
+   `declarations.get_dependencies_from_decl(decl)` function from the
+   `declarations` module, which returns the same result.
 
 Version 1.9.0
 -------------
