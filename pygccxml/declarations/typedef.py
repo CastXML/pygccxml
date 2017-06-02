@@ -8,7 +8,6 @@ defines class that describes C++ typedef declaration
 """
 
 from . import declaration
-from . import class_declaration
 from . import byte_info
 
 
