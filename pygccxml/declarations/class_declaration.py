@@ -460,6 +460,7 @@ class class_t(
         return answer
 
     def i_depend_on_them(self, recursive=True):
+        self._warn_deprecated()
         from . import dependencies  # prevent cyclic dependencies
 
         answer = []

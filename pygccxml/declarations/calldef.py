@@ -310,6 +310,7 @@ class calldef_t(declaration.declaration_t):
         return dependencies.dependency_info_t(self, *args, **keywd)
 
     def i_depend_on_them(self, recursive=True):
+        self._warn_deprecated()
         answer = []
         if self.return_type:
             answer.append(
