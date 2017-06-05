@@ -18,6 +18,7 @@ from . import declaration
 from . import templates
 from . import byte_info
 from . import elaborated_info
+from . import type_traits
 
 
 class ACCESS_TYPES(object):
@@ -482,7 +483,6 @@ class class_t(
         return answer
 
     def _get_partial_name_impl(self):
-        from . import type_traits  # prevent cyclic dependencies
         if type_traits.is_std_string(self):
             return 'string'
         if type_traits.is_std_wstring(self):
