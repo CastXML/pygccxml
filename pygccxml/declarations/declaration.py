@@ -335,6 +335,6 @@ class declaration_t(object):
         """
         warnings.warn(
             "The i_depend_on_them() method is deprecated.\n" +
-            "Please use the declarations.get_dependencies_from_decl()"  +
-            "method instead.\n",
+            "Please use the declarations.get_dependencies_from_decl()" +
+            "function instead.\n",
             DeprecationWarning)
