@@ -306,7 +306,9 @@ class calldef_t(declaration.declaration_t):
         self._has_inline = has_inline
 
     def _report(self, *args, **keywd):
-        from . import dependencies
+        # Implementation detail. Will be removed when the deprecated
+        # i_depend_on_them method is dropped
+        from . import dependencies  # pylint: disable=R0401
         return dependencies.dependency_info_t(self, *args, **keywd)
 
     def i_depend_on_them(self, recursive=True):

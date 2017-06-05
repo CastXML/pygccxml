@@ -461,7 +461,9 @@ class class_t(
 
     def i_depend_on_them(self, recursive=True):
         self._warn_deprecated()
-        from . import dependencies  # prevent cyclic dependencies
+        # Deprecated method. The cyclic import will be removed with the method
+        # in the next release, so we can disable the cyclic import check here.
+        from . import dependencies  # pylint: disable=R0401
 
         answer = []
 
