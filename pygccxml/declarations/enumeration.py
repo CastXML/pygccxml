@@ -135,4 +135,5 @@ class enumeration_t(
         return x
 
     def i_depend_on_them(self, recursive=True):
+        self._warn_deprecated()
         return []

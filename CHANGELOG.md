@@ -12,6 +12,11 @@ Version 2.0.0 (unreleased)
 
 2. Drop support for ```Python 2.6``` and ```Python 3.2```
 
+3. Deprecated all the `i_depend_on_them` methods from the `declaration_t`
+   class hierarchy. Instead of using `decl.i_depend_on_them()`, please use the
+   `declarations.get_dependencies_from_decl(decl)` function from the
+   `declarations` module, which returns the same result.
+
 Version 1.9.0
 -------------
 

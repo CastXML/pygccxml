@@ -119,7 +119,11 @@ class variable_t(declaration.declaration_t):
         self._mangled = mangled
 
     def i_depend_on_them(self, recursive=True):
-        return [class_declaration.dependency_info_t(self, self.decl_type)]
+        # Deprecated method. The cyclic import will be removed with the method
+        # in the next release, so we can disable the cyclic import check here.
+        from . import dependencies  # pylint: disable=R0401
+        self._warn_deprecated()
+        return [dependencies.dependency_info_t(self, self.decl_type)]
 
     def get_mangled_name(self):
         if not self._mangled \
