@@ -8,6 +8,8 @@ Define few unrelated algorithms that work on declarations.
 
 """
 
+import re
+
 from . import declaration_utils
 from . import runtime_errors
 
@@ -79,9 +81,31 @@ def apply_visitor(visitor, decl_inst):
 
     """
 
-    fname = 'visit_' + \
-        decl_inst.__class__.__name__[:-2]  # removing '_t' from class name
-    if not hasattr(visitor, fname):
+    fname = decl_inst.__class__.__name__
+    fname = re.sub("_t$", "", fname)  # removing '_t' from class name
+    fname = re.sub("T$", "", fname)  # removing 'T' from class name
+    fname = re.sub("D$", "", fname)  # removing 'D' from class name
+
+    # TODO: Refactor this once the class name refactoring is done
+    new_name = ""
+    i = 0
+    if fname[0].isupper():
+        # New class syntaxt
+        for char in fname:
+            # For example:
+            # ClassDeclarationD -> class_declaration
+            # NamespaceD -> namespace
+            # WCharT -> wchar
+            if char.isupper() and i > 0 and fname[i-1].islower():
+                new_name += "_"
+            new_name += char.lower()
+            i += 1
+    else:
+        # Legacy class syntax
+        new_name = fname
+
+    new_name = 'visit_' + new_name
+    if not hasattr(visitor, new_name):
         raise runtime_errors.visit_function_has_not_been_found_t(
             visitor, decl_inst)
-    return getattr(visitor, fname)()
+    return getattr(visitor, new_name)()
