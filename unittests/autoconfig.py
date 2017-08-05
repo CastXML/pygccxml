@@ -23,7 +23,6 @@ sys.path.insert(1, os.path.join(os.curdir, '..'))
 # in site-packages. Insert the directory's path.
 sys.path.insert(1, "../pygccxml")
 
-from pygccxml import declarations  # nopep8
 from pygccxml import parser  # nopep8
 from pygccxml import utils  # nopep8
 
