@@ -725,7 +725,6 @@ def is_noncopyable(class_, already_visited_cls_vars=None):
     class_decl = class_traits.get_declaration(class_)
 
     true_header = "is_noncopyable(TRUE) - %s - " % class_.decl_string
-    # false_header = "is_noncopyable(false) - %s - " % class_.decl_string
 
     if is_union(class_):
         return False
@@ -790,7 +789,7 @@ def is_noncopyable(class_, already_visited_cls_vars=None):
 def is_unary_operator(oper):
     """returns True, if operator is unary operator, otherwise False"""
     # definition:
-    # memeber in class
+    # member in class
     # ret-type operator symbol()
     # ret-type operator [++ --](int)
     # globally
@@ -823,7 +822,7 @@ def is_unary_operator(oper):
 def is_binary_operator(oper):
     """returns True, if operator is binary operator, otherwise False"""
     # definition:
-    # memeber in class
+    # member in class
     # ret-type operator symbol(arg)
     # globally
     # ret-type operator symbol( arg1, arg2 )
