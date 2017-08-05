@@ -80,6 +80,7 @@ from . import test_non_copyable_recursive
 from . import test_castxml_wrong_epic
 from . import test_elaborated_types
 from . import test_order
+from . import test_find_noncopyable_vars
 
 testers = [
     pep8_tester,
@@ -150,7 +151,8 @@ testers = [
     test_non_copyable_recursive,
     test_castxml_wrong_epic,
     test_elaborated_types,
-    test_order
+    test_order,
+    test_find_noncopyable_vars
 ]
 
 if platform.system() != 'Windows':
