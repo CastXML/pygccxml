@@ -204,6 +204,9 @@ def find_noncopyable_vars(class_type, already_visited_cls_vars=None):
                 logger.debug((message + " - array"), var_type.decl_string)
                 noncopyable_vars.append(mvar)
 
+        if type_traits.is_pointer(var_type):
+            continue
+
         if class_traits.is_my_case(var_type):
 
             cls = class_traits.get_declaration(var_type)
