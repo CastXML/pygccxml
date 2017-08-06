@@ -5,117 +5,134 @@ env:
   global:
     - WINDOWS=0
     - SITECUSTOMIZELIBPATH=0
+    - PYPY=0
 
+dist: trusty
 matrix:
   include:
     - os: linux
-      python: 3.5
+      # BUILD 1 -------------------
+      python: 3.6
       env: WINDOWS=1
     - os: linux
+      # BUILD 2 -------------------
       python: 2.7
       env:
+        # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
+      # BUILD 3 -------------------
       python: 3.3
       env:
+        # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.3/lib/python3.3/sitecustomize.py"
     - os: linux
+      # BUILD 4 -------------------
       python: 3.4
       env:
+        # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.4/lib/python3.4/sitecustomize.py"
     - os: linux
+      # BUILD 5 -------------------
       python: 3.5
       env:
+        # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
+      # BUILD 6 -------------------
+      python: 3.6
+      env:
+        # gcc 4.8.4 with c++98
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
+    - os: linux
+      # BUILD 7 -------------------
+      python: pypy
+      env:
+        # gcc 4.8.4 with c++98
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy/lib-python/2.7/sitecustomize.py"
+        - PYPY=1
+    - os: linux
+      # BUILD 8 -------------------
+      python: pypy3
+      env:
+        # gcc 4.8.4 with c++98
+        - XML_GENERATOR="castxml"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy3/lib-python/3/sitecustomize.py"
+        - PYPY=1
+    - os: linux
+      # BUILD 9 -------------------
+      python: 3.6
+      env:
+        # gcc 5.4.1 with c++98
+        - XML_GENERATOR="castxml"
+        - COMPILER=g++-5
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+    - os: linux
+      # BUILD 10 ------------------
       python: 3.6
       env:
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      python: "pypy"
+      # BUILD 11 ------------------
+      python: 3.6
       env:
+        # gcc 4.8.4 with c++03
         - XML_GENERATOR="castxml"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy/lib-python/2.7/sitecustomize.py"
+        - CPPSTD="-std=c++03"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      python: "pypy3.3-5.2-alpha1"
+      # BUILD 12 ------------------
+      python: 3.6
       env:
+        # gcc 4.8.4 with c++11
         - XML_GENERATOR="castxml"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy3/lib-python/3/sitecustomize.py"
+        - CPPSTD="-std=c++11"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      python: 3.5
+      # BUILD 13 ------------------
+      python: 3.6
       env:
-       - XML_GENERATOR="castxml"
-       - COMPILER=g++-5
-       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+        # gcc 5.4.1 with c++11
+        - XML_GENERATOR="castxml"
+        - COMPILER=g++-5
+        - CPPSTD="-std=c++11"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-          # gcc 5.2.1
             - g++-5
     - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
+      # BUILD 14 ------------------
+      python: 3.6
       env:
+        # gcc 5.4.1 with c++14
         - XML_GENERATOR="castxml"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
-    - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
-      env:
-         # gcc 4.8.2 with c++03
-         - XML_GENERATOR="castxml"
-         - CPPSTD="-std=c++03"
-         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
-    - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
-      env:
-         # gcc 4.8.2 with c++11
-         - XML_GENERATOR="castxml"
-         - CPPSTD="-std=c++11"
-         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
-    - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
-      env:
-       - XML_GENERATOR="castxml"
-       - COMPILER=g++-5
-       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+        - COMPILER=g++-5
+        - CPPSTD="-std=c++14"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            # gcc 5.3.0
-            - g++-5
-    - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
-      env:
-       - XML_GENERATOR="castxml"
-       - COMPILER=g++-5
-       - CPPSTD="-std=c++14"
-       - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            # gcc 5.3.0
             - g++-5
     - os: osx
+      # BUILD 15 ------------------
       osx_image: xcode7.3
       language: generic
       env:
@@ -123,6 +140,7 @@ matrix:
         - TRAVIS_PYTHON_VERSION="2"
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python2.7/site-packages/sitecustomize.py"
     - os: osx
+      # BUILD 16 ------------------
       osx_image: xcode7.3
       language: generic
       env:
@@ -130,24 +148,22 @@ matrix:
         - TRAVIS_PYTHON_VERSION="3"
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
     - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
+      # BUILD 17 ------------------
+      python: 3.6
       env:
         - XML_GENERATOR="castxml-18032017"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      dist: trusty
-      sudo: required
-      python: 3.5
+      # BUILD 18 ------------------
+      python: 3.6
       env:
         - XML_GENERATOR="castxml-18032017"
         - CASTXML_EPIC="1"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
+        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
 
 
 before_install:
- # OS X
+  # OS X
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_retry brew update; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then brew install python3; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $TRAVIS_PYTHON_VERSION == 3 ]]; then sudo ln -sf /usr/local/bin/pip3 /usr/local/bin/pip; fi
@@ -179,27 +195,22 @@ before_install:
       export PATH=$PATH:~/castxml/bin/;
     fi
 
-  # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++03" ]]; then
       mv unittests/configs/travis_std03.cfg unittests/xml_generator.cfg;
     fi
 
-  # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++11" ]]; then
       mv unittests/configs/travis_std11.cfg unittests/xml_generator.cfg;
     fi
 
-  # Patch the c++ version to test on the fly
   - if [[ $CPPSTD == "-std=c++14" ]]; then
       mv unittests/configs/travis_std14.cfg unittests/xml_generator.cfg;
     fi
 
-  # Patch the compiler path on the fly for gcc5 testing
   - if [[ "$COMPILER" == "g++-5" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
      mv unittests/configs/travis_gcc5.cfg unittests/xml_generator.cfg;
     fi
 
-    # Patch the c++ version to test on the fly
   - if [[ $CASTXML_EPIC == "1" ]]; then
       mv unittests/configs/castxml_epic1.cfg unittests/xml_generator.cfg;
     fi
@@ -219,6 +230,7 @@ script:
   - echo $TRAVIS_OS_NAME
   - echo $WINDOWS
   - python --version
+  - c++ --version
 
   # Modify sitecustomize.py file for coverage. Allows to cover files run in a subprocess.
   - if [ $WINDOWS == 0 ]; then
@@ -229,10 +241,17 @@ script:
   # Install pygccxml, run the tests with coverage and
   # combine multiple .coverage files
   # We have multiple coverage files because some scripts run in a subprocess
-  - if [ $WINDOWS == 0 ]; then
+  - if [[ $WINDOWS == 0 ]] && [[ $PYPY == 0 ]]; then
       python setup.py install || travis_terminate 1;
       coverage run -m unittests.test_all || travis_terminate 1;
       coverage combine || travis_terminate 1;
+    fi
+    # For pypy, do not run coverage, as this is extremely slow
+    # https://bitbucket.org/pypy/pypy/issues/1871/10x-slower-than-cpython-under-coverage
+    # This is fixed with pypy 4.0, which is not the pypy provided by Travis ...
+  - if [[ $WINDOWS == 0 ]] && [[ $PYPY != 0 ]]; then
+      python setup.py install || travis_terminate 1;
+      python -m unittests.test_all || travis_terminate 1;
     fi
   # For the "empty" windows build, fetch the coverage results from appveyor
   - if [ $WINDOWS == 1 ]; then
