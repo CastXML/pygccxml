@@ -23,9 +23,9 @@ class Test(parser_test_case.parser_test_case_t):
         decls = parser.parse([self.header], self.config)
         self.global_ns = declarations.get_global_namespace(decls)
 
-    def test_smart_pointer(self):
+    def test_is_smart_pointer(self):
         """
-        Test smart_pointer_traits class.
+        Test smart_pointer_traits.is_smart_pointer method.
 
         """
 
@@ -50,9 +50,9 @@ class Test(parser_test_case.parser_test_case_t):
             declarations.smart_pointer_traits.is_smart_pointer(
                 decls[0].decl_type))
 
-    def test_auto_pointer(self):
+    def test_is_auto_pointer(self):
         """
-        Test auto_ptr_traits class.
+        Test auto_ptr_traits.is_smart_pointer method.
 
         """
 
