@@ -17,37 +17,48 @@ class Test(parser_test_case.parser_test_case_t):
         parser_test_case.parser_test_case_t.__init__(self, *args)
         self.header = "test_smart_pointer.hpp"
         self.config.cflags = "-std=c++11"
+        self.global_ns = None
+
+    def setUp(self):
+        decls = parser.parse([self.header], self.config)
+        self.global_ns = declarations.get_global_namespace(decls)
 
     def test_smart_pointer(self):
         """
-        Test code in the smart_pointer_traits module.
+        Test smart_pointer_traits class.
 
         """
 
         if self.config.xml_generator == "gccxml":
             return
 
-        decls = parser.parse([self.header], self.config)
-        global_ns = declarations.get_global_namespace(decls)
-
         criteria = declarations.declaration_matcher(name="yes1")
-        decls = declarations.matcher.find(criteria, global_ns)
+        decls = declarations.matcher.find(criteria, self.global_ns)
         self.assertTrue(
             declarations.smart_pointer_traits.is_smart_pointer(
                 decls[0].decl_type))
 
+    def test_auto_pointer(self):
+        """
+        Test auto_ptr_traits class.
+
+        """
+
+        if self.config.xml_generator == "gccxml":
+            return
+
         criteria = declarations.declaration_matcher(name="yes2")
-        decls = declarations.matcher.find(criteria, global_ns)
+        decls = declarations.matcher.find(criteria, self.global_ns)
         self.assertTrue(
             declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
 
         criteria = declarations.declaration_matcher(name="no1")
-        decls = declarations.matcher.find(criteria, global_ns)
+        decls = declarations.matcher.find(criteria, self.global_ns)
         self.assertFalse(
             declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
 
         criteria = declarations.declaration_matcher(name="no2")
-        decls = declarations.matcher.find(criteria, global_ns)
+        decls = declarations.matcher.find(criteria, self.global_ns)
         self.assertFalse(
             declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
 
