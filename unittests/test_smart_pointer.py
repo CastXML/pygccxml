@@ -38,6 +38,18 @@ class Test(parser_test_case.parser_test_case_t):
             declarations.smart_pointer_traits.is_smart_pointer(
                 decls[0].decl_type))
 
+        criteria = declarations.declaration_matcher(name="no1")
+        decls = declarations.matcher.find(criteria, self.global_ns)
+        self.assertFalse(
+            declarations.smart_pointer_traits.is_smart_pointer(
+                decls[0].decl_type))
+
+        criteria = declarations.declaration_matcher(name="no2")
+        decls = declarations.matcher.find(criteria, self.global_ns)
+        self.assertFalse(
+            declarations.smart_pointer_traits.is_smart_pointer(
+                decls[0].decl_type))
+
     def test_auto_pointer(self):
         """
         Test auto_ptr_traits class.
