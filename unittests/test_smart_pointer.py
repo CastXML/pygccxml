@@ -76,6 +76,34 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertFalse(
             declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
 
+    def test_smart_pointer_value_type(self):
+        """
+        Test smart_pointer_traits.value_type method.
+
+        """
+
+        if self.config.xml_generator == "gccxml":
+            return
+
+        criteria = declarations.declaration_matcher(name="yes1")
+        decls = declarations.matcher.find(criteria, self.global_ns)
+        vt = declarations.smart_pointer_traits.value_type(decls[0].decl_type)
+        self.assertIsInstance(vt, declarations.int_t)
+
+    def test_auto_pointer_value_type(self):
+        """
+        Test auto_pointer_traits.value_type method.
+
+        """
+
+        if self.config.xml_generator == "gccxml":
+            return
+
+        criteria = declarations.declaration_matcher(name="yes2")
+        decls = declarations.matcher.find(criteria, self.global_ns)
+        vt = declarations.auto_ptr_traits.value_type(decls[0].decl_type)
+        self.assertIsInstance(vt, declarations.double_t)
+
 
 def create_suite():
     suite = unittest.TestSuite()

@@ -18,7 +18,7 @@ class internal_type_traits(object):
     @staticmethod
     def get_by_name(type_, name):
         if class_traits.is_my_case(type_):
-            cls = class_traits.declaration_class(type_)
+            cls = class_traits.get_declaration(type_)
             return type_traits.remove_declarated(
                 cls.typedef(name, recursive=False).decl_type)
         elif class_declaration_traits.is_my_case(type_):
@@ -72,7 +72,7 @@ class smart_pointer_traits(object):
                 'Type "%s" is not an instantiation of \
                 boost::shared_ptr or std::shared_ptr' %
                 type_.decl_string)
-        return internal_type_traits.get_by_name(type_, "value_type")
+        return internal_type_traits.get_by_name(type_, "element_type")
 
 
 class auto_ptr_traits(object):
