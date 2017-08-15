@@ -187,9 +187,9 @@ from .type_traits_classes import find_noncopyable_vars
 from .type_traits_classes import has_any_non_copyconstructor
 from .type_traits_classes import has_vtable
 
-from .smart_pointer_traits import auto_ptr_traits
-from .smart_pointer_traits import smart_pointer_traits
-from .smart_pointer_traits import internal_type_traits
+from .pointer_traits import auto_ptr_traits
+from .pointer_traits import smart_pointer_traits
+from .pointer_traits import internal_type_traits
 
 from .container_traits import list_traits
 from .container_traits import deque_traits
