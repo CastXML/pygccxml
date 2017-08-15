@@ -31,16 +31,19 @@ def is_str(string):
     return isinstance(string, basestring)
 
 
-def find_xml_generator(name=None):
+def find_xml_generator(name="castxml"):
     """
-    Try to find a c++ parser. Returns path and name.
+    Try to find a c++ parser (xml generator)
 
-    :param name: name of the c++ parser: castxml or gccxml
-    :type name: str
+    Args:
+        name (str): name of the c++ parser (e.g. castxml)
 
-    If no name is given the function first looks for castxml,
-    then for gccxml. If no c++ parser is found the function
-    raises an exception.
+    Returns:
+        path (str), name (str): path to the xml generator and it's name
+
+
+    If no c++ parser is found the function raises an exception.
+    pygccxml does currently only support castxml as c++ parser.
 
     """
     if platform.system() == "Windows":
@@ -48,32 +51,14 @@ def find_xml_generator(name=None):
     else:
         command = "which"
 
-    if name is None:
-        name = "castxml"
-        p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        path = p.stdout.read().decode("utf-8")
-        p.wait()
-        p.stdout.close()
-        p.stderr.close()
-        if path == "":
-            name = "gccxml"
-            p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE)
-            path = p.stdout.read().decode("utf-8")
-            p.wait()
-            p.stdout.close()
-            p.stderr.close()
-    else:
-        p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-        path = p.stdout.read().decode("utf-8")
-        p.wait()
-        p.stdout.close()
-        p.stderr.close()
+    p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    path = p.stdout.read().decode("utf-8")
+    p.wait()
+    p.stdout.close()
+    p.stderr.close()
     if path == "":
-        raise(Exception(
-            "No c++ parser found. Please install castxml or gccxml."))
+        raise(Exception("No c++ parser found. Please install castxml."))
     else:
         return path.rstrip(), name
 
