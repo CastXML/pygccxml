@@ -152,7 +152,7 @@ def find_copy_constructor(type_):
         return None
 
 
-def find_noncopyable_vars(type_, already_visited_cls_vars=None):
+def find_noncopyable_vars(class_type, already_visited_cls_vars=None):
     """
     Returns list of all `noncopyable` variables.
 
@@ -161,7 +161,7 @@ def find_noncopyable_vars(type_, already_visited_cls_vars=None):
     whatever variables pointing to classes have been found.
 
     Args:
-        type_ (declarations.class_t): the class to be searched.
+        class_type (declarations.class_t): the class to be searched.
         already_visited_cls_vars (list): optional list of vars that should not
             be checked a second time, to prevent infinite recursions.
 
@@ -169,10 +169,11 @@ def find_noncopyable_vars(type_, already_visited_cls_vars=None):
         list: list of all `noncopyable` variables.
 
     """
-    assert isinstance(type_, class_declaration.class_t)
+
+    assert isinstance(class_type, class_declaration.class_t)
 
     logger = utils.loggers.cxx_parser
-    mvars = type_.variables(
+    mvars = class_type.variables(
         lambda v: not v.type_qualifiers.has_static,
         recursive=False,
         allow_empty=True)
@@ -187,25 +188,28 @@ def find_noncopyable_vars(type_, already_visited_cls_vars=None):
 
     for mvar in mvars:
 
-        type_ = type_traits.remove_reference(mvar.decl_type)
+        var_type = type_traits.remove_reference(mvar.decl_type)
 
-        if type_traits.is_const(type_):
-            no_const = type_traits.remove_const(type_)
+        if type_traits.is_const(var_type):
+            no_const = type_traits.remove_const(var_type)
             if type_traits.is_fundamental(no_const) or is_enum(no_const):
                 logger.debug(
                     (message + "- fundamental or enum"),
-                    type_.decl_string)
+                    var_type.decl_string)
                 noncopyable_vars.append(mvar)
             if is_class(no_const):
-                logger.debug((message + " - class"), type_.decl_string)
+                logger.debug((message + " - class"), var_type.decl_string)
                 noncopyable_vars.append(mvar)
             if type_traits.is_array(no_const):
-                logger.debug((message + " - array"), type_.decl_string)
+                logger.debug((message + " - array"), var_type.decl_string)
                 noncopyable_vars.append(mvar)
 
-        if class_traits.is_my_case(type_):
+        if type_traits.is_pointer(var_type):
+            continue
 
-            cls = class_traits.get_declaration(type_)
+        if class_traits.is_my_case(var_type):
+
+            cls = class_traits.get_declaration(var_type)
 
             # Exclude classes that have already been visited.
             if cls in already_visited_cls_vars:
@@ -215,12 +219,12 @@ def find_noncopyable_vars(type_, already_visited_cls_vars=None):
             if is_noncopyable(cls, already_visited_cls_vars):
                 logger.debug(
                     (message + " - class that is not copyable"),
-                    type_.decl_string)
+                    var_type.decl_string)
                 noncopyable_vars.append(mvar)
 
     logger.debug((
         "__contains_noncopyable_mem_var - %s - FALSE - doesn't " +
-        "contain noncopyable members"), type_.decl_string)
+        "contain noncopyable members"), class_type.decl_string)
 
     return noncopyable_vars
 
