@@ -208,7 +208,6 @@ def find_noncopyable_vars(class_type, already_visited_cls_vars=None):
             continue
 
         if class_traits.is_my_case(var_type):
-
             cls = class_traits.get_declaration(var_type)
 
             # Exclude classes that have already been visited.

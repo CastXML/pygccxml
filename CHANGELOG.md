@@ -17,6 +17,20 @@ Version 2.0.0 (unreleased)
    `declarations.get_dependencies_from_decl(decl)` function from the
    `declarations` module, which returns the same result.
 
+Version 1.9.1
+-------------
+
+1. Fix bug in the ```find_noncopyable_vars``` method which wrongly returned
+   member variables of pointer type (#84)
+
+2. Fix bug in the ```smart_pointer_traits.value_type``` and
+   ```auto_pointer_traits.value_type``` methods which didn't find the expected
+   ```value_type``` declaration (#85)
+
+3. Fix bug in the ```smart_pointer_traits.is_smart_pointer``` and
+   ```auto_pointer_traits.is_smart_pointer``` methods which didn't properly
+   work (#85)
+
 Version 1.9.0
 -------------
 
