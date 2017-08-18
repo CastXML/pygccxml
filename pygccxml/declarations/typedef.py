@@ -33,9 +33,6 @@ class typedef_t(declaration.declaration_t, byte_info.byte_info):
             return False
         return self.decl_type == other.decl_type
 
-    def __hash__(self):
-        return super(typedef_t, self).__hash__()
-
     @property
     def decl_type(self):
         """reference to the original :class:`decl_type <type_t>`"""

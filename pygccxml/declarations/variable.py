@@ -45,9 +45,6 @@ class variable_t(declaration.declaration_t):
             and self.value == other.value \
             and self.bits == other.bits
 
-    def __hash__(self):
-        return super(variable_t, self).__hash__()
-
     @property
     def decl_type(self):
         """reference to the variable :class:`decl_type <type_t>`"""
