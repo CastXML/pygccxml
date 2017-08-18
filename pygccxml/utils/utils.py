@@ -10,6 +10,7 @@ import sys
 import platform
 import logging
 import tempfile
+import shutil
 import subprocess
 import warnings
 
@@ -46,21 +47,34 @@ def find_xml_generator(name="castxml"):
     pygccxml does currently only support castxml as c++ parser.
 
     """
+
+    if sys.version_info >= (3, 3):
+        path = _find_xml_generator_for_python_greater_equals_33(name)
+    else:
+        path = _find_xml_generator_for_legacy_python(name)
+
+    if path == "":
+        raise(Exception("No c++ parser found. Please install castxml."))
+    else:
+        return path.rstrip(), name
+
+
+def _find_xml_generator_for_python_greater_equals_33(name):
+    return shutil.which(name)
+
+
+def _find_xml_generator_for_legacy_python(name):
     if platform.system() == "Windows":
         command = "where"
     else:
         command = "which"
-
     p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
     path = p.stdout.read().decode("utf-8")
     p.wait()
     p.stdout.close()
     p.stderr.close()
-    if path == "":
-        raise(Exception("No c++ parser found. Please install castxml."))
-    else:
-        return path.rstrip(), name
+    return path.rstrip()
 
 
 def _create_logger_(name):
