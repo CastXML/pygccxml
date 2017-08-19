@@ -27,9 +27,7 @@ Documentation and examples
 
 The :doc:`examples <examples>` are a good way to learn how to use pygccxml.
 
-If you want to know more about the API provided by pygccxml,
-read the :doc:`query interface <query_interface>` document or the
-:doc:`API documentation <apidocs/modules>`.
+If you want to know more about the API provided by pygccxml, read the :doc:`query interface <query_interface>` document or the :doc:`API documentation <apidocs/modules>`.
 
 A `FAQ <faq>`_ is also available and may answer some of your questions.
 

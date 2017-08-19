@@ -40,9 +40,7 @@ Documentation and examples
 
 The documentation can be found `here <http://pygccxml.readthedocs.io>`_, examples can be found `here <http://pygccxml.readthedocs.io/en/master/examples.html>`_.
 
-If you want to know more about the API provided by pygccxml, read the
- `query interface <http://pygccxml.readthedocs.io/en/develop/query_interface.html>`_ document or the
- `API documentation <http://pygccxml.readthedocs.io/en/develop/apidocs/modules.html>`_.
+If you want to know more about the API provided by pygccxml, read the `query interface <http://pygccxml.readthedocs.io/en/develop/query_interface.html>`_ document or the `API documentation <http://pygccxml.readthedocs.io/en/develop/apidocs/modules.html>`_.
 
 A `FAQ <http://pygccxml.readthedocs.io/en/master/faq.html>`_ is also available and may answer some of your questions.
 
