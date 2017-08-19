@@ -14,19 +14,42 @@ pygccxml
     :target: http://pygccxml.readthedocs.io/en/develop/?badge=develop
     :alt: Documentation status
 
-pygccxml is a specialized XML reader that reads the output from CastXML or GCCXML. It provides a simple framework to navigate C++ declarations, using Python classes.
+pygccxml is a specialized XML reader that reads the output from CastXML.
+It provides a simple framework to navigate C++ declarations, using Python classes.
 
-Install
--------
+Using pygccxml you can:
+
+* Parse C++ source code
+* Create a code generator
+* Generate UML diagrams
+* Build code analyzers
+* ...
+
+Installation
+------------
 
 Install instructions can be found `here <http://pygccxml.readthedocs.io/en/master/install.html>`_.
+
+Compatibility
+-------------
+
+pygccxml is compatible with Python 2.7, 3.3, 3.4, 3.5, pypy and pypy3.
 
 Documentation and examples
 --------------------------
 
 The documentation can be found `here <http://pygccxml.readthedocs.io>`_, examples can be found `here <http://pygccxml.readthedocs.io/en/master/examples.html>`_.
 
+If you want to know more about the API provided by pygccxml, read the
+ `query interface <http://pygccxml.readthedocs.io/en/develop/query_interface.html>`_ document or the
+ `API documentation <http://pygccxml.readthedocs.io/en/develop/apidocs/modules.html>`_.
+
 A `FAQ <http://pygccxml.readthedocs.io/en/master/faq.html>`_ is also available and may answer some of your questions.
+
+License
+-------
+
+`Boost Software License <http://boost.org/more/license_info.html>`_
 
 Contact us
 ----------
@@ -45,9 +68,8 @@ The develop branch contains the latest improvements but can be unstable. Pull Re
 Testing and code coverage
 -------------------------
 
-pygccxml has more than 250 unit tests. They are run after each code commit to ensure
-that the code stays functional and stable. You can find the Mac and Linux builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_ and
-the Windows builds `here <https://ci.appveyor.com/project/iMichka/pygccxml>`_.
+You can find the Mac and Linux builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_.
+The Windows builds are located `here <https://ci.appveyor.com/project/iMichka/pygccxml>`_.
 
 Running the test suite is done with:
 
