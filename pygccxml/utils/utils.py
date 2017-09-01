@@ -54,7 +54,7 @@ def find_xml_generator(name="castxml"):
         path = _find_xml_generator_for_legacy_python(name)
 
     if path == "" or path is None:
-        raise(Exception("No c++ parser found. Please install castxml."))
+        raise Exception("No c++ parser found. Please install castxml.")
     return path.rstrip(), name
 
 
