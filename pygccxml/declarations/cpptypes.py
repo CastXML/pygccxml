@@ -608,10 +608,8 @@ class array_t(compound_t):
     """represents C++ array type"""
     SIZE_UNKNOWN = -1
 
-    def __init__(self, base, size=None):
+    def __init__(self, base, size):
         compound_t.__init__(self, base)
-        if size is not None:
-            size = self.SIZE_UNKNOWN
         self._size = size
 
     @property
