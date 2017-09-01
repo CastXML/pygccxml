@@ -32,6 +32,24 @@ class Test(unittest.TestCase):
                 type_mockup = _create_type_t_mockup(member_type)
                 self.assertIsNotNone(hash(type_mockup))
 
+    def test_declarations_hashes(self):
+        """
+        Test if all the declaration_t instances implement a hash method.
+
+        The hash is part of the public API, as there are multiple tools
+        that rely on it to compare declaration_t instances.
+
+        The best way to test this is to instanciate dummy declaration_t objects
+        for each class that subclasses declaration_t, and check that the hash
+        of these objects is not None.
+
+        """
+        members = inspect.getmembers(declarations, inspect.isclass)
+        for member in members:
+            member_type = member[1]
+            if issubclass(member_type, declarations.declaration_t):
+                self.assertIsNotNone(hash(member_type()))
+
 
 def _create_type_t_mockup(member_type):
     nbr_parameters = len(inspect.signature(member_type).parameters)
