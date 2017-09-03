@@ -323,6 +323,7 @@ class calldef_t(declaration.declaration_t):
             answer.append(self._report(exc, hint="exception"))
         return answer
 
+    # pylint: disable=R0201
     def guess_calling_convention(self):
         """This function should be overriden in the derived classes and return
         more-or-less successfull guess about calling convention"""
