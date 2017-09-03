@@ -110,11 +110,7 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
 
     @staticmethod
     def __nice_decl_name(inst):
-        name = inst.__class__.__name__
-        return name
-        # if name.endswith( '_t' ):
-        #    name = name[:-len('_t')]
-        # return name.replace( '_', ' ' )
+        return inst.__class__.__name__
 
     def print_decl_header(self):
         header = self.__nice_decl_name(
