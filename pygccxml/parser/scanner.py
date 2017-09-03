@@ -609,19 +609,13 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def __read_free_operator(self, attrs):
         operator = self.__decl_factory.create_free_operator()
         self.__read_member_function(operator, attrs, True)
-        if 'new' in operator.name or 'delete' in operator.name:
-            operator.name = 'operator ' + operator.name
-        else:
-            operator.name = 'operator' + operator.name
+        self.__update_operator_name(operator)
         return operator
 
     def __read_member_operator(self, attrs):
         operator = self.__decl_factory.create_member_operator()
         self.__read_member_function(operator, attrs, True)
-        if 'new' in operator.name or 'delete' in operator.name:
-            operator.name = 'operator ' + operator.name
-        else:
-            operator.name = 'operator' + operator.name
+        self.__update_operator_name(operator)
         return operator
 
     def __read_version(self, attrs):
@@ -633,3 +627,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
             utils.loggers.cxx_parser, gccxml_cvs_revision, castxml_format)
         utils.xml_output_version = gccxml_cvs_revision
         self.__xml_generator_from_xml_file = xml_generator
+
+    @staticmethod
+    def __update_operator_name(operator):
+        if "new" in operator.name or "delete" in operator.name:
+            operator.name = "operator " + operator.name
+        else:
+            operator.name = "operator" + operator.name
