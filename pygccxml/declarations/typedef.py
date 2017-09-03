@@ -20,7 +20,7 @@ class typedef_t(declaration.declaration_t, byte_info.byte_info):
         declaration.declaration_t.__init__(self, name)
         byte_info.byte_info.__init__(self)
         self._decl_type = decl_type
-        if not isinstance(decl_type, str):
+        if not isinstance(decl_type, str) and decl_type is not None:
             self.byte_size = decl_type.byte_size
             self.byte_align = decl_type.byte_align
 
