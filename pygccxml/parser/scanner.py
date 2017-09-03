@@ -630,7 +630,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     @staticmethod
     def __update_operator_name(operator):
+        space = ""
         if "new" in operator.name or "delete" in operator.name:
-            operator.name = "operator " + operator.name
-        else:
-            operator.name = "operator" + operator.name
+            space = " "
+        operator.name = "operator" + space + operator.name
