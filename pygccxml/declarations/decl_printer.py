@@ -107,10 +107,6 @@ class decl_printer_t(decl_visitor.decl_visitor_t):
     def is_builtin_decl(decl):
         if not decl.name.startswith('__builtin_'):
             return False
-        # FIXME: This won't probably not work with CastXML.
-        # It either needs to be removed or improved
-        return decl.location and decl.location.file_name \
-            and decl.location.file_name.endswith('gccxml_builtins.h')
 
     @staticmethod
     def __nice_decl_name(inst):
