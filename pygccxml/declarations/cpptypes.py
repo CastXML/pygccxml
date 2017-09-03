@@ -926,6 +926,8 @@ class type_qualifiers_t(object):
             and self.has_extern == other.has_extern \
             and self.has_mutable == other.has_mutable
 
+    __hash__ = object.__hash__
+
     def __ne__(self, other):
         return not self.__eq__(other)
 
