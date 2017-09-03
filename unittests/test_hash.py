@@ -56,7 +56,10 @@ def _create_type_t_mockup(member_type):
     if nbr_parameters == 0:
         m = member_type()
     else:
-        m = member_type(_base_mockup())
+        if member_type == declarations.array_t:
+            m = member_type(_base_mockup(), size=1)
+        else:
+            m = member_type(_base_mockup())
     m.cache.decl_string = ""
     return m
 
