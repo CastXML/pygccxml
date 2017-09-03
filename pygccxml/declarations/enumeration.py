@@ -51,6 +51,8 @@ class enumeration_t(
             return False
         return self.values == other.values
 
+    __hash__ = declaration.declaration_t.__hash__
+
     def _get__cmp__items(self):
         """implementation details"""
         return [self.values]

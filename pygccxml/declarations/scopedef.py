@@ -187,6 +187,8 @@ class scopedef_t(declaration.declaration_t):
             return False
         return self.declarations[:].sort() == other.declarations[:].sort()
 
+    __hash__ = declaration.declaration_t.__hash__
+
     def _get_declarations_impl(self):
         raise NotImplementedError()
 
