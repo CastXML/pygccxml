@@ -81,6 +81,7 @@ from . import test_castxml_wrong_epic
 from . import test_elaborated_types
 from . import test_order
 from . import test_find_noncopyable_vars
+from . import test_hash
 
 testers = [
     pep8_tester,
@@ -152,7 +153,8 @@ testers = [
     test_castxml_wrong_epic,
     test_elaborated_types,
     test_order,
-    test_find_noncopyable_vars
+    test_find_noncopyable_vars,
+    test_hash
 ]
 
 if platform.system() != 'Windows':
