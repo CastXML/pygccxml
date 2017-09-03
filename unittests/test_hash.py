@@ -50,6 +50,16 @@ class Test(unittest.TestCase):
             if issubclass(member_type, declarations.declaration_t):
                 self.assertIsNotNone(hash(member_type()))
 
+    def test_type_qualifiers_t_hash(self):
+        """
+        Test if the type_qualifiers_t instance implements a hash method.
+
+        The hash is part of the public API, as there are multiple tools
+        that rely on it to compare type_qualifiers_t instances.
+
+        """
+        self.assertIsNotNone(hash(declarations.type_qualifiers_t()))
+
 
 def _create_type_t_mockup(member_type):
     nbr_parameters = len(inspect.signature(member_type).parameters)
