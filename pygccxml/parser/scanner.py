@@ -10,10 +10,8 @@ import xml.sax.handler
 from .. import utils
 from .. import declarations
 
-# convention
 # XML_NN - XML Node Name
 # XML_AN - XML Attribute Name
-# also those constants are sorted for easy searching.
 XML_AN_ABSTRACT = "abstract"
 XML_AN_ACCESS = "access"
 XML_AN_ALIGN = "align"
@@ -90,7 +88,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.logger = utils.loggers.cxx_parser
         self.xml_file = xml_file
         self.config = config
-        # defining parsing tables
         self.__readers = {
             XML_NN_FILE: self.__read_file,
             XML_NN_NAMESPACE: self.__read_namespace,
