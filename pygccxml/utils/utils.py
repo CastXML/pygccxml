@@ -26,7 +26,7 @@ def is_str(string):
         bool: True or False
 
     """
-    if sys.version_info >= (3, 0):
+    if sys.version_info[:2] >= (3, 0):
         return isinstance(string, str)
 
     return isinstance(string, basestring)
@@ -48,7 +48,7 @@ def find_xml_generator(name="castxml"):
 
     """
 
-    if sys.version_info >= (3, 3):
+    if sys.version_info[:2] >= (3, 3):
         path = _find_xml_generator_for_python_greater_equals_33(name)
     else:
         path = _find_xml_generator_for_legacy_python(name)

@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
 
         """
 
-        if sys.version_info[:2] <= (2,7):
+        if sys.version_info[:2] <= (2, 7):
             # _create_type_t_mockup calls inspect.signature, which does not
             # exist for legacy Python
             return
