@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 
-class location_t(object):
+class Location(object):
     """
     Provides information about the location of the declaration within the
     source file.
@@ -28,7 +28,7 @@ class location_t(object):
         return not self.__eq__(other)
 
     def __lt__(self, other):
-        if not isinstance(other, location_t):
+        if not isinstance(other, Location):
             return self.__class__.__name__ < other.__class__.__name__
         return (self.file_name, self.line) < (other.file_name, other.line)
 

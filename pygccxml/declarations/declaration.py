@@ -225,7 +225,7 @@ class declaration_t(object):
         """
         Location of the declaration within source file
 
-           @type: :class:`location_t`
+           @type: :class:`Location`
 
         """
 
