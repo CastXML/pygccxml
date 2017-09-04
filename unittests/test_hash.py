@@ -3,6 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import sys
 import unittest
 import inspect
 
@@ -23,6 +24,12 @@ class Test(unittest.TestCase):
         these objects is not None.
 
         """
+
+        if sys.version_info[:2] <= (2,7):
+            # _create_type_t_mockup calls inspect.signature, which does not
+            # exist for legacy Python
+            return
+
         members = inspect.getmembers(declarations, inspect.isclass)
         for member in members:
             member_type = member[1]
