@@ -191,7 +191,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         members_mapping = {}
         for gccxml_id, members in self.__members.items():
             decl = self.__declarations.get(gccxml_id)
-            if not decl or not isinstance(decl, declarations.scopedef_t):
+            if not decl or not isinstance(decl, declarations.ScopedefD):
                 continue
             members_mapping[id(decl)] = members
         self.__members = members_mapping

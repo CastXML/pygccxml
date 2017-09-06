@@ -38,18 +38,18 @@ User interface
 
 As you already know, ``pygccxml.declarations`` package defines the following classes:
 
-* :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` - base class
+* :class:`ScopedefD <pygccxml.declarations.scopedef.ScopedefD>` - base class
   for all classes, that can contain other declarations
 
 * :class:`namespace_t  <pygccxml.declarations.namespace.namespace_t>` - derives
-  from :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` class,
+  from :class:`ScopedefD <pygccxml.declarations.scopedef.ScopedefD>` class,
   represents C++ namespace
 
 * :class:`class_t  <pygccxml.declarations.class_declaration.class_t>` - derives
-  from :class:`scopedef_t <pygccxml.declarations.scopedef.scopedef_t>` class,
+  from :class:`ScopedefD <pygccxml.declarations.scopedef.ScopedefD>` class,
   represents C++ class/struct/union.
 
-So, the query methods defined on ``scopedef_t`` class could be used on instances
+So, the query methods defined on ``ScopedefD`` class could be used on instances
 of ``class_t`` and ``namespace_t`` classes. I am sure you knew that.
 
 Usage examples
@@ -162,7 +162,7 @@ by:
     If ``recursive`` is ``False``, then member function will be searched only
     within current scope.
 
-    What happen if ``recursive`` is ``None``? Well. ``scopedef_t`` class defines
+    What happen if ``recursive`` is ``None``? Well. ``ScopedefD`` class defines
     ``RECURSIVE_DEFAULT`` variable. Its initial value is ``True``. So, if you
     don't pass ``recursive`` argument, the value of ``RECURSIVE_DEFAULT`` variable
     will be used. This "yet another level of indirection" allows you to configure
@@ -245,7 +245,7 @@ Performance
 -----------
 
 For big projects, performance is critical. When you finished to build/change
-declarations tree, then you can call ``scopedef_t.init_optimizer`` method.
+declarations tree, then you can call ``ScopedefD.init_optimizer`` method.
 This method will initialize few data structures, that will help to minimize the
 number of compared declarations. The price you are going to pay is memory usage.
 
@@ -253,28 +253,28 @@ Data structures
 ~~~~~~~~~~~~~~~
 Here is a short explanation of what data structures is initialized.
 
-* ``scopedef_t._type2decls``, ``scopedef_t._type2decls_nr``
+* ``ScopedefD._type2decls``, ``ScopedefD._type2decls_nr``
 
   Python dictionary, that contains mapping between declaration type and
   declarations in the current scope.
 
-  ``scopedef_t.type2decls_nr`` contains only declaration from the current scope.
-  ``scopedef_t.type2decls`` contains declarations from the current scope and its children
+  ``ScopedefD.type2decls_nr`` contains only declaration from the current scope.
+  ``ScopedefD.type2decls`` contains declarations from the current scope and its children
 
-* ``scopedef_t._type2name2decls``, ``scopedef_t._type2name2decls_nr``
+* ``ScopedefD._type2name2decls``, ``ScopedefD._type2name2decls_nr``
 
   Python dictionary, that contains mapping between declaration type and
   another dictionary. This second dictionary contains mapping between
   a declaration name and declaration.
 
-  ``scopedef_t.type2name2decls_nr`` contains only declaration from the current scope.
-  ``scopedef_t.type2name2decls`` contains declarations from the current scope and its children
+  ``ScopedefD.type2name2decls_nr`` contains only declaration from the current scope.
+  ``ScopedefD.type2name2decls`` contains declarations from the current scope and its children
 
-* ``scopedef_t._all_decls``
+* ``ScopedefD._all_decls``
 
   A flat list of all declarations, including declarations from the children scopes.
 
-Except ``scopedef_t.decl`` and ``scopedef_t.decls`` methods, all other queries
+Except ``ScopedefD.decl`` and ``ScopedefD.decls`` methods, all other queries
 have information about declaration type.
 
 If you include ``name`` into your query, you will get the best performance.

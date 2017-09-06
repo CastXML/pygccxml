@@ -182,7 +182,7 @@ class class_declaration_t(declaration.DeclarationD):
 
 
 class class_t(
-        scopedef.scopedef_t,
+        scopedef.ScopedefD,
         byte_info.byte_info,
         elaborated_info.elaborated_info):
 
@@ -194,7 +194,7 @@ class class_t(
             class_type=CLASS_TYPES.CLASS,
             is_abstract=False):
         """creates class that describes C++ class definition"""
-        scopedef.scopedef_t.__init__(self, name)
+        scopedef.ScopedefD.__init__(self, name)
         byte_info.byte_info.__init__(self)
         elaborated_info.elaborated_info.__init__(self, class_type)
         if class_type:
@@ -233,7 +233,7 @@ class class_t(
             self.protected_members.sort()]
 
     def __eq__(self, other):
-        if not scopedef.scopedef_t.__eq__(self, other):
+        if not scopedef.ScopedefD.__eq__(self, other):
             return False
         return self.class_type == other.class_type \
             and [declaration_utils.declaration_path(base.related_class) for

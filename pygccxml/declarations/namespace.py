@@ -12,7 +12,7 @@ from . import scopedef
 from . import declaration_utils
 
 
-class namespace_t(scopedef.scopedef_t):
+class namespace_t(scopedef.ScopedefD):
     """
     Describes C++ namespace.
 
@@ -27,7 +27,7 @@ class namespace_t(scopedef.scopedef_t):
             declarations (list[DeclarationD]): list of declarations
 
         """
-        scopedef.scopedef_t.__init__(self, name)
+        scopedef.ScopedefD.__init__(self, name)
         if not declarations:
             declarations = []
         # List of all declarations belonging to this namespace
@@ -57,7 +57,7 @@ class namespace_t(scopedef.scopedef_t):
         Returns:
             list[DeclarationD]
         """
-        return scopedef.scopedef_t.declarations.fget(self)
+        return scopedef.ScopedefD.declarations.fget(self)
 
     @declarations.setter
     def declarations(self, declarations):
@@ -115,7 +115,7 @@ class namespace_t(scopedef.scopedef_t):
 
         return (
             self._find_single(
-                scopedef.scopedef_t._impl_matchers[namespace_t.namespace],
+                scopedef.ScopedefD._impl_matchers[namespace_t.namespace],
                 name=name,
                 function=function,
                 recursive=recursive)
@@ -135,7 +135,7 @@ class namespace_t(scopedef.scopedef_t):
 
         return (
             self._find_multiple(
-                scopedef.scopedef_t._impl_matchers[namespace_t.namespace],
+                scopedef.ScopedefD._impl_matchers[namespace_t.namespace],
                 name=name,
                 function=function,
                 recursive=recursive,
@@ -159,7 +159,7 @@ class namespace_t(scopedef.scopedef_t):
 
         return (
             self._find_single(
-                scopedef.scopedef_t._impl_matchers[namespace_t.free_function],
+                scopedef.ScopedefD._impl_matchers[namespace_t.free_function],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[namespace_t.free_function],
@@ -188,7 +188,7 @@ class namespace_t(scopedef.scopedef_t):
 
         return (
             self._find_multiple(
-                scopedef.scopedef_t._impl_matchers[namespace_t.free_function],
+                scopedef.ScopedefD._impl_matchers[namespace_t.free_function],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[namespace_t.free_function],
@@ -217,7 +217,7 @@ class namespace_t(scopedef.scopedef_t):
         """
         return (
             self._find_single(
-                scopedef.scopedef_t._impl_matchers[namespace_t.free_operator],
+                scopedef.ScopedefD._impl_matchers[namespace_t.free_operator],
                 name=self._build_operator_name(name, function, symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name, function),
@@ -248,7 +248,7 @@ class namespace_t(scopedef.scopedef_t):
 
         return (
             self._find_multiple(
-                scopedef.scopedef_t._impl_matchers[namespace_t.free_operator],
+                scopedef.ScopedefD._impl_matchers[namespace_t.free_operator],
                 name=self._build_operator_name(name, function, symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name, function),

@@ -3,7 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""Defines :class:`scopedef_t` class"""
+"""Defines :class:`ScopedefD` class"""
 
 import time
 import collections
@@ -89,14 +89,14 @@ class matcher(object):
             raise runtime_errors.multiple_declarations_found_t(decl_matcher)
 
 
-class scopedef_t(declaration.DeclarationD):
+class ScopedefD(declaration.DeclarationD):
 
     """
     Base class for :class:`namespace_t` and :class:`class_t` classes.
 
     This is the base class for all declaration classes that may have
     children nodes. The children can be accessed via the
-    :attr:`scopedef_t.declarations` property.
+    :attr:`ScopedefD.declarations` property.
 
     Also this class provides "get/select/find" interface. Using this class you
     can get instance or instances of internal declaration(s).
@@ -253,7 +253,7 @@ class scopedef_t(declaration.DeclarationD):
         self._all_decls_not_recursive = None
 
         for decl in self.declarations:
-            if isinstance(decl, scopedef_t):
+            if isinstance(decl, ScopedefD):
                 decl.clear_optimizer()
 
     def init_optimizer(self):
@@ -277,7 +277,7 @@ class scopedef_t(declaration.DeclarationD):
 
         self.clear_optimizer()
 
-        for dtype in scopedef_t._impl_all_decl_types:
+        for dtype in ScopedefD._impl_all_decl_types:
             self._type2decls[dtype] = []
             self._type2decls_nr[dtype] = []
             self._type2name2decls[dtype] = {}
@@ -302,7 +302,7 @@ class scopedef_t(declaration.DeclarationD):
                     name2decls_nr[decl.name].append(decl)
 
         for decl in self._all_decls_not_recursive:
-            if isinstance(decl, scopedef_t):
+            if isinstance(decl, ScopedefD):
                 decl.init_optimizer()
         if self.name == '::':
             self._logger.debug((
@@ -420,7 +420,7 @@ class scopedef_t(declaration.DeclarationD):
             name = None
 
         if name and decl_type:
-            impl_match = scopedef_t._impl_matchers[scopedef_t.decl](name=name)
+            impl_match = ScopedefD._impl_matchers[ScopedefD.decl](name=name)
             if impl_match.is_full_name():
                 name = impl_match.decl_name_only
             if recursive:
@@ -500,7 +500,7 @@ class scopedef_t(declaration.DeclarationD):
         return (
             self._find_single(
                 self._impl_matchers[
-                    scopedef_t.decl],
+                    ScopedefD.decl],
                 name=name,
                 function=function,
                 decl_type=decl_type,
@@ -522,7 +522,7 @@ class scopedef_t(declaration.DeclarationD):
         return (
             self._find_multiple(
                 self._impl_matchers[
-                    scopedef_t.decl],
+                    ScopedefD.decl],
                 name=name,
                 function=function,
                 decl_type=decl_type,
@@ -543,11 +543,11 @@ class scopedef_t(declaration.DeclarationD):
         criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.class_],
+                self._impl_matchers[ScopedefD.class_],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.class_],
+                    ScopedefD.class_],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive)
@@ -565,11 +565,11 @@ class scopedef_t(declaration.DeclarationD):
         criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.class_],
+                self._impl_matchers[ScopedefD.class_],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.class_],
+                    ScopedefD.class_],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive,
@@ -590,7 +590,7 @@ class scopedef_t(declaration.DeclarationD):
         return (
             self._find_single(
                 self._impl_matchers[
-                    scopedef_t.variable],
+                    ScopedefD.variable],
                 name=name,
                 function=function,
                 decl_type=decl_type,
@@ -614,7 +614,7 @@ class scopedef_t(declaration.DeclarationD):
         return (
             self._find_multiple(
                 self._impl_matchers[
-                    scopedef_t.variable],
+                    ScopedefD.variable],
                 name=name,
                 function=function,
                 decl_type=decl_type,
@@ -637,11 +637,11 @@ class scopedef_t(declaration.DeclarationD):
         criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.calldef],
+                self._impl_matchers[ScopedefD.calldef],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.calldef],
+                    ScopedefD.calldef],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -663,11 +663,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.calldef],
+                self._impl_matchers[ScopedefD.calldef],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.calldef],
+                    ScopedefD.calldef],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -690,14 +690,14 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.operator],
+                self._impl_matchers[ScopedefD.operator],
                 name=self._build_operator_name(name,
                                                function,
                                                symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name,
                                                        function),
-                decl_type=self._impl_decl_types[scopedef_t.operator],
+                decl_type=self._impl_decl_types[ScopedefD.operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -720,14 +720,14 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.operator],
+                self._impl_matchers[ScopedefD.operator],
                 name=self._build_operator_name(name,
                                                function,
                                                symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name,
                                                        function),
-                decl_type=self._impl_decl_types[scopedef_t.operator],
+                decl_type=self._impl_decl_types[ScopedefD.operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -749,11 +749,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.member_function],
+                self._impl_matchers[ScopedefD.member_function],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.member_function],
+                    ScopedefD.member_function],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -775,11 +775,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.member_function],
+                self._impl_matchers[ScopedefD.member_function],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.member_function],
+                    ScopedefD.member_function],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -801,11 +801,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.constructor],
+                self._impl_matchers[ScopedefD.constructor],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.constructor],
+                    ScopedefD.constructor],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -827,11 +827,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.constructor],
+                self._impl_matchers[ScopedefD.constructor],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.constructor],
+                    ScopedefD.constructor],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -854,14 +854,14 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.member_operator],
+                self._impl_matchers[ScopedefD.member_operator],
                 name=self._build_operator_name(name,
                                                function,
                                                symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name,
                                                        function),
-                decl_type=self._impl_decl_types[scopedef_t.member_operator],
+                decl_type=self._impl_decl_types[ScopedefD.member_operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -884,14 +884,14 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.member_operator],
+                self._impl_matchers[ScopedefD.member_operator],
                 name=self._build_operator_name(name,
                                                function,
                                                symbol),
                 symbol=symbol,
                 function=self._build_operator_function(name,
                                                        function),
-                decl_type=self._impl_decl_types[scopedef_t.member_operator],
+                decl_type=self._impl_decl_types[ScopedefD.member_operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -913,11 +913,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.casting_operator],
+                self._impl_matchers[ScopedefD.casting_operator],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.casting_operator],
+                    ScopedefD.casting_operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -939,11 +939,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.casting_operator],
+                self._impl_matchers[ScopedefD.casting_operator],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.casting_operator],
+                    ScopedefD.casting_operator],
                 return_type=return_type,
                 arg_types=arg_types,
                 header_dir=header_dir,
@@ -963,11 +963,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.enumeration],
+                self._impl_matchers[ScopedefD.enumeration],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.enumeration],
+                    ScopedefD.enumeration],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive)
@@ -985,11 +985,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.enumeration],
+                self._impl_matchers[ScopedefD.enumeration],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.enumeration],
+                    ScopedefD.enumeration],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive,
@@ -1007,11 +1007,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_single(
-                self._impl_matchers[scopedef_t.typedef],
+                self._impl_matchers[ScopedefD.typedef],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.typedef],
+                    ScopedefD.typedef],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive)
@@ -1029,11 +1029,11 @@ class scopedef_t(declaration.DeclarationD):
         defined criteria"""
         return (
             self._find_multiple(
-                self._impl_matchers[scopedef_t.typedef],
+                self._impl_matchers[ScopedefD.typedef],
                 name=name,
                 function=function,
                 decl_type=self._impl_decl_types[
-                    scopedef_t.typedef],
+                    ScopedefD.typedef],
                 header_dir=header_dir,
                 header_file=header_file,
                 recursive=recursive,
@@ -1065,10 +1065,10 @@ def make_flatten(decl_or_decls):
 
     def proceed_single(decl):
         answer = [decl]
-        if not isinstance(decl, scopedef_t):
+        if not isinstance(decl, ScopedefD):
             return answer
         for elem in decl.declarations:
-            if isinstance(elem, scopedef_t):
+            if isinstance(elem, ScopedefD):
                 answer.extend(proceed_single(elem))
             else:
                 answer.append(elem)

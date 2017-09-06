@@ -119,10 +119,10 @@ Basically, most of the classes defined in this package are just "set of properti
 has ``parent`` property. This property keeps a reference to the scope declaration
 instance, in which this declaration is defined.
 
-The ``scopedef_t`` class derives from ``DeclarationD``. This class is used to
+The ``ScopedefD`` class derives from ``DeclarationD``. This class is used to
 say - "I may have other declarations inside". The "composite" design pattern is
 used here. ``class_t`` and ``namespace_t`` declaration classes derive from the
-``scopedef_t`` class.
+``ScopedefD`` class.
 
 ------------------
 ``parser`` package
