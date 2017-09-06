@@ -115,11 +115,11 @@ Declarations hierarchy
 A declaration hierarchy is used to represent an arbitrary C++ declaration.
 Basically, most of the classes defined in this package are just "set of properties".
 
-``declaration_t`` is the base class of the declaration hierarchy. Every declaration
+``DeclarationD`` is the base class of the declaration hierarchy. Every declaration
 has ``parent`` property. This property keeps a reference to the scope declaration
 instance, in which this declaration is defined.
 
-The ``scopedef_t`` class derives from ``declaration_t``. This class is used to
+The ``scopedef_t`` class derives from ``DeclarationD``. This class is used to
 say - "I may have other declarations inside". The "composite" design pattern is
 used here. ``class_t`` and ``namespace_t`` declaration classes derive from the
 ``scopedef_t`` class.

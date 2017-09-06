@@ -41,20 +41,20 @@ class Test(unittest.TestCase):
 
     def test_declarations_hashes(self):
         """
-        Test if all the declaration_t instances implement a hash method.
+        Test if all the DeclarationD instances implement a hash method.
 
         The hash is part of the public API, as there are multiple tools
-        that rely on it to compare declaration_t instances.
+        that rely on it to compare DeclarationD instances.
 
-        The best way to test this is to instanciate dummy declaration_t objects
-        for each class that subclasses declaration_t, and check that the hash
+        The best way to test this is to instanciate dummy DeclarationD objects
+        for each class that subclasses DeclarationD, and check that the hash
         of these objects is not None.
 
         """
         members = inspect.getmembers(declarations, inspect.isclass)
         for member in members:
             member_type = member[1]
-            if issubclass(member_type, declarations.declaration_t):
+            if issubclass(member_type, declarations.DeclarationD):
                 self.assertIsNotNone(hash(member_type()))
 
     def test_type_qualifiers_t_hash(self):

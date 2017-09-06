@@ -47,7 +47,7 @@ def remove_alias(type_):
     Returns `type_t` without typedef
 
     Args:
-        type_ (type_t | declaration_t): type or declaration
+        type_ (type_t | DeclarationD): type or declaration
 
     Returns:
         type_t: the type associated to the inputted declaration

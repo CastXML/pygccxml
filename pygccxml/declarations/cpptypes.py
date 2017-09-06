@@ -770,7 +770,7 @@ class member_function_type_t(type_t, calldef_type_t):
 
     @property
     def class_inst(self):
-        """reference to parent :class:`class <declaration_t>`"""
+        """reference to parent :class:`class <DeclarationD>`"""
         return self._class_inst
 
     @class_inst.setter
@@ -880,7 +880,7 @@ class member_variable_type_t(compound_t):
 class declarated_t(type_t, byte_info.byte_info):
 
     """class that binds between to hierarchies: :class:`type_t`
-    and :class:`declaration_t`"""
+    and :class:`DeclarationD`"""
 
     def __init__(self, declaration):
         type_t.__init__(self)
@@ -891,7 +891,7 @@ class declarated_t(type_t, byte_info.byte_info):
 
     @property
     def declaration(self):
-        """reference to :class:`declaration_t`"""
+        """reference to :class:`DeclarationD`"""
         return self._declaration
 
     @declaration.setter

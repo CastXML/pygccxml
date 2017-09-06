@@ -699,7 +699,7 @@ def find_container_traits(cls_or_string):
     Find the container traits type of a declaration.
 
     Args:
-        cls_or_string (str | declarations.declaration_t): a string
+        cls_or_string (str | declarations.DeclarationD): a string
 
     Returns:
         declarations.container_traits: a container traits

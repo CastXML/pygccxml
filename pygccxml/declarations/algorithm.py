@@ -41,7 +41,7 @@ class match_declaration_t(object):
         Returns True if inst does match one of specified criteria.
 
         :param inst: declaration instance
-        :type inst: :class:`declaration_t`
+        :type inst: :class:`DeclarationD`
 
         :rtype: bool
 

@@ -134,7 +134,7 @@ class argument_t(object):
         self._attributes = attributes
 
 
-class calldef_t(declaration.declaration_t):
+class calldef_t(declaration.DeclarationD):
 
     """base class for all "callable" declarations"""
 
@@ -147,7 +147,7 @@ class calldef_t(declaration.declaration_t):
             has_extern=False,
             does_throw=True,
             mangled=None):
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
         if not arguments:
             arguments = []
         self._arguments = arguments
@@ -187,7 +187,7 @@ class calldef_t(declaration.declaration_t):
         return items
 
     def __eq__(self, other):
-        if not declaration.declaration_t.__eq__(self, other):
+        if not declaration.DeclarationD.__eq__(self, other):
             return False
 
         return self.return_type == other.return_type \
@@ -251,7 +251,7 @@ class calldef_t(declaration.declaration_t):
     @property
     def exceptions(self):
         """The list of exceptions.
-            @type: list of :class:`declaration_t`"""
+            @type: list of :class:`DeclarationD`"""
         return self._exceptions
 
     @exceptions.setter

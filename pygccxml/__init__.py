@@ -17,7 +17,7 @@ function in the :mod:parser sub package which returns a tree that contains all
 declarations found in the header files. The root of the tree represents the
 main namespace `::` and the children nodes represent the namespace contents
 such as other namespaces, classes, functions, etc. Each node in the tree is an
-object of a type derived from the :class:`declaration_t` class. An inner node
+object of a type derived from the :class:`DeclarationD` class. An inner node
 is always either a namespace :class:`declarations.namespace_t` or a class
 :class:`declarations.class_t`, which are both derived from
 :class:`declarations.scopedef_t` class. Everything else (free functions,

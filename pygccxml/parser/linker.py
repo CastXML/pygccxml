@@ -41,7 +41,7 @@ class linker_t(
         self.__inst = inst
 
         # use inst, to reduce attribute access time
-        if isinstance(inst, declarations.declaration_t) and \
+        if isinstance(inst, declarations.DeclarationD) and \
                 inst.location is not None and \
                 inst.location.file_name != '':
             inst.location.file_name = self.__files[inst.location.file_name]

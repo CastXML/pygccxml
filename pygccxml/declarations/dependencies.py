@@ -139,7 +139,7 @@ class impl_details(object):
     @staticmethod
     def dig_declarations(depend_on_it):
 
-        if isinstance(depend_on_it, declaration.declaration_t):
+        if isinstance(depend_on_it, declaration.DeclarationD):
             return [depend_on_it]
         base_type = type_traits.base_type(
             type_traits.remove_alias(depend_on_it))

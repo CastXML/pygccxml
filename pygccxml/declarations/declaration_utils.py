@@ -9,7 +9,7 @@ def declaration_path(decl):
     Returns a list of parent declarations names.
 
     Args:
-        decl (declaration_t): declaration for which declaration path
+        decl (DeclarationD): declaration for which declaration path
                               should be calculated.
 
     Returns:
@@ -45,7 +45,7 @@ def partial_declaration_path(decl):
     have default value.
 
     Args:
-        decl (declaration_t): declaration for which the partial declaration
+        decl (DeclarationD): declaration for which the partial declaration
                               path should be calculated.
 
     Returns:
@@ -95,7 +95,7 @@ def full_name(decl, with_defaults=True):
     C++ illegal qualified name.
 
     Args:
-        decl (declaration_t): declaration for which the full qualified name
+        decl (DeclarationD): declaration for which the full qualified name
                               should be calculated.
 
     Returns:
@@ -133,10 +133,10 @@ def get_named_parent(decl):
     Returns a reference to a named parent declaration.
 
     Args:
-        decl (declaration_t): the child declaration
+        decl (DeclarationD): the child declaration
 
     Returns:
-        declaration_t: the declaration or None if not found.
+        DeclarationD: the declaration or None if not found.
 
     """
 

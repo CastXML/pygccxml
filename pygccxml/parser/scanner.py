@@ -241,7 +241,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 "__NSConstantString_tag",
                 "__NSConstantString"]
 
-            if isinstance(obj, declarations.declaration_t):
+            if isinstance(obj, declarations.DeclarationD):
 
                 if rm1 and str(obj.name) in names:
                     return

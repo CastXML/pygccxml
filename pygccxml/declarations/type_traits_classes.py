@@ -20,7 +20,7 @@ def is_union(declaration):
     Returns True if declaration represents a C++ union
 
     Args:
-        declaration (declaration_t): the declaration to be checked.
+        declaration (DeclarationD): the declaration to be checked.
 
     Returns:
         bool: True if declaration represents a C++ union
@@ -36,7 +36,7 @@ def is_struct(declaration):
     Returns True if declaration represents a C++ struct
 
     Args:
-        declaration (declaration_t): the declaration to be checked.
+        declaration (DeclarationD): the declaration to be checked.
 
     Returns:
         bool: True if declaration represents a C++ struct

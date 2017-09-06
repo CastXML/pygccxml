@@ -150,14 +150,14 @@ class hierarchy_info_t(object):
         return self._declaration_path_hash
 
 
-class class_declaration_t(declaration.declaration_t):
+class class_declaration_t(declaration.DeclarationD):
 
     """describes class declaration"""
 
     def __init__(self, name=''):
         """creates class that describes C++ class declaration
         ( and not definition )"""
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
         self._aliases = []
 
     def _get__cmp__items(self):
@@ -389,7 +389,7 @@ class class_t(
     def adopt_declaration(self, decl, access):
         """adds new declaration to the class
 
-        :param decl: reference to a :class:`declaration_t`
+        :param decl: reference to a :class:`DeclarationD`
 
         :param access: member access type
         :type access: :class:ACCESS_TYPES
@@ -411,7 +411,7 @@ class class_t(
         removes decl from  members list
 
         :param decl: declaration to be removed
-        :type decl: :class:`declaration_t`
+        :type decl: :class:`DeclarationD`
         """
 
         access_type = self.find_out_member_access_type(decl)
@@ -429,7 +429,7 @@ class class_t(
         returns member access type
 
         :param member: member of the class
-        :type member: :class:`declaration_t`
+        :type member: :class:`DeclarationD`
 
         :rtype: :class:ACCESS_TYPES
         """

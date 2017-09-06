@@ -24,7 +24,7 @@ class namespace_t(scopedef.scopedef_t):
 
         Args:
             name (str): name of the namespace
-            declarations (list[declaration_t]): list of declarations
+            declarations (list[DeclarationD]): list of declarations
 
         """
         scopedef.scopedef_t.__init__(self, name)
@@ -55,7 +55,7 @@ class namespace_t(scopedef.scopedef_t):
         List of children declarations.
 
         Returns:
-            list[declaration_t]
+            list[DeclarationD]
         """
         return scopedef.scopedef_t.declarations.fget(self)
 
@@ -65,7 +65,7 @@ class namespace_t(scopedef.scopedef_t):
         Set list of all declarations defined in the namespace.
 
         Args:
-            declarations (list[declaration_t]): list of declarations
+            declarations (list[DeclarationD]): list of declarations
 
         """
         self._declarations = declarations
@@ -96,7 +96,7 @@ class namespace_t(scopedef.scopedef_t):
         Removes declaration from members list.
 
         :param decl: declaration to be removed
-        :type decl: :class:`declaration_t`
+        :type decl: :class:`DeclarationD`
 
         """
 
@@ -275,7 +275,7 @@ def get_global_namespace(decls):
     Get the global namespace (::) from a declaration tree.
 
     Args:
-        decls (list[declaration_t]): a list of declarations
+        decls (list[DeclarationD]): a list of declarations
 
     Returns:
         namespace_t: the global namespace_t object (::)

@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 """
-Defines :class:`pygccxml.declarations.declaration_t` class - all declarations
+Defines :class:`pygccxml.declarations.DeclarationD` class - all declarations
 base class.
 
 """
@@ -15,7 +15,7 @@ from . import declaration_utils
 from . import algorithms_cache
 
 
-class declaration_t(object):
+class DeclarationD(object):
     """
     Base class for all classes that represent a C++ declaration.
 
@@ -191,7 +191,7 @@ class declaration_t(object):
         """
         Reference to parent declaration.
 
-           @type: declaration_t
+           @type: DeclarationD
 
         """
 
@@ -200,7 +200,7 @@ class declaration_t(object):
     @parent.setter
     def parent(self, new_parent):
         if new_parent:
-            assert isinstance(new_parent, declaration_t)
+            assert isinstance(new_parent, DeclarationD)
 
         self._parent = new_parent
 
@@ -209,7 +209,7 @@ class declaration_t(object):
         """
         Reference to top parent declaration.
 
-           @type: declaration_t
+           @type: DeclarationD
 
         """
         parent = self.parent

@@ -11,7 +11,7 @@ from . import declaration
 from . import class_declaration
 
 
-class variable_t(declaration.declaration_t):
+class variable_t(declaration.DeclarationD):
 
     """describes C++ global and member variable declaration"""
 
@@ -24,7 +24,7 @@ class variable_t(declaration.declaration_t):
             bits=None,
             mangled=None):
         """creates class that describes C++ global or member variable"""
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
         self._decl_type = decl_type
         self._type_qualifiers = type_qualifiers
         self._value = value
@@ -38,14 +38,14 @@ class variable_t(declaration.declaration_t):
 
     def __eq__(self, other):
         """implementation details"""
-        if not declaration.declaration_t.__eq__(self, other):
+        if not declaration.DeclarationD.__eq__(self, other):
             return False
         return self.decl_type == other.decl_type \
             and self.type_qualifiers == other.type_qualifiers \
             and self.value == other.value \
             and self.bits == other.bits
 
-    __hash__ = declaration.declaration_t.__hash__
+    __hash__ = declaration.DeclarationD.__hash__
 
     @property
     def decl_type(self):

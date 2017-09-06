@@ -14,7 +14,7 @@ from . import elaborated_info
 
 
 class enumeration_t(
-        declaration.declaration_t,
+        declaration.DeclarationD,
         byte_info.byte_info,
         elaborated_info.elaborated_info):
 
@@ -31,11 +31,11 @@ class enumeration_t(
         :param name: `enum` name
         :type name: str
         :param parent: Parent declaration
-        :type parent: declaration_t
+        :type parent: DeclarationD
         :param values: Enumeration values
         :type values: list
         """
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
         byte_info.byte_info.__init__(self)
         elaborated_info.elaborated_info.__init__(self, "enum")
 
@@ -47,11 +47,11 @@ class enumeration_t(
         self.values = values
 
     def __eq__(self, other):
-        if not declaration.declaration_t.__eq__(self, other):
+        if not declaration.DeclarationD.__eq__(self, other):
             return False
         return self.values == other.values
 
-    __hash__ = declaration.declaration_t.__hash__
+    __hash__ = declaration.DeclarationD.__hash__
 
     def _get__cmp__items(self):
         """implementation details"""

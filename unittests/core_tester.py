@@ -359,7 +359,7 @@ class Core(parser_test_case.parser_test_case_t):
         enum_declaration = self.global_ns.enumeration('EFavoriteDrinks')
         self.assertTrue(
             typedef_inst.decl_type.declaration is enum_declaration,
-            "instance of declaration_t has reference to '%s' instead of '%s'" %
+            "instance of DeclarationD has reference to '%s' instead of '%s'" %
             (typedef_inst.decl_type.declaration.name,
              enum_declaration.name))
 
