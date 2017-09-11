@@ -1,6 +1,8 @@
 Changes
 =======
 
+Just a test
+
 Version 2.0.0 (unreleased)
 --------------------------
 
