@@ -59,7 +59,7 @@ class tester_prj_t(parser_test_case.parser_test_case_t):
             name='item_t')
         self.assertTrue(item_cls, "unable to find class 'item_t'")
         self.assertTrue(len(item_cls.aliases) == 3)
-        expected_aliases = set(['Item', 'Item1', 'Item2'])
+        expected_aliases = {'Item', 'Item1', 'Item2'}
         real_aliases = set([typedef.name for typedef in item_cls.aliases])
         self.assertTrue(real_aliases == expected_aliases)
 
