@@ -20,7 +20,7 @@ Installation instructions can be found here: :doc:`Installation <install>`
 Compatibility
 -------------
 
-pygccxml is compatible with Python 2.7, 3.3, 3.4, 3.5, pypy and pypy3.
+pygccxml is compatible with Python 2.7, 3.4, 3.5, pypy and pypy3.
 
 Documentation and examples
 --------------------------

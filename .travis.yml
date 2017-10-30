@@ -23,34 +23,27 @@ matrix:
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python2.7/lib/python2.7/sitecustomize.py"
     - os: linux
       # BUILD 3 -------------------
-      python: 3.3
-      env:
-        # gcc 4.8.4 with c++98
-        - XML_GENERATOR="castxml"
-        - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.3/lib/python3.3/sitecustomize.py"
-    - os: linux
-      # BUILD 4 -------------------
       python: 3.4
       env:
         # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.4/lib/python3.4/sitecustomize.py"
     - os: linux
-      # BUILD 5 -------------------
+      # BUILD 4 -------------------
       python: 3.5
       env:
         # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.5/lib/python3.5/sitecustomize.py"
     - os: linux
-      # BUILD 6 -------------------
+      # BUILD 5 -------------------
       python: 3.6
       env:
         # gcc 4.8.4 with c++98
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      # BUILD 7 -------------------
+      # BUILD 6 -------------------
       python: pypy
       env:
         # gcc 4.8.4 with c++98
@@ -58,7 +51,7 @@ matrix:
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy/lib-python/2.7/sitecustomize.py"
         - PYPY=1
     - os: linux
-      # BUILD 8 -------------------
+      # BUILD 7 -------------------
       python: pypy3
       env:
         # gcc 4.8.4 with c++98
@@ -66,7 +59,7 @@ matrix:
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/pypy3/lib-python/3/sitecustomize.py"
         - PYPY=1
     - os: linux
-      # BUILD 9 -------------------
+      # BUILD 8 -------------------
       python: 3.6
       env:
         # gcc 5.4.1 with c++98
@@ -80,13 +73,13 @@ matrix:
           packages:
             - g++-5
     - os: linux
-      # BUILD 10 ------------------
+      # BUILD 9 ------------------
       python: 3.6
       env:
         - XML_GENERATOR="castxml"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      # BUILD 11 ------------------
+      # BUILD 10 ------------------
       python: 3.6
       env:
         # gcc 4.8.4 with c++03
@@ -94,7 +87,7 @@ matrix:
         - CPPSTD="-std=c++03"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      # BUILD 12 ------------------
+      # BUILD 11 ------------------
       python: 3.6
       env:
         # gcc 4.8.4 with c++11
@@ -102,7 +95,7 @@ matrix:
         - CPPSTD="-std=c++11"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      # BUILD 13 ------------------
+      # BUILD 12 ------------------
       python: 3.6
       env:
         # gcc 5.4.1 with c++11
@@ -117,7 +110,7 @@ matrix:
           packages:
             - g++-5
     - os: linux
-      # BUILD 14 ------------------
+      # BUILD 13 ------------------
       python: 3.6
       env:
         # gcc 5.4.1 with c++14
@@ -132,7 +125,7 @@ matrix:
           packages:
             - g++-5
     - os: osx
-      # BUILD 15 ------------------
+      # BUILD 14 ------------------
       osx_image: xcode7.3
       language: generic
       env:
@@ -140,7 +133,7 @@ matrix:
         - TRAVIS_PYTHON_VERSION="2"
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python2.7/site-packages/sitecustomize.py"
     - os: osx
-      # BUILD 16 ------------------
+      # BUILD 15 ------------------
       osx_image: xcode7.3
       language: generic
       env:
@@ -148,13 +141,13 @@ matrix:
         - TRAVIS_PYTHON_VERSION="3"
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
     - os: linux
-      # BUILD 17 ------------------
+      # BUILD 16 ------------------
       python: 3.6
       env:
         - XML_GENERATOR="castxml-18032017"
         - SITECUSTOMIZELIBPATH="/home/travis/virtualenv/python3.6/lib/python3.6/sitecustomize.py"
     - os: linux
-      # BUILD 18 ------------------
+      # BUILD 17 ------------------
       python: 3.6
       env:
         - XML_GENERATOR="castxml-18032017"
