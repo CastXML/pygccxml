@@ -168,7 +168,7 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
                     "<std::basic_string<char, std::char_traits<char>, " +
                     "std::allocator<char> > >()))")]
             self.assertIn(
-                clone_tree.arguments[0].default_value in default_values)
+                clone_tree.arguments[0].default_value, default_values)
 
 
 class tester_32_t(tester_impl_t):
