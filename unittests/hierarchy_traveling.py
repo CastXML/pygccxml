@@ -29,22 +29,22 @@ class Test(parser_test_case.parser_test_case_t):
         self.__recursive_bases = {'a': set(),
                                   'b': set(),
                                   'c': set(),
-                                  'd': set(['a']),
-                                  'e': set(['a', 'b']),
+                                  'd': {'a'},
+                                  'e': {'a', 'b'},
                                   'f': set(),
-                                  'g': set(['d', 'f', 'a']),
-                                  'h': set(['f']),
-                                  'i': set(['h', 'g', 'd', 'f', 'a'])}
+                                  'g': {'d', 'f', 'a'},
+                                  'h': {'f'},
+                                  'i': {'h', 'g', 'd', 'f', 'a'}}
 
         self.__recursive_derived = {
-            'a': set(['d', 'e', 'g', 'i']),
-            'b': set(['e']),
+            'a': {'d', 'e', 'g', 'i'},
+            'b': {'e'},
             'c': set(),
-            'd': set(['g', 'i']),
+            'd': {'g', 'i'},
             'e': set(),
-            'f': set(['g', 'h', 'i']),
-            'g': set(['i']),
-            'h': set(['i']),
+            'f': {'g', 'h', 'i'},
+            'g': {'i'},
+            'h': {'i'},
             'i': set()}
 
     def test_recursive_bases(self):
