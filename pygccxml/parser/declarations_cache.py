@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import time
+import timeit
 import hashlib
 try:
     import cPickle as pickle
@@ -188,11 +188,11 @@ class file_cache_t(cache_base_t):
         cache_file_obj = open(file_name, 'rb')
         try:
             file_cache_t.logger.info('Loading cache file "%s".', file_name)
-            start_time = time.clock()
+            start_time = timeit.default_timer()
             cache = pickle.load(cache_file_obj)
             file_cache_t.logger.debug(
                 "Cache file has been loaded in %.1f secs",
-                (time.clock() - start_time))
+                (timeit.default_timer() - start_time))
             file_cache_t.logger.debug(
                 "Found cache in file: [%s]  entries: %s",
                 file_name, len(list(cache.keys())))

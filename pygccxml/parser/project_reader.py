@@ -4,7 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import time
+import timeit
 
 import pygccxml.declarations
 
@@ -316,11 +316,11 @@ class project_reader_t(object):
             namespaces.append(decls)
 
         self.logger.debug("Flushing cache... ")
-        start_time = time.clock()
+        start_time = timeit.default_timer()
         self.__dcache.flush()
         self.logger.debug(
             "Cache has been flushed in %.1f secs",
-            (time.clock() - start_time))
+            (timeit.default_timer() - start_time))
         answer = []
         self.logger.debug("Joining namespaces ...")
         for file_nss in namespaces:
