@@ -6,7 +6,10 @@
 """Defines :class:`scopedef_t` class"""
 
 import timeit
-import collections
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections import Callable
 
 from . import algorithm
 from . import templates
@@ -312,7 +315,7 @@ class scopedef_t(declaration.declaration_t):
 
     @staticmethod
     def _build_operator_function(name, function):
-        if isinstance(name, collections.Callable):
+        if isinstance(name, Callable):
             return name
 
         return function
@@ -324,7 +327,7 @@ class scopedef_t(declaration.declaration_t):
             if 'new' in sym or 'delete' in sym:
                 return 'operator ' + sym
             return 'operator' + sym
-        if isinstance(name, collections.Callable) and None is function:
+        if isinstance(name, Callable) and None is function:
             name = None
         if name:
             if 'operator' not in name:
@@ -347,7 +350,7 @@ class scopedef_t(declaration.declaration_t):
     @staticmethod
     def __normalize_args(**keywds):
         """implementation details"""
-        if isinstance(keywds['name'], collections.Callable) and \
+        if isinstance(keywds['name'], Callable) and \
                 None is keywds['function']:
             keywds['function'] = keywds['name']
             keywds['name'] = None
