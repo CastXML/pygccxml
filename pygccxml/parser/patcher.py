@@ -287,7 +287,7 @@ def update_unnamed_class(decls):
     taken care of.
 
     Args:
-        decls (list[declaration_t]): a list of declarations to be patched.
+        decls (list[DeclarationD]): a list of declarations to be patched.
     Returns:
         None
     """

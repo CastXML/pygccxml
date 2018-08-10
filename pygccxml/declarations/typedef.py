@@ -11,13 +11,13 @@ from . import declaration
 from . import byte_info
 
 
-class typedef_t(declaration.declaration_t, byte_info.byte_info):
+class typedef_t(declaration.DeclarationD, byte_info.byte_info):
 
     """describes C++ typedef declaration"""
 
     def __init__(self, name='', decl_type=None):
         """creates class that describes C++ typedef"""
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
         byte_info.byte_info.__init__(self)
         self._decl_type = decl_type
         if not isinstance(decl_type, str) and decl_type is not None:
@@ -29,11 +29,11 @@ class typedef_t(declaration.declaration_t, byte_info.byte_info):
         return [self.decl_type]
 
     def __eq__(self, other):
-        if not declaration.declaration_t.__eq__(self, other):
+        if not declaration.DeclarationD.__eq__(self, other):
             return False
         return self.decl_type == other.decl_type
 
-    __hash__ = declaration.declaration_t.__hash__
+    __hash__ = declaration.DeclarationD.__hash__
 
     @property
     def decl_type(self):

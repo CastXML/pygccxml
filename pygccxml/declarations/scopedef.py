@@ -33,8 +33,8 @@ class matcher(object):
 
         :param decl_matcher: Python callable object, that takes one argument -
             reference to a declaration
-        :param decls: the search scope, :class:declaration_t object or
-            :class:declaration_t objects list t
+        :param decls: the search scope, :class:DeclarationD object or
+            :class:DeclarationD objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
             on the internal declarations too
         """
@@ -58,8 +58,8 @@ class matcher(object):
 
         :param decl_matcher: Python callable object, that takes one argument -
             reference to a declaration
-        :param decls: the search scope, :class:declaration_t object or
-            :class:declaration_t objects list t
+        :param decls: the search scope, :class:DeclarationD object or
+            :class:DeclarationD objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
             on the internal declarations too
         """
@@ -78,8 +78,8 @@ class matcher(object):
 
         :param decl_matcher: Python callable object, that takes one argument -
             reference to a declaration
-        :param decls: the search scope, :class:declaration_t object or
-            :class:declaration_t objects list t
+        :param decls: the search scope, :class:DeclarationD object or
+            :class:DeclarationD objects list t
         :param recursive: boolean, if True, the method will run `decl_matcher`
             on the internal declarations too
         """
@@ -92,7 +92,7 @@ class matcher(object):
             raise runtime_errors.multiple_declarations_found_t(decl_matcher)
 
 
-class scopedef_t(declaration.declaration_t):
+class scopedef_t(declaration.DeclarationD):
 
     """
     Base class for :class:`namespace_t` and :class:`class_t` classes.
@@ -154,7 +154,7 @@ class scopedef_t(declaration.declaration_t):
     _impl_all_decl_types = []
 
     def __init__(self, name=''):
-        declaration.declaration_t.__init__(self, name)
+        declaration.DeclarationD.__init__(self, name)
 
         self._optimized = False
         self._type2decls = {}
@@ -186,11 +186,11 @@ class scopedef_t(declaration.declaration_t):
         return items
 
     def __eq__(self, other):
-        if not declaration.declaration_t.__eq__(self, other):
+        if not declaration.DeclarationD.__eq__(self, other):
             return False
         return self.declarations[:].sort() == other.declarations[:].sort()
 
-    __hash__ = declaration.declaration_t.__hash__
+    __hash__ = declaration.DeclarationD.__hash__
 
     def _get_declarations_impl(self):
         raise NotImplementedError()
@@ -201,7 +201,7 @@ class scopedef_t(declaration.declaration_t):
         List of children declarations.
 
         Returns:
-            List[declarations.declaration_t]
+            List[declarations.DeclarationD]
         """
         if self._optimized:
             return self._all_decls_not_recursive
@@ -214,7 +214,7 @@ class scopedef_t(declaration.declaration_t):
         Set list of all declarations defined in the namespace.
 
         Args:
-            List[declarations.declaration_t]: list of declarations
+            List[declarations.DeclarationD]: list of declarations
 
         Not implemented.
 
@@ -233,7 +233,7 @@ class scopedef_t(declaration.declaration_t):
             types.append(decl.__class__)
         while bases:
             base = bases.pop()
-            if base is declaration.declaration_t:
+            if base is declaration.DeclarationD:
                 continue
             if base is byte_info.byte_info:
                 continue
@@ -1061,7 +1061,7 @@ def make_flatten(decl_or_decls):
 
     :param decl_or_decls: reference to list of declaration's or single
         declaration
-    :type decl_or_decls: :class:`declaration_t` or [ :class:`declaration_t` ]
+    :type decl_or_decls: :class:`DeclarationD` or [ :class:`DeclarationD` ]
     :rtype: [ all internal declarations ]
 
     """
@@ -1135,7 +1135,7 @@ def find_declaration(
     For more information about arguments see :class:`match_declaration_t`
     class.
 
-    :rtype: matched declaration :class:`declaration_t` or None
+    :rtype: matched declaration :class:`DeclarationD` or None
 
     """
 
@@ -1163,7 +1163,7 @@ def find_first_declaration(
     For more information about arguments see :class:`match_declaration_t`
     class.
 
-    :rtype: matched declaration :class:`declaration_t` or None
+    :rtype: matched declaration :class:`DeclarationD` or None
 
     """
 
@@ -1191,7 +1191,7 @@ def declaration_files(decl_or_decls):
 
     :param decl_or_decls: reference to list of declaration's or single
         declaration
-    :type decl_or_decls: :class:`declaration_t` or [:class:`declaration_t`]
+    :type decl_or_decls: :class:`DeclarationD` or [:class:`DeclarationD`]
     :rtype: set(declaration file names)
 
     """

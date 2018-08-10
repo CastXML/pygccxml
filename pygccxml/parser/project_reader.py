@@ -247,7 +247,7 @@ class project_reader_t(object):
         :param compilation_mode: determines whether the files are parsed
                                  individually or as one single chunk
         :type compilation_mode: :class:`COMPILATION_MODE`
-        :rtype: [:class:`declaration_t`]
+        :rtype: [:class:`DeclarationD`]
         """
 
         if compilation_mode == COMPILATION_MODE.ALL_AT_ONCE \

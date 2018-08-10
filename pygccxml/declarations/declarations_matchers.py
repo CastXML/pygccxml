@@ -36,7 +36,7 @@ class declaration_matcher_t(matcher_base_t):
         """
         :param decl_type: declaration type to match by. For example
         :class:`enumeration_t`.
-        :type decl_type: any class that derives from :class:`declaration_t`
+        :type decl_type: any class that derives from :class:`DeclarationD`
         class
 
         :param name: declaration name, could be full name.

@@ -43,7 +43,7 @@ def parse(
     :type compilation_mode: :class:`parser.COMPILATION_MODE`
     :param cache: Declaration cache (None=no cache)
     :type cache: :class:`parser.cache_base_t` or str
-    :rtype: list of :class:`declarations.declaration_t`
+    :rtype: list of :class:`declarations.DeclarationD`
     """
     if not config:
         config = xml_generator_configuration_t()

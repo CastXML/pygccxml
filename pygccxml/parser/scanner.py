@@ -241,7 +241,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 "__NSConstantString_tag",
                 "__NSConstantString"]
 
-            if isinstance(obj, declarations.declaration_t):
+            if isinstance(obj, declarations.DeclarationD):
 
                 if rm1 and str(obj.name) in names:
                     return
@@ -285,9 +285,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
     @staticmethod
     def __read_location(decl, attrs, to_skip):
         if "name" in attrs and attrs["name"] in to_skip:
-            decl.location = declarations.location_t('', -1)
+            decl.location = declarations.Location('', -1)
         else:
-            decl.location = declarations.location_t(
+            decl.location = declarations.Location(
                 file_name=attrs[XML_AN_FILE],
                 line=int(attrs[XML_AN_LINE]))
 

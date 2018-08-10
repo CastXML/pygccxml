@@ -83,7 +83,7 @@ def normalize_name(decl):
     Cached variant of normalize
 
     Args:
-        decl (declaration.declaration_t): the declaration
+        decl (declaration.DeclarationD): the declaration
 
     Returns:
         str: normalized name
@@ -98,7 +98,7 @@ def normalize_partial_name(decl):
     Cached variant of normalize
 
     Args:
-        decl (declaration.declaration_t): the declaration
+        decl (declaration.DeclarationD): the declaration
 
     Returns:
         str: normalized name
@@ -113,7 +113,7 @@ def normalize_full_name_true(decl):
     Cached variant of normalize
 
     Args:
-        decl (declaration.declaration_t): the declaration
+        decl (declaration.DeclarationD): the declaration
 
     Returns:
         str: normalized name
@@ -129,7 +129,7 @@ def normalize_full_name_false(decl):
     Cached variant of normalize
 
     Args:
-        decl (declaration.declaration_t): the declaration
+        decl (declaration.DeclarationD): the declaration
 
     Returns:
         str: normalized name

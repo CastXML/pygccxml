@@ -12,8 +12,12 @@ Contains classes that describe different C++ declarations
 from . import xml_generators as compilers
 from . import xml_generators
 
-from .location import location_t
-from .declaration import declaration_t
+from .location import Location
+from .location import Location as location_t
+
+from .declaration import DeclarationD
+from .declaration import DeclarationD as declaration_t
+
 from .scopedef import scopedef_t
 from .enumeration import enumeration_t
 from .typedef import typedef_t
