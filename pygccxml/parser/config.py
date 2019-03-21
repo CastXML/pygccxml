@@ -429,7 +429,8 @@ def create_compiler_path(xml_generator, compiler_path):
                 ['where', 'cl'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
-            compiler_path = p.stdout.read().decode("utf-8").rstrip()
+            # Fix where cl error. In cmake environment there are more then one  Visual Studio path are found. 
+            compiler_path = p.stdout.read().decode("utf-8").rstrip().split("\r\n")[0].rstrip()
             p.wait()
             p.stdout.close()
             p.stderr.close()
