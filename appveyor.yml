@@ -16,7 +16,7 @@ install:
   - "%PYTHON%/Scripts/pip.exe install coveralls"
 
   # Install castxml
-  - ps: wget https://midas3.kitware.com/midas/download/bitstream/461597/castxml-windows.zip -OutFile castxml.zip
+  - ps: wget https://data.kitware.com/api/v1/file/hashsum/sha512/315a6acef496b9d0dc9a8e0414119c22d1e1e866b8862b6372f587821c1741ac084460b1cd41b3772c4aae3922025e708c86b0a82c8a6d9952093d5e7ed9122d/download -OutFile castxml.zip
   - cmd: echo "Unzipping castxml..."
   - cmd: 7z x castxml.zip -o"C:\Program Files\" -y > nul
   - cmd: set PATH=%PATH:castxml\bin=%;C:\Program Files\castxml\bin
