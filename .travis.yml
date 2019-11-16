@@ -126,7 +126,7 @@ matrix:
             - g++-5
     - os: osx
       # BUILD 14 ------------------
-      osx_image: xcode9.4
+      osx_image: xcode11.2
       language: generic
       env:
         - XML_GENERATOR="castxml"
@@ -134,12 +134,12 @@ matrix:
         - SITECUSTOMIZELIBPATH="/usr/local/lib/python2.7/site-packages/sitecustomize.py"
     - os: osx
       # BUILD 15 ------------------
-      osx_image: xcode9.4
+      osx_image: xcode11.2
       language: generic
       env:
         - XML_GENERATOR="castxml"
         - TRAVIS_PYTHON_VERSION="3"
-        - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.6/site-packages/sitecustomize.py"
+        - SITECUSTOMIZELIBPATH="/usr/local/lib/python3.7/site-packages/sitecustomize.py"
     - os: linux
       # BUILD 16 ------------------
       python: 3.6
@@ -168,13 +168,13 @@ before_install:
   # Look at the redirection and extract the direct URL for usage with Travis.
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461589/castxml-macosx.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/88c9b5954ca7417f7b519f3006dc6fe4bd194af0837168edc30007a41eaae6d4eee97cef2a72747432af14941c7f60333b77c25e208b2540dcde2d61e0d0e6f3/download | tar zxf - -C ${HOME};
       fi;
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ $XML_GENERATOR == "castxml" ]]; then
       if [ ! -e ${HOME}/castxml ]; then
-        wget -q -O - https://midas3.kitware.com/midas/download/bitstream/461590/castxml-linux.tar.gz | tar zxf - -C ${HOME};
+        wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/f43ef30267c850872cf1e8ea8594c5dc6a1beb7c343d63875662ee7c648dac4f9214c915499ef2e1148f2b5f866e4c518ca1a21fb5055baba7d62f4f69097ba0/download | tar zxf - -C ${HOME};
       fi;
     fi
 
