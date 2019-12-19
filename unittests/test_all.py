@@ -82,6 +82,7 @@ from . import test_elaborated_types
 from . import test_order
 from . import test_find_noncopyable_vars
 from . import test_hash
+from . import test_null_comparison
 
 testers = [
     pep8_tester,
@@ -154,7 +155,8 @@ testers = [
     test_elaborated_types,
     test_order,
     test_find_noncopyable_vars,
-    test_hash
+    test_hash,
+    test_null_comparison,
 ]
 
 if platform.system() != 'Windows':
