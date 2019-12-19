@@ -28,10 +28,10 @@ class Test(parser_test_case.parser_test_case_t):
         ns = global_ns.namespace("ns")
 
         func = ns.free_function(name="TestFunction1")
-        assert (func.arguments[0] > func.arguments[1]) == False
+        assert (func.arguments[0] > func.arguments[1]) is False
 
         func = ns.free_function(name="TestFunction2")
-        assert (func.arguments[0] > func.arguments[1]) == False
+        assert (func.arguments[0] > func.arguments[1]) is False
 
 
 def create_suite():

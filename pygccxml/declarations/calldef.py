@@ -85,9 +85,9 @@ class argument_t(object):
     def __lt__(self, other):
         if not isinstance(other, self.__class__):
             return self.__class__.__name__ < other.__class__.__name__
-        if other.default_value == None:
+        if other.default_value is None:
             return False
-        if self.default_value == None:
+        if self.default_value is None:
             return self.name < other.name \
                 and self.decl_type < other.decl_type
         return self.name < other.name \
