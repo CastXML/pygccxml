@@ -124,7 +124,7 @@ class source_reader_t(object):
         # Platform specific options
         if platform.system() == 'Windows':
 
-            if "mingw" in self.__config.compiler_path.lower():
+            if "mingw" or "g++" or "gcc" in self.__config.compiler_path.lower():
                 # Look at the compiler path. This is a bad way
                 # to find out if we are using mingw; but it
                 # should probably work in most of the cases
