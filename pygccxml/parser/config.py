@@ -425,51 +425,34 @@ def create_compiler_path(xml_generator, compiler_path):
     if xml_generator == 'castxml' and compiler_path is None:
         if platform.system() == 'Windows':
             # Look for msvc
-            p = subprocess.Popen(
-                ['where', 'cl'],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-            # Fix where cl error. In cmake environment there are more then one  Visual Studio path are found. 
-            compiler_path = p.stdout.read().decode("utf-8").rstrip().split("\r\n")[0].rstrip()
-            p.wait()
-            p.stdout.close()
-            p.stderr.close()
+            compiler_path = __get_first_compiler_in_path('where', 'cl')
             # No msvc found; look for mingw
             if compiler_path == '':
-                p = subprocess.Popen(
-                    ['where', 'mingw'],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE)
-                compiler_path = p.stdout.read().decode("utf-8").rstrip()
-                p.wait()
-                p.stdout.close()
-                p.stderr.close()
+                compiler_path = __get_first_compiler_in_path('where', 'mingw')
         else:
             # OS X or Linux
             # Look for clang first, then gcc
-            p = subprocess.Popen(
-                ['which', 'clang++'],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-            compiler_path = p.stdout.read().decode("utf-8").rstrip()
-            p.wait()
-            p.stdout.close()
-            p.stderr.close()
+            compiler_path = __get_first_compiler_in_path('which', 'clang++')
             # No clang found; use gcc
             if compiler_path == '':
-                p = subprocess.Popen(
-                    ['which', 'c++'],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE)
-                compiler_path = p.stdout.read().decode("utf-8").rstrip()
-                p.wait()
-                p.stdout.close()
-                p.stderr.close()
+                compiler_path = __get_first_compiler_in_path('which', 'c++')
 
         if compiler_path == "":
             compiler_path = None
 
     return compiler_path
+
+
+def __get_first_compiler_in_path(command, compiler_name):
+    p = subprocess.Popen(
+        [command, compiler_name],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    path = p.stdout.read().decode("utf-8").rstrip().split("\r\n")[0].rstrip()
+    p.wait()
+    p.stdout.close()
+    p.stderr.close()
+    return path
 
 
 if __name__ == '__main__':
