@@ -414,7 +414,7 @@ def create_compiler_path(xml_generator, compiler_path):
     """
     Try to guess a path for the compiler.
 
-    If you want ot use a specific compiler, please provide the compiler
+    If you want to use a specific compiler, please provide the compiler
     path manually, as the guess may not be what you are expecting.
     Providing the path can be done by passing it as an argument (compiler_path)
     to the xml_generator_configuration_t() or by defining it in your pygccxml
