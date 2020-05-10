@@ -1,0 +1,42 @@
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+    env:
+      XML_GENERATOR: castxml
+      CPPSTD: -std=c++98
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    # You can test your matrix by printing the current Python version
+    - name: Display Python version
+      run: python -c "import sys; print(sys.version)"
+    - name: Setup castxml
+      run: |
+        wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/f43ef30267c850872cf1e8ea8594c5dc6a1beb7c343d63875662ee7c648dac4f9214c915499ef2e1148f2b5f866e4c518ca1a21fb5055baba7d62f4f69097ba0/download | tar zxf - -C ~/
+    - name: Setup Python test libs
+      run: |
+        pip install coveralls
+        pip install coverage
+        pip install pycodestyle
+    - name: Run tests
+      run: |
+        export PATH=~/castxml/bin:$PATH
+        python setup.py install
+        coverage run -m unittests.test_all
+        coverage combine
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: .coverage
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
