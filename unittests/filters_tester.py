@@ -49,9 +49,9 @@ class Test(parser_test_case.parser_test_case_t):
             if nbr == 21:
                 # We are using llvm 3.9, see bug #32. Make sure the 4 names
                 # are still there
-                ll = ["isa", "flags", "str", "length"]
-                for l in ll:
-                    self.assertTrue(l in [mbr.name for mbr in public_members])
+                names = ["isa", "flags", "str", "length"]
+                for name in names:
+                    self.assertTrue(names in [mbr.name for mbr in public_members])
         else:
             self.assertTrue(17 == len(public_members))
 
