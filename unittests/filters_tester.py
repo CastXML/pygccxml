@@ -51,7 +51,8 @@ class Test(parser_test_case.parser_test_case_t):
                 # are still there
                 names = ["isa", "flags", "str", "length"]
                 for name in names:
-                    self.assertTrue(names in [mbr.name for mbr in public_members])
+                    self.assertTrue(
+                        names in [mbr.name for mbr in public_members])
         else:
             self.assertTrue(17 == len(public_members))
 
