@@ -3,10 +3,12 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import argparse
+import multiprocessing as mp
 import os
+import platform
 import sys
 import unittest
-import platform
 
 from . import decl_string_tester
 from . import declaration_files_tester
@@ -89,7 +91,8 @@ testers = [
     decl_string_tester,
     declaration_files_tester,
     declarations_comparison_tester,
-    declarations_tester, file_cache_tester,
+    declarations_tester,
+    file_cache_tester,
     gccxml_runner_tester,
     project_reader_correctness_tester,
     source_reader_tester,
@@ -172,22 +175,94 @@ if os.path.isfile("test_cost.log"):
     os.remove("test_cost.log")  # pragma: no cover
 
 
-def create_suite():
+def create_suite(testers):
     main_suite = unittest.TestSuite()
     for tester in testers:
         main_suite.addTest(tester.create_suite())
     return main_suite
 
 
-def run_suite():
-    result = unittest.TextTestRunner(verbosity=2).run(create_suite())
+def run_suite(indices):
+    suite = create_suite([testers[i] for i in indices])
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
     error_desc = 'EXCEPTION IN SAFE SELECT 9'
     all_errors = result.failures + result.errors
+    error_count = 0
     for test_case, description in all_errors:
         if error_desc not in description:  # pragma: no cover
-            return 1  # pragma: no cover
-    return 0
+            error_count += 1  # pragma: no cover
+    return error_count
+
+
+def split_item_list(item_list, item_cost_func, num_chunks):
+    """Split @p item_list into @p num_chunks such that all chunks have similar
+    sum item cost (as computed by @p item_cost_func)."""
+    # TODO(eric.cousineau): Just use third party lib?
+    # TODO(eric.cousineau): Sort items by cost first, then for each chunk, add
+    # first item, then iterate until we exhaust the cost?
+    if num_chunks == 1:
+        return [item_list]
+    item_costs = [item_cost_func(x) for x in item_list]
+    cost_total = sum(item_costs)
+    chunk_cost_target = cost_total / num_chunks
+    chunk_list = []
+    chunk = []
+    chunk_cost = 0
+    for item, item_cost in zip(item_list, item_costs):
+        past_cost_target = (chunk_cost >= chunk_cost_target)
+        need_more_chunks = (len(chunk_list) + 1 < num_chunks)
+        if past_cost_target and need_more_chunks:
+            # Store current chunk (with previous item(s)), and start a new
+            # chunk.
+            chunk_list.append(chunk)
+            chunk = []
+            chunk_cost = 0
+        chunk_cost += item_cost
+        chunk.append(item)
+    # Append final chunk.
+    chunk_list.append(chunk)
+    assert len(chunk_list) <= num_chunks, (len(chunk_list), num_chunks)
+    return chunk_list
+
+
+def flatten_suite(suite):
+    tests = []
+    for test in suite:
+        if isinstance(test, unittest.TestSuite):
+            tests += flatten_suite(test)
+        else:
+            tests += [test]
+    return tests
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-j", "--jobs", type=int, default=0)
+    args = parser.parse_args()
+
+    # Consider using an actual parallelization for unittest:
+    # https://stackoverflow.com/q/4710142/7829525
+    job_count = args.jobs
+    indices = list(range(len(testers)))
+    if job_count == 0:
+        error_counts = [run_suite(indices)]
+    else:
+
+        def index_cost(index):
+            suite = create_suite([testers[index]])
+            tests = flatten_suite(suite)
+            return len(tests)
+
+        indices_chunks = split_item_list(indices, index_cost, job_count)
+        job_count = len(indices_chunks)
+        with mp.Pool(job_count) as pool:
+            error_counts = pool.map(run_suite, indices_chunks)
+    error_count = sum(error_counts)
+    if error_count > 0:
+        print()
+        print("FAIL: {} total error(s)".format(error_count))
+    sys.exit(error_count)
 
 
 if __name__ == "__main__":
-    sys.exit(run_suite())
+    main()
