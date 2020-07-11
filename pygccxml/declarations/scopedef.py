@@ -109,16 +109,15 @@ class scopedef_t(declaration.declaration_t):
         1. ``name`` - declaration name, could be full qualified name
 
         2. ``header_dir`` - directory, to which belongs file, that the
-        declaration was declared in. ``header_dir`` should be absolute path.
+           declaration was declared in. ``header_dir`` should be absolute path.
 
         3. ``header_file`` - file that the declaration was declared in.
 
         4. ``function`` - user ( your ) custom criteria. The interesting thing
-        is that this function will be joined with other arguments (criteria).
+           is that this function will be joined with other arguments (criteria).
 
         5. ``recursive`` - the search declaration range, if True will be search
-        in internal declarations too.
-
+           in internal declarations too.
 
     Every ""query"" API, takes name or function as the first argument.
 
