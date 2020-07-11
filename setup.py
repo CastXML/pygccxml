@@ -9,6 +9,16 @@ from release_utils import utils
 
 version = utils.find_version("../pygccxml/__init__.py")
 
+requirements_test = {
+  "coverage",
+  "coveralls",
+  "pycodestyle",
+}
+requirements_docs = {
+  "sphinx",
+  "sphinx_rtd_theme",
+}
+
 setup(name="pygccxml",
       version=version,
       author="Roman Yakovenko",
@@ -25,6 +35,10 @@ setup(name="pygccxml",
                 "pygccxml.declarations",
                 "pygccxml.parser",
                 "pygccxml.utils"],
+      extras_require={
+          "test": list(requirements_test),
+          "docs": list(requirements_docs),
+      },
       classifiers=[
           "Development Status :: 5 - Production/Stable",
           "Environment :: Console",

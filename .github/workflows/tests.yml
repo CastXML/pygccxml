@@ -83,15 +83,12 @@ jobs:
       - name: Setup castxml config
         if: matrix.compiler == 'gcc' && matrix.version == '7'
         run: mv unittests/configs/gcc7.cfg unittests/xml_generator.cfg;
-      - name: Setup Python test libs
+      - name: Install Python lib and test libs
         run: |
-          pip install coveralls
-          pip install coverage
-          pip install pycodestyle
+          pip install .[test]
       - name: Run tests
         run: |
           export PATH=~/castxml/bin:$PATH
-          python setup.py install
           coverage run -m unittests.test_all
           coverage combine
       - name: Upload coverage to Codecov

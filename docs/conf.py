@@ -22,7 +22,7 @@ import subprocess
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('.') + "/../")
 
-from ..release_utils import utils  # nopep8
+from release_utils import utils  # nopep8
 
 # -- General configuration ------------------------------------------------
 
