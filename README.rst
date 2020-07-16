@@ -1,14 +1,8 @@
 pygccxml
 ========
 
-.. image:: https://travis-ci.org/gccxml/pygccxml.svg?branch=develop
-    :target: https://travis-ci.org/gccxml/pygccxml
-    :alt: Linux and Mac tests status
-.. image:: https://ci.appveyor.com/api/projects/status/knt8ej6vp1w76may/branch/develop?svg=true
-    :target: https://ci.appveyor.com/project/iMichka/pygccxml
-    :alt: Windows tests status
-.. image:: https://coveralls.io/repos/gccxml/pygccxml/badge.svg?branch=develop
-    :target: https://coveralls.io/r/gccxml/pygccxml?branch=develop
+.. image:: https://codecov.io/gh/iMichka/pygccxml/branch/develop/graph/badge.svg
+    :target: https://codecov.io/gh/iMichka/pygccxml
     :alt: Code coverage status
 .. image:: https://readthedocs.org/projects/pygccxml/badge/?version=develop
     :target: http://pygccxml.readthedocs.io/en/develop/?badge=develop
