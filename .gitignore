@@ -16,3 +16,4 @@ docs/examples/caching/example.hpp.xml
 test_cost.log
 docs/apidocs
 htmlcov
+/venv/
