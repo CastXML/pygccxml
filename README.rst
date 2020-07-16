@@ -27,7 +27,7 @@ Install instructions can be found `here <http://pygccxml.readthedocs.io/en/maste
 Compatibility
 -------------
 
-pygccxml is compatible with Python 2.7, 3.4, 3.5, pypy and pypy3.
+pygccxml is compatible with Python 3.5, 3.6, 3.7, 3.8 and pypy3.
 
 Documentation and examples
 --------------------------
@@ -46,9 +46,11 @@ License
 Contact us
 ----------
 
-You can contact us through the `CastXML mailing list <http://public.kitware.com/mailman/listinfo/castxml/>`_.
+For issues with pygccxml you can open an issue `here <https://github.com/CastXML/pygccxml/issues/>`_.
 
-For issues with pygccxml you can open an issue `here <https://github.com/gccxml/pygccxml/issues/>`_.
+For issues with CastXML you can open an issue `here <https://github.com/CastXML/CastXML>`_.
+
+You can contact us through the `CastXML mailing list <http://public.kitware.com/mailman/listinfo/castxml/>`_.
 
 Branches
 --------
@@ -60,8 +62,7 @@ The develop branch contains the latest improvements but can be unstable. Pull Re
 Testing and code coverage
 -------------------------
 
-You can find the Mac and Linux builds `here <https://travis-ci.org/gccxml/pygccxml/builds>`_.
-The Windows builds are located `here <https://ci.appveyor.com/project/iMichka/pygccxml>`_.
+The builds are done using the Github Actions infrastructure.
 
 Running the test suite is done with:
 
@@ -69,4 +70,4 @@ Running the test suite is done with:
 
   python3 -m unittests.test_all
 
-Code coverage is also available. It is automatically updated after each commit and can be found `here <https://coveralls.io/r/gccxml/pygccxml>`_.
+Code coverage is also available. It is automatically updated after each commit and can be found `here <https://codecov.io/gh/iMichka/pygccxml>`_.
