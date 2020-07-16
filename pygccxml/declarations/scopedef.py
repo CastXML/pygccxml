@@ -113,8 +113,9 @@ class scopedef_t(declaration.declaration_t):
 
         3. ``header_file`` - file that the declaration was declared in.
 
-        4. ``function`` - user ( your ) custom criteria. The interesting thing
-           is that this function will be joined with other arguments (criteria).
+        4. ``function`` - user ( your ) custom criteria. The interesting
+           thing is that this function will be joined with
+           other arguments (criteria).
 
         5. ``recursive`` - the search declaration range, if True will be search
            in internal declarations too.
