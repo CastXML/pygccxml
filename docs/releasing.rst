@@ -15,9 +15,13 @@ Uploading to pypi
 
 The documentation for the building and uploading can be found here: `pypi`_
 
+Cleanup your dist:
+
+``rm -rf dist``
+
 The wheels are built with:
 
-``python setup.py bdist_wheel --universal``
+``python3 setup.py bdist_wheel --universal``
 
 They are uploaded with:
 

@@ -4,6 +4,11 @@ Changes
 Version 2.1.0 (unreleased)
 --------------------------
 
+Version 2.0.1
+-------------
+
+1. Minor description and doc updates for release uploads
+
 Version 2.0.0
 -------------
 
