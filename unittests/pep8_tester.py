@@ -4,9 +4,10 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import pycodestyle
 import unittest
 import fnmatch
+
+import pycodestyle
 
 
 class Test(unittest.TestCase):

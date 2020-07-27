@@ -157,14 +157,7 @@ class Core(parser_test_case.parser_test_case_t):
     def test_mangled_name_namespace(self):
         std = self.global_ns.namespace("std")
         self.assertTrue(std, "std namespace has not been found")
-        # GCCXML had mangled names for everything. With CastXML
-        # there are only mangled names for functions and variables.
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(
-                std.mangled,
-                "Mangled name of std namespace should be different from None")
-        elif self.xml_generator_from_xml_file.is_castxml:
-            self.assertIsNone(std.mangled)
+        self.assertIsNone(std.mangled)
 
     def test_mangled_name_functions(self):
         # This works with gccxml and castxml
@@ -182,18 +175,6 @@ class Core(parser_test_case.parser_test_case_t):
             var_inst.mangled,
             "Mangled name of array255 variable should be different +"
             "from None")
-
-    def test_demangled_name_variable(self):
-        # This works with gccxml only. Check if an assertion is correctly
-        # raised when using castxml.
-        var_inst = self.global_ns.variable('array255')
-        if self.xml_generator_from_xml_file.is_gccxml:
-            self.assertTrue(
-                var_inst.demangled,
-                "Demangled name of array255 variable should be different +"
-                "from None")
-        else:
-            self.assertIsNone(var_inst.demangled)
 
     def _test_is_based_and_derived(self, base, derived, access):
         dhi_v = declarations.hierarchy_info_t(derived, access, True)

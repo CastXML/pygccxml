@@ -69,91 +69,60 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_numeric_patcher(self):
         fix_numeric = self.global_ns.free_function("fix_numeric")
         if 32 == self.architecture:
-            if self.xml_generator_from_xml_file.is_gccxml_09 or \
-                    self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-                if platform.machine() == "x86_64":
-                    self.assertEqual(
-                        fix_numeric.arguments[0].default_value, "-1u")
-                else:
-                    val = "0xffffffffffffffffu"
-                    self.assertEqual(
-                        fix_numeric.arguments[0].default_value, val)
-            else:
-                val = "0xffffffffffffffff"
-                self.assertEqual(
-                    fix_numeric.arguments[0].default_value, val)
+            val = "0xffffffffffffffff"
+            self.assertEqual(
+                fix_numeric.arguments[0].default_value, val)
         else:
             generator = self.xml_generator_from_xml_file
-            if generator.is_castxml:
-                if generator.is_castxml1 or \
-                        float(generator.xml_output_version) >= 1.137:
-                    val = "(unsigned long long)-1"
-                else:
-                    val = "(ull)-1"
-                self.assertEqual(
-                    fix_numeric.arguments[0].default_value, val)
+            if generator.is_castxml1 or \
+                    float(generator.xml_output_version) >= 1.137:
+                val = "(unsigned long long)-1"
             else:
-                self.assertEqual(
-                    fix_numeric.arguments[0].default_value, "0ffffffff")
+                val = "(ull)-1"
+            self.assertEqual(
+                fix_numeric.arguments[0].default_value, val)
 
     def test_unqualified_integral_patcher(self):
-        if 32 != self.architecture and \
-                self.xml_generator_from_xml_file.is_gccxml:
+        if 32 != self.architecture:
             # For this check to be removed, patcher_tester_64bit.xml
-            # will need to be updated for GCCXML
+            # will need to be updated for CastXML
             return
 
         ns1 = self.global_ns.namespace("ns1")
         st1 = ns1.class_("st1")
         fun1 = st1.member_function("fun1")
-        if self.xml_generator_from_xml_file.is_castxml:
-            output_verion = self.xml_generator_from_xml_file.xml_output_version
-            if self.xml_generator_from_xml_file.is_castxml1 or \
-                    float(output_verion) >= 1.137:
-                val1 = "ns1::DEFAULT_1"
-                val2 = "ns1::st1::DEFAULT_2"
-            else:
-                val1 = "::ns1::DEFAULT_1"
-                val2 = "::ns1::st1::DEFAULT_2"
-            self.assertEqual(
-                fun1.arguments[0].default_value, val1)
-            self.assertEqual(
-                fun1.arguments[1].default_value, val2)
+        output_verion = self.xml_generator_from_xml_file.xml_output_version
+        if self.xml_generator_from_xml_file.is_castxml1 or \
+                float(output_verion) >= 1.137:
+            val1 = "ns1::DEFAULT_1"
+            val2 = "ns1::st1::DEFAULT_2"
         else:
-            self.assertEqual(
-                fun1.arguments[0].default_value,
-                "ns1::DEFAULT_1")
-            self.assertEqual(
-                fun1.arguments[1].default_value,
-                "ns1::st1::DEFAULT_2")
+            val1 = "::ns1::DEFAULT_1"
+            val2 = "::ns1::st1::DEFAULT_2"
+        self.assertEqual(
+            fun1.arguments[0].default_value, val1)
+        self.assertEqual(
+            fun1.arguments[1].default_value, val2)
 
         fun2 = self.global_ns.free_function("fun2")
         self.assertEqual(
             fun2.arguments[0].default_value,
             "::DEFAULT_1")
-        if self.xml_generator_from_xml_file.is_castxml:
-            output_verion = self.xml_generator_from_xml_file.xml_output_version
-            if self.xml_generator_from_xml_file.is_castxml1 or \
-                    float(output_verion) >= 1.137:
-                val1 = "ns1::DEFAULT_1"
-                val2 = "ns1::st1::DEFAULT_2"
-            else:
-                # Before XML output version 1.137, the following two
-                # were unpatched and were identical to the text in
-                # matcher.hpp
-                val1 = "ns1::DEFAULT_1"
-                val2 = "::ns1::st1::DEFAULT_2"
-            self.assertEqual(
-                fun2.arguments[1].default_value, val1)
-            self.assertEqual(
-                fun2.arguments[2].default_value, val2)
+        output_verion = self.xml_generator_from_xml_file.xml_output_version
+        if self.xml_generator_from_xml_file.is_castxml1 or \
+                float(output_verion) >= 1.137:
+            val1 = "ns1::DEFAULT_1"
+            val2 = "ns1::st1::DEFAULT_2"
         else:
-            self.assertEqual(
-                fun2.arguments[1].default_value,
-                "ns1::DEFAULT_1")
-            self.assertEqual(
-                fun2.arguments[2].default_value,
-                "ns1::st1::DEFAULT_2")
+            # Before XML output version 1.137, the following two
+            # were unpatched and were identical to the text in
+            # matcher.hpp
+            val1 = "ns1::DEFAULT_1"
+            val2 = "::ns1::st1::DEFAULT_2"
+        self.assertEqual(
+            fun2.arguments[1].default_value, val1)
+        self.assertEqual(
+            fun2.arguments[2].default_value, val2)
 
     def test_unnamed_enum_patcher(self):
         fix_unnamed = self.global_ns.free_function("fix_unnamed")
@@ -163,18 +132,12 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_function_call_patcher(self):
         fix_function_call = self.global_ns.free_function("fix_function_call")
         default_val = fix_function_call.arguments[0].default_value
-        if self.xml_generator_from_xml_file.is_castxml:
-            output_verion = self.xml_generator_from_xml_file.xml_output_version
-            if self.xml_generator_from_xml_file.is_castxml1 or \
-                    float(output_verion) >= 1.137:
-                val = "function_call::calc(1, 2, 3)"
-            else:
-                val = "calc(1, 2, 3)"
-        elif self.xml_generator_from_xml_file.is_gccxml_09 or \
-                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
+        output_verion = self.xml_generator_from_xml_file.xml_output_version
+        if self.xml_generator_from_xml_file.is_castxml1 or \
+                float(output_verion) >= 1.137:
             val = "function_call::calc(1, 2, 3)"
         else:
-            val = "function_call::calc( 1, 2, 3 )"
+            val = "calc(1, 2, 3)"
         self.assertEqual(default_val, val)
 
     def test_fundamental_patcher(self):
@@ -189,32 +152,23 @@ class tester_impl_t(parser_test_case.parser_test_case_t):
     def test_constructor_patcher(self):
         typedef__func = self.global_ns.free_function("typedef__func")
         default_val = typedef__func.arguments[0].default_value
-        if self.xml_generator_from_xml_file.is_gccxml_09 or \
-                self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-            val = "typedef_::original_name()"
-        elif self.xml_generator_from_xml_file.is_castxml:
-            # Most clean output, no need to patch
-            val = "typedef_::alias()"
-        else:
-            val = "::typedef_::alias( )"
+        val = "typedef_::alias()"
         self.assertEqual(default_val, val)
         if 32 == self.architecture:
             clone_tree = self.global_ns.free_function("clone_tree")
-            if not self.xml_generator_from_xml_file.is_gccxml_09 and \
-                    not self.xml_generator_from_xml_file.is_gccxml_09_buggy:
-                default_values = [
-                    ("vector<std::basic_string<char, std::char_traits<char>," +
-                        " std::allocator<char> >,std::allocator" +
-                        "<std::basic_string<char, std::char_traits<char>, " +
-                        "std::allocator<char> > > >()"),
-                    ("vector<std::basic_string<char, std::char_traits<char>," +
-                        "std::allocator<char> >,std::allocator" +
-                        "<std::basic_string<char, std::char_traits<char>, " +
-                        "std::allocator<char> > > >((&allocator" +
-                        "<std::basic_string<char, std::char_traits<char>, " +
-                        "std::allocator<char> > >()))")]
-                self.assertIn(
-                    clone_tree.arguments[0].default_value in default_values)
+            default_values = [
+                ("vector<std::basic_string<char, std::char_traits<char>," +
+                    " std::allocator<char> >,std::allocator" +
+                    "<std::basic_string<char, std::char_traits<char>, " +
+                    "std::allocator<char> > > >()"),
+                ("vector<std::basic_string<char, std::char_traits<char>," +
+                    "std::allocator<char> >,std::allocator" +
+                    "<std::basic_string<char, std::char_traits<char>, " +
+                    "std::allocator<char> > > >((&allocator" +
+                    "<std::basic_string<char, std::char_traits<char>, " +
+                    "std::allocator<char> > >()))")]
+            self.assertIn(
+                clone_tree.arguments[0].default_value, default_values)
 
 
 class tester_32_t(tester_impl_t):

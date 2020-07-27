@@ -1,0 +1,102 @@
+on: [push, pull_request]
+jobs:
+  tests:
+    name: ${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.5
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.6
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.7
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.8
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.8
+            castxml: "castxml"
+            castxml-epic: 1
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.8
+            castxml: "castxml"
+            castxml-epic: 1
+            cppstd: "-std=c++11"
+
+          - os: macos-latest
+            compiler: xcode
+            version: "default"
+            python-version: 3.8
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Setup castxml for Linux
+        if: matrix.os == 'ubuntu-18.04' && matrix.castxml == 'castxml'
+        run: |
+          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/f43ef30267c850872cf1e8ea8594c5dc6a1beb7c343d63875662ee7c648dac4f9214c915499ef2e1148f2b5f866e4c518ca1a21fb5055baba7d62f4f69097ba0/download | tar zxf - -C ~/
+      - name: Setup castxml for Mac
+        if: matrix.os == 'macos-latest'
+        run: |
+          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/88c9b5954ca7417f7b519f3006dc6fe4bd194af0837168edc30007a41eaae6d4eee97cef2a72747432af14941c7f60333b77c25e208b2540dcde2d61e0d0e6f3/download | tar zxf - -C ~/
+      - name: Setup castxml config
+        if: matrix.compiler == 'gcc' && matrix.version == '7'
+        run: mv unittests/configs/gcc7.cfg unittests/xml_generator.cfg;
+      - name: Install Python lib and test libs
+        run: |
+          pip install .[test]
+      - name: Run tests
+        run: |
+          export PATH=~/castxml/bin:$PATH
+          coverage run -m unittests.test_all
+          coverage combine
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: .coverage
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: true

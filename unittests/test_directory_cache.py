@@ -7,7 +7,6 @@ import os
 import sys
 import shutil
 import unittest
-import warnings
 
 from . import parser_test_case
 
@@ -53,23 +52,6 @@ class Test(parser_test_case.parser_test_case_t):
         parser.parse([self.header], self.config, cache=cache)
         # Read from the cache the second time
         parser.parse([self.header], self.config, cache=cache)
-
-    def test_dir_compatibility(self):
-        """
-        For retro-compatibility, test if the dir argument is still working
-
-        This test can be removed in v2.0.0.
-
-        """
-
-        # Do not clutter the tests with warnings
-        warnings.simplefilter("ignore", DeprecationWarning)
-
-        cache = parser.directory_cache_t(dir=self.cache_dir, compression=True)
-        parser.parse([self.header], self.config, cache=cache)
-
-        # Reset this warning to always
-        warnings.simplefilter("error", DeprecationWarning)
 
     def test_directory_cache_twice(self):
         """

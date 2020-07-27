@@ -55,18 +55,10 @@ class Test(parser_test_case.parser_test_case_t):
             if isinstance(decl, declarations.constructor_t):
                 ctors.append(decl)
 
-        # GCCXML and CastXML return the constructors in a different order.
-        # I hope this index inversion will cover the two cases. If different
-        # compilers give other orders, we will need to find a nicer solution.
-        if self.xml_generator_from_xml_file.is_castxml:
-            positions = [0, 1]
-        elif self.xml_generator_from_xml_file.is_gccxml:
-            positions = [1, 0]
-
         # test2::test2() [constructor]
-        self.assertFalse(declarations.is_copy_constructor(ctors[positions[0]]))
+        self.assertFalse(declarations.is_copy_constructor(ctors[0]))
         # test2::test2(test2 const & arg0) [copy constructor]
-        self.assertTrue(declarations.is_copy_constructor(ctors[positions[1]]))
+        self.assertTrue(declarations.is_copy_constructor(ctors[1]))
 
 
 def create_suite():

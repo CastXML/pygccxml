@@ -36,7 +36,6 @@ from . import cache_enums_tester
 from . import decl_printer_tester
 from . import typedefs_tester
 from . import non_copyable_classes_tester
-# from . import demangled_tester
 from . import unnamed_enums_bug_tester
 from . import vector_traits_tester
 from . import string_traits_tester
@@ -57,7 +56,6 @@ from . import declaration_matcher_tester
 from . import calling_convention_tester
 from . import const_volatile_arg_tester
 from . import array_bug_tester
-from . import gccxml10183_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
@@ -83,9 +81,10 @@ from . import test_castxml_wrong_epic
 from . import test_elaborated_types
 from . import test_order
 from . import test_find_noncopyable_vars
+from . import test_hash
+from . import test_null_comparison
 
 testers = [
-    # , demangled_tester # failing right now
     pep8_tester,
     decl_string_tester,
     declaration_files_tester,
@@ -127,7 +126,6 @@ testers = [
     calling_convention_tester,
     const_volatile_arg_tester,
     array_bug_tester,
-    gccxml10183_tester,
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
@@ -156,7 +154,9 @@ testers = [
     test_castxml_wrong_epic,
     test_elaborated_types,
     test_order,
-    test_find_noncopyable_vars
+    test_find_noncopyable_vars,
+    test_hash,
+    test_null_comparison,
 ]
 
 if platform.system() != 'Windows':

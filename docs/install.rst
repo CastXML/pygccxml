@@ -18,11 +18,27 @@ Installation of pygccxml
 
 You can use pip to install pygccxml:
 
-  pip install pygccxml
+.. code-block:: shell
+
+    pip install pygccxml
 
 To install from source, you can use the usual procedure:
 
+.. code-block:: shell
+
   python setup.py install
+
+For development
+%%%%%%%%%%%%%%%
+
+You should use a ``virtualenv`` when possible. Example recipe:
+
+.. code-block:: shell
+
+  cd pygccxml  # git root
+  python -m virtualenv ./venv
+  source ./venv/bin/activate
+  pip install --editable .[test]
 
 GCC-XML (Legacy)
 ----------------

@@ -1,6 +1,31 @@
 Changes
 =======
 
+Version 2.1.0 (unreleased)
+--------------------------
+
+Version 2.0.0
+-------------
+
+1. Drop support for ```GCC-XML```.
+
+  * Drop all the demangled name attributes
+
+  * Drop declarations.class_t.USE_DEMANGLED_AS_NAME
+
+2. Drop support for ```Python 2.6```, ```Python 2.7```, ```Python 3.2```, ```Python 3.3```, ```Python 3.4```.
+
+3. Add support for ```Python 3.5```, ```Python 3.6```, ```Python 3.7```, ```Python 3.8```.
+
+4. Deprecated all the `i_depend_on_them` methods from the `declaration_t`
+   class hierarchy. Instead of using `decl.i_depend_on_them()`, please use the
+   `declarations.get_dependencies_from_decl(decl)` function from the
+   `declarations` module, which returns the same result.
+
+5. Add support for `-std=c++17` and `-std=c++2a` flags
+
+6. Add `g++` and `gcc` to better support gnu compilers on windows
+
 Version 1.9.1
 -------------
 

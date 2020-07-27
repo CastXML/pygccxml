@@ -28,7 +28,7 @@ sys.path.insert(1, root)
 sys.modules[__name__].__file__ = example_file
 
 # Run the example
-if sys.version_info >= (3, 0):
+if sys.version_info[:2] >= (3, 0):
     with open(example_file) as f:
         code = compile(f.read(), example_file, "exec")
         exec(code, None, None)
