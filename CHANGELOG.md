@@ -1,8 +1,11 @@
 Changes
 =======
 
-Version 2.0.0 (unreleased)
+Version 2.1.0 (unreleased)
 --------------------------
+
+Version 2.0.0
+-------------
 
 1. Drop support for ```GCC-XML```.
 
