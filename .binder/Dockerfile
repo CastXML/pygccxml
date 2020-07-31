@@ -14,7 +14,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends \
     -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew \
     -o Dpkg::Use-Pty=0 \
-      jupyter-notebook \
       locales \
       python3-pip \
       python3-setuptools \
@@ -46,7 +45,8 @@ ENV HOME="/home/$NB_USER" \
   LANGUAGE=en_US.UTF-8 \
   LC_ALL=en_US.UTF-8 \
   SHELL=/bin/bash \
-  USER="$NB_USER"
+  USER="$NB_USER" \
+  PATH="/home/$NB_USER/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
 WORKDIR $HOME
 RUN mkdir pygccxml
@@ -54,5 +54,5 @@ COPY ["/", "pygccxml/"]
 RUN chown -R $NB_UID:$NB_GID \
   "$HOME/pygccxml"
 USER "$NB_USER"
-RUN pip3 --no-cache-dir install -e ./pygccxml
-CMD ["jupyter", "notebook", "--ip", "0.0.0.0", "pygccxml/docs/examples/notebook/example.ipynb"]
+RUN pip3 --no-cache-dir install -e ./pygccxml[examples]
+CMD ["jupyter", "lab", "--ip", "0.0.0.0", "pygccxml/docs/examples/notebook/example.ipynb"]

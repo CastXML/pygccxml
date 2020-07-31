@@ -18,6 +18,9 @@ requirements_docs = {
   "sphinx",
   "sphinx_rtd_theme",
 }
+requirements_examples = {
+  "jupyterlab",
+}
 
 setup(name="pygccxml",
       version=version,
@@ -38,6 +41,7 @@ setup(name="pygccxml",
       extras_require={
           "test": list(requirements_test),
           "docs": list(requirements_docs),
+          "examples": list(requirements_examples),
       },
       classifiers=[
           "Development Status :: 5 - Production/Stable",
