@@ -83,6 +83,7 @@ from . import test_order
 from . import test_find_noncopyable_vars
 from . import test_hash
 from . import test_null_comparison
+from . import test_comments
 
 testers = [
     pep8_tester,
@@ -157,6 +158,7 @@ testers = [
     test_find_noncopyable_vars,
     test_hash,
     test_null_comparison,
+    test_comments,
 ]
 
 if platform.system() != 'Windows':

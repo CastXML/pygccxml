@@ -16,15 +16,18 @@ XML_AN_ABSTRACT = "abstract"
 XML_AN_ACCESS = "access"
 XML_AN_ALIGN = "align"
 XML_AN_ARTIFICIAL = "artificial"
+XML_AN_ATTACHED = "attached"
 XML_AN_ATTRIBUTES = "attributes"
 XML_AN_BASE_TYPE = "basetype"
 XML_AN_BASES = "bases"
 XML_AN_BITS = "bits"
+XML_AN_COMMENT = "comment"
 XML_AN_CONST = "const"
 XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_CASTXML_FORMAT = "format"
 XML_AN_DEFAULT = "default"
+XML_AN_END_LINE = "end_line"
 XML_AN_EXPLICIT = "explicit"
 XML_AN_EXTERN = "extern"
 XML_AN_FILE = "file"
@@ -33,6 +36,7 @@ XML_AN_INCOMPLETE = "incomplete"
 XML_AN_INIT = "init"
 XML_AN_INLINE = "inline"
 XML_AN_LINE = "line"
+XML_AN_BEGIN_LINE = "begin_line"
 XML_AN_MANGLED = "mangled"
 XML_AN_MAX = "max"
 XML_AN_MEMBERS = "members"
@@ -52,6 +56,7 @@ XML_NN_ARGUMENT = "Argument"
 XML_NN_ARRAY_TYPE = "ArrayType"
 XML_NN_CASTING_OPERATOR = "Converter"
 XML_NN_CLASS = "Class"
+XML_NN_COMMENT = "Comment"
 XML_NN_CONSTRUCTOR = "Constructor"
 XML_NN_CV_QUALIFIED_TYPE = "CvQualifiedType"
 XML_NN_DESTRUCTOR = "Destructor"
@@ -110,6 +115,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             XML_NN_UNION: self.__read_union,
             XML_NN_FIELD: self.__read_field,
             XML_NN_CASTING_OPERATOR: self.__read_casting_operator,
+            XML_NN_COMMENT: self.__read_comment,
             XML_NN_CONSTRUCTOR: self.__read_constructor,
             XML_NN_DESTRUCTOR: self.__read_destructor,
             XML_NN_FUNCTION: self.__read_function,
@@ -125,6 +131,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             XML_NN_DESTRUCTOR,
             XML_NN_ENUMERATION,
             XML_NN_FILE,
+            XML_NN_COMMENT,
             XML_NN_FUNCTION,
             XML_NN_FREE_OPERATOR,
             XML_NN_MEMBER_OPERATOR,
@@ -186,6 +193,19 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def read(self):
         xml.sax.parse(self.xml_file, self)
 
+    def _handle_comment(self, declaration):
+        comm_decl = self.__declarations.get(declaration.comment)
+        if comm_decl:
+            with open(self.__files.get(comm_decl.location.file_name, "r")) as file:
+                line_list = file.readlines()
+                comment_text = []
+                for indx in range(comm_decl.start_line - 1,comm_decl.end_line):
+                    comm_line = line_list[indx]
+                    comm_line = comm_line.strip("\n")
+                    comment_text.append(comm_line)
+                comm_decl.text = comment_text
+        return comm_decl
+
     def endDocument(self):
         # updating membership
         members_mapping = {}
@@ -195,6 +215,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 continue
             members_mapping[id(decl)] = members
         self.__members = members_mapping
+        for gccxml_id, decl in self.__declarations.items():
+            decl.comment = self._handle_comment(decl)
 
     def declarations(self):
         return self.__declarations
@@ -287,9 +309,13 @@ class scanner_t(xml.sax.handler.ContentHandler):
         if "name" in attrs and attrs["name"] in to_skip:
             decl.location = declarations.location_t('', -1)
         else:
+            if XML_AN_BEGIN_LINE in attrs:
+                line_number = attrs[XML_AN_BEGIN_LINE]
+            else:
+                line_number = attrs[XML_AN_LINE]
             decl.location = declarations.location_t(
                 file_name=attrs[XML_AN_FILE],
-                line=int(attrs[XML_AN_LINE]))
+                line=int(line_number))
 
     def __update_membership(self, attrs):
         parent = attrs.get(XML_AN_CONTEXT)
@@ -501,6 +527,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             else:
                 calldef.does_throw = True
                 calldef.exceptions = throw_stmt.split()
+        if attrs.get(XML_AN_COMMENT):
+            calldef.comment = attrs.get(XML_AN_COMMENT)
 
     def __read_member_function(self, calldef, attrs, is_declaration):
         self.__read_calldef(calldef, attrs, is_declaration)
@@ -551,6 +579,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 XML_AN_INIT),
             bits=bits)
         self.__read_byte_offset(decl, attrs)
+        if attrs.get(XML_AN_COMMENT):
+            decl.comment = attrs.get(XML_AN_COMMENT)
         return decl
 
     __read_field = __read_variable  # just a synonym
@@ -568,6 +598,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             decl.is_abstract = bool(attrs.get(XML_AN_ABSTRACT, False))
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
+        if attrs.get(XML_AN_COMMENT):
+            decl.comment = attrs.get(XML_AN_COMMENT)
         return decl
 
     def __read_class(self, attrs):
@@ -583,6 +615,13 @@ class scanner_t(xml.sax.handler.ContentHandler):
         operator = self.__decl_factory.create_casting_operator()
         self.__read_member_function(operator, attrs, True)
         return operator
+
+    def __read_comment(self, attrs):
+        comment = self.__decl_factory.create_comment()
+        comment._start_line = int(attrs.get(XML_AN_BEGIN_LINE))
+        comment._end_line = int(attrs.get(XML_AN_END_LINE))
+        self.__read_location(comment, attrs, self.__name_attrs_to_skip)
+        return comment
 
     def __read_constructor(self, attrs):
         constructor = self.__decl_factory.create_constructor()
