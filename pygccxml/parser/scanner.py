@@ -20,6 +20,9 @@ XML_AN_ATTACHED = "attached"
 XML_AN_ATTRIBUTES = "attributes"
 XML_AN_BASE_TYPE = "basetype"
 XML_AN_BASES = "bases"
+XML_AN_BEGIN_COLUMN = "begin_column"
+XML_AN_BEGIN_LINE = "begin_line"
+XML_AN_BEGIN_OFFSET = "begin_offset"
 XML_AN_BITS = "bits"
 XML_AN_COMMENT = "comment"
 XML_AN_CONST = "const"
@@ -27,7 +30,9 @@ XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_CASTXML_FORMAT = "format"
 XML_AN_DEFAULT = "default"
+XML_AN_END_COLUMN = "end_column"
 XML_AN_END_LINE = "end_line"
+XML_AN_END_OFFSET = "end_offset"
 XML_AN_EXPLICIT = "explicit"
 XML_AN_EXTERN = "extern"
 XML_AN_FILE = "file"
@@ -36,7 +41,6 @@ XML_AN_INCOMPLETE = "incomplete"
 XML_AN_INIT = "init"
 XML_AN_INLINE = "inline"
 XML_AN_LINE = "line"
-XML_AN_BEGIN_LINE = "begin_line"
 XML_AN_MANGLED = "mangled"
 XML_AN_MAX = "max"
 XML_AN_MEMBERS = "members"
@@ -618,8 +622,12 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def __read_comment(self, attrs):
         comment = self.__decl_factory.create_comment()
-        comment._start_line = int(attrs.get(XML_AN_BEGIN_LINE))
-        comment._end_line = int(attrs.get(XML_AN_END_LINE))
+        comment.begin_line = int(attrs.get(XML_AN_BEGIN_LINE))
+        comment.end_line = int(attrs.get(XML_AN_END_LINE))
+        comment.begin_offset = int(attrs.get(XML_AN_BEGIN_OFFSET))
+        comment.end_offset = int(attrs.get(XML_AN_END_OFFSET))
+        comment.begin_column = int(attrs.get(XML_AN_BEGIN_COLUMN))
+        comment.end_column = int(attrs.get(XML_AN_END_COLUMN))
         self.__read_location(comment, attrs, self.__name_attrs_to_skip)
         return comment
 
