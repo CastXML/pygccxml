@@ -51,6 +51,11 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertIn("comment", dir(tconstructor))
         self.assertEqual(["/** doc comment */"], tconstructor.comment.text)
 
+        for indx, cmt in enumerate(['//! mutable field comment',"/// bit field comment"]):
+            tvariable = tclass.variables()[indx]
+            self.assertIn("comment", dir(tvariable))
+            self.assertEqual([cmt], tvariable.comment.text)
+
 def create_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
