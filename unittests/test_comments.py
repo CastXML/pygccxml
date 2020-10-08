@@ -44,12 +44,12 @@ class Test(parser_test_case.parser_test_case_t):
         tmethod = tclass.member_functions()[0]
 
         self.assertIn("comment", dir(tmethod))
-        self.assertEqual(["  /// cxx comment", "  /// with multiple lines"], tmethod.comment.text)
+        self.assertEqual(["/// cxx comment", "/// with multiple lines"], tmethod.comment.text)
 
         tconstructor = tclass.constructors()[0]
 
         self.assertIn("comment", dir(tconstructor))
-        self.assertEqual(["  /** doc comment */"], tconstructor.comment.text)
+        self.assertEqual(["/** doc comment */"], tconstructor.comment.text)
 
 def create_suite():
     suite = unittest.TestSuite()

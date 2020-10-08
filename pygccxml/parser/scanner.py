@@ -158,6 +158,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.__files = {}
         # mapping between decl id -> access
         self.__access = {}
+        # mapping between file decl_id -> text
+        self.__files_text = {}
         # current object under construction
         self.__inst = None
         # mapping from id to members
@@ -200,14 +202,26 @@ class scanner_t(xml.sax.handler.ContentHandler):
     def _handle_comment(self, declaration):
         comm_decl = self.__declarations.get(declaration.comment)
         if comm_decl:
-            with open(self.__files.get(comm_decl.location.file_name, "r")) as file:
-                line_list = file.readlines()
-                comment_text = []
-                for indx in range(comm_decl.start_line - 1,comm_decl.end_line):
-                    comm_line = line_list[indx]
-                    comm_line = comm_line.strip("\n")
-                    comment_text.append(comm_line)
-                comm_decl.text = comment_text
+            # First acquire file_name placeholder
+            file_decl = comm_decl.location.file_name
+            # If first encounter:
+            # Find real name and read it into memory
+            if file_decl not in self.__files_text:
+                src_name = self.__files.get(file_decl)
+                with open(src_name, "r") as file:
+                    line_list = file.readlines()
+                    self.__files_text[file_decl] = line_list
+            comment_text = []
+            # Capture file text for parsing
+            file_text = self.__files_text.get(file_decl)
+            # Use lines and columns to capture only comment text
+            for indx in range(comm_decl.begin_line - 1, comm_decl.end_line):
+                comm_line = file_text[indx]
+                comm_line = comm_line[comm_decl.begin_column - 1:comm_decl.end_column]
+                # Remove newlines from end of string
+                comm_line = comm_line.rstrip("\n")
+                comment_text.append(comm_line)
+            comm_decl.text = comment_text
         return comm_decl
 
     def endDocument(self):
