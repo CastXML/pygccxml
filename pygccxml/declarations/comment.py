@@ -102,7 +102,7 @@ class comment_t(declaration.declaration_t):
     @end_offset.setter
     def end_offset(self, end_offset):
         self._end_offset = int(end_offset)
- 
+
     @property
     def end_column(self):
         """An integer value which corresponds to the

@@ -217,7 +217,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # Use lines and columns to capture only comment text
             for indx in range(comm_decl.begin_line - 1, comm_decl.end_line):
                 comm_line = file_text[indx]
-                comm_line = comm_line[comm_decl.begin_column - 1:comm_decl.end_column]
+                comm_line = comm_line[
+                              comm_decl.begin_column - 1:comm_decl.end_column
+                ]
                 # Remove newlines from end of string
                 comm_line = comm_line.rstrip("\n")
                 comment_text.append(comm_line)
