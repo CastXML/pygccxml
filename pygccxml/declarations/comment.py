@@ -61,8 +61,9 @@ class comment_t(declaration.declaration_t):
 
     @property
     def begin_offset(self):
-        """An integer value which corresponds to the
-        line of the file where the comment begins
+        """An integer value representing the
+        number of bytes from the beginning of the
+        file to the start of the comment
         @type: int """
         return self._begin_offset
 
@@ -94,8 +95,9 @@ class comment_t(declaration.declaration_t):
 
     @property
     def end_offset(self):
-        """An integer value which corresponds to the
-        line of the file where the comment ends
+        """An integer value representing the
+        number of bytes from the beginning of the
+        file to the end of the comment
         @type: int """
         return self._end_offset
 
