@@ -37,9 +37,26 @@ class Test(parser_test_case.parser_test_case_t):
         if self.config.castxml_epic_version != 1:
             # Run this test only with castxml epic version == 1
             return
-        tclass = self.global_ns.class_("test")
+
+        tnamespace = self.global_ns.namespace("comment")
+
+        self.assertIn("comment", dir(tnamespace))
+        self.assertEqual(["//! Namespace Comment", "//! Across multiple lines"],
+                         tnamespace.comment.text)
+
+        tenumeration = tnamespace.enumeration("com_enum")
+        self.assertIn("comment", dir(tenumeration))
+        self.assertEqual(['/// Outside Class enum comment'],
+                         tenumeration.comment.text)
+
+        tclass = tnamespace.class_("test")
         self.assertIn("comment", dir(tclass))
         self.assertEqual(["/** class comment */"], tclass.comment.text)
+
+        tcls_enumeration = tclass.enumeration("test_enum")
+        self.assertIn("comment", dir(tcls_enumeration))
+        self.assertEqual(['/// inside class enum comment'],
+                         tcls_enumeration.comment.text)
 
         tmethod = tclass.member_functions()[0]
 

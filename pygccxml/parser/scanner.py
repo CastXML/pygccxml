@@ -416,7 +416,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # that is almost true: gcc mangale name using top file name.
             # almost all files has '.' in name
             ns_name = ''
-        return self.__decl_factory.create_namespace(name=ns_name)
+        decl = self.__decl_factory.create_namespace(name=ns_name)
+        if attrs.get(XML_AN_COMMENT):
+            decl.comment = attrs.get(XML_AN_COMMENT)
+        return decl
 
     def __read_enumeration(self, attrs):
         enum_name = attrs.get(XML_AN_NAME, '')
@@ -424,6 +427,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # it means that this is unnamed enum. in c++ enum{ x };
             enum_name = ''
         decl = self.__decl_factory.create_enumeration(name=enum_name)
+        if attrs.get(XML_AN_COMMENT):
+            decl.comment = attrs.get(XML_AN_COMMENT)
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
         self.__enums.append(decl)
