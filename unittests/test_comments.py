@@ -3,6 +3,8 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
+import re
+import subprocess
 import unittest
 
 from . import parser_test_case
@@ -28,6 +30,7 @@ class Test(parser_test_case.parser_test_case_t):
             Test.xml_generator_from_xml_file = \
                 self.config.xml_generator_from_xml_file
         self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
+
         self.global_ns = Test.global_ns
 
     def test(self):
@@ -37,11 +40,25 @@ class Test(parser_test_case.parser_test_case_t):
         if self.config.castxml_epic_version != 1:
             # Run this test only with castxml epic version == 1
             return
-
+        # Try to capture CastXML's patch version: 0.3.<###>
+        # If the version is <= 0.3.6, return as the functionality doesn't exist
+        # Else, continue on with the test.
+        rtn = subprocess.run(
+            [self.config.xml_generator_path, "--version"],
+            stdout=subprocess.PIPE
+        )
+        version_regex = re.compile(
+            b"castxml version 0.3.(?P<patch_ver>[0-9]+)"
+        )
+        reg_match = re.match(version_regex, rtn.stdout)
+        if reg_match:
+            if int(reg_match.group("patch_ver")) <= 6:
+                return
         tnamespace = self.global_ns.namespace("comment")
 
         self.assertIn("comment", dir(tnamespace))
-        self.assertEqual(["//! Namespace Comment", "//! Across multiple lines"],
+        self.assertEqual(["//! Namespace Comment",
+                          "//! Across multiple lines"],
                          tnamespace.comment.text)
 
         tenumeration = tnamespace.enumeration("com_enum")
