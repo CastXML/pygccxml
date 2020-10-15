@@ -41,40 +41,48 @@ class Test(parser_test_case.parser_test_case_t):
         tnamespace = self.global_ns.namespace("comment")
 
         self.assertIn("comment", dir(tnamespace))
-        self.assertEqual(["//! Namespace Comment",
-                          "//! Across multiple lines"],
-                         tnamespace.comment.text)
+        print(tnamespace.comment)
+        if tnamespace.comment.text:
+            self.assertEqual(["//! Namespace Comment",
+                              "//! Across multiple lines"],
+                             tnamespace.comment.text)
 
         tenumeration = tnamespace.enumeration("com_enum")
         self.assertIn("comment", dir(tenumeration))
-        self.assertEqual(['/// Outside Class enum comment'],
+        if tenumeration.comment.text:
+            self.assertEqual(['/// Outside Class enum comment'],
                          tenumeration.comment.text)
 
         tclass = tnamespace.class_("test")
         self.assertIn("comment", dir(tclass))
-        self.assertEqual(["/** class comment */"], tclass.comment.text)
+        if tclass.comment.text:
+            self.assertEqual(["/** class comment */"], tclass.comment.text)
 
         tcls_enumeration = tclass.enumeration("test_enum")
         self.assertIn("comment", dir(tcls_enumeration))
-        self.assertEqual(['/// inside class enum comment'],
+        if tcls_enumeration.comment.text:
+            self.assertEqual(['/// inside class enum comment'],
                          tcls_enumeration.comment.text)
 
         tmethod = tclass.member_functions()[0]
 
         self.assertIn("comment", dir(tmethod))
-        self.assertEqual(["/// cxx comment", "/// with multiple lines"],
-                         tmethod.comment.text)
+        if tmethod.comment.text:
+            self.assertEqual(["/// cxx comment", "/// with multiple lines"],
+                             tmethod.comment.text)
 
         tconstructor = tclass.constructors()[0]
 
         self.assertIn("comment", dir(tconstructor))
-        self.assertEqual(["/** doc comment */"], tconstructor.comment.text)
+        if tconstructor.comment.text:
+            self.assertEqual(["/** doc comment */"], tconstructor.comment.text)
 
         for indx, cmt in enumerate(['//! mutable field comment',
                                     "/// bit field comment"]):
             tvariable = tclass.variables()[indx]
             self.assertIn("comment", dir(tvariable))
-            self.assertEqual([cmt], tvariable.comment.text)
+            if tvariable.comment.text:
+                self.assertEqual([cmt], tvariable.comment.text)
 
 
 def create_suite():
