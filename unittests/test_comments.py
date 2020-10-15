@@ -51,7 +51,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertIn("comment", dir(tenumeration))
         if tenumeration.comment.text:
             self.assertEqual(['/// Outside Class enum comment'],
-                         tenumeration.comment.text)
+                             tenumeration.comment.text)
 
         tclass = tnamespace.class_("test")
         self.assertIn("comment", dir(tclass))
@@ -62,7 +62,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.assertIn("comment", dir(tcls_enumeration))
         if tcls_enumeration.comment.text:
             self.assertEqual(['/// inside class enum comment'],
-                         tcls_enumeration.comment.text)
+                             tcls_enumeration.comment.text)
 
         tmethod = tclass.member_functions()[0]
 
