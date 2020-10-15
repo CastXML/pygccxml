@@ -68,13 +68,15 @@ class Test(parser_test_case.parser_test_case_t):
         tmethod = tclass.member_functions()[0]
 
         self.assertIn("comment", dir(tmethod))
-        self._check_comment_content(["/// cxx comment", "/// with multiple lines"],
+        self._check_comment_content(["/// cxx comment",
+                                     "/// with multiple lines"],
                                     tmethod.comment)
 
         tconstructor = tclass.constructors()[0]
 
         self.assertIn("comment", dir(tconstructor))
-        self._check_comment_content(["/** doc comment */"], tconstructor.comment)
+        self._check_comment_content(["/** doc comment */"],
+                                    tconstructor.comment)
 
         for indx, cmt in enumerate(['//! mutable field comment',
                                     "/// bit field comment"]):
