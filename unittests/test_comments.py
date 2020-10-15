@@ -41,7 +41,6 @@ class Test(parser_test_case.parser_test_case_t):
         tnamespace = self.global_ns.namespace("comment")
 
         self.assertIn("comment", dir(tnamespace))
-        print(tnamespace.comment)
         if tnamespace.comment.text:
             self.assertEqual(["//! Namespace Comment",
                               "//! Across multiple lines"],

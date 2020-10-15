@@ -152,6 +152,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
         self.__calldefs = []
         # list of enums I need later
         self.__enums = []
+        # mapping of id -> comment decl
+        self.__comments = {}
         # mapping from id -> type
         self.__types = {}
         # mapping from id -> file
@@ -200,7 +202,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         xml.sax.parse(self.xml_file, self)
 
     def _handle_comment(self, declaration):
-        comm_decl = self.__declarations.get(declaration.comment)
+        comm_decl = self.__comments.get(declaration.comment)
         if comm_decl:
             # First acquire file_name placeholder
             file_decl = comm_decl.location.file_name
@@ -306,6 +308,11 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 self.__types[element_id] = obj
                 self.__read_byte_size(obj, attrs)
                 self.__read_byte_align(obj, attrs)
+
+            elif isinstance(obj, declarations.comment.comment_t):
+                self.__comments[element_id] = obj
+                self.__update_membership(attrs)
+                self.__read_attributes(obj, attrs)
 
             elif utils.is_str(obj):
 
