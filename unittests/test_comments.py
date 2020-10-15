@@ -20,6 +20,12 @@ class Test(parser_test_case.parser_test_case_t):
         self.global_ns = None
         self.config.castxml_epic_version = 1
 
+    def _check_comment_content(self, list, comment_decl):
+        if comment_decl.text:
+            self.assertEqual(list, comment_decl.text)
+        else:
+            print("No text in comment to check")
+
     def setUp(self):
 
         if not self.global_ns:
@@ -41,47 +47,40 @@ class Test(parser_test_case.parser_test_case_t):
         tnamespace = self.global_ns.namespace("comment")
 
         self.assertIn("comment", dir(tnamespace))
-        if tnamespace.comment.text:
-            self.assertEqual(["//! Namespace Comment",
-                              "//! Across multiple lines"],
-                             tnamespace.comment.text)
+        self._check_comment_content(["//! Namespace Comment",
+                                    "//! Across multiple lines"],
+                                    tnamespace.comment)
 
         tenumeration = tnamespace.enumeration("com_enum")
         self.assertIn("comment", dir(tenumeration))
-        if tenumeration.comment.text:
-            self.assertEqual(['/// Outside Class enum comment'],
-                             tenumeration.comment.text)
+        self._check_comment_content(['/// Outside Class enum comment'],
+                                    tenumeration.comment)
 
         tclass = tnamespace.class_("test")
         self.assertIn("comment", dir(tclass))
-        if tclass.comment.text:
-            self.assertEqual(["/** class comment */"], tclass.comment.text)
+        self._check_comment_content(["/** class comment */"], tclass.comment)
 
         tcls_enumeration = tclass.enumeration("test_enum")
         self.assertIn("comment", dir(tcls_enumeration))
-        if tcls_enumeration.comment.text:
-            self.assertEqual(['/// inside class enum comment'],
-                             tcls_enumeration.comment.text)
+        self._check_comment_content(['/// inside class enum comment'],
+                                    tcls_enumeration.comment)
 
         tmethod = tclass.member_functions()[0]
 
         self.assertIn("comment", dir(tmethod))
-        if tmethod.comment.text:
-            self.assertEqual(["/// cxx comment", "/// with multiple lines"],
-                             tmethod.comment.text)
+        self._check_comment_content(["/// cxx comment", "/// with multiple lines"],
+                                    tmethod.comment)
 
         tconstructor = tclass.constructors()[0]
 
         self.assertIn("comment", dir(tconstructor))
-        if tconstructor.comment.text:
-            self.assertEqual(["/** doc comment */"], tconstructor.comment.text)
+        self._check_comment_content(["/** doc comment */"], tconstructor.comment)
 
         for indx, cmt in enumerate(['//! mutable field comment',
                                     "/// bit field comment"]):
             tvariable = tclass.variables()[indx]
             self.assertIn("comment", dir(tvariable))
-            if tvariable.comment.text:
-                self.assertEqual([cmt], tvariable.comment.text)
+            self._check_comment_content([cmt], tvariable.comment)
 
 
 def create_suite():
