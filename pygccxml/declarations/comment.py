@@ -8,12 +8,10 @@ Describe a C++ comment declaration.
 
 """
 
-
-from . import declaration
 from . import location as pygccxml_location
 
 
-class comment_t(declaration.declaration_t):
+class comment_t():
 
     def __init__(self, name='', declarations=None):
         """
@@ -22,7 +20,6 @@ class comment_t(declaration.declaration_t):
         Args:
 
         """
-        declaration.declaration_t.__init__(self, name)
         self._location = {}
         self._begin_line = 0
         self._begin_column = 0

@@ -13,6 +13,7 @@ import warnings
 
 from . import declaration_utils
 from . import algorithms_cache
+from . import comment
 
 
 class declaration_t(object):
@@ -37,7 +38,7 @@ class declaration_t(object):
         self._cache = algorithms_cache.declaration_algs_cache_t()
         self._partial_name = None
         self._decorated_name = None
-        self._comment = None
+        self._comment = comment.comment_t()
 
     def __str__(self):
         """
