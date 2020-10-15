@@ -35,8 +35,6 @@ setup(name="pygccxml",
                 "pygccxml.declarations",
                 "pygccxml.parser",
                 "pygccxml.utils"],
-      install_requires=[
-          "castxml>=0.3.6"],
       extras_require={
           "test": list(requirements_test),
           "docs": list(requirements_docs),
