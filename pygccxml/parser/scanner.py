@@ -224,7 +224,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 comm_line = comm_line.rstrip("\n")
                 comment_text.append(comm_line)
             comm_decl.text = comment_text
-        return comm_decl
+            return comm_decl
+        else:
+            return declarations.comment.comment_t()
 
     def endDocument(self):
         # updating membership
@@ -236,7 +238,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
             members_mapping[id(decl)] = members
         self.__members = members_mapping
         for gccxml_id, decl in self.__declarations.items():
-            decl.comment = self._handle_comment(decl)
+            if not isinstance(decl.comment, declarations.comment.comment_t):
+                decl.comment = self._handle_comment(decl)
 
     def declarations(self):
         return self.__declarations
