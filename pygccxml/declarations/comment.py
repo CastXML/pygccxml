@@ -11,7 +11,7 @@ Describe a C++ comment declaration.
 from . import location as pygccxml_location
 
 
-class comment_t():
+class comment_t(object):
 
     def __init__(self, name='', declarations=None):
         """
