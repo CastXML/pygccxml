@@ -218,9 +218,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
             file_text = self.__files_text.get(file_decl)
             # Use lines and columns to capture only comment text
             for indx in range(comm_decl.begin_line - 1, comm_decl.end_line):
+                # Col data only useful on first and last lines
+                strt_idx = 0
+                end_idx = -1
+                if indx == comm_decl.begin_line - 1:
+                    strt_idx = comm_decl.begin_column - 1
+                if indx == comm_decl.end_line - 1:
+                    end_idx = comm_decl.end_column
                 comm_line = file_text[indx]
                 comm_line = comm_line[
-                              comm_decl.begin_column - 1:comm_decl.end_column
+                               strt_idx:end_idx
                 ]
                 # Remove newlines from end of string
                 comm_line = comm_line.rstrip("\n")
