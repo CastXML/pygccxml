@@ -434,7 +434,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # almost all files has '.' in name
             ns_name = ''
         decl = self.__decl_factory.create_namespace(name=ns_name)
-        if attrs.get(XML_AN_COMMENT):
+        if attrs.get(XML_AN_COMMENT) is not None:
             decl.comment = attrs.get(XML_AN_COMMENT)
         return decl
 
@@ -444,7 +444,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             # it means that this is unnamed enum. in c++ enum{ x };
             enum_name = ''
         decl = self.__decl_factory.create_enumeration(name=enum_name)
-        if attrs.get(XML_AN_COMMENT):
+        if attrs.get(XML_AN_COMMENT) is not None:
             decl.comment = attrs.get(XML_AN_COMMENT)
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
@@ -569,7 +569,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             else:
                 calldef.does_throw = True
                 calldef.exceptions = throw_stmt.split()
-        if attrs.get(XML_AN_COMMENT):
+        if attrs.get(XML_AN_COMMENT) is not None:
             calldef.comment = attrs.get(XML_AN_COMMENT)
 
     def __read_member_function(self, calldef, attrs, is_declaration):
@@ -621,7 +621,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 XML_AN_INIT),
             bits=bits)
         self.__read_byte_offset(decl, attrs)
-        if attrs.get(XML_AN_COMMENT):
+        if attrs.get(XML_AN_COMMENT) is not None:
             decl.comment = attrs.get(XML_AN_COMMENT)
         return decl
 
@@ -640,7 +640,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
             decl.is_abstract = bool(attrs.get(XML_AN_ABSTRACT, False))
         self.__read_byte_size(decl, attrs)
         self.__read_byte_align(decl, attrs)
-        if attrs.get(XML_AN_COMMENT):
+        if attrs.get(XML_AN_COMMENT) is not None:
             decl.comment = attrs.get(XML_AN_COMMENT)
         return decl
 
