@@ -71,7 +71,7 @@ class comment_t(object):
     @property
     def begin_column(self):
         """An integer value which corresponds to the
-        line of the file where the comment begins
+        column of the file where the comment begins
         @type: int """
         return self._begin_column
 
@@ -105,7 +105,7 @@ class comment_t(object):
     @property
     def end_column(self):
         """An integer value which corresponds to the
-        coloumn of character in a line of the file
+        column of character in a line of the file
         where the comment ends
         @type: int """
         return self._end_column
@@ -116,7 +116,7 @@ class comment_t(object):
 
     @property
     def text(self):
-        """An list of strings where each entry in the list
+        """A list of strings where each entry in the list
         is one line of the comment. These comments will not
         end in a newline
         @type: list """
