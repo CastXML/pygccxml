@@ -33,8 +33,22 @@ Documentation and examples
 --------------------------
 
 The documentation can be found `here <http://pygccxml.readthedocs.io>`_, examples can be found `here <http://pygccxml.readthedocs.io/en/master/examples.html>`_.
+You can also run an example JupyterLab Notebook using Binder, or view it using
+``nbviewer``:
+
+..
+    Developers: See `.binder/README.md` for more information.
+
+.. image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/EricCousineau-TRI/pygccxml/feature-py-notebook-example?urlpath=lab/tree/docs/examples/notebook/
+    :alt: Binder
+.. image:: https://img.shields.io/badge/view%20on-nbviewer-brightgreen.svg
+    :target: https://nbviewer.jupyter.org/github/EricCousineau-TRI/pygccxml/tree/feature-py-notebook-example/docs/examples/notebook/
+    :alt: nbviewer
 
 If you want to know more about the API provided by pygccxml, read the `query interface <http://pygccxml.readthedocs.io/en/develop/query_interface.html>`_ document or the `API documentation <http://pygccxml.readthedocs.io/en/develop/apidocs/modules.html>`_.
+
+
 
 A `FAQ <http://pygccxml.readthedocs.io/en/master/faq.html>`_ is also available and may answer some of your questions.
 

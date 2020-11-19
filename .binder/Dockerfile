@@ -1,6 +1,9 @@
 # -*- mode: dockerfile -*-
 # vi: set ft=dockerfile :
 
+# TODO(eric.cousineau): Figure out how to make JupyterLab work with this setup:
+# https://github.com/binder-examples/jupyterlab
+
 FROM ubuntu:18.04
 
 ARG NB_USER=jovyan

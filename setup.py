@@ -20,6 +20,7 @@ requirements_docs = {
 }
 requirements_examples = {
   "jupyterlab",
+  "jupyterlab_launcher",
 }
 
 setup(name="pygccxml",
