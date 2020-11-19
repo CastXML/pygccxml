@@ -40,7 +40,7 @@ You can also run an example JupyterLab Notebook using Binder, or view it using
     Developers: See `.binder/README.md` for more information.
 
 .. image:: https://mybinder.org/badge_logo.svg
-    :target: https://mybinder.org/v2/gh/EricCousineau-TRI/pygccxml/feature-py-notebook-example?urlpath=lab/tree/docs/examples/notebook/
+    :target: https://mybinder.org/v2/gh/EricCousineau-TRI/pygccxml/feature-py-notebook-example?urlpath=tree/pygccxml/docs/examples/notebook/
     :alt: Binder
 .. image:: https://img.shields.io/badge/view%20on-nbviewer-brightgreen.svg
     :target: https://nbviewer.jupyter.org/github/EricCousineau-TRI/pygccxml/tree/feature-py-notebook-example/docs/examples/notebook/
