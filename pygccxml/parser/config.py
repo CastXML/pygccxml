@@ -200,8 +200,12 @@ class parser_configuration_t(object):
         if os.path.isdir(dir_path):
             return
         if os.path.exists(self.working_directory):
-            raise RuntimeError(
-                '%s("%s") does not exist!' % (meaning, dir_path))
+            msg = '%s("%s") does not exist!' % (meaning, dir_path)
+            if meaning == 'include_directory':
+                # Warn instead of failing.
+                print(msg)
+            else:
+                raise RuntimeError(msg)
         else:
             raise RuntimeError(
                 '%s("%s") should be "directory", not a file.' %
