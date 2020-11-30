@@ -201,7 +201,7 @@ class parser_configuration_t(object):
             return
         if os.path.exists(self.working_directory):
             msg = '%s("%s") does not exist!' % (meaning, dir_path)
-            if meaning == 'include_directory':
+            if meaning == 'include directory':
                 # Warn instead of failing.
                 print(msg)
             else:
