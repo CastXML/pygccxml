@@ -91,11 +91,12 @@ jobs:
           export PATH=~/castxml/bin:$PATH
           coverage run -m unittests.test_all
           coverage combine
+          coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: .coverage
+          file: coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
