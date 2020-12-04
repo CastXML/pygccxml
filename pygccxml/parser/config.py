@@ -12,6 +12,7 @@ import os
 import copy
 import platform
 import subprocess
+import warnings
 # In py3, ConfigParser was renamed to the more-standard configparser.
 # But there's a py3 backport that installs "configparser" in py2, and I don't
 # want it because it has annoying deprecation warnings. So try the real py2
@@ -200,10 +201,10 @@ class parser_configuration_t(object):
         if os.path.isdir(dir_path):
             return
         if os.path.exists(self.working_directory):
-            msg = '%s("%s") does not exist!' % (meaning, dir_path)
+            msg = '%s("%s") does not exist.' % (meaning, dir_path)
             if meaning == 'include directory':
                 # Warn instead of failing.
-                print(msg)
+                warnings.warn(msg)
             else:
                 raise RuntimeError(msg)
         else:

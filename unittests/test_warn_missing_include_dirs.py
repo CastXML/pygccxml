@@ -3,11 +3,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-from contextlib import redirect_stdout
 import io
 import sys
 import os
 import unittest
+import warnings
 
 sys.path.insert(1, os.path.join(os.curdir, '..'))
 sys.path.insert(1, "../pygccxml")
@@ -36,12 +36,13 @@ class Test(unittest.TestCase):
             xml_generator_path=generator_path,
             xml_generator=name,
             include_paths=["doesnt/exist", os.getcwd()])
-        with redirect_stdout(f):
+        with warnings.catch_warnings(record=True) as f:
             parser.parse_string(code, config)
 
         self.assertIn(
-            "include directory(\"doesnt/exist\") does not exist!",
-            f.getvalue())
+            "include directory(\"doesnt/exist\") does not exist",
+            str(f[0].message))
+
 
 
 def create_suite():
