@@ -30,18 +30,12 @@ class Test(unittest.TestCase):
         # Find the location of the xml generator (castxml or gccxml)
         generator_path, name = utils.find_xml_generator()
 
-        f = io.StringIO()
         # Path given as include director doesn't exist
         config = parser.xml_generator_configuration_t(
             xml_generator_path=generator_path,
             xml_generator=name,
             include_paths=["doesnt/exist", os.getcwd()])
-        with warnings.catch_warnings(record=True) as f:
-            parser.parse_string(code, config)
-
-        self.assertIn(
-            "include directory(\"doesnt/exist\") does not exist",
-            str(f[0].message))
+        self.assertWarns(UserWarning, parser.parse_string, code, config)
 
 
 
