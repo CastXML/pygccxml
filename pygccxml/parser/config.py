@@ -204,7 +204,7 @@ class parser_configuration_t(object):
             msg = '%s("%s") does not exist.' % (meaning, dir_path)
             if meaning == 'include directory':
                 # Warn instead of failing.
-                warnings.warn(msg)
+                warnings.warn(msg, RuntimeWarning)
             else:
                 raise RuntimeError(msg)
         else:

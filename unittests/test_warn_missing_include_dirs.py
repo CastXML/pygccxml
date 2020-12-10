@@ -35,8 +35,7 @@ class Test(unittest.TestCase):
             xml_generator_path=generator_path,
             xml_generator=name,
             include_paths=["doesnt/exist", os.getcwd()])
-        self.assertWarns(UserWarning, parser.parse_string, code, config)
-
+        self.assertWarns(RuntimeWarning, parser.parse_string, code, config)
 
 
 def create_suite():
