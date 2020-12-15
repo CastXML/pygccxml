@@ -246,7 +246,7 @@ class calldef_t(declaration.declaration_t):
     @property
     def overrides(self):
         """If a function is marked as an overrides, contains
-        the declaration which this function overridess."""
+        the declaration which this function overrides."""
         return self._overrides
 
     @overrides.setter
