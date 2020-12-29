@@ -47,6 +47,7 @@ XML_AN_MEMBERS = "members"
 XML_AN_MUTABLE = "mutable"
 XML_AN_NAME = "name"
 XML_AN_OFFSET = "offset"
+XML_AN_OVERRIDES = "overrides"
 XML_AN_PURE_VIRTUAL = "pure_virtual"
 XML_AN_RESTRICT = "restrict"
 XML_AN_RETURNS = "returns"
@@ -247,6 +248,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
         for gccxml_id, decl in self.__declarations.items():
             if not isinstance(decl.comment, declarations.comment.comment_t):
                 decl.comment = self._handle_comment(decl)
+            if isinstance(decl, declarations.calldef_t) and decl.overrides:
+                overrides_decl = self.__declarations.get(decl.overrides)
+                decl.overrides = overrides_decl
 
     def declarations(self):
         return self.__declarations
@@ -581,6 +585,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 calldef.virtuality = declarations.VIRTUALITY_TYPES.VIRTUAL
             else:
                 calldef.virtuality = declarations.VIRTUALITY_TYPES.NOT_VIRTUAL
+            if XML_AN_OVERRIDES in attrs:
+                calldef.overrides = attrs.get(XML_AN_OVERRIDES)
         else:
             calldef.class_inst = attrs[XML_AN_BASE_TYPE]
 
