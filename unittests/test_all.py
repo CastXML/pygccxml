@@ -84,6 +84,7 @@ from . import test_find_noncopyable_vars
 from . import test_hash
 from . import test_null_comparison
 from . import test_comments
+from . import test_warn_missing_include_dirs
 from . import test_overrides
 
 testers = [
@@ -160,6 +161,7 @@ testers = [
     test_hash,
     test_null_comparison,
     test_comments,
+    test_warn_missing_include_dirs,
     test_overrides,
 ]
 
