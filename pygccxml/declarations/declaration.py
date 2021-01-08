@@ -39,6 +39,7 @@ class declaration_t(object):
         self._partial_name = None
         self._decorated_name = None
         self._comment = comment.comment_t()
+        self._deprecation = None
 
     def __str__(self):
         """
@@ -348,3 +349,11 @@ class declaration_t(object):
     @comment.setter
     def comment(self, comment):
         self._comment = comment
+
+    @property
+    def deprecation(self):
+        return self._deprecation
+
+    @deprecation.setter
+    def deprecation(self, deprecation):
+        self._deprecation = deprecation

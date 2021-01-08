@@ -30,6 +30,7 @@ XML_AN_CONTEXT = "context"
 XML_AN_CVS_REVISION = "cvs_revision"
 XML_AN_CASTXML_FORMAT = "format"
 XML_AN_DEFAULT = "default"
+XML_AN_DEPRECATION = "deprecation"
 XML_AN_END_COLUMN = "end_column"
 XML_AN_END_LINE = "end_line"
 XML_AN_END_OFFSET = "end_offset"
@@ -309,6 +310,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 if isinstance(obj, declarations.class_t):
                     self.__read_bases(obj, attrs)
                 self.__read_artificial(obj, attrs)
+                self.__read_deprecation(obj, attrs)
                 self.__read_mangled(obj, attrs)
                 self.__read_attributes(obj, attrs)
 
@@ -383,6 +385,12 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 mangled.endswith(self.__mangled_suffix):
             mangled = mangled[:self.__mangled_suffix_len]
         decl.mangled = mangled
+
+    def __read_deprecation(self, decl, attrs):
+        deprecation = attrs.get(XML_AN_DEPRECATION)
+        # the following patch is defined here for performance reasons
+        if isinstance(deprecation, str):
+            decl.deprecation = deprecation
 
     def __read_attributes(self, decl, attrs):
         attribute = attrs.get(XML_AN_ATTRIBUTES)
