@@ -32,7 +32,13 @@ Run `git tag vmajor.minor.minor`.
 
 Run `git push origin vmajor.minor.minor && git push origin master`
 
-Wait for the CI checks to run before uploading the release to pypi.
+Wait for the CI to be done and all green.
+
+Go to the releases page on github and use the "draft a new release" button
+to create a new release. Use the exisiting tag. You can copy-past the
+changelog's content there if you want to.
+
+Once you are done, you can upload the release to pypi.
 
 Uploading to pypi
 -----------------
