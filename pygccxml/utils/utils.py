@@ -162,8 +162,7 @@ def remove_file_no_raise(file_name, config):
             file_name, str(error))
 
 
-# pylint: disable=W0622
-def create_temp_file_name(suffix, prefix=None, dir=None, directory=None):
+def create_temp_file_name(suffix, prefix=None, directory=None):
     """
     Small convenience function that creates temporary files.
 
@@ -171,12 +170,6 @@ def create_temp_file_name(suffix, prefix=None, dir=None, directory=None):
     function tempfile.mkstemp.
 
     """
-    if dir is not None:
-        warnings.warn(
-            "The dir argument is deprecated.\n" +
-            "Please use the directory argument instead.", DeprecationWarning)
-        # Deprecated since 1.9.0, will be removed in 2.0.0
-        directory = dir
 
     if not prefix:
         prefix = tempfile.gettempprefix()

@@ -9,6 +9,8 @@ Version 2.0.1
 
 1. Minor description and doc updates for release uploads
 
+2. `create_temp_file_name`: remove deprecated `dir` argument
+
 Version 2.0.0
 -------------
 
