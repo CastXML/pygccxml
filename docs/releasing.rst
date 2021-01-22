@@ -22,13 +22,15 @@ Merging and releasing
 
 Merge develop into master:
 
+Run `git checkout master`.
+
 Run `git merge develop master`.
 
 Tag the version (do not forget the v):
 
 Run `git tag vmajor.minor.minor`.
 
-Run `git push origin v2.0.0 && git push origin master`
+Run `git push origin vmajor.minor.minor && git push origin master`
 
 Wait for the CI checks to run before uploading the release to pypi.
 
