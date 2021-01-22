@@ -1,15 +1,24 @@
 Changes
 =======
 
-Version 2.1.0 (unreleased)
+Version 2.2.0 (unreleased)
 --------------------------
+
+Version 2.1.0
+-------------
+
+1. `create_temp_file_name`: remove deprecated `dir` argument
+
+2. Warn if "include directories" do not exist.
+
+3. Use "overrides" information from CastXML
+
+4. Add comment parsing from CastXML
 
 Version 2.0.1
 -------------
 
 1. Minor description and doc updates for release uploads
-
-2. `create_temp_file_name`: remove deprecated `dir` argument
 
 Version 2.0.0
 -------------
