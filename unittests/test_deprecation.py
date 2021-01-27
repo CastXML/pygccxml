@@ -1,5 +1,4 @@
-# Copyright 2014-2020 Insight Software Consortium.
-# Copyright 2004-2009 Roman Yakovenko.
+# Copyright 2021 Insight Software Consortium.
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
@@ -20,14 +19,13 @@ class Test(parser_test_case.parser_test_case_t):
         self.global_ns = None
         self.config.castxml_epic_version = 1
 
-    def _check_text_content(self, list, comment_decl):
-        if comment_decl:
-            self.assertEqual(list, comment_decl)
+    def _check_text_content(self, desired_text, deprecation_string):
+        if deprecation_string:
+            self.assertEqual(desired_text, deprecation_string)
         else:
-            print("No text in comment to check")
+            print("No text in deprecation attribute to check")
 
     def setUp(self):
-
         if not self.global_ns:
             decls = parser.parse([self.header], self.config)
             Test.global_ns = declarations.get_global_namespace(decls)
