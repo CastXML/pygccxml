@@ -9,19 +9,20 @@ https://github.com/RobotLocomotion/drake/tree/dc2a9394d/.binder
 of the repository and named either `binder` or `.binder`. This image is NOT
 intended for use by most developers or users.*
 
+These instructions are for running the image locally. For Binder itself, you
+should only need to visit the link from the root-level README.
+
 To create a Docker image and run a Docker container similar to those used by
 [Binder](https://mybinder.org) for local debugging purposes, execute the
-following `pull`, `build`, and `run` commands from the top level of this Git
-repository:
+following `build` and `run` commands from the top level of this Git repository:
 
 ```bash
-cd pygccxml
 docker build -f .binder/Dockerfile -t binder .
 docker run --rm -it --name mybinder -p 8888:8888 binder
 ```
 
-Copy and paste the URL (including the login token) that is displayed in the
-terminal into the web browser of your choice.
+For the URLs printed, only open the `127.0.0.1:8888` URL (including the login
+token) in a web browser on your host system.
 
 To stop the running container, simply exit it from the terminal with Ctrl+C.
 
