@@ -9,15 +9,18 @@ from release_utils import utils
 
 version = utils.find_version("../pygccxml/__init__.py")
 
-requirements_test = {
+requirements_test = [
   "coverage",
   "coveralls",
   "pycodestyle",
-}
-requirements_docs = {
+]
+requirements_docs = [
   "sphinx",
   "sphinx_rtd_theme",
-}
+]
+requirements_examples = [
+  "notebook",
+]
 
 setup(name="pygccxml",
       version=version,
@@ -36,8 +39,9 @@ setup(name="pygccxml",
                 "pygccxml.parser",
                 "pygccxml.utils"],
       extras_require={
-          "test": list(requirements_test),
-          "docs": list(requirements_docs),
+          "test": requirements_test,
+          "docs": requirements_docs,
+          "examples": requirements_examples,
       },
       classifiers=[
           "Development Status :: 5 - Production/Stable",
