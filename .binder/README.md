@@ -28,5 +28,6 @@ To stop the running container, simply exit it from the terminal with Ctrl+C.
 
 *Note*: If you want to test the Docker image with the current source tree
 (without copying, so you can modify source files), insert the arguments
-`-v "${PWD}:/home/jovyan/pygccxml"` before the image name (`binder`) to mount it
-directly. This will *not* act on any changes to `./setup.py`.
+`-v "${PWD}:/home/jovyan/pygccxml"` to `docker run`, before the image name
+(`binder`), to mount it directly. This will *not* act on any changes to
+`./setup.py`.
