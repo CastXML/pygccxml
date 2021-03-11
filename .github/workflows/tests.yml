@@ -3,7 +3,9 @@ jobs:
   tests:
     name: ${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
     runs-on: ${{ matrix.os }}
-
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
@@ -64,34 +66,74 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
+          - os: windows-latest
+            compiler: msvc
+            version: "default"
+            python-version: 3.8
+            castxml: "castxml"
+            castxml-epic: 1
+            cppstd: "-std=c++14"
+
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+
       - name: Setup castxml for Linux
         if: matrix.os == 'ubuntu-18.04' && matrix.castxml == 'castxml'
         run: |
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/bdbb67a10c5f8d1b738cd19cb074f409d4803e8077cb8c1072ef4eaf738fa871a73643f9c8282d58cae28d188df842c82ad6620b6d590b0396a0172a27438dce/download | tar zxf - -C ~/
+
       - name: Setup castxml for Mac
         if: matrix.os == 'macos-latest'
         run: |
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/5d937e938f7b882a3a3e7941e68f8312d0898aaf2082e00003dd362b1ba70b98b0a08706a1be28e71652a6a0f1e66f89768b5eaa20e5a100592d5b3deefec3f0/download | tar zxf - -C ~/
-      - name: Setup castxml config
+
+      - name: Setup castxml for Windows
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          curl https://data.kitware.com/api/v1/file/hashsum/sha512/bdd1e2c3b203019f758681067bb4dd68cb37abc930fee6b4b5d181bd805236352f888d061f32c7f93bde2eac2caa1265b93bbccff6656f98989dafd08f55847b/download --output castxml.zip
+          powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::ExtractToDirectory('castxml.zip', 'C:\'); }"
+
+      - name: Setup castxml config for gcc
         if: matrix.compiler == 'gcc' && matrix.version == '7'
         run: mv unittests/configs/gcc7.cfg unittests/xml_generator.cfg;
+
+      - name: Setup castxml config for msvc
+        if: matrix.compiler == 'msvc'
+        shell: cmd
+        run: |
+          move unittests\configs\msvc.cfg unittests\xml_generator.cfg;
+
       - name: Install Python lib and test libs
         run: |
           pip install .[test]
-      - name: Run tests
+
+      - name: Run tests for Windows
+        shell: cmd
+        if: matrix.os == 'windows-latest'
+        run: |
+          SET path=C:\castxml\bin;%path% || echo Failed to add castxml to path && exit \b
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat" || echo Failed to call vcvars64 && exit \b
+          coverage run -m unittests.test_all || echo Test failure && exit \b
+          coverage combine || echo coverage combine failed && exit \b
+          coverage xml || echo Failed to generate xml coverage file && exit \b
+
+      - name: Run tests for Mac and Linux
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-18.04'
         run: |
           export PATH=~/castxml/bin:$PATH
           coverage run -m unittests.test_all
           coverage combine
           coverage xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
