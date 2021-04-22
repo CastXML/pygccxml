@@ -66,7 +66,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: windows-latest
+          - os: windows-2016
             compiler: msvc
             version: "default"
             python-version: 3.8
@@ -96,7 +96,7 @@ jobs:
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/5d937e938f7b882a3a3e7941e68f8312d0898aaf2082e00003dd362b1ba70b98b0a08706a1be28e71652a6a0f1e66f89768b5eaa20e5a100592d5b3deefec3f0/download | tar zxf - -C ~/
 
       - name: Setup castxml for Windows
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2016'
         shell: cmd
         run: |
           curl https://data.kitware.com/api/v1/file/hashsum/sha512/bdd1e2c3b203019f758681067bb4dd68cb37abc930fee6b4b5d181bd805236352f888d061f32c7f93bde2eac2caa1265b93bbccff6656f98989dafd08f55847b/download --output castxml.zip
@@ -118,10 +118,10 @@ jobs:
 
       - name: Run tests for Windows
         shell: cmd
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-2016'
         run: |
           SET path=C:\castxml\bin;%path% || echo Failed to add castxml to path && exit \b
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat" || echo Failed to call vcvars64 && exit \b
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat" || echo Failed to call vcvars64 && exit \b
           coverage run -m unittests.test_all || echo Test failure && exit \b
           coverage combine || echo coverage combine failed && exit \b
           coverage xml || echo Failed to generate xml coverage file && exit \b
