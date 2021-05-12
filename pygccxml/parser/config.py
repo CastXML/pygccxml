@@ -49,6 +49,7 @@ class parser_configuration_t(object):
             define_symbols=None,
             undefine_symbols=None,
             cflags="",
+            ccflags="",
             compiler=None,
             xml_generator=None,
             keep_xml=False,
@@ -72,6 +73,8 @@ class parser_configuration_t(object):
         self.__undefine_symbols = undefine_symbols
 
         self.__cflags = cflags
+
+        self.__ccflags = ccflags
 
         self.__compiler = compiler
 
@@ -197,6 +200,26 @@ class parser_configuration_t(object):
     def append_cflags(self, val):
         self.__cflags = self.__cflags + ' ' + val
 
+    @property
+    def ccflags(self):
+        """
+        additional cross-compatible flags to pass directly
+        to internal simulated compiler.
+        Castxml removes any definitions of its
+        pre-defined macros (e.g. -fopenmp). To propagate these down to the
+        compiler, these flags must also be passed here.
+        See `cc-opt` on castxml's documentation page:
+        https://github.com/CastXML/CastXML/blob/master/doc/manual/castxml.1.rst
+        """
+        return self.__ccflags
+
+    @ccflags.setter
+    def ccflags(self, val):
+        self.__ccflags = val
+
+    def append_ccflags(self, val):
+        self.__ccflags = self.__ccflags + ' ' + val
+
     def __ensure_dir_exists(self, dir_path, meaning):
         if os.path.isdir(dir_path):
             return
@@ -245,6 +268,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             start_with_declarations=None,
             ignore_gccxml_output=False,
             cflags="",
+            ccflags="",
             compiler=None,
             xml_generator=None,
             keep_xml=False,
@@ -258,7 +282,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             include_paths=include_paths,
             define_symbols=define_symbols,
             undefine_symbols=undefine_symbols,
-            cflags=cflags,
+            ccflags=ccflags,
             compiler=compiler,
             xml_generator=xml_generator,
             keep_xml=keep_xml,
@@ -398,6 +422,8 @@ def load_xml_generator_configuration(configuration, **defaults):
             cfg.keep_xml = value
         elif name == 'cflags':
             cfg.cflags = value
+        elif name == 'ccflags':
+            cfg.ccflags = value
         elif name == 'flags':
             cfg.flags = value
         elif name == 'compiler_path':
