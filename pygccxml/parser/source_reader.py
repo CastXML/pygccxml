@@ -137,7 +137,6 @@ class source_reader_t(object):
                 if self.__config.compiler == 'msvc9':
                     cmd.append('"-D_HAS_TR1=0"')
         else:
-
             # On mac or linux, use gcc or clang (the flag is the same)
             cmd.append('--castxml-cc-gnu ')
 
@@ -146,9 +145,14 @@ class source_reader_t(object):
             else:
                 std_flag = ' ' + self.__cxx_std.stdcxx + ' '
 
+            ccflags = self.__config.ccflags
             if std_flag:
+                ccflags += std_flag
+
+            if ccflags:
+                all_cc_opts = self.__config.compiler_path + ' ' + ccflags
                 cmd.append(
-                    '"(" ' + self.__config.compiler_path + std_flag + '")"')
+                    '"(" ' + all_cc_opts + ' ")"')
             else:
                 cmd.append(self.__config.compiler_path)
 

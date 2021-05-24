@@ -87,6 +87,7 @@ from . import test_comments
 from . import test_deprecation
 from . import test_warn_missing_include_dirs
 from . import test_overrides
+from . import test_ccflags
 
 testers = [
     pep8_tester,
@@ -170,6 +171,9 @@ testers = [
 if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(example_tester)
+
+    # Awaiting Windows CI machine
+    testers.append(test_ccflags)
 
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
