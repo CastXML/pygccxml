@@ -1,8 +1,18 @@
 Changes
 =======
 
-Version 2.2.0 (unreleased)
---------------------------
+Version 2.2.0
+-------------
+
+1. Add `ccflags` config parameter. Castxml removes any definitions of its
+   pre-defined macros (e.g. -fopenmp). The `ccflags` option allows users to
+   override this behavior.
+
+2. Add an example jupyter notebook for binder
+
+3. Add declaration object for deprecation message
+
+4. Update release documentation
 
 Version 2.1.0
 -------------
