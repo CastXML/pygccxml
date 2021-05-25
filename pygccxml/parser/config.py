@@ -282,6 +282,7 @@ class xml_generator_configuration_t(parser_configuration_t):
             include_paths=include_paths,
             define_symbols=define_symbols,
             undefine_symbols=undefine_symbols,
+            cflags=cflags,
             ccflags=ccflags,
             compiler=compiler,
             xml_generator=xml_generator,
