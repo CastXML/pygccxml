@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 2.2.1
+-------------
+
+1. Fix issue introduced by 2.2.0 where cflags are not passed
+   to config objects properly.
+
 Version 2.2.0
 -------------
 
