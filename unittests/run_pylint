@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# Get current directory
-DIRECTORY=$( cd "$( dirname "$0" )" && pwd )
-# Get parent directory
-DIR=${DIRECTORY%/*}
-
-pylint --rcfile=$DIRECTORY"/pylint.cfg" $DIR/pygccxml/
