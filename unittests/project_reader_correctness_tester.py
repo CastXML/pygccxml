@@ -47,9 +47,9 @@ class Test(parser_test_case.parser_test_case_t):
                         os.path.join(bdir, file_name + '.pr.txt'), 'w+') as pr:
 
                     declarations.print_declarations(
-                        s, writer=lambda l: sr.write(l + os.linesep))
+                        s, writer=lambda x: sr.write(l + os.linesep))
                     declarations.print_declarations(
-                        p, writer=lambda l: pr.write(l + os.linesep))
+                        p, writer=lambda x: pr.write(l + os.linesep))
 
             self.fail(
                 "There is a difference between declarations in file %s." %
