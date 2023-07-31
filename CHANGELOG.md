@@ -1,6 +1,11 @@
 Changes
 =======
 
+Next version
+------------
+
+1. Drop support for ```Python 3.5```
+
 Version 2.2.1
 -------------
 

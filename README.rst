@@ -27,7 +27,7 @@ Install instructions can be found `here <http://pygccxml.readthedocs.io/en/maste
 Compatibility
 -------------
 
-pygccxml is compatible with Python 3.5, 3.6, 3.7, 3.8 and pypy3.
+pygccxml is compatible with Python 3.6, 3.7, 3.8 and pypy3.
 
 Documentation and examples
 --------------------------

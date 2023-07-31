@@ -116,7 +116,7 @@ class source_reader_t(object):
 
         # Always require a compiler path at this point
         if self.__config.compiler_path is None:
-            raise(RuntimeError(
+            raise (RuntimeError(
                 "Please pass the compiler_path as argument to " +
                 "your xml_generator_configuration_t(), or add it to your " +
                 "pygccxml configuration file."))
