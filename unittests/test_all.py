@@ -60,7 +60,6 @@ from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
 from . import test_create_decl_string
-from . import pep8_tester
 from . import example_tester
 from . import test_utils
 from . import test_va_list_tag_removal
@@ -90,7 +89,6 @@ from . import test_overrides
 from . import test_ccflags
 
 testers = [
-    pep8_tester,
     decl_string_tester,
     declaration_files_tester,
     declarations_comparison_tester,

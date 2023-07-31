@@ -64,6 +64,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+      - name: Install pycodestyle
+        run: pip install pycodestyle
+      - name: Run pycodestyle
+        run: pycodestyle . --exclude=docs
       - name: Setup castxml for Linux
         if: matrix.os == 'ubuntu-20.04' && matrix.castxml == 'castxml'
         run: |
