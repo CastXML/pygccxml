@@ -1,10 +1,18 @@
 Changes
 =======
 
-Next version
-------------
+Version 2.3.0
+-------------
 
 1. Drop support for ```Python 3.5```
+
+2. Make type equivalence check for string and ostream more robust (`is_std_string`, `is_std_wstring`, `is_std_ostream`, `is_std_wostream`)
+
+3. Skip GCC's __va_list fields on AArch644
+
+4. Add search_path arg to `find_xml_generator
+
+5. Publish pygccxml as source distribution too
 
 Version 2.2.1
 -------------

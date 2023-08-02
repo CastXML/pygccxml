@@ -49,9 +49,13 @@ Cleanup your dist:
 
 ``rm -rf dist``
 
-The wheels are built with:
+Make sur your build tools are up to date
 
-``python3 setup.py bdist_wheel --universal``
+`python3 -m pip install --upgrade build`
+
+The wheels and the source distribution are built with:
+
+``python3 -m build``
 
 They are uploaded with:
 
