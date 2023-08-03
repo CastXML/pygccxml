@@ -66,8 +66,12 @@ class tester_prj_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_src_t))
-    suite.addTest(unittest.makeSuite(tester_prj_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=tester_src_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=tester_prj_t))
     return suite
 
 

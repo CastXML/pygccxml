@@ -95,7 +95,8 @@ class _base_mockup(declarations.type_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
     return suite
 
 

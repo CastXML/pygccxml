@@ -94,9 +94,15 @@ class project_reader_3_tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(source_reader_tester_t))
-    suite.addTest(unittest.makeSuite(project_reader_1_tester_t))
-    suite.addTest(unittest.makeSuite(project_reader_3_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=source_reader_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=project_reader_1_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=project_reader_3_tester_t))
     return suite
 
 

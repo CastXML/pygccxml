@@ -453,9 +453,15 @@ class class_traits_tester_t(unittest.TestCase):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(class_traits_tester_t))
-    suite.addTest(unittest.makeSuite(Test))
-    suite.addTest(unittest.makeSuite(missing_decls_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=class_traits_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=Test))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=missing_decls_tester_t))
     return suite
 
 

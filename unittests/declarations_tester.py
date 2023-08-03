@@ -324,8 +324,12 @@ class pdb_based_tester_t(declarations_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(file_by_file_tester_t))
-    suite.addTest(unittest.makeSuite(all_at_once_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=file_by_file_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=all_at_once_tester_t))
     # if os.name == 'nt' and autoconfig.get_pdb_global_ns():
     # suite.addTest( unittest.makeSuite(pdb_based_tester_t))
 

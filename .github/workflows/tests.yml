@@ -11,7 +11,7 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: 3.6
+            python-version: "3.6"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
@@ -19,7 +19,7 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: 3.7
+            python-version: "3.7"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
@@ -27,7 +27,7 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: 3.8
+            python-version: "3.8"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
@@ -35,7 +35,31 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: 3.8
+            python-version: "3.9"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04
+            compiler: gcc
+            version: "9"
+            python-version: "3.10"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04
+            compiler: gcc
+            version: "9"
+            python-version: "3.11"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04
+            compiler: gcc
+            version: "9"
+            python-version: "3.8"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++98"
@@ -43,7 +67,7 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: 3.8
+            python-version: "3.8"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++11"
@@ -51,7 +75,7 @@ jobs:
           - os: macos-latest
             compiler: xcode
             version: "default"
-            python-version: 3.8
+            python-version: "3.8"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"

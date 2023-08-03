@@ -57,7 +57,8 @@ class DeprecatedClass(object):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
     return suite
 
 

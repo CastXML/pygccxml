@@ -10,7 +10,7 @@ from . import parser_test_case
 from pygccxml import declarations
 
 
-class tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(
@@ -90,7 +90,8 @@ class tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
     return suite
 
 

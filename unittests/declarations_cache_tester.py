@@ -14,7 +14,7 @@ from pygccxml.parser.config import xml_generator_configuration_t
 from pygccxml.parser import declarations_cache
 
 
-class decl_cache_tester(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
@@ -162,7 +162,8 @@ class decl_cache_tester(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(decl_cache_tester))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
     return suite
 
 
