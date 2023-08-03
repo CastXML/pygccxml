@@ -67,7 +67,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_join_on_vector(self):
         self.assertTrue(
-            "vector< int, std::allocator<int> >" ==
+            "vector<int, std::allocator<int>>" ==
             declarations.templates.join(
                 "vector", ("int", "std::allocator<int>")))
 
