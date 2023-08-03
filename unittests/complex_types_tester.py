@@ -34,7 +34,8 @@ class Test(parser_test_case.parser_test_case_t):
 def create_suite():
     suite = unittest.TestSuite()
     if os.name != 'nt':
-        suite.addTest(unittest.makeSuite(Test))
+        suite.addTest(
+            unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
     return suite
 
 

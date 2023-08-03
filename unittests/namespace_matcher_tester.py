@@ -55,8 +55,12 @@ class unnamed_ns_tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
-    suite.addTest(unittest.makeSuite(unnamed_ns_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=Test))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(
+            testCaseClass=unnamed_ns_tester_t))
     return suite
 
 

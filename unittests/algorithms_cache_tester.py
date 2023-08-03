@@ -11,7 +11,7 @@ from pygccxml import parser
 from pygccxml import declarations
 
 
-class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
+class Test(parser_test_case.parser_test_case_t):
     # tester source reader
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
 
@@ -63,7 +63,8 @@ class algorithms_cache_tester_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(algorithms_cache_tester_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
 
     return suite
 

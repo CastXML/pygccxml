@@ -1,10 +1,15 @@
 Changes
 =======
 
+Version 2.4.0
+-------------
+
+1. Add official support for `Python 3.9`, `Python 3.10`, `Python 3.11`
+
 Version 2.3.0
 -------------
 
-1. Drop support for ```Python 3.5```
+1. Drop support for `Python 3.5`
 
 2. Make type equivalence check for string and ostream more robust (`is_std_string`, `is_std_wstring`, `is_std_ostream`, `is_std_wostream`)
 

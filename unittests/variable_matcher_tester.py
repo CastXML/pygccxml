@@ -73,8 +73,10 @@ class tester_2_t(parser_test_case.parser_test_case_t):
 
 def create_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(tester_1_t))
-    suite.addTest(unittest.makeSuite(tester_2_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=tester_1_t))
+    suite.addTest(
+        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=tester_2_t))
     return suite
 
 
