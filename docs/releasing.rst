@@ -6,12 +6,10 @@ Preparation
 
 Run `git checkout develop`.
 
-To build a new release, modify the version number in:
-
-``pygccxml/__init__.py``
+To build a new release, modify the version number in `pyproject.toml`.
 
 This version number will then automatically be used to build
-the documentation and by the setup.py script when building the wheels.
+the documentation and by the build script when building the wheels.
 
 Run `git add . && git commit -m "Bump version major.minor.minor"`.
 

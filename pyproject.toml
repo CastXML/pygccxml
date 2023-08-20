@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "pygccxml"
+description = "Python package for easy C++ declarations navigation."
+authors = [
+    {name = "Michka Popoff", email = "michkapopoff@gmail.com"},
+    {name = "Insight Software Consortium", email = "castxml@public.kitware.com"},
+    {name = "Roman Yakovenko", email = "romanyakovenko@gmail.com"},
+]
+license = {file = "LICENSE.rst"}
+keywords = [
+  "C++",
+  "XML",
+  "declaration parser",
+  "CastXML",
+  "gccxml",
+]
+version = "2.3.0"
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development",
+]
+
+dependencies = [
+  'importlib-metadata >= 4.6; python_version < "3.10"', # Not required for 3.8+, but fixes a stdlib bug
+]
+
+[project.urls]
+Homepage = "https://github.com/CastXML/pygccxml"
+Documentation = "https://readthedocs.org/projects/pygccxml/"
+Repository = "https://github.com/CastXML/pygccxml"
+Changelog = "https://github.com/CastXML/pygccxml/CHANGELOG.md"
+
+[options]
+python_requires = ">=3.7"
+
+[project.optional-dependencies]
+test = [
+  "coverage",
+  "coveralls",
+  "pycodestyle",
+]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+]
+examples = [
+  "notebook",
+]

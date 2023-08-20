@@ -21,7 +21,7 @@ build_directory = os.path.join(this_module_dir_path, 'temp')
 sys.path.insert(1, os.path.join(os.curdir, '..'))
 # The tests are run on the parent pygccxml directory, not the one
 # in site-packages. Insert the directory's path.
-sys.path.insert(1, "../pygccxml")
+sys.path.insert(1, "../src/pygccxml")
 
 from pygccxml import parser  # nopep8
 from pygccxml import utils  # nopep8
