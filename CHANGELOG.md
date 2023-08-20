@@ -4,7 +4,9 @@ Changes
 Version 2.4.0
 -------------
 
-1. Add official support for `Python 3.9`, `Python 3.10`, `Python 3.11`
+1. Drop support for `Python 3.6`
+
+2. Add official support for `Python 3.9`, `Python 3.10`, `Python 3.11`
 
 Version 2.3.0
 -------------
