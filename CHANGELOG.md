@@ -8,6 +8,8 @@ Version 2.4.0
 
 2. Add official support for `Python 3.9`, `Python 3.10`, `Python 3.11`
 
+3. Replace `setup.py` by `pyproject.toml`
+
 Version 2.3.0
 -------------
 
