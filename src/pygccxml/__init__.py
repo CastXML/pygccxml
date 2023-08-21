@@ -3,11 +3,11 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-"""Python CastXML or GCC-XML front end.
+"""Python CastXML front end.
 
 This package provides functionality to extract and inspect
 declarations from C/C++ header files. This is accomplished
-by invoking an external tool like CastXML or GCC-XML,
+by invoking an external tool like CastXML,
 which parses a header file and dumps the declarations as a
 XML file. This XML file is then read by pygccxml and the contents
 are made available as appropriate Python objects.
@@ -38,9 +38,6 @@ from . import utils
 # pygccxml is a tool for developers, and these need
 # to know what is deprecated.
 warnings.simplefilter("always", DeprecationWarning)
-
-# TODO:
-# 1. Add "explicit" property for constructors
 
 version = sys.version_info
 
