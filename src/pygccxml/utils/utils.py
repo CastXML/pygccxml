@@ -26,6 +26,11 @@ def is_str(string):
         bool: True or False
 
     """
+    warnings.warn(
+        "The is_str function is deprecated. \
+        Use isinstance(string, str) instead.",
+        DeprecationWarning)
+
     if sys.version_info[:2] >= (3, 0):
         return isinstance(string, str)
 
