@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 2.5.0
+-------------
+
+1. Add support for new cxx versions in cxx_standard class
+
+
 Version 2.4.0
 -------------
 
