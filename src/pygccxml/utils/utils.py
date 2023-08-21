@@ -50,33 +50,10 @@ def find_xml_generator(name="castxml", search_path=None):
 
     """
 
-    if sys.version_info[:2] >= (3, 3):
-        path = _find_xml_generator_for_python_greater_equals_33(
-            name, search_path=search_path)
-    else:
-        path = _find_xml_generator_for_legacy_python(name)
-
+    path = shutil.which(name, path=search_path)
     if path == "" or path is None:
         raise Exception("No c++ parser found. Please install castxml.")
     return path.rstrip(), name
-
-
-def _find_xml_generator_for_python_greater_equals_33(name, search_path=None):
-    return shutil.which(name, path=search_path)
-
-
-def _find_xml_generator_for_legacy_python(name):
-    if platform.system() == "Windows":
-        command = "where"
-    else:
-        command = "which"
-    p = subprocess.Popen([command, name], stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
-    path = p.stdout.read().decode("utf-8")
-    p.wait()
-    p.stdout.close()
-    p.stderr.close()
-    return path.rstrip()
 
 
 def _create_logger_(name):
