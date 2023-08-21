@@ -26,7 +26,7 @@ To install from source, you can use the usual procedure:
 
 .. code-block:: shell
 
-  python setup.py install
+  pip install .
 
 For development
 %%%%%%%%%%%%%%%
