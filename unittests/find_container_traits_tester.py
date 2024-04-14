@@ -9,7 +9,6 @@ from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
-from pygccxml import utils
 
 
 class Test(parser_test_case.parser_test_case_t):
@@ -30,7 +29,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.global_ns = Test.global_ns
 
     def __cmp_traits(self, typedef, expected, partial_name, key_type=None):
-        if utils.is_str(typedef):
+        if isinstance(typedef, str):
             typedef = self.global_ns.typedef(typedef)
         traits = declarations.find_container_traits(typedef)
         self.assertTrue(
