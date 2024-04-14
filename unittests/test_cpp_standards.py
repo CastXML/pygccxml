@@ -19,10 +19,6 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        # Skip this test for gccxml, this is a CastXML feature.
-        if "gccxml" in self.config.xml_generator:
-            return True
-
         parser.parse(["cpp_standards.hpp"], self.config)
 
         if platform.system() != 'Windows':
