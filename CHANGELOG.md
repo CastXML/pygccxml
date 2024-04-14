@@ -6,6 +6,10 @@ Version 2.5.0
 
 1. Add support for new cxx versions in cxx_standard class
 
+2. Deprecate utils.is_str
+
+3. pyproject.toml improvements
+
 
 Version 2.4.0
 -------------
