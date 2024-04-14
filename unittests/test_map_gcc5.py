@@ -28,9 +28,6 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        if self.config.xml_generator == "gccxml":
-            return
-
         decls = parser.parse([self.header], self.config)
         global_ns = declarations.get_global_namespace(decls)
 

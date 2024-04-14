@@ -36,8 +36,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_keep_va_list_tag(self):
 
-        if "gccxml" in self.config.xml_generator or \
-                platform.system() == 'Windows':
+        if platform.system() == 'Windows':
             return True
 
         self.config.flags = ["f1"]
@@ -89,8 +88,7 @@ class Test(parser_test_case.parser_test_case_t):
 
     def test_remove_va_list_tag(self):
 
-        if "gccxml" in self.config.xml_generator or \
-                platform.system() == 'Windows':
+        if platform.system() == 'Windows':
             return True
 
         self.config.flags = []

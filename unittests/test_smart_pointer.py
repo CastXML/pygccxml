@@ -20,8 +20,6 @@ class Test(parser_test_case.parser_test_case_t):
         self.global_ns = None
 
     def setUp(self):
-        if self.config.xml_generator == "gccxml":
-            return
         decls = parser.parse([self.header], self.config)
         self.global_ns = declarations.get_global_namespace(decls)
 
@@ -30,9 +28,6 @@ class Test(parser_test_case.parser_test_case_t):
         Test smart_pointer_traits.is_smart_pointer method.
 
         """
-
-        if self.config.xml_generator == "gccxml":
-            return
 
         criteria = declarations.declaration_matcher(name="yes1")
         decls = declarations.matcher.find(criteria, self.global_ns)
@@ -58,9 +53,6 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        if self.config.xml_generator == "gccxml":
-            return
-
         criteria = declarations.declaration_matcher(name="yes2")
         decls = declarations.matcher.find(criteria, self.global_ns)
         self.assertTrue(
@@ -82,9 +74,6 @@ class Test(parser_test_case.parser_test_case_t):
 
         """
 
-        if self.config.xml_generator == "gccxml":
-            return
-
         criteria = declarations.declaration_matcher(name="yes1")
         decls = declarations.matcher.find(criteria, self.global_ns)
         vt = declarations.smart_pointer_traits.value_type(decls[0].decl_type)
@@ -95,9 +84,6 @@ class Test(parser_test_case.parser_test_case_t):
         Test auto_pointer_traits.value_type method.
 
         """
-
-        if self.config.xml_generator == "gccxml":
-            return
 
         criteria = declarations.declaration_matcher(name="yes2")
         decls = declarations.matcher.find(criteria, self.global_ns)

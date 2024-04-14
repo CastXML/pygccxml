@@ -62,14 +62,9 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char [4] const' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char const [4]' == arr_type.decl_string,
-                arr_type.decl_string)
+        self.assertTrue(
+            'char const [4]' == arr_type.decl_string,
+            arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
         self.assertTrue(
@@ -81,14 +76,9 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char [4] volatile' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char volatile [4]' == arr_type.decl_string,
-                arr_type.decl_string)
+        self.assertTrue(
+            'char volatile [4]' == arr_type.decl_string,
+            arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
         self.assertTrue(
@@ -100,14 +90,9 @@ class Test(parser_test_case.parser_test_case_t):
         global_ns = declarations.get_global_namespace(
             src_reader.read_string(code))
         arr_type = global_ns.variable('arr').decl_type
-        if self.config.xml_generator == "gccxml":
-            self.assertTrue(
-                'char [4] const volatile' == arr_type.decl_string,
-                arr_type.decl_string)
-        else:
-            self.assertTrue(
-                'char const volatile [4]' == arr_type.decl_string,
-                arr_type.decl_string)
+        self.assertTrue(
+            'char const volatile [4]' == arr_type.decl_string,
+            arr_type.decl_string)
         self.assertTrue(
             declarations.is_array(arr_type))
         self.assertTrue(

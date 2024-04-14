@@ -47,7 +47,7 @@ These instructions are only here for historical reasons. `GCC-XML`_ was the tool
 to generate the xml files before CastXML existed.
 
 **From version v1.8.0 on, pygccxml uses CastXML by default.
-The support for GCC-XML will finally be dropped in pygccxml v2.0.0.**
+The support for GCC-XML was finally dropped in pygccxml v2.0.0.**
 
 There are few different ways to install GCC-XML on your system:
 

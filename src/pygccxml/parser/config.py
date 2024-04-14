@@ -129,16 +129,12 @@ class parser_configuration_t(object):
 
     @property
     def xml_generator(self):
-        """get xml_generator (gccxml or castxml)"""
+        """get xml_generator"""
         return self.__xml_generator
 
     @xml_generator.setter
     def xml_generator(self, xml_generator):
-        """set xml_generator (gccxml or castxml)"""
-        if "real" in xml_generator:
-            # Support for gccxml.real from newer gccxml package
-            # Can be removed once gccxml support is dropped.
-            xml_generator = "gccxml"
+        """set xml_generator"""
         self.__xml_generator = xml_generator
 
     @property
@@ -241,9 +237,8 @@ class parser_configuration_t(object):
         self.__ensure_dir_exists(self.working_directory, 'working directory')
         for idir in self.include_paths:
             self.__ensure_dir_exists(idir, 'include directory')
-        if self.__xml_generator not in ["castxml", "gccxml"]:
-            msg = ('xml_generator("%s") should either be ' +
-                   '"castxml" or "gccxml".') % self.xml_generator
+        if self.__xml_generator != "castxml":
+            msg = f"xml_generator ({self.xml_generator}) can only be 'castxml'"
             raise RuntimeError(msg)
 
 
