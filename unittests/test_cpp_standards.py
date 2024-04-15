@@ -48,6 +48,15 @@ class Test(parser_test_case.parser_test_case_t):
             RuntimeError,
             lambda: parser.parse(["cpp_standards.hpp"], self.config))
 
+    def test_cpp17(self):
+        """
+        Test c++17 by setting cflags.
+
+        """
+
+        self.config.cflags = "-std=c++17"
+        parser.parse(["cpp_standard_17.hpp"], self.config)
+
 
 def create_suite():
     suite = unittest.TestSuite()
