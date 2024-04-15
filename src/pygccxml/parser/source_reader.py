@@ -121,6 +121,7 @@ class source_reader_t(object):
                 "your xml_generator_configuration_t(), or add it to your " +
                 "pygccxml configuration file."))
 
+        stdcxx_switch = self.__cxx_std.stdcxx
         # Platform specific options
         if platform.system() == 'Windows':
             compilers = ("mingw", "g++", "gcc")
@@ -135,6 +136,8 @@ class source_reader_t(object):
                 if self.__config.compiler == 'msvc9':
                     cmd.append('"-D_HAS_TR1=0"')
                 cmd.append('--castxml-cc-msvc ')
+                # msvc uses std:c++XX format instead of std=c++XX
+                stdcxx_switch = stdcxx_switch.replace('=', ':')
         else:
             # On mac or linux, use gcc or clang (the flag is the same)
             cmd.append('--castxml-cc-gnu ')
@@ -142,7 +145,7 @@ class source_reader_t(object):
         if self.__cxx_std.is_implicit:
             std_flag = ''
         else:
-            std_flag = ' ' + self.__cxx_std.stdcxx + ' '
+            std_flag = ' ' + stdcxx_switch + ' '
 
         ccflags = self.__config.ccflags
         if std_flag:
