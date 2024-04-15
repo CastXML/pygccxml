@@ -140,21 +140,21 @@ class source_reader_t(object):
             # On mac or linux, use gcc or clang (the flag is the same)
             cmd.append('--castxml-cc-gnu ')
 
-            if self.__cxx_std.is_implicit:
-                std_flag = ''
-            else:
-                std_flag = ' ' + self.__cxx_std.stdcxx + ' '
+        if self.__cxx_std.is_implicit:
+            std_flag = ''
+        else:
+            std_flag = ' ' + self.__cxx_std.stdcxx + ' '
 
-            ccflags = self.__config.ccflags
-            if std_flag:
-                ccflags += std_flag
+        ccflags = self.__config.ccflags
+        if std_flag:
+            ccflags += std_flag
 
-            if ccflags:
-                all_cc_opts = self.__config.compiler_path + ' ' + ccflags
-                cmd.append(
-                    '"(" ' + all_cc_opts + ' ")"')
-            else:
-                cmd.append(self.__config.compiler_path)
+        if ccflags:
+            all_cc_opts = f'"{self.__config.compiler_path}"' + ' ' + ccflags
+            cmd.append(
+                '"(" ' + all_cc_opts + ' ")"')
+        else:
+            cmd.append(f'"{self.__config.compiler_path}"')
 
         if self.__config.castxml_epic_version is not None:
             if self.__config.castxml_epic_version != 1:
