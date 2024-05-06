@@ -61,7 +61,6 @@ from . import gccxml10185_tester
 from . import inline_specifier_tester
 from . import test_create_decl_string
 from . import example_tester
-from . import test_utils
 from . import test_va_list_tag_removal
 from . import test_copy_constructor
 from . import test_cpp_standards
@@ -140,7 +139,6 @@ testers = [
     test_pattern_parser,
     test_function_pointer,
     test_directory_cache,
-    test_utils,
     test_cpp_standards,
     test_va_list_tag_removal,
     decl_printer_tester,

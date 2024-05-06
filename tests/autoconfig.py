@@ -9,9 +9,6 @@ import logging
 import warnings
 import platform
 
-from pygccxml import parser
-from pygccxml import utils
-
 # Prevents copy.deepcopy RecursionError in some tests (Travis build)
 sys.setrecursionlimit(10000)
 
@@ -21,6 +18,14 @@ this_module_dir_path = os.path.abspath(
 data_directory = os.path.join(this_module_dir_path, 'data')
 build_directory = os.path.join(this_module_dir_path, 'temp')
 
+sys.path.insert(1, os.path.join(os.curdir, '..'))
+# The tests are run on the parent pygccxml directory, not the one
+# in site-packages. Insert the directory's path.
+sys.path.insert(1, "../src/pygccxml")
+
+from pygccxml import parser  # nopep8
+from pygccxml import utils  # nopep8
+
 # We want to make sure we throw an error for ALL the warnings during the
 # tests. This will allow us to be notified by the build bots, so that the
 # warnings can be fixed.
@@ -29,7 +34,7 @@ warnings.simplefilter("error", Warning)
 # Set logging level
 utils.loggers.set_level(logging.CRITICAL)
 
-# Find out the c++ parser (castxml)
+# Find out the c++ parser (gccxml or castxml)
 generator_path, generator_name = utils.find_xml_generator()
 
 
