@@ -14,7 +14,7 @@ from pygccxml import utils
 
 class Test(parser_test_case.parser_test_case_t):
 
-    def test(self):
+    def test_contains_parent_dir(self):
         path = os.path.normpath("/mypath/folder1/folder2/folder3")
         dirs = [
             os.path.normpath("/mypath/folder1/folder2/"),
