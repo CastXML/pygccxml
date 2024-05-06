@@ -21,7 +21,6 @@ from . import templates_tester
 from . import type_traits_tester
 from . import core_tester
 from . import xmlfile_reader_tester
-from . import text_reader_tester
 from . import hierarchy_traveling
 from . import patcher_tester
 from . import call_invocation_tester
@@ -56,32 +55,11 @@ from . import const_volatile_arg_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
-from . import test_create_decl_string
 from . import example_tester
-from . import test_va_list_tag_removal
-from . import test_copy_constructor
-from . import test_cpp_standards
 from . import unnamed_classes_tester
-from . import test_map_gcc5
-from . import test_argument_without_name
-from . import test_smart_pointer
-from . import test_pattern_parser
-from . import test_function_pointer
 from . import test_directory_cache
 from . import deprecation_tester
-from . import test_xml_generators
-from . import test_non_copyable_recursive
-from . import test_castxml_wrong_epic
-from . import test_elaborated_types
-from . import test_order
-from . import test_find_noncopyable_vars
-from . import test_hash
-from . import test_null_comparison
-from . import test_comments
-from . import test_deprecation
-from . import test_warn_missing_include_dirs
 from . import test_overrides
-from . import test_ccflags
 
 testers = [
     decl_string_tester,
@@ -95,7 +73,6 @@ testers = [
     templates_tester,
     core_tester,
     xmlfile_reader_tester,
-    text_reader_tester,
     hierarchy_traveling,
     call_invocation_tester,
     bit_fields_tester,
@@ -125,43 +102,20 @@ testers = [
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
-    test_create_decl_string,
-    test_copy_constructor,
     unnamed_classes_tester,
-    test_map_gcc5,
-    test_argument_without_name,
-    test_smart_pointer,
-    test_pattern_parser,
-    test_function_pointer,
     test_directory_cache,
-    test_cpp_standards,
-    test_va_list_tag_removal,
     decl_printer_tester,
     type_traits_tester,
     remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,
     deprecation_tester,
-    test_xml_generators,
-    test_non_copyable_recursive,
-    test_castxml_wrong_epic,
-    test_elaborated_types,
-    test_order,
-    test_find_noncopyable_vars,
-    test_hash,
-    test_null_comparison,
-    test_comments,
-    test_deprecation,
-    test_warn_missing_include_dirs,
     test_overrides,
 ]
 
 if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(example_tester)
-
-    # Awaiting Windows CI machine
-    testers.append(test_ccflags)
 
 if 'posix' in os.name:
     testers.append(copy_constructor_tester)
