@@ -96,9 +96,13 @@ jobs:
       - name: Setup castxml config
         if: matrix.compiler == 'gcc' && matrix.version == '9'
         run: mv unittests/configs/gcc9.cfg unittests/xml_generator.cfg;
-      - name: Run tests
+      - name: Run legacy tests
         run: |
           export PATH=~/castxml/bin:$PATH
           coverage run -m unittests.test_all
           coverage combine
           coverage xml
+      - name: Run tests
+        run: |
+          export PATH=~/castxml/bin:$PATH
+          pytest tests

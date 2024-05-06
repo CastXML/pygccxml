@@ -55,6 +55,7 @@ test = [
   "coverage",
   "coveralls",
   "pycodestyle",
+  "pytest",
 ]
 docs = [
   "sphinx",
