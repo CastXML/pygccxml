@@ -41,12 +41,10 @@ from . import vector_traits_tester
 from . import string_traits_tester
 from . import declarations_cache_tester
 from . import has_binary_operator_traits_tester
-from . import algorithms_cache_tester
 from . import dependencies_tester
 from . import free_operators_tester
 from . import remove_template_defaults_tester
 from . import find_container_traits_tester
-from . import attributes_tester
 from . import type_as_exception_bug_tester
 from . import copy_constructor_tester
 from . import plain_c_tester
@@ -55,7 +53,6 @@ from . import better_templates_matcher_tester
 from . import declaration_matcher_tester
 from . import calling_convention_tester
 from . import const_volatile_arg_tester
-from . import array_bug_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
@@ -116,7 +113,6 @@ testers = [
     string_traits_tester,
     declarations_cache_tester,
     has_binary_operator_traits_tester,
-    algorithms_cache_tester,
     dependencies_tester,
     free_operators_tester,
     type_as_exception_bug_tester,
@@ -126,7 +122,6 @@ testers = [
     declaration_matcher_tester,
     calling_convention_tester,
     const_volatile_arg_tester,
-    array_bug_tester,
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
@@ -142,7 +137,6 @@ testers = [
     test_cpp_standards,
     test_va_list_tag_removal,
     decl_printer_tester,
-    attributes_tester,
     type_traits_tester,
     remove_template_defaults_tester,
     patcher_tester,
