@@ -72,7 +72,6 @@ from . import test_smart_pointer
 from . import test_pattern_parser
 from . import test_function_pointer
 from . import test_directory_cache
-from . import test_config
 from . import deprecation_tester
 from . import test_xml_generators
 from . import test_non_copyable_recursive
@@ -141,7 +140,6 @@ testers = [
     test_pattern_parser,
     test_function_pointer,
     test_directory_cache,
-    test_config,
     test_utils,
     test_cpp_standards,
     test_va_list_tag_removal,
