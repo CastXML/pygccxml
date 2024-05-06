@@ -12,31 +12,27 @@ from pygccxml import declarations
 
 
 class Test(parser_test_case.parser_test_case_t):
-
     global_ns = None
 
     def __init__(self, *args):
         parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'bit_fields.hpp'
+        self.header = 'const_volatile_arg.hpp'
+        self.global_ns = None
 
     def setUp(self):
         if not Test.global_ns:
             decls = parser.parse([self.header], self.config)
             Test.global_ns = declarations.get_global_namespace(decls)
             Test.global_ns.init_optimizer()
+        self.global_ns = Test.global_ns
 
-    def test(self):
-        bf_x = self.global_ns.variable('x')
-        self.assertTrue(bf_x.bits == 1)
-
-        bf_y = self.global_ns.variable('y')
-        self.assertTrue(bf_y.bits == 7)
-
-        mv_z = self.global_ns.variable('z')
-        self.assertTrue(mv_z.bits is None)
-
-    def test2(self):
-        pass
+    def test_const_volatile_arg(self):
+        f = self.global_ns.free_function('pygccxml_bug')
+        t = f.arguments[0].decl_type
+        self.assertTrue(isinstance(t, declarations.pointer_t))
+        self.assertTrue(isinstance(t.base, declarations.volatile_t))
+        self.assertTrue(isinstance(t.base.base, declarations.const_t))
+        self.assertTrue(declarations.is_integral(t.base.base.base))
 
 
 def create_suite():

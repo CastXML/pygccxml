@@ -23,7 +23,7 @@ class Test(parser_test_case.parser_test_case_t):
         if not self.declarations:
             self.declarations = parser.parse([self.header], self.config)
 
-    def test(self):
+    def test_calldef_matcher(self):
         criteria = declarations.calldef_matcher_t(
             name='return_default_args',
             return_type='int',

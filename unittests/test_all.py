@@ -8,7 +8,6 @@ import sys
 import unittest
 import platform
 
-from . import decl_string_tester
 from . import declaration_files_tester
 from . import declarations_comparison_tester
 from . import declarations_tester
@@ -21,12 +20,9 @@ from . import templates_tester
 from . import core_tester
 from . import hierarchy_traveling
 from . import patcher_tester
-from . import call_invocation_tester
-from . import bit_fields_tester
 from . import complex_types_tester
 from . import cached_source_file_tester
 from . import namespace_matcher_tester
-from . import calldef_matcher_tester
 from . import filters_tester
 from . import cache_enums_tester
 from . import decl_printer_tester
@@ -39,13 +35,10 @@ from . import dependencies_tester
 from . import free_operators_tester
 from . import remove_template_defaults_tester
 from . import find_container_traits_tester
-from . import copy_constructor_tester
 from . import plain_c_tester
-from . import function_traits_tester
 from . import better_templates_matcher_tester
 from . import declaration_matcher_tester
 from . import calling_convention_tester
-from . import const_volatile_arg_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
@@ -55,7 +48,6 @@ from . import deprecation_tester
 from . import test_overrides
 
 testers = [
-    decl_string_tester,
     declaration_files_tester,
     declarations_comparison_tester,
     declarations_tester, file_cache_tester,
@@ -66,12 +58,9 @@ testers = [
     templates_tester,
     core_tester,
     hierarchy_traveling,
-    call_invocation_tester,
-    bit_fields_tester,
     complex_types_tester,
     cached_source_file_tester,
     namespace_matcher_tester,
-    calldef_matcher_tester,
     filters_tester,
     cache_enums_tester,
     non_copyable_classes_tester,
@@ -82,11 +71,9 @@ testers = [
     dependencies_tester,
     free_operators_tester,
     plain_c_tester,
-    function_traits_tester,
     better_templates_matcher_tester,
     declaration_matcher_tester,
     calling_convention_tester,
-    const_volatile_arg_tester,
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
@@ -103,8 +90,6 @@ if platform.system() != 'Windows':
     # Known to fail under windows with VS2013
     testers.append(example_tester)
 
-if 'posix' in os.name:
-    testers.append(copy_constructor_tester)
 
 if os.path.isfile("test_cost.log"):
     # Remove the cost log file when tests are run again.

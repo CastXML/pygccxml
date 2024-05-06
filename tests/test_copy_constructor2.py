@@ -48,7 +48,7 @@ class Test(parser_test_case.parser_test_case_t):
         # Delete the extracted xml file
         os.remove(self.xml_path)
 
-    def test(self):
+    def test_copy_constructor2(self):
         for x in self.global_ns.typedefs('SettingsMultiMap'):
             self.assertTrue(not declarations.is_noncopyable(x))
 
