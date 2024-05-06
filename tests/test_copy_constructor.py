@@ -28,7 +28,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.xml_generator_from_xml_file = Test.xml_generator_from_xml_file
         self.global_ns = Test.global_ns
 
-    def test(self):
+    def test_copy_constructor(self):
         """
         Check the is_copy_constructor method.
 
