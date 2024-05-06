@@ -2,6 +2,10 @@
 *.pyo
 *~
 docs/_build
+tests/temp
+tests/data/pygccxml.cache
+tests/data/directory_cache_test
+tests/data/ogre.1.7.xml
 unittests/temp
 unittests/data/pygccxml.cache
 unittests/data/directory_cache_test

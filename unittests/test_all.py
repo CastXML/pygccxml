@@ -18,24 +18,19 @@ from . import project_reader_correctness_tester
 from . import source_reader_tester
 from . import start_with_declarations_tester
 from . import templates_tester
-from . import type_traits_tester
 from . import core_tester
-from . import xmlfile_reader_tester
 from . import hierarchy_traveling
 from . import patcher_tester
 from . import call_invocation_tester
 from . import bit_fields_tester
 from . import complex_types_tester
 from . import cached_source_file_tester
-from . import variable_matcher_tester
 from . import namespace_matcher_tester
 from . import calldef_matcher_tester
 from . import filters_tester
 from . import cache_enums_tester
 from . import decl_printer_tester
-from . import typedefs_tester
 from . import non_copyable_classes_tester
-from . import unnamed_enums_bug_tester
 from . import vector_traits_tester
 from . import string_traits_tester
 from . import declarations_cache_tester
@@ -44,7 +39,6 @@ from . import dependencies_tester
 from . import free_operators_tester
 from . import remove_template_defaults_tester
 from . import find_container_traits_tester
-from . import type_as_exception_bug_tester
 from . import copy_constructor_tester
 from . import plain_c_tester
 from . import function_traits_tester
@@ -56,7 +50,6 @@ from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
 from . import example_tester
-from . import unnamed_classes_tester
 from . import test_directory_cache
 from . import deprecation_tester
 from . import test_overrides
@@ -72,27 +65,22 @@ testers = [
     start_with_declarations_tester,
     templates_tester,
     core_tester,
-    xmlfile_reader_tester,
     hierarchy_traveling,
     call_invocation_tester,
     bit_fields_tester,
     complex_types_tester,
     cached_source_file_tester,
-    variable_matcher_tester,
     namespace_matcher_tester,
     calldef_matcher_tester,
     filters_tester,
     cache_enums_tester,
-    typedefs_tester,
     non_copyable_classes_tester,
-    unnamed_enums_bug_tester,
     vector_traits_tester,
     string_traits_tester,
     declarations_cache_tester,
     has_binary_operator_traits_tester,
     dependencies_tester,
     free_operators_tester,
-    type_as_exception_bug_tester,
     plain_c_tester,
     function_traits_tester,
     better_templates_matcher_tester,
@@ -102,10 +90,8 @@ testers = [
     gccxml10184_tester,
     gccxml10185_tester,
     inline_specifier_tester,
-    unnamed_classes_tester,
     test_directory_cache,
     decl_printer_tester,
-    type_traits_tester,
     remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,

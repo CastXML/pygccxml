@@ -20,7 +20,7 @@ class Test(parser_test_case.parser_test_case_t):
         self.__fname = 'core_types.hpp'
         # self.__fname = 'merge_free_functions.hpp'
 
-    def test(self):
+    def test_read_xml_file(self):
         src_reader = parser.source_reader_t(self.config)
         src_decls = src_reader.read_file(self.__fname)
 

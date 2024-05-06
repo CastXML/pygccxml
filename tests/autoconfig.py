@@ -18,6 +18,9 @@ this_module_dir_path = os.path.abspath(
 data_directory = os.path.join(this_module_dir_path, '../unittests', 'data')
 build_directory = os.path.join(this_module_dir_path, 'temp')
 
+if not os.path.exists(build_directory):
+    os.makedirs(build_directory)
+
 sys.path.insert(1, os.path.join(os.curdir, '..'))
 # The tests are run on the parent pygccxml directory, not the one
 # in site-packages. Insert the directory's path.

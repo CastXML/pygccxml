@@ -16,11 +16,6 @@ from pygccxml.parser import declarations_cache
 
 class Test(parser_test_case.parser_test_case_t):
 
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        if not os.path.exists(autoconfig.build_directory):
-            os.makedirs(autoconfig.build_directory)
-
     def test_file_signature(self):
         file1 = os.path.join(autoconfig.data_directory, 'decl_cache_file1.txt')
         file1_dup = os.path.join(
