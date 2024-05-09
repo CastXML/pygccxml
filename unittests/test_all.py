@@ -20,24 +20,19 @@ from . import patcher_tester
 from . import complex_types_tester
 from . import cached_source_file_tester
 from . import namespace_matcher_tester
-from . import filters_tester
 from . import cache_enums_tester
 from . import non_copyable_classes_tester
 from . import vector_traits_tester
 from . import string_traits_tester
 from . import declarations_cache_tester
-from . import has_binary_operator_traits_tester
 from . import dependencies_tester
-from . import free_operators_tester
 from . import remove_template_defaults_tester
 from . import find_container_traits_tester
-from . import plain_c_tester
 from . import better_templates_matcher_tester
 from . import declaration_matcher_tester
 from . import calling_convention_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
-from . import inline_specifier_tester
 from . import test_directory_cache
 from . import test_overrides
 
@@ -53,22 +48,17 @@ testers = [
     complex_types_tester,
     cached_source_file_tester,
     namespace_matcher_tester,
-    filters_tester,
     cache_enums_tester,
     non_copyable_classes_tester,
     vector_traits_tester,
     string_traits_tester,
     declarations_cache_tester,
-    has_binary_operator_traits_tester,
     dependencies_tester,
-    free_operators_tester,
-    plain_c_tester,
     better_templates_matcher_tester,
     declaration_matcher_tester,
     calling_convention_tester,
     gccxml10184_tester,
     gccxml10185_tester,
-    inline_specifier_tester,
     test_directory_cache,
     remove_template_defaults_tester,
     patcher_tester,
