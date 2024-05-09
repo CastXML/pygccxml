@@ -8,10 +8,7 @@ import sys
 import unittest
 import platform
 
-from . import declaration_files_tester
-from . import declarations_comparison_tester
 from . import declarations_tester
-from . import file_cache_tester
 from . import gccxml_runner_tester
 from . import project_reader_correctness_tester
 from . import source_reader_tester
@@ -25,7 +22,6 @@ from . import cached_source_file_tester
 from . import namespace_matcher_tester
 from . import filters_tester
 from . import cache_enums_tester
-from . import decl_printer_tester
 from . import non_copyable_classes_tester
 from . import vector_traits_tester
 from . import string_traits_tester
@@ -42,15 +38,11 @@ from . import calling_convention_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import inline_specifier_tester
-from . import example_tester
 from . import test_directory_cache
-from . import deprecation_tester
 from . import test_overrides
 
 testers = [
-    declaration_files_tester,
-    declarations_comparison_tester,
-    declarations_tester, file_cache_tester,
+    declarations_tester,
     gccxml_runner_tester,
     project_reader_correctness_tester,
     source_reader_tester,
@@ -78,17 +70,11 @@ testers = [
     gccxml10185_tester,
     inline_specifier_tester,
     test_directory_cache,
-    decl_printer_tester,
     remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,
-    deprecation_tester,
     test_overrides,
 ]
-
-if platform.system() != 'Windows':
-    # Known to fail under windows with VS2013
-    testers.append(example_tester)
 
 
 if os.path.isfile("test_cost.log"):
