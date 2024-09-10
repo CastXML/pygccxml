@@ -576,8 +576,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
         if is_declaration:
             self.__calldefs.append(calldef)
             calldef.name = attrs.get(XML_AN_NAME, '')
-            calldef.has_extern = attrs.get(XML_AN_EXTERN, False)
-            calldef.has_inline = bool(attrs.get(XML_AN_INLINE, "") == "1")
+            calldef.has_extern = bool(attrs.get(XML_AN_EXTERN, False))
+            calldef.has_inline = bool(attrs.get(XML_AN_INLINE, False))
             throw_stmt = attrs.get(XML_AN_THROW)
             if None is throw_stmt:
                 calldef.does_throw = True
@@ -593,9 +593,9 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def __read_member_function(self, calldef, attrs, is_declaration):
         self.__read_calldef(calldef, attrs, is_declaration)
-        calldef.has_const = attrs.get(XML_AN_CONST, False)
+        calldef.has_const = bool(attrs.get(XML_AN_CONST, False))
         if is_declaration:
-            calldef.has_static = attrs.get(XML_AN_STATIC, False)
+            calldef.has_static = bool(attrs.get(XML_AN_STATIC, False))
             if XML_AN_PURE_VIRTUAL in attrs:
                 calldef.virtuality = declarations.VIRTUALITY_TYPES.PURE_VIRTUAL
             elif XML_AN_VIRTUAL in attrs:
