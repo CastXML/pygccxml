@@ -14,7 +14,6 @@ from . import project_reader_correctness_tester
 from . import source_reader_tester
 from . import start_with_declarations_tester
 from . import templates_tester
-from . import core_tester
 from . import hierarchy_traveling
 from . import patcher_tester
 from . import complex_types_tester
@@ -43,7 +42,6 @@ testers = [
     source_reader_tester,
     start_with_declarations_tester,
     templates_tester,
-    core_tester,
     hierarchy_traveling,
     complex_types_tester,
     cached_source_file_tester,
