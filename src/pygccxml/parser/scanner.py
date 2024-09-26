@@ -56,6 +56,7 @@ XML_AN_SIZE = "size"
 XML_AN_STATIC = "static"
 XML_AN_THROW = "throw"
 XML_AN_TYPE = "type"
+XML_AN_ORIGINAL_TYPE = "original_type"
 XML_AN_VIRTUAL = "virtual"
 XML_AN_VOLATILE = "volatile"
 XML_NN_ARGUMENT = "Argument"
@@ -558,7 +559,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
                 XML_AN_NAME,
                 'arg%d' % len(
                     self.__inst.arguments))
-            argument.decl_type = attrs[XML_AN_TYPE]
+            argument.decl_type = attrs.get(
+                XML_AN_ORIGINAL_TYPE,
+                attrs.get(XML_AN_TYPE)
+            )
             argument.default_value = attrs.get(XML_AN_DEFAULT)
             self.__read_attributes(argument, attrs)
             self.__inst.arguments.append(argument)
