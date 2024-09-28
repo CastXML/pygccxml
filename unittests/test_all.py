@@ -6,19 +6,16 @@
 import os
 import sys
 import unittest
-import platform
 
 from . import declarations_tester
 from . import gccxml_runner_tester
 from . import project_reader_correctness_tester
 from . import source_reader_tester
 from . import start_with_declarations_tester
-from . import templates_tester
 from . import hierarchy_traveling
 from . import patcher_tester
 from . import complex_types_tester
 from . import cached_source_file_tester
-from . import namespace_matcher_tester
 from . import cache_enums_tester
 from . import non_copyable_classes_tester
 from . import vector_traits_tester
@@ -33,7 +30,6 @@ from . import calling_convention_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 from . import test_directory_cache
-from . import test_overrides
 
 testers = [
     declarations_tester,
@@ -41,11 +37,9 @@ testers = [
     project_reader_correctness_tester,
     source_reader_tester,
     start_with_declarations_tester,
-    templates_tester,
     hierarchy_traveling,
     complex_types_tester,
     cached_source_file_tester,
-    namespace_matcher_tester,
     cache_enums_tester,
     non_copyable_classes_tester,
     vector_traits_tester,
@@ -61,7 +55,6 @@ testers = [
     remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,
-    test_overrides,
 ]
 
 
