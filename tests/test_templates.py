@@ -3,14 +3,12 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
-
 from . import parser_test_case
 
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
+class TestTemplates(parser_test_case.parser_test_case_t):
 
     def __test_split_impl(self, decl_string, name, args):
         self.assertTrue(
