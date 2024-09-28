@@ -1,4 +1,10 @@
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
 jobs:
   tests:
     name: ${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
