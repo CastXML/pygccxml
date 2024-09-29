@@ -235,7 +235,8 @@ class source_reader_t(object):
         process = subprocess.Popen(
             args=command_line,
             shell=True,
-            stdout=subprocess.PIPE)
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
 
         try:
             results = []
@@ -246,9 +247,12 @@ class source_reader_t(object):
             for line in process.stdout.readlines():
                 if line.strip():
                     results.append(line.rstrip())
+            for line in process.stderr.readlines():
+                if line.strip():
+                    results.append(line.rstrip())
 
             exit_status = process.returncode
-            msg = os.linesep.join([str(s) for s in results])
+            msg = os.linesep.join([str(s.decode()) for s in results])
             if self.__config.ignore_gccxml_output:
                 if not os.path.isfile(xml_file):
                     raise RuntimeError(
