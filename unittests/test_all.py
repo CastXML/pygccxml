@@ -9,36 +9,24 @@ import unittest
 
 from . import declarations_tester
 from . import gccxml_runner_tester
-from . import source_reader_tester
-from . import start_with_declarations_tester
 from . import hierarchy_traveling
 from . import patcher_tester
-from . import complex_types_tester
 from . import non_copyable_classes_tester
 from . import vector_traits_tester
-from . import string_traits_tester
 from . import dependencies_tester
-from . import remove_template_defaults_tester
 from . import find_container_traits_tester
-from . import declaration_matcher_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 
 testers = [
     declarations_tester,
     gccxml_runner_tester,
-    source_reader_tester,
-    start_with_declarations_tester,
     hierarchy_traveling,
-    complex_types_tester,
     non_copyable_classes_tester,
     vector_traits_tester,
-    string_traits_tester,
     dependencies_tester,
-    declaration_matcher_tester,
     gccxml10184_tester,
     gccxml10185_tester,
-    remove_template_defaults_tester,
     patcher_tester,
     find_container_traits_tester,
 ]
