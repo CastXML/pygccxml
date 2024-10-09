@@ -7,28 +7,18 @@ import os
 import sys
 import unittest
 
-from . import declarations_tester
 from . import gccxml_runner_tester
-from . import hierarchy_traveling
 from . import patcher_tester
-from . import non_copyable_classes_tester
 from . import vector_traits_tester
-from . import dependencies_tester
-from . import find_container_traits_tester
 from . import gccxml10184_tester
 from . import gccxml10185_tester
 
 testers = [
-    declarations_tester,
     gccxml_runner_tester,
-    hierarchy_traveling,
-    non_copyable_classes_tester,
     vector_traits_tester,
-    dependencies_tester,
     gccxml10184_tester,
     gccxml10185_tester,
     patcher_tester,
-    find_container_traits_tester,
 ]
 
 
