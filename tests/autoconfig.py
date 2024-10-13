@@ -15,7 +15,7 @@ sys.setrecursionlimit(10000)
 this_module_dir_path = os.path.abspath(
     os.path.dirname(sys.modules[__name__].__file__))
 
-data_directory = os.path.join(this_module_dir_path, '../unittests', 'data')
+data_directory = os.path.join(this_module_dir_path, 'data')
 build_directory = os.path.join(this_module_dir_path, 'temp')
 
 if not os.path.exists(build_directory):
