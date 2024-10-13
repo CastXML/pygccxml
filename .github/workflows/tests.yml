@@ -99,15 +99,6 @@ jobs:
         if: matrix.os == 'macos-12'
         run: |
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/5d937e938f7b882a3a3e7941e68f8312d0898aaf2082e00003dd362b1ba70b98b0a08706a1be28e71652a6a0f1e66f89768b5eaa20e5a100592d5b3deefec3f0/download | tar zxf - -C ~/
-      - name: Setup castxml config
-        if: matrix.compiler == 'gcc' && matrix.version == '9'
-        run: mv unittests/configs/gcc9.cfg unittests/xml_generator.cfg;
-      - name: Run legacy tests
-        run: |
-          export PATH=~/castxml/bin:$PATH
-          coverage run -m unittests.test_all
-          coverage combine
-          coverage xml
       - name: Run tests
         run: |
           export PATH=~/castxml/bin:$PATH
