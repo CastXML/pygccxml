@@ -3,45 +3,31 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
+TEST_FILES = [
+    "declarations_calldef.hpp",
+]
+
+
+@pytest.fixture
+def decls():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'declarations_calldef.hpp'
-        self.declarations = None
-
-    def setUp(self):
-        if not self.declarations:
-            self.declarations = parser.parse([self.header], self.config)
-
-    def test_calldef_matcher(self):
-        criteria = declarations.calldef_matcher_t(
-            name='return_default_args',
-            return_type='int',
-            arg_types=[None, declarations.bool_t()])
-        rda = declarations.matcher.get_single(criteria, self.declarations)
-        self.assertTrue(rda, "return_default_args function was not found.")
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    return decls
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+def test_calldef_matcher(decls):
+    criteria = declarations.calldef_matcher_t(
+        name='return_default_args',
+        return_type='int',
+        arg_types=[None, declarations.bool_t()])
+    rda = declarations.matcher.get_single(criteria, decls)
+    assert rda is not None

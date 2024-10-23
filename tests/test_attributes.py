@@ -3,98 +3,63 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
-
-class Test(parser_test_case.parser_test_case_t):
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        # TODO: once gccxml is removed; rename this to something like
-        # annotate_tester
-        self.header = "attributes_" + self.config.xml_generator + ".hpp"
-
-    def setUp(self):
-        # Reset flags before each test
-        self.config.flags = ""
-
-    def test_attributes(self):
-
-        decls = parser.parse([self.header], self.config)
-        Test.global_ns = declarations.get_global_namespace(decls)
-        Test.global_ns.init_optimizer()
-
-        numeric = self.global_ns.class_('numeric_t')
-        do_nothing = numeric.member_function('do_nothing')
-        arg = do_nothing.arguments[0]
-
-        generator = self.config.xml_generator_from_xml_file
-        if generator.is_castxml1 or \
-            (generator.is_castxml and
-                float(generator.xml_output_version) >= 1.137):
-            # This works since:
-            # https://github.com/CastXML/CastXML/issues/25
-            # https://github.com/CastXML/CastXML/pull/26
-            # https://github.com/CastXML/CastXML/pull/27
-            # The version bump to 1.137 came way later but this is the
-            # only way to make sure the test is running correctly
-            self.assertTrue("annotate(sealed)" == numeric.attributes)
-            self.assertTrue("annotate(no throw)" == do_nothing.attributes)
-            self.assertTrue("annotate(out)" == arg.attributes)
-            self.assertTrue(
-                numeric.member_operators(name="=")[0].attributes is None)
-        else:
-            self.assertTrue("gccxml(no throw)" == do_nothing.attributes)
-            self.assertTrue("gccxml(out)" == arg.attributes)
-
-    def test_attributes_thiscall(self):
-        """
-        Test attributes with the "f2" flag
-
-        """
-        if self.config.compiler != "msvc":
-            return
-
-        self.config.flags = ["f2"]
-
-        decls = parser.parse([self.header], self.config)
-        Test.global_ns = declarations.get_global_namespace(decls)
-        Test.global_ns.init_optimizer()
-
-        numeric = self.global_ns.class_('numeric_t')
-        do_nothing = numeric.member_function('do_nothing')
-        arg = do_nothing.arguments[0]
-
-        generator = self.config.xml_generator_from_xml_file
-        if generator.is_castxml1 or (
-                generator.is_castxml and
-                float(generator.xml_output_version) >= 1.137):
-            self.assertTrue("annotate(sealed)" == numeric.attributes)
-            self.assertTrue("annotate(out)" == arg.attributes)
-
-            self.assertTrue(
-                "__thiscall__ annotate(no throw)" == do_nothing.attributes)
-            self.assertTrue(
-                numeric.member_operators(name="=")[0].attributes ==
-                "__thiscall__")
+TEST_FILES = [
+    # TODO: once gccxml is removed; rename this to something like
+    # annotate_tester
+    "attributes_castxml.hpp",
+]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    INIT_OPTIMIZER = True
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    if INIT_OPTIMIZER:
+        global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def test_attributes(global_ns):
+    numeric = global_ns.class_('numeric_t')
+    do_nothing = numeric.member_function('do_nothing')
+    arg = do_nothing.arguments[0]
+    assert "annotate(sealed)" == numeric.attributes
+    assert "annotate(no throw)" == do_nothing.attributes
+    assert "annotate(out)" == arg.attributes
+    assert numeric.member_operators(name="=")[0].attributes is None
 
 
-if __name__ == "__main__":
-    run_suite()
+def test_attributes_thiscall():
+    """
+    Test attributes with the "f2" flag
+
+    """
+
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+
+    config.flags = ["f2"]
+
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+
+    numeric = global_ns.class_('numeric_t')
+    do_nothing = numeric.member_function('do_nothing')
+    arg = do_nothing.arguments[0]
+
+    assert "annotate(sealed)" == numeric.attributes
+    assert "annotate(out)" == arg.attributes
+
+    assert "annotate(no throw)" == do_nothing.attributes
+    assert numeric.member_operators(name="=")[0].attributes is None

@@ -10,23 +10,24 @@ from . import autoconfig
 from pygccxml import parser
 from pygccxml import declarations
 
+TEST_FILES = [
+    "better_templates_matcher_tester.hpp",
+]
+
 
 @pytest.fixture
-def global_ns_better():
+def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
     config = autoconfig.cxx_parsers_cfg.config.clone()
-    decls = parser.parse(
-        ['better_templates_matcher_tester.hpp'],
-        config, COMPILATION_MODE
-    )
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)
     if INIT_OPTIMIZER:
         global_ns.init_optimizer()
     return global_ns
 
 
-def test_better_templates_matcher(global_ns_better):
+def test_better_templates_matcher(global_ns):
     classes = [
         "::Ogre::PlaneBoundedVolume",
         "::Ogre::Plane",
@@ -34,4 +35,4 @@ def test_better_templates_matcher(global_ns_better):
         "::Ogre::PCZoneFactoryManager",
         ]
     for i in classes:
-        global_ns_better.class_(i)
+        global_ns.class_(i)
