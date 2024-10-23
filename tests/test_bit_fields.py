@@ -3,52 +3,36 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
-
-class Test(parser_test_case.parser_test_case_t):
-
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'bit_fields.hpp'
-
-    def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-            Test.global_ns.init_optimizer()
-
-    def test_bit_fields(self):
-        bf_x = self.global_ns.variable('x')
-        self.assertTrue(bf_x.bits == 1)
-
-        bf_y = self.global_ns.variable('y')
-        self.assertTrue(bf_y.bits == 7)
-
-        mv_z = self.global_ns.variable('z')
-        self.assertTrue(mv_z.bits is None)
-
-    def test2(self):
-        pass
+TEST_FILES = [
+    "bit_fields.hpp",
+]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    INIT_OPTIMIZER = True
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    if INIT_OPTIMIZER:
+        global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def test_bit_fields(global_ns):
+    bf_x = global_ns.variable('x')
+    assert bf_x.bits == 1
 
+    bf_y = global_ns.variable('y')
+    assert bf_y.bits == 7
 
-if __name__ == "__main__":
-    run_suite()
+    mv_z = global_ns.variable('z')
+    assert mv_z.bits is None
