@@ -3,43 +3,20 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 
 
-class Test(parser_test_case.parser_test_case_t):
+def test_castxml_epic_version_check():
+    """
+    Test using a forbidden value for the castxml epic version.
 
-    def test_castxml_epic_version_check(self):
-        """
-        Test using a forbidden value for the castxml epic version.
+    """
 
-        """
-
-        if self.config.castxml_epic_version != 1:
-            # Run this test only with castxml epic version == 1
-            return
-
-        self.config.castxml_epic_version = 2
-        self.assertRaises(
-            RuntimeError, lambda: parser.parse_string("", self.config))
-
-        # Reset castxml epic version
-        self.config.castxml_epic_version = 1
-
-
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.castxml_epic_version = 2
+    with pytest.raises(RuntimeError):
+        parser.parse_string("", config)
