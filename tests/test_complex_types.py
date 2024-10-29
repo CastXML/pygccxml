@@ -3,45 +3,36 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import os
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
+from pygccxml import declarations
 from pygccxml import parser
 
 
-class Test(parser_test_case.parser_test_case_t):
+TEST_FILES = [
+    "complex_types.hpp",
+]
+
+
+@pytest.fixture
+def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'complex_types.hpp'
-        self.declarations = None
-
-    def setUp(self):
-        if not self.declarations:
-            self.declarations = parser.parse([self.header], self.config)
-
-    def test(self):
-        """
-        This test tests presence of complex long double, float within
-        FUNDAMENTAL_TYPES map
-        """
-        pass
+    INIT_OPTIMIZER = True
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.castxml_epic_version = 1
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    if INIT_OPTIMIZER:
+        global_ns.init_optimizer()
+    return global_ns
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    if os.name != 'nt':
-        suite.addTest(
-            unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+def test_complex_types():
+    """
+    This test tests presence of complex long double, float within
+    FUNDAMENTAL_TYPES map
+    """
+    pass
+    # TODO: write test
