@@ -5,70 +5,41 @@
 
 import os
 import bz2
-import unittest
 
 from . import autoconfig
-from . import parser_test_case
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
+def test_copy_constructor2():
+    # Extract the xml file from the bz2 archive
+    bz2_path = os.path.join(
+        autoconfig.data_directory,
+        'ogre.1.7.xml.bz2')
+    xml_path = os.path.join(
+        autoconfig.data_directory,
+        'ogre.1.7.xml')
+    with open(xml_path, 'wb') as new_file:
+        # bz2.BZ2File can not be used in a with statement in python 2.6
+        bz2_file = bz2.BZ2File(bz2_path, 'rb')
+        for data in iter(lambda: bz2_file.read(100 * 1024), b''):
+            new_file.write(data)
+        bz2_file.close()
 
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.global_ns = None
-        self.xml_path = None
+    reader = parser.source_reader_t(autoconfig.cxx_parsers_cfg.config)
+    global_ns = declarations.get_global_namespace(
+        reader.read_xml_file(xml_path)
+        )
+    global_ns.init_optimizer()
 
-    def setUp(self):
-        if not self.global_ns:
+    for x in global_ns.typedefs('SettingsMultiMap'):
+        assert declarations.is_noncopyable(x) is False
 
-            # Extract the xml file from the bz2 archive
-            bz2_path = os.path.join(
-                autoconfig.data_directory,
-                'ogre.1.7.xml.bz2')
-            self.xml_path = os.path.join(
-                autoconfig.data_directory,
-                'ogre.1.7.xml')
-            with open(self.xml_path, 'wb') as new_file:
-                # bz2.BZ2File can not be used in a with statement in python 2.6
-                bz2_file = bz2.BZ2File(bz2_path, 'rb')
-                for data in iter(lambda: bz2_file.read(100 * 1024), b''):
-                    new_file.write(data)
-                bz2_file.close()
+    for x in global_ns.typedefs('SettingsIterator'):
+        assert declarations.is_noncopyable(x) is False
 
-            reader = parser.source_reader_t(autoconfig.cxx_parsers_cfg.config)
-            self.global_ns = declarations.get_global_namespace(
-                reader.read_xml_file(
-                    self.xml_path))
-            self.global_ns.init_optimizer()
+    for x in global_ns.typedefs('SectionIterator'):
+        assert declarations.is_noncopyable(x) is False
 
-    def tearDown(self):
-        # Delete the extracted xml file
-        os.remove(self.xml_path)
-
-    def test_copy_constructor2(self):
-        for x in self.global_ns.typedefs('SettingsMultiMap'):
-            self.assertTrue(not declarations.is_noncopyable(x))
-
-        for x in self.global_ns.typedefs('SettingsIterator'):
-            self.assertTrue(not declarations.is_noncopyable(x))
-
-        for x in self.global_ns.typedefs('SectionIterator'):
-            self.assertTrue(not declarations.is_noncopyable(x))
-
-
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+    os.remove(xml_path)
