@@ -3,62 +3,44 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import platform
-import unittest
+import pytest
 
-from . import parser_test_case
+import platform
+
+from . import autoconfig
 
 from pygccxml import parser
 
 
-class Test(parser_test_case.parser_test_case_t):
+def test_cpp_standards():
+    """
+    Test different compilation standards by setting cflags.
 
-    def test(self):
-        """
-        Test different compilation standards by setting cflags.
+    """
 
-        """
+    config = autoconfig.cxx_parsers_cfg.config.clone()
 
-        parser.parse(["cpp_standards.hpp"], self.config)
+    parser.parse(["cpp_standards.hpp"], config)
 
-        if platform.system() != 'Windows':
-            self.config.cflags = "-std=c++98"
-            parser.parse(["cpp_standards.hpp"], self.config)
+    if platform.system() != 'Windows':
+        config.cflags = "-std=c++98"
+        parser.parse(["cpp_standards.hpp"], config)
 
-            self.config.cflags = "-std=c++03"
-            parser.parse(["cpp_standards.hpp"], self.config)
+        config.cflags = "-std=c++03"
+        parser.parse(["cpp_standards.hpp"], config)
 
-        self.config.cflags = "-std=c++11"
-        parser.parse(["cpp_standards.hpp"], self.config)
+    config.cflags = "-std=c++11"
 
-        # This is broken with llvm 3.6.2 (the one from homebrew)
-        # It should work with never llvms but I keep the test disabled
-        # See https://llvm.org/bugs/show_bug.cgi?id=24872
-        # self.config.cflags = "-std=c++14"
-        # parser.parse(["cpp_standards.hpp"], self.config)
+    parser.parse(["cpp_standards.hpp"], config)
 
-        # Same as above
-        # self.config.cflags = "-std=c++1z"
-        # parser.parse(["cpp_standards.hpp"], self.config)
+    config.cflags = "-std=c++14"
+    parser.parse(["cpp_standards.hpp"], config)
 
-        # Pass down a flag that does not exist.
-        # This should raise an exception.
-        self.config.cflags = "-std=c++00"
-        self.assertRaises(
-            RuntimeError,
-            lambda: parser.parse(["cpp_standards.hpp"], self.config))
+    config.cflags = "-std=c++1z"
+    parser.parse(["cpp_standards.hpp"], config)
 
-
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+    # Pass down a flag that does not exist.
+    # This should raise an exception.
+    config.cflags = "-std=c++00"
+    with pytest.raises(RuntimeError):
+        parser.parse(["cpp_standards.hpp"], config)
