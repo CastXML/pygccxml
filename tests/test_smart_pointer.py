@@ -3,104 +3,93 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = "test_smart_pointer.hpp"
-        self.config.cflags = "-std=c++11"
-        self.global_ns = None
-
-    def setUp(self):
-        decls = parser.parse([self.header], self.config)
-        self.global_ns = declarations.get_global_namespace(decls)
-
-    def test_is_smart_pointer(self):
-        """
-        Test smart_pointer_traits.is_smart_pointer method.
-
-        """
-
-        criteria = declarations.declaration_matcher(name="yes1")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertTrue(
-            declarations.smart_pointer_traits.is_smart_pointer(
-                decls[0].decl_type))
-
-        criteria = declarations.declaration_matcher(name="no1")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertFalse(
-            declarations.smart_pointer_traits.is_smart_pointer(
-                decls[0].decl_type))
-
-        criteria = declarations.declaration_matcher(name="no2")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertFalse(
-            declarations.smart_pointer_traits.is_smart_pointer(
-                decls[0].decl_type))
-
-    def test_is_auto_pointer(self):
-        """
-        Test auto_ptr_traits.is_smart_pointer method.
-
-        """
-
-        criteria = declarations.declaration_matcher(name="yes2")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertTrue(
-            declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
-
-        criteria = declarations.declaration_matcher(name="no1")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertFalse(
-            declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
-
-        criteria = declarations.declaration_matcher(name="no2")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        self.assertFalse(
-            declarations.auto_ptr_traits.is_smart_pointer(decls[0].decl_type))
-
-    def test_smart_pointer_value_type(self):
-        """
-        Test smart_pointer_traits.value_type method.
-
-        """
-
-        criteria = declarations.declaration_matcher(name="yes1")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        vt = declarations.smart_pointer_traits.value_type(decls[0].decl_type)
-        self.assertIsInstance(vt, declarations.int_t)
-
-    def test_auto_pointer_value_type(self):
-        """
-        Test auto_pointer_traits.value_type method.
-
-        """
-
-        criteria = declarations.declaration_matcher(name="yes2")
-        decls = declarations.matcher.find(criteria, self.global_ns)
-        vt = declarations.auto_ptr_traits.value_type(decls[0].decl_type)
-        self.assertIsInstance(vt, declarations.double_t)
+TEST_FILES = [
+    'test_smart_pointer.hpp'
+]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++11"
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def test_is_smart_pointer(global_ns):
+    """
+    Test smart_pointer_traits.is_smart_pointer method.
+
+    """
+
+    criteria = declarations.declaration_matcher(name="yes1")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.smart_pointer_traits.is_smart_pointer(
+        decls[0].decl_type) is True
+
+    criteria = declarations.declaration_matcher(name="no1")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.smart_pointer_traits.is_smart_pointer(
+            decls[0].decl_type) is False
+
+    criteria = declarations.declaration_matcher(name="no2")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.smart_pointer_traits.is_smart_pointer(
+            decls[0].decl_type) is False
 
 
-if __name__ == "__main__":
-    run_suite()
+def test_is_auto_pointer(global_ns):
+    """
+    Test auto_ptr_traits.is_smart_pointer method.
+
+    """
+
+    criteria = declarations.declaration_matcher(name="yes2")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.auto_ptr_traits.is_smart_pointer(
+        decls[0].decl_type) is True
+
+    criteria = declarations.declaration_matcher(name="no1")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.auto_ptr_traits.is_smart_pointer(
+        decls[0].decl_type) is False
+
+    criteria = declarations.declaration_matcher(name="no2")
+    decls = declarations.matcher.find(criteria, global_ns)
+    assert declarations.auto_ptr_traits.is_smart_pointer(
+        decls[0].decl_type) is False
+
+
+def test_smart_pointer_value_type(global_ns):
+    """
+    Test smart_pointer_traits.value_type method.
+
+    """
+
+    criteria = declarations.declaration_matcher(name="yes1")
+    decls = declarations.matcher.find(criteria, global_ns)
+    vt = declarations.smart_pointer_traits.value_type(decls[0].decl_type)
+    assert isinstance(vt, declarations.int_t) is True
+
+
+def test_auto_pointer_value_type(global_ns):
+    """
+    Test auto_pointer_traits.value_type method.
+
+    """
+
+    criteria = declarations.declaration_matcher(name="yes2")
+    decls = declarations.matcher.find(criteria, global_ns)
+    vt = declarations.auto_ptr_traits.value_type(decls[0].decl_type)
+    assert isinstance(vt, declarations.double_t) is True

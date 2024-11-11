@@ -3,48 +3,34 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'type_as_exception_bug.h'
-
-    def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-            Test.global_ns.init_optimizer()
-
-    def test(self):
-        buggy = self.global_ns.member_function('buggy')
-        expression_error = self.global_ns.class_('ExpressionError')
-        self.assertTrue(len(buggy.exceptions) == 1)
-        err = buggy.exceptions[0]
-        self.assertTrue(declarations.is_reference(err))
-        err = declarations.remove_declarated(
-            declarations.remove_reference(err))
-        self.assertTrue(err is expression_error)
+TEST_FILES = [
+    "type_as_exception_bug.h",
+]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+def test_type_as_exception(global_ns):
+    buggy = global_ns.member_function('buggy')
+    expression_error = global_ns.class_('ExpressionError')
+    assert len(buggy.exceptions) == 1
+    err = buggy.exceptions[0]
+    assert declarations.is_reference(err)
+    err = declarations.remove_declarated(
+        declarations.remove_reference(err))
+    assert err is expression_error

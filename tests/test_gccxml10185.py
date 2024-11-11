@@ -3,9 +3,9 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
@@ -18,43 +18,23 @@ template <int N> struct A<const char[N]>
 """
 
 
-class Test(parser_test_case.parser_test_case_t):
+def test_partial_template():
+    """
+    The purpose of this test was to check if changes to GCCXML
+    would lead to changes in the outputted xml file (Meaning
+    the bug was fixed).
 
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
+    GCCXML wrongly outputted partial template specialization.
+    CastXML does not have this bug. In this case we check if
+    the template specialization can not be found; which is the
+    expected/wanted behaviour.
 
-    def test(self):
-        """
-        The purpose of this test was to check if changes to GCCXML
-        would lead to changes in the outputted xml file (Meaning
-        the bug was fixed).
+    https://github.com/CastXML/CastXML/issues/20
 
-        GCCXML wrongly outputted partial template specialization.
-        CastXML does not have this bug. In this case we check if
-        the template specialization can not be found; which is the
-        expected/wanted behaviour.
+    """
 
-        https://github.com/CastXML/CastXML/issues/20
-
-        """
-
-        decls = parser.parse_string(code, self.config)
-        global_ns = declarations.get_global_namespace(decls)
-        self.assertRaises(
-            declarations.declaration_not_found_t,
-            lambda: global_ns.class_('A<const char [N]>'))
-
-
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse_string(code, config)
+    global_ns = declarations.get_global_namespace(decls)
+    with pytest.raises(declarations.declaration_not_found_t):
+        global_ns.class_('A<const char [N]>')
