@@ -3,66 +3,54 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
+TEST_FILES = [
+    "string_traits.hpp",
+]
+
+
+@pytest.fixture
+def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'string_traits.hpp'
-        self.global_ns = None
-
-    def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-        self.global_ns = Test.global_ns
-
-    def validate_yes(self, ns, controller):
-        for typedef in ns.typedefs():
-            self.assertTrue(controller(typedef.decl_type))
-
-    def validate_no(self, ns, controller):
-        for typedef in ns.typedefs():
-            self.assertTrue(not controller(typedef.decl_type))
-
-    def test_string(self):
-        string_traits = self.global_ns.namespace('string_traits')
-        self.validate_yes(
-            string_traits.namespace('yes'),
-            declarations.is_std_string)
-        self.validate_no(
-            string_traits.namespace('no'),
-            declarations.is_std_string)
-
-    def test_wstring(self):
-        wstring_traits = self.global_ns.namespace('wstring_traits')
-        self.validate_yes(
-            wstring_traits.namespace('yes'),
-            declarations.is_std_wstring)
-        self.validate_no(
-            wstring_traits.namespace('no'),
-            declarations.is_std_wstring)
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+def validate_yes(ns, controller):
+    for typedef in ns.typedefs():
+        assert controller(typedef.decl_type) is True
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def validate_no(ns, controller):
+    for typedef in ns.typedefs():
+        assert controller(typedef.decl_type) is False
 
 
-if __name__ == "__main__":
-    run_suite()
+def test_string(global_ns):
+    string_traits = global_ns.namespace('string_traits')
+    validate_yes(
+        string_traits.namespace('yes'),
+        declarations.is_std_string)
+    validate_no(
+        string_traits.namespace('no'),
+        declarations.is_std_string)
+
+
+def test_wstring(global_ns):
+    wstring_traits = global_ns.namespace('wstring_traits')
+    validate_yes(
+        wstring_traits.namespace('yes'),
+        declarations.is_std_wstring)
+    validate_no(
+        wstring_traits.namespace('no'),
+        declarations.is_std_wstring)

@@ -3,45 +3,29 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
-
-class Test(parser_test_case.parser_test_case_t):
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'declarations_calldef.hpp'
-        self.global_ns = None
-
-    def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-            Test.global_ns.init_optimizer()
-        self.global_ns = Test.global_ns
-
-    def test_compound_argument_type(self):
-        do_smth = self.global_ns.calldefs('do_smth')
-        self.assertTrue(do_smth, "unable to find do_smth")
-        do_smth.function_type()
+TEST_FILES = [
+    'declarations_calldef.hpp'
+]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+def test_compound_argument_type(global_ns):
+    do_smth = global_ns.calldefs('do_smth')
+    assert do_smth is not None
+    do_smth.function_type()

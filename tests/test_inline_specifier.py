@@ -3,53 +3,34 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
-
-class Test(parser_test_case.parser_test_case_t):
-
-    global_ns = None
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'inline_specifier.hpp'
-
-    def setUp(self):
-        if not Test.global_ns:
-            decls = parser.parse([self.header], self.config)
-            Test.global_ns = declarations.get_global_namespace(decls)
-            Test.global_ns.init_optimizer()
-
-    def test(self):
-        inlined_funcs = self.global_ns.calldefs('inlined')
-        self.assertTrue(len(inlined_funcs))
-        for f in inlined_funcs:
-            self.assertTrue(f.has_inline)
-
-        not_inlined_funcs = self.global_ns.calldefs('not_inlined')
-        self.assertTrue(len(not_inlined_funcs))
-        for f in not_inlined_funcs:
-            self.assertTrue(f.has_inline is False)
-
-    def test2(self):
-        pass
+TEST_FILES = ["inline_specifier.hpp"]
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++11"
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def test_inline_specifier(global_ns):
+    inlined_funcs = global_ns.calldefs('inlined')
+    assert len(inlined_funcs) != 0
+    for f in inlined_funcs:
+        assert f.has_inline is True
 
-
-if __name__ == "__main__":
-    run_suite()
+    not_inlined_funcs = global_ns.calldefs('not_inlined')
+    assert len(not_inlined_funcs) != 0
+    for f in not_inlined_funcs:
+        assert f.has_inline is False
