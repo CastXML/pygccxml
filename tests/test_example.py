@@ -5,59 +5,29 @@
 
 import os
 import fnmatch
-import unittest
 import subprocess
 
-from . import parser_test_case
 
+def test_example():
+    """Runs the example in the docs directory"""
 
-class Test(parser_test_case.parser_test_case_t):
+    env = os.environ.copy()
 
-    def test_example(self):
-        """Runs the example in the docs directory"""
+    # Get the path to current directory
+    path = os.path.dirname(os.path.realpath(__file__))
+    # Set the COVERAGE_PROCESS_START env. variable.
+    # Allows to cover files run in a subprocess
+    # http://nedbatchelder.com/code/coverage/subprocess.html
+    env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
 
-        env = os.environ.copy()
+    # Find all the examples files
+    file_paths = []
+    for root, _, filenames in os.walk(path + "/../docs/examples"):
+        for file_path in fnmatch.filter(filenames, '*.py'):
+            file_paths.append(os.path.join(root, file_path))
 
-        # Get the path to current directory
-        path = os.path.dirname(os.path.realpath(__file__))
-        # Set the COVERAGE_PROCESS_START env. variable.
-        # Allows to cover files run in a subprocess
-        # http://nedbatchelder.com/code/coverage/subprocess.html
-        env["COVERAGE_PROCESS_START"] = path + "/../.coveragerc"
-
-        # Find all the examples files
-        file_paths = []
-        for root, dirnames, filenames in os.walk(path + "/../docs/examples"):
-            for file_path in fnmatch.filter(filenames, '*.py'):
-                file_paths.append(os.path.join(root, file_path))
-
-        for file_path in file_paths:
-
-            if "elaborated" in file_path and\
-                    self.config.castxml_epic_version != 1:
-                # Don't run this test if the castxml_epic_version was not
-                # set to 1, because the test needs to be able to run with
-                # that version
-                continue
-
-            return_code = subprocess.call(
-                ["python", path + "/example_tester_wrap.py", file_path],
-                env=env)
-            self.assertFalse(
-                return_code,
-                msg="The example %s did not run correctly" % file_path)
-
-
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
-
-
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+    for file_path in file_paths:
+        return_code = subprocess.call(
+            ["python", path + "/example_tester_wrap.py", file_path],
+            env=env)
+        assert return_code == 0

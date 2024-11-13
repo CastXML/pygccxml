@@ -4,95 +4,71 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import os
-import sys
-import unittest
-import subprocess
 
 from . import autoconfig
-from . import parser_test_case
 
 from pygccxml import parser
 
-
-class Test(parser_test_case.parser_test_case_t):
-    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = os.path.join(autoconfig.data_directory, 'core_cache.hpp')
-        self.cache_file = os.path.join(
+TEST_FILE = os.path.join(autoconfig.data_directory, 'core_cache.hpp')
+cache_file = os.path.join(
             autoconfig.data_directory,
             'pygccxml.cache')
-        if os.path.exists(self.cache_file) and os.path.isfile(self.cache_file):
-            os.remove(self.cache_file)
-
-    def touch(self):
-        # Need to change file.
-        with open(self.header, "a+") as header:
-            header.write("//touch")
-
-    def test_update(self):
-
-        # Save the content of the header file for later
-        with open(self.header, "r") as old_header:
-            content = old_header.read()
-
-        declarations = parser.parse([self.header], self.config)
-        cache = parser.file_cache_t(self.cache_file)
-        cache.update(
-            source_file=self.header,
-            configuration=self.config,
-            declarations=declarations,
-            included_files=[])
-        self.assertTrue(
-            declarations == cache.cached_value(
-                self.header,
-                self.config),
-            "cached declarations and source declarations are different")
-        self.touch()
-        self.assertTrue(
-            cache.cached_value(self.header, self.config) is None,
-            "cache didn't recognize that some files on disk has been changed")
-
-        # We wrote a //touch in the header file. Just replace the file with the
-        # original content. The touched file would be sometimes commited by
-        # error as it was modified.
-        with open(self.header, "w") as new_header:
-            new_header.write(content)
-
-    def test_from_file(self):
-        declarations = parser.parse([self.header], self.config)
-        cache = parser.file_cache_t(self.cache_file)
-        cache.update(
-            source_file=self.header,
-            configuration=self.config,
-            declarations=declarations,
-            included_files=[])
-        self.assertTrue(
-            declarations == cache.cached_value(
-                self.header,
-                self.config),
-            "cached declarations and source declarations are different")
-        cache.flush()
-        cache = parser.file_cache_t(self.cache_file)
-        self.assertTrue(
-            declarations == cache.cached_value(
-                self.header,
-                self.config),
-            ("cached declarations and source declarations are different, " +
-                "after pickling"))
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+def reset_cache():
+    if os.path.exists(cache_file) and os.path.isfile(cache_file):
+        os.remove(cache_file)
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def touch():
+    # Need to change file.
+    with open(TEST_FILE, "a+") as header:
+        header.write("//touch")
 
 
-if __name__ == "__main__":
-    run_suite()
+def test_update_cache():
+    reset_cache()
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+
+    # Save the content of the header file for later
+    with open(TEST_FILE, "r") as old_header:
+        content = old_header.read()
+
+    declarations = parser.parse([TEST_FILE], config)
+    cache = parser.file_cache_t(cache_file)
+    cache.update(
+        source_file=TEST_FILE,
+        configuration=config,
+        declarations=declarations,
+        included_files=[])
+    assert declarations == cache.cached_value(
+            TEST_FILE,
+            config)
+    touch()
+    assert cache.cached_value(TEST_FILE, config) is None
+
+    # We wrote a //touch in the header file. Just replace the file with the
+    # original content. The touched file would be sometimes commited by
+    # error as it was modified.
+    with open(TEST_FILE, "w") as new_header:
+        new_header.write(content)
+
+
+def test_cache_from_file():
+    reset_cache()
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    declarations = parser.parse([TEST_FILE], config)
+    cache = parser.file_cache_t(cache_file)
+    cache.update(
+        source_file=TEST_FILE,
+        configuration=config,
+        declarations=declarations,
+        included_files=[])
+    assert declarations == cache.cached_value(
+            TEST_FILE,
+            config)
+    cache.flush()
+    cache = parser.file_cache_t(cache_file)
+    assert declarations == cache.cached_value(
+            TEST_FILE,
+            config)

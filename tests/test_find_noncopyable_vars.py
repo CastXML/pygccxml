@@ -3,48 +3,38 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = "find_noncopyable_vars.hpp"
-        decls = parser.parse([self.header], self.config)
-        self.global_ns = declarations.get_global_namespace(decls)
-
-    def test(self):
-        """
-        Test the find_noncopyable_vars function
-
-        """
-
-        # The ptr1 variable in the holder struct can be copied,
-        # but not the ptr2 variable
-        holder = self.global_ns.class_("holder")
-        nc_vars = declarations.find_noncopyable_vars(holder)
-        self.assertEqual(len(nc_vars), 1)
-        self.assertEqual(nc_vars[0].name, "ptr2")
-        self.assertTrue(declarations.is_pointer(nc_vars[0].decl_type))
-        self.assertTrue(declarations.is_const(nc_vars[0].decl_type))
+TEST_FILES = ['find_noncopyable_vars.hpp']
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
+def test_find_noncopyable_vars(global_ns):
+    """
+    Test the find_noncopyable_vars function
 
+    """
 
-if __name__ == "__main__":
-    run_suite()
+    # The ptr1 variable in the holder struct can be copied,
+    # but not the ptr2 variable
+    holder = global_ns.class_("holder")
+    nc_vars = declarations.find_noncopyable_vars(holder)
+    assert len(nc_vars) == 1
+    assert nc_vars[0].name == "ptr2"
+    assert declarations.is_pointer(nc_vars[0].decl_type) is True
+    assert declarations.is_const(nc_vars[0].decl_type) is True
