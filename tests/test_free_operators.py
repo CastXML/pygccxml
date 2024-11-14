@@ -3,47 +3,33 @@
 # Distributed under the Boost Software License, Version 1.0.
 # See http://www.boost.org/LICENSE_1_0.txt
 
-import unittest
+import pytest
 
-from . import parser_test_case
+from . import autoconfig
 
 from pygccxml import parser
 from pygccxml import declarations
 
 
-class Test(parser_test_case.parser_test_case_t):
-
-    def __init__(self, *args):
-        parser_test_case.parser_test_case_t.__init__(self, *args)
-        self.header = 'free_operators.hpp'
-        self.global_ns = None
-
-    def setUp(self):
-        reader = parser.source_reader_t(self.config)
-        decls = reader.read_file(self.header)
-        self.global_ns = declarations.get_global_namespace(decls)
-
-    def test(self):
-        fo = self.global_ns.namespace('free_operators')
-        number = fo.class_('number')
-        rational = fo.class_('rational')
-        for oper in fo.free_operators():
-            if number.name in str(oper):
-                self.assertTrue(number in oper.class_types)
-            if rational.name in str(oper):
-                self.assertTrue(rational in oper.class_types)
+TEST_FILES = ['free_operators.hpp']
 
 
-def create_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(
-        unittest.TestLoader().loadTestsFromTestCase(testCaseClass=Test))
-    return suite
+@pytest.fixture
+def global_ns():
+    COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
+    global_ns = declarations.get_global_namespace(decls)
+    global_ns.init_optimizer()
+    return global_ns
 
 
-def run_suite():
-    unittest.TextTestRunner(verbosity=2).run(create_suite())
-
-
-if __name__ == "__main__":
-    run_suite()
+def test_free_operators(global_ns):
+    fo = global_ns.namespace('free_operators')
+    number = fo.class_('number')
+    rational = fo.class_('rational')
+    for oper in fo.free_operators():
+        if number.name in str(oper):
+            assert number in oper.class_types
+        if rational.name in str(oper):
+            assert rational in oper.class_types
