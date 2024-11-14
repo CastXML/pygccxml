@@ -303,3 +303,16 @@ def update_unnamed_class(decls):
             if referent.name or not isinstance(referent, declarations.class_t):
                 continue
             referent.name = decl.name
+
+
+def remove_spaces_from_template_names(decls):
+     """
+     Cleanup names that can have different spaces at different places.
+     This depends on the compiler / platform, so just remove spaces.
+     Examples:
+     before hash<std::vector<int> >
+     after hash<std::vector<int>>
+     """
+     for decl in decls:
+         if isinstance(decl, declarations.declaration_t):
+             decl.name = decl.name.replace(" >", ">").replace("< ", "<")
