@@ -65,7 +65,7 @@ def test_split_on_map():
 
 
 def test_join_on_vector():
-    assert "vector< int, std::allocator<int> >" == \
+    assert "vector<int, std::allocator<int>>" == \
         declarations.templates.join(
             "vector", ("int", "std::allocator<int>"))
 

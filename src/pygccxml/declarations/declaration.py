@@ -189,6 +189,10 @@ class declaration_t(object):
 
         return self._partial_name
 
+    @partial_name.setter
+    def partial_name(self, new_partial_name):
+        self._partial_name = new_partial_name
+
     @property
     def parent(self):
         """
