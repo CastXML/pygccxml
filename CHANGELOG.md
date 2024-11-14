@@ -1,6 +1,10 @@
 Changes
 =======
 
+Version 2.6.0
+
+1. Drop utils.is_str function
+
 Version 2.5.0
 -------------
 
