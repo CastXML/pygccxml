@@ -14,6 +14,8 @@ Version 2.6.0
 
 5. Fix a bug in build_decl_string with elaborated type specifiers
 
+6. Fix a bug where the declared widht of arrays args where lost (by using the original type xml tag)
+
 Version 2.5.0
 -------------
 
