@@ -2,8 +2,17 @@ Changes
 =======
 
 Version 2.6.0
+-------------
 
 1. Drop utils.is_str function
+
+2. Massive unit test refactoring: migrated all the tests to pytest.
+
+3. Make sure has_mutable, has_static, has_extern functions always return a boolean
+
+4. Fix a bug in unordered_set_traits and unordered_multiset_traits
+
+5. Fix a bug in build_decl_string with elaborated type specifiers
 
 Version 2.5.0
 -------------
