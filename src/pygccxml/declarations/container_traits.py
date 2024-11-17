@@ -647,14 +647,14 @@ unordered_multimap_traits = container_traits_impl_t(
 
 unordered_set_traits = container_traits_impl_t(
     'unordered_set',
-    1,
+    0,
     'value_type',
     'erase_hash_allocator',
     unordered_maps_and_sets=True)
 
 unordered_multiset_traits = container_traits_impl_t(
     'unordered_multiset',
-    1,
+    0,
     'value_type',
     'erase_hash_allocator',
     unordered_maps_and_sets=True)

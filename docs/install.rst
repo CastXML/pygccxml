@@ -47,7 +47,7 @@ These instructions are only here for historical reasons. `GCC-XML`_ was the tool
 to generate the xml files before CastXML existed.
 
 **From version v1.8.0 on, pygccxml uses CastXML by default.
-The support for GCC-XML will finally be dropped in pygccxml v2.0.0.**
+The support for GCC-XML was finally dropped in pygccxml v2.0.0.**
 
 There are few different ways to install GCC-XML on your system:
 
@@ -58,8 +58,8 @@ There are few different ways to install GCC-XML on your system:
 .. _`instructions`: http://gccxml.org/HTML/Install.html
 .. _`GCC-XML`: http://www.gccxml.org
 .. _`CastXML`: https://github.com/CastXML/CastXML
-.. _`Linux`: https://midas3.kitware.com/midas/folder/13152
-.. _`OS X`: https://midas3.kitware.com/midas/folder/13152
-.. _`Windows`: https://midas3.kitware.com/midas/folder/13152
+.. _`Linux`: https://github.com/CastXML/CastXMLSuperbuild/releases/latest
+.. _`OS X`: https://github.com/CastXML/CastXMLSuperbuild/releases/latest
+.. _`Windows`: https://github.com/CastXML/CastXMLSuperbuild/releases/latest
 .. _`SuperBuild`: https://github.com/thewtex/CastXMLSuperbuild
 .. _`full install instructions`: https://github.com/CastXML/CastXML#build
