@@ -30,6 +30,8 @@ class defaults_eraser(object):
 
     def replace_basic_string(self, cls_name):
 
+        print("replace_basic_string START", cls_name)
+
         # Take the lists of all possible string variations
         # and clean them up by replacing ::std by std.
         str_eq = [
@@ -48,6 +50,8 @@ class defaults_eraser(object):
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
+
+        print("replace_basic_string DONE", new_name)
 
         return new_name
 
@@ -99,10 +103,12 @@ class defaults_eraser(object):
         return self.no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
+        print("erase_allocator START", cls_name)
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
-            return
+            print("erase_allocator EARLY RETURN")
+            return cls_name
         value_type = c_args[0]
         tmpl = string.Template(
             "$container<$value_type, $allocator<$value_type>>")
@@ -112,8 +118,10 @@ class defaults_eraser(object):
             allocator=default_allocator)
         if self.normalize(cls_name) == \
                 self.normalize(tmpl):
+            print("erase_allocator NORMALIZED RETURN")
             return templates.join(
                 c_name, [self.erase_recursive(value_type)])
+        print("erase_allocator FINAL RETURN NONE")
 
     def erase_container(self, cls_name, default_container_name='std::deque'):
         cls_name = self.replace_basic_string(cls_name)
@@ -525,6 +533,7 @@ class container_traits_impl_t(object):
             name = self.class_declaration(type_or_string).name
         if not self.remove_defaults_impl:
             return name
+        print("remove_defaults", name)
         no_defaults = self.remove_defaults_impl(name)
         if not no_defaults:
             return name

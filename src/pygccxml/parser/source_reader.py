@@ -420,7 +420,7 @@ class source_reader_t(object):
             patcher.update_unnamed_class(decls.values())
         patcher.fix_calldef_decls(
             scanner_.calldefs(), scanner_.enums(), self.__cxx_std)
-        patcher.remove_spaces_from_template_names(decls.values())
+        # patcher.remove_spaces_from_template_names(decls.values())
 
         decls = [inst for inst in iter(decls.values()) if self.__check(inst)]
         return decls, list(files.values())

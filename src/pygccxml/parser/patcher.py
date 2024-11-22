@@ -314,6 +314,32 @@ def remove_spaces_from_template_names(decls):
     after hash<std::vector<int>>
     """
     for decl in decls:
+        # if "v_int" in decl.name:
+        #     print("------")
+        #     print(
+        #         decl.decl_type,
+        #         type(decl.decl_type),
+        #         decl.decl_type.declaration.name)
+        # if "vector" in decl.name:
+        #     print("------")
+        #     print("vvvvvvv", decl, decl.name)
         decl.name = decl.name.replace(" >", ">").replace("< ", "<")
         decl.partial_name = \
             decl.partial_name.replace(" >", ">").replace("< ", "<")
+        if isinstance(decl, declarations.typedef_t) and \
+           isinstance(decl.decl_type, declarations.declarated_t):
+            decl.decl_type.declaration.name = fix_spaces(
+                decl.decl_type.declaration.name)
+            decl.decl_type.declaration.partial_name = fix_spaces(
+                decl.decl_type.declaration.partial_name)
+        # if "v_int" in decl.name:
+        #     print(
+        #         decl.decl_type,
+        #         type(decl.decl_type),
+        #         decl.decl_type.declaration.name)
+        # if "vector" in decl.name:
+        #     print("vvvvvvv", decl, decl.name)
+
+
+def fix_spaces(val):
+    return val.replace(" >", ">").replace("< ", "<")

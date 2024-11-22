@@ -66,8 +66,8 @@ def test_split():
 
     """
 
-    p1 = "std::vector<char, std::allocator<char> >"
-    p2 = "std::vector<int, std::allocator<int> >"
+    p1 = "std::vector<char, std::allocator<char>>"
+    p2 = "std::vector<int, std::allocator<int>>"
     args_list = [
         "const std::basic_string<char> &", "const int &", "const double &"]
 
