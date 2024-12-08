@@ -29,7 +29,6 @@ class defaults_eraser(object):
         return type_str.replace(' ', '')
 
     def replace_basic_string(self, cls_name):
-
         # Take the lists of all possible string variations
         # and clean them up by replacing ::std by std.
         str_eq = [
@@ -102,7 +101,7 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
-            return
+            return cls_name
         value_type = c_args[0]
         tmpl = string.Template(
             "$container< $value_type, $allocator<$value_type> >")
@@ -119,12 +118,12 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
-            return
+            return cls_name
         value_type = c_args[0]
         dc_no_defaults = self.erase_recursive(c_args[1])
         if self.normalize(dc_no_defaults) != self.normalize(
                 templates.join(default_container_name, [value_type])):
-            return
+            return cls_name
         return templates.join(
             c_name, [self.erase_recursive(value_type)])
 
@@ -136,7 +135,7 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
-            return
+            return cls_name
         dc_no_defaults = self.erase_recursive(c_args[1])
         if self.normalize(dc_no_defaults) != self.normalize(
                 templates.join(default_container_name, [c_args[0]])):
@@ -156,7 +155,7 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
-            return
+            return cls_name
         value_type = c_args[0]
         tmpl = string.Template(
             "$container< $value_type, $compare<$value_type>, " +
@@ -179,7 +178,7 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 4:
-            return
+            return cls_name
         key_type = c_args[0]
         mapped_type = c_args[1]
         tmpls = [
@@ -209,7 +208,7 @@ class defaults_eraser(object):
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) < 3:
-            return
+            return cls_name
 
         default_less = 'std::less'
         default_equal_to = 'std::equal_to'
@@ -226,7 +225,7 @@ class defaults_eraser(object):
                 "$container< $value_type, $hash<$value_type >, " +
                 "$equal_to<$value_type >, $allocator<$value_type> >")
         else:
-            return
+            return cls_name
 
         value_type = c_args[0]
         template = string.Template(tmpl)
@@ -258,7 +257,7 @@ class defaults_eraser(object):
             key_type = c_args[0]
             mapped_type = c_args[1]
         else:
-            return
+            return cls_name
 
         if len(c_args) == 4:
             default_hash = 'hash_compare'
@@ -305,7 +304,7 @@ class defaults_eraser(object):
                         "$equal_to<$key_type>, " +
                         "$allocator< $mapped_type > >")
         else:
-            return
+            return cls_name
 
         for ns in std_namespaces:
             inst = tmpl.substitute(
@@ -520,14 +519,13 @@ class container_traits_impl_t(object):
                std::vector< int >
 
         """
-
         name = type_or_string
         if not isinstance(type_or_string, str):
             name = self.class_declaration(type_or_string).name
         if not self.remove_defaults_impl:
             return name
         no_defaults = self.remove_defaults_impl(name)
-        if not no_defaults:
+        if no_defaults is None:
             return name
         return no_defaults
 
