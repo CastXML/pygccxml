@@ -482,22 +482,32 @@ def is_fundamental(type_):
 
 string_equivalences = [
     (
-        '::std::basic_string<char,std::char_traits<char>,'
+        'std::basic_string<char, std::char_traits<char>, '
+        'std::allocator<char>>, '
+        'std::allocator<std::basic_string<'
+        'char, std::char_traits<char>, std::allocator<char>>>'),
+    (
+        '::std::basic_string<char, std::char_traits<char>, '
         'std::allocator<char>>'),
     '::std::basic_string<char>', '::std::string']
 
 wstring_equivalences = [
     (
-        '::std::basic_string<wchar_t,std::char_traits<wchar_t>,' +
+        'std::basic_string<wchar_t, std::char_traits<wchar_t>, '
+        'std::allocator<wchar_t>>, '
+        'std::allocator<std::basic_string<'
+        'wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>>'),
+    (
+        '::std::basic_string<wchar_t, std::char_traits<wchar_t>, '
         'std::allocator<wchar_t>>'),
     '::std::basic_string<wchar_t>', '::std::wstring']
 
 ostream_equivalences = [
-    '::std::basic_ostream<char,std::char_traits<char>>',
+    '::std::basic_ostream<char std::char_traits<char>>',
     '::std::basic_ostream<char>', '::std::ostream']
 
 wostream_equivalences = [
-    '::std::basic_ostream<wchar_t,std::char_traits<wchar_t>>',
+    '::std::basic_ostream<wchar_t, std::char_traits<wchar_t>>',
     '::std::basic_ostream<wchar_t>', '::std::wostream']
 
 
