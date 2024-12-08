@@ -482,8 +482,11 @@ def is_fundamental(type_):
 
 string_equivalences = [
     (
-        '::std::basic_string<char,std::char_traits<char>,'
-        'std::allocator<char>>'),
+        'std::basic_string<char, std::char_traits<char>, '
+        'std::allocator<char>>, '
+        'std::allocator<std::basic_string<'
+        'char, std::char_traits<char>, std::allocator<char>>>'),
+    '::std::basic_string<char,std::char_traits<char>,std::allocator<char>>',
     '::std::basic_string<char>', '::std::string']
 
 wstring_equivalences = [

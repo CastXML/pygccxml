@@ -192,16 +192,17 @@ class parser_t(object):
         args = [_f for _f in args if _f]
 
         if not args:
-            args_str = ' '
+            args_str = ''
         elif len(args) == 1:
-            args_str = ' ' + args[0] + ' '
+            args_str = '' + args[0] + ''
         else:
-            args_str = ' ' + arg_separator.join(args) + ' '
+            args_str = '' + arg_separator.join(args) + ''
 
         return ''.join([name, self.__begin, args_str, self.__end])
 
     def normalize(self, decl_string, arg_separator=None):
         """implementation details"""
+
         if not self.has_pattern(decl_string):
             return decl_string
         name, args = self.split(decl_string)

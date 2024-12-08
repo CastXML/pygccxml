@@ -30,6 +30,8 @@ class defaults_eraser(object):
 
     def replace_basic_string(self, cls_name):
 
+        print("replace_basic_string START", cls_name)
+
         # Take the lists of all possible string variations
         # and clean them up by replacing ::std by std.
         str_eq = [
@@ -48,6 +50,8 @@ class defaults_eraser(object):
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
+
+        print("replace_basic_string DONE", new_name)
 
         return new_name
 
@@ -99,21 +103,25 @@ class defaults_eraser(object):
         return self.no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
+        print("erase_allocator START", cls_name)
         cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
-            return
+            print("erase_allocator EARLY RETURN")
+            return cls_name
         value_type = c_args[0]
         tmpl = string.Template(
-            "$container< $value_type, $allocator<$value_type> >")
+            "$container<$value_type, $allocator<$value_type>>")
         tmpl = tmpl.substitute(
             container=c_name,
             value_type=value_type,
             allocator=default_allocator)
         if self.normalize(cls_name) == \
                 self.normalize(tmpl):
+            print("erase_allocator NORMALIZED RETURN")
             return templates.join(
                 c_name, [self.erase_recursive(value_type)])
+        print("erase_allocator FINAL RETURN NONE")
 
     def erase_container(self, cls_name, default_container_name='std::deque'):
         cls_name = self.replace_basic_string(cls_name)
@@ -159,8 +167,8 @@ class defaults_eraser(object):
             return
         value_type = c_args[0]
         tmpl = string.Template(
-            "$container< $value_type, $compare<$value_type>, " +
-            "$allocator<$value_type> >")
+            "$container<$value_type, $compare<$value_type>, " +
+            "$allocator<$value_type>>")
         tmpl = tmpl.substitute(
             container=c_name,
             value_type=value_type,
@@ -184,14 +192,14 @@ class defaults_eraser(object):
         mapped_type = c_args[1]
         tmpls = [
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< const $key_type, $mapped_type> > >"),
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair<const $key_type, $mapped_type>>>"),
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< $key_type const, $mapped_type> > >"),
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair<$key_type const, $mapped_type>>>"),
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< $key_type, $mapped_type> > >")]
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair<$key_type, $mapped_type>>>")]
         for tmpl in tmpls:
             tmpl = tmpl.substitute(
                 container=c_name,
@@ -218,13 +226,13 @@ class defaults_eraser(object):
         if len(c_args) == 3:
             default_hash = 'hash_compare'
             tmpl = (
-                "$container< $value_type, $hash<$value_type, " +
-                "$less<$value_type> >, $allocator<$value_type> >")
+                "$container<$value_type, $hash<$value_type, " +
+                "$less<$value_type>>, $allocator<$value_type>>")
         elif len(c_args) == 4:
             default_hash = 'hash'
             tmpl = (
-                "$container< $value_type, $hash<$value_type >, " +
-                "$equal_to<$value_type >, $allocator<$value_type> >")
+                "$container<$value_type, $hash<$value_type>, " +
+                "$equal_to<$value_type>, $allocator<$value_type>>")
         else:
             return
 
@@ -263,14 +271,14 @@ class defaults_eraser(object):
         if len(c_args) == 4:
             default_hash = 'hash_compare'
             tmpl = string.Template(
-                "$container< $key_type, $mapped_type, " +
-                "$hash<$key_type, $less<$key_type> >, " +
-                "$allocator< std::pair< const $key_type, $mapped_type> > >")
+                "$container<$key_type, $mapped_type, " +
+                "$hash<$key_type, $less<$key_type>>, " +
+                "$allocator<std::pair<const $key_type, $mapped_type>>>")
             if key_type.startswith('const ') or key_type.endswith(' const'):
                 tmpl = string.Template(
-                    "$container< $key_type, $mapped_type, $hash<$key_type, " +
-                    "$less<$key_type> >, $allocator< std::pair< $key_type, " +
-                    "$mapped_type> > >")
+                    "$container<$key_type, $mapped_type, $hash<$key_type, " +
+                    "$less<$key_type>>, $allocator<std::pair<$key_type, " +
+                    "$mapped_type>>>")
         elif len(c_args) == 5:
             default_hash = 'hash'
             if self.unordered_maps_and_sets:
@@ -279,31 +287,31 @@ class defaults_eraser(object):
                     "$hash<$key_type>, " +
                     "$equal_to<$key_type>, " +
                     "$allocator<std::pair<const$key_type, " +
-                    "$mapped_type> > >")
+                    "$mapped_type>>>")
                 if key_type.startswith('const ') or \
                         key_type.endswith(' const'):
                     tmpl = string.Template(
                         "$container<$key_type, $mapped_type, " +
-                        "$hash<$key_type >, " +
-                        "$equal_to<$key_type >, " +
+                        "$hash<$key_type>, " +
+                        "$equal_to<$key_type>, " +
                         "$allocator<std::pair<$key_type, " +
-                        "$mapped_type> > >")
+                        "$mapped_type>>>")
             else:
                 tmpl = string.Template(
-                    "$container< $key_type, $mapped_type, "
-                    "$hash<$key_type >, " +
+                    "$container<$key_type, $mapped_type, "
+                    "$hash<$key_type>, " +
                     "$equal_to<$key_type>, "
-                    "$allocator< $mapped_type> >")
+                    "$allocator<$mapped_type>>")
                 if key_type.startswith('const ') or \
                         key_type.endswith(' const'):
                     # TODO: this template is the same than above.
                     # Make sure why this was needed and if this is
                     # tested. There may be a const missing somewhere.
                     tmpl = string.Template(
-                        "$container< $key_type, $mapped_type, " +
-                        "$hash<$key_type >, " +
+                        "$container<$key_type, $mapped_type, " +
+                        "$hash<$key_type>, " +
                         "$equal_to<$key_type>, " +
-                        "$allocator< $mapped_type > >")
+                        "$allocator<$mapped_type>>")
         else:
             return
 
@@ -383,7 +391,6 @@ class container_traits_impl_t(object):
 
         utils.loggers.queries_engine.debug(
             "Container traits: cleaned up search %s", type_)
-
         if isinstance(type_, cpptypes.declarated_t):
             cls_declaration = type_traits.remove_alias(type_.declaration)
         elif isinstance(type_, class_declaration.class_t):
@@ -512,12 +519,12 @@ class container_traits_impl_t(object):
         For example:
             .. code-block:: c++
 
-               std::vector< int, std::allocator< int > >
+               std::vector<int, std::allocator<int>>
 
         will become:
             .. code-block:: c++
 
-               std::vector< int >
+               std::vector<int>
 
         """
 
@@ -526,6 +533,7 @@ class container_traits_impl_t(object):
             name = self.class_declaration(type_or_string).name
         if not self.remove_defaults_impl:
             return name
+        print("remove_defaults", name)
         no_defaults = self.remove_defaults_impl(name)
         if not no_defaults:
             return name

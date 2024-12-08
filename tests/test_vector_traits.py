@@ -71,11 +71,11 @@ def test_no(global_ns):
 def test_declaration():
     cnt = (
         'std::vector<std::basic_string<char, std::char_traits<char>, ' +
-        'std::allocator<char> >,std::allocator<std::basic_string<char, ' +
-        'std::char_traits<char>, std::allocator<char> > > >' +
+        'std::allocator<char>>,std::allocator<std::basic_string<char, ' +
+        'std::char_traits<char>, std::allocator<char>>>>' +
         '@::std::vector<std::basic_string<char, std::char_traits<char>, ' +
-        'std::allocator<char> >,std::allocator<std::basic_string<char, ' +
-        'std::char_traits<char>, std::allocator<char> > > >')
+        'std::allocator<char>>,std::allocator<std::basic_string<char, ' +
+        'std::char_traits<char>, std::allocator<char>>>>')
     traits = declarations.find_container_traits(cnt)
     assert declarations.vector_traits == traits
 
