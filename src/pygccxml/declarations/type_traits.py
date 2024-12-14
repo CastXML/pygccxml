@@ -490,29 +490,33 @@ def _normalize_equivalences(equivalences):
 
 string_equivalences = [
     (
-        '::std::basic_string<char, std::char_traits<char>, '
+        'std::basic_string<char, std::char_traits<char>, '
         'std::allocator<char>>'
     ),
-    '::std::basic_string<char>',
-    '::std::string'
+    'std::basic_string<char>',
+    'std::string'
     ]
 
 wstring_equivalences = [
     (
-        '::std::basic_string<wchar_t, std::char_traits<wchar_t>, '
+        'std::basic_string<wchar_t, std::char_traits<wchar_t>, '
         'std::allocator<wchar_t>>'
     ),
-    '::std::basic_string<wchar_t>',
-    '::std::wstring'
+    'std::basic_string<wchar_t>',
+    'std::wstring'
     ]
 
 ostream_equivalences = [
-    '::std::basic_ostream<char, std::char_traits<char>>',
-    '::std::basic_ostream<char>', '::std::ostream']
+    'std::basic_ostream<char, std::char_traits<char>>',
+    'std::basic_ostream<char>',
+    'std::ostream'
+    ]
 
 wostream_equivalences = [
-    '::std::basic_ostream<wchar_t, std::char_traits<wchar_t>>',
-    '::std::basic_ostream<wchar_t>', '::std::wostream']
+    'std::basic_ostream<wchar_t, std::char_traits<wchar_t>>',
+    'std::basic_ostream<wchar_t>',
+    'std::wostream'
+    ]
 
 
 normalized_string_equivalences = _normalize_equivalences(
