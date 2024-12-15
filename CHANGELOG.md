@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 2.6.1
+-------------
+
+1. Fix test_remove_template_defaults when tested on macos 13
+
+2. Fix some test compilation with c++14/17
+
 Version 2.6.0
 -------------
 
