@@ -48,13 +48,11 @@ typedef EFavoriteDrinks typedef_EFavoriteDrinks;
 
 typedef int (*function_ptr)(int, double);
 
-struct exception{};
-
 struct members_pointers_t{
 	int some_function( double hi, int i ){
 		return 0;
 	}
-	int some_function( double hi) const throw( exception ){
+	int some_function( double hi) const {
 		return 0;
 	};
     int m_some_const_member;

@@ -19,6 +19,16 @@ from .. import utils
 
 std_namespaces = ('std', 'stdext', '__gnu_cxx')
 
+# Take into account different equivalences (with or without spaces)
+string_equivalences = type_traits.string_equivalences + \
+    type_traits.normalized_string_equivalences
+string_equivalences = [
+    v for v in string_equivalences if not v == "std::string"]
+wstring_equivalences = type_traits.wstring_equivalences + \
+    type_traits.normalized_wstring_equivalences
+wstring_equivalences = [
+    v for v in wstring_equivalences if not v == "std::wstring"]
+
 
 class defaults_eraser(object):
 
@@ -29,20 +39,10 @@ class defaults_eraser(object):
         return type_str.replace(' ', '')
 
     def replace_basic_string(self, cls_name):
-
-        # Take the lists of all possible string variations
-        # and clean them up by replacing ::std by std.
-        str_eq = [
-            v.replace("::std", "std") for v in
-            type_traits.string_equivalences]
-        wstr_eq = [
-            v.replace("::std", "std") for v in
-            type_traits.wstring_equivalences]
-
-        # Replace all the variations of strings by the smallest one.
         strings = {
-            "std::string": [v for v in str_eq if not v == "std::string"],
-            "std::wstring": [v for v in wstr_eq if not v == "std::wstring"]}
+            "std::string": string_equivalences,
+            "std::wstring": wstring_equivalences
+            }
 
         new_name = cls_name
         for short_name, long_names in strings.items():

@@ -1,6 +1,13 @@
 Changes
 =======
 
+Version 2.6.1
+-------------
+
+1. Fix test_remove_template_defaults when tested on macos 13
+
+2. Fix some test compilation with c++14/17
+
 Version 2.6.0
 -------------
 
@@ -13,6 +20,8 @@ Version 2.6.0
 4. Fix a bug in unordered_set_traits and unordered_multiset_traits
 
 5. Fix a bug in build_decl_string with elaborated type specifiers
+
+6. Fix a bug where the declared widht of arrays args where lost (by using the original type xml tag)
 
 Version 2.5.0
 -------------
