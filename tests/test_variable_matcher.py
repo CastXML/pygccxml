@@ -54,7 +54,7 @@ def test_no_defaults():
     global_ns = declarations.get_global_namespace(decls)
 
     global_ns.decls(lambda decl: 'vector<' in decl.name)
-    global_ns.decl('vector< _0_ >')
-    global_ns.class_('vector< std::vector< int > >')
-    global_ns.class_('vector< std::string >')
-    global_ns.decl('vector< const int >')
+    global_ns.decl('vector<_0_>')
+    global_ns.class_('vector<std::vector<int>>')
+    global_ns.class_('vector<std::string>')
+    global_ns.decl('vector<const int>')

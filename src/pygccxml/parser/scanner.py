@@ -285,7 +285,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
         return self.__members
 
     def startElement(self, name, attrs):
-
         try:
             if name not in self.__readers:
                 return
@@ -656,6 +655,12 @@ class scanner_t(xml.sax.handler.ContentHandler):
         name = attrs.get(XML_AN_NAME, '')
         if '$' in name or '.' in name:
             name = ''
+        if "<" in name and " >" in name:
+            # Name with template. In some rare cases there
+            # is a space before > (and only there), so remove
+            # it to be consistent with the other names that
+            # have no space there
+            name = name.replace(" >", ">")
         if XML_AN_INCOMPLETE in attrs:
             decl = self.__decl_factory.create_class_declaration(name=name)
         else:
