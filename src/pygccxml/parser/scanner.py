@@ -286,6 +286,8 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def startElement(self, name, attrs):
 
+        # print(attrs)
+
         try:
             if name not in self.__readers:
                 return
@@ -654,6 +656,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
 
     def __read_class_impl(self, class_type, attrs):
         name = attrs.get(XML_AN_NAME, '')
+        # name = name.replace(">", " >").replace("<", "< ")
         if '$' in name or '.' in name:
             name = ''
         if XML_AN_INCOMPLETE in attrs:

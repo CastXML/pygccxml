@@ -21,25 +21,25 @@ def __test_is_template_impl(decl_string):
 
 
 def test_split_on_vector():
-    __test_is_template_impl("vector<int,std::allocator<int> >")
+    __test_is_template_impl("vector<int, std::allocator<int>>")
 
     __test_split_impl(
-        "vector<int,std::allocator<int> >",
+        "vector<int, std::allocator<int>>",
         "vector",
         ["int", "std::allocator<int>"])
 
     __test_split_recursive_impl(
-        "vector<int,std::allocator<int> >",
+        "vector<int, std::allocator<int>>",
         [("vector", ["int", "std::allocator<int>"]),
             ("std::allocator", ["int"])])
 
 
 def test_split_on_string():
     __test_is_template_impl(
-        "basic_string<char,std::char_traits<char>,std::allocator<char> >")
+        "basic_string<char, std::char_traits<char>, std::allocator<char>>")
 
     __test_split_impl(
-        "basic_string<char,std::char_traits<char>,std::allocator<char> >",
+        "basic_string<char, std::char_traits<char>, std::allocator<char>>",
         "basic_string",
         ["char",
             "std::char_traits<char>",
@@ -48,24 +48,24 @@ def test_split_on_string():
 
 def test_split_on_map():
     __test_is_template_impl(
-        "map<long int,std::vector<int, std::allocator<int> >," +
-        "std::less<long int>,std::allocator<std::pair<const long int, " +
-        "std::vector<int, std::allocator<int> > > > >")
+        "map<long int,std::vector<int, std::allocator<int>>," +
+        "std::less<long int>, std::allocator<std::pair<const long int, " +
+        "std::vector<int, std::allocator<int>>>>>")
 
     __test_split_impl(
-        "map<long int,std::vector<int, std::allocator<int> >," +
-        "std::less<long int>,std::allocator<std::pair<const long int, " +
-        "std::vector<int, std::allocator<int> > > > >",
+        "map<long int,std::vector<int, std::allocator<int>>," +
+        "std::less<long int>, std::allocator<std::pair<const long int, " +
+        "std::vector<int, std::allocator<int>>>>>",
         "map",
         ["long int",
-            "std::vector<int, std::allocator<int> >",
+            "std::vector<int, std::allocator<int>>",
             "std::less<long int>",
             "std::allocator<std::pair<const long int, " +
-            "std::vector<int, std::allocator<int> > > >"])
+            "std::vector<int, std::allocator<int>>>>"])
 
 
 def test_join_on_vector():
-    assert "vector< int, std::allocator<int> >" == \
+    assert "vector<int, std::allocator<int>>" == \
         declarations.templates.join(
             "vector", ("int", "std::allocator<int>"))
 
