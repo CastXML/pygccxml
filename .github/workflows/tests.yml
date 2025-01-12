@@ -3,6 +3,7 @@ on:
     branches:
       - main
       - develop
+      - dynamic_exception
   pull_request:
 
 jobs:
