@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import pytest
+import platform
 
 from . import autoconfig
 
@@ -15,7 +16,12 @@ from pygccxml import declarations
 def global_ns_fixture():
     config = autoconfig.cxx_parsers_cfg.config.clone()
     config.castxml_epic_version = 1
-    config.cflags = "-std=c++11"
+    if platform.system() == "Darwin":
+        config.cflags = "-std=c++11 -Dat_quick_exit=atexit -Dquick_exit=exit"
+        # https://fr.mathworks.com/matlabcentral/answers/2013982-clibgen-generatelibrarydefinition-error-the-global-scope-has-no-quick_exit-on-mac-m2#answer_1439856
+        # https://github.com/jetbrains/kotlin/commit/d50f585911dedec5723213da8835707ac95e1c01
+    else:
+        config.cflags = "-std=c++11"
     decls = parser.parse(["test_overrides.hpp"], config)
     global_ns = declarations.get_global_namespace(decls)
     return global_ns

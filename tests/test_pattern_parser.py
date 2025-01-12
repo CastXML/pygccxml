@@ -40,7 +40,12 @@ def test_template_split_std_vector(global_ns):
     """
 
     config = autoconfig.cxx_parsers_cfg.config.clone()
-    config.cflags = "-std=c++11"
+    if platform.system() == "Darwin":
+        config.cflags = "-std=c++11 -Dat_quick_exit=atexit -Dquick_exit=exit"
+        # https://fr.mathworks.com/matlabcentral/answers/2013982-clibgen-generatelibrarydefinition-error-the-global-scope-has-no-quick_exit-on-mac-m2#answer_1439856
+        # https://github.com/jetbrains/kotlin/commit/d50f585911dedec5723213da8835707ac95e1c01
+    else:
+        config.cflags = "-std=c++11"
     decls = parser.parse(TEST_FILES, config)
 
     for decl in declarations.make_flatten(decls):
