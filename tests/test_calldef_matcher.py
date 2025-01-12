@@ -20,6 +20,7 @@ TEST_FILES = [
 def decls():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     return decls
 

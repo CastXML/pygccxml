@@ -21,6 +21,7 @@ TEST_FILES = [
 def global_ns_fixture_all_at_once():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)
     return global_ns
@@ -30,6 +31,7 @@ def global_ns_fixture_all_at_once():
 def global_ns_fixture_file_by_file():
     COMPILATION_MODE = parser.COMPILATION_MODE.FILE_BY_FILE
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)
     return global_ns

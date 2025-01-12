@@ -21,6 +21,7 @@ def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     config.castxml_epic_version = 1
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)

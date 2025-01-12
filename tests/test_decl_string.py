@@ -21,6 +21,7 @@ def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     INIT_OPTIMIZER = True
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     config.castxml_epic_version = 1
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)
@@ -38,6 +39,7 @@ TEMPLATE = """
 
 def test_member_function(global_ns):
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     member_inline_call = \
         global_ns.member_function('member_inline_call')
     decls = parser.parse_string(
@@ -49,6 +51,7 @@ def test_member_function(global_ns):
 
 def test_free_function(global_ns):
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     return_default_args = \
         global_ns.free_function('return_default_args')
     decls = parser.parse_string(
@@ -60,6 +63,7 @@ def test_free_function(global_ns):
 
 def test_all_mem_and_free_funs(global_ns):
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    config.cflags = "-std=c++14"
     ns = global_ns.namespace('::declarations::calldef')
     for f in ns.member_functions():
         decls = parser.parse_string(
