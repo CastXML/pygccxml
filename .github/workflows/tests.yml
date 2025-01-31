@@ -204,13 +204,20 @@ jobs:
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
       - name: Setup castxml for Linux
-        if: (matrix.os == 'ubuntu-20.04' || matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-24.04' || startsWith(matrix.os, 'ubuntu-22.04-arm') || startsWith(matrix.os, 'ubuntu-24.04-arm')) && matrix.castxml == 'castxml'
+        if: (matrix.os == 'ubuntu-24.04' || matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-20.04')) && matrix.castxml == 'castxml'
         run: |
-          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/bdbb67a10c5f8d1b738cd19cb074f409d4803e8077cb8c1072ef4eaf738fa871a73643f9c8282d58cae28d188df842c82ad6620b6d590b0396a0172a27438dce/download | tar zxf - -C ~/
+          wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-linux.tar.gz | tar zxf - -C ~/
+        if: (matrix.os == 'ubuntu-24.04-arm' || matrix.os == 'ubuntu-22.04-arm')) && matrix.castxml == 'castxml'
+        run: |
+          wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-linux-aarch64.tar.gz | tar zxf - -C ~/
       - name: Setup castxml for Mac
         if: matrix.os == 'macos-13' || startsWith(matrix.os, 'macos-15')
         run: |
-          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/5d937e938f7b882a3a3e7941e68f8312d0898aaf2082e00003dd362b1ba70b98b0a08706a1be28e71652a6a0f1e66f89768b5eaa20e5a100592d5b3deefec3f0/download | tar zxf - -C ~/
+          wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-macosx.tar.gz | tar zxf - -C ~/
+      - name: Setup castxml for Mac ARM
+        if: matrix.os == 'macos-15'
+        run: |
+          wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-macos-arm.tar.gz | tar zxf - -C ~/
       - name: Run tests
         run: |
           export PATH=~/castxml/bin:$PATH
