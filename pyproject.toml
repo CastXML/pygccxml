@@ -27,8 +27,6 @@ classifiers = [
   "Operating System :: MacOS :: MacOS X",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: POSIX",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -40,7 +38,7 @@ classifiers = [
 ]
 
 dependencies = [
-  'importlib-metadata >= 4.6; python_version < "3.14"', # Not required for 3.8+, but fixes a stdlib bug
+  'importlib-metadata >= 4.6; python_version < "3.10"', # Not required for 3.8+, but fixes a stdlib bug
 ]
 
 [project.urls]
@@ -50,7 +48,7 @@ Repository = "https://github.com/CastXML/pygccxml"
 Changelog = "https://github.com/CastXML/pygccxml/CHANGELOG.md"
 
 [options]
-python_requires = ">=3.7"
+python_requires = ">=3.9"
 
 [project.optional-dependencies]
 test = [
