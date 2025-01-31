@@ -203,10 +203,11 @@ jobs:
           pip install '.[test]'
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
-      - name: Setup castxml for Linux
+      - name: Setup castxml for Linux x86_64
         if: (matrix.os == 'ubuntu-24.04' || matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-20.04')) && matrix.castxml == 'castxml'
         run: |
           wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-linux.tar.gz | tar zxf - -C ~/
+      - name: Setup castxml for Linux ARM64/AARCH64
         if: (matrix.os == 'ubuntu-24.04-arm' || matrix.os == 'ubuntu-22.04-arm')) && matrix.castxml == 'castxml'
         run: |
           wget -q -O - https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.10/castxml-linux-aarch64.tar.gz | tar zxf - -C ~/
