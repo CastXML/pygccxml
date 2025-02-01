@@ -9,7 +9,7 @@
 # Docker image:
 # https://mybinder.readthedocs.io/en/latest/using/config_files.html
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
