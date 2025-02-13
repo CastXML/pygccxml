@@ -22,8 +22,6 @@ int return_default_args( int arg=1, bool flag=false );
 
 extern void static_call();
 
-void calldef_with_throw() throw( some_exception_t, other_exception_t );
-
 struct calldefs_t{
     calldefs_t();
 

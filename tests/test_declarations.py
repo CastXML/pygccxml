@@ -171,14 +171,6 @@ def test_calldef_free_functions(global_ns, helpers):
     )
     helpers._test_calldef_exceptions(global_ns, return_default_args, [])
 
-    calldef_with_throw = ns.free_function("calldef_with_throw")
-    assert calldef_with_throw is not None
-    helpers._test_calldef_exceptions(
-        global_ns, calldef_with_throw,
-        ["some_exception_t", "other_exception_t"]
-    )
-    # from now there is no need to check exception specification
-
 
 @pytest.mark.parametrize(
     "global_ns",
