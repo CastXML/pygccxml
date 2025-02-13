@@ -7,7 +7,7 @@ on:
 
 jobs:
   tests:
-    name: ${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
+    name: ${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -15,6 +15,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.9"
@@ -23,6 +24,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.10"
@@ -31,6 +33,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.11"
@@ -39,6 +42,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.12"
@@ -47,6 +51,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.13"
@@ -55,6 +60,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
             compiler: gcc
             version: "9"
             python-version: "3.13"
@@ -63,6 +69,70 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: ubuntu-20.04
+            arch: x86_64
+            compiler: gcc
+            version: "9"
+            python-version: "3.13"
+            castxml: "castxml"
+            castxml-epic: 1
+            cppstd: "-std=c++11"
+            
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.9"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.10"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.11"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.12"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.13"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
+            compiler: gcc
+            version: "9"
+            python-version: "3.13"
+            castxml: "castxml"
+            castxml-epic: 1
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04-arm
+            arch: aarch64
             compiler: gcc
             version: "9"
             python-version: "3.13"
@@ -79,9 +149,9 @@ jobs:
             cppstd: "-std=c++98"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Display Python version
