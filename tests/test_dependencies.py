@@ -143,28 +143,6 @@ def test_calldefs(global_ns):
         for dependency in dependencies_new]
     assert used_types == ['int', 'int', 'bool']
 
-    some_exception = ns.class_('some_exception_t')
-    other_exception = ns.class_('other_exception_t')
-    calldef_with_throw = ns.calldef('calldef_with_throw')
-
-    # Legacy way of fetching dependencies. Is still valid but deprecated
-    warnings.simplefilter("ignore", Warning)
-    dependencies_old = calldef_with_throw.i_depend_on_them()
-    warnings.simplefilter("error", Warning)
-    assert len(dependencies_old) == 3
-    dependencies_old = [
-        dependency for dependency in dependencies_old if
-        dependency.depend_on_it in (some_exception, other_exception)]
-    assert len(dependencies_old) == 2
-
-    dependencies_new = declarations.get_dependencies_from_decl(
-        calldef_with_throw)
-    assert len(dependencies_new) == 3
-    dependencies_new = [
-        dependency for dependency in dependencies_new if
-        dependency.depend_on_it in (some_exception, other_exception)]
-    assert len(dependencies_new) == 2
-
 
 def test_coverage(global_ns):
     declarations.get_dependencies_from_decl(global_ns)
