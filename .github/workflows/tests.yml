@@ -17,22 +17,6 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: "3.7"
-            castxml: "castxml"
-            castxml-epic: 0
-            cppstd: "-std=c++98"
-
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
-            python-version: "3.8"
-            castxml: "castxml"
-            castxml-epic: 0
-            cppstd: "-std=c++98"
-
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
@@ -57,7 +41,23 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: "3.8"
+            python-version: "3.12"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04
+            compiler: gcc
+            version: "9"
+            python-version: "3.13"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-20.04
+            compiler: gcc
+            version: "9"
+            python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++98"
@@ -65,7 +65,7 @@ jobs:
           - os: ubuntu-20.04
             compiler: gcc
             version: "9"
-            python-version: "3.8"
+            python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++11"
@@ -73,7 +73,7 @@ jobs:
           - os: macos-13
             compiler: xcode
             version: "default"
-            python-version: "3.8"
+            python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
