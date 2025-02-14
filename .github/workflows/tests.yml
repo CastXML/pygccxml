@@ -79,18 +79,23 @@ jobs:
             cppstd: "-std=c++98"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+
       - name: Install Python lib and test libs
         run: |
           pip install '.[test]'
+
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
+
       - name: Setup castxml for Linux
         if: matrix.os == 'ubuntu-20.04' && matrix.castxml == 'castxml'
         run: |
