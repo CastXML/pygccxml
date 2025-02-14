@@ -14,62 +14,65 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          # UBUNTU 24.04 - CASTXML EPIC 0
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.10"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.11"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.12"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          # UBUNTU 24.04 - CASTXML EPIC 1
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             compiler: gcc
-            version: "9"
+            version: "11"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
             cppstd: "-std=c++11"
 
+          # MACOS
           - os: macos-15
             compiler: xcode
             version: "default"
@@ -79,20 +82,25 @@ jobs:
             cppstd: "-std=c++98"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+
       - name: Install Python lib and test libs
         run: |
           pip install '.[test]'
+
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
+
       - name: Setup castxml for Linux
-        if: matrix.os == 'ubuntu-20.04' && matrix.castxml == 'castxml'
+        if: matrix.os == 'ubuntu-22.04' && matrix.castxml == 'castxml'
         run: |
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/bdbb67a10c5f8d1b738cd19cb074f409d4803e8077cb8c1072ef4eaf738fa871a73643f9c8282d58cae28d188df842c82ad6620b6d590b0396a0172a27438dce/download | tar zxf - -C ~/
       - name: Setup castxml for Mac
