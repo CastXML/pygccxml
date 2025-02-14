@@ -70,7 +70,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++11"
 
-          - os: macos-13
+          - os: macos-15
             compiler: xcode
             version: "default"
             python-version: "3.13"
