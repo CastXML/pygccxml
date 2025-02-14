@@ -17,7 +17,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
@@ -26,7 +26,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.10"
             castxml: "castxml"
             castxml-epic: 0
@@ -35,7 +35,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.11"
             castxml: "castxml"
             castxml-epic: 0
@@ -44,7 +44,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.12"
             castxml: "castxml"
             castxml-epic: 0
@@ -53,7 +53,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
@@ -62,7 +62,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -71,7 +71,7 @@ jobs:
           - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -80,7 +80,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
@@ -89,7 +89,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.10"
             castxml: "castxml"
             castxml-epic: 0
@@ -98,7 +98,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.11"
             castxml: "castxml"
             castxml-epic: 0
@@ -107,7 +107,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.12"
             castxml: "castxml"
             castxml-epic: 0
@@ -116,7 +116,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
@@ -125,7 +125,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -134,7 +134,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
-            version: "9"
+            version: "14"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
