@@ -81,6 +81,14 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
+          - os: windows-2025
+            compiler: msvc
+            version: "default"
+            python-version: "3.13"
+            castxml: "castxml"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
     steps:
       - uses: actions/checkout@v4
 
