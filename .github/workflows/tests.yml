@@ -82,6 +82,7 @@ jobs:
             cppstd: "-std=c++98"
 
           - os: windows-2025
+            aarch: amd64
             compiler: msvc
             version: "default"
             python-version: "3.13"
