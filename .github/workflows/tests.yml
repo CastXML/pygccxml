@@ -16,8 +16,8 @@ jobs:
         include:
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
@@ -25,8 +25,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.10"
             castxml: "castxml"
             castxml-epic: 0
@@ -34,8 +34,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.11"
             castxml: "castxml"
             castxml-epic: 0
@@ -43,8 +43,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.12"
             castxml: "castxml"
             castxml-epic: 0
@@ -52,8 +52,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
@@ -61,8 +61,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -70,8 +70,8 @@ jobs:
 
           - os: ubuntu-24.04
             arch: x86_64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -79,8 +79,8 @@ jobs:
             
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.9"
             castxml: "castxml"
             castxml-epic: 0
@@ -88,8 +88,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.10"
             castxml: "castxml"
             castxml-epic: 0
@@ -97,8 +97,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.11"
             castxml: "castxml"
             castxml-epic: 0
@@ -106,8 +106,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.12"
             castxml: "castxml"
             castxml-epic: 0
@@ -115,8 +115,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
@@ -124,8 +124,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -133,8 +133,8 @@ jobs:
 
           - os: ubuntu-24.04-arm
             arch: aarch64
-            compiler: gcc
-            version: "14"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 1
@@ -142,8 +142,8 @@ jobs:
 
           - os: macos-15
             arch: arm64
-            compiler: xcode
-            version: "default"
+            compiler: clang
+            version: "18"
             python-version: "3.13"
             castxml: "castxml"
             castxml-epic: 0
@@ -151,17 +151,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+
       - name: Install Python lib and test libs
         run: |
           pip install '.[test]'
+
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
+
+      # Install LLVM Clang 18 on Ubuntu runners
+      - name: Install LLVM Clang 18 on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-18 lldb-18 libclang-18-dev
+
+      # Install LLVM Clang 18 on macOS runners
+      - name: Install LLVM Clang 18 on macOS
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew update
+          brew install llvm@18
+          echo "$(brew --prefix llvm@18)/bin" >> $GITHUB_PATH
 
       # ─── Setup CastXML for Linux x86_64 ──────────────────────────────
       - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
@@ -170,12 +189,14 @@ jobs:
           wget -q -O ~/castxml-ubuntu-24.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-24.04-x86_64.tar.gz
           tar -xzf ~/castxml-ubuntu-24.04-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
-      - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
+
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 22.04)
         if: matrix.os == 'ubuntu-22.04' && matrix.arch == 'x86_64'
         run: |
           wget -q -O ~/castxml-ubuntu-22.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-x86_64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
+
       # ─── Setup CastXML for Linux ARM64 ──────────────────────────────
       - name: Setup CastXML for Linux ARM64 (Ubuntu 24.04)
         if: matrix.os == 'ubuntu-24.04-arm' && matrix.arch == 'aarch64'
@@ -183,25 +204,29 @@ jobs:
           wget -q -O ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-24.04-arm-aarch64.tar.gz
           tar -xzf ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
+
       - name: Setup CastXML for Linux ARM64 (Ubuntu 22.04)
         if: matrix.os == 'ubuntu-22.04-arm' && matrix.arch == 'aarch64'
         run: |
           wget -q -O ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-arm-aarch64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
+
       # ─── Setup CastXML for macOS ─────────────────────────────────────
       - name: Setup CastXML for macOS (x86_64)
         if: matrix.os == 'macos-15' && matrix.arch == 'x86_64'
         run: |
           wget -q -O ~/castxml-castxml-macos-15-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-macos-15-x86_64.tar.gz
-          tar -xzf ~/castxml-macos-15-x86_64.tar.gz -C ~/
+          tar -xzf ~/castxml-castxml-macos-15-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
+
       - name: Setup CastXML for macOS (ARM)
         if: matrix.os == 'macos-15' && matrix.arch == 'arm64'
         run: |
           wget -q -O ~/castxml-macos-15-arm64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-macos-15-arm64.tar.gz
           tar -xzf ~/castxml-macos-15-arm64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
+
       - name: Run tests
         run: |
           export PATH=~/castxml/bin:$PATH
