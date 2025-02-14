@@ -79,9 +79,9 @@ jobs:
             cppstd: "-std=c++98"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Display Python version
@@ -93,13 +93,13 @@ jobs:
         run: pycodestyle . --exclude=docs
 
       # ─── Setup CastXML for Linux ARM64 ──────────────────────────────
-      - name: Setup CastXML for Linux ARM64 (Ubuntu 22.04)
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 22.04)
         if: matrix.os == 'ubuntu-22.04'
         run: |
           wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-x86_64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/castxml
-      - name: Setup CastXML for Linux ARM64 (Ubuntu 24.04)
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
         if: matrix.os == 'ubuntu-24.04'
         run: |
           wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-24.04-x86_64.tar.gz
