@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -23,7 +23,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -32,7 +32,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -41,7 +41,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -50,7 +50,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -59,7 +59,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -68,7 +68,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -77,7 +77,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++11"
             
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -86,7 +86,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -95,7 +95,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -104,7 +104,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -113,7 +113,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -122,7 +122,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -131,7 +131,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04-arm
+          - os: ubuntu-22.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -162,7 +162,7 @@ jobs:
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
       - name: Setup castxml for Linux
-        if: matrix.os == 'ubuntu-20.04' && matrix.castxml == 'castxml'
+        if: matrix.os == 'ubuntu-22.04' && matrix.castxml == 'castxml'
         run: |
           wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/bdbb67a10c5f8d1b738cd19cb074f409d4803e8077cb8c1072ef4eaf738fa871a73643f9c8282d58cae28d188df842c82ad6620b6d590b0396a0172a27438dce/download | tar zxf - -C ~/
       - name: Setup castxml for Mac
