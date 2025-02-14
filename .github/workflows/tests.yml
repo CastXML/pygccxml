@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -23,7 +23,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -32,7 +32,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -41,7 +41,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -50,7 +50,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -59,7 +59,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -68,7 +68,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             arch: x86_64
             compiler: gcc
             version: "9"
@@ -77,7 +77,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++11"
             
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -86,7 +86,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -95,7 +95,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -104,7 +104,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -113,7 +113,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -122,7 +122,7 @@ jobs:
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -131,7 +131,7 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-22.04-arm
+          - os: ubuntu-24.04-arm
             arch: aarch64
             compiler: gcc
             version: "9"
@@ -164,11 +164,11 @@ jobs:
         run: pycodestyle . --exclude=docs
 
       # ─── Setup CastXML for Linux x86_64 ──────────────────────────────
-      - name: Setup CastXML for Linux x86_64 (Ubuntu 22.04)
-        if: matrix.os == 'ubuntu-22.04' && matrix.arch == 'x86_64'
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
+        if: matrix.os == 'ubuntu-24.04' && matrix.arch == 'x86_64'
         run: |
-          wget -q -O ~/castxml-ubuntu-22.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-x86_64.tar.gz
-          tar -xzf ~/castxml-ubuntu-22.04-x86_64.tar.gz -C ~/
+          wget -q -O ~/castxml-ubuntu-24.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-24.04-x86_64.tar.gz
+          tar -xzf ~/castxml-ubuntu-24.04-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
       - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
         if: matrix.os == 'ubuntu-24.04' && matrix.arch == 'x86_64'
@@ -183,11 +183,11 @@ jobs:
           wget -q -O ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-arm-aarch64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
-      - name: Setup CastXML for Linux ARM64 (Ubuntu 24.04)
-        if: matrix.os == 'ubuntu-24.04-arm' && matrix.arch == 'aarch64'
+      - name: Setup CastXML for Linux ARM64 (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04-arm' && matrix.arch == 'aarch64'
         run: |
-          wget -q -O ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-24.04-arm-aarch64.tar.gz
-          tar -xzf ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz -C ~/
+          wget -q -O ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post1/castxml-ubuntu-22.04-arm-aarch64.tar.gz
+          tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
       # ─── Setup CastXML for macOS ─────────────────────────────────────
       - name: Setup CastXML for macOS (x86_64)
