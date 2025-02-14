@@ -92,34 +92,30 @@ jobs:
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
 
-            # ─── Setup CastXML para Linux ARM64 ──────────────────────────────
+            # ─── Setup CastXML for Linux ARM64 ──────────────────────────────
       - name: Setup CastXML for Linux ARM64 (Ubuntu 22.04)
         if: matrix.os == 'ubuntu-22.04-arm64'
         run: |
-          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-ubuntu-22.04-arm-aarch64.zip
-          unzip -q castxml-ubuntu-22.04-arm-aarch64.zip -d ~/
+          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-ubuntu-22.04-arm-aarch64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/castxml
       - name: Setup CastXML for Linux ARM64 (Ubuntu 24.04)
         if: matrix.os == 'ubuntu-24.04-arm64'
         run: |
-          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-ubuntu-24.04-arm-aarch64.zip
-          unzip -q castxml-ubuntu-24.04-arm-aarch64.zip -d ~/
+          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-ubuntu-24.04-arm-aarch64.tar.gz
           tar -xzf ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/castxml
-      # ─── Setup CastXML para macOS ─────────────────────────────────────
+      # ─── Setup CastXML for macOS ─────────────────────────────────────
       - name: Setup CastXML for macOS (x86_64)
         if: matrix.os == 'macos-15' && matrix.arch == 'x86_64'
         run: |
-          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-macos-15-x86_64.zip
-          unzip -q castxml-macos-15-x86_64.zip -d ~/
+          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-macos-15-x86_64.tar.gz
           tar -xzf ~/castxml-macos-15-x86_64.tar.gz -C ~/
           chmod +x ~/castxml/castxml
       - name: Setup CastXML for macOS (ARM)
         if: matrix.os == 'macos-15' && matrix.arch == 'arm64'
         run: |
-          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-macos-15-arm64.zip
-          unzip -q castxml-macos-15-arm64.zip -d ~/
+          wget -q https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11/castxml-macos-15-arm64.tar.gz
           tar -xzf ~/castxml-macos-15-arm64.tar.gz -C ~/
           chmod +x ~/castxml/castxml
       - name: Run tests
