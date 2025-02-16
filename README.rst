@@ -27,7 +27,7 @@ Install instructions can be found `here <http://pygccxml.readthedocs.io/en/maste
 Compatibility
 -------------
 
-pygccxml is compatible with Python 3.7, 3.8, 3.9, 3.10, 3.11 and pypy3.
+pygccxml is compatible with Python 3.9, 3.10, 3.11, 3.12, 3.13 and pypy3.
 
 Documentation and examples
 --------------------------
@@ -73,15 +73,11 @@ The stable version can be found on the master branch.
 
 The develop branch contains the latest improvements but can be unstable. Pull Requests should be done on the develop branch.
 
-Testing and code coverage
--------------------------
-
-The builds are done using the Github Actions infrastructure.
+Testing
+-------
 
 Running the test suite is done with:
 
 .. code-block::
 
-  python3 -m unittests.test_all
-
-Code coverage is also available. It is automatically updated after each commit and can be found `here <https://codecov.io/gh/iMichka/pygccxml>`_.
+  pytest tests
