@@ -548,11 +548,13 @@ class project_reader_t(object):
                     if name == "rebind<std::__tree_node" + \
                             "<std::basic_string<char>, void *> >":
                         continue
+                    if name == "type":
+                        continue
 
                     msg = []
                     msg.append(
                         "Unable to find out actual class definition: '%s'." %
-                        decl_wrapper_type.declaration._name)
+                        name)
                     msg.append((
                         "Class definition has been changed from one " +
                         "compilation to an other."))
