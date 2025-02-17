@@ -374,7 +374,7 @@ def load_xml_generator_configuration(configuration, **defaults):
 
     An example configuration file skeleton can be found
     `here <https://github.com/gccxml/pygccxml/blob/develop/
-    unittests/xml_generator.cfg>`_.
+    tests/xml_generator.cfg>`_.
 
     """
     parser = configuration
