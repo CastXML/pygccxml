@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [x86_64]
+        arch: [ x86_64 ]
         include:
           # UBUNTU 22.04 - CASTXML EPIC 0
           - os: ubuntu-22.04
