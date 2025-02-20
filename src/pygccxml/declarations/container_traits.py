@@ -38,7 +38,8 @@ class defaults_eraser(object):
     def normalize(self, type_str):
         return type_str.replace(' ', '')
 
-    def replace_basic_string(self, cls_name):
+    @staticmethod
+    def replace_basic_string(cls_name):
         strings = {
             "std::string": string_equivalences,
             "std::wstring": wstring_equivalences
@@ -48,7 +49,6 @@ class defaults_eraser(object):
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
-
         return new_name
 
     def decorated_call_prefix(self, cls_name, text, doit):
@@ -99,7 +99,6 @@ class defaults_eraser(object):
         return self.no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
             return
@@ -116,7 +115,6 @@ class defaults_eraser(object):
                 c_name, [self.erase_recursive(value_type)])
 
     def erase_container(self, cls_name, default_container_name='std::deque'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
             return
@@ -132,7 +130,6 @@ class defaults_eraser(object):
             cls_name,
             default_container_name='std::vector',
             default_compare='std::less'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
             return
@@ -152,7 +149,6 @@ class defaults_eraser(object):
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
             return
@@ -175,7 +171,6 @@ class defaults_eraser(object):
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 4:
             return
@@ -205,7 +200,6 @@ class defaults_eraser(object):
                      self.erase_recursive(mapped_type)])
 
     def erase_hash_allocator(self, cls_name):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) < 3:
             return
@@ -243,7 +237,6 @@ class defaults_eraser(object):
                     c_name, [self.erase_recursive(value_type)])
 
     def erase_hashmap_compare_allocator(self, cls_name):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
 
         if self.unordered_maps_and_sets:
@@ -523,6 +516,7 @@ class container_traits_impl_t(object):
         name = type_or_string
         if not isinstance(type_or_string, str):
             name = self.class_declaration(type_or_string).name
+        name = defaults_eraser.replace_basic_string(name)
         if not self.remove_defaults_impl:
             return name
         no_defaults = self.remove_defaults_impl(name)
