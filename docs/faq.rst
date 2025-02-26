@@ -98,6 +98,9 @@ Currently this adds the support for elaborated type specifiers.
 \_\_va_list_tag and other hidden declarations (f1)
 --------------------------------------------------
 
+!!! This flag has been removed from pygccxml > 2.6
+We will now always remove these declarations
+
 When parsing with CastXML, the XML tree can contain declarations named
 ``__va_list_tag``. If the compiler is llvm 3.9,  ``__NSConstantString_tag``
 and ``__NSConstantString`` declarations may also be present.
