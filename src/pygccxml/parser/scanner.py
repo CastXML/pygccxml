@@ -202,6 +202,7 @@ class scanner_t(xml.sax.handler.ContentHandler):
         # With llvm 3.9 there is a __NSConstantString(_tag) in the tree
         self.__declarations_to_skip = [
             "__va_list_tag",
+            "__va_list",
             "__NSConstantString_tag",
             "__NSConstantString"
         ]
