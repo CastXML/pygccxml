@@ -130,6 +130,32 @@ jobs:
             castxml-epic: 1
             cppstd: "-std=c++11"
 
+          # UBUNTU ARM
+          - os: ubuntu-22.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 15
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++17"
+
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++17"
+
+          # UBUNTU 24.04 - CASTXML EPIC 1
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 1
+            cppstd: "-std=c++11"
+
           # MACOS
           - os: macos-13
             compiler: clang++
@@ -179,6 +205,21 @@ jobs:
         run: |
           wget -q -O ~/castxml-ubuntu-22.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-22.04-x86_64.tar.gz
           tar -xzf ~/castxml-ubuntu-22.04-x86_64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      # ─── Setup CastXML for Linux aarch64 ──────────────────────────────
+      - name: Setup CastXML for Linux aarch64 (Ubuntu 24.04)
+        if: matrix.os == 'ubuntu-24.04-arm' && matrix.arch == 'aarch64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-24.04-arm-aarch64.tar.gz
+          tar -xzf ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      - name: Setup CastXML for Linux aarch64 (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04-arm' && matrix.arch == 'aarch64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-22.04-arm-aarch64.tar.gz
+          tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
           chmod +x ~/castxml/bin/castxml
 
       # ─── Setup CastXML for MacOS ──────────────────────────────
