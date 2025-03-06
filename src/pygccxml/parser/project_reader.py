@@ -321,21 +321,21 @@ class project_reader_t(object):
         self.logger.debug(
             "Cache has been flushed in %.1f secs",
             (timeit.default_timer() - start_time))
-        answer = []
+        namespaces = []
         self.logger.debug("Joining namespaces ...")
         for file_nss in namespaces:
-            answer = self._join_top_namespaces(answer, file_nss)
+            namespaces = self._join_top_namespaces(namespaces, file_nss)
         self.logger.debug("Joining declarations ...")
-        for ns in answer:
-            if isinstance(ns, pygccxml.declarations.namespace_t):
-                declarations_joiner.join_declarations(ns)
-        leaved_classes = self._join_class_hierarchy(answer)
-        types = self.__declarated_types(answer)
+        for namespace in namespaces:
+            if isinstance(namespace, pygccxml.declarations.namespace_t):
+                declarations_joiner.join_declarations(namespace)
+        leaved_classes = self._join_class_hierarchy(namespaces)
+        types = self.__declarated_types(namespaces)
         self.logger.debug("Relinking declared types ...")
         self._relink_declarated_types(leaved_classes, types)
         declarations_joiner.bind_aliases(
-            pygccxml.declarations.make_flatten(answer))
-        return answer
+            pygccxml.declarations.make_flatten(namespaces))
+        return namespaces
 
     def __parse_all_at_once(self, files):
         config = self.__config.clone()
@@ -353,12 +353,12 @@ class project_reader_t(object):
                 header_content.append(
                     '#include "%s" %s' %
                     (header, os.linesep))
-        declarations = self.read_string(''.join(header_content))
-        declarations = self._join_top_namespaces(declarations, [])
-        for ns in declarations:
-            if isinstance(ns, pygccxml.declarations.namespace_t):
-                declarations_joiner.join_declarations(ns)
-        return declarations
+        namespaces = self.read_string(''.join(header_content))
+        namespaces = self._join_top_namespaces(namespaces, [])
+        for namespace in namespaces:
+            if isinstance(namespace, pygccxml.declarations.namespace_t):
+                declarations_joiner.join_declarations(namespace)
+        return namespaces
 
     def read_string(self, content):
         """Parse a string containing C/C++ source code.
