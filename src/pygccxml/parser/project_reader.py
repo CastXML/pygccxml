@@ -321,14 +321,9 @@ class project_reader_t(object):
         self.logger.debug(
             "Cache has been flushed in %.1f secs",
             (timeit.default_timer() - start_time))
-        namespaces = []
-        self.logger.debug("Joining namespaces ...")
-        for file_nss in namespaces:
-            namespaces = self._join_top_namespaces(namespaces, file_nss)
-        self.logger.debug("Joining declarations ...")
-        for namespace in namespaces:
-            if isinstance(namespace, pygccxml.declarations.namespace_t):
-                declarations_joiner.join_declarations(namespace)
+        namespaces = self.__join_namespaces_and_declarations(
+            namespaces, namespaces
+            )
         leaved_classes = self._join_class_hierarchy(namespaces)
         types = self.__declarated_types(namespaces)
         self.logger.debug("Relinking declared types ...")
@@ -354,7 +349,14 @@ class project_reader_t(object):
                     '#include "%s" %s' %
                     (header, os.linesep))
         namespaces = self.read_string(''.join(header_content))
-        namespaces = self._join_top_namespaces(namespaces, [])
+        return self.__join_namespaces_and_declarations(
+            namespaces, namespaces
+            )
+
+    def __join_namespaces_and_declarations(self, main_ns_list, other_ns_list):
+        self.logger.debug("Joining namespaces ...")
+        namespaces = self._join_top_namespaces(main_ns_list, other_ns_list)
+        self.logger.debug("Joining declarations ...")
         for namespace in namespaces:
             if isinstance(namespace, pygccxml.declarations.namespace_t):
                 declarations_joiner.join_declarations(namespace)
