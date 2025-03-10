@@ -1,6 +1,30 @@
 Changes
 =======
 
+Version 3.0.0
+-------------
+
+1. Drop support for `Python 3.7` and `Python 3.8`
+
+2. Add official support for `Python 3.12`, `Python 3.13`
+
+3. Add official support for `arm` processors
+
+4. Make many tests more robust for more combinations of processors / c++ standards
+
+5. Update CI with newer `castxml` versions
+
+5. Removed the `__va_list` declaration on `arm` from the declaration tree
+
+6. Fix issues with spaces in c++ templates (containers traits)
+   I have seen different scenarios regarding spaces in templates.
+   On some platforms there might be spaces, on some others not.
+   This "might" be a breaking change if you used to compare declarations manually,
+   but from a pygccxml point of view all comparisons / search functions are still
+   working as before.
+   Anyway this is a 3.0.0 major version so at least you have been warned.
+
+
 Version 2.6.1
 -------------
 
