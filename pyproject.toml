@@ -18,7 +18,7 @@ keywords = [
   "CastXML",
   "gccxml",
 ]
-version = "2.7.0"
+version = "3.0.0"
 
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -27,8 +27,6 @@ classifiers = [
   "Operating System :: MacOS :: MacOS X",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: POSIX",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
