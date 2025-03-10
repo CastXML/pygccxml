@@ -197,6 +197,16 @@ class scanner_t(xml.sax.handler.ContentHandler):
             "__vr_offs",
         ]
 
+        # With CastXML and clang some __va_list_tag declarations are
+        # present in the tree
+        # With llvm 3.9 there is a __NSConstantString(_tag) in the tree
+        self.__declarations_to_skip = [
+            "__va_list_tag",
+            "__va_list",
+            "__NSConstantString_tag",
+            "__NSConstantString"
+        ]
+
         self.__xml_generator_from_xml_file = None
 
     @property
@@ -285,7 +295,6 @@ class scanner_t(xml.sax.handler.ContentHandler):
         return self.__members
 
     def startElement(self, name, attrs):
-
         try:
             if name not in self.__readers:
                 return
@@ -298,21 +307,10 @@ class scanner_t(xml.sax.handler.ContentHandler):
             self.__read_access(attrs)
             element_id = attrs.get(XML_AN_ID)
 
-            # With CastXML and clang some __va_list_tag declarations are
-            # present in the tree: we do not want to have these in the tree.
-            # With llvm 3.9 there is a __NSConstantString(_tag) in the tree
-            # We hide these declarations by default
-            rm1 = "f1" not in self.config.flags
-            names = [
-                "__va_list_tag",
-                "__NSConstantString_tag",
-                "__NSConstantString"]
-
             if isinstance(obj, declarations.declaration_t):
 
-                if rm1 and str(obj.name) in names:
+                if obj.name in self.__declarations_to_skip:
                     return
-
                 self.__update_membership(attrs)
                 self.__declarations[element_id] = obj
                 if not isinstance(obj, declarations.namespace_t):
@@ -656,6 +654,12 @@ class scanner_t(xml.sax.handler.ContentHandler):
         name = attrs.get(XML_AN_NAME, '')
         if '$' in name or '.' in name:
             name = ''
+        if "<" in name and " >" in name:
+            # Name with template. In some rare cases there
+            # is a space before > (and only there), so remove
+            # it to be consistent with the other names that
+            # have no space there
+            name = name.replace(" >", ">")
         if XML_AN_INCOMPLETE in attrs:
             decl = self.__decl_factory.create_class_declaration(name=name)
         else:

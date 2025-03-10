@@ -38,7 +38,8 @@ class defaults_eraser(object):
     def normalize(self, type_str):
         return type_str.replace(' ', '')
 
-    def replace_basic_string(self, cls_name):
+    @staticmethod
+    def replace_basic_string(cls_name):
         strings = {
             "std::string": string_equivalences,
             "std::wstring": wstring_equivalences
@@ -48,7 +49,6 @@ class defaults_eraser(object):
         for short_name, long_names in strings.items():
             for lname in long_names:
                 new_name = new_name.replace(lname, short_name)
-
         return new_name
 
     def decorated_call_prefix(self, cls_name, text, doit):
@@ -99,13 +99,12 @@ class defaults_eraser(object):
         return self.no_end_const(cls_name)
 
     def erase_allocator(self, cls_name, default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
             return
         value_type = c_args[0]
         tmpl = string.Template(
-            "$container< $value_type, $allocator<$value_type> >")
+            "$container<$value_type, $allocator<$value_type>>")
         tmpl = tmpl.substitute(
             container=c_name,
             value_type=value_type,
@@ -116,24 +115,21 @@ class defaults_eraser(object):
                 c_name, [self.erase_recursive(value_type)])
 
     def erase_container(self, cls_name, default_container_name='std::deque'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 2:
             return
         value_type = c_args[0]
         dc_no_defaults = self.erase_recursive(c_args[1])
-        if self.normalize(dc_no_defaults) != self.normalize(
+        if self.normalize(dc_no_defaults) == self.normalize(
                 templates.join(default_container_name, [value_type])):
-            return
-        return templates.join(
-            c_name, [self.erase_recursive(value_type)])
+            return templates.join(
+                c_name, [self.erase_recursive(value_type)])
 
     def erase_container_compare(
             self,
             cls_name,
             default_container_name='std::vector',
             default_compare='std::less'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
             return
@@ -153,14 +149,13 @@ class defaults_eraser(object):
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 3:
             return
         value_type = c_args[0]
         tmpl = string.Template(
-            "$container< $value_type, $compare<$value_type>, " +
-            "$allocator<$value_type> >")
+            "$container<$value_type, $compare<$value_type>, " +
+            "$allocator<$value_type>>")
         tmpl = tmpl.substitute(
             container=c_name,
             value_type=value_type,
@@ -176,7 +171,6 @@ class defaults_eraser(object):
             cls_name,
             default_compare='std::less',
             default_allocator='std::allocator'):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) != 4:
             return
@@ -184,14 +178,14 @@ class defaults_eraser(object):
         mapped_type = c_args[1]
         tmpls = [
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< const $key_type, $mapped_type> > >"),
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair<const $key_type, $mapped_type>>>"),
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< $key_type const, $mapped_type> > >"),
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair< $key_type const, $mapped_type>>>"),
             string.Template(
-                "$container< $key_type, $mapped_type, $compare<$key_type>, " +
-                "$allocator< std::pair< $key_type, $mapped_type> > >")]
+                "$container<$key_type, $mapped_type, $compare<$key_type>, " +
+                "$allocator<std::pair<$key_type, $mapped_type>>>")]
         for tmpl in tmpls:
             tmpl = tmpl.substitute(
                 container=c_name,
@@ -206,7 +200,6 @@ class defaults_eraser(object):
                      self.erase_recursive(mapped_type)])
 
     def erase_hash_allocator(self, cls_name):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
         if len(c_args) < 3:
             return
@@ -218,13 +211,13 @@ class defaults_eraser(object):
         if len(c_args) == 3:
             default_hash = 'hash_compare'
             tmpl = (
-                "$container< $value_type, $hash<$value_type, " +
-                "$less<$value_type> >, $allocator<$value_type> >")
+                "$container<$value_type, $hash<$value_type, " +
+                "$less<$value_type>>, $allocator<$value_type>>")
         elif len(c_args) == 4:
             default_hash = 'hash'
             tmpl = (
-                "$container< $value_type, $hash<$value_type >, " +
-                "$equal_to<$value_type >, $allocator<$value_type> >")
+                "$container<$value_type, $hash<$value_type>, " +
+                "$equal_to<$value_type>, $allocator<$value_type>>")
         else:
             return
 
@@ -244,7 +237,6 @@ class defaults_eraser(object):
                     c_name, [self.erase_recursive(value_type)])
 
     def erase_hashmap_compare_allocator(self, cls_name):
-        cls_name = self.replace_basic_string(cls_name)
         c_name, c_args = templates.split(cls_name)
 
         if self.unordered_maps_and_sets:
@@ -263,14 +255,14 @@ class defaults_eraser(object):
         if len(c_args) == 4:
             default_hash = 'hash_compare'
             tmpl = string.Template(
-                "$container< $key_type, $mapped_type, " +
-                "$hash<$key_type, $less<$key_type> >, " +
-                "$allocator< std::pair< const $key_type, $mapped_type> > >")
+                "$container<$key_type, $mapped_type, " +
+                "$hash<$key_type, $less<$key_type>>, " +
+                "$allocator<std::pair<const $key_type, $mapped_type>>>")
             if key_type.startswith('const ') or key_type.endswith(' const'):
                 tmpl = string.Template(
-                    "$container< $key_type, $mapped_type, $hash<$key_type, " +
-                    "$less<$key_type> >, $allocator< std::pair< $key_type, " +
-                    "$mapped_type> > >")
+                    "$container<$key_type, $mapped_type, $hash<$key_type, " +
+                    "$less<$key_type>>, $allocator<std::pair<$key_type, " +
+                    "$mapped_type>>>")
         elif len(c_args) == 5:
             default_hash = 'hash'
             if self.unordered_maps_and_sets:
@@ -279,31 +271,31 @@ class defaults_eraser(object):
                     "$hash<$key_type>, " +
                     "$equal_to<$key_type>, " +
                     "$allocator<std::pair<const$key_type, " +
-                    "$mapped_type> > >")
+                    "$mapped_type>>>")
                 if key_type.startswith('const ') or \
                         key_type.endswith(' const'):
                     tmpl = string.Template(
                         "$container<$key_type, $mapped_type, " +
-                        "$hash<$key_type >, " +
-                        "$equal_to<$key_type >, " +
+                        "$hash<$key_type>, " +
+                        "$equal_to<$key_type>, " +
                         "$allocator<std::pair<$key_type, " +
-                        "$mapped_type> > >")
+                        "$mapped_type>>>")
             else:
                 tmpl = string.Template(
-                    "$container< $key_type, $mapped_type, "
+                    "$container<$key_type, $mapped_type, "
                     "$hash<$key_type >, " +
                     "$equal_to<$key_type>, "
-                    "$allocator< $mapped_type> >")
+                    "$allocator<$mapped_type>>")
                 if key_type.startswith('const ') or \
                         key_type.endswith(' const'):
                     # TODO: this template is the same than above.
                     # Make sure why this was needed and if this is
                     # tested. There may be a const missing somewhere.
                     tmpl = string.Template(
-                        "$container< $key_type, $mapped_type, " +
-                        "$hash<$key_type >, " +
+                        "$container<$key_type, $mapped_type, " +
+                        "$hash<$key_type>, " +
                         "$equal_to<$key_type>, " +
-                        "$allocator< $mapped_type > >")
+                        "$allocator<$mapped_type>>")
         else:
             return
 
@@ -524,6 +516,7 @@ class container_traits_impl_t(object):
         name = type_or_string
         if not isinstance(type_or_string, str):
             name = self.class_declaration(type_or_string).name
+        name = defaults_eraser.replace_basic_string(name)
         if not self.remove_defaults_impl:
             return name
         no_defaults = self.remove_defaults_impl(name)

@@ -20,6 +20,10 @@ TEST_FILES = [
 def global_ns():
     COMPILATION_MODE = parser.COMPILATION_MODE.ALL_AT_ONCE
     config = autoconfig.cxx_parsers_cfg.config.clone()
+    # This test does not work with c++17 and above
+    # See https://developers.redhat.com/articles/2021/08/06/porting-your-code-c17-gcc-11#exception_specification_changes # noqa
+    # This test is thus excpected to use -std=c++14 forever
+    config.cflags = "-std=c++14"
     decls = parser.parse(TEST_FILES, config, COMPILATION_MODE)
     global_ns = declarations.get_global_namespace(decls)
     return global_ns

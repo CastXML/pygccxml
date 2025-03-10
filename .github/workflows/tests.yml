@@ -7,98 +7,236 @@ on:
 
 jobs:
   tests:
-    name: ${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.version }}-python-${{ matrix.python-version }}-${{ matrix.castxml-epic }}
+    name: ${{ matrix.os }} ${{ matrix.compiler }}${{ matrix.clang-version }} ${{ matrix.cppstd }} Python ${{ matrix.python-version }} Epic ${{ matrix.castxml-epic }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
-            python-version: "3.7"
-            castxml: "castxml"
+          # UBUNTU 22.04 - CASTXML EPIC 0
+          - os: ubuntu-22.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 13
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+          
+          - os: ubuntu-22.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 14
+            python-version: "3.13"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
-            python-version: "3.8"
-            castxml: "castxml"
+          - os: ubuntu-22.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 15
+            python-version: "3.13"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
+          - os: ubuntu-22.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 15
+            python-version: "3.13"
+            castxml-epic: 1
+            cppstd: "-std=c++98"
+  
+          # UBUNTU 24.04 - CASTXML EPIC 0
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
             python-version: "3.9"
-            castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
             python-version: "3.10"
-            castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
             python-version: "3.11"
-            castxml: "castxml"
             castxml-epic: 0
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
-            python-version: "3.8"
-            castxml: "castxml"
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.12"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++98"
+
+          # UBUNTU 24.04 - CASTXML EPIC 0 - c++XX
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++11"
+
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++14"
+
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++17"
+
+          # UBUNTU 24.04 - CASTXML EPIC 1
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
             castxml-epic: 1
             cppstd: "-std=c++98"
 
-          - os: ubuntu-20.04
-            compiler: gcc
-            version: "9"
-            python-version: "3.8"
-            castxml: "castxml"
+          - os: ubuntu-24.04
+            arch: x86_64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
             castxml-epic: 1
             cppstd: "-std=c++11"
 
-          - os: macos-13
-            compiler: xcode
-            version: "default"
-            python-version: "3.8"
-            castxml: "castxml"
+          # UBUNTU ARM
+          - os: ubuntu-22.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 15
+            python-version: "3.13"
             castxml-epic: 0
-            cppstd: "-std=c++98"
+            cppstd: "-std=c++17"
+
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 0
+            cppstd: "-std=c++17"
+
+          # UBUNTU 24.04 - CASTXML EPIC 1
+          - os: ubuntu-24.04-arm
+            arch: aarch64
+            compiler: clang++
+            clang-version: 16
+            python-version: "3.13"
+            castxml-epic: 1
+            cppstd: "-std=c++11"
+
+          # MACOS
+          - os: macos-13
+            compiler: clang++
+            python-version: "3.13"
+            castxml-epic: 0
+
+          - os: macos-15
+            compiler: clang++
+            python-version: "3.13"
+            castxml-epic: 0
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+
       - name: Install Python lib and test libs
         run: |
           pip install '.[test]'
+
       - name: Run pycodestyle
         run: pycodestyle . --exclude=docs
-      - name: Setup castxml for Linux
-        if: matrix.os == 'ubuntu-20.04' && matrix.castxml == 'castxml'
+
+      - name: Write xml_generator.cfg
+        if: contains(matrix.os, 'ubuntu')
         run: |
-          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/bdbb67a10c5f8d1b738cd19cb074f409d4803e8077cb8c1072ef4eaf738fa871a73643f9c8282d58cae28d188df842c82ad6620b6d590b0396a0172a27438dce/download | tar zxf - -C ~/
-      - name: Setup castxml for Mac
+          echo "[xml_generator]" > tests/xml_generator.cfg
+          echo "compiler_path=/usr/bin/${{ matrix.compiler }}-${{ matrix.clang-version }}" >> tests/xml_generator.cfg
+          echo "ccflags=${{ matrix.cppstd }}" >> tests/xml_generator.cfg
+
+      # ─── Setup CastXML for Linux x86_64 ──────────────────────────────
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 24.04)
+        if: matrix.os == 'ubuntu-24.04' && matrix.arch == 'x86_64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-24.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-24.04-x86_64.tar.gz
+          tar -xzf ~/castxml-ubuntu-24.04-x86_64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      - name: Setup CastXML for Linux x86_64 (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04' && matrix.arch == 'x86_64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-22.04-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-22.04-x86_64.tar.gz
+          tar -xzf ~/castxml-ubuntu-22.04-x86_64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      # ─── Setup CastXML for Linux aarch64 ──────────────────────────────
+      - name: Setup CastXML for Linux aarch64 (Ubuntu 24.04)
+        if: matrix.os == 'ubuntu-24.04-arm' && matrix.arch == 'aarch64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-24.04-arm-aarch64.tar.gz
+          tar -xzf ~/castxml-ubuntu-24.04-arm-aarch64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      - name: Setup CastXML for Linux aarch64 (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04-arm' && matrix.arch == 'aarch64'
+        run: |
+          wget -q -O ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-ubuntu-22.04-arm-aarch64.tar.gz
+          tar -xzf ~/castxml-ubuntu-22.04-arm-aarch64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      # ─── Setup CastXML for MacOS ──────────────────────────────
+      - name: Setup CastXML for macOS (arm64)
+        if: matrix.os == 'macos-15'
+        run: |
+          wget -q -O ~/castxml-macos-15-arm64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-macos-15-arm64.tar.gz
+          tar -xzf ~/castxml-macos-15-arm64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
+      - name: Setup CastXML for macOS (x86_64)
         if: matrix.os == 'macos-13'
         run: |
-          wget -q -O - https://data.kitware.com/api/v1/file/hashsum/sha512/5d937e938f7b882a3a3e7941e68f8312d0898aaf2082e00003dd362b1ba70b98b0a08706a1be28e71652a6a0f1e66f89768b5eaa20e5a100592d5b3deefec3f0/download | tar zxf - -C ~/
+          wget -q -O ~/castxml-macos-13-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-macos-13-x86_64.tar.gz
+          tar -xzf ~/castxml-macos-13-x86_64.tar.gz -C ~/
+          chmod +x ~/castxml/bin/castxml
+
       - name: Run tests
         run: |
           export PATH=~/castxml/bin:$PATH
