@@ -10,6 +10,7 @@ authors = [
     {name = "Insight Software Consortium", email = "castxml@public.kitware.com"},
     {name = "Roman Yakovenko", email = "romanyakovenko@gmail.com"},
 ]
+readme = "README.rst"
 license = {file = "LICENSE.rst"}
 keywords = [
   "C++",
