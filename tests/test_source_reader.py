@@ -4,6 +4,7 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 import platform
+import os
 
 import pytest
 
@@ -35,3 +36,15 @@ def test_compound_argument_type(global_ns):
     do_smth = global_ns.calldefs('do_smth')
     assert do_smth is not None
     do_smth.function_type()
+
+
+def test_stderr_present_and_readable():
+    with open(os.path.join('tests', 'data', TEST_FILES[0]), 'r') as f:
+        source_str = f.read()
+
+    err_str = "add some stuff that should not compile"
+    source_str += err_str
+    config = autoconfig.cxx_parsers_cfg.config.clone()
+    with pytest.raises(RuntimeError) as e_context:
+        parser.parse_string(source_str, config)
+    assert err_str in str(e_context)
