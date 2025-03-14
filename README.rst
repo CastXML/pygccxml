@@ -1,9 +1,6 @@
 pygccxml
 ========
 
-.. image:: https://codecov.io/gh/iMichka/pygccxml/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/iMichka/pygccxml
-    :alt: Code coverage status
 .. image:: https://readthedocs.org/projects/pygccxml/badge/?version=develop
     :target: http://pygccxml.readthedocs.io/en/develop/?badge=develop
     :alt: Documentation status
