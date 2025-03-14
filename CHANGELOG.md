@@ -1,6 +1,12 @@
 Changes
 =======
 
+Version 3.0.1
+-------------
+
+1. Build and sign wheels using Github Actions CI, see https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+  This is a way better way to distribute our wheels as it prevents supply chain attacks.
+
 Version 3.0.0
 -------------
 
