@@ -1,8 +1,17 @@
 Changes
 =======
 
+Version 3.0.2
+-------------
+
+1. Fix automatic wheel upload (did not work in 3.0.1)
+
+2. Fix syntax errors in readme
+
 Version 3.0.1
 -------------
+
+This release was never uploaded to pypi due to an issue with the readme syntac. Use 3.0.2 instead.
 
 1. Build and sign wheels using Github Actions CI, see https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
   This is a way better way to distribute our wheels as it prevents supply chain attacks.

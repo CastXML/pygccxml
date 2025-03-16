@@ -19,7 +19,7 @@ keywords = [
   "CastXML",
   "gccxml",
 ]
-version = "3.0.1"
+version = "3.0.2"
 
 classifiers = [
   "Development Status :: 5 - Production/Stable",
