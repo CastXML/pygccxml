@@ -159,7 +159,7 @@ jobs:
             cppstd: "-std=c++11"
 
           # MACOS
-          - os: macos-13
+          - os: macos-15-intel
             compiler: clang++
             python-version: "3.13"
             castxml-epic: 0
@@ -233,7 +233,7 @@ jobs:
           chmod +x ~/castxml/bin/castxml
 
       - name: Setup CastXML for macOS (x86_64)
-        if: matrix.os == 'macos-13'
+        if: matrix.os == 'macos-15-intel'
         run: |
           wget -q -O ~/castxml-macos-13-x86_64.tar.gz https://github.com/CastXML/CastXMLSuperbuild/releases/download/v0.6.11.post2/castxml-macos-13-x86_64.tar.gz
           tar -xzf ~/castxml-macos-13-x86_64.tar.gz -C ~/
