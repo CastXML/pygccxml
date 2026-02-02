@@ -109,8 +109,7 @@ class defaults_eraser(object):
             container=c_name,
             value_type=value_type,
             allocator=default_allocator)
-        if self.normalize(cls_name) == \
-                self.normalize(tmpl):
+        if cls_name == tmpl:
             return templates.join(
                 c_name, [self.erase_recursive(value_type)])
 
@@ -120,8 +119,8 @@ class defaults_eraser(object):
             return
         value_type = c_args[0]
         dc_no_defaults = self.erase_recursive(c_args[1])
-        if self.normalize(dc_no_defaults) == self.normalize(
-                templates.join(default_container_name, [value_type])):
+        if dc_no_defaults == \
+                templates.join(default_container_name, [value_type]):
             return templates.join(
                 c_name, [self.erase_recursive(value_type)])
 
@@ -134,12 +133,12 @@ class defaults_eraser(object):
         if len(c_args) != 3:
             return
         dc_no_defaults = self.erase_recursive(c_args[1])
-        if self.normalize(dc_no_defaults) != self.normalize(
-                templates.join(default_container_name, [c_args[0]])):
+        if dc_no_defaults != \
+                templates.join(default_container_name, [c_args[0]]):
             return
         dcomp_no_defaults = self.erase_recursive(c_args[2])
-        if self.normalize(dcomp_no_defaults) != self.normalize(
-                templates.join(default_compare, [c_args[0]])):
+        if dcomp_no_defaults != \
+                templates.join(default_compare, [c_args[0]]):
             return
         value_type = self.erase_recursive(c_args[0])
         return templates.join(c_name, [value_type])
@@ -161,8 +160,7 @@ class defaults_eraser(object):
             value_type=value_type,
             compare=default_compare,
             allocator=default_allocator)
-        if self.normalize(cls_name) == \
-                self.normalize(tmpl):
+        if cls_name == tmpl:
             return templates.join(
                 c_name, [self.erase_recursive(value_type)])
 
@@ -193,7 +191,7 @@ class defaults_eraser(object):
                 mapped_type=mapped_type,
                 compare=default_compare,
                 allocator=default_allocator)
-            if self.normalize(cls_name) == self.normalize(tmpl):
+            if cls_name == tmpl:
                 return templates.join(
                     c_name,
                     [self.erase_recursive(key_type),
@@ -231,8 +229,7 @@ class defaults_eraser(object):
                 less=default_less,
                 equal_to=default_equal_to,
                 allocator=default_allocator)
-            if self.normalize(cls_name) == \
-                    self.normalize(inst):
+            if cls_name == inst:
                 return templates.join(
                     c_name, [self.erase_recursive(value_type)])
 
@@ -309,7 +306,7 @@ class defaults_eraser(object):
                 equal_to=default_equal_to,
                 allocator=default_allocator)
 
-            if self.normalize(cls_name) == self.normalize(inst):
+            if cls_name == inst:
                 return templates.join(
                     c_name,
                     [self.erase_recursive(key_type),
